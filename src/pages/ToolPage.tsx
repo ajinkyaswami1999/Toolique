@@ -196,7 +196,9 @@ export default function ToolPage() {
         <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
           <Link to="/" className="hover:text-indigo-500 transition-colors">Home</Link>
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
-          <span className="capitalize">{tool.category}</span>
+          <Link to={`/?category=${tool.category}`} className="capitalize hover:text-indigo-500 transition-colors">
+            {tool.category}
+          </Link>
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
           <span className="text-zinc-650 dark:text-zinc-300 font-medium">{tool.name}</span>
         </div>

@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon, Sliders, Hammer, Compass, Palette, HelpCircle, ArrowRight, ShieldAlert, Zap, Globe } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { categories } from '../data/categories';
 import ToolCard from '../components/ToolCard';
 import AdPlaceholder from '../components/AdPlaceholder';
 import SEO from '../components/SEO';
+import { useSearchParams } from 'react-router-dom';
 
 const categoryIcons: Record<string, React.ComponentType<any>> = {
   finance: IndianRupee,
@@ -22,14 +23,45 @@ const popularToolIds = ['SIPCalculator', 'EMICalculator', 'ConcreteCalculator', 
 const recentToolIds = ['ModularKitchenCostCalculator', 'WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator'];
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get('q') || '';
+  const selectedCategory = searchParams.get('category') || 'all';
+
+  const setSearchQuery = (q: string) => {
+    setSearchParams((prev) => {
+      if (q) prev.set('q', q);
+      else prev.delete('q');
+      return prev;
+    }, { replace: true });
+  };
+
+  const setSelectedCategory = (cat: string) => {
+    setSearchParams((prev) => {
+      if (cat && cat !== 'all') prev.set('category', cat);
+      else prev.delete('category');
+      return prev;
+    }, { replace: true });
+  };
+
+  // Scroll to tools-section if we have active filter parameters in URL (e.g. redirected from breadcrumbs)
+  useEffect(() => {
+    if (searchParams.get('category') || searchParams.get('q')) {
+      const el = document.getElementById('tools-section');
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    }
+  }, []); // run once on mount
 
   const filteredTools = toolsList.filter((tool) => {
+    const query = searchQuery.toLowerCase().trim();
     const matchesSearch =
-      tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tool.shortDescription.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tool.keywords.some((k) => k.toLowerCase().includes(searchQuery.toLowerCase()));
+      !query ||
+      (tool.name || '').toLowerCase().includes(query) ||
+      (tool.shortDescription || '').toLowerCase().includes(query) ||
+      (tool.keywords || []).some((k) => (k || '').toLowerCase().includes(query));
 
     const matchesCategory =
       selectedCategory === 'all' || tool.category === selectedCategory;

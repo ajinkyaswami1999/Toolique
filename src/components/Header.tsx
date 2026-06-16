@@ -1,11 +1,38 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Sun, Moon, Search, Menu, X, Command } from 'lucide-react';
+import { toolsList } from '../data/tools';
 
 export default function Header() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const [navQuery, setNavQuery] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+
+  const filteredSuggestions = navQuery.trim()
+    ? toolsList.filter(tool =>
+        (tool.name || '').toLowerCase().includes(navQuery.toLowerCase()) ||
+        (tool.category || '').toLowerCase().includes(navQuery.toLowerCase()) ||
+        (tool.shortDescription || '').toLowerCase().includes(navQuery.toLowerCase())
+      ).slice(0, 5)
+    : [];
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (navQuery.trim()) {
+      navigate(`/?q=${encodeURIComponent(navQuery.trim())}`);
+      setNavQuery('');
+      setIsOpen(false);
+      // Smooth scroll to search area if on homepage
+      setTimeout(() => {
+        const el = document.getElementById('tools-section');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
 
   // Initialize theme
   useEffect(() => {
@@ -117,14 +144,48 @@ export default function Header() {
             </button>
           </div>
 
-          {/* Quick Search Link */}
-          <a
-            href="#tools-section"
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 text-[10px] font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition"
-          >
-            <Search className="w-3 h-3" />
-            <span>Search</span>
-          </a>
+          {/* Quick Search Input */}
+          <form onSubmit={handleSearchSubmit} className="relative hidden sm:block">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/40 text-xs text-zinc-500 dark:text-zinc-400 focus-within:border-indigo-500 transition-all duration-200">
+              <Search className="w-3.5 h-3.5" />
+              <input
+                type="text"
+                placeholder="Search tools..."
+                value={navQuery}
+                onChange={(e) => {
+                  setNavQuery(e.target.value);
+                  setIsOpen(true);
+                }}
+                onFocus={() => setIsOpen(true)}
+                onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+                className="bg-transparent border-none outline-none text-[11px] w-24 focus:w-40 transition-all duration-200 text-zinc-900 dark:text-zinc-100 font-semibold placeholder-zinc-400 dark:placeholder-zinc-650"
+              />
+            </div>
+
+            {/* Autocomplete Dropdown */}
+            {isOpen && navQuery.trim() && (
+              <div className="absolute right-0 mt-2 w-64 max-h-72 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-xl overflow-y-auto py-2 z-50">
+                {filteredSuggestions.length > 0 ? (
+                  filteredSuggestions.map((tool) => (
+                    <Link
+                      key={tool.id}
+                      to={`/tool/${tool.slug}`}
+                      onClick={() => {
+                        setNavQuery('');
+                        setIsOpen(false);
+                      }}
+                      className="flex flex-col px-3.5 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-left transition"
+                    >
+                      <span className="text-xs font-bold text-zinc-800 dark:text-zinc-250">{tool.name}</span>
+                      <span className="text-[10px] text-zinc-400 capitalize mt-0.5">{tool.category}</span>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="px-3.5 py-2 text-xs text-zinc-400 dark:text-zinc-550 text-center">No tools found</div>
+                )}
+              </div>
+            )}
+          </form>
 
           {/* Mobile Menu Button */}
           <button
@@ -147,20 +208,32 @@ export default function Header() {
               className={`block px-3 py-2 rounded-xl text-sm font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-900 transition ${
                 isActive(link.path)
                   ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-500/5'
-                  : 'text-zinc-650 dark:text-zinc-400'
+                  : 'text-zinc-655 dark:text-zinc-400'
               }`}
             >
               {link.name}
             </Link>
           ))}
-          <a
-            href="#tools-section"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="flex items-center justify-center gap-2 w-full mt-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition shadow-sm"
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (navQuery.trim()) {
+                navigate(`/?q=${encodeURIComponent(navQuery.trim())}`);
+                setNavQuery('');
+                setIsMobileMenuOpen(false);
+              }
+            }}
+            className="relative w-full mt-2"
           >
-            <Search className="w-4 h-4" />
-            <span>Search directory</span>
-          </a>
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Search directory..."
+              value={navQuery}
+              onChange={(e) => setNavQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/40 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-500 font-semibold placeholder-zinc-400 dark:placeholder-zinc-650"
+            />
+          </form>
         </div>
       )}
     </header>
