@@ -53,7 +53,7 @@ export default function Home() {
   const prevViewRef = useRef(searchParams.get('view'));
   const prevQRef = useRef(searchParams.get('q') || '');
 
-  // Scroll to tools-section if we have active filter parameters in URL
+  // Scroll to tools-section or top of page if we have active filter parameters in URL
   useEffect(() => {
     const currentView = searchParams.get('view');
     const hasCategory = searchParams.get('category');
@@ -61,32 +61,42 @@ export default function Home() {
 
     const categoryChanged = (hasCategory || 'all') !== (prevCategoryRef.current || 'all');
     const qChanged = (hasQ || '') !== prevQRef.current;
+    const viewChanged = currentView !== prevViewRef.current;
 
     const isTyping = document.activeElement?.id === 'home-search-input';
 
     const navigatedToCategory = hasCategory && hasCategory !== 'all';
     const navigatedToQuery = hasQ && hasQ.trim() !== '';
 
-    let shouldScroll = false;
     if (!isTyping) {
       if (isFirstRender.current) {
         // On initial mount, scroll if we have a specific category or query
-        shouldScroll = !!(navigatedToCategory || navigatedToQuery);
+        if (navigatedToCategory || navigatedToQuery) {
+          const el = document.getElementById('tools-section');
+          if (el) {
+            setTimeout(() => {
+              el.scrollIntoView({ behavior: 'smooth' });
+            }, 150);
+          }
+        }
       } else {
-        // On subsequent renders, scroll if category changed to a specific category or query changed
-        shouldScroll = !!(
-          (categoryChanged && navigatedToCategory) ||
-          (qChanged && navigatedToQuery)
-        );
-      }
-    }
-
-    if (shouldScroll) {
-      const el = document.getElementById('tools-section');
-      if (el) {
-        setTimeout(() => {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }, 150);
+        // On subsequent renders
+        if ((categoryChanged && navigatedToCategory) || (qChanged && navigatedToQuery)) {
+          const el = document.getElementById('tools-section');
+          if (el) {
+            setTimeout(() => {
+              el.scrollIntoView({ behavior: 'smooth' });
+            }, 150);
+          }
+        } else if (
+          (viewChanged && currentView === 'all') || 
+          (!hasCategory && !hasQ && (categoryChanged || qChanged || viewChanged))
+        ) {
+          // If view changed to 'all' (Directory) or cleared filters (Home), scroll to top of the page
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 150);
+        }
       }
     }
 
@@ -149,32 +159,34 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <section className="text-center max-w-4xl mx-auto space-y-6 pt-6 md:pt-12">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/10 dark:border-indigo-400/10 bg-indigo-500/5 text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>No servers, no tracking, completely instant</span>
-        </div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-white leading-[1.15]">
-          A simpler way to calculate, <br />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">design, and optimize</span>
-        </h1>
-        <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-          Fast, free browser utilities for Indian engineers, architects, designers, developers, and finance professionals. All calculations execute locally.
-        </p>
+      {!(searchParams.get('view') === 'all' || selectedCategory !== 'all' || searchQuery) && (
+        <section className="text-center max-w-4xl mx-auto space-y-6 pt-6 md:pt-12">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/10 dark:border-indigo-400/10 bg-indigo-500/5 text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>No servers, no tracking, completely instant</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-white leading-[1.15]">
+            A simpler way to calculate, <br />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">design, and optimize</span>
+          </h1>
+          <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto">
+            Fast, free browser utilities for Indian engineers, architects, designers, developers, and finance professionals. All calculations execute locally.
+          </p>
 
-        {/* Global Stats bar */}
-        <div className="flex justify-center items-center gap-8 pt-2 text-xs font-semibold text-zinc-400 dark:text-zinc-500">
-          <div>
-            <span className="text-lg font-black text-zinc-900 dark:text-white mr-1.5">{toolsList.length}</span>
-            Tools
+          {/* Global Stats bar */}
+          <div className="flex justify-center items-center gap-8 pt-2 text-xs font-semibold text-zinc-400 dark:text-zinc-500">
+            <div>
+              <span className="text-lg font-black text-zinc-900 dark:text-white mr-1.5">{toolsList.length}</span>
+              Tools
+            </div>
+            <div className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-800" />
+            <div>
+              <span className="text-lg font-black text-zinc-900 dark:text-white mr-1.5">{categories.length}</span>
+              Categories
+            </div>
           </div>
-          <div className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-800" />
-          <div>
-            <span className="text-lg font-black text-zinc-900 dark:text-white mr-1.5">{categories.length}</span>
-            Categories
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Search & Category Filter Hub */}
       <section id="tools-section" className="space-y-6 max-w-5xl mx-auto pt-2">
