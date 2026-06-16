@@ -40,11 +40,17 @@ export default function ImageCompressor() {
     setPreviewUrl(url);
 
     // Intelligently suggest target size based on original size
+    const maxKb = Math.ceil(file.size / 1024);
+    let suggestedKb = 150;
     if (file.size > 1024 * 1024) {
-      setTargetSizeKb(200); // suggest 200KB for large files
+      suggestedKb = 200;
     } else {
-      setTargetSizeKb(Math.max(50, Math.round((file.size / 1024) * 0.4))); // suggest 40% of size
+      suggestedKb = Math.max(5, Math.round(maxKb * 0.4));
     }
+    if (suggestedKb >= maxKb) {
+      suggestedKb = Math.max(5, Math.round(maxKb * 0.5));
+    }
+    setTargetSizeKb(suggestedKb);
   };
 
   const compressImage = () => {
@@ -276,9 +282,14 @@ export default function ImageCompressor() {
             <input
               type="number"
               min="5"
-              max="100000"
+              max={selectedFile ? Math.ceil(originalSize / 1024) : 100000}
               value={targetSizeKb}
-              onChange={(e) => setTargetSizeKb(Math.max(5, parseInt(e.target.value) || 5))}
+              onChange={(e) => {
+                const maxKb = selectedFile ? Math.ceil(originalSize / 1024) : 100000;
+                let val = parseInt(e.target.value) || 5;
+                if (val > maxKb) val = maxKb;
+                setTargetSizeKb(Math.max(5, val));
+              }}
               disabled={!selectedFile}
               className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-700 dark:text-slate-200 font-semibold focus:border-teal-500 focus:outline-none disabled:opacity-40"
             />
