@@ -73,6 +73,22 @@ import FalseCeilingCalculator from '../tools/FalseCeilingCalculator';
 import ModularKitchenCostCalculator from '../tools/ModularKitchenCostCalculator';
 import WardrobeCostCalculator from '../tools/WardrobeCostCalculator';
 
+
+// Phase 4 - Image Tools Expansion (13 tools)
+import ImageCropper from '../tools/ImageCropper';
+import ImageResizer from '../tools/ImageResizer';
+import ImageConverter from '../tools/ImageConverter';
+import ImageRotator from '../tools/ImageRotator';
+import ImageWatermark from '../tools/ImageWatermark';
+import ImageBlur from '../tools/ImageBlur';
+import BackgroundRemover from '../tools/BackgroundRemover';
+import MetadataViewer from '../tools/MetadataViewer';
+import ImageToBase64 from '../tools/ImageToBase64';
+import Base64ToImage from '../tools/Base64ToImage';
+import ImagesToZip from '../tools/ImagesToZip';
+import ImageColorPicker from '../tools/ImageColorPicker';
+import QRScannerImage from '../tools/QRScannerImage';
+
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
   SIPCalculator,
@@ -137,6 +153,21 @@ const toolComponents: Record<string, React.ComponentType> = {
   FalseCeilingCalculator,
   ModularKitchenCostCalculator,
   WardrobeCostCalculator,
+
+  // Phase 4 - Image Tools Expansion
+  ImageCropper,
+  ImageResizer,
+  ImageConverter,
+  ImageRotator,
+  ImageWatermark,
+  ImageBlur,
+  BackgroundRemover,
+  MetadataViewer,
+  ImageToBase64,
+  Base64ToImage,
+  ImagesToZip,
+  ImageColorPicker,
+  QRScannerImage,
 };
 
 export default function ToolPage() {

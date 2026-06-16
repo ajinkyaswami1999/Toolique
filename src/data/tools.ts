@@ -1990,5 +1990,495 @@ export const toolsList: Tool[] = [
       "content": "- **Hinged**: Classic doors swinging outwards, requiring front floor clearance but exposing the entire wardrobe interior when opened.\n- **Sliding**: Modern doors sliding sideways on tracks, saving floor space in compact rooms but exposing only half of the wardrobe at a time."
     }
   ]
-}
+},
+  {
+    "id": "ImageCropper",
+    "slug": "image-cropper",
+    "name": "Image Cropper",
+    "category": "image",
+    "shortDescription": "Crop images to custom dimensions, locks aspect ratio options, and edit boundaries in browser.",
+    "metaDescription": "Free online Image Cropper tool. Crop JPG, PNG, and WebP images to standard aspect ratios (1:1, 16:9, 4:3) or custom free-hand shapes locally.",
+    "keywords": [
+      "Image Cropper",
+      "Crop photo online",
+      "Cut image dimensions",
+      "Crop JPG PNG",
+      "Resize image bounds"
+    ],
+    "icon": "Crop",
+    "howToUse": [
+      "Select or drag-and-drop an image from your device.",
+      "Select your preferred aspect ratio preset (Free, 1:1, 16:9, 4:3).",
+      "Drag and resize the overlay crop window on the image preview.",
+      "Click the \"Download Crop\" button to compile and save the cropped image."
+    ],
+    "faqs": [
+      {
+        "question": "Are my cropped images uploaded to any servers?",
+        "answer": "No. The image cropping is performed completely locally inside your web browser sandbox using HTML5 Canvas. No file is ever sent to our servers."
+      },
+      {
+        "question": "Does aspect ratio lock prevent free-form scaling?",
+        "answer": "Yes. Locking the aspect ratio (like 16:9 or 1:1) forces the crop bounds to scale symmetrically, preserving the selected proportions."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Image Cropping Fundamentals",
+        "content": "Cropping is the process of removing unwanted outer areas from an image. It is used to improve framing, change aspect ratios, or isolate a specific subject. Doing this client-side prevents bandwidth usage and keeps private photos secure."
+      }
+    ]
+  },
+  {
+    "id": "ImageResizer",
+    "slug": "image-resizer",
+    "name": "Image Resizer",
+    "category": "image",
+    "shortDescription": "Resize images by pixel width/height or scaling percentage with aspect ratio locks.",
+    "metaDescription": "Free online Image Resizer. Adjust width and height of JPG, PNG, and WebP images. Lock aspect ratio or scale images by percentage instantly.",
+    "keywords": [
+      "Image Resizer",
+      "Resize photo online",
+      "Change image dimensions",
+      "Scale image percentage",
+      "Resize JPG PNG"
+    ],
+    "icon": "Sliders",
+    "howToUse": [
+      "Choose the image file you wish to resize.",
+      "Enter new width or height in pixels, or use the scaling percentage slider.",
+      "Keep the \"Aspect Ratio Locked\" to avoid warping the image.",
+      "Download the resized image in PNG format."
+    ],
+    "faqs": [
+      {
+        "question": "What is the benefit of keeping Aspect Ratio locked?",
+        "answer": "Locking aspect ratio ensures that when you adjust the width, the height scales proportionally, preventing the image from looking stretched or squished."
+      },
+      {
+        "question": "Will resizing reduce the file size of the image?",
+        "answer": "Yes, reducing the pixel resolution of an image naturally reduces its raw byte size, making it faster to load on websites."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Pixel Dimensions vs File Size",
+        "content": "An image is made of pixels. Reducing the dimensions (e.g. from 4000x3000 to 800x600) decreases the total pixel count, which dramatically lowers file size while maintaining visibility at standard display sizes."
+      }
+    ]
+  },
+  {
+    "id": "ImageConverter",
+    "slug": "image-converter",
+    "name": "Image Converter",
+    "category": "image",
+    "shortDescription": "Convert images between formats (PNG, JPEG, WebP, GIF, BMP) in bulk with quality controls.",
+    "metaDescription": "Convert images to PNG, JPG, WebP, GIF, and BMP format online. Bulk convert multiple images and download as a single ZIP file.",
+    "keywords": [
+      "Image Converter",
+      "Convert JPG to PNG",
+      "WebP to JPG converter",
+      "Bulk image converter",
+      "Convert photo format"
+    ],
+    "icon": "RefreshCw",
+    "howToUse": [
+      "Upload one or multiple images from your device.",
+      "Select your desired target format (JPEG, PNG, WebP, GIF, BMP) in the settings panel.",
+      "For JPEG and WebP, adjust the compression quality slider.",
+      "Click \"Convert Images\" and download individually or as a single compiled ZIP."
+    ],
+    "faqs": [
+      {
+        "question": "Which image format offers the best compression?",
+        "answer": "WebP is highly recommended for web use as it offers superior lossy and lossless compression compared to older formats like JPEG and PNG."
+      },
+      {
+        "question": "Can I convert multiple formats at the same time?",
+        "answer": "Yes, you can load images of mixed formats (PNG, JPG, etc.) and convert them all to the selected target format in a single action."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Understanding Web Image Formats",
+        "content": "- **JPEG**: Best for photos, uses lossy compression.\n- **PNG**: Supports transparency, uses lossless compression.\n- **WebP**: Modern web standard, offers small sizes for both transparent and photographic content."
+      }
+    ]
+  },
+  {
+    "id": "ImageRotator",
+    "slug": "image-rotator",
+    "name": "Image Rotator",
+    "category": "image",
+    "shortDescription": "Rotate images clockwise/counter-clockwise, flip horizontally or vertically, and adjust custom angles.",
+    "metaDescription": "Rotate and flip images online for free. Adjust rotation angle by degrees or mirror photos horizontally/vertically with live preview.",
+    "keywords": [
+      "Image Rotator",
+      "Rotate photo online",
+      "Flip image horizontal",
+      "Mirror image vertically",
+      "Rotate JPG PNG"
+    ],
+    "icon": "RotateCw",
+    "howToUse": [
+      "Upload your image to the workspace.",
+      "Use the quick buttons to rotate 90 degrees or mirror/flip the image.",
+      "Adjust the slider to rotate by custom degrees (0 to 360).",
+      "Download your transformed image instantly."
+    ],
+    "faqs": [
+      {
+        "question": "Does custom degree rotation crop the image corners?",
+        "answer": "No. The canvas size dynamically expands to fit the rotated dimensions so that the entire image remains fully visible."
+      },
+      {
+        "question": "Will rotating affect transparency in PNGs?",
+        "answer": "No, transparent backgrounds are preserved when rotating PNG or WebP images."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Image Mirroring and Rotations",
+        "content": "Flipping horizontally creates a mirror image, which is useful for correcting front-camera selfies. Custom angle rotations use trigonometric coordinates to map pixels onto an expanded canvas boundary."
+      }
+    ]
+  },
+  {
+    "id": "ImageWatermark",
+    "slug": "image-watermark",
+    "name": "Add Watermark to Image",
+    "category": "image",
+    "shortDescription": "Add text or logo image watermarks to protect your photos with custom opacity and grid positioning.",
+    "metaDescription": "Add watermark to images online for free. Protect photos with text or logo overlays, configure transparency, sizing, and position grids.",
+    "keywords": [
+      "Add Watermark to Image",
+      "Watermark photo online",
+      "Protect images copyright",
+      "Logo watermark maker",
+      "Overlay text on image"
+    ],
+    "icon": "Type",
+    "howToUse": [
+      "Upload the primary image you wish to protect.",
+      "Choose between \"Text\" or \"Logo\" watermark settings.",
+      "Configure the watermark (enter text/upload logo, choose size, color, opacity).",
+      "Select a grid position (Center, Corners) or choose the \"Tiled\" repeating layout."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of a tiled watermark?",
+        "answer": "A tiled watermark repeats the text or logo across the entire image in a grid, making it much harder to crop out or remove than a single corner mark."
+      },
+      {
+        "question": "Can I upload a transparent PNG logo as a watermark?",
+        "answer": "Yes, transparent PNG or WebP logos are supported and recommended, preserving their transparency when overlaid."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Copyright Protection with Watermarks",
+        "content": "Watermarking is a visual signature placed on photos to claim ownership. Lowering the opacity ensures the watermark protects the work without blocking the primary visual elements."
+      }
+    ]
+  },
+  {
+    "id": "ImageBlur",
+    "slug": "image-blur",
+    "name": "Blur Image",
+    "category": "image",
+    "shortDescription": "Apply Gaussian blur to images with adjustable intensity sliders.",
+    "metaDescription": "Blur images online for free. Adjust Gaussian blur radius for photos to create smooth background effects instantly in browser.",
+    "keywords": [
+      "Blur Image",
+      "Blur photo background",
+      "Gaussian blur online",
+      "Smoothen image pixels",
+      "Blur image tool"
+    ],
+    "icon": "Layers",
+    "howToUse": [
+      "Upload the image you want to blur.",
+      "Adjust the blur intensity slider (from 0px to 60px).",
+      "Review the live preview on the canvas workspace.",
+      "Download the blurred image in PNG format."
+    ],
+    "faqs": [
+      {
+        "question": "How is the blur effect computed?",
+        "answer": "The blur uses high-performance hardware-accelerated canvas filter properties (`blur(Xpx)`), rendering the blurred pixels instantly in browser memory."
+      },
+      {
+        "question": "Can I blur only a specific portion of the image?",
+        "answer": "Currently, this tool applies Gaussian blur to the entire image. To blur a specific area, you can crop that segment first."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Gaussian Blur Applications",
+        "content": "Gaussian blur is a math filter that averages pixel colors with surrounding values. It is commonly used to create decorative backgrounds, protect text privacy, or reduce digital noise."
+      }
+    ]
+  },
+  {
+    "id": "BackgroundRemover",
+    "slug": "background-remover",
+    "name": "Remove Background",
+    "category": "image",
+    "shortDescription": "Remove backgrounds from images using local pixel color keying with tolerance controls.",
+    "metaDescription": "Erase background from images online for free. Select key colors and adjust tolerance sliders to create transparent PNGs locally.",
+    "keywords": [
+      "Remove Background",
+      "Background remover online",
+      "Make image transparent",
+      "Chroma key eraser",
+      "Transparent PNG maker"
+    ],
+    "icon": "Pipette",
+    "howToUse": [
+      "Upload an image with a solid or high-contrast background.",
+      "Click on the color picker tool or click directly on any pixel in the background preview.",
+      "Adjust the tolerance slider to expand or narrow the erased color range.",
+      "Adjust the edge smoothing slider and click download to save as a transparent PNG."
+    ],
+    "faqs": [
+      {
+        "question": "Does this tool support automatic AI background removal?",
+        "answer": "No, this tool uses chroma-key color thresholding running locally in your browser. This guarantees 100% data privacy and runs without external server costs."
+      },
+      {
+        "question": "Why does parts of the subject get erased as well?",
+        "answer": "If the subject contains colors similar to the background, increasing tolerance will key them out too. Adjust the tolerance lower or choose a more distinct color."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Color Keying / Chroma Key Basics",
+        "content": "Color keying maps each pixel to its RGB channels and calculates the distance to the target color. Pixels falling within the tolerance threshold are assigned an alpha value of 0 (transparency)."
+      }
+    ]
+  },
+  {
+    "id": "MetadataViewer",
+    "slug": "metadata-viewer",
+    "name": "Image Metadata Viewer",
+    "category": "image",
+    "shortDescription": "View basic image specifications and decode EXIF header metadata from camera photos.",
+    "metaDescription": "Read image metadata online. View file sizes, resolutions, aspect ratios, and extract EXIF headers (ISO, aperture, exposure, camera model).",
+    "keywords": [
+      "Image Metadata Viewer",
+      "Read EXIF online",
+      "View photo details",
+      "Image property reader",
+      "Camera metadata checker"
+    ],
+    "icon": "Table",
+    "howToUse": [
+      "Select a photo from your device (JPEG/JPG is highly recommended).",
+      "The general properties (resolution, size, type) will display immediately.",
+      "Review the EXIF headers section for camera make, model, exposure settings, and date taken details."
+    ],
+    "faqs": [
+      {
+        "question": "Why does my image show no EXIF metadata?",
+        "answer": "Most image uploads on social media, messaging apps, or optimization tools strip EXIF data to protect user privacy and minimize file sizes."
+      },
+      {
+        "question": "Does this metadata viewer store my GPS locations?",
+        "answer": "No. The file data is parsed entirely locally in your browser tab. No location details, camera tags, or image properties are sent to any server."
+      }
+    ],
+    "sections": [
+      {
+        "title": "What is EXIF Data?",
+        "content": "EXIF (Exchangeable Image File Format) is a metadata standard embedded inside image files. It stores details written by digital cameras and smartphones, such as date/time, camera model, coordinates, and exposure information."
+      }
+    ]
+  },
+  {
+    "id": "ImageToBase64",
+    "slug": "image-to-base64",
+    "name": "Convert Image to Base64",
+    "category": "image",
+    "shortDescription": "Convert images to Base64 data strings, HTML image tags, and CSS background properties.",
+    "metaDescription": "Convert JPG, PNG, and WebP images to Base64 online. Generate raw base64 data strings, HTML img tags, and CSS background url codes.",
+    "keywords": [
+      "Convert Image to Base64",
+      "Image to Base64 online",
+      "Base64 image encoder",
+      "Generate data URL",
+      "Embed image base64"
+    ],
+    "icon": "FileCode",
+    "howToUse": [
+      "Upload the image you wish to convert.",
+      "Select the target format: Data URL, Raw String, HTML snippet, or CSS rule.",
+      "Review the character count and copy the generated base64 string directly."
+    ],
+    "faqs": [
+      {
+        "question": "What is a Base64 Image?",
+        "answer": "A Base64 image is a binary-to-text representation of an image file. It allows developers to embed image data directly inside HTML, CSS, or JSON files."
+      },
+      {
+        "question": "Does Base64 increase the size of the image?",
+        "answer": "Yes, Base64 encoding increases file size by approximately 33% compared to raw binary data. Use it primarily for small icons and inline SVGs."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Use Cases for Inline Base64 Images",
+        "content": "Inline images eliminate HTTP roundtrips, speeding up single-page loads for tiny icons or template files. However, because they increase size and cannot be cached independently, avoid base64 encoding for larger gallery photos."
+      }
+    ]
+  },
+  {
+    "id": "Base64ToImage",
+    "slug": "base64-to-image",
+    "name": "Base64 to Image",
+    "category": "image",
+    "shortDescription": "Paste Base64 code or data URIs to reconstruct and download the original image.",
+    "metaDescription": "Decode Base64 string to image online. Paste raw base64 or Data URI code to preview, inspect, and download original image files.",
+    "keywords": [
+      "Base64 to Image",
+      "Base64 image decoder",
+      "Convert Base64 to JPG",
+      "Base64 string to PNG",
+      "Decode base64 code"
+    ],
+    "icon": "Eye",
+    "howToUse": [
+      "Paste your Base64 string into the text input area.",
+      "The tool will automatically parse the data, detect the format, and render a preview.",
+      "Review dimensions and click \"Download Image\" to save the file."
+    ],
+    "faqs": [
+      {
+        "question": "What formats can be decoded back to images?",
+        "answer": "The decoder automatically parses raw base64, data URIs (`data:image/png;base64,...`), CSS rules, and HTML `<img>` tag snippets for PNG, JPEG, WebP, and GIF."
+      },
+      {
+        "question": "How does it detect the correct image format?",
+        "answer": "It parses the header prefix or inspects the initial byte signatures (magic bytes) of the raw base64 string to identify MIME formats."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Base64 Decoding Mechanics",
+        "content": "Decoding takes ASCII base64 characters and converts them back to a raw binary array buffer. The browser then creates an in-memory object URL allowing the image to render and download."
+      }
+    ]
+  },
+  {
+    "id": "ImagesToZip",
+    "slug": "images-to-zip",
+    "name": "Convert Multiple Images to ZIP",
+    "category": "image",
+    "shortDescription": "Select and package multiple images into a single compressed ZIP archive locally.",
+    "metaDescription": "Compress multiple images to ZIP online. Package photo selections into a single zip download file entirely in browser.",
+    "keywords": [
+      "Convert Multiple Images to ZIP",
+      "Images to ZIP converter",
+      "Zip photos online",
+      "Compress folder images",
+      "Pack files to zip"
+    ],
+    "icon": "Archive",
+    "howToUse": [
+      "Select or drag-and-drop multiple image files into the upload box.",
+      "Review and manage the selected files list (remove unwanted items).",
+      "Click \"Compile ZIP Archive\" to create the zip folder locally.",
+      "Download the compiled `.zip` file with a single click."
+    ],
+    "faqs": [
+      {
+        "question": "Is there a limit on the number of images I can zip?",
+        "answer": "There is no strict limit, but zipping runs inside your browser memory. Processing hundreds of megabytes of images at once can slow down older devices."
+      },
+      {
+        "question": "Are the files zipped securely?",
+        "answer": "Yes, compression runs 100% locally in your browser memory. Your files are never uploaded to any remote server."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Benefits of Client-Side Zipping",
+        "content": "Zipping locally allows you to package and download bulk assets instantly without spending data bandwidth to upload files to a server, providing perfect security for private snapshots."
+      }
+    ]
+  },
+  {
+    "id": "ImageColorPicker",
+    "slug": "image-color-picker",
+    "name": "Image Color Picker",
+    "category": "image",
+    "shortDescription": "Extract pixel color codes from images with a magnifying zoom loupe overlay.",
+    "metaDescription": "Pick color from image online. Hover with magnifying glass zoom and click to copy hex, rgb, and hsl color codes from any pixel.",
+    "keywords": [
+      "Image Color Picker",
+      "Pick color from image",
+      "Hex color dropper",
+      "Find pixel color online",
+      "Color identifier from photo"
+    ],
+    "icon": "Pipette",
+    "howToUse": [
+      "Upload the image from which you want to pick colors.",
+      "Hover over the image canvas. A zoom loupe overlay will follow your cursor.",
+      "Click to lock-select the color of that pixel.",
+      "Copy Hex, RGB, or HSL codes from the sidebar panel."
+    ],
+    "faqs": [
+      {
+        "question": "How accurate is the magnifying loupe?",
+        "answer": "It zooms into the exact pixel coordinate on the canvas, showing a 9x9 grid of pixels around the cursor for precise color selections."
+      },
+      {
+        "question": "What color formats does this tool output?",
+        "answer": "It outputs standard CSS hexadecimal (#Hex), rgb(r, g, b), and hsl(h, s, l) codes ready to copy directly into designs."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Color Codes in Web Development",
+        "content": "- **HEX**: Alphanumeric representation of Red, Green, and Blue intensity in base-16.\n- **RGB**: Specifies additive red, green, blue channels directly.\n- **HSL**: Stands for Hue, Saturation, Lightness, offering a more human-intuitive model for editing colors."
+      }
+    ]
+  },
+  {
+    "id": "QRScannerImage",
+    "slug": "qr-scanner-image",
+    "name": "QR Code Scanner From Image",
+    "category": "image",
+    "shortDescription": "Scan and decode QR codes from image files locally inside browser memory.",
+    "metaDescription": "Scan QR code from image online. Upload JPG, PNG or WebP files and parse QR link or text contents instantly u/s local canvas decoding.",
+    "keywords": [
+      "QR Code Scanner From Image",
+      "Read QR code from file",
+      "QR decoder from photo",
+      "Online QR reader image",
+      "Scan QR code photo"
+    ],
+    "icon": "QrCode",
+    "howToUse": [
+      "Select or drag-and-drop a photo containing a QR code.",
+      "The scanner will analyze the image data instantly in browser.",
+      "Review the decoded text result. Click copy or follow link shortcuts."
+    ],
+    "faqs": [
+      {
+        "question": "Will this scanner work on blur or skewed QR codes?",
+        "answer": "Yes, the decoder (jsQR) contains error correction algorithms to resolve slightly skewed, rotated, or blurry QR codes, provided they are in focus."
+      },
+      {
+        "question": "Can it scan QR codes from screenshots?",
+        "answer": "Yes. Any screenshot, photo, or downloaded graphic containing a QR code can be parsed and decoded."
+      }
+    ],
+    "sections": [
+      {
+        "title": "How QR Code Scanning Works",
+        "content": "QR (Quick Response) codes contain black square blocks arranged in a square grid on a white background. The scanner reads these blocks as binary data, applies Reed-Solomon error correction, and extracts the encoded text strings."
+      }
+    ]
+  },
 ];
