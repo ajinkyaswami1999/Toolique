@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Ruler, ArrowUpDown } from 'lucide-react';
 
 type Category = 'length' | 'weight' | 'temperature' | 'area';
@@ -53,12 +53,12 @@ export default function UnitConverter() {
   const [toUnit, setToUnit] = useState<string>('cm');
   const [result, setResult] = useState<number>(0);
 
-  // When category changes, reset units
-  useEffect(() => {
-    const list = unitsByCategory[category];
+  const handleCategoryChange = (cat: Category) => {
+    setCategory(cat);
+    const list = unitsByCategory[cat];
     setFromUnit(list[0].value);
     setToUnit(list[1].value);
-  }, [category]);
+  };
 
   // Convert
   useEffect(() => {
@@ -129,7 +129,7 @@ export default function UnitConverter() {
             {(['length', 'weight', 'temperature', 'area'] as Category[]).map((cat) => (
               <button
                 key={cat}
-                onClick={() => setCategory(cat)}
+                onClick={() => handleCategoryChange(cat)}
                 className={`py-2 px-3 rounded-xl border text-xs font-bold capitalize transition ${
                   category === cat
                     ? 'bg-teal-50 border-teal-200 text-teal-600 dark:bg-teal-950/20 dark:border-teal-900/60 dark:text-teal-400'
@@ -151,7 +151,7 @@ export default function UnitConverter() {
             type="number"
             value={inputValue || ''}
             onChange={(e) => setInputValue(parseFloat(e.target.value) || 0)}
-            className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-700 dark:text-slate-200 focus:border-teal-500 focus:outline-none"
+            className="saas-input"
           />
         </div>
 
@@ -164,7 +164,7 @@ export default function UnitConverter() {
             <select
               value={fromUnit}
               onChange={(e) => setFromUnit(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-200 focus:border-teal-500 focus:outline-none"
+              className="saas-select"
             >
               {unitsByCategory[category].map((u) => (
                 <option key={u.value} value={u.value}>
@@ -191,7 +191,7 @@ export default function UnitConverter() {
             <select
               value={toUnit}
               onChange={(e) => setToUnit(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-700 dark:text-slate-200 focus:border-teal-500 focus:outline-none"
+              className="saas-select"
             >
               {unitsByCategory[category].map((u) => (
                 <option key={u.value} value={u.value}>

@@ -42,6 +42,10 @@
   @apply w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/40 text-sm text-zinc-900 dark:text-zinc-100 font-medium focus:border-indigo-500 focus:outline-none transition;
 }
 
+select option {
+  @apply bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100;
+}
+
 .saas-badge {
   @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider;
 }
