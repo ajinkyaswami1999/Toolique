@@ -12,7 +12,7 @@ export interface Tool {
   id: string;
   slug: string;
   name: string;
-  category: 'finance' | 'developer' | 'image' | 'utility';
+  category: 'finance' | 'developer' | 'image' | 'utility' | 'civil' | 'architecture' | 'interior';
   shortDescription: string;
   metaDescription: string;
   keywords: string[];
@@ -1155,4 +1155,840 @@ export const toolsList: Tool[] = [
       }
     ]
   }
+,
+  {
+  "id": "ConstructionCostCalculator",
+  "slug": "construction-cost-calculator",
+  "name": "Construction Cost Calculator",
+  "category": "civil",
+  "shortDescription": "Estimate the total cost of construction based on built-up area, quality, and location.",
+  "metaDescription": "Free online House Construction Cost Calculator in India. Estimate total budget, material split, and labor split based on quality grades.",
+  "keywords": [
+    "construction cost calculator",
+    "building cost estimator",
+    "house construction cost India",
+    "material labor split calculator"
+  ],
+  "icon": "Hammer",
+  "howToUse": [
+    "Enter the built-up area in square feet.",
+    "Select the construction quality: Economy, Standard, or Premium.",
+    "Select the city tier or location multiplier.",
+    "View the estimated cost breakdown, including material and labor splits."
+  ],
+  "faqs": [
+    {
+      "question": "What is the average construction cost per sq ft in India?",
+      "answer": "The average construction cost in India ranges from ₹1,200 to ₹1,800 per sq ft for basic/standard quality, and can exceed ₹2,500 per sq ft for premium quality."
+    },
+    {
+      "question": "What is the standard ratio of material to labor in construction?",
+      "answer": "In general, materials constitute 60% of the total budget, while labor makes up the remaining 40%."
+    }
+  ],
+  "sections": [
+    {
+      "title": "What is Construction Cost?",
+      "content": "Construction cost refers to the total expenditure incurred to erect a physical building structure. It includes site preparation, excavation, foundation, brickwork, RCC columns, plastering, wiring, plumbing, and finishing."
+    },
+    {
+      "title": "Material vs Labor cost split",
+      "content": "Building materials (cement, steel, bricks, sand, aggregate, wood, tiles) typically make up about 60% to 65% of the construction budget. Onsite labor (masonry, carpentry, electrical, plumbing labor) accounts for 35% to 40%."
+    }
+  ]
+},
+  {
+  "id": "BOQCalculator",
+  "slug": "boq-calculator",
+  "name": "BOQ (Bill of Quantities) Calculator",
+  "category": "civil",
+  "shortDescription": "Generate material quantity estimates for construction projects.",
+  "metaDescription": "Free online BOQ Calculator. Generate structural cement, steel, bricks, sand, and aggregate quantity requirements based on built-up area.",
+  "keywords": [
+    "BOQ Calculator",
+    "Bill of Quantities online",
+    "material estimator",
+    "cement sand steel estimation",
+    "civil BOQ tool"
+  ],
+  "icon": "Hammer",
+  "howToUse": [
+    "Enter the total proposed built-up area of your building.",
+    "Modify the estimated unit rates for cement, steel, sand, and bricks if needed.",
+    "View the required quantities and estimated structural building costs instantly."
+  ],
+  "faqs": [
+    {
+      "question": "What is a Bill of Quantities (BOQ)?",
+      "answer": "A BOQ is a construction document prepared by a quantity surveyor or civil engineer that lists all materials, parts, and labor costs for a construction project."
+    },
+    {
+      "question": "Are these BOQ estimates final?",
+      "answer": "These estimates use standard civil engineering thumb rules for residential construction and should be used for rough planning only."
+    }
+  ],
+  "sections": [
+    {
+      "title": "What is a BOQ (Bill of Quantities)?",
+      "content": "A Bill of Quantities is a comprehensive schedule of materials, labor, and equipment needed for a construction contract, allowing builders to estimate accurate tender proposals."
+    },
+    {
+      "title": "BOQ Estimation Thumb-Rule Formula",
+      "content": "Our calculator utilizes standard residential material coefficients:\n- Cement: 0.4 Bags per sq ft\n- Steel: 4.0 Kg per sq ft\n- Sand: 1.8 Cubic feet per sq ft\n- Aggregate: 1.35 Cubic feet per sq ft\n- Bricks: 1.4 Bricks per sq ft"
+    }
+  ]
+},
+  {
+  "id": "ConcreteCalculator",
+  "slug": "concrete-calculator",
+  "name": "Concrete Calculator",
+  "category": "civil",
+  "shortDescription": "Calculate concrete volume and ingredient requirements for cement, sand, and aggregate.",
+  "metaDescription": "Online Concrete Calculator. Calculate concrete dry volumes, bags of cement, sand, and aggregate needed for rectangular slabs, beams, or columns.",
+  "keywords": [
+    "Concrete Calculator",
+    "concrete mix ratio calculator",
+    "cement sand aggregate calculator",
+    "dry volume concrete",
+    "M20 concrete mix"
+  ],
+  "icon": "Hammer",
+  "howToUse": [
+    "Enter the dimensions of your concrete structure (length, width, and thickness).",
+    "Select the concrete mix grade (M5, M10, M15, M20, M25).",
+    "Set the wastage buffer percentage (default is 5%).",
+    "View the total wet volume, dry volume, bags of cement, sand tons, and aggregate tons needed."
+  ],
+  "faqs": [
+    {
+      "question": "Why does concrete shrink during mixing?",
+      "answer": "Concrete shrinks when water fills the air voids between cement particles. To compensate, a dry volume multiplier of 1.54 is standard in civil calculations."
+    },
+    {
+      "question": "What mix ratio is M20 concrete?",
+      "answer": "M20 grade concrete has a volume ratio of 1:1.5:3 (1 part cement, 1.5 parts sand, and 3 parts aggregate)."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Concrete Dry vs Wet Volume calculation",
+      "content": "The volume of wet concrete poured is always less than the dry volume of ingredients mixed. Dry Volume is computed as:\nDry Volume = Wet Volume × 1.54"
+    },
+    {
+      "title": "Concrete Grade Mix Ratios",
+      "content": "- **M10**: 1 : 3 : 6 (Cement : Sand : Aggregate) - Used for PCC foundations.\n- **M15**: 1 : 2 : 4 - Used for small pavements and yard floors.\n- **M20**: 1 : 1.5 : 3 - Standard grade for residential columns, slabs, and beams.\n- **M25**: 1 : 1 : 2 - High strength grade for heavily loaded pillars and footings."
+    }
+  ]
+},
+  {
+  "id": "BrickCalculator",
+  "slug": "brick-calculator",
+  "name": "Brick Calculator",
+  "category": "civil",
+  "shortDescription": "Calculate masonry material requirements for brick walls.",
+  "metaDescription": "Free online Brick Calculator. Estimate total number of bricks, cement bags, and sand required for 4.5\" partition and 9\" load-bearing brick walls.",
+  "keywords": [
+    "Brick Calculator",
+    "brick masonry calculator",
+    "mortar estimation",
+    "number of bricks in wall",
+    "brick count calculator"
+  ],
+  "icon": "Hammer",
+  "howToUse": [
+    "Enter the wall length and height.",
+    "Select the wall thickness (4.5 inches or 9 inches).",
+    "Choose the brick size preset (Traditional Clay or Modular Blocks).",
+    "Set mortar mix ratio and wastage allowances to view total material and cost outputs."
+  ],
+  "faqs": [
+    {
+      "question": "How many bricks are in a 9-inch thick wall?",
+      "answer": "Typically, a 9-inch wall requires approximately 10 to 12 bricks per square foot of surface area depending on brick size."
+    },
+    {
+      "question": "What mortar ratio is recommended for wall brickwork?",
+      "answer": "A 1:4 mix (1 cement, 4 sand) is recommended for half-brick partition walls (4.5\"), while a 1:6 mix is standard for full 9\" external walls."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Brick Wall Masonry Math",
+      "content": "Brick masonry calculations compute the volume of the wall, subtracts standard door/window openings, estimates the number of bricks based on volumetric size including 10mm mortar joints, and determines mortar volumes."
+    },
+    {
+      "title": "Standard Brick Dimensions",
+      "content": "- **Traditional Indian Brick**: 9\" × 4.5\" × 3\" (approx. 228mm x 114mm x 76mm)\n- **Modular Standard Brick**: 190mm × 90mm × 90mm (nominal 200mm x 100mm x 100mm including mortar)"
+    }
+  ]
+},
+  {
+  "id": "RCCCalculator",
+  "slug": "rcc-calculator",
+  "name": "RCC Calculator",
+  "category": "civil",
+  "shortDescription": "Calculate reinforced cement concrete quantities including steel and shuttering.",
+  "metaDescription": "Free online RCC Calculator. Calculate total concrete volume, steel reinforcement weight, and shuttering board area for building structures.",
+  "keywords": [
+    "RCC Calculator",
+    "reinforced concrete calculator",
+    "steel weight in concrete",
+    "shuttering area calculator",
+    "IS 456 concrete steel ratios"
+  ],
+  "icon": "Hammer",
+  "howToUse": [
+    "Input structural dimensions: Length, Width, and Thickness/Depth.",
+    "Select steel density ratio (e.g. 1.0% for slabs, 2.0% for columns).",
+    "Enter unit rates to generate detailed material cost splits."
+  ],
+  "faqs": [
+    {
+      "question": "What is RCC?",
+      "answer": "RCC stands for Reinforced Cement Concrete, which combines the high compressive strength of concrete with the high tensile strength of steel rebars."
+    },
+    {
+      "question": "How is steel weight estimated in concrete?",
+      "answer": "Steel is calculated as a volume ratio percentage of the total concrete mass, multiplying the volume of steel by the density of steel (7,850 kg/m³)."
+    }
+  ],
+  "sections": [
+    {
+      "title": "RCC Volume & Steel Weight calculations",
+      "content": "The weight of reinforcement steel is calculated by taking a percentage of the total concrete volume. A standard rule of thumb is:\nSteel Weight (kg) = Concrete Volume (m³) × Steel Ratio (%) × 7850 kg/m³"
+    },
+    {
+      "title": "Standard Steel Ratios u/s IS 456 Guidelines",
+      "content": "- **Slabs**: 0.7% to 1.0% of concrete volume\n- **Beams**: 1.0% to 2.0% of concrete volume\n- **Columns**: 1.5% to 3.0% of concrete volume\n- **Footings**: 0.5% to 0.8% of concrete volume"
+    }
+  ]
+},
+  {
+  "id": "SteelWeightCalculator",
+  "slug": "steel-weight-calculator",
+  "name": "Steel Weight Calculator",
+  "category": "civil",
+  "shortDescription": "Calculate the weight of structural steel bars, plates, flats, and profiles.",
+  "metaDescription": "Online Steel Weight Calculator. Calculate weights of TMT rebar, round bars, flat sections, angles, and channels instantly.",
+  "keywords": [
+    "Steel Weight Calculator",
+    "TMT bar weight formula",
+    "D2/162 steel weight",
+    "steel flat weight calculator",
+    "structural steel weight"
+  ],
+  "icon": "Hammer",
+  "howToUse": [
+    "Select the steel profile: TMT rebar, Round bar, Flats, Angles, or Channels.",
+    "Input the dimensions (diameter, thickness, length, or width).",
+    "Input the quantity to see total weight in kilograms and tons."
+  ],
+  "faqs": [
+    {
+      "question": "What is the D²/162 formula?",
+      "answer": "It is a shortcut to calculate the weight of a round steel bar per meter. Weight (kg/m) = Diameter(mm) × Diameter(mm) / 162.28."
+    },
+    {
+      "question": "What is the density of structural steel?",
+      "answer": "The density of steel is assumed to be 7,850 kg per cubic meter or 7.85 grams per cubic centimeter."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Structural Steel Weight Formula",
+      "content": "Round steel bars are calculated using standard cylindrical volumes:\nWeight = Length × (π × Diameter² / 4) × Steel Density\nThis simplifies to the classic site formula:\nWeight per meter (kg) = Diameter (mm) × Diameter (mm) / 162.28"
+    },
+    {
+      "title": "Standard TMT Rebar Diameter Weights",
+      "content": "- **8 mm**: 0.395 kg/m\n- **10 mm**: 0.617 kg/m\n- **12 mm**: 0.888 kg/m\n- **16 mm**: 1.580 kg/m\n- **20 mm**: 2.470 kg/m\n- **25 mm**: 3.858 kg/m"
+    }
+  ]
+},
+  {
+  "id": "ColumnDesignCalculator",
+  "slug": "column-design-calculator",
+  "name": "Column Design Calculator",
+  "category": "civil",
+  "shortDescription": "Estimate concrete volume, main rebar weights, and column casing shuttering area.",
+  "metaDescription": "Free online Column Design Calculator. Estimate concrete, vertical steel bars, stirrups, and shuttering area for building columns.",
+  "keywords": [
+    "Column Design Calculator",
+    "column concrete steel calculator",
+    "column stirrups estimator",
+    "vertical rebar calculator",
+    "IS 456 column design"
+  ],
+  "icon": "Hammer",
+  "howToUse": [
+    "Enter column width, depth, and height.",
+    "Select the vertical rebar count and rebar diameter.",
+    "Enter stirrup diameter and tie spacing.",
+    "View structural quantities and cost estimates."
+  ],
+  "faqs": [
+    {
+      "question": "What is the minimum steel percentage in columns?",
+      "answer": "Under IS 456, vertical reinforcement in columns must be at least 0.8% of the total cross-sectional area."
+    },
+    {
+      "question": "What spacing is standard for lateral ties (stirrups)?",
+      "answer": "Stirrups are typically spaced at 100mm near beam-column joints, and 150mm in mid-spans."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Structural Columns Design Criteria",
+      "content": "Columns are primary vertical members that transfer compression loads down to footings. Design factors include axial loads, buckling ratios, concrete cover protection (minimum 40mm), and lateral confinement ties."
+    },
+    {
+      "title": "Minimum Rebar Standards",
+      "content": "- Rectangular columns require a minimum of 4 longitudinal bars.\n- Circular columns require a minimum of 6 longitudinal bars.\n- Minimum bar diameter should not be less than 12mm."
+    }
+  ]
+},
+  {
+  "id": "SlabCalculator",
+  "slug": "slab-calculator",
+  "name": "Slab Calculator",
+  "category": "civil",
+  "shortDescription": "Calculate concrete volume, reinforcement grids, and estimated billing costs for slabs.",
+  "metaDescription": "Online Concrete Slab Calculator. Calculate concrete, reinforcement steel meshes, formwork, and billing for G+0/G+1 slabs.",
+  "keywords": [
+    "Slab Calculator",
+    "roof slab concrete calculator",
+    "slab reinforcement steel weight",
+    "concrete slab estimator",
+    "IS 456 slab cover"
+  ],
+  "icon": "Hammer",
+  "howToUse": [
+    "Enter the length, width, and thickness of the slab.",
+    "Enter rebar spacing and bar diameter to estimate reinforcement weight.",
+    "Input standard material prices to view the billing report."
+  ],
+  "faqs": [
+    {
+      "question": "What is the standard thickness of a residential roof slab?",
+      "answer": "Residential building slabs are commonly designed with a thickness of 5 inches (125mm) or 6 inches (150mm)."
+    },
+    {
+      "question": "What is clear cover for slabs?",
+      "answer": "Standard clear cover for concrete slabs is 15mm to 20mm to protect reinforcement steel mesh from rusting."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Slab Concrete Volume calculations",
+      "content": "Concrete volume is a direct cubic dimension calculation:\nVolume = Length × Width × Thickness\nDry materials are then estimated using the M20 or M25 dry volume coefficient of 1.54."
+    },
+    {
+      "title": "Slab Reinforcement Grid specifications",
+      "content": "Main reinforcement bars are laid along the shorter span, while distribution reinforcement is laid along the longer span. Standard residential rebar spacings range from 100mm to 150mm center-to-center."
+    }
+  ]
+},
+  {
+  "id": "FoundationCalculator",
+  "slug": "foundation-calculator",
+  "name": "Foundation Calculator",
+  "category": "civil",
+  "shortDescription": "Calculate excavation soil volumes, PCC mud-mat concrete, and structural RCC footing quantities.",
+  "metaDescription": "Free online Foundation Calculator. Calculate soil excavation pit volumes, sand filling, PCC beds, and RCC column footings.",
+  "keywords": [
+    "Foundation Calculator",
+    "footing concrete calculator",
+    "soil excavation calculator",
+    "PCC mud-mat calculator",
+    "isolated footing design"
+  ],
+  "icon": "Hammer",
+  "howToUse": [
+    "Enter the footing length, width, and excavation depth.",
+    "Specify sand filling thickness and PCC bed thickness.",
+    "Input the RCC footing pad dimensions.",
+    "Select rebar configurations to view excavation, concrete, and steel results."
+  ],
+  "faqs": [
+    {
+      "question": "What is PCC in foundations?",
+      "answer": "PCC stands for Plain Cement Concrete. A thin layer of PCC (usually M10 mix, 3-4 inches thick) is laid at the bottom of excavation pits to create a clean base for steel footings."
+    },
+    {
+      "question": "What depth is safe for residential footings?",
+      "answer": "Safe isolated footing excavation depths depend on soil bearing capacity, but a minimum of 4 to 5 feet is standard for residential houses."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Excavation soil volume calculations",
+      "content": "Soil excavation volume is computed based on pit footprint dimensions:\nExcavation Volume = Length × Width × Depth\nWe add a 10% volume allowance for manual sloped excavation or machinery errors."
+    },
+    {
+      "title": "PCC Base Foundations & Footings",
+      "content": "- **Sand Bedding**: Standard 3-inch thick compacted sand bed is laid first to absorb moisture.\n- **PCC Bed**: 3-inch M10 concrete mix is laid next.\n- **RCC Pad**: The main reinforced footing pad (typically 12\" thickness) is poured on top."
+    }
+  ]
+},
+  {
+  "id": "FARFSICalculator",
+  "slug": "far-fsi-calculator",
+  "name": "FAR / FSI Calculator",
+  "category": "architecture",
+  "shortDescription": "Calculate Floor Area Ratio (FAR) and Floor Space Index (FSI) for plot clearances.",
+  "metaDescription": "Free online FAR / FSI Calculator. Check permissible built-up limits, floors, and utilized area ratios according to municipal bylaws.",
+  "keywords": [
+    "FAR FSI Calculator",
+    "Floor Area Ratio calculator",
+    "Floor Space Index India",
+    "municipal built-up compliance",
+    "max buildable area"
+  ],
+  "icon": "Compass",
+  "howToUse": [
+    "Enter the plot area in square feet or square meters.",
+    "Specify the local permissible FSI/FAR value.",
+    "Input planned built-up area per floor and number of floors.",
+    "Verify FSI compliance status and check remaining buildable area."
+  ],
+  "faqs": [
+    {
+      "question": "What is FAR and FSI?",
+      "answer": "Floor Area Ratio (FAR) and Floor Space Index (FSI) are identical metrics representing the ratio of total floor area across all building levels to the plot area."
+    },
+    {
+      "question": "What is the formula for FSI?",
+      "answer": "FSI = Total Built-up Area / Plot Area. For example, on a 2000 sq ft plot with an FSI of 1.5, the total buildable floor area is 3000 sq ft."
+    }
+  ],
+  "sections": [
+    {
+      "title": "What is Floor Space Index?",
+      "content": "FSI is a zoning restriction used by local municipal development bodies to control building density, traffic management, and utility load distributions in urban areas."
+    },
+    {
+      "title": "FAR Calculation Formulas",
+      "content": "1. **Max Buildable Area** = Plot Area × FSI Value\n2. **Utilized Area** = Built-up Area per Floor × Number of Floors\n3. **Remaining Area** = Max Buildable Area - Utilized Area"
+    }
+  ]
+},
+  {
+  "id": "StaircaseCalculator",
+  "slug": "staircase-calculator",
+  "name": "Staircase Calculator",
+  "category": "architecture",
+  "shortDescription": "Calculate stair riser heights, tread depths, number of steps, and pitch angles.",
+  "metaDescription": "Free online Staircase Calculator. Estimate number of risers, tread sizes, total horizontal run, and staircase pitch angles in Imperial and Metric.",
+  "keywords": [
+    "Staircase Calculator",
+    "riser tread calculator",
+    "stair pitch angle",
+    "stair design online",
+    "building code stairs"
+  ],
+  "icon": "Compass",
+  "howToUse": [
+    "Select unit mode: Imperial (inches) or Metric (cm).",
+    "Input the total floor-to-floor height (rise).",
+    "Input target riser height and tread depth values.",
+    "Check the actual riser height, steps count, run, and compliance indicators."
+  ],
+  "faqs": [
+    {
+      "question": "What riser height is recommended for comfortable stairs?",
+      "answer": "A riser height between 6 to 7 inches (15 to 18 cm) is recommended for comfortable residential walking stairs."
+    },
+    {
+      "question": "How is the staircase pitch angle calculated?",
+      "answer": "The stair angle is calculated using the inverse tangent of the riser height divided by the tread depth (Pitch = arctan(Riser/Tread) * 180 / pi)."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Staircase Layout Criteria",
+      "content": "Proper stair design prevents tripping. It requires balancing riser height (vertical step distance) and tread depth (horizontal foot spacing) to match human walking strides."
+    },
+    {
+      "title": "Riser-Tread Walking Comfort Rule",
+      "content": "A standard architectural comfort index is:\n2 × Riser + Tread = 24 to 25 inches (60 to 64 cm)"
+    }
+  ]
+},
+  {
+  "id": "RoomAreaCalculator",
+  "slug": "room-area-calculator",
+  "name": "Room Area Calculator",
+  "category": "architecture",
+  "shortDescription": "Add multiple rooms to build a layout and estimate Carpet, Built-up, and Super Built-up areas.",
+  "metaDescription": "Interactive Room Area Calculator. Add bedrooms, kitchens, balconies, specify wall thickness, and check total carpet and built-up areas.",
+  "keywords": [
+    "Room Area Calculator",
+    "carpet built up calculator",
+    "super built up area tool",
+    "multiple rooms area calculator",
+    "room square footage"
+  ],
+  "icon": "Compass",
+  "howToUse": [
+    "Select unit system (Feet or Meters).",
+    "Add rooms to the list, inputting length and width for each.",
+    "Check or uncheck \"RERA Carpet\" to toggle RERA classifications.",
+    "Input wall thickness, loading factor, and cost rates to view property metrics."
+  ],
+  "faqs": [
+    {
+      "question": "What is RERA Carpet Area?",
+      "answer": "RERA Carpet Area includes usable floor area of rooms + internal partition walls, but excludes external walls, service shafts, and private balconies."
+    },
+    {
+      "question": "How is wall area estimated here?",
+      "answer": "It estimates wall area by calculating room perimeters and multiplying by the specified wall thickness."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Carpet vs Built-up Area explained",
+      "content": "Carpet area represents net usable floor area inside structural walls. Built-up area includes carpet area, thickness of all internal and external walls, and private balconies."
+    },
+    {
+      "title": "Super Built-up Area & Loading factor",
+      "content": "Super Built-up Area is the built-up area plus a proportionate share of common lobbies, staircase wells, lifts, and security cabins. Loading factor represents this markup (typically 25-35%)."
+    }
+  ]
+},
+  {
+  "id": "CarpetAreaCalculator",
+  "slug": "carpet-area-calculator",
+  "name": "Carpet Area Calculator",
+  "category": "architecture",
+  "shortDescription": "Convert between Carpet, Built-up, and Super Built-up areas using standard ratios.",
+  "metaDescription": "Free online Carpet Area Calculator. Quick conversion tool to find RERA Carpet area from Super Built-up area and vice versa.",
+  "keywords": [
+    "Carpet Area Calculator",
+    "convert super built up to carpet",
+    "carpet to built up formula",
+    "RERA area converter",
+    "apartment carpet estimator"
+  ],
+  "icon": "Compass",
+  "howToUse": [
+    "Select your input area type: Carpet, Built-up, or Super Built-up.",
+    "Enter the area value in square feet or square meters.",
+    "Adjust wall ratios, balcony space ratios, and loading factor sliders.",
+    "View RERA carpet, net usable, and built-up splits instantly."
+  ],
+  "faqs": [
+    {
+      "question": "How do I extract RERA carpet area from Super Built-up?",
+      "answer": "Divide the Super Built-up area by (1 + loading factor/100) to find the Built-up area, then subtract wall and balcony shares."
+    },
+    {
+      "question": "Is a loading factor of 30% normal?",
+      "answer": "Yes, modern high-rise apartments with wide lobbies, double lifts, and clubhouses routinely have loading factors between 25% and 35%."
+    }
+  ],
+  "sections": [
+    {
+      "title": "RERA Carpet Definition",
+      "content": "Under the Real Estate Regulation Act, developers are legally obligated to disclose the RERA Carpet Area (net usable floor area + internal walls) so buyers pay only for private usable space."
+    },
+    {
+      "title": "How to compute Carpet from Built-up",
+      "content": "Carpet Area = Built-up Area - Balcony Area - External Walls Area (typically 5-6% of flat size)."
+    }
+  ]
+},
+  {
+  "id": "FloorTileCalculator",
+  "slug": "floor-tile-calculator",
+  "name": "Floor Tile Calculator",
+  "category": "architecture",
+  "shortDescription": "Calculate floor tile quantities, tile wastage buffers, and box quantities.",
+  "metaDescription": "Online Floor Tile Calculator. Calculate vitrified, ceramic, or wooden floor tile counts, required boxes, and costs based on floor dimensions.",
+  "keywords": [
+    "Floor Tile Calculator",
+    "how many tiles do I need",
+    "floor tile box count",
+    "vitrified tile count estimator",
+    "floor area tiles"
+  ],
+  "icon": "Compass",
+  "howToUse": [
+    "Select unit mode: Imperial (ft/in) or Metric (m/cm).",
+    "Input floor length and width.",
+    "Select a standard tile preset size or set custom dimensions.",
+    "Configure wastage buffers and box packing quantities to view material and cost outputs."
+  ],
+  "faqs": [
+    {
+      "question": "How many tiles are standard in a box?",
+      "answer": "Standard 2x2 feet (60x60 cm) tiles typically come in boxes of 4, while larger 4x2 feet tiles come in boxes of 2."
+    },
+    {
+      "question": "Why do I need a wastage buffer for tiles?",
+      "answer": "Cutting tiles for borders, door frames, and corners generates waste. Standard guidelines recommend adding an 8% to 10% wastage buffer."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Tile count calculation guidelines",
+      "content": "First, find the floor area (Length × Width). Then, divide the floor area by the surface area of a single tile. Finally, round up to the next integer and apply wastage buffers."
+    },
+    {
+      "title": "Standard Tile Size references",
+      "content": "- **Small Bathroom**: 1x1 ft (30x30 cm)\n- **Living/Bedroom**: 2x2 ft (60x60 cm) or 32x32 in (80x80 cm)\n- **Premium Large Vitrified**: 4x2 ft (120x60 cm)"
+    }
+  ]
+},
+  {
+  "id": "PaintCalculator",
+  "slug": "paint-calculator",
+  "name": "Paint Calculator",
+  "category": "architecture",
+  "shortDescription": "Calculate wall and ceiling paint volumes in liters, subtracting window/door areas.",
+  "metaDescription": "Free online Paint Calculator. Estimate total paint liters required for rooms based on surface area, coats, and paint quality.",
+  "keywords": [
+    "Paint Calculator",
+    "room paint estimator",
+    "how many liters of paint",
+    "wall surface paint calculator",
+    "house painting budget"
+  ],
+  "icon": "Compass",
+  "howToUse": [
+    "Enter room Length, Width, and Height dimensions.",
+    "Check whether to include the ceiling area.",
+    "Input door and window counts to subtract their area.",
+    "Select paint quality and coats to view the total liters and material cost."
+  ],
+  "faqs": [
+    {
+      "question": "How many square feet does a liter of paint cover?",
+      "answer": "A standard liter of plastic emulsion covers approximately 100 to 120 sq ft for two coats (or 200-240 sq ft for a single coat)."
+    },
+    {
+      "question": "Do I need 2 coats of paint?",
+      "answer": "Yes, 2 coats are recommended to hide plaster imperfections, achieve rich color depth, and ensure durability."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Wall surface area calculations",
+      "content": "Gross wall surface area is calculated as:\nWall Area = 2 × (Length + Width) × Height\nWe then add the ceiling area (Length × Width) and subtract openings (Standard Door: 21 sq ft, Window: 16 sq ft)."
+    },
+    {
+      "title": "Paint coverage per liter standards",
+      "content": "- **Economy Distemper**: 80 sq ft / liter (2 coats)\n- **Standard Acrylic Emulsion**: 100 sq ft / liter (2 coats)\n- **Premium/Luxury Emulsion**: 140 sq ft / liter (2 coats)"
+    }
+  ]
+},
+  {
+  "id": "WallpaperCalculator",
+  "slug": "wallpaper-calculator",
+  "name": "Wallpaper Calculator",
+  "category": "architecture",
+  "shortDescription": "Calculate wallpaper rolls based on wall area and pattern match repeat margins.",
+  "metaDescription": "Free online Wallpaper Calculator. Calculate standard rolls, pattern repeat margins, and total project costs based on wall size.",
+  "keywords": [
+    "Wallpaper Calculator",
+    "wallpaper rolls estimator",
+    "wallpaper roll size India",
+    "pattern repeat wallpaper calculator",
+    "wall decor calculator"
+  ],
+  "icon": "Compass",
+  "howToUse": [
+    "Enter wall width and wall height.",
+    "Select roll size preset (Standard or Large Roll).",
+    "Input the pattern repeat length (set to 0 for solid colors).",
+    "View net rolls, wastage allowances, and total rolls needed."
+  ],
+  "faqs": [
+    {
+      "question": "What is the size of a standard wallpaper roll?",
+      "answer": "A standard wallpaper roll is typically 33 feet (10m) long and 21 inches (53cm) wide, covering 57.42 square feet."
+    },
+    {
+      "question": "What is pattern repeat?",
+      "answer": "Pattern repeat is the vertical distance between identical design elements. Matching patterns side-by-side creates waste, requiring extra rolls."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Wall area measurements for Wallpaper",
+      "content": "Measure the height and total horizontal width of the wall you want to paper. Area is calculated as Width × Height. Doors and windows are usually not subtracted because you need full strips to cut around them."
+    },
+    {
+      "title": "Wallpaper roll dimensions reference",
+      "content": "- **Standard Roll**: 33 ft × 21 in (10m x 53cm) = 57.4 sq ft / 5.3 sq m\n- **Double/Large Roll**: 33 ft × 41 in (10m x 106cm) = 112.5 sq ft / 10.6 sq m"
+    }
+  ]
+},
+  {
+  "id": "FlooringCostCalculator",
+  "slug": "flooring-cost-calculator",
+  "name": "Flooring Cost Calculator",
+  "category": "interior",
+  "shortDescription": "Estimate material and labor costs for tiles, Indian marble, Italian marble, and wooden flooring.",
+  "metaDescription": "Free online Flooring Cost Calculator. Compare vitrified tiles, marble, granite, and hardwood installation budgets per square foot.",
+  "keywords": [
+    "Flooring Cost Calculator",
+    "marble flooring installation cost",
+    "vitrified tile flooring price",
+    "wooden flooring cost India",
+    "granite flooring cost"
+  ],
+  "icon": "Palette",
+  "howToUse": [
+    "Enter the flooring area in square feet or square meters.",
+    "Select a material preset (Vitrified, Indian Marble, Italian Marble, Wood).",
+    "Adjust wastage buffer percentage.",
+    "Review material cost, labor cost, and total flooring project budget."
+  ],
+  "faqs": [
+    {
+      "question": "What is the cost of vitrified tile flooring in India?",
+      "answer": "Materials cost between ₹60 to ₹100 per sq ft, and labor installation costs are about ₹20 to ₹30 per sq ft."
+    },
+    {
+      "question": "Why is Italian marble flooring labor so expensive?",
+      "answer": "Italian marble is soft and prone to cracking, requiring specialized backing mesh, epoxy adhesives, and multi-stage diamond polishing labor (₹120-200/sq ft)."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Tile vs Marble flooring cost comparisons",
+      "content": "Vitrified tiles are pre-polished and laid quickly, keeping labor costs low. Marble is laid as raw slabs, requiring mortar backing, joint grouting, and post-installation diamond polishing."
+    },
+    {
+      "title": "Labor installation charges guidelines",
+      "content": "- **Vitrified Tiles**: ₹25 per sq ft\n- **Indian Marble**: ₹60 - ₹80 per sq ft (including polishing)\n- **Italian Marble**: ₹120 - ₹180 per sq ft (including polishing)\n- **Wooden Flooring**: ₹30 per sq ft"
+    }
+  ]
+},
+  {
+  "id": "FalseCeilingCalculator",
+  "slug": "false-ceiling-calculator",
+  "name": "False Ceiling Calculator",
+  "category": "interior",
+  "shortDescription": "Calculate POP, Gypsum board, and PVC false ceiling sheet costs, cove lights, and labor.",
+  "metaDescription": "Online False Ceiling Calculator. Estimate material and labor prices for Gypsum, POP, or PVC ceilings including cove lightings.",
+  "keywords": [
+    "False Ceiling Calculator",
+    "POP ceiling cost calculator",
+    "gypsum ceiling rate per sq ft",
+    "cove lighting cost estimator",
+    "renovation ceiling cost"
+  ],
+  "icon": "Palette",
+  "howToUse": [
+    "Enter ceiling Length and Width.",
+    "Select ceiling material (Gypsum, POP, PVC, Wood).",
+    "Select design complexity (Flat, Step, or Designer).",
+    "Toggle cove lighting and specify wastage buffers."
+  ],
+  "faqs": [
+    {
+      "question": "Which is better: Gypsum or POP?",
+      "answer": "Gypsum board is lightweight, fast to install, and has seamless joints. POP (Plaster of Paris) is highly customizable for designer curves but takes longer and is messy to apply."
+    },
+    {
+      "question": "How is cove lighting estimated?",
+      "answer": "Cove lighting is calculated per running foot (Rft) of the perimeter ceiling drop where LED strip slots are made."
+    }
+  ],
+  "sections": [
+    {
+      "title": "POP vs Gypsum ceilings comparison",
+      "content": "Gypsum boards are factory-made panels screwed to steel ceiling channel frameworks. POP is plaster powder mixed with water and applied over metal meshes onsite, allowing high artistic freedom."
+    },
+    {
+      "title": "Complexity markups and cove light pricing",
+      "content": "- **Step Ceiling**: Adds ~15% material/labor charges for vertical drop bands.\n- **Designer CNC/Curves**: Adds ~35% markup.\n- **LED Cove Strip**: Estimated at ₹120 to ₹180 per running foot for strips + driver wiring."
+    }
+  ]
+},
+  {
+  "id": "ModularKitchenCostCalculator",
+  "slug": "modular-kitchen-cost-calculator",
+  "name": "Modular Kitchen Cost Calculator",
+  "category": "interior",
+  "shortDescription": "Estimate modular kitchen prices based on layouts, finishes, countertops, and lofts.",
+  "metaDescription": "Free online Modular Kitchen Cost Calculator. Estimate costs for Straight, L-shape, U-shape, or Parallel kitchens in Laminate, Acrylic, or PU.",
+  "keywords": [
+    "Modular Kitchen Cost Calculator",
+    "L shape kitchen cost",
+    "acrylic kitchen price per foot",
+    "modular kitchen cost estimator",
+    "kitchen design budget"
+  ],
+  "icon": "Palette",
+  "howToUse": [
+    "Select kitchen shape: Straight, Parallel, L-Shape, or U-Shape.",
+    "Enter counter length, loft length, and tall unit counts.",
+    "Select cabinet finish (Laminate, Acrylic, PU Paint).",
+    "Select hardware quality and countertop slabs to view the final quote."
+  ],
+  "faqs": [
+    {
+      "question": "What is the running foot rate of a modular kitchen?",
+      "answer": "Rates vary by finish. Laminate kitchen packages range from ₹1,400 to ₹1,800 per running foot, while acrylic ranges from ₹2,000 to ₹2,500."
+    },
+    {
+      "question": "Does modular kitchen cost include chimney and hob?",
+      "answer": "No, modular kitchen quotes cover woodwork cabinet boxes, shutters, countertop, and hardware channels. Electrical appliances are extra."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Modular Kitchen layout shapes",
+      "content": "- **Straight**: Single wall counter, best for studio flats.\n- **L-Shape**: Most popular layout, utilizes corner areas efficiently.\n- **U-Shape**: Covers three walls, providing maximum counter workspace.\n- **Parallel**: Double counters running opposite, ideal for narrow corridor kitchens."
+    },
+    {
+      "title": "Finish options (Acrylic vs Laminate)",
+      "content": "- **Laminate**: Matte/gloss, highly durable, scratch-resistant, budget-friendly.\n- **Acrylic**: Ultra-high gloss, premium mirror finish, prone to finger smudges.\n- **PU Paint/Duco**: Seamless luxury spray-paint, rich colors, expensive."
+    }
+  ]
+},
+  {
+  "id": "WardrobeCostCalculator",
+  "slug": "wardrobe-cost-calculator",
+  "name": "Wardrobe Cost Calculator",
+  "category": "interior",
+  "shortDescription": "Calculate wardrobe cabinet cost based on sliding or hinged doors, finishes, and loft options.",
+  "metaDescription": "Online Wardrobe Cost Calculator. Estimate hinged or sliding wardrobe budgets, premium fittings, and overhead storage loft costs.",
+  "keywords": [
+    "Wardrobe Cost Calculator",
+    "sliding wardrobe cost estimator",
+    "wardrobe cost per sq ft",
+    "hinged wardrobe price",
+    "bedroom wardrobe planner"
+  ],
+  "icon": "Palette",
+  "howToUse": [
+    "Select unit and enter wardrobe width and height.",
+    "Select door type: Hinged (swing) or Sliding.",
+    "Toggle overhead lofts and specify loft height.",
+    "Select exterior finish and interior accessory levels."
+  ],
+  "faqs": [
+    {
+      "question": "Which is cheaper: sliding or hinged wardrobes?",
+      "answer": "Hinged wardrobes are cheaper (₹1,300 - ₹1,500/sq ft). Sliding wardrobes cost ₹1,800 - ₹2,200/sq ft because they require specialized sliding track mechanisms."
+    },
+    {
+      "question": "How is wardrobe area calculated for billing?",
+      "answer": "Wardrobes are billed based on facade square feet (Width × Height of the wardrobe front)."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Wardrobe sq ft calculation guides",
+      "content": "Measure the width and height of the wall niche where the wardrobe will sit. Multiply Width × Height to find the front face area. Example: A 6ft width × 7ft height wardrobe equals 42 square feet."
+    },
+    {
+      "title": "Sliding vs Hinged door mechanisms",
+      "content": "- **Hinged**: Classic doors swinging outwards, requiring front floor clearance but exposing the entire wardrobe interior when opened.\n- **Sliding**: Modern doors sliding sideways on tracks, saving floor space in compact rooms but exposing only half of the wardrobe at a time."
+    }
+  ]
+}
 ];

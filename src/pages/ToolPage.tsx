@@ -1,4 +1,4 @@
-﻿import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { toolsList } from '../data/tools';
 import { additionalFaqs } from '../data/toolFaqs';
 import { ArrowLeft } from 'lucide-react';
@@ -47,6 +47,32 @@ import HashGenerator from '../tools/HashGenerator';
 import URLEncoderDecoder from '../tools/URLEncoderDecoder';
 import RegexTester from '../tools/RegexTester';
 
+// Phase 3 - Civil Engineering (9 tools)
+import ConstructionCostCalculator from '../tools/ConstructionCostCalculator';
+import BOQCalculator from '../tools/BOQCalculator';
+import ConcreteCalculator from '../tools/ConcreteCalculator';
+import BrickCalculator from '../tools/BrickCalculator';
+import RCCCalculator from '../tools/RCCCalculator';
+import SteelWeightCalculator from '../tools/SteelWeightCalculator';
+import ColumnDesignCalculator from '../tools/ColumnDesignCalculator';
+import SlabCalculator from '../tools/SlabCalculator';
+import FoundationCalculator from '../tools/FoundationCalculator';
+
+// Phase 3 - Architecture (7 tools)
+import FARFSICalculator from '../tools/FARFSICalculator';
+import StaircaseCalculator from '../tools/StaircaseCalculator';
+import RoomAreaCalculator from '../tools/RoomAreaCalculator';
+import CarpetAreaCalculator from '../tools/CarpetAreaCalculator';
+import FloorTileCalculator from '../tools/FloorTileCalculator';
+import PaintCalculator from '../tools/PaintCalculator';
+import WallpaperCalculator from '../tools/WallpaperCalculator';
+
+// Phase 3 - Interior Design (4 tools)
+import FlooringCostCalculator from '../tools/FlooringCostCalculator';
+import FalseCeilingCalculator from '../tools/FalseCeilingCalculator';
+import ModularKitchenCostCalculator from '../tools/ModularKitchenCostCalculator';
+import WardrobeCostCalculator from '../tools/WardrobeCostCalculator';
+
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
   SIPCalculator,
@@ -85,6 +111,32 @@ const toolComponents: Record<string, React.ComponentType> = {
   HashGenerator,
   URLEncoderDecoder,
   RegexTester,
+
+  // Phase 3 - Civil Engineering
+  ConstructionCostCalculator,
+  BOQCalculator,
+  ConcreteCalculator,
+  BrickCalculator,
+  RCCCalculator,
+  SteelWeightCalculator,
+  ColumnDesignCalculator,
+  SlabCalculator,
+  FoundationCalculator,
+
+  // Phase 3 - Architecture
+  FARFSICalculator,
+  StaircaseCalculator,
+  RoomAreaCalculator,
+  CarpetAreaCalculator,
+  FloorTileCalculator,
+  PaintCalculator,
+  WallpaperCalculator,
+
+  // Phase 3 - Interior Design
+  FlooringCostCalculator,
+  FalseCeilingCalculator,
+  ModularKitchenCostCalculator,
+  WardrobeCostCalculator,
 };
 
 export default function ToolPage() {

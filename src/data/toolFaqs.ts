@@ -2547,5 +2547,1646 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "The tool is hosted publically at Toolique. For custom integrations, contact the administrator."
     }
   ]
+,
+  "ConstructionCostCalculator": [
+    {
+      "question": "What is the Construction Cost Calculator?",
+      "answer": "It is an interactive estimator that calculates building costs based on area, city tier, and material/labor selection."
+    },
+    {
+      "question": "How accurate is this cost estimation?",
+      "answer": "It uses current standard market rates in India, but local material price fluctuations and specific soil conditions can affect real-world pricing."
+    },
+    {
+      "question": "What is the standard ratio of material to labor in construction?",
+      "answer": "In general, materials constitute 60% of the total budget, while labor makes up the remaining 40%."
+    },
+    {
+      "question": "Does this include structural engineering design fees?",
+      "answer": "No, this estimator focuses purely on civil material and onsite labor costs, excluding design and statutory municipal permission fees."
+    },
+    {
+      "question": "How does location affect construction costs?",
+      "answer": "Tier 1 cities have higher labor costs and transport markups, whereas Tier 3 areas are typically cheaper."
+    },
+    {
+      "question": "Can I use this for multi-story residential buildings?",
+      "answer": "Yes, you can input the total built-up area across all floors to get a cumulative estimation."
+    },
+    {
+      "question": "Is interior design or plumbing included in the base rate?",
+      "answer": "Basic plumbing, wiring, and floor plastering are covered under standard quality metrics, but modular woodwork and premium sanitaries are extra."
+    },
+    {
+      "question": "How are cement requirements estimated?",
+      "answer": "Typically, around 0.4 bags of cement are required per square foot of built-up construction."
+    },
+    {
+      "question": "How much steel is standard for domestic houses?",
+      "answer": "Residential buildings use approximately 3.5kg to 4.5kg of structural steel per square foot."
+    },
+    {
+      "question": "What is the difference between Economy, Standard, and Premium qualities?",
+      "answer": "Economy uses local brands, standard brickwork and basic tiles; standard uses branded cement and vitrified flooring; premium uses Italian marble, high-end woodwork, and premium fittings."
+    },
+    {
+      "question": "Does this calculator account for boundary wall construction?",
+      "answer": "No, this only estimates the primary built-up house structure. Boundary walls are charged separately by running length."
+    },
+    {
+      "question": "How can I reduce construction cost?",
+      "answer": "Opt for local bricks, standard vitrified flooring, minimize design complexities, and purchase bulk materials directly."
+    },
+    {
+      "question": "What is built-up area?",
+      "answer": "Built-up area includes carpet area plus wall thickness, balconies, and internal utility voids."
+    },
+    {
+      "question": "Are excavation and foundation cost included?",
+      "answer": "Yes, standard foundation costs are factored into the overall base rates per square foot."
+    },
+    {
+      "question": "Who benefits from this calculator?",
+      "answer": "Civil contractors, property developers, architects, and individual homeowners planning construction."
+    },
+    {
+      "question": "Does the calculator handle commercial buildings?",
+      "answer": "It is optimized for residential structures, but can give a basic benchmark for standard office construction."
+    },
+    {
+      "question": "How does cement cost influence the total?",
+      "answer": "Cement makes up about 16% of total material costs, making it a critical component of construction budget tracking."
+    },
+    {
+      "question": "Is masonry sand calculated separately?",
+      "answer": "Yes, sand is estimated at 1.8 cubic feet per square foot of construction under the BOQ splits."
+    },
+    {
+      "question": "Are local municipal taxes included?",
+      "answer": "No, municipal permission fees, registry charges, and GST are excluded from the core structure calculations."
+    },
+    {
+      "question": "Is the cost estimator updated for 2026?",
+      "answer": "Yes, the rate cards correspond to prevailing post-inflation building material indexes in India."
+    }
+  ],
+  "BOQCalculator": [
+    {
+      "question": "What does BOQ stand for?",
+      "answer": "BOQ stands for Bill of Quantities, a document detailing material and labor requirements for a construction project."
+    },
+    {
+      "question": "How does this BOQ Calculator work?",
+      "answer": "It applies civil engineering rules of thumb to estimate total quantities of cement, steel, bricks, aggregate, and sand for a given area."
+    },
+    {
+      "question": "How is sand volume calculated?",
+      "answer": "It is based on a standard requirement of 1.8 cubic feet of sand per square foot of construction area."
+    },
+    {
+      "question": "What is the steel requirement per square foot?",
+      "answer": "The calculator assumes a standard residential benchmark of 4.0 kg of steel per square foot."
+    },
+    {
+      "question": "How are brick quantities calculated?",
+      "answer": "It estimates 1.4 modular bricks per square foot of total built-up area as a thumb-rule guideline."
+    },
+    {
+      "question": "Does this calculator create a legal BOQ document?",
+      "answer": "No, it is a quick estimation tool. For legal bidding, a civil engineer must draft a custom BOQ based on structural drawings."
+    },
+    {
+      "question": "Are finishing aggregates included?",
+      "answer": "Yes, concrete aggregates (20mm and 10mm) are computed at 1.35 cubic feet per square foot."
+    },
+    {
+      "question": "Can I adjust the materials ratio?",
+      "answer": "This tool uses standard thumb-rules. For custom ratios, use the Concrete or Brick calculators."
+    },
+    {
+      "question": "How many cement bags are needed per sq ft?",
+      "answer": "Approximately 0.4 bags of standard Portland Pozoalna Cement (PPC) are estimated per square foot."
+    },
+    {
+      "question": "Does the BOQ include painting materials?",
+      "answer": "No, it focuses strictly on core structural elements: cement, steel, aggregate, sand, and bricks."
+    },
+    {
+      "question": "Is water requirement estimated in this BOQ?",
+      "answer": "Water is calculated dynamically in the concrete sub-module, but excluded from the high-level BOQ."
+    },
+    {
+      "question": "What is the margin of error for these thumb rules?",
+      "answer": "Routinely, these rules are within 10-15% of actual structural drawings."
+    },
+    {
+      "question": "Are foundation materials part of the BOQ?",
+      "answer": "Yes, they are factored into the comprehensive residential built-up multipliers."
+    },
+    {
+      "question": "How do I print the BOQ report?",
+      "answer": "Use the Copy button to copy the text to your clipboard and paste it into any text editor or printer tool."
+    },
+    {
+      "question": "Does it support metric units?",
+      "answer": "Yes, it supports input in square feet, which is standard in the Indian real estate market."
+    },
+    {
+      "question": "What grade of cement is assumed?",
+      "answer": "Standard 43 or 53-grade OPC/PPC cement is assumed."
+    },
+    {
+      "question": "Is waste factor included in the BOQ?",
+      "answer": "Yes, a standard 5% wastage allowance is integrated into the material estimations."
+    },
+    {
+      "question": "Who uses a BOQ?",
+      "answer": "Contractors, builders, estimators, and homeowners to compare quotations from local builders."
+    },
+    {
+      "question": "Can I edit the material unit prices?",
+      "answer": "Yes, you can edit the price inputs to customize the total billing estimate."
+    },
+    {
+      "question": "Are structural columns factored in?",
+      "answer": "Yes, average column density is covered under the total area steel and concrete ratios."
+    }
+  ],
+  "ConcreteCalculator": [
+    {
+      "question": "What is the Concrete Calculator?",
+      "answer": "A tool to calculate the quantities of cement, sand, and aggregate required for a specific concrete volume."
+    },
+    {
+      "question": "What is the dry volume multiplier?",
+      "answer": "Concrete shrinks when water is added. We multiply wet volume by 1.54 to find the required dry material volume."
+    },
+    {
+      "question": "What are M20, M25, and M15 concrete grades?",
+      "answer": "These represent compressive strength in N/mm²: M20 has a 1:1.5:3 mix ratio, while M25 has a 1:1:2 mix ratio."
+    },
+    {
+      "question": "How much water is needed per bag of cement?",
+      "answer": "Standard water-cement ratio is 0.45 to 0.50, requiring roughly 22.5 to 25 liters per bag."
+    },
+    {
+      "question": "Which concrete mix is recommended for slabs?",
+      "answer": "M20 or M25 grade concrete is widely recommended for RCC slabs and columns under IS 456 codes."
+    },
+    {
+      "question": "How is aggregate split calculated?",
+      "answer": "Aggregate is calculated based on the mix ratio selected (e.g. M20 has 3 parts aggregate for 1 part cement)."
+    },
+    {
+      "question": "Can this calculator handle rectangular slabs?",
+      "answer": "Yes, you input the length, width, and thickness of the slab to compute the volume."
+    },
+    {
+      "question": "How do I calculate concrete for circular pillars?",
+      "answer": "You can calculate volume as π × R² × Height and input it as a direct volume."
+    },
+    {
+      "question": "What is the density of concrete?",
+      "answer": "Plain concrete (PCC) is ~2400 kg/m³, while reinforced concrete (RCC) is ~2500 kg/m³."
+    },
+    {
+      "question": "How many bags of cement are in one cubic meter of M20?",
+      "answer": "Around 8 bags of cement are needed per cubic meter of M20 concrete."
+    },
+    {
+      "question": "Is sand weight calculated or volume?",
+      "answer": "Both. The calculator outputs sand in cubic feet (cft) and weight in kg/tons."
+    },
+    {
+      "question": "What type of sand is best for concrete?",
+      "answer": "Coarse river sand or manufactured sand (M-Sand) is ideal for concrete mixes."
+    },
+    {
+      "question": "What size of aggregate is standard for RCC?",
+      "answer": "A mix of 10mm and 20mm aggregates is standard for structural concrete."
+    },
+    {
+      "question": "Can I calculate PCC foundations here?",
+      "answer": "Yes, M10 or M7.5 mixes are standard for PCC mud-mats."
+    },
+    {
+      "question": "How much wastage is standard?",
+      "answer": "Standard civil guidelines recommend adding 5% to 10% wastage buffer."
+    },
+    {
+      "question": "What is curing in concrete?",
+      "answer": "Curing is maintaining moisture in concrete to achieve maximum design strength over 7-14 days."
+    },
+    {
+      "question": "How does water quality affect concrete?",
+      "answer": "Potable water with neutral pH should be used to prevent chemical erosion of reinforcement."
+    },
+    {
+      "question": "Does this tool calculate reinforcement steel?",
+      "answer": "For steel quantities, please use the RCC Calculator or Slab Calculator."
+    },
+    {
+      "question": "What is segregations in concrete placement?",
+      "answer": "Aggregation splits if dropped from over 1.5 meters, weakening structural strength."
+    },
+    {
+      "question": "Is there a resetting mechanism?",
+      "answer": "Yes, click the reset icon to restore the standard 10m x 10m x 0.15m slab values."
+    }
+  ],
+  "BrickCalculator": [
+    {
+      "question": "What is the Brick Calculator?",
+      "answer": "A tool that estimates the number of bricks and quantity of mortar needed for masonry walls."
+    },
+    {
+      "question": "What is the standard brick size in India?",
+      "answer": "Modular brick size is 190mm x 90mm x 90mm, while traditional bricks are 9\" x 4.5\" x 3\"."
+    },
+    {
+      "question": "How does mortar thickness affect brick count?",
+      "answer": "A standard mortar joint of 10mm (0.4 inches) is included, which reduces the raw number of bricks needed."
+    },
+    {
+      "question": "What is a 9-inch wall and a 4.5-inch wall?",
+      "answer": "9-inch walls are external load-bearing walls (double layer); 4.5-inch walls are partition walls (single layer)."
+    },
+    {
+      "question": "What mortar ratio is recommended for partition walls?",
+      "answer": "A 1:4 mix ratio (1 part cement to 4 parts sand) is recommended for 4.5\" partition walls."
+    },
+    {
+      "question": "What mortar ratio is recommended for load-bearing walls?",
+      "answer": "A 1:6 mix ratio is standard for 9\" thick structural external walls."
+    },
+    {
+      "question": "How much dry volume multiplier is used for mortar?",
+      "answer": "Mortar wet volume is multiplied by 1.33 to obtain the required dry material volume."
+    },
+    {
+      "question": "Does this include brick wastage?",
+      "answer": "Yes, a default wastage markup of 5% is added to the total bricks to account for breakages."
+    },
+    {
+      "question": "How many bricks are in 1 cubic foot of masonry?",
+      "answer": "Typically, about 13.5 standard traditional bricks are present in one cubic foot of brickwork."
+    },
+    {
+      "question": "How much cement is needed for 100 sq ft of 9-inch wall?",
+      "answer": "Approximately 5 to 6 bags of cement are needed depending on the mix ratio."
+    },
+    {
+      "question": "What type of cement is used for brickwork?",
+      "answer": "Masonry cement or standard PPC (Portland Pozzolana Cement) is ideal."
+    },
+    {
+      "question": "Can I calculate mortar for fly ash bricks?",
+      "answer": "Yes, the calculator is applicable for fly ash bricks, clay bricks, or concrete blocks of similar dimensions."
+    },
+    {
+      "question": "How does frog size in bricks affect mortar?",
+      "answer": "The indentation (frog) on bricks holds mortar and is factored into standard mortar volume constants."
+    },
+    {
+      "question": "Why is curing important for brick walls?",
+      "answer": "Curing for 7 days ensures the mortar bonds strongly with the bricks, preventing joint cracks."
+    },
+    {
+      "question": "What is efflorescence in brickwork?",
+      "answer": "Efflorescence is the deposition of white salts on brick surfaces due to mineral impurities in water or soil."
+    },
+    {
+      "question": "How much sand is needed for plastering?",
+      "answer": "This calculator covers bricklaying mortar. Plastering requires a separate calculation."
+    },
+    {
+      "question": "Is the calculator free?",
+      "answer": "Yes, it is free and runs client-side in your web browser."
+    },
+    {
+      "question": "Can I change the brick dimensions?",
+      "answer": "You can select presets for modular or traditional clay bricks."
+    },
+    {
+      "question": "Does it support metric inputs?",
+      "answer": "Yes, length and height can be calculated in feet or meters."
+    },
+    {
+      "question": "How do I copy the brick estimation report?",
+      "answer": "Click the copy button in the results panel to copy a formatted text summary."
+    }
+  ],
+  "RCCCalculator": [
+    {
+      "question": "What is the RCC Calculator?",
+      "answer": "A tool to calculate concrete volume, shuttering area, and steel reinforcement weight for structures."
+    },
+    {
+      "question": "What does RCC stand for?",
+      "answer": "RCC stands for Reinforced Cement Concrete, concrete embedded with steel rebars for tensile strength."
+    },
+    {
+      "question": "What is the standard density of steel?",
+      "answer": "Structural steel density is 7850 kg per cubic meter."
+    },
+    {
+      "question": "How is steel quantity estimated in RCC?",
+      "answer": "It is calculated as a percentage of concrete volume (e.g. 1% for slabs, 2% for columns, 1.5% for beams)."
+    },
+    {
+      "question": "What is the shuttering area?",
+      "answer": "The surface area of wooden or metal formwork needed to hold wet concrete until it hardens."
+    },
+    {
+      "question": "How is concrete wet-to-dry conversion done?",
+      "answer": "A dry conversion factor of 1.54 is applied to calculate dry ingredients."
+    },
+    {
+      "question": "What is standard steel spacing in RCC?",
+      "answer": "Spacing ranges from 100mm to 150mm c/c depending on structural design load."
+    },
+    {
+      "question": "Which concrete grade is standard for RCC?",
+      "answer": "M20 (1:1.5:3) is the minimum recommended grade under Indian standards."
+    },
+    {
+      "question": "How is aggregate proportioned?",
+      "answer": "Typically, coarse aggregate forms 60% of total aggregate volume, and fine sand forms 40%."
+    },
+    {
+      "question": "Can I change unit rates?",
+      "answer": "Yes, you can edit the price parameters for concrete, steel, and shuttering."
+    },
+    {
+      "question": "Is this calculator suitable for high-rise buildings?",
+      "answer": "It provides basic volume and weight estimates; professional designs must conform to IS 456."
+    },
+    {
+      "question": "What is concrete cover?",
+      "answer": "The clear distance from rebars to concrete surface, protecting steel from corrosion."
+    },
+    {
+      "question": "How much clear cover is needed for slabs?",
+      "answer": "A minimum of 15mm to 20mm cover is standard for concrete slabs."
+    },
+    {
+      "question": "How much clear cover is needed for columns?",
+      "answer": "A minimum of 40mm cover is recommended for structural columns."
+    },
+    {
+      "question": "Why is steel used in concrete?",
+      "answer": "Concrete is strong in compression but weak in tension; steel rebars provide the necessary tensile strength."
+    },
+    {
+      "question": "How is shuttering cost calculated?",
+      "answer": "It is calculated per square foot of contact area for formwork boards."
+    },
+    {
+      "question": "Does it calculate binder wire?",
+      "answer": "Yes, binder wire is approximated at 1% of total steel reinforcement weight."
+    },
+    {
+      "question": "What is standard wastage for steel reinforcement?",
+      "answer": "Standard calculation includes 3% to 5% wastage for cut rebars."
+    },
+    {
+      "question": "What is segregations in concrete placement?",
+      "answer": "Aggregation splits if dropped from over 1.5 meters, weakening structural strength."
+    },
+    {
+      "question": "Does it run offline?",
+      "answer": "Yes, all computations are processed locally in your browser."
+    }
+  ],
+  "SteelWeightCalculator": [
+    {
+      "question": "What is the Steel Weight Calculator?",
+      "answer": "A tool to calculate the weight of TMT bars, round bars, flat sections, angles, and channels."
+    },
+    {
+      "question": "What is the formula for TMT bar weight per meter?",
+      "answer": "The formula is Weight = D² / 162, where D is the diameter of the bar in millimeters."
+    },
+    {
+      "question": "How is the weight of steel flats calculated?",
+      "answer": "Weight = Width (mm) × Thickness (mm) × Length (m) × 0.00785."
+    },
+    {
+      "question": "What is the density of structural steel?",
+      "answer": "The density is 7.85 g/cm³ or 7850 kg/m³."
+    },
+    {
+      "question": "Can I calculate the weight of hollow pipes?",
+      "answer": "Yes, you can calculate round bars or select sections from standard formats."
+    },
+    {
+      "question": "What diameters of TMT bars are standard in India?",
+      "answer": "Standard sizes are 8mm, 10mm, 12mm, 16mm, 20mm, 25mm, and 32mm."
+    },
+    {
+      "question": "How is the weight of steel angles calculated?",
+      "answer": "Weight = (Leg 1 + Leg 2 - Thickness) × Thickness × Length × 0.00785."
+    },
+    {
+      "question": "What is the standard length of a TMT bar?",
+      "answer": "A single full TMT bar is typically 12 meters (approx. 40 feet) long."
+    },
+    {
+      "question": "Does this tool calculate total cost?",
+      "answer": "Yes, you can input the price per kg of steel to get a total material cost."
+    },
+    {
+      "question": "What is the formula for weight per foot?",
+      "answer": "The weight per foot of TMT steel bars is computed as D² / 533."
+    },
+    {
+      "question": "What is MS Channel weight calculation?",
+      "answer": "It is based on flanges, web thickness, and length profile density."
+    },
+    {
+      "question": "Is there any difference between thermo-mechanically treated (TMT) and mild steel weight?",
+      "answer": "No, both have the same chemical density of 7850 kg/m³, so their weights are identical."
+    },
+    {
+      "question": "Who uses this steel weight tool?",
+      "answer": "Fabricators, civil site engineers, steel merchants, and building contractors."
+    },
+    {
+      "question": "How accurate is the flat bar weight?",
+      "answer": "It is mathematically precise based on volumetric dimensions and steel density."
+    },
+    {
+      "question": "How do I select units?",
+      "answer": "You can input length in meters or feet, and diameter in millimeters."
+    },
+    {
+      "question": "Does the calculator include shipping costs?",
+      "answer": "No, it computes material price only. Freight is determined by transport companies."
+    },
+    {
+      "question": "Can I calculate galvanized iron (GI) sections?",
+      "answer": "Yes, GI has a similar density, so calculations remain valid."
+    },
+    {
+      "question": "How do I reset variables?",
+      "answer": "Click the reset button to restore default TMT bar diameter parameters."
+    },
+    {
+      "question": "Can I copy the weight schedule?",
+      "answer": "Yes, click copy to transfer the weight summary schedule to your device clipboard."
+    },
+    {
+      "question": "What is reinforcement steel binding?",
+      "answer": "Tying steel rebars with binding wire (usually 18 SWG wire) at column intersections."
+    }
+  ],
+  "ColumnDesignCalculator": [
+    {
+      "question": "What is the Column Design Calculator?",
+      "answer": "An estimator for concrete volume, shuttering perimeter, and main steel rebar weights for vertical columns."
+    },
+    {
+      "question": "What size of columns is standard for G+1 houses?",
+      "answer": "A column size of 9\" x 12\" (230mm x 300mm) with 4 bars of 12mm is common in India."
+    },
+    {
+      "question": "How is column concrete volume calculated?",
+      "answer": "Volume = Width × Depth × Height of the column."
+    },
+    {
+      "question": "What is the recommended concrete grade for columns?",
+      "answer": "M20 or M25 grade is recommended to withstand axial load and bending moments."
+    },
+    {
+      "question": "How is shuttering area computed for columns?",
+      "answer": "Shuttering Area = Perimeter of column (2 × (Width + Depth)) × Height."
+    },
+    {
+      "question": "What is the role of stirrups (lateral ties)?",
+      "answer": "Stirrups hold main rebars in position and resist shear forces in columns."
+    },
+    {
+      "question": "What diameter is standard for column stirrups?",
+      "answer": "8mm stirrups at 100mm to 150mm spacing center-to-center is standard."
+    },
+    {
+      "question": "How much steel is standard in columns?",
+      "answer": "According to IS 456, vertical reinforcement should be 0.8% to 6% of column cross-section area."
+    },
+    {
+      "question": "What is the minimum number of bars in a square column?",
+      "answer": "A minimum of 4 vertical bars are required in a square/rectangular column."
+    },
+    {
+      "question": "What is the minimum number of bars in a circular column?",
+      "answer": "A minimum of 6 vertical bars are required in a circular column."
+    },
+    {
+      "question": "What clear cover is recommended for columns?",
+      "answer": "A standard clear cover of 40mm is recommended to protect steel from corrosion."
+    },
+    {
+      "question": "Does this tool design foundations too?",
+      "answer": "For foundation details, please refer to the Foundation Calculator."
+    },
+    {
+      "question": "Can I calculate material cost?",
+      "answer": "Yes, input material and labor rates to calculate total project column costs."
+    },
+    {
+      "question": "What is lap splicing in column reinforcement?",
+      "answer": "Lapping connects vertical rebars across floors, typically using a lap length of 50D."
+    },
+    {
+      "question": "Why is M25 preferred over M20 for columns?",
+      "answer": "M25 provides higher load-bearing capacity and strength for tall structures."
+    },
+    {
+      "question": "How much wastage is estimated for column steel?",
+      "answer": "We factor a standard 5% wastage for stirrup hooks and rebar overlaps."
+    },
+    {
+      "question": "What is the spacing between stirrups?",
+      "answer": "Generally, ties are spaced at 100mm near columns joints and 150mm in mid-span."
+    },
+    {
+      "question": "Who uses a column estimator?",
+      "answer": "Structural draftsmen, site engineers, and masonry contractors."
+    },
+    {
+      "question": "Are the calculations compliant with IS 456?",
+      "answer": "Yes, steel ratios and concrete grades conform to Indian Standard IS 456:2000."
+    },
+    {
+      "question": "Can I reset parameters?",
+      "answer": "Yes, click reset to clear custom measurements."
+    }
+  ],
+  "SlabCalculator": [
+    {
+      "question": "What is the Slab Calculator?",
+      "answer": "A tool to calculate concrete volumes, steel mesh weight, and shuttering areas for concrete slabs."
+    },
+    {
+      "question": "What is standard slab thickness for residential houses?",
+      "answer": "Standard roof slab thickness is 5 inches (125mm) or 6 inches (150mm)."
+    },
+    {
+      "question": "How is steel mesh weight calculated for slabs?",
+      "answer": "It is calculated based on reinforcement spacing and bar diameter across the slab area."
+    },
+    {
+      "question": "Which concrete mix is recommended for RCC slabs?",
+      "answer": "M20 (1:1.5:3) or M25 (1:1:2) is recommended for structural slabs."
+    },
+    {
+      "question": "What is the clear cover for slabs?",
+      "answer": "Clear cover of 15mm to 20mm is standard for roof slabs."
+    },
+    {
+      "question": "How is the shuttering area for a slab calculated?",
+      "answer": "It equals the floor area of the slab + side formwork boundaries."
+    },
+    {
+      "question": "How much cement is needed for a 1000 sq ft slab?",
+      "answer": "A 5-inch thick slab requires approximately 75 to 85 bags of cement for M20 concrete."
+    },
+    {
+      "question": "What is a main bar and cross bar in slab mesh?",
+      "answer": "Main bars resist tensile stress at the bottom; distribution bars resist temperature shrinkages."
+    },
+    {
+      "question": "What diameter is standard for slab reinforcement?",
+      "answer": "8mm and 10mm bars are commonly used in residential roof slabs."
+    },
+    {
+      "question": "Does this slab calculator include beam calculations?",
+      "answer": "No, it estimates slabs only. Beams are calculated separately in RCC modules."
+    },
+    {
+      "question": "What is the weight-to-volume steel ratio in slabs?",
+      "answer": "Standard slab reinforcement is about 80 kg to 100 kg of steel per cubic meter of concrete."
+    },
+    {
+      "question": "How is water volume determined?",
+      "answer": "Water is calculated based on a water-cement ratio of 0.45 to 0.50 (22-25 liters per bag)."
+    },
+    {
+      "question": "What is standard wastage for concrete?",
+      "answer": "A standard 5% concrete wastage allowance is standard on site."
+    },
+    {
+      "question": "What is curing time for roof slabs?",
+      "answer": "Pond curing for a minimum of 10 to 14 days is essential to achieve slab concrete strength."
+    },
+    {
+      "question": "What are micro-cracks in roof slabs?",
+      "answer": "Cracks caused by rapid moisture loss, prevented by timely curing and proper water-cement ratios."
+    },
+    {
+      "question": "Can I input custom slab thicknesses?",
+      "answer": "Yes, you can specify thickness in inches or cm."
+    },
+    {
+      "question": "Does it support metric units?",
+      "answer": "Yes, you can toggle between imperial (feet) and metric (meters) formats."
+    },
+    {
+      "question": "Who uses this slab calculator?",
+      "answer": "Civil engineers, estimators, building owners, and masonry supervisors."
+    },
+    {
+      "question": "Is concrete mix ratio standard?",
+      "answer": "Yes, standard IS 456 volume mixes are applied dynamically."
+    },
+    {
+      "question": "How do I export results?",
+      "answer": "Copy the results panel to copy a formatted text schedule to your clipboard."
+    }
+  ],
+  "FoundationCalculator": [
+    {
+      "question": "What is the Foundation Calculator?",
+      "answer": "A tool to calculate excavation soil volume, PCC base concrete, and structural footing quantities."
+    },
+    {
+      "question": "Why is PCC used in foundations?",
+      "answer": "PCC (Plain Cement Concrete) provides a level, mud-free surface to place steel footing reinforcement."
+    },
+    {
+      "question": "What is standard footing size for residential buildings?",
+      "answer": "A standard isolated footing size is 4ft x 4ft x 4ft (1.2m x 1.2m x 1.2m) depth."
+    },
+    {
+      "question": "How is soil excavation volume calculated?",
+      "answer": "Excavation Volume = Length × Width × Excavation Depth of the pit."
+    },
+    {
+      "question": "Which concrete mix is used for footing bases?",
+      "answer": "M10 or M7.5 is standard for PCC beds, and M20 or M25 is standard for RCC footings."
+    },
+    {
+      "question": "How is RCC footing concrete calculated?",
+      "answer": "It is calculated based on the cubical volume of the concrete pad."
+    },
+    {
+      "question": "What is clear cover for foundations?",
+      "answer": "A minimum clear cover of 50mm is recommended to protect steel from soil salts and moisture."
+    },
+    {
+      "question": "How is excavation cost estimated?",
+      "answer": "It is estimated per cubic foot or cubic meter based on manual labor or JCB machine hours."
+    },
+    {
+      "question": "What is backfilling in foundation?",
+      "answer": "Refilling the excavated pits with soil after the concrete footing is cured."
+    },
+    {
+      "question": "What steel percentage is assumed for foundations?",
+      "answer": "A standard 0.8% to 1.2% steel volume ratio is assumed for footings."
+    },
+    {
+      "question": "What is bearing capacity of soil?",
+      "answer": "The maximum load-bearing capability of soil, determining footing size."
+    },
+    {
+      "question": "Can I estimate trapezoidal footings?",
+      "answer": "This tool assumes rectangular/isolated pads which are standard in residential projects."
+    },
+    {
+      "question": "How much cement is needed for PCC foundation?",
+      "answer": "PCC M10 mix requires around 4.5 bags of cement per cubic meter."
+    },
+    {
+      "question": "Is sand requirement high in foundations?",
+      "answer": "Sand is determined by the mix ratio (e.g. M10 has 3 parts sand to 1 part cement)."
+    },
+    {
+      "question": "How do I calculate multiple footings?",
+      "answer": "Enter the footprint of one pit and multiply the result by total footing count."
+    },
+    {
+      "question": "Does it calculate aggregate weight?",
+      "answer": "Yes, aggregate is estimated in cubic feet and converted to tons/kg."
+    },
+    {
+      "question": "Why is water logging dangerous for excavation?",
+      "answer": "It loosens soil walls, leading to pit collapses and curing delays."
+    },
+    {
+      "question": "Is the calculator mobile-friendly?",
+      "answer": "Yes, it adapts cleanly to all mobile phone screens."
+    },
+    {
+      "question": "Can I reset inputs?",
+      "answer": "Yes, the reset button restores isolated residential defaults."
+    },
+    {
+      "question": "How do I copy foundation data?",
+      "answer": "Click the copy button to transfer the cost and volume breakdown."
+    }
+  ],
+  "FARFSICalculator": [
+    {
+      "question": "What is FAR / FSI?",
+      "answer": "Floor Area Ratio (FAR) or Floor Space Index (FSI) is the ratio of cumulative built-up area of all floors to the total plot area."
+    },
+    {
+      "question": "How does FSI affect construction?",
+      "answer": "A higher FSI allows you to build more floors or larger room areas on the same plot of land."
+    },
+    {
+      "question": "What is the formula for FSI?",
+      "answer": "FSI = Total Built-up Area / Plot Area."
+    },
+    {
+      "question": "What is the difference between FAR and FSI?",
+      "answer": "FAR is expressed as a decimal or percentage (e.g., 1.5 or 150%), while FSI is expressed as a ratio (e.g., 1.5)."
+    },
+    {
+      "question": "Does FSI include balconies?",
+      "answer": "Local municipal authorities determine if balconies are counted under FSI; often exclusive balconies are exempt up to a limit."
+    },
+    {
+      "question": "What is paid FSI?",
+      "answer": "Paid or Premium FSI allows developers to build beyond the normal permissible limit by paying a premium fee to local authorities."
+    },
+    {
+      "question": "How does plot area affect permissible FSI?",
+      "answer": "Larger plots facing wider public roads are generally granted higher permissible FSI by town planners."
+    },
+    {
+      "question": "Is basement parking counted in FSI?",
+      "answer": "Basement areas used strictly for car parking and utility shafts are typically excluded from FSI calculations."
+    },
+    {
+      "question": "What is RERA carpet area vs FSI area?",
+      "answer": "FSI is calculated on built-up areas (including external walls), whereas RERA carpet is internal usable floor area."
+    },
+    {
+      "question": "Does this tool check bylaws for all Indian cities?",
+      "answer": "No, it is a mathematical calculator. Permissible FSI values must be obtained from local municipal bylaws."
+    },
+    {
+      "question": "Can FSI be transferred?",
+      "answer": "Yes, via Transferable Development Rights (TDR), developers can transfer build permissions between plots."
+    },
+    {
+      "question": "How does road width affect FAR?",
+      "answer": "Narrower roads have lower FAR to prevent traffic congestion and high building densities."
+    },
+    {
+      "question": "What happens if I build beyond the FSI limit?",
+      "answer": "Unpermitted construction beyond FSI is illegal, subject to demolition or hefty regularization penalties."
+    },
+    {
+      "question": "Does the calculator work in square yards?",
+      "answer": "It is configured for square feet and square meters, which are standard in property indices."
+    },
+    {
+      "question": "What is loading factor in relation to FSI?",
+      "answer": "Loading factor represents common area markup. FSI is computed on total built-up area including these common facilities."
+    },
+    {
+      "question": "Who defines FSI limits?",
+      "answer": "Local urban development authorities (e.g. DDA in Delhi, MMRDA in Mumbai, BBMP in Bengaluru)."
+    },
+    {
+      "question": "Is FSI the same for residential and commercial buildings?",
+      "answer": "No, commercial complexes often have higher permissible FSI than residential layouts."
+    },
+    {
+      "question": "How do I reset my values?",
+      "answer": "Click the reset icon in the input card to restore default plot parameters."
+    },
+    {
+      "question": "Is my data stored on the server?",
+      "answer": "No, all calculations are private, running in your local browser sandbox."
+    },
+    {
+      "question": "How do I copy the clearance report?",
+      "answer": "Click the copy button to copy the compliance report to your clipboard."
+    }
+  ],
+  "StaircaseCalculator": [
+    {
+      "question": "What is the Staircase Calculator?",
+      "answer": "A tool that computes actual riser heights, treads, horizontal run, and stair pitch based on total rise."
+    },
+    {
+      "question": "What is a comfortable stair riser height?",
+      "answer": "A riser height between 6 inches to 7 inches (15 to 18 cm) is recommended for comfort."
+    },
+    {
+      "question": "What is the ideal tread depth?",
+      "answer": "A tread depth of 10 inches to 12 inches (25 to 30 cm) is standard for safety."
+    },
+    {
+      "question": "What is the ideal angle of a staircase?",
+      "answer": "Stair angles should ideally be between 30° and 38°. Angles above 42° are too steep."
+    },
+    {
+      "question": "How is number of risers calculated?",
+      "answer": "Number of Risers = Total Floor-to-Floor Height / Desired Riser Height (rounded to nearest integer)."
+    },
+    {
+      "question": "What is the relation between treads and risers?",
+      "answer": "Treads = Risers - 1. The top landing serves as the final step."
+    },
+    {
+      "question": "What is the standard rule for stair comfort?",
+      "answer": "The standard rule of thumb is: 2 × Riser + Tread = 24 to 25 inches (60 to 64 cm)."
+    },
+    {
+      "question": "Does this tool calculate L-shaped stairs?",
+      "answer": "It calculates dimensions for a straight run. For L-shaped stairs, split the total rise across two landings."
+    },
+    {
+      "question": "What is clear headroom in staircases?",
+      "answer": "The vertical height from the tread to the ceiling, which must be at least 6.5 feet (2 meters)."
+    },
+    {
+      "question": "What width is standard for residential stairs?",
+      "answer": "A minimum width of 3 feet (90 cm) is standard for residential layouts."
+    },
+    {
+      "question": "How is the horizontal run calculated?",
+      "answer": "Total Horizontal Run = Number of Treads × Tread Depth."
+    },
+    {
+      "question": "Does this tool support metric units?",
+      "answer": "Yes, you can toggle between Imperial (inches) and Metric (cm)."
+    },
+    {
+      "question": "What are stair winders?",
+      "answer": "Triangular steps used to change stair direction without a landing, not recommended for safety."
+    },
+    {
+      "question": "Can I calculate steel stairs?",
+      "answer": "Yes, stair geometry calculations are identical for steel, concrete, and timber structures."
+    },
+    {
+      "question": "How do I calculate concrete volume for stairs?",
+      "answer": "Concrete volume requires multiplying the waist slab thickness by the length and width, which is a structural calculation."
+    },
+    {
+      "question": "Why does actual riser differ from desired riser?",
+      "answer": "Because the total floor height must be divided into a whole number of steps, adjusting the step height slightly."
+    },
+    {
+      "question": "Is this tool useful for architects?",
+      "answer": "Yes, it saves manual calculation time during layout drawings."
+    },
+    {
+      "question": "How do I reset variables?",
+      "answer": "Click the reset button in the header to restore standard residential defaults."
+    },
+    {
+      "question": "Does it require registration?",
+      "answer": "No, it is a free public browser tool."
+    },
+    {
+      "question": "How do I copy the geometry report?",
+      "answer": "Click the copy button in the results panel to save a formatted report."
+    }
+  ],
+  "RoomAreaCalculator": [
+    {
+      "question": "What is the Room Area Calculator?",
+      "answer": "A layout tool that computes Carpet Area, Built-up Area, and Super Built-up Area based on room dimensions."
+    },
+    {
+      "question": "What is Carpet Area?",
+      "answer": "Carpet area is the net usable floor area of an apartment, excluding walls and common areas."
+    },
+    {
+      "question": "What is Built-up Area?",
+      "answer": "Built-up area is carpet area plus wall thickness, balconies, and internal utility shafts."
+    },
+    {
+      "question": "What is Super Built-up Area?",
+      "answer": "Super Built-up area includes Built-up area plus a proportionate share of common lobby, stairs, lift shafts, and clubhouses."
+    },
+    {
+      "question": "How is wall area estimated in this tool?",
+      "answer": "It uses a perimeter approximation formula based on wall thickness and room layouts."
+    },
+    {
+      "question": "What is loading factor in apartments?",
+      "answer": "Loading factor represents common areas added to built-up area, typically ranging from 20% to 35%."
+    },
+    {
+      "question": "Does RERA carpet area include balconies?",
+      "answer": "Under standard RERA guidelines, exclusive balcony and terrace areas are excluded from carpet area."
+    },
+    {
+      "question": "Can I add custom rooms in this builder?",
+      "answer": "Yes, you can add multiple rooms, name them, set dimensions, and toggle RERA carpet inclusions."
+    },
+    {
+      "question": "What is rate per sq ft pricing?",
+      "answer": "It is the base selling price of the property per square foot of Super Built-up area."
+    },
+    {
+      "question": "Does the calculator support metric dimensions?",
+      "answer": "Yes, you can toggle between Feet and Meters."
+    },
+    {
+      "question": "Why is carpet area smaller than super built-up?",
+      "answer": "Because super built-up includes common passages, parking share, and thick external walls."
+    },
+    {
+      "question": "How does wall thickness affect usable area?",
+      "answer": "Thicker walls (e.g. 9-inch exterior walls) occupy more area, reducing net usable carpet area."
+    },
+    {
+      "question": "Can I estimate individual room floor costs?",
+      "answer": "Yes, using the flooring calculator. This tool focuses on area ratios."
+    },
+    {
+      "question": "Who uses this room area tool?",
+      "answer": "Interior designers, home buyers, builders, and real estate brokers."
+    },
+    {
+      "question": "Is the room data saved?",
+      "answer": "No, all input room data remains strictly in your browser memory."
+    },
+    {
+      "question": "How do I remove a room?",
+      "answer": "Click the trash bin icon next to any room row to delete it."
+    },
+    {
+      "question": "Does it calculate property costs?",
+      "answer": "Yes, it estimates property costs based on the Super Built-up area and custom price rates."
+    },
+    {
+      "question": "How do I reset my inputs?",
+      "answer": "Click the reset button in the header card."
+    },
+    {
+      "question": "Are balconies calculated under built-up area?",
+      "answer": "Yes, balconies are added to built-up area estimations."
+    },
+    {
+      "question": "How do I share the room area report?",
+      "answer": "Copy the formatted summary and paste it into emails or documents."
+    }
+  ],
+  "CarpetAreaCalculator": [
+    {
+      "question": "What is the Carpet Area Calculator?",
+      "answer": "A tool that converts between Carpet, Built-Up, and Super Built-Up areas based on standard real estate splits."
+    },
+    {
+      "question": "How do I convert Built-up to Carpet?",
+      "answer": "The tool subtracts wall thickness ratios (typically 6-8%) and balcony space to find the net carpet area."
+    },
+    {
+      "question": "How do I convert Super Built-up to Carpet?",
+      "answer": "It first divides by the loading factor (e.g., 1.25) to get built-up area, then applies wall and balcony deductions."
+    },
+    {
+      "question": "What is the standard loading percentage in India?",
+      "answer": "Loading percentages commonly range from 25% to 35% in multi-story apartments."
+    },
+    {
+      "question": "What is RERA compliant carpet area?",
+      "answer": "Usable floor area + internal partition walls. Balconies and common lobbies must be excluded."
+    },
+    {
+      "question": "Does this tool support custom ratios?",
+      "answer": "Yes, you can customize wall ratio, balcony ratio, and loading factor sliders."
+    },
+    {
+      "question": "Why is FSI area different from carpet area?",
+      "answer": "FSI includes external walls and balconies, whereas carpet area is strictly usable internal space."
+    },
+    {
+      "question": "Can I input area in square meters?",
+      "answer": "Yes, you can toggle between Sq Ft and Sq M."
+    },
+    {
+      "question": "What is built-up area?",
+      "answer": "Carpet area + area of walls + balcony area."
+    },
+    {
+      "question": "Who benefits from this converter?",
+      "answer": "Homebuyers looking to check if a developer's carpet area quote is correct."
+    },
+    {
+      "question": "How does wall ratio affect carpet area?",
+      "answer": "Thicker structural columns or partition walls consume more built-up space, lowering net carpet."
+    },
+    {
+      "question": "Is the calculator ad-supported?",
+      "answer": "Yes, it is supported by non-intrusive display ads and is 100% free."
+    },
+    {
+      "question": "Is there a limit on custom inputs?",
+      "answer": "No, you can enter any positive area value."
+    },
+    {
+      "question": "Are lift shafts included in built-up area?",
+      "answer": "No, lift shafts are common areas and fall under the super built-up loading factor."
+    },
+    {
+      "question": "What is standard balcony ratio?",
+      "answer": "Typically, balcony area is 5% to 10% of the flat size."
+    },
+    {
+      "question": "How do I reset default ratios?",
+      "answer": "Click the reset button to restore standard Indian apartment parameters."
+    },
+    {
+      "question": "Are private open terraces part of carpet area?",
+      "answer": "Under RERA, exclusive open terraces are excluded from carpet area, even if privately owned."
+    },
+    {
+      "question": "Does the tool run on mobile?",
+      "answer": "Yes, it is designed with a responsive layout."
+    },
+    {
+      "question": "How do I copy the area conversion report?",
+      "answer": "Click the copy button in the results panel."
+    },
+    {
+      "question": "Is the calculation immediate?",
+      "answer": "Yes, it computes instantly as you adjust input values."
+    }
+  ],
+  "FloorTileCalculator": [
+    {
+      "question": "What is the Floor Tile Calculator?",
+      "answer": "A tool that calculates the number of tiles, box counts, and material costs for a floor layout."
+    },
+    {
+      "question": "How is tile wastage calculated?",
+      "answer": "A buffer percentage (typically 8-10%) is added to the net count to cover corner cuts and breakages."
+    },
+    {
+      "question": "What are standard tile sizes for living rooms?",
+      "answer": "2x2 feet (60x60 cm) and 4x2 feet (120x60 cm) are standard sizes in India."
+    },
+    {
+      "question": "How is box count determined?",
+      "answer": "Box Count = Total Tiles Required / Tiles per Box (rounded up)."
+    },
+    {
+      "question": "Can I input custom tile sizes?",
+      "answer": "Yes, select 'Custom Size' and enter length and width in inches or cm."
+    },
+    {
+      "question": "Does this tool calculate wall tile requirements?",
+      "answer": "It is optimized for floor area, but you can input wall area as floor area to get wall tile counts."
+    },
+    {
+      "question": "Does it support metric measurements?",
+      "answer": "Yes, you can toggle between Imperial (feet/inches) and Metric (meters/cm)."
+    },
+    {
+      "question": "Why is wastage higher for diagonal tile patterns?",
+      "answer": "Diagonal laying requires cutting corners of many border tiles, increasing wastage to 12-15%."
+    },
+    {
+      "question": "What is standard grout width?",
+      "answer": "Standard grout spacing is 2mm to 5mm, which is a tiny factor and ignored in total tile area."
+    },
+    {
+      "question": "How do I calculate cost?",
+      "answer": "Input the price per tile to compute the overall floor tile budget."
+    },
+    {
+      "question": "What is the box size constant?",
+      "answer": "Typically, tile boxes contain 4 tiles for 2x2 sizes and 2 tiles for 4x2 sizes."
+    },
+    {
+      "question": "Can I calculate tiles for multiple rooms?",
+      "answer": "Input the total cumulative floor area of all rooms into the length and width fields."
+    },
+    {
+      "question": "What is vitrified tiling?",
+      "answer": "Highly durable cement-based tile with low porosity, widely used for indoor floors."
+    },
+    {
+      "question": "What are glazed tiles?",
+      "answer": "Ceramic tiles coated with liquid glass, ideal for bathroom walls but slippery for floors."
+    },
+    {
+      "question": "How do I copy my report?",
+      "answer": "Click the copy button on the result panel."
+    },
+    {
+      "question": "Is the tool updated for 2026?",
+      "answer": "Yes, the preset options reflect standard sizing sold in modern tile stores."
+    },
+    {
+      "question": "Does it require internet?",
+      "answer": "No, it runs entirely client-side."
+    },
+    {
+      "question": "How do I reset variables?",
+      "answer": "Click the reset button in the header card."
+    },
+    {
+      "question": "Is wastage mandatory?",
+      "answer": "Highly recommended; ordering exact counts will leave you short of tiles during corner adjustments."
+    },
+    {
+      "question": "How does tile thickness affect calculations?",
+      "answer": "Tile thickness does not affect count, only weight and transport cost."
+    }
+  ],
+  "PaintCalculator": [
+    {
+      "question": "What is the Paint Calculator?",
+      "answer": "A tool that estimates wall and ceiling surface area, subtracts openings, and calculates required paint volume."
+    },
+    {
+      "question": "How much wall area does 1 liter of paint cover?",
+      "answer": "A standard liter of emulsion covers approximately 100 to 140 sq ft for two coats."
+    },
+    {
+      "question": "Why do we subtract door and window areas?",
+      "answer": "Because doors and windows are not painted with wall paint, saving paint volume."
+    },
+    {
+      "question": "What are standard door and window deductions?",
+      "answer": "A standard door is 21 sq ft (3x7 ft) and a standard window is 16 sq ft (4x4 ft)."
+    },
+    {
+      "question": "How many coats of paint are recommended?",
+      "answer": "A minimum of 2 coats is standard for a smooth, durable finish. 3 coats may be needed for dark shades."
+    },
+    {
+      "question": "Does this include ceiling painting?",
+      "answer": "You can toggle the 'Paint Ceiling' checkbox to include or exclude ceiling area."
+    },
+    {
+      "question": "What is the difference between Premium and Economy paint?",
+      "answer": "Premium paint has higher coverage and durability, whereas economy distemper covers less area per liter."
+    },
+    {
+      "question": "Can I calculate the cost of painting?",
+      "answer": "Yes, input the price per liter of paint to get a total material cost."
+    },
+    {
+      "question": "Does this estimate labor costs?",
+      "answer": "This tool focus on paint material volume. Labor is typically charged separately per sq ft."
+    },
+    {
+      "question": "What is wall primer?",
+      "answer": "A base coat applied before paint to improve adhesion and coverage, usually requiring 1 coat."
+    },
+    {
+      "question": "How does wall texture affect coverage?",
+      "answer": "Rough or textured walls absorb more paint, reducing coverage per liter by up to 20%."
+    },
+    {
+      "question": "Can I use this for exterior painting?",
+      "answer": "Yes, you can input the total outer wall area to get exterior paint volume requirements."
+    },
+    {
+      "question": "What unit systems are supported?",
+      "answer": "Toggle between Feet and Meters for dimensions."
+    },
+    {
+      "question": "How do I copy the report?",
+      "answer": "Click the copy button on the result card."
+    },
+    {
+      "question": "Is the tool free to use?",
+      "answer": "Yes, it is 100% free with no hidden charges."
+    },
+    {
+      "question": "How do I reset the inputs?",
+      "answer": "Click the reset button to restore standard room settings."
+    },
+    {
+      "question": "What is VOC in paints?",
+      "answer": "Volatile Organic Compounds, chemicals that evaporate. Low-VOC paint is safer for indoor use."
+    },
+    {
+      "question": "Does it calculate roller or brush requirements?",
+      "answer": "No, it focuses strictly on paint fluid volume in liters."
+    },
+    {
+      "question": "Can I save custom coverage values?",
+      "answer": "Yes, select 'Custom' and edit the coverage per liter and price fields."
+    },
+    {
+      "question": "How accurate is the paint estimation?",
+      "answer": "It is accurate for standard plaster walls, but porous wall putty will consume more base paint."
+    }
+  ],
+  "WallpaperCalculator": [
+    {
+      "question": "What is the Wallpaper Calculator?",
+      "answer": "A tool that estimates wallpaper rolls required based on wall dimensions and pattern matching repeat metrics."
+    },
+    {
+      "question": "What is standard roll size for wallpapers?",
+      "answer": "A standard roll is typically 33 feet (10m) long and 21 inches (53cm) wide, covering ~57 sq ft."
+    },
+    {
+      "question": "Why is pattern repeat important?",
+      "answer": "If your wallpaper has a repeating pattern, you must align adjacent strips, creating cut waste."
+    },
+    {
+      "question": "How is wallpaper waste estimated?",
+      "answer": "Pattern repeats (e.g. 12\" or 18\" repeats) add a 10-15% wastage markup, while solid colors add only 5-8%."
+    },
+    {
+      "question": "Can I calculate custom roll sizes?",
+      "answer": "Yes, select 'Custom Size' and enter length and width parameters manually."
+    },
+    {
+      "question": "What is standard wallpaper width in metric?",
+      "answer": "The most common standard width is 53 cm (0.53 meters)."
+    },
+    {
+      "question": "Does this tool subtract doors and windows?",
+      "answer": "It calculates gross wall area. For windows, you can subtract their width from the total wall width."
+    },
+    {
+      "question": "What adhesive is used for wallpapers?",
+      "answer": "Special CMC (Carboxymethyl Cellulose) starch paste adhesive is mixed with water."
+    },
+    {
+      "question": "How do I calculate cost?",
+      "answer": "Input the price per roll to estimate total purchase costs."
+    },
+    {
+      "question": "Can I wipe modern wallpapers?",
+      "answer": "Vinyl-coated wallpapers are washable and can be wiped with a damp cloth."
+    },
+    {
+      "question": "How do I apply wallpaper?",
+      "answer": "Prepare the wall with primer, apply adhesive to wallpaper back, align patterns, and smooth out air bubbles."
+    },
+    {
+      "question": "Does this tool support meters?",
+      "answer": "Yes, you can toggle between Feet and Meters."
+    },
+    {
+      "question": "How many rolls are in a double roll?",
+      "answer": "A double roll is twice the length of a single roll, covering approximately 100 sq ft."
+    },
+    {
+      "question": "Can I use wallpaper in bathrooms?",
+      "answer": "Standard wallpaper peels due to humidity; moisture-resistant vinyl wallpapers are required for bathrooms."
+    },
+    {
+      "question": "Who uses a wallpaper calculator?",
+      "answer": "Interior decor contractors, decorators, and DIY homeowners."
+    },
+    {
+      "question": "How do I copy the calculation report?",
+      "answer": "Use the copy button on the results panel."
+    },
+    {
+      "question": "Is the calculator free?",
+      "answer": "Yes, it runs locally in your browser."
+    },
+    {
+      "question": "How do I reset my values?",
+      "answer": "Click the reset button in the header card."
+    },
+    {
+      "question": "What is non-woven wallpaper?",
+      "answer": "A blend of natural and synthetic fibers, breathable and easy to install/remove."
+    },
+    {
+      "question": "How do I prepare the wall before papering?",
+      "answer": "The wall must be clean, dry, sand-smoothed, and coated with a base primer."
+    }
+  ],
+  "FlooringCostCalculator": [
+    {
+      "question": "What is the Flooring Cost Calculator?",
+      "answer": "An estimator that calculates material and labor installation costs for tiles, wood, and marble flooring."
+    },
+    {
+      "question": "How much does vitrified tile installation cost?",
+      "answer": "Vitrified tiles cost around ₹60-100/sq ft for materials, and ₹20-30/sq ft for installation labor."
+    },
+    {
+      "question": "Why is Italian marble labor cost high?",
+      "answer": "Because it requires heavy backing mortar, diamond polishing, and skilled craftsmen (labor is ₹100-150/sq ft)."
+    },
+    {
+      "question": "What is the flooring wastage factor?",
+      "answer": "Standard tile projects require 8% wastage, while marble/stone layouts can require up to 10%."
+    },
+    {
+      "question": "Does this tool calculate polishing costs?",
+      "answer": "Yes, polishing is integrated into the labor rate presets for Indian and Italian marble."
+    },
+    {
+      "question": "Can I input area in square meters?",
+      "answer": "Yes, toggling units converts calculations automatically."
+    },
+    {
+      "question": "What is laminate wooden flooring?",
+      "answer": "Multi-layer synthetic wood tiles laminated together, costing ~₹100/sq ft for materials."
+    },
+    {
+      "question": "What is vitrified flooring?",
+      "answer": "Highly polished, low-porosity ceramic tiles that look premium and resist stains."
+    },
+    {
+      "question": "Does it calculate skirting tiles?",
+      "answer": "No, skirting is charged by running length; this tool estimates floor flat area."
+    },
+    {
+      "question": "Can I input custom prices?",
+      "answer": "Yes, select 'Custom Material' and edit the price fields."
+    },
+    {
+      "question": "Is concrete sub-floor cost included?",
+      "answer": "No, this assumes a level concrete IPS sub-floor is already present."
+    },
+    {
+      "question": "What is standard grout for vitrified tiles?",
+      "answer": "Epoxy or cement-based grout is used to seal joints between tiles."
+    },
+    {
+      "question": "How do I copy the cost report?",
+      "answer": "Click the copy button on the result panel."
+    },
+    {
+      "question": "Who uses this calculator?",
+      "answer": "Homeowners, designers, and quantity estimators."
+    },
+    {
+      "question": "Are taxes included?",
+      "answer": "No, GST and transport charges are extra."
+    },
+    {
+      "question": "How do I reset values?",
+      "answer": "Click the reset button in the header card."
+    },
+    {
+      "question": "What is granite flooring cost?",
+      "answer": "Granite materials cost around ₹120-250/sq ft, with labor costing ₹50-80/sq ft."
+    },
+    {
+      "question": "Can I use this for outdoor paving?",
+      "answer": "Yes, select custom rates to estimate paver block installations."
+    },
+    {
+      "question": "Is hardwood flooring durable?",
+      "answer": "Yes, but susceptible to moisture, requiring professional dry-lay installation."
+    },
+    {
+      "question": "Does it work on tablet screens?",
+      "answer": "Yes, it is fully responsive."
+    }
+  ],
+  "FalseCeilingCalculator": [
+    {
+      "question": "What is the False Ceiling Calculator?",
+      "answer": "A tool that estimates POP, gypsum board, PVC, and wood false ceiling costs including cove lighting."
+    },
+    {
+      "question": "How much does a gypsum board ceiling cost?",
+      "answer": "Standard gypsum ceilings cost between ₹80 and ₹110 per square foot including labor."
+    },
+    {
+      "question": "What is cove lighting?",
+      "answer": "A lighting design where light is directed up onto the ceiling from a hidden cove, creating a soft glow."
+    },
+    {
+      "question": "How is cove lighting cost estimated?",
+      "answer": "It is calculated by running feet of the perimeter ceiling where LED strips are installed."
+    },
+    {
+      "question": "What is the complexity markup?",
+      "answer": "Step layers and designer layouts require more channels and labor, adding 15% to 35% markups."
+    },
+    {
+      "question": "What is POP false ceiling?",
+      "answer": "Plaster of Paris ceiling, molded onsite for custom designer shapes, costing slightly more than gypsum."
+    },
+    {
+      "question": "Are PVC ceilings good for bathrooms?",
+      "answer": "Yes, PVC panels are water-proof and ideal for bathrooms and kitchens."
+    },
+    {
+      "question": "Does it support metric units?",
+      "answer": "Yes, you can toggle between Feet and Meters."
+    },
+    {
+      "question": "Is wiring cost included in cove rates?",
+      "answer": "Yes, the preset cove price factors in standard LED strip cost + minor wiring loops."
+    },
+    {
+      "question": "What is standard ceiling wastage?",
+      "answer": "False ceilings require around 5% wastage for board corner trims."
+    },
+    {
+      "question": "Can I input custom rates?",
+      "answer": "Yes, select 'Custom Setup' and enter your local builder's rate."
+    },
+    {
+      "question": "How do I copy the report?",
+      "answer": "Click the copy button on the result section."
+    },
+    {
+      "question": "Who uses this false ceiling calculator?",
+      "answer": "Interior designers, contractors, and homeowners planning renovations."
+    },
+    {
+      "question": "Does it calculate metal channel grids?",
+      "answer": "Yes, the base rate preset includes standard metal suspension frame costs."
+    },
+    {
+      "question": "Why is wooden ceiling expensive?",
+      "answer": "Wooden paneling requires MDF/veneer sheets and polishing, costing ₹200-300/sq ft."
+    },
+    {
+      "question": "Is standard height factored in?",
+      "answer": "Standard height clearances do not affect cost, only flat surface area."
+    },
+    {
+      "question": "How do I reset my values?",
+      "answer": "Click the reset button in the header card."
+    },
+    {
+      "question": "What is grid ceiling?",
+      "answer": "A modular ceiling layout using 2x2 acoustic tiles, common in office spaces."
+    },
+    {
+      "question": "Is the calculator free?",
+      "answer": "Yes, it is 100% free with no registration required."
+    },
+    {
+      "question": "Does it work in dark mode?",
+      "answer": "Yes, the interface transitions smoothly into dark mode theme styles."
+    }
+  ],
+  "ModularKitchenCostCalculator": [
+    {
+      "question": "What is the Modular Kitchen Cost Calculator?",
+      "answer": "A tool that estimates kitchen costs based on shape, counter length, finish, countertop, and loft options."
+    },
+    {
+      "question": "What is the standard price of a modular kitchen?",
+      "answer": "A standard L-shape acrylic kitchen costs between ₹1.5 Lakhs and ₹2.5 Lakhs depending on fittings."
+    },
+    {
+      "question": "How are kitchen dimensions measured?",
+      "answer": "They are measured in running feet along the counter length where cabinets are installed."
+    },
+    {
+      "question": "What is the difference between Laminate and Acrylic finishes?",
+      "answer": "Laminate is durable and budget-friendly; acrylic is highly reflective, premium, and easy to clean."
+    },
+    {
+      "question": "How does kitchen shape affect cost?",
+      "answer": "U-shape has the longest counter lengths and corners, making it more expensive than straight or L-shape."
+    },
+    {
+      "question": "Are kitchen lofts worth it?",
+      "answer": "Yes, lofts utilize vertical space up to the ceiling, providing extra storage."
+    },
+    {
+      "question": "What is a tall unit in a kitchen?",
+      "answer": "A vertical full-height pantry cabinet used to store groceries or house built-in microwave/ovens."
+    },
+    {
+      "question": "What countertop materials are popular?",
+      "answer": "Granite is highly durable and economical; quartz is premium, non-porous, and offers seamless joints."
+    },
+    {
+      "question": "Does this tool estimate hardware costs?",
+      "answer": "Yes, it applies percentage markups for Basic, Premium (soft-close), and Luxury hardware."
+    },
+    {
+      "question": "Are appliances included in the cost?",
+      "answer": "No, chimneys, hobs, sinks, and dishwashers must be bought separately."
+    },
+    {
+      "question": "Which material is best for kitchen cabinets?",
+      "answer": "BWR (Boiling Water Resistant) marine ply is recommended to resist kitchen moisture."
+    },
+    {
+      "question": "Does it support metric units?",
+      "answer": "Yes, you can toggle between Feet and Meters."
+    },
+    {
+      "question": "How do I copy the modular kitchen quote?",
+      "answer": "Click the copy button in the results panel."
+    },
+    {
+      "question": "Who uses this kitchen calculator?",
+      "answer": "Interior designers, kitchen manufacturers, and homeowners."
+    },
+    {
+      "question": "Is countertop installation labor included?",
+      "answer": "Yes, countertop rate presets include standard slab cutting and polishing."
+    },
+    {
+      "question": "How do I reset my selections?",
+      "answer": "Click the reset button in the header card."
+    },
+    {
+      "question": "What is a parallel kitchen?",
+      "answer": "A galley layout with counters running along two opposite walls, ideal for narrow rooms."
+    },
+    {
+      "question": "Are baskets included in base rates?",
+      "answer": "Base rates cover cabinetry shells; baskets are covered under the hardware option markup."
+    },
+    {
+      "question": "Is the quote final?",
+      "answer": "No, it is a high-fidelity estimate. Actual vendor quotes may vary by brand."
+    },
+    {
+      "question": "Does the tool run on smartphones?",
+      "answer": "Yes, it is optimized for all mobile viewports."
+    }
+  ],
+  "WardrobeCostCalculator": [
+    {
+      "question": "What is the Wardrobe Cost Calculator?",
+      "answer": "A tool that estimates wardrobe prices based on width, height, door mechanism, finishes, and loft options."
+    },
+    {
+      "question": "Why are sliding wardrobes more expensive?",
+      "answer": "Because they require heavy sliding channels, aluminum profile handles, and specialized track systems."
+    },
+    {
+      "question": "How is wardrobe area calculated?",
+      "answer": "Area = Width × Height of the wardrobe facing facade."
+    },
+    {
+      "question": "What is standard depth of a wardrobe?",
+      "answer": "Hinged wardrobes are 20-22 inches deep; sliding wardrobes require 24 inches depth to clear the tracks."
+    },
+    {
+      "question": "Are lofts counted in wardrobe height?",
+      "answer": "Yes, you can toggle 'Overhead Loft' and specify loft height to get a combined estimate."
+    },
+    {
+      "question": "What finish is best for kid rooms?",
+      "answer": "Laminate is highly durable, scratch-resistant, and cost-effective."
+    },
+    {
+      "question": "What is veneer finish?",
+      "answer": "A thin layer of natural wood glued to ply, polished to give a rich, solid-wood look."
+    },
+    {
+      "question": "Does this tool calculate internal fittings cost?",
+      "answer": "Yes, it adds markups for Basic, Premium (soft-close drawers), and Ultra (pullouts, LEDs) accessories."
+    },
+    {
+      "question": "What plywood is recommended for wardrobes?",
+      "answer": "Commercial MR (Moisture Resistant) grade plywood or MDF is standard for wardrobes."
+    },
+    {
+      "question": "Does it support metric inputs?",
+      "answer": "Yes, you can toggle dimensions between Feet and Meters."
+    },
+    {
+      "question": "What is the standard wardrobe height?",
+      "answer": "Standard height is 7 feet, with the remaining 2-3 feet up to the ceiling covered by lofts."
+    },
+    {
+      "question": "How do I copy the wardrobe report?",
+      "answer": "Use the copy button on the results panel."
+    },
+    {
+      "question": "Who uses this wardrobe calculator?",
+      "answer": "Carpenters, designers, home renovators, and builders."
+    },
+    {
+      "question": "Are soft-close hinges included in base rate?",
+      "answer": "No, standard hinges are assumed. Soft-close hinges fall under premium accessories."
+    },
+    {
+      "question": "Can I calculate cost for MDF wardrobes?",
+      "answer": "Yes, select laminate finish and adjust rates using the sliding sliders."
+    },
+    {
+      "question": "Is installation labor included?",
+      "answer": "Yes, base rates include carpentry assembly labor charges."
+    },
+    {
+      "question": "How do I reset inputs?",
+      "answer": "Click the reset button in the header card."
+    },
+    {
+      "question": "Are mirrors on doors extra?",
+      "answer": "Yes, premium glass/mirror panels add finish markup costs."
+    },
+    {
+      "question": "Is this tool free?",
+      "answer": "Yes, it is 100% free with no registration required."
+    },
+    {
+      "question": "Does it save my designs?",
+      "answer": "No, calculations run purely locally in the user browser."
+    }
+  ]
 };
 

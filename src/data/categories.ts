@@ -34,5 +34,26 @@ export const categories: Category[] = [
     description: 'Generate standard QR codes, UPI links, calculate age, experience, and more.',
     icon: 'Sliders',
     colorClass: 'from-amber-500/10 to-orange-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20'
+  },
+  {
+    id: 'civil',
+    name: 'Civil Engineering',
+    description: 'Calculate concrete, bricks, steel weight, BOQs, and structural dimensions u/s industry standards.',
+    icon: 'Hammer',
+    colorClass: 'from-blue-500/10 to-cyan-500/10 text-cyan-700 dark:text-cyan-400 border-cyan-500/20'
+  },
+  {
+    id: 'architecture',
+    name: 'Architecture',
+    description: 'Design stairs, estimate paint/wallpaper, and calculate FAR/FSI plot clearances.',
+    icon: 'Compass',
+    colorClass: 'from-violet-500/10 to-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/20'
+  },
+  {
+    id: 'interior',
+    name: 'Interior Design',
+    description: 'Estimate material and installation costs for modular kitchens, wardrobes, ceilings, and flooring.',
+    icon: 'Palette',
+    colorClass: 'from-pink-500/10 to-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20'
   }
 ];
