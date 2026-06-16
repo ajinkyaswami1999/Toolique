@@ -98,7 +98,7 @@ Estimated u/s standard IS-456 reinforcement concrete limits.`;
           </div>
           <button
             onClick={handleReset}
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-855 hover:text-slate-650 dark:hover:text-slate-200 transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-zinc-800 hover:text-slate-650 dark:hover:text-slate-200 transition"
             title="Reset"
           >
             <RotateCcw className="w-4 h-4" />
@@ -249,11 +249,11 @@ Estimated u/s standard IS-456 reinforcement concrete limits.`;
               </div>
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-400 font-medium">Total Steel Weight</span>
-                <span className="font-black text-slate-850 dark:text-white font-mono">
+                <span className="font-black text-zinc-800 dark:text-white font-mono">
                   {results.totalSteelKg} kg
                 </span>
               </div>
-              <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-slate-850 pt-2.5">
+              <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-zinc-800 pt-2.5">
                 <span className="text-slate-400 font-medium">Shuttering Area</span>
                 <span className="font-bold text-teal-650 dark:text-teal-400 font-mono">
                   {results.shutteringSqm} m²

@@ -126,25 +126,31 @@ Calculated u/s layout tiles optimization algorithms.`;
   const dimUnit = unit === 'imperial' ? 'ft' : 'm';
   const tileDimUnit = unit === 'imperial' ? 'in' : 'cm';
 
+  // Calculate grid dimensions
+  const tileL_units = unit === 'imperial' ? tileLength / 12 : tileLength / 100;
+  const tileW_units = unit === 'imperial' ? tileWidth / 12 : tileWidth / 100;
+  const approxCols = Math.max(1, Math.min(10, Math.round(floorLength / (tileL_units || 1))));
+  const approxRows = Math.max(1, Math.min(8, Math.round(floorWidth / (tileW_units || 1))));
+
   return (
     <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 text-left">
       {/* Input Panel */}
       <div className="md:col-span-7 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-4">
-        <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800/60 pb-3">
+        <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-800/60 pb-3">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400">
+            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
               <Compass className="w-4.5 h-4.5" />
             </div>
-            <h3 className="font-bold text-slate-800 dark:text-white text-sm">Floor & Tile Sizes</h3>
+            <h3 className="font-bold text-zinc-800 dark:text-white text-sm">Floor & Tile Sizes</h3>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex rounded-lg bg-slate-100 dark:bg-slate-800 p-0.5 text-xs font-bold">
+            <div className="flex rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5 text-[10px] font-bold">
               <button
                 onClick={() => {
                   setUnit('imperial');
                   setTileSizePreset('2x2');
                 }}
-                className={`px-2 py-1 rounded-md transition ${unit === 'imperial' ? 'bg-white dark:bg-slate-700 text-violet-600 shadow-sm' : 'text-slate-400'}`}
+                className={`px-2 py-1 rounded-md transition-all duration-200 ${unit === 'imperial' ? 'bg-white dark:bg-zinc-700 text-indigo-650 dark:text-indigo-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-650'}`}
               >
                 Imperial (ft/in)
               </button>
@@ -153,14 +159,14 @@ Calculated u/s layout tiles optimization algorithms.`;
                   setUnit('metric');
                   setTileSizePreset('2x2');
                 }}
-                className={`px-2 py-1 rounded-md transition ${unit === 'metric' ? 'bg-white dark:bg-slate-700 text-violet-600 shadow-sm' : 'text-slate-400'}`}
+                className={`px-2 py-1 rounded-md transition-all duration-200 ${unit === 'metric' ? 'bg-white dark:bg-zinc-700 text-indigo-655 dark:text-indigo-405 shadow-sm' : 'text-zinc-400 hover:text-zinc-650'}`}
               >
                 Metric (m/cm)
               </button>
             </div>
             <button
               onClick={handleReset}
-              className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-650 dark:hover:text-slate-200 transition"
+              className="p-1.5 rounded-lg text-zinc-405 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-650 dark:hover:text-zinc-200 transition"
               title="Reset"
             >
               <RotateCcw className="w-4 h-4" />
@@ -171,7 +177,7 @@ Calculated u/s layout tiles optimization algorithms.`;
         {/* Floor Size */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-450 dark:text-zinc-500 mb-1.5">
               Floor Length ({dimUnit})
             </label>
             <input
@@ -182,7 +188,7 @@ Calculated u/s layout tiles optimization algorithms.`;
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-455 dark:text-zinc-500 mb-1.5">
               Floor Width ({dimUnit})
             </label>
             <input
@@ -195,51 +201,56 @@ Calculated u/s layout tiles optimization algorithms.`;
         </div>
 
         {/* Tile Size Preset */}
-        <div className="grid grid-cols-3 gap-2">
-          {['1x1', '2x1', '2x2', '4x2'].map((preset) => (
+        <div>
+          <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-550 mb-1.5">
+            Tile Size Slabs
+          </label>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+            {['1x1', '2x1', '2x2', '4x2'].map((preset) => (
+              <button
+                key={preset}
+                onClick={() => setTileSizePreset(preset)}
+                className={`px-2 py-1.5 rounded-lg text-xs font-bold border transition-all duration-200 ${
+                  tileSizePreset === preset
+                    ? 'border-indigo-500 bg-indigo-500/5 text-indigo-600 dark:text-indigo-400'
+                    : 'border-zinc-200 dark:border-zinc-800 text-zinc-650 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/40'
+                }`}
+              >
+                {preset === '1x1'
+                  ? unit === 'imperial'
+                    ? '1x1 ft'
+                    : '30x30 cm'
+                  : preset === '2x1'
+                  ? unit === 'imperial'
+                    ? '2x1 ft'
+                    : '60x30 cm'
+                  : preset === '2x2'
+                  ? unit === 'imperial'
+                    ? '2x2 ft'
+                    : '60x60 cm'
+                  : unit === 'imperial'
+                  ? '4x2 ft'
+                  : '120x60 cm'}
+              </button>
+            ))}
             <button
-              key={preset}
-              onClick={() => setTileSizePreset(preset)}
-              className={`px-2 py-1.5 rounded-lg text-xs font-bold border transition ${
-                tileSizePreset === preset
-                  ? 'border-violet-500 bg-violet-500/5 text-violet-600 dark:text-violet-400'
-                  : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-855'
+              onClick={() => setTileSizePreset('custom')}
+              className={`px-2 py-1.5 rounded-lg text-xs font-bold border transition-all duration-200 ${
+                tileSizePreset === 'custom'
+                  ? 'border-indigo-500 bg-indigo-500/5 text-indigo-600 dark:text-indigo-400'
+                  : 'border-zinc-200 dark:border-zinc-800 text-zinc-650 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/40'
               }`}
             >
-              {preset === '1x1'
-                ? unit === 'imperial'
-                  ? '1 x 1 ft'
-                  : '30 x 30 cm'
-                : preset === '2x1'
-                ? unit === 'imperial'
-                  ? '2 x 1 ft'
-                  : '60 x 30 cm'
-                : preset === '2x2'
-                ? unit === 'imperial'
-                  ? '2 x 2 ft'
-                  : '60 x 60 cm'
-                : unit === 'imperial'
-                ? '4 x 2 ft'
-                : '120 x 60 cm'}
+              Custom
             </button>
-          ))}
-          <button
-            onClick={() => setTileSizePreset('custom')}
-            className={`px-2 py-1.5 rounded-lg text-xs font-bold border transition ${
-              tileSizePreset === 'custom'
-                ? 'border-violet-500 bg-violet-500/5 text-violet-600 dark:text-violet-400'
-                : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-855'
-            }`}
-          >
-            Custom Size
-          </button>
+          </div>
         </div>
 
         {/* Custom dimensions if custom selected */}
         {tileSizePreset === 'custom' && (
-          <div className="grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-slate-800/60 pt-3">
+          <div className="grid grid-cols-2 gap-4 border-t border-zinc-150 dark:border-zinc-800/60 pt-3 animate-none">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+              <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 mb-1.5">
                 Tile Length ({tileDimUnit})
               </label>
               <input
@@ -250,7 +261,7 @@ Calculated u/s layout tiles optimization algorithms.`;
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+              <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 mb-1.5">
                 Tile Width ({tileDimUnit})
               </label>
               <input
@@ -264,9 +275,9 @@ Calculated u/s layout tiles optimization algorithms.`;
         )}
 
         {/* Pricing, Wastage, Box details */}
-        <div className="grid grid-cols-3 gap-3 border-t border-slate-100 dark:border-slate-800/60 pt-4">
+        <div className="grid grid-cols-3 gap-3 border-t border-zinc-150 dark:border-zinc-800/60 pt-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-450 dark:text-zinc-500 mb-1.5">
               Wastage (%)
             </label>
             <input
@@ -277,8 +288,8 @@ Calculated u/s layout tiles optimization algorithms.`;
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
-              Tiles Per Box
+            <label className="block text-xs font-semibold text-zinc-455 dark:text-zinc-500 mb-1.5">
+              Tiles / Box
             </label>
             <input
               type="number"
@@ -288,7 +299,7 @@ Calculated u/s layout tiles optimization algorithms.`;
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-455 dark:text-zinc-500 mb-1.5">
               Price / Tile (₹)
             </label>
             <input
@@ -305,12 +316,12 @@ Calculated u/s layout tiles optimization algorithms.`;
       <div className="md:col-span-5 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-col justify-between">
         <div>
           <div className="flex justify-between items-center mb-4">
-            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
+            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block">
               Tiles Estimation Results
             </span>
             <button
               onClick={copyReport}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-[11px] font-bold transition shadow-sm"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold transition shadow-sm active:scale-95"
             >
               {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -319,45 +330,70 @@ Calculated u/s layout tiles optimization algorithms.`;
 
           <div className="space-y-4">
             <div>
-              <span className="text-xs font-semibold text-slate-400">Total Tiles Required</span>
-              <div className="text-xl md:text-2xl font-black text-slate-900 dark:text-white mt-0.5 font-mono">
+              <span className="text-xs font-semibold text-zinc-400">Total Tiles Required</span>
+              <div className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white mt-0.5 font-mono">
                 {results.totalTiles} Units
               </div>
-              <p className="text-[10px] text-slate-400 mt-1">
+              <p className="text-[10px] text-zinc-450 mt-1 font-semibold">
                 Net: {results.netTiles} + Wastage: {results.wastageTiles} ({wastage}%)
               </p>
             </div>
 
-            <div className="border-t border-slate-100 dark:border-slate-800/60 pt-4 space-y-3">
+            <div className="border-t border-zinc-150 dark:border-zinc-800/60 pt-4 space-y-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Floor Area</span>
-                <span className="font-bold text-slate-700 dark:text-slate-350 font-mono">
+                <span className="text-zinc-400 font-medium">Floor Area</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-300 font-mono">
                   {results.floorArea.toLocaleString()} {areaUnit}
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Single Tile Area</span>
-                <span className="font-bold text-slate-700 dark:text-slate-350 font-mono">
+                <span className="text-zinc-400 font-medium">Single Tile Area</span>
+                <span className="font-bold text-zinc-805 dark:text-zinc-300 font-mono">
                   {results.tileArea} {areaUnit}
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Total Boxes Required</span>
-                <span className="font-bold text-slate-700 dark:text-slate-350 font-mono">
+                <span className="text-zinc-400 font-medium">Total Boxes Required</span>
+                <span className="font-bold text-zinc-805 dark:text-zinc-300 font-mono">
                   {results.totalBoxes} Boxes
                 </span>
               </div>
-              <div className="flex justify-between items-center text-xs border-t border-slate-100 dark:border-slate-850 pt-2.5">
-                <span className="text-slate-400 font-medium">Estimated Material Cost</span>
-                <span className="font-extrabold text-violet-650 dark:text-violet-400 font-mono">
+              <div className="flex justify-between items-center text-xs border-t border-zinc-150 dark:border-zinc-800 pt-2.5 pb-2">
+                <span className="text-zinc-400 font-medium font-semibold">Estimated Material Cost</span>
+                <span className="font-extrabold text-indigo-600 dark:text-indigo-400 font-mono">
                   ₹{results.materialCost.toLocaleString()}
                 </span>
               </div>
             </div>
+
+            {/* Responsive tile grid visual representation */}
+            <div className="space-y-2.5 pt-1">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-550 uppercase tracking-widest block">
+                Floor Tile Layout Map
+              </span>
+              <div className="relative w-full h-32 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 p-2 flex items-center justify-center">
+                <div 
+                  className="grid gap-0.5 w-full h-full border border-zinc-300 dark:border-zinc-800 bg-zinc-200 dark:bg-zinc-800 p-0.5 rounded-lg overflow-hidden"
+                  style={{
+                    gridTemplateColumns: `repeat(${approxCols}, minmax(0, 1fr))`,
+                    gridTemplateRows: `repeat(${approxRows}, minmax(0, 1fr))`,
+                  }}
+                >
+                  {[...Array(approxCols * approxRows)].map((_, i) => (
+                    <div key={i} className="bg-white dark:bg-zinc-900 border border-zinc-200/20 dark:border-zinc-800/10 rounded-xs" />
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-between items-center text-[9px] text-zinc-500 dark:text-zinc-400 font-medium">
+                <span>Layout: {approxCols} cols x {approxRows} rows</span>
+                <span>Preset: {tileSizePreset.toUpperCase()}</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <div className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800/60 text-[10px] text-slate-400 leading-relaxed">
+        <div className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800/60 text-[10px] text-zinc-450 dark:text-zinc-550 leading-relaxed">
           <p>
             An additional 8-10% of tiles is recommended to account for cuts, corners, borders, and breakage during laying.
           </p>

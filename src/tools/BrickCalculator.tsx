@@ -54,8 +54,6 @@ export default function BrickCalculator() {
     numBricks = numBricks * (1 + wastage / 100);
 
     // 5. Compute mortar volume (in cubic meters)
-    // Mortar = Wall Vol - (Bricks u/s wastage * Brick volume without mortar)
-    // We compute for base wall volume first
     const cleanBricks = wallVolM3 / bVolWithMortar;
     const totalBrickVol = cleanBricks * bVol;
     let wetMortarVol = wallVolM3 - totalBrickVol;
@@ -113,17 +111,17 @@ Estimated u/s standard brick joint ratios.`;
   return (
     <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 text-left">
       {/* Input Panel */}
-      <div className="md:col-span-7 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-4">
-        <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800/60 pb-3">
+      <div className="md:col-span-7 p-6 saas-card space-y-4">
+        <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-800/60 pb-3">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400">
+            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
               <Ruler className="w-4.5 h-4.5" />
             </div>
-            <h3 className="font-bold text-slate-800 dark:text-white text-sm">Wall & Brick details</h3>
+            <h3 className="font-bold text-zinc-805 dark:text-white text-sm">Wall & Brick details</h3>
           </div>
           <button
             onClick={handleReset}
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-850 hover:text-slate-650 dark:hover:text-slate-200 transition"
+            className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-650 dark:hover:text-zinc-200 transition"
             title="Reset"
           >
             <RotateCcw className="w-4 h-4" />
@@ -133,35 +131,35 @@ Estimated u/s standard brick joint ratios.`;
         {/* Wall Dimensions */}
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-405 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 mb-1.5">
               Length (ft)
             </label>
             <input
               type="number"
               value={wallLength || ''}
               onChange={(e) => setWallLength(Math.max(0, parseFloat(e.target.value) || 0))}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-750 dark:text-slate-200 focus:border-teal-500 focus:outline-none"
+              className="saas-input"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-405 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 mb-1.5">
               Height (ft)
             </label>
             <input
               type="number"
               value={wallHeight || ''}
               onChange={(e) => setWallHeight(Math.max(0, parseFloat(e.target.value) || 0))}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-750 dark:text-slate-200 focus:border-teal-500 focus:outline-none"
+              className="saas-input"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-405 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 mb-1.5">
               Thickness
             </label>
             <select
               value={thickness}
               onChange={(e) => setThickness(parseInt(e.target.value) || 9)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-750 dark:text-slate-200 focus:border-teal-500 focus:outline-none"
+              className="saas-select animate-none"
             >
               <option value={9}>9-inch (Outer Wall)</option>
               <option value={4.5}>4.5-inch (Partition)</option>
@@ -171,13 +169,13 @@ Estimated u/s standard brick joint ratios.`;
 
         {/* Brick Type */}
         <div>
-          <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+          <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 mb-1.5">
             Brick Size / Class
           </label>
           <select
             value={brickType}
             onChange={(e) => setBrickType(e.target.value)}
-            className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-750 dark:text-slate-200 focus:border-teal-500 focus:outline-none"
+            className="saas-select"
           >
             {Object.keys(brickSizes).map((k) => (
               <option key={k} value={k}>
@@ -190,13 +188,13 @@ Estimated u/s standard brick joint ratios.`;
         {/* Mortar and Wastage */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 mb-1.5">
               Mortar Mix Ratio
             </label>
             <select
               value={mortarRatio}
               onChange={(e) => setMortarRatio(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-750 dark:text-slate-200 focus:border-teal-500 focus:outline-none"
+              className="saas-select"
             >
               {Object.keys(mortarRatios).map((k) => (
                 <option key={k} value={k}>
@@ -206,7 +204,7 @@ Estimated u/s standard brick joint ratios.`;
             </select>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 mb-1.5">
               Wastage Buffer (%)
             </label>
             <input
@@ -214,22 +212,22 @@ Estimated u/s standard brick joint ratios.`;
               min="0"
               value={wastage || ''}
               onChange={(e) => setWastage(Math.max(0, parseInt(e.target.value) || 0))}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-750 dark:text-slate-200 focus:border-teal-500 focus:outline-none"
+              className="saas-input"
             />
           </div>
         </div>
       </div>
 
       {/* Output Panel */}
-      <div className="md:col-span-5 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-col justify-between">
+      <div className="md:col-span-5 p-6 saas-card flex flex-col justify-between">
         <div>
           <div className="flex justify-between items-center mb-4">
-            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
+            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block">
               Required Materials
             </span>
             <button
               onClick={copyReport}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-[11px] font-bold transition shadow-sm"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold transition shadow-sm active:scale-95"
             >
               {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -238,38 +236,73 @@ Estimated u/s standard brick joint ratios.`;
 
           <div className="space-y-4">
             <div>
-              <span className="text-xs font-semibold text-slate-400">Total Bricks Count</span>
-              <div className="text-2xl md:text-3xl font-black text-teal-650 dark:text-teal-400 mt-1 leading-tight font-mono">
+              <span className="text-xs font-semibold text-zinc-400">Total Bricks Count</span>
+              <div className="text-2xl md:text-3xl font-black text-indigo-650 dark:text-indigo-400 mt-1 leading-tight font-mono">
                 {results.numBricks.toLocaleString()} Pcs
               </div>
             </div>
 
-            <div className="border-t border-slate-100 dark:border-slate-800/60 pt-4 space-y-3">
+            <div className="border-t border-zinc-100 dark:border-zinc-800/60 pt-4 space-y-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Cement (50kg bags)</span>
-                <span className="font-bold text-slate-750 dark:text-slate-350 font-mono">
+                <span className="text-zinc-400 font-medium">Cement (50kg bags)</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-300 font-mono">
                   {results.cementBags} Bags
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Sand (Fine Aggregate)</span>
-                <span className="font-bold text-slate-750 dark:text-slate-350 font-mono">
+                <span className="text-zinc-400 font-medium">Sand (Fine Aggregate)</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-300 font-mono">
                   {results.sandCuft} Cu Ft
                 </span>
               </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Mortar Wet Volume</span>
-                <span className="font-bold text-slate-750 dark:text-slate-355 font-mono">
+              <div className="flex justify-between items-center text-xs border-b border-zinc-100 dark:border-zinc-800/40 pb-3">
+                <span className="text-zinc-400 font-medium">Mortar Wet Volume</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-300 font-mono">
                   {results.mortarVolume} m³
                 </span>
               </div>
             </div>
+
+            {/* Visual wall structure preview */}
+            <div className="space-y-2.5 pt-1">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block">
+                Wall Laying Preview (Running Bond)
+              </span>
+              <div className="flex flex-col gap-1 p-2 rounded-xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200/60 dark:border-zinc-800/80">
+                {[...Array(4)].map((_, rowIndex) => {
+                  const isOffset = rowIndex % 2 === 1;
+                  return (
+                    <div key={rowIndex} className="flex gap-1 justify-center w-full">
+                      {isOffset ? (
+                        <>
+                          <div className="h-3.5 bg-amber-700/80 dark:bg-amber-800/40 border border-amber-700/20 rounded-xs flex-1" />
+                          <div className="h-3.5 bg-amber-700/80 dark:bg-amber-800/40 border border-amber-700/20 rounded-xs flex-[2]" />
+                          <div className="h-3.5 bg-amber-700/80 dark:bg-amber-800/40 border border-amber-700/20 rounded-xs flex-[2]" />
+                          <div className="h-3.5 bg-amber-700/80 dark:bg-amber-800/40 border border-amber-700/20 rounded-xs flex-1" />
+                        </>
+                      ) : (
+                        <>
+                          <div className="h-3.5 bg-amber-700/80 dark:bg-amber-800/40 border border-amber-700/20 rounded-xs flex-[2]" />
+                          <div className="h-3.5 bg-amber-700/80 dark:bg-amber-800/40 border border-amber-700/20 rounded-xs flex-[2]" />
+                          <div className="h-3.5 bg-amber-700/80 dark:bg-amber-800/40 border border-amber-700/20 rounded-xs flex-[2]" />
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex justify-between items-center text-[9px] text-zinc-550 dark:text-zinc-450 font-medium">
+                <span>Mortar Joint: 10mm (Standard)</span>
+                <span>Brick Size: {brickType === 'standard' ? 'Modular' : brickType === 'clay' ? 'Clay' : 'Fly Ash'}</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <div className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800/60 text-[10px] text-slate-400 leading-relaxed">
+        <div className="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-800/60 text-[10px] text-zinc-450 dark:text-zinc-555 leading-relaxed">
           <p>
-            Standard brick joint calculations assume 10mm mortar thickness u/s IS codes, applying a standard 1.33 shrinkage expansion parameter for dry mortar values.
+            Standard brick joint calculations assume 10mm mortar thickness per standard guidelines, applying a standard 1.33 shrinkage expansion parameter for dry mortar values.
           </p>
         </div>
       </div>

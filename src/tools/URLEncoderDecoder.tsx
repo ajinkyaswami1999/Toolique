@@ -188,7 +188,7 @@ export default function URLEncoderDecoder() {
         </div>
       </div>
 
-      <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-850 flex items-start gap-3">
+      <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-zinc-800 flex items-start gap-3">
         <div className="p-2 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400 mt-0.5">
           <Link className="w-4.5 h-4.5" />
         </div>

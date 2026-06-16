@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import type { Tool } from '../data/tools';
 import { categories } from '../data/categories';
 import LucideIcon from './LucideIcon';
@@ -14,28 +14,29 @@ export default function ToolCard({ tool }: ToolCardProps) {
   return (
     <Link
       to={`/tool/${tool.slug}`}
-      className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm hover:shadow-md hover:border-teal-500/30 dark:hover:border-teal-500/35 transition-all duration-300 transform hover:-translate-y-1"
+      className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-indigo-500/40 dark:hover:border-indigo-500/40 hover:shadow-[0_8px_30px_rgb(99,102,241,0.03)] dark:hover:shadow-[0_8px_30px_rgb(99,102,241,0.015)] transition-all duration-300 transform hover:-translate-y-0.5"
     >
       <div>
         <div className="flex justify-between items-start mb-4">
-          <div className={`p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 group-hover:bg-teal-500/10 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300`}>
-            <LucideIcon name={tool.icon} className="w-6 h-6" />
+          <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800/60 text-zinc-700 dark:text-zinc-300 group-hover:bg-indigo-500/10 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors duration-300">
+            <LucideIcon name={tool.icon} className="w-5 h-5" />
           </div>
           {categoryInfo && (
-            <span className={`text-[11px] font-semibold tracking-wide uppercase px-2.5 py-1 rounded-full border ${categoryInfo.colorClass}`}>
+            <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400">
               {categoryInfo.name}
             </span>
           )}
         </div>
-        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300 mb-2">
+        <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300 mb-1.5">
           {tool.name}
         </h3>
-        <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">
+        <p className="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed mb-4 line-clamp-2">
           {tool.shortDescription}
         </p>
       </div>
-      <div className="flex items-center text-xs font-semibold text-teal-600 dark:text-teal-400 group-hover:translate-x-1.5 transition-transform duration-300">
-        Use Tool <ArrowRight className="w-3.5 h-3.5 ml-1" />
+      <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+        <span>Open Utility</span>
+        <ArrowUpRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
       </div>
     </Link>
   );

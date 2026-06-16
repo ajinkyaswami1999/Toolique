@@ -91,7 +91,7 @@ Calculated using standard structural steel density parameters.`;
           </div>
           <button
             onClick={handleReset}
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-855 hover:text-slate-650 dark:hover:text-slate-200 transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-zinc-800 hover:text-slate-650 dark:hover:text-slate-200 transition"
             title="Reset"
           >
             <RotateCcw className="w-4 h-4" />
@@ -115,7 +115,7 @@ Calculated using standard structural steel density parameters.`;
                 className={`py-2 px-1 rounded-xl border text-[11px] font-bold text-center transition ${
                   shape === s.id
                     ? 'bg-teal-50 border-teal-200 text-teal-600 dark:bg-teal-950/20 dark:border-teal-900/60 dark:text-teal-400'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-850'
+                    : 'border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-50 dark:hover:bg-zinc-800'
                 }`}
               >
                 {s.name}
@@ -174,7 +174,7 @@ Calculated using standard structural steel density parameters.`;
             <label className="block text-xs font-semibold text-slate-400 mb-1.5">
               Unit of Length
             </label>
-            <div className="flex rounded-xl bg-slate-50 dark:bg-slate-950/40 p-1 border border-slate-200/60 dark:border-slate-850">
+            <div className="flex rounded-xl bg-slate-50 dark:bg-slate-950/40 p-1 border border-slate-200/60 dark:border-zinc-800">
               <button
                 onClick={() => setUnit('m')}
                 className={`flex-grow py-1.5 rounded-lg text-xs font-bold transition ${

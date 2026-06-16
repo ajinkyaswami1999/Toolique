@@ -375,7 +375,7 @@ Total Amount     : ₹${results.totalAmount.toLocaleString('en-IN')}
 
       {/* Educational GST Guide Explainer */}
       <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-4">
-        <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-1.5 border-b border-slate-100 dark:border-slate-850 pb-2">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-1.5 border-b border-slate-100 dark:border-zinc-800 pb-2">
           <Info className="w-5 h-5 text-teal-600 dark:text-teal-400" />
           Understanding CGST, SGST, IGST, and UTGST
         </h3>

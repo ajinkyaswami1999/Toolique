@@ -202,7 +202,7 @@ Calculated according to standard multi-brand modular kitchen rate matrixes.`;
                 className={`px-1 py-1.5 rounded-lg text-xs font-bold border text-center transition ${
                   kitchenShape === shape.id
                     ? 'border-pink-500 bg-pink-500/5 text-pink-600 dark:text-pink-400'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-655 hover:bg-slate-50 dark:hover:bg-slate-855'
+                    : 'border-slate-200 dark:border-slate-800 text-slate-655 hover:bg-slate-50 dark:hover:bg-zinc-800'
                 }`}
               >
                 {shape.label}
@@ -314,7 +314,7 @@ Calculated according to standard multi-brand modular kitchen rate matrixes.`;
                 className={`px-2 py-1.5 rounded-lg text-xs font-bold border transition ${
                   countertopType === cnt.id
                     ? 'border-pink-500 bg-pink-500/5 text-pink-600 dark:text-pink-400'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-655 hover:bg-slate-50 dark:hover:bg-slate-855'
+                    : 'border-slate-200 dark:border-slate-800 text-slate-655 hover:bg-slate-50 dark:hover:bg-zinc-800'
                 }`}
               >
                 {cnt.label}

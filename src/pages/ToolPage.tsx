@@ -146,13 +146,13 @@ export default function ToolPage() {
   if (!tool) {
     return (
       <div className="text-center py-20 space-y-6 max-w-md mx-auto">
-        <h2 className="text-3xl font-black text-slate-800 dark:text-white">Tool Not Found</h2>
-        <p className="text-slate-500 dark:text-slate-400">
+        <h2 className="text-3xl font-black text-zinc-900 dark:text-white">Tool Not Found</h2>
+        <p className="text-zinc-500 dark:text-zinc-400 text-sm">
           The tool you are looking for does not exist or has been relocated.
         </p>
         <Link
           to="/"
-          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-sm font-bold text-white shadow-sm transition"
+          className="saas-button-primary inline-flex"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Home</span>
@@ -176,7 +176,7 @@ export default function ToolPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="space-y-8 max-w-6xl mx-auto px-4 sm:px-6">
       <SEO
         title={`${tool.name} | Free Online Browser Tool`}
         description={tool.metaDescription}
@@ -185,29 +185,29 @@ export default function ToolPage() {
       />
 
       {/* Breadcrumb & Navigation */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
         <Link
           to="/"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-teal-600 dark:text-slate-400 dark:hover:text-teal-400 transition"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
         >
-          <ArrowLeft className="w-4.5 h-4.5" />
+          <ArrowLeft className="w-4 h-4" />
           <span>Back to Home</span>
         </Link>
-        <div className="text-xs text-slate-400 dark:text-slate-500 font-semibold">
-          <Link to="/" className="hover:underline">Home</Link>
-          <span className="mx-2">&gt;</span>
+        <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
+          <Link to="/" className="hover:text-indigo-500 transition-colors">Home</Link>
+          <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
           <span className="capitalize">{tool.category}</span>
-          <span className="mx-2">&gt;</span>
-          <span className="text-slate-600 dark:text-slate-350">{tool.name}</span>
+          <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
+          <span className="text-zinc-650 dark:text-zinc-300 font-medium">{tool.name}</span>
         </div>
       </div>
 
       {/* Tool Header */}
       <div className="space-y-3 text-left">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-zinc-905 dark:text-zinc-50 tracking-tight">
           {tool.name}
         </h1>
-        <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 leading-relaxed max-w-4xl">
+        <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-4xl">
           {tool.shortDescription}
         </p>
       </div>
@@ -220,7 +220,7 @@ export default function ToolPage() {
         {ActiveToolComponent ? (
           <ActiveToolComponent />
         ) : (
-          <div className="p-8 text-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200">
+          <div className="p-8 text-center rounded-2xl bg-zinc-900 border border-zinc-800">
             Component not implemented yet: {tool.id}
           </div>
         )}
@@ -237,13 +237,13 @@ export default function ToolPage() {
 
       {/* Educational Guide Articles */}
       {tool.sections && tool.sections.length > 0 && (
-        <section className="mt-8 p-6 md:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm text-left space-y-6">
+        <section className="saas-card p-6 md:p-8 text-left space-y-6">
           {tool.sections.map((section, idx) => (
             <div key={idx} className="space-y-3">
-              <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white border-b border-slate-100 dark:border-slate-800/60 pb-2">
+              <h2 className="text-lg md:text-xl font-bold text-zinc-900 dark:text-white border-b border-zinc-100 dark:border-zinc-800/80 pb-2">
                 {section.title}
               </h2>
-              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-line">
+              <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-450 leading-relaxed whitespace-pre-line">
                 {section.content}
               </p>
             </div>

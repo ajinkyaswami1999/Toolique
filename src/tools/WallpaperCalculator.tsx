@@ -195,7 +195,7 @@ Calculated based on standard wall pattern alignment norms.`;
               className={`px-2 py-1.5 rounded-lg text-xs font-bold border transition ${
                 rollPreset === 'standard'
                   ? 'border-violet-500 bg-violet-500/5 text-violet-600 dark:text-violet-400'
-                  : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-855'
+                  : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-zinc-800'
               }`}
             >
               Standard Roll
@@ -205,7 +205,7 @@ Calculated based on standard wall pattern alignment norms.`;
               className={`px-2 py-1.5 rounded-lg text-xs font-bold border transition ${
                 rollPreset === 'large'
                   ? 'border-violet-500 bg-violet-500/5 text-violet-600 dark:text-violet-400'
-                  : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-855'
+                  : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-zinc-800'
               }`}
             >
               Large Roll
@@ -215,7 +215,7 @@ Calculated based on standard wall pattern alignment norms.`;
               className={`px-2 py-1.5 rounded-lg text-xs font-bold border transition ${
                 rollPreset === 'custom'
                   ? 'border-violet-500 bg-violet-500/5 text-violet-600 dark:text-violet-400'
-                  : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-855'
+                  : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-zinc-800'
               }`}
             >
               Custom Size
@@ -319,7 +319,7 @@ Calculated based on standard wall pattern alignment norms.`;
                   {results.rollArea.toLocaleString()} {areaUnit}
                 </span>
               </div>
-              <div className="flex justify-between items-center text-xs border-t border-slate-100 dark:border-slate-850 pt-2.5">
+              <div className="flex justify-between items-center text-xs border-t border-slate-100 dark:border-zinc-800 pt-2.5">
                 <span className="text-slate-400 font-medium">Estimated Purchase Cost</span>
                 <span className="font-extrabold text-violet-650 dark:text-violet-400 font-mono">
                   ₹{results.totalCost.toLocaleString()}

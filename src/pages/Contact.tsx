@@ -78,7 +78,7 @@ export default function Contact() {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-850 dark:text-white"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-zinc-800 dark:text-white"
                     placeholder="Enter name"
                   />
                 </div>
@@ -89,7 +89,7 @@ export default function Contact() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-850 dark:text-white"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-zinc-800 dark:text-white"
                     placeholder="name@example.com"
                   />
                 </div>
@@ -101,7 +101,7 @@ export default function Contact() {
                   type="text"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-850 dark:text-white"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-zinc-800 dark:text-white"
                   placeholder="e.g. GST Calculator suggestion"
                 />
               </div>
@@ -113,7 +113,7 @@ export default function Contact() {
                   rows={5}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-850 dark:text-white resize-none"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-zinc-800 dark:text-white resize-none"
                   placeholder="Write your suggestions or details here..."
                 />
               </div>

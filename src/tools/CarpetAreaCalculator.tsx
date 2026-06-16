@@ -144,7 +144,7 @@ Calculated according to Real Estate Regulation Act (RERA) criteria.`;
                 className={`px-3 py-2 rounded-xl text-xs font-bold border transition ${
                   inputType === 'carpet'
                     ? 'border-violet-500 bg-violet-500/5 text-violet-600 dark:text-violet-400'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-855'
+                    : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-zinc-800'
                 }`}
               >
                 Carpet Area
@@ -157,7 +157,7 @@ Calculated according to Real Estate Regulation Act (RERA) criteria.`;
                 className={`px-3 py-2 rounded-xl text-xs font-bold border transition ${
                   inputType === 'builtup'
                     ? 'border-violet-500 bg-violet-500/5 text-violet-600 dark:text-violet-400'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-855'
+                    : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-zinc-800'
                 }`}
               >
                 Built-Up Area
@@ -170,7 +170,7 @@ Calculated according to Real Estate Regulation Act (RERA) criteria.`;
                 className={`px-3 py-2 rounded-xl text-xs font-bold border transition ${
                   inputType === 'super'
                     ? 'border-violet-500 bg-violet-500/5 text-violet-600 dark:text-violet-400'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-855'
+                    : 'border-slate-200 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-zinc-800'
                 }`}
               >
                 Super Built-up Area

@@ -86,7 +86,7 @@ Estimated using standard M20/M25 concrete & structural steel pricing.`;
           </div>
           <button
             onClick={handleReset}
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-855 hover:text-slate-650 dark:hover:text-slate-200 transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-zinc-800 hover:text-slate-650 dark:hover:text-slate-200 transition"
             title="Reset"
           >
             <RotateCcw className="w-4 h-4" />

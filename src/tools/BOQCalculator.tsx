@@ -98,7 +98,7 @@ Calculated using residential RCC construction standard norms.`;
           </div>
           <button
             onClick={handleReset}
-            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-850 hover:text-slate-650 dark:hover:text-slate-200 transition"
+            className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-zinc-800 hover:text-slate-650 dark:hover:text-slate-200 transition"
             title="Reset"
           >
             <RotateCcw className="w-4 h-4" />
@@ -168,7 +168,7 @@ Calculated using residential RCC construction standard norms.`;
             </div>
 
             {/* Sand */}
-            <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-slate-850 pt-2.5">
+            <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-zinc-800 pt-2.5">
               <div>
                 <span className="font-bold text-slate-750 dark:text-slate-200 block">Sand</span>
                 <span className="text-[10px] text-slate-400">@ ₹{prices.sand}/cu ft</span>
@@ -180,7 +180,7 @@ Calculated using residential RCC construction standard norms.`;
             </div>
 
             {/* Aggregate */}
-            <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-slate-850 pt-2.5">
+            <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-zinc-800 pt-2.5">
               <div>
                 <span className="font-bold text-slate-750 dark:text-slate-200 block">Aggregate</span>
                 <span className="text-[10px] text-slate-400">@ ₹{prices.aggregate}/cu ft</span>
@@ -192,7 +192,7 @@ Calculated using residential RCC construction standard norms.`;
             </div>
 
             {/* Steel */}
-            <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-slate-850 pt-2.5">
+            <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-zinc-800 pt-2.5">
               <div>
                 <span className="font-bold text-slate-750 dark:text-slate-200 block">Steel</span>
                 <span className="text-[10px] text-slate-400">@ ₹{prices.steel}/kg</span>
@@ -204,7 +204,7 @@ Calculated using residential RCC construction standard norms.`;
             </div>
 
             {/* Bricks */}
-            <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-slate-850 pt-2.5">
+            <div className="flex justify-between items-center text-xs border-t border-slate-50 dark:border-zinc-800 pt-2.5">
               <div>
                 <span className="font-bold text-slate-750 dark:text-slate-200 block">Bricks</span>
                 <span className="text-[10px] text-slate-400">@ ₹{prices.bricks}/pcs</span>

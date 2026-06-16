@@ -31,10 +31,6 @@ export default function StaircaseCalculator() {
     const angleRad = Math.atan(actualRiser / (desiredTread || 1));
     const stairAngle = (angleRad * 180) / Math.PI;
 
-    // Indian Building Code / standard limits:
-    // Ideal riser: 5.5 to 7 inches (14 - 18 cm)
-    // Ideal tread: 10 to 12 inches (25 - 30 cm)
-    // Ideal angle: 30 to 38 degrees
     let isCompliant = true;
     let complianceText = 'Compliant: Comfortable slope';
 
@@ -132,32 +128,32 @@ Calculated u/s National Building Code (NBC) stair guidelines.`;
   return (
     <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 text-left">
       {/* Input Panel */}
-      <div className="md:col-span-7 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-4">
-        <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800/60 pb-3">
+      <div className="md:col-span-7 p-6 saas-card space-y-4">
+        <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-800/60 pb-3">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400">
+            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-650 dark:text-indigo-400">
               <Compass className="w-4.5 h-4.5" />
             </div>
-            <h3 className="font-bold text-slate-800 dark:text-white text-sm">Staircase Dimensions</h3>
+            <h3 className="font-bold text-zinc-805 dark:text-white text-sm">Staircase Dimensions</h3>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex rounded-lg bg-slate-100 dark:bg-slate-800 p-0.5 text-xs font-bold">
+            <div className="flex rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5 text-[10px] font-bold">
               <button
                 onClick={() => handleUnitChange('imperial')}
-                className={`px-2 py-1 rounded-md transition ${unit === 'imperial' ? 'bg-white dark:bg-slate-700 text-violet-600 shadow-sm' : 'text-slate-400'}`}
+                className={`px-2 py-1 rounded-md transition-all duration-200 ${unit === 'imperial' ? 'bg-white dark:bg-zinc-700 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-650'}`}
               >
                 Imperial
               </button>
               <button
                 onClick={() => handleUnitChange('metric')}
-                className={`px-2 py-1 rounded-md transition ${unit === 'metric' ? 'bg-white dark:bg-slate-700 text-violet-600 shadow-sm' : 'text-slate-400'}`}
+                className={`px-2 py-1 rounded-md transition-all duration-200 ${unit === 'metric' ? 'bg-white dark:bg-zinc-700 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-650'}`}
               >
                 Metric
               </button>
             </div>
             <button
               onClick={handleReset}
-              className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-650 dark:hover:text-slate-200 transition"
+              className="p-1.5 rounded-lg text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-650 dark:hover:text-zinc-200 transition"
               title="Reset"
             >
               <RotateCcw className="w-4 h-4" />
@@ -167,16 +163,16 @@ Calculated u/s National Building Code (NBC) stair guidelines.`;
 
         {/* Floor Height */}
         <div>
-          <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+          <label className="block text-xs font-semibold text-zinc-450 dark:text-zinc-500 mb-1.5">
             Total Floor-to-Floor Rise ({unitLabel === 'in' ? 'Inches' : 'cm'})
           </label>
           <input
             type="number"
             value={totalRise || ''}
             onChange={(e) => setTotalRise(Math.max(0, parseFloat(e.target.value) || 0))}
-            className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-700 dark:text-slate-200 font-semibold focus:border-violet-500 focus:outline-none"
+            className="saas-input"
           />
-          <p className="text-[10px] text-slate-400 mt-1">
+          <p className="text-[10px] text-zinc-455 mt-1 font-medium">
             {unit === 'imperial' 
               ? `Equivalent to ${(totalRise / 12).toFixed(1)} feet.`
               : `Equivalent to ${(totalRise / 100).toFixed(2)} meters.`}
@@ -184,9 +180,9 @@ Calculated u/s National Building Code (NBC) stair guidelines.`;
         </div>
 
         {/* Riser & Tread Target */}
-        <div className="grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-slate-800/60 pt-4">
+        <div className="grid grid-cols-2 gap-4 border-t border-zinc-150 dark:border-zinc-800/60 pt-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-450 dark:text-zinc-500 mb-1.5">
               Target Riser Height ({unitLabel})
             </label>
             <input
@@ -194,12 +190,12 @@ Calculated u/s National Building Code (NBC) stair guidelines.`;
               step="0.1"
               value={desiredRiser || ''}
               onChange={(e) => setDesiredRiser(Math.max(0, parseFloat(e.target.value) || 0))}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-700 dark:text-slate-200 focus:border-violet-500 focus:outline-none"
+              className="saas-input"
             />
-            <p className="text-[9px] text-slate-400 mt-1">Ideal: 6-7" (15-18cm)</p>
+            <p className="text-[9px] text-zinc-450 mt-1">Ideal: 6-7" (15-18cm)</p>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-450 dark:text-zinc-500 mb-1.5">
               Target Tread Depth ({unitLabel})
             </label>
             <input
@@ -207,23 +203,23 @@ Calculated u/s National Building Code (NBC) stair guidelines.`;
               step="0.1"
               value={desiredTread || ''}
               onChange={(e) => setDesiredTread(Math.max(0, parseFloat(e.target.value) || 0))}
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm text-slate-700 dark:text-slate-200 focus:border-violet-500 focus:outline-none"
+              className="saas-input"
             />
-            <p className="text-[9px] text-slate-400 mt-1">Ideal: 10-12" (25-30cm)</p>
+            <p className="text-[9px] text-zinc-450 mt-1">Ideal: 10-12" (25-30cm)</p>
           </div>
         </div>
       </div>
 
       {/* Output Panel */}
-      <div className="md:col-span-5 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-col justify-between">
+      <div className="md:col-span-5 p-6 saas-card flex flex-col justify-between">
         <div>
           <div className="flex justify-between items-center mb-4">
-            <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block">
+            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block">
               Stair Geometry Results
             </span>
             <button
               onClick={copyReport}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white text-[11px] font-bold transition shadow-sm"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold transition shadow-sm active:scale-95"
             >
               {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -232,8 +228,8 @@ Calculated u/s National Building Code (NBC) stair guidelines.`;
 
           <div className="space-y-4">
             <div>
-              <span className="text-xs font-semibold text-slate-400">Total Risers Required</span>
-              <div className="text-xl md:text-2xl font-black text-slate-900 dark:text-white mt-0.5 font-mono">
+              <span className="text-xs font-semibold text-zinc-400">Total Risers Required</span>
+              <div className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white mt-0.5 font-mono">
                 {results.numRisers} Steps
               </div>
               <div className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-md mt-2 ${
@@ -245,36 +241,65 @@ Calculated u/s National Building Code (NBC) stair guidelines.`;
               </div>
             </div>
 
-            <div className="border-t border-slate-100 dark:border-slate-800/60 pt-4 space-y-3">
+            <div className="border-t border-zinc-100 dark:border-zinc-800/60 pt-4 space-y-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Actual Riser Height</span>
-                <span className="font-bold text-slate-700 dark:text-slate-350 font-mono">
+                <span className="text-zinc-400 font-medium">Actual Riser Height</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-300 font-mono">
                   {results.actualRiser} {unitLabel}
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium font-mono">Number of Treads</span>
-                <span className="font-bold text-slate-700 dark:text-slate-350 font-mono">
+                <span className="text-zinc-400 font-medium font-mono">Number of Treads</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-300 font-mono">
                   {results.numTreads} Treads
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Total Horizontal Run</span>
-                <span className="font-bold text-slate-700 dark:text-slate-350 font-mono">
+                <span className="text-zinc-400 font-medium">Total Horizontal Run</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-300 font-mono">
                   {results.totalRun} {unitLabel}
                 </span>
               </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Stair Pitch Angle</span>
-                <span className="font-bold text-slate-700 dark:text-slate-350 font-mono">
+              <div className="flex justify-between items-center text-xs border-b border-zinc-155 dark:border-zinc-800/40 pb-3">
+                <span className="text-zinc-400 font-medium">Stair Pitch Angle</span>
+                <span className="font-bold text-zinc-800 dark:text-zinc-300 font-mono">
                   {results.stairAngle}°
                 </span>
               </div>
             </div>
+
+            {/* Staircase Graphic rendering */}
+            <div className="space-y-2 pt-1">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block">
+                Comfort Angle Preview
+              </span>
+              <div className="relative w-full h-32 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center p-2">
+                <svg viewBox="0 0 200 120" className="w-full h-full stroke-indigo-500 fill-none">
+                  {/* Grid Lines */}
+                  <line x1="20" y1="100" x2="180" y2="100" className="stroke-zinc-200 dark:stroke-zinc-800" strokeWidth="1" />
+                  <line x1="20" y1="20" x2="20" y2="100" className="stroke-zinc-200 dark:stroke-zinc-800" strokeWidth="1" />
+                  
+                  {/* Incline Hypothenuse */}
+                  <line x1="20" y1="100" x2="170" y2="25" strokeDasharray="3 3" className="stroke-zinc-400 dark:stroke-zinc-600" strokeWidth="1.5" />
+                  
+                  {/* Step path */}
+                  <path d="M 20 100 h 30 v -15 h 30 v -15 h 30 v -15 h 30 v -15 h 30 v -15" className="stroke-indigo-500 dark:stroke-indigo-400" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  
+                  {/* Angle indicators */}
+                  <path d="M 40 100 A 20 20 0 0 0 38 90" className="stroke-emerald-550 dark:stroke-emerald-400" strokeWidth="1.5" />
+                  
+                  {/* Dynamic angle label */}
+                  <text x="50" y="93" className="fill-indigo-650 dark:fill-indigo-400 text-[10px] font-black font-mono" stroke="none">
+                    {results.stairAngle}°
+                  </text>
+                </svg>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <div className="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800/60 text-[10px] text-slate-400 leading-relaxed">
+        <div className="mt-8 pt-4 border-t border-zinc-100 dark:border-zinc-800/60 text-[10px] text-zinc-450 dark:text-zinc-555 leading-relaxed">
           <p>
             Ideal stair angle should lie between 30° and 38°. Treads and risers follow the standard rule: 2 × Riser + Tread = 24 to 25 inches (60 to 64 cm) for natural walking rhythm.
           </p>

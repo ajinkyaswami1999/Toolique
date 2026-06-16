@@ -26,7 +26,7 @@ export default function Disclaimer() {
         </div>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-850 dark:text-white">1. Financial Estimations & Market Risks</h2>
+          <h2 className="text-xl font-bold text-zinc-800 dark:text-white">1. Financial Estimations & Market Risks</h2>
           <p>
             The SIP Mutual Fund Calculator, EMI Loan Calculator, and other investment estimators on Toolique use mathematical formulas to project future values based on constant interest rates. 
             Mutual fund investments and interest rates are subject to market volatility. Actual maturity values, returns, or loan splits may vary significantly based on bank policies and market conditions.
@@ -34,7 +34,7 @@ export default function Disclaimer() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-850 dark:text-white">2. Tax Calculations Disclaimer (GST, TDS, Salary)</h2>
+          <h2 className="text-xl font-bold text-zinc-800 dark:text-white">2. Tax Calculations Disclaimer (GST, TDS, Salary)</h2>
           <p>
             Our tax calculators (GST Calculator, TDS Calculator, In-hand Salary Calculator) are updated to represent standard Indian tax codes. However, tax compliance rules, exemptions, state-level surcharges, and municipal professional tax rates change frequently.
           </p>
@@ -44,14 +44,14 @@ export default function Disclaimer() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-850 dark:text-white">3. Code Formatting & Output Accuracy</h2>
+          <h2 className="text-xl font-bold text-zinc-800 dark:text-white">3. Code Formatting & Output Accuracy</h2>
           <p>
             Our developer tools (SQL Formatter, JSON Formatter & Validator) process scripts inside the browser context. While these utilities validate standard grammar, we cannot guarantee that structured edits will execute error-free in production databases or servers. Please back up critical scripts before running formatters.
           </p>
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-850 dark:text-white">4. No Professional-Client Relationship</h2>
+          <h2 className="text-xl font-bold text-zinc-800 dark:text-white">4. No Professional-Client Relationship</h2>
           <p>
             Your usage of Toolique does not establish a professional advisor-client relationship between you and the owners or administrators of this website.
           </p>

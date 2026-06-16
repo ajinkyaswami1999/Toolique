@@ -17,7 +17,7 @@ export default function About() {
       </div>
 
       <div className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-6">
-        <h2 className="text-2xl font-bold text-slate-850 dark:text-white flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-zinc-800 dark:text-white flex items-center gap-2">
           <Layers className="w-6 h-6 text-teal-600 dark:text-teal-400" />
           Our Mission
         </h2>
@@ -25,7 +25,7 @@ export default function About() {
           Toolique was built with a simple goal: to provide fast, reliable, and completely private utility tools. Whether you are calculating complicated GST/TDS tax invoices, planning mutual fund investments (SIP), structuring developer payloads (SQL/JSON), or compressing production images, our suite of tools works instantly in your web browser.
         </p>
 
-        <h2 className="text-2xl font-bold text-slate-850 dark:text-white flex items-center gap-2 pt-4">
+        <h2 className="text-2xl font-bold text-zinc-800 dark:text-white flex items-center gap-2 pt-4">
           <ShieldAlert className="w-6 h-6 text-teal-600 dark:text-teal-400" />
           Why Choose Toolique?
         </h2>

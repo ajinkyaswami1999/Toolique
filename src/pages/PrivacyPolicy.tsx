@@ -19,7 +19,7 @@ export default function PrivacyPolicy() {
 
       <div className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-6 text-sm text-slate-655 dark:text-slate-400 leading-relaxed">
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-850 dark:text-white">1. Client-Side Operations & Data Safety</h2>
+          <h2 className="text-xl font-bold text-zinc-800 dark:text-white">1. Client-Side Operations & Data Safety</h2>
           <p>
             At Toolique, privacy is our core principle. Unlike typical online platforms, all calculations, syntax formatting, inputs, and image compression occur <strong>100% locally in your web browser</strong> using client-side JavaScript APIs.
           </p>
@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-850 dark:text-white">2. Google AdSense & Cookies</h2>
+          <h2 className="text-xl font-bold text-zinc-800 dark:text-white">2. Google AdSense & Cookies</h2>
           <p>
             We may use Google AdSense to serve advertisements on our website. Google, as a third-party vendor, uses cookies (such as DART cookies) to serve ads based on your visit to this site and other websites on the internet.
           </p>
@@ -42,21 +42,21 @@ export default function PrivacyPolicy() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-850 dark:text-white">3. Third-Party Analytics</h2>
+          <h2 className="text-xl font-bold text-zinc-800 dark:text-white">3. Third-Party Analytics</h2>
           <p>
             We may deploy lightweight, privacy-focused traffic analytics (such as Google Analytics or Plausible) to monitor aggregate traffic trends, bounce rates, and popular tools. These tools compile anonymous metrics (such as page views and browser types) but never track individual identification details.
           </p>
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-850 dark:text-white">4. External Web Links</h2>
+          <h2 className="text-xl font-bold text-zinc-800 dark:text-white">4. External Web Links</h2>
           <p>
             Our web pages may link to external sites (e.g., bank sites or developer documentation). We are not responsible for the privacy regulations or content of third-party platforms.
           </p>
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-slate-850 dark:text-white">5. Revisions to This Policy</h2>
+          <h2 className="text-xl font-bold text-zinc-800 dark:text-white">5. Revisions to This Policy</h2>
           <p>
             We reserve the right to revise this Privacy Policy at any time. Any revisions will be reflected instantly on this page with an updated "Last Updated" timestamp.
           </p>

@@ -193,7 +193,7 @@ Calculated according to Indian standard fit-out contractor rate indexes.`;
                 className={`px-2 py-2 rounded-xl text-left border transition ${
                   materialKey === key
                     ? 'border-pink-500 bg-pink-500/5 text-pink-600 dark:text-pink-400'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-655 hover:bg-slate-50 dark:hover:bg-slate-855'
+                    : 'border-slate-200 dark:border-slate-800 text-slate-655 hover:bg-slate-50 dark:hover:bg-zinc-800'
                 }`}
               >
                 <div className="text-xs font-bold truncate">{value.name}</div>
@@ -239,7 +239,7 @@ Calculated according to Indian standard fit-out contractor rate indexes.`;
                 className={`px-2 py-1.5 rounded-lg text-xs font-bold border transition ${
                   complexity === tier.id
                     ? 'border-pink-500 bg-pink-500/5 text-pink-600 dark:text-pink-400'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-655 hover:bg-slate-50 dark:hover:bg-slate-855'
+                    : 'border-slate-200 dark:border-slate-800 text-slate-655 hover:bg-slate-50 dark:hover:bg-zinc-800'
                 }`}
               >
                 {tier.label}

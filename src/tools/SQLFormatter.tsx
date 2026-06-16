@@ -185,7 +185,7 @@ export default function SQLFormatter() {
             )}
           </div>
           {outputSql ? (
-            <pre className="flex-grow w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-100 dark:border-slate-850/50 font-mono text-sm leading-relaxed overflow-auto text-teal-700 dark:text-teal-400">
+            <pre className="flex-grow w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-100 dark:border-zinc-800/50 font-mono text-sm leading-relaxed overflow-auto text-teal-700 dark:text-teal-400">
               <code>{outputSql}</code>
             </pre>
           ) : (
