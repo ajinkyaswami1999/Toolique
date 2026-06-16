@@ -158,7 +158,7 @@ Estimated u/s standard brick joint ratios.`;
             </label>
             <select
               value={thickness}
-              onChange={(e) => setThickness(parseInt(e.target.value) || 9)}
+              onChange={(e) => setThickness(parseFloat(e.target.value) || 9)}
               className="saas-select animate-none"
             >
               <option value={9}>9-inch (Outer Wall)</option>
