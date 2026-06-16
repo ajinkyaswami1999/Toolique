@@ -55,5 +55,12 @@ export const categories: Category[] = [
     description: 'Estimate material and installation costs for modular kitchens, wardrobes, ceilings, and flooring.',
     icon: 'Palette',
     colorClass: 'from-pink-500/10 to-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20'
+  },
+  {
+    id: 'pdf',
+    name: 'PDF Tools',
+    description: 'Merge, split, compress, protect, unlock, watermark, and convert PDF files directly in your browser.',
+    icon: 'FileText',
+    colorClass: 'from-red-500/10 to-orange-500/10 text-red-700 dark:text-red-400 border-red-500/20'
   }
 ];

@@ -89,6 +89,25 @@ import ImagesToZip from '../tools/ImagesToZip';
 import ImageColorPicker from '../tools/ImageColorPicker';
 import QRScannerImage from '../tools/QRScannerImage';
 
+
+// Phase 5 - PDF Tools (16 tools)
+import PDFMerge from '../tools/PDFMerge';
+import PDFSplit from '../tools/PDFSplit';
+import PDFCompressor from '../tools/PDFCompressor';
+import PDFPageRemover from '../tools/PDFPageRemover';
+import PDFPageReorder from '../tools/PDFPageReorder';
+import PDFRotate from '../tools/PDFRotate';
+import PDFPasswordProtect from '../tools/PDFPasswordProtect';
+import PDFUnlock from '../tools/PDFUnlock';
+import PDFWatermark from '../tools/PDFWatermark';
+import PDFPageNumbering from '../tools/PDFPageNumbering';
+import ExtractTextPDF from '../tools/ExtractTextPDF';
+import PDFMetadataViewer from '../tools/PDFMetadataViewer';
+import PDFToWord from '../tools/PDFToWord';
+import WordToPDF from '../tools/WordToPDF';
+import ExcelToPDF from '../tools/ExcelToPDF';
+import PowerPointToPDF from '../tools/PowerPointToPDF';
+
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
   SIPCalculator,
@@ -168,6 +187,24 @@ const toolComponents: Record<string, React.ComponentType> = {
   ImagesToZip,
   ImageColorPicker,
   QRScannerImage,
+
+  // Phase 5 - PDF Tools
+  PDFMerge,
+  PDFSplit,
+  PDFCompressor,
+  PDFPageRemover,
+  PDFPageReorder,
+  PDFRotate,
+  PDFPasswordProtect,
+  PDFUnlock,
+  PDFWatermark,
+  PDFPageNumbering,
+  ExtractTextPDF,
+  PDFMetadataViewer,
+  PDFToWord,
+  WordToPDF,
+  ExcelToPDF,
+  PowerPointToPDF,
 };
 
 export default function ToolPage() {

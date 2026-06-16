@@ -12,7 +12,7 @@ export interface Tool {
   id: string;
   slug: string;
   name: string;
-  category: 'finance' | 'developer' | 'image' | 'utility' | 'civil' | 'architecture' | 'interior';
+  category: 'finance' | 'developer' | 'image' | 'utility' | 'civil' | 'architecture' | 'interior' | 'pdf';
   shortDescription: string;
   metaDescription: string;
   keywords: string[];
@@ -2478,6 +2478,517 @@ export const toolsList: Tool[] = [
       {
         "title": "How QR Code Scanning Works",
         "content": "QR (Quick Response) codes contain black square blocks arranged in a square grid on a white background. The scanner reads these blocks as binary data, applies Reed-Solomon error correction, and extracts the encoded text strings."
+      }
+    ]
+  },
+  {
+    id: 'PDFMerge',
+    slug: 'pdf-merge',
+    name: 'PDF Merge',
+    category: 'pdf',
+    shortDescription: 'Combine multiple PDF files into a single document client-side.',
+    metaDescription: 'Free online PDF Merge tool. Combine multiple PDF documents into one PDF file easily and securely in your browser without uploading to any server.',
+    keywords: ['Merge PDF', 'Combine PDF files', 'Join PDF online', 'PDF merger free', 'Local PDF combiner'],
+    icon: 'Combine',
+    howToUse: [
+      'Click Upload or drag & drop multiple PDF files into the upload zone.',
+      'Rearrange the uploaded files by dragging them up or down in the list.',
+      'Click the "Merge PDFs" button to combine the documents.',
+      'Your merged PDF file will download automatically.'
+    ],
+    faqs: [
+      {
+        question: 'Is there a limit on the number of PDFs I can merge?',
+        answer: 'No, there is no hard limit on the number of files you can combine, but merging very large PDFs may take more memory in your browser.'
+      },
+      {
+        question: 'Are my PDF files uploaded to a server?',
+        answer: 'No. The entire merging process happens 100% locally in your web browser. No files are uploaded to our servers, ensuring absolute privacy.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Why Merge PDFs Locally?',
+        content: 'Merging PDFs locally is the safest way to handle documents containing sensitive business or personal information. Unlike traditional online PDF tools that upload your files to external servers, local merging preserves your document integrity and guarantees that your data never leaves your computer.'
+      }
+    ]
+  },
+  {
+    id: 'PDFSplit',
+    slug: 'pdf-split',
+    name: 'PDF Split',
+    category: 'pdf',
+    shortDescription: 'Extract specific pages or split a PDF document by ranges.',
+    metaDescription: 'Free online PDF Splitter. Extract specific pages or split PDF by custom ranges locally in your browser. Fast, secure, and completely serverless.',
+    keywords: ['Split PDF', 'Extract pages from PDF', 'Split PDF range', 'PDF splitter free', 'Cut PDF pages online'],
+    icon: 'Scissors',
+    howToUse: [
+      'Upload a single PDF document.',
+      'Choose whether to extract specific pages (e.g. 1, 3, 5) or split by ranges (e.g. 1-3, 4-6).',
+      'Input the desired pages or ranges.',
+      'Click "Split PDF" to generate and download the split document(s).'
+    ],
+    faqs: [
+      {
+        question: 'How do I specify multiple ranges to split?',
+        answer: 'Use commas to separate multiple ranges, such as 1-3, 4-6. This will extract pages 1 through 3 as one document, and 4 through 6 as another.'
+      },
+      {
+        question: 'Can I split password-protected PDFs?',
+        answer: 'You will need to unlock the PDF first using our PDF Unlock tool before splitting it, as encrypted PDFs cannot be parsed directly.'
+      }
+    ],
+    sections: [
+      {
+        title: 'PDF Splitting Modes',
+        content: '1. **Extract Page List**: Select individual page numbers (e.g., 2, 5, 9) to extract only those pages into a new PDF document.\n2. **Split Ranges**: Define ranges (e.g. 1-5, 6-10) to slice a larger report into smaller, manageable chapters.'
+      }
+    ]
+  },
+  {
+    id: 'PDFCompressor',
+    slug: 'pdf-compressor',
+    name: 'PDF Compressor',
+    category: 'pdf',
+    shortDescription: 'Reduce PDF file size by compressing images client-side.',
+    metaDescription: 'Free online PDF Compressor. Reduce PDF file size locally in your browser by optimizing image assets. Safe, secure, and fast.',
+    keywords: ['Compress PDF', 'Reduce PDF size', 'PDF size reducer', 'Compress PDF client side', 'Shrink PDF file size'],
+    icon: 'FileDown',
+    howToUse: [
+      'Upload the PDF file you wish to compress.',
+      'Select a compression level: Low (maximum quality), Medium (recommended balance), or High (smallest file size).',
+      'Click "Compress PDF" to optimize.',
+      'The compressed PDF will download automatically with a smaller file size.'
+    ],
+    faqs: [
+      {
+        question: 'How does client-side PDF compression work?',
+        answer: 'It renders PDF pages onto standard canvases, applies high-efficiency image compression to the layouts, and outputs a rewritten PDF structure.'
+      },
+      {
+        question: 'Does PDF compression reduce text quality?',
+        answer: 'No, textual elements remain sharp. The compressor primarily targets embedded images and graphics which contribute to the bulk of the file size.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding PDF Compression Levels',
+        content: '- **Low Compression**: Minimal change in resolution, best for high-fidelity architectural drawings.\n- **Medium Compression**: Re-encodes images at 150 DPI, ideal for typical corporate slideshows and business agreements.\n- **High Compression**: Re-encodes at 72 DPI, ideal for quick drafts and mobile distributions.'
+      }
+    ]
+  },
+  {
+    id: 'PDFPageRemover',
+    slug: 'pdf-page-remover',
+    name: 'PDF Page Remover',
+    category: 'pdf',
+    shortDescription: 'Delete selected pages from a PDF document visually.',
+    metaDescription: 'Free online PDF Page Remover. Delete unwanted pages from your PDF visually in your browser. Fast, secure, and client-side.',
+    keywords: ['Delete pages from PDF', 'Remove PDF pages', 'PDF page remover', 'Erase PDF pages online', 'PDF editor free'],
+    icon: 'FileMinus',
+    howToUse: [
+      'Upload a PDF document to load its pages.',
+      'Select the pages you want to delete by clicking on their thumbnails.',
+      'Click the "Remove Selected Pages" button.',
+      'Download the updated PDF with the chosen pages removed.'
+    ],
+    faqs: [
+      {
+        question: 'Can I undo a page deletion?',
+        answer: 'You can uncheck a thumbnail before downloading to restore the page. Once the file is downloaded, the pages are permanently removed from the output.'
+      },
+      {
+        question: 'How many pages can I delete at once?',
+        answer: 'You can select and remove any number of pages, up to all but one page (PDFs must have at least 1 page).'
+      }
+    ],
+    sections: [
+      {
+        title: 'Visual PDF Page Management',
+        content: 'Our visual interface renders a thumbnail preview of each page using HTML5 Canvas. This lets you visually identify and select unwanted pages (such as blank pages or draft versions) before rendering the output.'
+      }
+    ]
+  },
+  {
+    id: 'PDFPageReorder',
+    slug: 'pdf-page-reorder',
+    name: 'PDF Page Reorder',
+    category: 'pdf',
+    shortDescription: 'Rearrange the page order of a PDF using drag & drop.',
+    metaDescription: 'Free online PDF Page Reorder tool. Rearrange PDF pages visually via drag & drop. 100% secure, private, and client-side.',
+    keywords: ['Reorder PDF pages', 'Rearrange PDF pages', 'PDF page organizer', 'Move PDF pages', 'Organize PDF files'],
+    icon: 'ArrowUpDown',
+    howToUse: [
+      'Upload a PDF file to see page thumbnails.',
+      'Click and drag a page thumbnail to its new position.',
+      'Verify the new page sequence.',
+      'Click "Save PDF" to download the reordered document.'
+    ],
+    faqs: [
+      {
+        question: 'Is it easy to drag pages on mobile devices?',
+        answer: 'Yes, the page reordering interface supports touch gestures on mobile devices and tablets for easy page sorting.'
+      },
+      {
+        question: 'Can I insert new blank pages here?',
+        answer: 'This tool is currently designed for rearranging existing pages. To merge different documents, use the PDF Merge tool.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Client-Side PDF Organization',
+        content: 'Rearranging pages visually allows you to fix misordered scans, index slide presentations, or organize report headers immediately before delivery, without needing heavy desktop software.'
+      }
+    ]
+  },
+  {
+    id: 'PDFRotate',
+    slug: 'pdf-rotate',
+    name: 'PDF Rotate',
+    category: 'pdf',
+    shortDescription: 'Rotate pages of a PDF document visually.',
+    metaDescription: 'Free online PDF Rotator. Rotate individual pages or all pages of a PDF by 90, 180, or 270 degrees locally in browser.',
+    keywords: ['Rotate PDF', 'Turn PDF pages', 'Rotate PDF pages online', 'PDF page rotator', 'Fix upside down PDF'],
+    icon: 'RotateCw',
+    howToUse: [
+      'Upload a PDF file.',
+      'Click the rotate buttons on individual page thumbnails, or click "Rotate All Pages".',
+      'Select rotation angles (90° CW, 90° CCW, or 180°).',
+      'Click "Save Rotated PDF" to download.'
+    ],
+    faqs: [
+      {
+        question: 'Will the rotation be saved permanently?',
+        answer: 'Yes. The rotation tag of the selected pages is updated within the PDF structure, so it displays correctly in any standard PDF viewer.'
+      },
+      {
+        question: 'Can I rotate only odd or even pages?',
+        answer: 'Yes, our batch tools allow quick selection and rotation filters for odd pages, even pages, or the entire document.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Fixing Scanned Documents',
+        content: 'Scanned invoices and documents often end up rotated sideways or upside-down. This tool updates the PDF `/Rotate` dictionary key on a page level, meaning pages are permanently corrected without compressing or lowering the document quality.'
+      }
+    ]
+  },
+  {
+    id: 'PDFPasswordProtect',
+    slug: 'pdf-password-protect',
+    name: 'PDF Password Protect',
+    category: 'pdf',
+    shortDescription: 'Encrypt a PDF document with a secure password.',
+    metaDescription: 'Free online PDF Password Protect. Encrypt your PDF files with user passwords to prevent unauthorized access. Safe and secure client-side encryption.',
+    keywords: ['Password protect PDF', 'Encrypt PDF online', 'Secure PDF file', 'Add password to PDF', 'PDF locker free'],
+    icon: 'Lock',
+    howToUse: [
+      'Upload the PDF file you wish to lock.',
+      'Type a secure password in the input field.',
+      'Confirm the password.',
+      'Click "Lock PDF" to encrypt and download the secured document.'
+    ],
+    faqs: [
+      {
+        question: 'What type of encryption is used?',
+        answer: 'We use standard PDF security handlers (including standard RC4/MD5 128-bit encryption) to ensure compatibility across Acrobat Reader and browsers.'
+      },
+      {
+        question: 'Can I recover the PDF if I forget the password?',
+        answer: 'No. Since the password is never uploaded to any server, there is no way to recover or reset it. Make sure to remember your password.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Why Password-Protect Your PDFs?',
+        content: 'Encrypting files with a password restricts unauthorized views, protecting critical customer details, payroll, or business receipts when sending attachments over email or chat applications.'
+      }
+    ]
+  },
+  {
+    id: 'PDFUnlock',
+    slug: 'pdf-unlock',
+    name: 'PDF Unlock',
+    category: 'pdf',
+    shortDescription: 'Remove password protection from secure PDFs.',
+    metaDescription: 'Free online PDF Unlocker. Remove security passwords and restrictions from your PDF files locally. Fast, secure, and 100% private.',
+    keywords: ['Unlock PDF', 'Decrypt PDF online', 'Remove password from PDF', 'PDF password remover', 'Unprotect PDF free'],
+    icon: 'Unlock',
+    howToUse: [
+      'Upload a password-protected PDF file.',
+      'Enter the correct document password.',
+      'Click "Decrypt PDF".',
+      'Download the unprotected PDF file which can now be opened without a password.'
+    ],
+    faqs: [
+      {
+        question: 'Do I need to know the password to unlock it?',
+        answer: 'Yes, this tool removes passwords from documents you own or have authorized access to. It is not designed to crack passwords.'
+      },
+      {
+        question: 'Will this remove copying and printing restrictions too?',
+        answer: 'Yes. The decryption process removes all security dictionaries, lifting printing, copying, and editing restrictions.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Unlocking PDF Workflows',
+        content: 'Unlocking documents removes the constant password prompt, allowing easier archiving, reading on smart devices, and seamless uploads into document index tools.'
+      }
+    ]
+  },
+  {
+    id: 'PDFWatermark',
+    slug: 'pdf-watermark',
+    name: 'PDF Watermark',
+    category: 'pdf',
+    shortDescription: 'Add text or image watermarks to a PDF document.',
+    metaDescription: 'Free online PDF Watermark. Add custom text or image logos onto your PDF pages. Customize position, opacity, scale, and rotation in-browser.',
+    keywords: ['Watermark PDF', 'Add logo to PDF', 'PDF watermarker online', 'Stamp PDF pages', 'Brand PDF documents'],
+    icon: 'FileSignature',
+    howToUse: [
+      'Upload a PDF document.',
+      'Choose "Text Watermark" (input your text, select font, size, color) or "Image Watermark" (upload an image logo).',
+      'Adjust settings like Opacity, Rotation angle, and Placement position.',
+      'Click "Apply Watermark" and download the stamped PDF.'
+    ],
+    faqs: [
+      {
+        question: 'Will the watermark appear on all pages?',
+        answer: 'Yes, the watermark will be drawn on every page of the document by default, but you can choose to skip the first page.'
+      },
+      {
+        question: 'Can the watermark be easily removed?',
+        answer: 'No, the watermark is rendered directly as content streams inside the PDF pages, making it permanent for standard readers.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Branding and Protecting Intellectual Property',
+        content: 'Watermarks (like "CONFIDENTIAL", "DRAFT", or your company logo) protect your business drafts from being shared without credit or used before final review.'
+      }
+    ]
+  },
+  {
+    id: 'PDFPageNumbering',
+    slug: 'pdf-page-numbering',
+    name: 'PDF Page Numbering',
+    category: 'pdf',
+    shortDescription: 'Add running page numbers to a PDF document.',
+    metaDescription: 'Free online PDF Page Numbering tool. Add running numbers (e.g. Page X of Y) to headers or footers. Safe and client-side.',
+    keywords: ['Add page numbers to PDF', 'PDF page numbering', 'Page numbers header footer', 'Number PDF pages online', 'PDF editor numbers'],
+    icon: 'Hash',
+    howToUse: [
+      'Upload the PDF file.',
+      'Select number format (e.g., "1", "Page 1", "Page 1 of 10").',
+      'Select position (Bottom Right, Bottom Center, Top Right, etc.) and margin offsets.',
+      'Click "Add Page Numbers" to generate and download.'
+    ],
+    faqs: [
+      {
+        question: 'Can I start numbering from a specific page?',
+        answer: 'Yes, you can set the "Start Page" index (e.g., start numbering from page 2 to skip a cover page).'
+      },
+      {
+        question: 'Can I choose the font size and color?',
+        answer: 'Yes, the controls let you adjust font size, color (dark or light), and font style (Standard, Bold, Italic).'
+      }
+    ],
+    sections: [
+      {
+        title: 'Professional Document Indexing',
+        content: 'Adding page numbers organizes reports, contracts, and manuals, making it easy for readers to reference specific sections during discussions or presentations.'
+      }
+    ]
+  },
+  {
+    id: 'ExtractTextPDF',
+    slug: 'extract-text-pdf',
+    name: 'Extract Text From PDF',
+    category: 'pdf',
+    shortDescription: 'Extract plain text content from a PDF file locally.',
+    metaDescription: 'Free online PDF Text Extractor. Extract plain text from PDF documents in browser without uploads. View preview and download as TXT.',
+    keywords: ['Extract text from PDF', 'PDF to text converter', 'Read PDF text online', 'PDF text scraper', 'Convert PDF to TXT'],
+    icon: 'FileSearch',
+    howToUse: [
+      'Upload a PDF document.',
+      'The tool will automatically parse text content from each page.',
+      'Review the extracted text preview in the editor box.',
+      'Click "Download Text" to save as a plain `.txt` file.'
+    ],
+    faqs: [
+      {
+        question: 'Can this extract text from scanned images or photos?',
+        answer: 'This is a text parser, not an OCR (Optical Character Recognition) tool. It extracts native searchable text from digital PDFs, not scanned images.'
+      },
+      {
+        question: 'Does it preserve document formatting?',
+        answer: 'It extracts words in layout order. While margins are lost, paragraph and line splits are preserved to maintain readability.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Fast and Private Text Scrapes',
+        content: 'Local text extraction parses PDF layout streams in browser memory, letting you extract copyable texts, logs, or lists from massive files instantly without server latency.'
+      }
+    ]
+  },
+  {
+    id: 'PDFMetadataViewer',
+    slug: 'pdf-metadata-viewer',
+    name: 'PDF Metadata Viewer',
+    category: 'pdf',
+    shortDescription: 'Inspect properties and metadata tags of a PDF file.',
+    metaDescription: 'Free online PDF Metadata Viewer. Inspect PDF properties, creation date, modifications, author, version, and producer tags locally.',
+    keywords: ['PDF metadata viewer', 'Inspect PDF tags', 'Check PDF properties', 'Read PDF author title', 'PDF file inspector'],
+    icon: 'Info',
+    howToUse: [
+      'Upload a PDF document.',
+      'The viewer will read and parse standard document dictionaries.',
+      'Inspect metadata like Author, Title, Creator, Producer, Creation/Mod Date, Page Count, and file metrics.'
+    ],
+    faqs: [
+      {
+        question: 'Can I edit the metadata here?',
+        answer: 'This version is a read-only viewer. To write custom metadata, use dedicated PDF editing tools.'
+      },
+      {
+        question: 'Why is some metadata missing?',
+        answer: 'Metadata fields are optional. If the document creator did not specify a Title or Author, the corresponding fields will show as "Not Specified".'
+      }
+    ],
+    sections: [
+      {
+        title: 'Verifying PDF Properties',
+        content: 'Inspecting PDF metadata lets you verify the software producer, creator, and modification dates to check document validity before archiving or printing.'
+      }
+    ]
+  },
+  {
+    id: 'PDFToWord',
+    slug: 'pdf-to-word',
+    name: 'PDF to Word',
+    category: 'pdf',
+    shortDescription: 'Convert a PDF document into a Word (.doc) document.',
+    metaDescription: 'Free online PDF to Word converter. Convert PDF files to editable Microsoft Word files locally. Secure, client-side conversion.',
+    keywords: ['Convert PDF to Word', 'PDF to DOCX online', 'Editable PDF to Word', 'Local PDF converter Word', 'PDF to doc converter'],
+    icon: 'FileText',
+    howToUse: [
+      'Upload a PDF document.',
+      'Click "Convert to Word".',
+      'The tool will extract document texts and format them into an editable Word document.',
+      'Download your converted `.doc` file.'
+    ],
+    faqs: [
+      {
+        question: 'Will the Word file match my PDF layout exactly?',
+        answer: 'It transfers text blocks, paragraphs, and headings. Very complex layouts with multi-column text overlays may require slight adjustments in Word.'
+      },
+      {
+        question: 'Can I edit the output document in Google Docs?',
+        answer: 'Yes, the exported file is compatible with Microsoft Word, Google Docs, LibreOffice, and WPS Writer.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Editable PDF Conversions',
+        content: 'Converting a PDF to a editable Word file allows you to reuse old text contents, adjust contract clauses, or rewrite layout templates without typing from scratch.'
+      }
+    ]
+  },
+  {
+    id: 'WordToPDF',
+    slug: 'word-to-pdf',
+    name: 'Word to PDF',
+    category: 'pdf',
+    shortDescription: 'Convert a Microsoft Word document (.docx) to PDF.',
+    metaDescription: 'Free online Word to PDF converter. Convert DOCX files to PDF documents locally in your browser. Private and serverless conversion.',
+    keywords: ['Convert Word to PDF', 'DOCX to PDF online', 'Word to PDF client side', 'Convert doc to pdf free', 'Local Word converter'],
+    icon: 'FileText',
+    howToUse: [
+      'Upload a `.docx` file.',
+      'Click "Convert to PDF".',
+      'The text and formatting will be parsed and formatted into PDF pages.',
+      'Your PDF document will download automatically.'
+    ],
+    faqs: [
+      {
+        question: 'Does this require MS Word to be installed?',
+        answer: 'No, this converter operates completely independently inside the browser engine using Javascript parsing.'
+      },
+      {
+        question: 'What Word formats are supported?',
+        answer: 'It supports standard XML-based Word files (.docx). Older binary Word files (.doc) must be saved as .docx first.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Word processing in PDF',
+        content: 'Converting Word documents into PDF formats is standard practice for professional sharing. It guarantees that the fonts, margins, and layouts appear identical on any recipient device.'
+      }
+    ]
+  },
+  {
+    id: 'ExcelToPDF',
+    slug: 'excel-to-pdf',
+    name: 'Excel to PDF',
+    category: 'pdf',
+    shortDescription: 'Convert Microsoft Excel (.xlsx) sheets to PDF tables.',
+    metaDescription: 'Free online Excel to PDF converter. Convert XLSX files into styled PDF tables locally in browser. Secure, fast, and serverless.',
+    keywords: ['Convert Excel to PDF', 'XLSX to PDF online', 'Excel sheet to PDF table', 'Convert spreadsheet to pdf', 'Local Excel converter'],
+    icon: 'Table',
+    howToUse: [
+      'Upload a `.xlsx` spreadsheet.',
+      'Review the sheet selection list (all worksheets are converted).',
+      'Click "Convert to PDF" to compile.',
+      'Download the PDF displaying your data tables organized on pages.'
+    ],
+    faqs: [
+      {
+        question: 'Will formulas be computed in the PDF?',
+        answer: 'The converter reads the last calculated values stored in the sheet cells, ensuring the outputs match your spreadsheet state.'
+      },
+      {
+        question: 'How are large sheets handled?',
+        answer: 'Worksheets are automatically scaled and fitted onto portrait or landscape pages with column borders to maintain layout alignment.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Sharing Spreadsheet Reports',
+        content: 'Converting spreadsheets into static PDF sheets prevents accidental formula edits or column width adjustments by readers, ideal for sending financial statements, quotes, and bills.'
+      }
+    ]
+  },
+  {
+    id: 'PowerPointToPDF',
+    slug: 'powerpoint-to-pdf',
+    name: 'PowerPoint to PDF',
+    category: 'pdf',
+    shortDescription: 'Convert Microsoft PowerPoint slides (.pptx) to PDF.',
+    metaDescription: 'Free online PowerPoint to PDF converter. Convert PPTX slide decks into landscape PDF presentations locally. Private and serverless.',
+    keywords: ['Convert PPTX to PDF', 'PowerPoint to PDF online', 'PPTX to PDF local', 'Convert presentation to pdf', 'PowerPoint slides converter'],
+    icon: 'Presentation',
+    howToUse: [
+      'Upload a `.pptx` presentation deck.',
+      'Click "Convert to PDF".',
+      'The slides are parsed and drawn onto landscape PDF pages.',
+      'Download your PDF presentation.'
+    ],
+    faqs: [
+      {
+        question: 'Are slides exported in landscape format?',
+        answer: 'Yes, the slides are written onto landscape PDF pages (16:9 aspect ratio) to match standard presentation structures.'
+      },
+      {
+        question: 'Are transitions preserved in PDF?',
+        answer: 'PDF is a static document format, so animations and slide transition effects will be removed, exporting slide graphics and text statically.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Delivering Pitch Decks securely',
+        content: 'Converting PPTX slideshows to PDF guarantees that your layouts, titles, text alignments, and fonts look consistent on client display devices or mobile readers during presentations.'
       }
     ]
   },

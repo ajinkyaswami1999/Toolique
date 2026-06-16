@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon, Sliders, Hammer, Compass, Palette, HelpCircle, ArrowRight, ShieldAlert, Zap, Globe } from 'lucide-react';
+import { Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon, Sliders, Hammer, Compass, Palette, HelpCircle, ArrowRight, ShieldAlert, Zap, Globe, FileText } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { categories } from '../data/categories';
 import ToolCard from '../components/ToolCard';
@@ -15,6 +15,7 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
   civil: Hammer,
   architecture: Compass,
   interior: Palette,
+  pdf: FileText,
 };
 
 // Lists of featured, popular and recently added tool IDs
