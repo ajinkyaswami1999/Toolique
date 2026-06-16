@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon, Sliders, Hammer, Compass, Palette, HelpCircle, ArrowRight, ShieldAlert, Zap, Globe } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { categories } from '../data/categories';
@@ -37,15 +37,32 @@ export default function Home() {
 
   const setSelectedCategory = (cat: string) => {
     setSearchParams((prev) => {
-      if (cat && cat !== 'all') prev.set('category', cat);
-      else prev.delete('category');
+      if (cat && cat !== 'all') {
+        prev.set('category', cat);
+        prev.delete('view');
+      } else {
+        prev.delete('category');
+        prev.delete('view');
+      }
       return prev;
     }, { replace: true });
   };
 
-  // Scroll to tools-section if we have active filter parameters in URL (e.g. redirected from breadcrumbs)
+  const prevCategoryRef = useRef(selectedCategory);
+  const prevViewRef = useRef(searchParams.get('view'));
+
+  // Scroll to tools-section if we have active filter parameters in URL
   useEffect(() => {
-    if (searchParams.get('category') || searchParams.get('q')) {
+    const currentView = searchParams.get('view');
+    const hasCategory = searchParams.get('category');
+    const hasQ = searchParams.get('q');
+
+    const categoryChanged = hasCategory !== prevCategoryRef.current;
+    const viewChanged = currentView !== prevViewRef.current;
+
+    const shouldScroll = categoryChanged || viewChanged || ( (hasCategory || hasQ || currentView) && !prevCategoryRef.current && !prevViewRef.current );
+
+    if (shouldScroll) {
       const el = document.getElementById('tools-section');
       if (el) {
         setTimeout(() => {
@@ -53,7 +70,10 @@ export default function Home() {
         }, 150);
       }
     }
-  }, []); // run once on mount
+
+    prevCategoryRef.current = hasCategory || 'all';
+    prevViewRef.current = currentView;
+  }, [searchParams]);
 
   const filteredTools = toolsList.filter((tool) => {
     const query = searchQuery.toLowerCase().trim();
@@ -152,9 +172,16 @@ export default function Home() {
         {/* Category Filters */}
         <div className="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto pt-2">
           <button
-            onClick={() => setSelectedCategory('all')}
+            onClick={() => {
+              setSelectedCategory('all');
+              setSearchParams((prev) => {
+                prev.delete('view');
+                prev.delete('category');
+                return prev;
+              }, { replace: true });
+            }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
-              selectedCategory === 'all'
+              selectedCategory === 'all' && !searchParams.get('view')
                 ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 border-zinc-900 dark:border-white'
                 : 'bg-transparent text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:text-zinc-900 dark:hover:text-white'
             }`}
@@ -185,11 +212,17 @@ export default function Home() {
       {/* Ad slot */}
       <AdPlaceholder slot="home-top" type="banner" />
 
-      {/* Conditional Rendering: If searching or filtering, show directory list. Else, show structured SaaS landing layout */}
-      {searchQuery || selectedCategory !== 'all' ? (
+      {/* Conditional Rendering: If searching, filtering, or view all is selected, show directory list. Else, show structured SaaS landing layout */}
+      {searchQuery || selectedCategory !== 'all' || searchParams.get('view') === 'all' ? (
         <section className="max-w-6xl mx-auto space-y-6">
           <div className="flex justify-between items-center max-w-5xl mx-auto px-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Search Results</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+              {searchQuery
+                ? 'Search Results'
+                : selectedCategory !== 'all'
+                ? `${categories.find((c) => c.id === selectedCategory)?.name || 'Filtered'} Tools`
+                : 'All Tools Directory'}
+            </h3>
             <span className="text-xs font-bold text-indigo-500">{filteredTools.length} found</span>
           </div>
           {filteredTools.length > 0 ? (
@@ -212,9 +245,19 @@ export default function Home() {
           <section className="max-w-6xl mx-auto space-y-6">
             <div className="flex justify-between items-center px-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Featured Platforms</h3>
-              <a href="#tools-section" className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 flex items-center gap-0.5">
-                <span>View all</span> <ArrowRight className="w-3 h-3" />
-              </a>
+              <button
+                onClick={() => {
+                  setSearchParams((prev) => {
+                    prev.set('view', 'all');
+                    prev.delete('category');
+                    prev.delete('q');
+                    return prev;
+                  }, { replace: true });
+                }}
+                className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 flex items-center gap-0.5 cursor-pointer"
+              >
+                <span>View all</span> <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredTools.map((tool) => (

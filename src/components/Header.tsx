@@ -69,13 +69,14 @@ export default function Header() {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Directory', path: '/#tools-section' },
+    { name: 'Directory', path: '/?view=all' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' }
   ];
 
   const isActive = (path: string) => {
-    if (path === '/') return location.pathname === '/';
+    if (path === '/') return location.pathname === '/' && !location.search;
+    if (path.includes('?view=all')) return location.pathname === '/' && location.search.includes('view=all');
     if (path.startsWith('/#')) return false; // Anchor links
     return location.pathname.startsWith(path);
   };

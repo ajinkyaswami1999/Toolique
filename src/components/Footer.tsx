@@ -34,22 +34,22 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-xs font-semibold">
               <li>
-                <Link to="/#tools-section" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                <Link to="/?category=civil" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                   Civil Engineering
                 </Link>
               </li>
               <li>
-                <Link to="/#tools-section" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                <Link to="/?category=architecture" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                   Architecture Suite
                 </Link>
               </li>
               <li>
-                <Link to="/#tools-section" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                <Link to="/?category=interior" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                   Interior Design
                 </Link>
               </li>
               <li>
-                <Link to="/#tools-section" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                <Link to="/?category=finance" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
                   Finance & Developer
                 </Link>
               </li>
