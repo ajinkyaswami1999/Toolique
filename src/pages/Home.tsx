@@ -48,8 +48,10 @@ export default function Home() {
     }, { replace: true });
   };
 
+  const isFirstRender = useRef(true);
   const prevCategoryRef = useRef(selectedCategory);
   const prevViewRef = useRef(searchParams.get('view'));
+  const prevQRef = useRef(searchParams.get('q') || '');
 
   // Scroll to tools-section if we have active filter parameters in URL
   useEffect(() => {
@@ -57,10 +59,27 @@ export default function Home() {
     const hasCategory = searchParams.get('category');
     const hasQ = searchParams.get('q');
 
-    const categoryChanged = hasCategory !== prevCategoryRef.current;
-    const viewChanged = currentView !== prevViewRef.current;
+    const categoryChanged = (hasCategory || 'all') !== (prevCategoryRef.current || 'all');
+    const qChanged = (hasQ || '') !== prevQRef.current;
 
-    const shouldScroll = categoryChanged || viewChanged || ( (hasCategory || hasQ || currentView) && !prevCategoryRef.current && !prevViewRef.current );
+    const isTyping = document.activeElement?.id === 'home-search-input';
+
+    const navigatedToCategory = hasCategory && hasCategory !== 'all';
+    const navigatedToQuery = hasQ && hasQ.trim() !== '';
+
+    let shouldScroll = false;
+    if (!isTyping) {
+      if (isFirstRender.current) {
+        // On initial mount, scroll if we have a specific category or query
+        shouldScroll = !!(navigatedToCategory || navigatedToQuery);
+      } else {
+        // On subsequent renders, scroll if category changed to a specific category or query changed
+        shouldScroll = !!(
+          (categoryChanged && navigatedToCategory) ||
+          (qChanged && navigatedToQuery)
+        );
+      }
+    }
 
     if (shouldScroll) {
       const el = document.getElementById('tools-section');
@@ -71,8 +90,10 @@ export default function Home() {
       }
     }
 
+    isFirstRender.current = false;
     prevCategoryRef.current = hasCategory || 'all';
     prevViewRef.current = currentView;
+    prevQRef.current = hasQ || '';
   }, [searchParams]);
 
   const filteredTools = toolsList.filter((tool) => {
@@ -161,6 +182,7 @@ export default function Home() {
         <div className="relative max-w-xl mx-auto">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-4.5 h-4.5" />
           <input
+            id="home-search-input"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
