@@ -200,7 +200,8 @@ export default function Home() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Type tool name, keyword, or category (e.g. concrete, cost)..."
-            className="saas-input pl-12 pr-4 py-3 font-semibold shadow-sm focus:ring-indigo-500/10 focus:border-indigo-500"
+            className="saas-input pr-4 py-3 font-semibold shadow-sm focus:ring-indigo-500/10 focus:border-indigo-500"
+            style={{ paddingLeft: '3rem' }}
           />
         </div>
 
