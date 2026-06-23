@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { FileText, Upload, Download, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import * as pdfjs from 'pdfjs-dist';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export default function PDFToWord() {
   const [file, setFile] = useState<File | null>(null);
+  const [mode, setMode] = useState<'text' | 'image'>('text');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [progressText, setProgressText] = useState<string>('');
   const [outputBlob, setOutputBlob] = useState<Blob | null>(null);
@@ -51,32 +52,56 @@ export default function PDFToWord() {
       `;
 
       for (let i = 1; i <= numPages; i++) {
-        setProgressText(`Parsing page ${i} of ${numPages}...`);
+        setProgressText(`Analyzing page ${i} of ${numPages}...`);
         const page = await pdf.getPage(i);
         const textContent = await page.getTextContent();
+        const hasText = textContent.items.length > 0;
         
         let pageHtml = i > 1 ? '<div class="page-break"></div>' : '';
-        let lastY = -1;
-        let currentParagraph = '';
 
-        for (const item of textContent.items as any[]) {
-          const currentY = item.transform?.[5];
-          const textStr = item.str || '';
+        if (mode === 'text' && hasText) {
+          let lastY = -1;
+          let currentParagraph = '';
 
-          if (lastY !== -1 && Math.abs(currentY - lastY) > 12) {
-            // New paragraph/line detected if coordinates shifted vertically
-            if (currentParagraph.trim()) {
-              pageHtml += `<p>${currentParagraph.trim()}</p>\n`;
+          for (const item of textContent.items as any[]) {
+            const currentY = item.transform?.[5];
+            const textStr = item.str || '';
+
+            if (lastY !== -1 && Math.abs(currentY - lastY) > 12) {
+              // New paragraph/line detected if coordinates shifted vertically
+              if (currentParagraph.trim()) {
+                pageHtml += `<p>${currentParagraph.trim()}</p>\n`;
+              }
+              currentParagraph = '';
             }
-            currentParagraph = '';
+
+            currentParagraph += textStr + ' ';
+            lastY = currentY;
           }
 
-          currentParagraph += textStr + ' ';
-          lastY = currentY;
-        }
-
-        if (currentParagraph.trim()) {
-          pageHtml += `<p>${currentParagraph.trim()}</p>\n`;
+          if (currentParagraph.trim()) {
+            pageHtml += `<p>${currentParagraph.trim()}</p>\n`;
+          }
+        } else {
+          // Render page to canvas and get base64 image
+          setProgressText(`Rendering page ${i} of ${numPages} as image...`);
+          const viewport = page.getViewport({ scale: 1.5 });
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          
+          if (context) {
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            
+            await page.render({
+              canvasContext: context,
+              viewport: viewport,
+              canvas: canvas,
+            }).promise;
+            
+            const imgData = canvas.toDataURL('image/jpeg', 0.85);
+            pageHtml += `<p style="text-align: center; margin-bottom: 0;"><img src="${imgData}" width="600" style="max-width: 100%; height: auto;" /></p>\n`;
+          }
         }
 
         htmlContent += pageHtml;
@@ -92,7 +117,7 @@ export default function PDFToWord() {
       setOutputBlob(wordBlob);
     } catch (err: any) {
       console.error(err);
-      setError('An error occurred during conversion. Make sure the PDF is not encrypted.');
+      setError('An error occurred during conversion. Make sure the PDF is not encrypted or corrupted.');
     } finally {
       setIsProcessing(false);
       setProgressText('');
@@ -156,6 +181,44 @@ export default function PDFToWord() {
 
       {/* Control panel */}
       <div className="md:col-span-5 space-y-6">
+        <div className="saas-card p-6 space-y-4">
+          <h3 className="text-base font-bold text-zinc-900 dark:text-white">Conversion Settings</h3>
+          
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-2.5">
+              <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition ${mode === 'text' ? 'border-indigo-500 bg-indigo-50/5 dark:bg-indigo-950/10' : 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50'}`}>
+                <input
+                  type="radio"
+                  name="conversionMode"
+                  value="text"
+                  checked={mode === 'text'}
+                  onChange={() => setMode('text')}
+                  className="mt-1 accent-indigo-600"
+                />
+                <div>
+                  <p className="text-xs font-bold text-zinc-900 dark:text-white">Editable Text (Default)</p>
+                  <p className="text-[10px] text-zinc-500 leading-relaxed mt-0.5">Extracts text paragraphs and headings. Best for standard text editing. Automatically falls back to image mode for scanned/blank pages.</p>
+                </div>
+              </label>
+
+              <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition ${mode === 'image' ? 'border-indigo-500 bg-indigo-50/5 dark:bg-indigo-950/10' : 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50'}`}>
+                <input
+                  type="radio"
+                  name="conversionMode"
+                  value="image"
+                  checked={mode === 'image'}
+                  onChange={() => setMode('image')}
+                  className="mt-1 accent-indigo-600"
+                />
+                <div>
+                  <p className="text-xs font-bold text-zinc-900 dark:text-white">Exact Layout (As Images)</p>
+                  <p className="text-[10px] text-zinc-500 leading-relaxed mt-0.5">Converts entire pages to images. Preserves exact layout, forms, tables, diagrams, and signatures. Ideal for non-selectable PDFs.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
         <div className="saas-card p-6 text-center space-y-4">
           <h3 className="text-base font-bold text-zinc-900 dark:text-white text-left">Actions</h3>
 

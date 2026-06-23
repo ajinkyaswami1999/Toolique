@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FileText, Upload, Download, CheckCircle2, AlertCircle, Loader2, Copy, Check } from 'lucide-react';
 import * as pdfjs from 'pdfjs-dist';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export default function ExtractTextPDF() {
   const [file, setFile] = useState<File | null>(null);

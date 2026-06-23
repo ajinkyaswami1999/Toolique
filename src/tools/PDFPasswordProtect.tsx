@@ -3,7 +3,7 @@ import { FileText, Upload, Download, CheckCircle2, AlertCircle, Loader2, Lock } 
 import { jsPDF } from 'jspdf';
 import * as pdfjs from 'pdfjs-dist';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export default function PDFPasswordProtect() {
   const [file, setFile] = useState<File | null>(null);
