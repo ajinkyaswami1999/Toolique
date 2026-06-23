@@ -160,6 +160,18 @@ import FacebookCoverCreator from '../tools/FacebookCoverCreator';
 import LinkedInBannerResizer from '../tools/LinkedInBannerResizer';
 import WhatsAppLinkGenerator from '../tools/WhatsAppLinkGenerator';
 
+// Electrical Engineering Tools
+import VoltageDropCalculator from '../tools/VoltageDropCalculator';
+import CableSizeCalculator from '../tools/CableSizeCalculator';
+import LoadCalculator from '../tools/LoadCalculator';
+import PowerConsumptionCalculator from '../tools/PowerConsumptionCalculator';
+import UPSCalculator from '../tools/UPSCalculator';
+import SolarPanelCalculator from '../tools/SolarPanelCalculator';
+import BatteryBackupCalculator from '../tools/BatteryBackupCalculator';
+import kWToHPConverter from '../tools/kWToHPConverter';
+import TransformerCalculator from '../tools/TransformerCalculator';
+import LEDLightingCalculator from '../tools/LEDLightingCalculator';
+
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
   SIPCalculator,
@@ -202,6 +214,18 @@ const toolComponents: Record<string, React.ComponentType> = {
   FacebookCoverCreator,
   LinkedInBannerResizer,
   WhatsAppLinkGenerator,
+
+  // Electrical Engineering Tools Registration
+  VoltageDropCalculator,
+  CableSizeCalculator,
+  LoadCalculator,
+  PowerConsumptionCalculator,
+  UPSCalculator,
+  SolarPanelCalculator,
+  BatteryBackupCalculator,
+  kWToHPConverter,
+  TransformerCalculator,
+  LEDLightingCalculator,
 
   // New Developer Tools Registration
   JSONValidator,

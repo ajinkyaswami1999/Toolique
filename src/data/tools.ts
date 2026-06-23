@@ -12,7 +12,7 @@ export interface Tool {
   id: string;
   slug: string;
   name: string;
-  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health';
+  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health';
   shortDescription: string;
   metaDescription: string;
   keywords: string[];
@@ -4167,5 +4167,286 @@ export const toolsList: Tool[] = [
         content: 'Adding a WhatsApp QR code or link to your email signatures, business cards, or product flyers makes it incredibly easy for customers to scan and ask questions immediately.'
       }
     ]
-  }
+  },
+  {
+    id: 'VoltageDropCalculator',
+    slug: 'voltage-drop-calculator',
+    name: 'Voltage Drop Calculator',
+    category: 'electrical',
+    shortDescription: "Calculate voltage drop percentage and receiving end voltage for DC, 1-Phase AC, and 3-Phase AC circuits.",
+    metaDescription: "Free online Voltage Drop Calculator. Calculate line voltage drop in copper or aluminum cables under NEC branch and feeder regulations.",
+    keywords: ["voltage drop calculator","calculate voltage drop","single phase voltage drop","three phase drop","cable voltage loss"],
+    icon: 'Zap',
+    howToUse: [
+      "Select the electrical phase (DC, 1-Phase AC, or 3-Phase AC).",
+      "Select the conductor material (Copper or Aluminum).",
+      "Select the cable size in square millimeters (mm²).",
+      "Enter the length of the run and choose meters or feet.",
+      "Enter source voltage, current load, power factor and review results."
+    ],
+    faqs: [
+      {
+        "question": "What is a safe limit for voltage drop?",
+        "answer": "The National Electrical Code (NEC) recommends keeping voltage drop under 3% for branch circuits and under 5% for the combined feeder and branch circuits."
+      }
+    ],
+    sections: [
+      {
+        "title": "Understanding Voltage Drop in Electrical Systems",
+        "content": "Voltage drop is the decrease in electrical potential along the path of a current flowing in an electrical circuit. This is caused by the resistance and reactance of the cable conductors. Sizing conductors properly reduces power loss, heating, and prevents damage to connected loads."
+      }
+    ]
+  },
+  {
+    id: 'CableSizeCalculator',
+    slug: 'cable-size-calculator',
+    name: 'Cable Size Calculator',
+    category: 'electrical',
+    shortDescription: "Determine the minimum required cable conductor size based on load current, installation type, and voltage drop limits.",
+    metaDescription: "Free online Cable Size Calculator. Sizing electrical cables (mm² and AWG) according to ampacity and voltage drop criteria.",
+    keywords: ["cable size calculator","electrical wire sizing","wire size calculator","cable size for motor","conduit wire sizing"],
+    icon: 'Zap',
+    howToUse: [
+      "Enter the connected load in kW, Amps, or Horsepower.",
+      "Specify the voltage, phase type, and run length.",
+      "Select conductor material, installation method (conduit, air, buried), and insulation (PVC/XLPE).",
+      "Choose the allowable voltage drop limit to view the recommended sizing."
+    ],
+    faqs: [
+      {
+        "question": "How do PVC and XLPE insulations differ in cable sizing?",
+        "answer": "XLPE insulation can withstand higher operating temperatures (up to 90°C) compared to PVC (70°C). This allows XLPE cables to carry higher currents, allowing smaller cable sizes for the same load."
+      }
+    ],
+    sections: [
+      {
+        "title": "Factors Influencing Cable Selection",
+        "content": "Cable sizing depends on two main parameters: Ampacity (the maximum current a cable can safely carry without overheating) and Voltage Drop. Environmental factors like ambient temperature, grouping, and burial depth also require safety derating factors."
+      }
+    ]
+  },
+  {
+    id: 'LoadCalculator',
+    slug: 'load-calculator',
+    name: 'Electrical Load Calculator',
+    category: 'electrical',
+    shortDescription: "Calculate connected load and estimated maximum demand currents for residential and commercial circuits.",
+    metaDescription: "Free online Connected Load Calculator. Estimate maximum demand using NEC diversity factors for residential and industrial loads.",
+    keywords: ["electrical load calculator","connected load calculator","maximum demand calculator","house load estimator","amps load calculator"],
+    icon: 'Zap',
+    howToUse: [
+      "Add appliances or custom loads to the calculator.",
+      "Specify quantities and individual watt ratings for each appliance.",
+      "Configure system voltage, phase, and power factor parameters.",
+      "Check the total connected load versus max demand output."
+    ],
+    faqs: [
+      {
+        "question": "What is the difference between connected load and maximum demand?",
+        "answer": "Connected load is the sum of power ratings of all installed electrical appliances. Maximum demand is the actual peak load drawn at any given time, which is lower because not all appliances run concurrently (diversity factor)."
+      }
+    ],
+    sections: [
+      {
+        "title": "Applying Diversity Factors to Electrical Design",
+        "content": "Sizing an electrical service panels or generator for the full connected load is uneconomical. Electrical codes apply diversity factors (e.g. 60% for lighting, 50% for standard sockets) to estimate the realistic maximum demand, preventing oversized equipment."
+      }
+    ]
+  },
+  {
+    id: 'PowerConsumptionCalculator',
+    slug: 'power-consumption-calculator',
+    name: 'Power Consumption Calculator',
+    category: 'electrical',
+    shortDescription: "Estimate energy consumption in kWh and monthly electricity costs for home or office appliances.",
+    metaDescription: "Free online Power Consumption Calculator. Calculate daily, monthly, and yearly electricity usage costs in Rupees based on appliance wattages.",
+    keywords: ["power consumption calculator","electricity cost calculator","kWh calculator","energy cost estimator","appliance power consumption"],
+    icon: 'Zap',
+    howToUse: [
+      "Select a preset appliance or enter a custom wattage rating.",
+      "Enter the quantity of appliances and hours used per day.",
+      "Input your local utility tariff rate in Rupees per unit (kWh).",
+      "Examine the daily, weekly, monthly, and annual cost projections."
+    ],
+    faqs: [
+      {
+        "question": "What is 1 unit of electricity?",
+        "answer": "One unit of electricity is equal to 1 Kilowatt-hour (kWh). It represents the energy consumed by a 1,000-Watt appliance running continuously for 1 hour."
+      }
+    ],
+    sections: [
+      {
+        "title": "Tips for Reducing Appliance Power Bills",
+        "content": "To lower your energy bills, focus on high-wattage heating/cooling loads (like ACs, heaters, geysers). Switching to 5-star inverter-based appliances and LED lighting significantly cuts down monthly unit consumption."
+      }
+    ]
+  },
+  {
+    id: 'UPSCalculator',
+    slug: 'ups-calculator',
+    name: 'UPS Capacity Calculator',
+    category: 'electrical',
+    shortDescription: "Calculate the required UPS capacity (VA) and battery bank rating (Ah) to back up connected load demands.",
+    metaDescription: "Free online UPS Sizing Calculator. Calculate required inverter rating in VA and battery capacity in Ah for backup runtime.",
+    keywords: ["ups calculator","inverter capacity calculator","battery size for ups","ups runtime calculator","va rating calculator"],
+    icon: 'Zap',
+    howToUse: [
+      "Enter the total connected backup load in Watts or Volt-Amps.",
+      "Set the desired power factor, safety margin, and backup time.",
+      "Choose the battery system DC voltage (12V, 24V, 48V, etc.).",
+      "Select battery chemistry and click calculate to view sizing results."
+    ],
+    faqs: [
+      {
+        "question": "How do I choose the correct battery system voltage?",
+        "answer": "Smaller UPS/Inverters (under 1000VA) typically use a single 12V battery. Larger loads (1.5kVA to 3kVA) use 24V or 36V configurations, while high-capacity units (5kVA+) use 48V or 96V to reduce currents."
+      }
+    ],
+    sections: [
+      {
+        "title": "Inverter Sizing vs Battery Capacity Sizing",
+        "content": "Sizing backup systems requires two independent steps: First, select the UPS rating (VA) to handle peak power draw (including safety buffers). Second, compute the battery bank capacity (Ah) to hold enough energy for the desired runtime."
+      }
+    ]
+  },
+  {
+    id: 'SolarPanelCalculator',
+    slug: 'solar-panel-calculator',
+    name: 'Solar Panel Calculator',
+    category: 'electrical',
+    shortDescription: "Estimate required solar PV system capacity, panel counts, and roof space based on monthly bills or kWh consumption.",
+    metaDescription: "Free online Solar Panel Calculator. Calculate solar PV system size (kW), required panels count, and roof area needed for home installation.",
+    keywords: ["solar panel calculator","solar system sizing","pv array calculator","solar roof area space","solar power calculator"],
+    icon: 'Zap',
+    howToUse: [
+      "Choose to input monthly unit consumption (kWh) or average bill amount.",
+      "Configure local peak sun hours and target solar panel wattage.",
+      "Adjust system efficiency losses based on your roof tilt and shade.",
+      "Review system kW capacity, panel count, and roof space details."
+    ],
+    faqs: [
+      {
+        "question": "What are average peak sun hours?",
+        "answer": "Peak sun hours represent the average daily solar irradiance equivalent to 1000W/m² of sun intensity. In India, peak sun hours typically range from 4.0 to 5.5 hours per day."
+      }
+    ],
+    sections: [
+      {
+        "title": "Planning a Roof Solar Installation",
+        "content": "When installing solar panels, ensure the roof has shadow-free space facing South (in the northern hemisphere) to maximize sun absorption. A standard 1kW rooftop solar system requires approximately 80 to 100 square feet of area."
+      }
+    ]
+  },
+  {
+    id: 'BatteryBackupCalculator',
+    slug: 'battery-backup-calculator',
+    name: 'Battery Backup Calculator',
+    category: 'electrical',
+    shortDescription: "Calculate battery backup runtime hours or required Ah capacity for a given electrical load.",
+    metaDescription: "Free online Battery Backup Calculator. Estimate battery run-time based on load wattage, voltage, and battery chemistry.",
+    keywords: ["battery backup calculator","battery runtime estimator","calculate battery ah","battery discharge calculator","ups battery backup time"],
+    icon: 'Zap',
+    howToUse: [
+      "Enter the average electrical load in Watts.",
+      "Select the battery nominal voltage and capacity in Ah.",
+      "Select battery chemistry (Tubular Lead Acid, AGM, Lithium, LiFePO4).",
+      "Set inverter/system efficiency to view estimated backup hours."
+    ],
+    faqs: [
+      {
+        "question": "What is Depth of Discharge (DoD)?",
+        "answer": "Depth of Discharge (DoD) is the percentage of battery capacity that can be safely used. Lead-acid batteries should not be discharged past 50% to 70% to avoid structural damage, while Lithium/LiFePO4 can handle up to 90% to 95% DoD."
+      }
+    ],
+    sections: [
+      {
+        "title": "Optimizing Battery Bank Lifespans",
+        "content": "To maximize battery cycles, avoid deep discharges beyond recommendations, perform regular equalization charging for flooded tubular batteries, and keep the installation room well-ventilated and cool."
+      }
+    ]
+  },
+  {
+    id: 'kWToHPConverter',
+    slug: 'kw-hp-converter',
+    name: 'kW ↔ HP Converter',
+    category: 'electrical',
+    shortDescription: "Convert power ratings between Kilowatts (kW) and Horsepower (HP) using electrical, mechanical, or metric standards.",
+    metaDescription: "Free online kW to HP Converter. Bi-directionally convert Kilowatts and Horsepower for motor and automotive ratings instantly.",
+    keywords: ["kW to HP converter","convert kW to horsepower","HP to kW converter","motor power conversion","electrical horsepower converter"],
+    icon: 'Zap',
+    howToUse: [
+      "Choose the conversion standard (Electrical, Mechanical, or Metric).",
+      "Input the value in Kilowatts or Horsepower.",
+      "Adjust the sliders to quickly compare power scales.",
+      "Copy the converted summary for documentation."
+    ],
+    faqs: [
+      {
+        "question": "Why are there different horsepower standards?",
+        "answer": "Mechanical HP (745.7W) is used in imperial auto sectors; Metric HP (735.5W / PS) is common in Europe; Electrical HP (746W) is standard for grading electric motors and generators."
+      }
+    ],
+    sections: [
+      {
+        "title": "Power Ratings in Electrical Equipment",
+        "content": "Motor specifications routinely mix power values. Submersible pumps and industrial motors are rated in HP, whereas solar inverters and utility meters track loads in kW. This utility resolves the mathematical relationship between the units."
+      }
+    ]
+  },
+  {
+    id: 'TransformerCalculator',
+    slug: 'transformer-calculator',
+    name: 'Transformer Calculator',
+    category: 'electrical',
+    shortDescription: "Calculate primary/secondary currents, turns ratio, and coil windings for single and three-phase transformers.",
+    metaDescription: "Free online Transformer Calculator. Calculate primary and secondary winding full-load currents based on kVA rating.",
+    keywords: ["transformer calculator","calculate transformer current","turns ratio calculator","transformer coil winding","kva rating calculator"],
+    icon: 'Zap',
+    howToUse: [
+      "Enter the transformer rating in kVA.",
+      "Select single-phase or three-phase winding systems.",
+      "Input the primary and secondary voltage levels.",
+      "Adjust the turns per volt constant to calculate winding turns."
+    ],
+    faqs: [
+      {
+        "question": "How is turns ratio related to voltages?",
+        "answer": "The turns ratio (Np / Ns) of a transformer is directly proportional to the primary and secondary voltage ratio (Vp / Vs) under ideal conditions."
+      }
+    ],
+    sections: [
+      {
+        "title": "Transformer Currents and Sizing Safety",
+        "content": "Transformers step voltages up or down while transferring power. Due to energy conservation, the side with higher voltage carries a lower current, and vice versa. Knowing full-load currents is essential to size breakers and isolator cables."
+      }
+    ]
+  },
+  {
+    id: 'LEDLightingCalculator',
+    slug: 'led-lighting-calculator',
+    name: 'LED Lighting Calculator',
+    category: 'electrical',
+    shortDescription: "Calculate the required number of LED bulbs and layout spacing based on room dimensions and Lux targets.",
+    metaDescription: "Free online LED Lighting Calculator. Estimate required bulbs count and spacing layout based on room area and target Lux levels.",
+    keywords: ["led lighting calculator","lumen calculator","lux to lumens calculator","how many led bulbs needed","room lighting calculator"],
+    icon: 'Zap',
+    howToUse: [
+      "Enter room length, width, and dimensions unit.",
+      "Select the room type preset (bedroom, kitchen, office) to set target Lux.",
+      "Input the LED bulb lumen rating (usually 800-900lm for 9W bulbs).",
+      "Set utilization and maintenance parameters to view the fixture count and grid."
+    ],
+    faqs: [
+      {
+        "question": "What is the difference between Lux and Lumens?",
+        "answer": "Lumen (lm) measures the total light output emitted by a bulb. Lux (lx) measures the intensity of light falling on a surface area (1 Lux = 1 Lumen per square meter)."
+      }
+    ],
+    sections: [
+      {
+        "title": "Illuminance Standards for Indoor Spaces",
+        "content": "Adequate lighting prevents eye strain. Standards recommend different Lux levels: bedrooms require lower ambient light (100 Lux), kitchens require task lighting (250 Lux), while office desks and drawing boards require high intensity (500 Lux)."
+      }
+    ]
+  },
 ];

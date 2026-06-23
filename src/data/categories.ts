@@ -36,6 +36,13 @@ export const categories: Category[] = [
     colorClass: 'from-pink-500/10 to-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20'
   },
   {
+    id: 'electrical',
+    name: 'Electrical Engineering',
+    description: 'Calculate voltage drop, cable sizes, load demands, solar PV capacity, and battery backups.',
+    icon: 'Zap',
+    colorClass: 'from-yellow-500/10 to-amber-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20'
+  },
+  {
     id: 'pdf',
     name: 'PDF Tools',
     description: 'Merge, split, compress, protect, unlock, watermark, and convert PDF files directly in your browser.',

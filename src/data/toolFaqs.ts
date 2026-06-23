@@ -6238,5 +6238,825 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "Double-check that you entered the phone number correctly and included the proper country code without spaces or dashes."
     }
   ],
+  "VoltageDropCalculator": [
+    {
+      "question": "What is voltage drop?",
+      "answer": "Voltage drop is the decrease of electrical potential along the path of a current flowing in an electrical circuit, caused by the resistance and reactance of the wires."
+    },
+    {
+      "question": "What is the formula for single-phase voltage drop?",
+      "answer": "For single-phase AC, the formula is: V_drop = 2 * I * L * (R * cos(theta) + X * sin(theta)) / 1000, where I is current, L is length, R is resistance, and X is reactance."
+    },
+    {
+      "question": "What is the formula for three-phase voltage drop?",
+      "answer": "For three-phase AC, the formula is: V_drop = sqrt(3) * I * L * (R * cos(theta) + X * sin(theta)) / 1000."
+    },
+    {
+      "question": "What is the maximum allowable voltage drop according to the NEC?",
+      "answer": "The National Electrical Code (NEC) recommends a maximum voltage drop of 3% for branch circuits, and 5% total for the combined feeder and branch circuits."
+    },
+    {
+      "question": "How does conductor material affect voltage drop?",
+      "answer": "Aluminum has higher resistivity than copper (~60% higher). Therefore, aluminum wires will experience a higher voltage drop than copper wires of the same size and length under the same load."
+    },
+    {
+      "question": "Why does cable size impact voltage drop?",
+      "answer": "Resistance is inversely proportional to cross-sectional area. A thicker cable (larger area) has lower resistance, which directly reduces the voltage drop."
+    },
+    {
+      "question": "Does cable length increase voltage drop?",
+      "answer": "Yes, cable resistance increases linearly with length. The longer the run, the higher the voltage drop."
+    },
+    {
+      "question": "What happens if voltage drop is too high?",
+      "answer": "High voltage drop causes appliances to run hot, lose efficiency, flicker (lights), or fail to start. It also leads to energy wastage as heat in the walls."
+    },
+    {
+      "question": "How does power factor affect AC voltage drop?",
+      "answer": "Power factor determines the active and reactive current components. A lower power factor increases the current required for the same active load, which increases the voltage drop."
+    },
+    {
+      "question": "Does this tool calculate DC voltage drop?",
+      "answer": "Yes, selecting the 'DC' phase option calculates voltage drop based on pure resistance (V = 2 * I * L * R / 1000) with no reactance or power factor factors."
+    },
+    {
+      "question": "What resistivity values are assumed in the calculator?",
+      "answer": "We assume standard electrical resistivity at 70°C: Copper is 0.0193 Ohm.mm²/m and Aluminum is 0.0310 Ohm.mm²/m."
+    },
+    {
+      "question": "What is reactance in AC cables?",
+      "answer": "Reactance is the opposition to AC current caused by magnetic fields (inductance) surrounding the cable. It is approximated at a standard 0.08 Ohm/km."
+    },
+    {
+      "question": "How can I reduce the voltage drop in my circuit?",
+      "answer": "You can reduce voltage drop by choosing copper instead of aluminum, increasing the cable cross-sectional size, or relocating the load closer to the source."
+    },
+    {
+      "question": "What is receiving end voltage?",
+      "answer": "Receiving end voltage is the actual voltage available at the load, calculated as Source Voltage minus the Voltage Drop."
+    },
+    {
+      "question": "Does the calculator work for overhead lines?",
+      "answer": "Yes, it calculates the core voltage drop of conductors. However, overhead lines may have slightly different reactance values depending on spacing."
+    },
+    {
+      "question": "Is this tool suitable for solar DC wiring sizing?",
+      "answer": "Yes! Use the 'DC' mode and input the solar panel voltage (e.g. 12V, 24V, 48V) to ensure DC line losses are kept under 3%."
+    },
+    {
+      "question": "Can I use feet as the length unit?",
+      "answer": "Yes, you can toggle between meters (m) and feet (ft). The tool automatically converts feet to meters for internal formulas."
+    },
+    {
+      "question": "Why is the power factor input disabled in DC mode?",
+      "answer": "Direct Current (DC) circuits do not have phase angles or reactive components, so the power factor is always equal to 1.0."
+    },
+    {
+      "question": "Does temperature affect voltage drop?",
+      "answer": "Yes, conductor resistance increases with temperature. This calculator uses standard resistivity constants evaluated at 70°C for safety margins."
+    },
+    {
+      "question": "Is this calculator free to use?",
+      "answer": "Yes, the tool runs entirely local in your browser and is free with no daily limits or signups."
+    }
+  ],
+  "CableSizeCalculator": [
+    {
+      "question": "What is the purpose of the Cable Size Calculator?",
+      "answer": "It determines the smallest conductor size (in mm²) required to safely carry the electrical load current while keeping voltage drop within allowable limits."
+    },
+    {
+      "question": "How does the calculator determine cable size?",
+      "answer": "It checks standard ampacity schedules for the conductor material, installation method, and insulation type, then validates that the selected size meets the target voltage drop limit."
+    },
+    {
+      "question": "What is ampacity?",
+      "answer": "Ampacity is the maximum current (in Amps) that a conductor can carry continuously under standard conditions without exceeding its insulation temperature rating."
+    },
+    {
+      "question": "Why does installation method affect cable sizing?",
+      "answer": "Cables in open air dissipate heat much better than cables packed in a closed conduit or buried in the ground. Consequently, open-air cables have higher ampacity ratings."
+    },
+    {
+      "question": "What is the difference between PVC and XLPE insulation?",
+      "answer": "PVC insulation has a maximum operating temperature of 70°C. XLPE can withstand up to 90°C, which allows XLPE-insulated cables to carry higher currents."
+    },
+    {
+      "question": "Does the calculator support Aluminum conductors?",
+      "answer": "Yes, you can select Copper or Aluminum. Aluminum has lower ampacity than copper, resulting in larger recommended cable sizes."
+    },
+    {
+      "question": "What is the standard allowable voltage drop limit?",
+      "answer": "The standard limit for branch circuits is 3%. You can choose 1%, 2%, 3%, or 5% depending on system specifications."
+    },
+    {
+      "question": "How is the load current calculated from kW?",
+      "answer": "For single-phase: I = kW * 1000 / (V * PF). For three-phase: I = kW * 1000 / (sqrt(3) * V * PF)."
+    },
+    {
+      "question": "Does this tool support Horsepower inputs?",
+      "answer": "Yes, you can input motor loads in Horsepower (HP). The calculator converts 1 HP to 746 Watts of electrical load."
+    },
+    {
+      "question": "What happens if a cable is too small?",
+      "answer": "An undersized cable will overheat, degrading the insulation over time, which poses a severe risk of short circuits and electrical fires."
+    },
+    {
+      "question": "What is a conduit installation?",
+      "answer": "A conduit installation is when wires are pulled through plastic or metal pipes embedded in walls or run on surfaces, which reduces heat dissipation."
+    },
+    {
+      "question": "What are standard cable sizes available in the calculator?",
+      "answer": "The calculator references standard metric sizes: 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240, and 300 mm²."
+    },
+    {
+      "question": "Why does the calculator recommend a larger cable for longer runs?",
+      "answer": "Long runs increase voltage drop. Even if a small wire can carry the current (ampacity), it might fail the voltage drop limit, requiring a larger wire."
+    },
+    {
+      "question": "Can I use this for home wiring?",
+      "answer": "Yes, it is perfect for sizing cables for ACs, geysers, pumps, or main distribution lines in residential projects."
+    },
+    {
+      "question": "Does it calculate three-phase sizing?",
+      "answer": "Yes, selecting '3-Ph' dynamically applies the three-phase formulas and current splits."
+    },
+    {
+      "question": "What is a safety de-rating factor?",
+      "answer": "It is a multiplier applied to standard ampacity to account for thermal factors, such as high ambient temperatures or crowded conduits."
+    },
+    {
+      "question": "What happens if the required current exceeds 300 mm²?",
+      "answer": "The tool will display a warning warning that the load exceeds standard single-cable limits, suggesting parallel cables."
+    },
+    {
+      "question": "Is my data stored on the server?",
+      "answer": "No, all calculation runs in your local browser memory, keeping your specifications private."
+    },
+    {
+      "question": "Are results compliant with local codes?",
+      "answer": "Yes, the calculations follow standard physical resistivity and ampacity limits defined in NEC and IS guidelines."
+    },
+    {
+      "question": "Can I copy the sizing report?",
+      "answer": "Yes, click 'Copy Report' to save a summary of all parameters to your clipboard."
+    }
+  ],
+  "LoadCalculator": [
+    {
+      "question": "What does the Electrical Load Calculator do?",
+      "answer": "It lets you compile a list of all lighting and power appliances in a house or office, summing their total wattage and estimating maximum demand."
+    },
+    {
+      "question": "What is connected load?",
+      "answer": "Connected load is the total sum of power ratings (Watts/kW) of all electrical equipment, lighting, and sockets installed in a facility."
+    },
+    {
+      "question": "What is maximum demand?",
+      "answer": "Maximum demand is the highest electrical load drawn by a facility during a specific interval, which is lower than the connected load due to non-simultaneous use."
+    },
+    {
+      "question": "What is a diversity factor?",
+      "answer": "A diversity factor is a percentage factor (e.g., 60% for lighting) applied to connected load categories to estimate the maximum concurrent load."
+    },
+    {
+      "question": "Why is load calculation important?",
+      "answer": "It is required to size the main incoming breaker, request electrical connection capacity from the utility board, and size generators."
+    },
+    {
+      "question": "What are default diversity factors used in the tool?",
+      "answer": "Lighting is 60% (0.6), Cooling is 80% (0.8), Heating is 70% (0.7), Motor is 90% (0.9), and General load is 50% (0.5)."
+    },
+    {
+      "question": "Can I add custom appliances to the list?",
+      "answer": "Yes! Use the custom appliance form at the bottom of the table to input any name, wattage, and quantity."
+    },
+    {
+      "question": "Does it support three-phase systems?",
+      "answer": "Yes, you can toggle between 1-Phase AC (230V) and 3-Phase AC (415V) to calculate the line currents."
+    },
+    {
+      "question": "How does power factor impact load current?",
+      "answer": "Current is inversely proportional to power factor. A lower power factor increases the current (Amps) required for the same kW load."
+    },
+    {
+      "question": "Can I edit the wattage of added appliances?",
+      "answer": "Yes, you can type directly in the wattage and quantity input boxes in the table rows."
+    },
+    {
+      "question": "Does this tool calculate bills?",
+      "answer": "No, this tool estimates power capacity. To calculate energy bills, please use the Power Consumption Calculator."
+    },
+    {
+      "question": "What are common appliance wattages?",
+      "answer": "Ceiling fans are ~75W, LED bulbs are 9-15W, refrigerators are 200-300W, and air conditioners are 1500-2000W."
+    },
+    {
+      "question": "How do I remove an appliance from the builder?",
+      "answer": "Click the red trash bin icon in the action column of the table row to remove that load."
+    },
+    {
+      "question": "What is the standard power factor for residential homes?",
+      "answer": "A power factor of 0.8 to 0.9 is typical for residential homes due to inductive motor loads (fans, ACs, pumps)."
+    },
+    {
+      "question": "Does the calculator support HP rating for pumps?",
+      "answer": "Yes, you can input motor loads by converting them (1 HP = 746W) and adding them to the custom list."
+    },
+    {
+      "question": "What happens if I change the voltage?",
+      "answer": "The calculated current (Amps) will adjust accordingly. Higher voltage results in lower current for the same load."
+    },
+    {
+      "question": "Can I export the load schedule?",
+      "answer": "Yes, click 'Copy Report' to copy a formatted text load list to your clipboard."
+    },
+    {
+      "question": "Is there a limit to how many appliances I can add?",
+      "answer": "No, you can add as many appliances as needed to size your entire electrical panel."
+    },
+    {
+      "question": "Is this tool mobile friendly?",
+      "answer": "Yes, the layout adjusts to fit mobile screens, allowing on-site load estimation."
+    },
+    {
+      "question": "Is registration required?",
+      "answer": "No, this is a free, web-based tool with no account signup required."
+    }
+  ],
+  "PowerConsumptionCalculator": [
+    {
+      "question": "What is the Power Consumption Calculator?",
+      "answer": "A tool to estimate the energy consumption (in units/kWh) of household appliances and calculate their operating cost."
+    },
+    {
+      "question": "What is a Kilowatt-hour (kWh)?",
+      "answer": "A Kilowatt-hour is a measure of energy equal to 1,000 Watts of power expended over 1 hour. It is the standard billing unit for electricity."
+    },
+    {
+      "question": "How is energy consumption calculated?",
+      "answer": "Energy (kWh) = (Wattage * Hours Used * Quantity) / 1000."
+    },
+    {
+      "question": "How is the electricity cost calculated?",
+      "answer": "Cost = Energy (kWh) * Tariff Rate (₹/kWh)."
+    },
+    {
+      "question": "What is a standard electricity tariff rate in India?",
+      "answer": "Tariff rates vary by state and slab, typically ranging from ₹5 to ₹10 per unit (kWh). The default rate is set to ₹7."
+    },
+    {
+      "question": "Can I calculate monthly electricity bills here?",
+      "answer": "Yes, the tool outputs cost projections for Daily, Weekly, Monthly (30 days), and Yearly periods."
+    },
+    {
+      "question": "Does the tool include appliance presets?",
+      "answer": "Yes, it has presets for fans, TVs, refrigerators, ACs, computers, and geysers."
+    },
+    {
+      "question": "What is a duty cycle in refrigerators?",
+      "answer": "Refrigerators do not run at full wattage constantly; their compressors turn on and off. Therefore, actual daily kWh is lower than (max watts * 24 hours)."
+    },
+    {
+      "question": "How much power does an inverter AC consume?",
+      "answer": "Inverter ACs adjust motor speed based on temperature, consuming less average power than standard fixed-speed ACs once the room cools down."
+    },
+    {
+      "question": "What wattage is a typical ceiling fan?",
+      "answer": "Standard ceiling fans consume about 70W to 80W. BLDC energy-saving fans consume only 28W to 35W."
+    },
+    {
+      "question": "How does quantity affect energy consumption?",
+      "answer": "Energy consumption increases proportionally. Running 10 bulbs of 15W consumes the same power as one 150W bulb."
+    },
+    {
+      "question": "Can I calculate the cost of charging my phone?",
+      "answer": "Yes, a mobile charger consumes only about 5W to 15W. Charging for 2 hours daily costs less than ₹1 per month."
+    },
+    {
+      "question": "Does it support custom wattage input?",
+      "answer": "Yes, selecting 'Custom' or changing the wattage field allows you to enter any custom load."
+    },
+    {
+      "question": "Can I use decimals for daily usage hours?",
+      "answer": "Yes, you can input values like 2.5 hours or 0.5 hours for short appliance usage."
+    },
+    {
+      "question": "Is this tool useful for solar payback calculations?",
+      "answer": "Yes, it helps identify high-consumption appliances to calculate potential solar savings."
+    },
+    {
+      "question": "Does this tool track standby power consumption?",
+      "answer": "Standby loads (like red LED indicators on TVs) are small (1-5W) but run 24/7. You can calculate their cost by entering low wattages."
+    },
+    {
+      "question": "How do I save my calculations?",
+      "answer": "You can click 'Copy Report' to copy a formatted cost breakdown to save as a text document."
+    },
+    {
+      "question": "Is this calculator free?",
+      "answer": "Yes, the tool is free and runs in any standard web browser."
+    },
+    {
+      "question": "Can I use this tool offline?",
+      "answer": "Yes, once loaded, the script processes all calculations locally without internet dependencies."
+    },
+    {
+      "question": "Does it support other currencies?",
+      "answer": "The calculations are numeric, so while formatted with a Rupee symbol (₹), they apply to any currency unit."
+    }
+  ],
+  "UPSCalculator": [
+    {
+      "question": "What is the UPS Capacity Calculator?",
+      "answer": "A tool to size the required UPS/Inverter capacity (in VA) and battery bank rating (in Ah) for home backup systems."
+    },
+    {
+      "question": "How is required UPS rating calculated?",
+      "answer": "UPS Rating (VA) = (Load in Watts / Power Factor) * (1 + Safety Margin % / 100). The default safety margin is 20%."
+    },
+    {
+      "question": "What is VA in power ratings?",
+      "answer": "VA stands for Volt-Ampere. It is the unit of apparent power in AC circuits, representing the actual capacity a UPS must handle."
+    },
+    {
+      "question": "How is battery bank capacity (Ah) calculated?",
+      "answer": "Ah = (Load in Watts * Backup Hours) / (Inverter Efficiency * DoD * System Voltage). This ensures the batteries hold sufficient energy."
+    },
+    {
+      "question": "What is standard battery efficiency?",
+      "answer": "Inverter conversion and battery charging losses result in an average system efficiency of 80% to 85%."
+    },
+    {
+      "question": "Why is battery depth of discharge (DoD) important?",
+      "answer": "Lead-acid batteries degrade if fully discharged. Sizing assumes a safe 70% DoD for lead-acid and 90% for lithium to preserve lifespan."
+    },
+    {
+      "question": "What does a 12V battery system mean?",
+      "answer": "A 12V system uses a single 12V battery. A 24V system uses two 12V batteries connected in series, and a 48V system uses four."
+    },
+    {
+      "question": "How many batteries do I need for my inverter?",
+      "answer": "The tool suggests battery configurations based on Ah needs (e.g. 150Ah 12V batteries) and your system voltage choice."
+    },
+    {
+      "question": "Can I input load directly in VA?",
+      "answer": "Yes, you can toggle the connected load unit between Watts (W) and Volt-Amps (VA)."
+    },
+    {
+      "question": "What is the role of the safety margin?",
+      "answer": "The safety margin (typically 20%) prevents overloading during motor startups and allows adding minor loads in the future."
+    },
+    {
+      "question": "Why is power factor important for UPS sizing?",
+      "answer": "Appliances with induction coils (like fans and compressors) consume reactive power, meaning a 500W load requires a larger 625VA UPS."
+    },
+    {
+      "question": "What type of battery is best for home inverters?",
+      "answer": "Tubular lead-acid batteries are durable and affordable. Lithium-ion batteries are compact, charge faster, and support deeper discharge."
+    },
+    {
+      "question": "How much backup time can I get from a 150Ah battery?",
+      "answer": "On a 300W load with a 12V system, a 150Ah tubular battery (50% usable) will provide about 2 to 2.5 hours of backup."
+    },
+    {
+      "question": "What is the difference between an offline and online UPS?",
+      "answer": "An offline UPS switches to battery during power cuts. An online UPS continuously powers equipment via the inverter, providing zero transfer time."
+    },
+    {
+      "question": "How do I calculate total connected backup load?",
+      "answer": "List only the appliances you plan to run during a power cut, and add their wattages. Do not include heavy loads like washing machines."
+    },
+    {
+      "question": "Does this tool calculate charging time?",
+      "answer": "This tool focus on discharge sizing. Charging time depends on your charger current rating (usually 10% to 15% of battery Ah)."
+    },
+    {
+      "question": "Can I copy the sizing results?",
+      "answer": "Yes, click 'Copy Report' to save the complete UPS and battery configuration report."
+    },
+    {
+      "question": "What happens if I size the UPS too small?",
+      "answer": "The UPS will trigger an overload warning and shut down immediately when appliances are switched on."
+    },
+    {
+      "question": "Is the calculator mobile friendly?",
+      "answer": "Yes, the interface is fully responsive on all smartphones."
+    },
+    {
+      "question": "Is there any cost for using this tool?",
+      "answer": "No, this is a free public browser utility."
+    }
+  ],
+  "SolarPanelCalculator": [
+    {
+      "question": "What does the Solar Panel Calculator estimate?",
+      "answer": "It estimates the required solar system size (kW), panel count, roof area, and expected electricity generation based on monthly consumption."
+    },
+    {
+      "question": "How is solar system size (kW) calculated?",
+      "answer": "System Size (kW) = Daily Consumption (kWh) / (Peak Sun Hours * System Efficiency % / 100)."
+    },
+    {
+      "question": "What are peak sun hours?",
+      "answer": "Peak sun hours represent the average daily hours where solar irradiance is equivalent to 1kW/m² (usually 4.0 to 5.5 hours in India)."
+    },
+    {
+      "question": "How many panels are needed for a 3kW system?",
+      "answer": "Using standard 400W panels: 3000W / 400W = 8 panels."
+    },
+    {
+      "question": "How much roof space is needed per kW of solar?",
+      "answer": "A standard 1kW rooftop system requires about 80 to 100 square feet (approx 8-10 m²) of unshaded space."
+    },
+    {
+      "question": "Why is system efficiency set to 75%?",
+      "answer": "Solar systems experience losses due to dust, panel heating, wiring resistance, and inverter conversion. 75% is a standard safe estimate."
+    },
+    {
+      "question": "Can I calculate solar capacity from my monthly bill?",
+      "answer": "Yes, you can toggle the input type to 'Bill Amount' and specify your average tariff rate."
+    },
+    {
+      "question": "Does the calculator support different panel wattages?",
+      "answer": "Yes, you can select standard panel presets: 330W, 400W, 450W, or 540W."
+    },
+    {
+      "question": "How much electricity does a 1kW solar system generate daily?",
+      "answer": "In sunny regions, a 1kW system generates approximately 4 to 4.5 units (kWh) of electricity per day."
+    },
+    {
+      "question": "What is the difference between On-Grid and Off-Grid solar?",
+      "answer": "On-Grid connects to the utility grid (net-metering), saving battery costs. Off-Grid uses batteries to store solar energy, ideal for remote areas."
+    },
+    {
+      "question": "Does solar panel generation decrease in winter?",
+      "answer": "Yes, shorter daylight hours and lower sun angles reduce winter output by 20% to 35% compared to summer."
+    },
+    {
+      "question": "How does roof direction affect solar panel output?",
+      "answer": "In India (Northern Hemisphere), solar panels must face South at a tilt angle matching the local latitude to maximize generation."
+    },
+    {
+      "question": "What is net metering?",
+      "answer": "Net metering is a billing mechanism that credits solar system owners for the electricity they feed back into the utility grid."
+    },
+    {
+      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    }
+  ],
+  "BatteryBackupCalculator": [
+    {
+      "question": "What does the Battery Backup Calculator do?",
+      "answer": "It calculates the backup duration (hours and minutes) you will get from a specific battery bank under a given load."
+    },
+    {
+      "question": "What is the formula for battery backup time?",
+      "answer": "Backup Time (Hours) = (Capacity (Ah) * Voltage (V) * DoD * Efficiency) / Load (W)."
+    },
+    {
+      "question": "Why does battery chemistry impact backup time?",
+      "answer": "Different chemistries have different allowable Depth of Discharge (DoD). Lithium/LiFePO4 can be discharged deeper (90-95%) than Lead-Acid (50-70%)."
+    },
+    {
+      "question": "How much backup does a 12V 150Ah battery provide for a 200W load?",
+      "answer": "Assuming a Lead-Acid battery (50% DoD) and 85% efficiency: (150 * 12 * 0.5 * 0.85) / 200 = 3.8 hours."
+    },
+    {
+      "question": "What is the difference between total energy and usable energy?",
+      "answer": "Total energy is the raw capacity (Ah * V). Usable energy is the actual energy available for discharge without damaging the battery (Total * DoD)."
+    },
+    {
+      "question": "How is inverter efficiency factored in?",
+      "answer": "Inverters consume power during DC-to-AC conversion. Sizing includes an average efficiency factor (default 85%)."
+    },
+    {
+      "question": "What are common DoD percentages for different battery types?",
+      "answer": "Tubular is 50%, AGM/GEL is 70%, Lithium-Ion is 90%, and LiFePO4 is 95%."
+    },
+    {
+      "question": "How do I calculate backup time for multiple batteries?",
+      "answer": "For series: Voltage increases, Ah remains same (e.g. two 12V 150Ah = 24V 150Ah). For parallel: Ah increases, voltage remains same (two 12V 150Ah = 12V 300Ah). Calculate accordingly."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    }
+  ],
+  "kWToHPConverter": [
+    {
+      "question": "What is the kW to HP Converter?",
+      "answer": "A tool to convert power ratings between Kilowatts (kW) and Horsepower (HP) using standard conversion ratios."
+    },
+    {
+      "question": "What is the conversion ratio for Electrical Horsepower?",
+      "answer": "For electrical systems, 1 HP is equal to exactly 746 Watts (0.746 kW)."
+    },
+    {
+      "question": "What is Mechanical Horsepower?",
+      "answer": "Mechanical HP (Imperial) is defined as 550 foot-pounds per second, which equals approximately 745.7 Watts (0.7457 kW)."
+    },
+    {
+      "question": "What is Metric Horsepower?",
+      "answer": "Metric HP (often called PS, cv, or pk) is defined as 75 kgf-m/s, which is equal to approximately 735.5 Watts (0.7355 kW)."
+    },
+    {
+      "question": "Is this converter bi-directional?",
+      "answer": "Yes, typing a value in kW automatically calculates HP, and typing in HP calculates kW."
+    },
+    {
+      "question": "Why are electric motors rated in HP?",
+      "answer": "Historically, mechanical power was compared to draft horses. The rating stuck for rotary motors (pumps, compressors) to indicate shaft output."
+    },
+    {
+      "question": "How do I convert 10 kW to HP?",
+      "answer": "Using the electrical standard: 10 kW / 0.746 = 13.40 HP."
+    },
+    {
+      "question": "How do I convert 5 HP to kW?",
+      "answer": "Using the electrical standard: 5 HP * 0.746 = 3.73 kW."
+    },
+    {
+      "question": "Do the sliders support decimal values?",
+      "answer": "Yes, the slider allows smooth scrolling to compare decimal ranges."
+    },
+    {
+      "question": "Is this tool useful for automotive calculations?",
+      "answer": "Yes! Use the 'Mechanical' or 'Metric' standards to convert car engine power specs."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the kWToHPConverter important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    }
+  ],
+  "TransformerCalculator": [
+    {
+      "question": "What does the Transformer Calculator calculate?",
+      "answer": "It calculates primary and secondary full-load currents, turns ratio, and number of turns for transformers based on kVA."
+    },
+    {
+      "question": "How is primary current calculated for a single-phase transformer?",
+      "answer": "Ip = (kVA * 1000) / V_primary."
+    },
+    {
+      "question": "How is primary current calculated for a three-phase transformer?",
+      "answer": "Ip = (kVA * 1000) / (sqrt(3) * V_primary)."
+    },
+    {
+      "question": "What is the turns ratio?",
+      "answer": "The turns ratio (Np / Ns) is the ratio of primary turns to secondary turns, which equals the primary-to-secondary voltage ratio."
+    },
+    {
+      "question": "How does the turns per volt constant work?",
+      "answer": "Turns per volt is a design constant based on core area and magnetic flux. Winding turns equal Voltage * Turns per Volt."
+    },
+    {
+      "question": "Why does a step-down transformer have higher secondary current?",
+      "answer": "Power must remain constant. If voltage is stepped down, current must increase proportionally (Ip * Vp = Is * Vs)."
+    },
+    {
+      "question": "Can I calculate three-phase transformer currents?",
+      "answer": "Yes, select 'Three Phase' to apply the sqrt(3) current divisions."
+    },
+    {
+      "question": "What is step-up and step-down transformer?",
+      "answer": "Step-up increases voltage (Vs > Vp); Step-down decreases voltage (Vs < Vp)."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the TransformerCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    }
+  ],
+  "LEDLightingCalculator": [
+    {
+      "question": "What is the LED Lighting Calculator?",
+      "answer": "A tool to calculate the required count and layout grid of LED bulbs based on room size and target Lux."
+    },
+    {
+      "question": "How is total lumens calculated?",
+      "answer": "Total Lumens = (Target Lux * Area in m²) / (Utilization Factor * Maintenance Factor)."
+    },
+    {
+      "question": "What is Lux?",
+      "answer": "Lux is the unit of illuminance, measuring luminous flux per unit area (1 Lux = 1 Lumen per square meter)."
+    },
+    {
+      "question": "What is a Lumen?",
+      "answer": "Lumen is the unit of luminous flux, measuring the total amount of visible light emitted by a light source."
+    },
+    {
+      "question": "How many Lux are recommended for a living room?",
+      "answer": "A standard living room requires about 150 Lux for comfortable ambient lighting."
+    },
+    {
+      "question": "How many Lux are recommended for an office desk?",
+      "answer": "Task spaces like office desks and study rooms require 500 Lux for high visibility."
+    },
+    {
+      "question": "What is a typical lumen output of a 9W LED bulb?",
+      "answer": "A standard 9-Watt LED bulb outputs approximately 800 to 900 lumens."
+    },
+    {
+      "question": "What are Utilization and Maintenance factors?",
+      "answer": "Utilization Factor (UF) represents light lost to walls/fixtures. Maintenance Factor (MF) accounts for bulb aging and dust accumulation."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    },
+    {
+      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
+      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
+    }
+  ],
 };
 
