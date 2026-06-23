@@ -91,7 +91,7 @@ export default function Header() {
             <Command className="w-4.5 h-4.5" />
           </div>
           <span className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
-            Toolique<span className="text-indigo-600 dark:text-indigo-400">.in</span>
+            Toolique
           </span>
         </Link>
 
