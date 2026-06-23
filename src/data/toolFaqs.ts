@@ -5500,5 +5500,743 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     }
   ],
+  "InstagramCaptionGenerator": [
+    {
+      "question": "What is the Instagram Caption Generator?",
+      "answer": "It is an interactive generator that crafts engaging, platform-optimized Instagram captions based on your input description, chosen vibe, emojis, and hashtags."
+    },
+    {
+      "question": "How does this caption generator work?",
+      "answer": "It combines your post keywords with curated tone-based vocabulary templates in real-time right inside your browser to produce relevant caption options."
+    },
+    {
+      "question": "Can I generate captions for other social networks?",
+      "answer": "Yes, while optimized for Instagram, the captions can easily be adapted for Facebook, TikTok, Threads, or X (Twitter)."
+    },
+    {
+      "question": "Are the generated captions unique?",
+      "answer": "Yes, the combinations of your specific input description, selected vibe, emoji density, and hashtags create highly customized captions."
+    },
+    {
+      "question": "What vibes/tones are available in this tool?",
+      "answer": "You can select from multiple presets including Funny, Aesthetic, Motivational, Professional, Minimal, and Storytelling."
+    },
+    {
+      "question": "How many captions are generated at once?",
+      "answer": "The tool generates three distinct variations for every generation request, giving you different options to choose from."
+    },
+    {
+      "question": "Can I add emojis to the captions automatically?",
+      "answer": "Yes, you can toggle emoji density between None, Low, Medium, and High depending on your preference."
+    },
+    {
+      "question": "Can I include hashtags in the captions?",
+      "answer": "Yes, the tool generates and appends relevant trending hashtags at the end of the caption when the hashtag option is enabled."
+    },
+    {
+      "question": "Is there a character limit for Instagram captions?",
+      "answer": "Instagram captions have a limit of 2,200 characters. The tool ensures generated outputs stay well within this standard limit."
+    },
+    {
+      "question": "Does this tool use OpenAI or other external APIs?",
+      "answer": "No, it uses fully local, rule-based text generation templates. No data is sent to external AI servers, keeping your input private."
+    },
+    {
+      "question": "Can I save my generated captions?",
+      "answer": "You can copy the generated captions to your clipboard instantly. We do not store your captions on a database to protect your privacy."
+    },
+    {
+      "question": "Are my post descriptions saved on your servers?",
+      "answer": "No, all input descriptions are processed in your browser memory and never uploaded or saved on any servers."
+    },
+    {
+      "question": "Can I generate funny Instagram captions?",
+      "answer": "Yes, selecting the 'Funny' vibe will generate captions using humorous, witty, and lighthearted phrasing."
+    },
+    {
+      "question": "How do I write a good caption for a selfie?",
+      "answer": "Input keywords like 'selfie, morning, reflection' and choose the 'Aesthetic' or 'Minimal' vibe to get clean, modern options."
+    },
+    {
+      "question": "What is the best caption length for engagement?",
+      "answer": "Short captions (under 150 characters) work best for quick reactions, while longer storytelling captions (300+ characters) build deeper connections."
+    },
+    {
+      "question": "Can I generate aesthetic captions?",
+      "answer": "Yes, selecting the 'Aesthetic' vibe generates captions with stylish, moody, and poetic expressions."
+    },
+    {
+      "question": "How do captions improve post reach?",
+      "answer": "Engaging captions keep users on your post longer (dwell time) and prompt comments, which signals the algorithm to boost your reach."
+    },
+    {
+      "question": "Is this Instagram caption generator free to use?",
+      "answer": "Yes, the tool is 100% free with no daily limits or premium paywalls."
+    },
+    {
+      "question": "Does this caption maker work on mobile devices?",
+      "answer": "Yes, the interface is completely mobile-responsive, allowing you to generate captions easily from your smartphone."
+    },
+    {
+      "question": "Can I use this for business accounts?",
+      "answer": "Absolutely! Choose the 'Professional' vibe to generate polished, call-to-action oriented captions suitable for brand posts."
+    }
+  ],
+  "HashtagGenerator": [
+    {
+      "question": "What is the Hashtag Generator?",
+      "answer": "It is an interactive helper that generates relevant hashtags for social media based on your seed keywords and category niches."
+    },
+    {
+      "question": "How does the Hashtag Generator find relevant tags?",
+      "answer": "It maps your input keywords against a structured local database of niche and category tags to produce a curated list."
+    },
+    {
+      "question": "What platforms is this hashtag tool suitable for?",
+      "answer": "It is optimized for Instagram, TikTok, LinkedIn, YouTube, and X (Twitter) marketing campaigns."
+    },
+    {
+      "question": "How many hashtags should I use on Instagram?",
+      "answer": "While Instagram allows up to 30 hashtags, research suggests using 5 to 15 highly relevant hashtags yields the best engagement."
+    },
+    {
+      "question": "Does the tool filter out banned hashtags?",
+      "answer": "The generator only suggests clean, high-performing standard tags and avoids known restricted or flagged keywords."
+    },
+    {
+      "question": "Can I select and copy only specific hashtags?",
+      "answer": "Yes, the tool allows you to deselect individual hashtags from the generated list and click 'Copy Selection'."
+    },
+    {
+      "question": "What are niche hashtags?",
+      "answer": "Niche hashtags are highly specific keywords (e.g., #MinimalistWebDesign) that target a smaller but highly engaged audience."
+    },
+    {
+      "question": "How do hashtags increase my post visibility?",
+      "answer": "They categorize your content, allowing users who follow or search for specific tags to discover your posts."
+    },
+    {
+      "question": "Can I input multiple keywords?",
+      "answer": "Yes, you can enter multiple comma-separated keywords to get a broader list of tag recommendations."
+    },
+    {
+      "question": "What categories/niches can I select?",
+      "answer": "You can select from diverse niches including Business, Travel, Tech, Fitness, Food, Fashion, Photography, and Art."
+    },
+    {
+      "question": "Is there a character limit for hashtags?",
+      "answer": "Hashtags themselves don't have a characters limit, but they must be single words without spaces or special symbols."
+    },
+    {
+      "question": "Are the hashtags generated in real-time?",
+      "answer": "Yes, the suggestions are compiled instantly in your browser without any delay."
+    },
+    {
+      "question": "Does using too many hashtags look like spam?",
+      "answer": "Using all 30 hashtags can sometimes look cluttered. Hiding them at the bottom of your caption or using fewer keeps the post neat."
+    },
+    {
+      "question": "What is the difference between broad and niche hashtags?",
+      "answer": "#Travel is a broad hashtag with millions of posts; #SoloTravelIndia is a niche tag where your post is more likely to rank."
+    },
+    {
+      "question": "Should I put hashtags in the caption or first comment?",
+      "answer": "Both options are indexable by search algorithms. Putting them in the caption is the most reliable approach."
+    },
+    {
+      "question": "Can I use this for TikTok or LinkedIn?",
+      "answer": "Yes, the tags are highly effective for categorizing video content on TikTok and professional updates on LinkedIn."
+    },
+    {
+      "question": "Are my searches logged or saved?",
+      "answer": "No, all keyword searches and selections are processed locally in your browser and never logged."
+    },
+    {
+      "question": "How often should I change my hashtags?",
+      "answer": "It is best to rotate hashtags for different posts to avoid triggering spam filters and reach new communities."
+    },
+    {
+      "question": "Is this hashtag generator free?",
+      "answer": "Yes, the tool is free, containing no limits or ads that block functionality."
+    },
+    {
+      "question": "Can I use it on my mobile phone?",
+      "answer": "Yes, it is fully responsive and optimized for mobile browsers."
+    }
+  ],
+  "BioGenerator": [
+    {
+      "question": "What is the Bio Generator?",
+      "answer": "It is a profile optimizer that generates clean, creative, or professional bios tailored for different social media platforms."
+    },
+    {
+      "question": "Which social media platforms does this bio generator support?",
+      "answer": "It supports custom presets for Instagram, X (Twitter), LinkedIn, and TikTok."
+    },
+    {
+      "question": "How many bio options are generated?",
+      "answer": "The generator outputs four distinct bio ideas per request, allowing you to choose the style that fits your persona."
+    },
+    {
+      "question": "What is the character limit for Instagram bios?",
+      "answer": "Instagram limits bios to 150 characters. The tool monitors and flags outputs exceeding this length."
+    },
+    {
+      "question": "What is the character limit for Twitter/X bios?",
+      "answer": "X (Twitter) allows up to 160 characters. The generator designs layouts that fit this criteria."
+    },
+    {
+      "question": "What is the character limit for TikTok bios?",
+      "answer": "TikTok has a very short limit of 80 characters. The tool provides ultra-short, punchy options for TikTok."
+    },
+    {
+      "question": "What is the character limit for LinkedIn headlines?",
+      "answer": "LinkedIn headlines allow up to 220 characters. The tool helps generate clear, title-and-value proposition lines."
+    },
+    {
+      "question": "How do I create a professional bio?",
+      "answer": "Select the 'Professional' vibe and input your job title, company, and key skills or achievements."
+    },
+    {
+      "question": "Can I generate a creative or funny bio?",
+      "answer": "Yes, toggling the 'Creative' or 'Funny' vibes will inject playful wordplay, emojis, and unique formatting."
+    },
+    {
+      "question": "Does the tool include emojis in the bios?",
+      "answer": "Yes, emojis are strategically placed to serve as bullet points or visual interest depending on the vibe."
+    },
+    {
+      "question": "Can I edit the generated bio?",
+      "answer": "Yes, you can copy the text to your clipboard and make manual edits or adjustments as you see fit."
+    },
+    {
+      "question": "Are my input interests or titles saved?",
+      "answer": "No, all input details are handled in-memory locally and are never stored or tracked."
+    },
+    {
+      "question": "How do I add a website link to my bio?",
+      "answer": "After generating and pasting your bio, use the platform's profile edit page to insert your website link separately."
+    },
+    {
+      "question": "Why is a good bio important?",
+      "answer": "Your bio is the first thing people see. A good bio clearly communicates what you do, why they should follow you, and what to do next."
+    },
+    {
+      "question": "Can I use this for a brand or business profile?",
+      "answer": "Yes, it is perfect for freelancers, agencies, and businesses looking to formulate clear value statements."
+    },
+    {
+      "question": "How often should I update my social bio?",
+      "answer": "Update it whenever you change roles, launch a new project, or have a new campaign link to promote."
+    },
+    {
+      "question": "Is this bio maker free?",
+      "answer": "Yes, it is completely free to use without any account creation."
+    },
+    {
+      "question": "Does it support custom fonts?",
+      "answer": "The tool outputs standard unicode text, which is widely compatible across all browsers and devices without formatting issues."
+    },
+    {
+      "question": "Can I use it on my smartphone?",
+      "answer": "Yes, the interface is fully responsive and works perfectly on mobile devices."
+    },
+    {
+      "question": "What elements make up a high-converting bio?",
+      "answer": "A clear description of your role, a touch of personality, credibility indicators (skills/clients), and a clear call-to-action (CTA)."
+    }
+  ],
+  "YouTubeThumbnailResizer": [
+    {
+      "question": "What is the YouTube Thumbnail Resizer?",
+      "answer": "It is a utility that crops, scales, and fits any image to the exact dimensions required for a YouTube video thumbnail."
+    },
+    {
+      "question": "What is the standard size for a YouTube thumbnail?",
+      "answer": "YouTube recommends a resolution of 1280 x 720 pixels, with a minimum width of 640 pixels, in a 16:9 aspect ratio."
+    },
+    {
+      "question": "Which file formats does this thumbnail resizer support?",
+      "answer": "You can upload JPEG, PNG, or WebP images, and export them as PNG or JPEG."
+    },
+    {
+      "question": "Is my uploaded image sent to a server?",
+      "answer": "No, all image processing, cropping, and canvas rendering are performed locally in your browser. No files are uploaded."
+    },
+    {
+      "question": "What is the recommended aspect ratio for YouTube thumbnails?",
+      "answer": "A 16:9 aspect ratio is standard, which matches the video player size and prevents black bars."
+    },
+    {
+      "question": "What is the maximum file size for a YouTube thumbnail?",
+      "answer": "YouTube limits thumbnail uploads to 2MB. Our tool allows adjusting export quality to help compress your file."
+    },
+    {
+      "question": "Can I crop my image using this tool?",
+      "answer": "Yes, the tool has built-in zoom, positioning, and rotation sliders to help you frame the crop perfectly."
+    },
+    {
+      "question": "How do I adjust the zoom or rotation of my image?",
+      "answer": "Use the visual sliders on the control panel to scale up, rotate, or slide the image vertically and horizontally."
+    },
+    {
+      "question": "Does this tool support outputting as JPEG or PNG?",
+      "answer": "Yes, you can choose PNG for high lossless quality or JPEG for compressed files."
+    },
+    {
+      "question": "How do I change the export quality?",
+      "answer": "When exporting as JPEG, you can use the Quality slider (from 10% to 100%) to optimize the file size."
+    },
+    {
+      "question": "Will resizing make my thumbnail look blurry?",
+      "answer": "If you upload a high-resolution image, it will remain sharp. Resizing small, low-res images can cause pixelation."
+    },
+    {
+      "question": "Can I resize images on mobile?",
+      "answer": "Yes, the layout works on touch interfaces, letting you crop and download thumbnails on your phone."
+    },
+    {
+      "question": "Why does YouTube require a specific thumbnail size?",
+      "answer": "Having 1280 x 720 dimensions ensures the thumbnail looks high-quality on desktop search results, mobile feeds, and TV screens."
+    },
+    {
+      "question": "What is the best resolution for custom thumbnails?",
+      "answer": "1280 x 720 pixels is the optimal standard. The tool exports exactly this size."
+    },
+    {
+      "question": "How do I make my thumbnail look clean?",
+      "answer": "Focus on a clear subject, use high-contrast outlines, and place text in the center-left to avoid the bottom-right timestamp."
+    },
+    {
+      "question": "Does the tool add a watermark?",
+      "answer": "No, our utility does not add any watermarks to your images."
+    },
+    {
+      "question": "Is there a limit on how many thumbnails I can resize?",
+      "answer": "No, you can process as many images as you like for free."
+    },
+    {
+      "question": "Is this tool completely free?",
+      "answer": "Yes, it is a free web tool with no signup, limits, or ads."
+    },
+    {
+      "question": "How do I download the resized thumbnail?",
+      "answer": "Click the 'Download Thumbnail' button, and it will trigger an instant download in your browser."
+    },
+    {
+      "question": "Can I rotate my image before downloading?",
+      "answer": "Yes, use the rotation slider to align or tilt your image up to 180 degrees."
+    }
+  ],
+  "InstagramPostResizer": [
+    {
+      "question": "What is the Instagram Post Resizer?",
+      "answer": "A tool that scales and crops your images to standard Instagram feed post sizes (Square, Portrait, or Landscape)."
+    },
+    {
+      "question": "What are the standard dimensions for Instagram posts?",
+      "answer": "Instagram uses 1080x1080 for Square, 1080x1350 for Portrait (4:5), and 1080x566 for Landscape (1.91:1)."
+    },
+    {
+      "question": "Can I crop images to a 4:5 vertical ratio?",
+      "answer": "Yes, selecting the 'Portrait (4:5)' preset crops your photo to the exact 1080 x 1350 size."
+    },
+    {
+      "question": "How does 'Fit' mode differ from 'Fill' mode?",
+      "answer": "'Fill' mode scales the image to cover the canvas entirely. 'Fit' mode scales the image to fit inside the canvas, leaving black/white borders if aspect ratios don't match."
+    },
+    {
+      "question": "Is my image data kept private?",
+      "answer": "Yes, all resizing and formatting are processed on your local machine using the HTML5 Canvas API."
+    },
+    {
+      "question": "What is the standard square post size?",
+      "answer": "The standard square post size is 1080 x 1080 pixels (1:1 aspect ratio)."
+    },
+    {
+      "question": "What is the landscape post resolution for Instagram?",
+      "answer": "Instagram landscape posts are optimized at 1080 x 566 pixels."
+    },
+    {
+      "question": "Can I zoom or pan my uploaded image?",
+      "answer": "Yes, you can use the sliders to zoom in/out and drag or offset the image to adjust which part is cropped."
+    },
+    {
+      "question": "Does this tool support PNG and JPEG exports?",
+      "answer": "Yes, you can toggle between exporting as a PNG file or a JPEG file."
+    },
+    {
+      "question": "How do I adjust export quality?",
+      "answer": "For JPEG format, you can adjust the compression quality slider to get a smaller file size."
+    },
+    {
+      "question": "Will my image lose quality during resizing?",
+      "answer": "No, the tool renders high-resolution source images directly to the target canvas sizes, ensuring sharp results."
+    },
+    {
+      "question": "Does this tool work on mobile devices?",
+      "answer": "Yes, it is responsive and touch-friendly for cropping photos on iPhones and Androids."
+    },
+    {
+      "question": "Can I resize multiple images at once?",
+      "answer": "This tool is designed to crop one post at a time to allow precise visual alignment for each image."
+    },
+    {
+      "question": "Why is the 4:5 portrait size recommended for Instagram?",
+      "answer": "A 4:5 portrait post takes up 30% more vertical space in the mobile feed than a square post, maximizing engagement potential."
+    },
+    {
+      "question": "Does the resizer add a watermark to my photos?",
+      "answer": "No, it generates clean, watermark-free images."
+    },
+    {
+      "question": "Can I rotate my image before exporting?",
+      "answer": "Yes, the tool has a rotation control slider to align tilted photos."
+    },
+    {
+      "question": "What is the best file size for Instagram posts?",
+      "answer": "Instagram compresses posts upon upload. Keep your exported file size under 1-2MB to maintain good clarity."
+    },
+    {
+      "question": "Is this tool free to use?",
+      "answer": "Yes, it is 100% free with no limits."
+    },
+    {
+      "question": "How do I download my resized post?",
+      "answer": "Once you are satisfied with the alignment, click 'Download Image' to save it."
+    },
+    {
+      "question": "Can I use this for carousel posts?",
+      "answer": "Yes, resize each slide image using the same preset (e.g., Square) to ensure consistency in your carousel."
+    }
+  ],
+  "StoryResizer": [
+    {
+      "question": "What is the Story Resizer?",
+      "answer": "A scaling tool that formats any horizontal or square image into a vertical 1080x1920 portrait format suited for Stories and Reels."
+    },
+    {
+      "question": "What is the standard resolution for Instagram Stories?",
+      "answer": "The recommended size is 1080 x 1920 pixels, which corresponds to a 9:16 aspect ratio."
+    },
+    {
+      "question": "What aspect ratio does the Story Resizer target?",
+      "answer": "It targets the 9:16 vertical aspect ratio."
+    },
+    {
+      "question": "How does the 'Fit with Blur background' option work?",
+      "answer": "If your photo is wide, 'Fit' mode places it in the center and duplicates/blurs it in the background to fill the empty top and bottom spaces."
+    },
+    {
+      "question": "Is my uploaded image secure and private?",
+      "answer": "Yes, the canvas processing executes entirely client-side. No image is uploaded or shared."
+    },
+    {
+      "question": "Can I adjust the level of background blur?",
+      "answer": "Yes, a slider controls the blur radius from 0px (none) up to 40px for a soft look."
+    },
+    {
+      "question": "Can I crop my photo to a 9:16 ratio?",
+      "answer": "Yes, using 'Fill' mode stretches the image to cover the canvas, cropping out sides if necessary."
+    },
+    {
+      "question": "How do I position my image within the 9:16 frame?",
+      "answer": "Use the X and Y offset controls to slide the photo around and center the subject."
+    },
+    {
+      "question": "Does this tool support JPEG and PNG downloads?",
+      "answer": "Yes, you can select PNG or JPEG export format."
+    },
+    {
+      "question": "Can I change the quality of the downloaded image?",
+      "answer": "Yes, the quality percentage slider is available for JPEG exports."
+    },
+    {
+      "question": "Does this tool work on my phone?",
+      "answer": "Yes, it is fully optimized for mobile browsers so you can resize on the go."
+    },
+    {
+      "question": "Can I use this for TikTok stories or YouTube Shorts?",
+      "answer": "Yes, TikTok, YouTube Shorts, Snapchat, and Instagram Stories all share the same 9:16 aspect ratio."
+    },
+    {
+      "question": "Why does my landscape image get cropped in stories?",
+      "answer": "Because stories are tall and vertical. Our blur letterbox mode solves this by letting you fit the image without cropping."
+    },
+    {
+      "question": "What is the maximum file size for Instagram Stories?",
+      "answer": "Instagram permits uploads up to 30MB, but smaller, optimized images (under 5MB) upload faster."
+    },
+    {
+      "question": "Does this tool add any watermark?",
+      "answer": "No, the exported images are completely free of watermarks."
+    },
+    {
+      "question": "Can I rotate my image in the resizer?",
+      "answer": "Yes, you can rotate the image up to 180 degrees using the slider."
+    },
+    {
+      "question": "Is this story cropping tool free?",
+      "answer": "Yes, it is completely free with no usage limits."
+    },
+    {
+      "question": "How do I download the finished 1080x1920 image?",
+      "answer": "Click the 'Download Story' button in the interface."
+    },
+    {
+      "question": "Can I use this tool offline?",
+      "answer": "Once loaded in your browser, the tool operates entirely offline as no server calls are made."
+    },
+    {
+      "question": "What is the ideal format for uploading stories?",
+      "answer": "JPEG is recommended for stories due to its compact file size and fast loading."
+    }
+  ],
+  "FacebookCoverCreator": [
+    {
+      "question": "What is the Facebook Cover Creator?",
+      "answer": "A layout creator that lets you upload a background, resize it to Facebook cover dimensions, and overlay text."
+    },
+    {
+      "question": "What is the standard dimension for Facebook covers?",
+      "answer": "Facebook desktop covers display at 820 x 312 pixels (approx 16:6 aspect ratio)."
+    },
+    {
+      "question": "Can I add text overlay to my Facebook cover?",
+      "answer": "Yes, you can add a main Header and a Subheader text directly over your image."
+    },
+    {
+      "question": "What is the purpose of the dark overlay slider?",
+      "answer": "It darkens the background photo, making the white text overlays much more readable."
+    },
+    {
+      "question": "Is my uploaded image sent to any server?",
+      "answer": "No, all rendering is done on your local browser canvas, maintaining absolute privacy."
+    },
+    {
+      "question": "Can I change the text color and font size?",
+      "answer": "Yes, you can choose text colors and adjust font sizes for both headings."
+    },
+    {
+      "question": "How do desktop and mobile Facebook cover dimensions differ?",
+      "answer": "Covers display at 820x312 on desktop and 640x360 on mobile. The tool exports at 820x312, keeping text centered so it fits both."
+    },
+    {
+      "question": "Can I crop and reposition my background image?",
+      "answer": "Yes, use the zoom and Y-axis offset sliders to fit the background image within the narrow cover frame."
+    },
+    {
+      "question": "What output file formats are supported?",
+      "answer": "You can export the cover banner as a PNG or JPEG file."
+    },
+    {
+      "question": "Does this tool support high-quality JPEG and PNG exports?",
+      "answer": "Yes, it renders at high pixel densities to keep text clean."
+    },
+    {
+      "question": "Can I change the font style?",
+      "answer": "Yes, the tool has multiple modern font presets (Sans, Serif, Display) to fit your brand."
+    },
+    {
+      "question": "Does this tool add a watermark?",
+      "answer": "No, all designs are exported without watermarks."
+    },
+    {
+      "question": "Can I use this cover creator on mobile?",
+      "answer": "Yes, it is fully responsive and touch-ready."
+    },
+    {
+      "question": "What is the best file size for a Facebook cover?",
+      "answer": "Facebook compresses banners. An exported cover under 1MB is recommended."
+    },
+    {
+      "question": "How do I keep text safe from being cut off on mobile?",
+      "answer": "Keep your text centered. The tool keeps overlays centered by default to ensure mobile compatibility."
+    },
+    {
+      "question": "Is this Facebook Cover Creator free?",
+      "answer": "Yes, it is 100% free with no subscription required."
+    },
+    {
+      "question": "How do I download the cover photo?",
+      "answer": "Click the 'Download Cover' button to save the banner."
+    },
+    {
+      "question": "Can I use a plain color background instead of an image?",
+      "answer": "Yes, you can adjust the overlay opacity to 100% to create a solid color cover."
+    },
+    {
+      "question": "Can I adjust the alignment of the text?",
+      "answer": "The text is centered horizontally and vertically to fit safely across desktop and mobile templates."
+    },
+    {
+      "question": "Is there a limit to the length of headers/subheaders?",
+      "answer": "While there is no strict cap, keeping text under 40-50 characters prevents text wrapping and clipping."
+    }
+  ],
+  "LinkedInBannerResizer": [
+    {
+      "question": "What is the LinkedIn Banner Resizer?",
+      "answer": "A cropping tool that formats any image to the exact 4:1 aspect ratio required for a LinkedIn personal banner."
+    },
+    {
+      "question": "What is the standard resolution for a LinkedIn profile banner?",
+      "answer": "The standard size recommended by LinkedIn is 1584 x 396 pixels."
+    },
+    {
+      "question": "What is the aspect ratio of a LinkedIn banner?",
+      "answer": "It is a wide 4:1 aspect ratio."
+    },
+    {
+      "question": "How does the crop tool help me?",
+      "answer": "Because standard photos are square or landscape, this tool crops them to the very wide 4:1 banner shape without distortion."
+    },
+    {
+      "question": "Is my uploaded image safe and processed locally?",
+      "answer": "Yes, all image resizing and canvas exports are processed locally in your web browser."
+    },
+    {
+      "question": "Can I zoom or reposition my photo inside the banner frame?",
+      "answer": "Yes, you can zoom, rotate, and offset the image vertically to frame your photo perfectly."
+    },
+    {
+      "question": "Which file formats does this banner resizer support?",
+      "answer": "You can upload JPEG, PNG, and WebP, and export in PNG or JPEG."
+    },
+    {
+      "question": "Can I adjust the quality of the exported image?",
+      "answer": "Yes, a quality slider is available for JPEG exports to optimize file sizes."
+    },
+    {
+      "question": "Will my banner look blurry on high-resolution screens?",
+      "answer": "As long as you upload a high-quality source image (at least 2000px wide), the exported banner will remain very sharp."
+    },
+    {
+      "question": "Does the LinkedIn banner get covered by the profile photo?",
+      "answer": "Yes, on desktop, your profile picture covers the bottom-left portion of the banner. Keep key elements out of this zone."
+    },
+    {
+      "question": "Where should I place key text in my LinkedIn banner?",
+      "answer": "Keep key text, logos, or contacts on the right side of the banner to avoid the profile avatar overlap on the left."
+    },
+    {
+      "question": "Does this tool work on mobile devices?",
+      "answer": "Yes, the resizer is fully responsive and supports touch guestures."
+    },
+    {
+      "question": "Does the resizer add a watermark?",
+      "answer": "No, it exports clean, professional files with no watermarks."
+    },
+    {
+      "question": "What is the recommended file size for LinkedIn headers?",
+      "answer": "LinkedIn limits uploads to 8MB. The tool helps compress it well below this size."
+    },
+    {
+      "question": "Can I rotate my image before exporting?",
+      "answer": "Yes, use the rotation slider to align or tilt the image."
+    },
+    {
+      "question": "Is this LinkedIn Banner Resizer free?",
+      "answer": "Yes, it is 100% free with no registration."
+    },
+    {
+      "question": "How do I download the cropped banner?",
+      "answer": "Click the 'Download Banner' button to download the 1584x396 image."
+    },
+    {
+      "question": "Can I use this for company page banners?",
+      "answer": "Yes, though LinkedIn company banners are slightly different (1128 x 191), the 1584x396 crop works well as a high-res alternative."
+    },
+    {
+      "question": "What are the dimensions for LinkedIn company banners?",
+      "answer": "LinkedIn company pages officially recommend 1128 x 191 pixels."
+    },
+    {
+      "question": "Can I use this tool offline?",
+      "answer": "Yes, all processing is done inside the browser, allowing offline usage after the page loads."
+    }
+  ],
+  "WhatsAppLinkGenerator": [
+    {
+      "question": "What is the WhatsApp Link Generator?",
+      "answer": "A tool that generates wa.me click-to-chat links and matching scan-ready QR codes for instant messaging."
+    },
+    {
+      "question": "How do I generate a WhatsApp link?",
+      "answer": "Input your country code, phone number, and optional text message, then click 'Generate Link'."
+    },
+    {
+      "question": "What is a wa.me link?",
+      "answer": "It is a official short URL (wa.me/number) created by WhatsApp to let users start a chat with you instantly."
+    },
+    {
+      "question": "Do I need to include the country code in the phone number?",
+      "answer": "Yes, country codes are required (e.g. 91 for India, 1 for US) without any leading plus sign or zeroes."
+    },
+    {
+      "question": "Can I add a pre-filled custom message?",
+      "answer": "Yes, you can write a message that will automatically appear in the user's text input field when they click your link."
+    },
+    {
+      "question": "How does the QR code generator work?",
+      "answer": "The tool uses a local JavaScript QR library to convert your click-to-chat URL into a high-quality scan-ready QR code."
+    },
+    {
+      "question": "Is my phone number or messages saved on your servers?",
+      "answer": "No, all link strings and QR images are generated locally in your browser. Your phone number remains completely private."
+    },
+    {
+      "question": "How do I download the generated QR code?",
+      "answer": "Click the 'Download QR Code' button to save it as a high-resolution PNG image."
+    },
+    {
+      "question": "Can I use the QR code in print media?",
+      "answer": "Yes, the exported QR code is high-resolution, making it perfect for printing on flyers, business cards, or packaging."
+    },
+    {
+      "question": "Is the click-to-chat link free?",
+      "answer": "Yes, wa.me links are a free feature provided by WhatsApp, and our tool is free to use."
+    },
+    {
+      "question": "Does this tool require registration?",
+      "answer": "No, you do not need to create an account or sign up to use the generator."
+    },
+    {
+      "question": "Does this generator work on mobile phones?",
+      "answer": "Yes, it is mobile-responsive and optimized for touch interactions."
+    },
+    {
+      "question": "How can I test my generated link?",
+      "answer": "Click the 'Test Link' button in the results section to verify that it opens the chat window correctly."
+    },
+    {
+      "question": "Can I use this for WhatsApp Business numbers?",
+      "answer": "Yes, wa.me links work identically for both standard and WhatsApp Business accounts."
+    },
+    {
+      "question": "How does a click-to-chat link improve customer engagement?",
+      "answer": "It removes the friction of saving a phone number to contacts first, allowing customers to reach out with one click."
+    },
+    {
+      "question": "What format is the downloaded QR code?",
+      "answer": "It downloads as a standard PNG image file."
+    },
+    {
+      "question": "Can I customize the QR code style?",
+      "answer": "The tool generates a clean, high-contrast black and white QR code to ensure maximum scanning compatibility on all devices."
+    },
+    {
+      "question": "Can I share the wa.me link on Instagram?",
+      "answer": "Yes, you can add it to your Instagram bio link or share it as a link sticker in your stories."
+    },
+    {
+      "question": "Does the QR code expire?",
+      "answer": "No, because the QR code simply encodes the text URL, it will never expire unless you change your phone number."
+    },
+    {
+      "question": "What should I do if the link does not open WhatsApp?",
+      "answer": "Double-check that you entered the phone number correctly and included the proper country code without spaces or dashes."
+    }
+  ],
 };
 

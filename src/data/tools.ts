@@ -3915,5 +3915,257 @@ export const toolsList: Tool[] = [
         content: 'Same-state transactions must separate tax into CGST (Central) and SGST (State) equally. Inter-state transactions aggregate tax into IGST (Integrated).'
       }
     ]
+  },
+  {
+    id: 'InstagramCaptionGenerator',
+    slug: 'instagram-caption-generator',
+    name: 'Instagram Caption Generator',
+    category: 'social',
+    shortDescription: 'Generate creative, platform-optimized captions matching custom vibes and emojis.',
+    metaDescription: 'Free online Instagram Caption Generator. Create engaging captions based on vibes, emojis, and hashtags.',
+    keywords: ['Instagram caption generator', 'generate captions online', 'creative instagram caption creator', 'funny captions maker', 'social media caption tool'],
+    icon: 'Sparkles',
+    howToUse: [
+      'Enter a description of what your post is about.',
+      'Select a tone/vibe (e.g. funny, aesthetic, motivational).',
+      'Choose emoji density and toggle hashtag recommendation.',
+      'Click Generate and copy your favorite caption.'
+    ],
+    faqs: [
+      {
+        question: 'How are captions generated?',
+        answer: 'They are built in real-time in your browser from curated vibe templates combined dynamically with your input keywords.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Crafting Engaging Social Media Captions',
+        content: 'A great caption tells a story, adds context, and drives engagement. Matching your caption vibe (aesthetic, funny, professional) to your visual content is key to keeping followers engaged.'
+      }
+    ]
+  },
+  {
+    id: 'HashtagGenerator',
+    slug: 'hashtag-generator',
+    name: 'Hashtag Generator',
+    category: 'social',
+    shortDescription: 'Generate relevant hashtags from keywords and category/niche selectors.',
+    metaDescription: 'Free online Hashtag Generator. Get top trending hashtags for Instagram, TikTok, and LinkedIn in-browser.',
+    keywords: ['Hashtag Generator', 'trending hashtags', 'niche hashtags', 'instagram tags creator', 'find hashtags online'],
+    icon: 'Hash',
+    howToUse: [
+      'Type or paste your seed keywords in the input box.',
+      'Select your niche category (e.g. business, travel, tech).',
+      'Click Generate Hashtags to create a list of up to 30 relevant tags.',
+      'Deselect tags you do not want and click Copy Selection.'
+    ],
+    faqs: [
+      {
+        question: 'Why is there a limit of 30 hashtags?',
+        answer: 'Instagram enforces a strict limit of 30 hashtags per post. Going over this limit will prevent your caption from posting.'
+      }
+    ],
+    sections: [
+      {
+        title: 'How to Use Hashtags Safely and Effectively',
+        content: 'Hashtags categorize your content and help platforms distribute it to interested users. Combining broad keywords with highly specific niche tags reaches diverse audiences while maintaining target relevancy.'
+      }
+    ]
+  },
+  {
+    id: 'BioGenerator',
+    slug: 'bio-generator',
+    name: 'Bio Generator',
+    category: 'social',
+    shortDescription: 'Generate professional, creative, or minimal bios for social profiles.',
+    metaDescription: 'Free online Bio Generator. Create engaging bios for Instagram, X/Twitter, LinkedIn, and TikTok instantly.',
+    keywords: ['Bio Generator', 'create social bio', 'instagram bio maker', 'linkedin headline generator', 'twitter bio ideas'],
+    icon: 'Sparkles',
+    howToUse: [
+      'Select your target platform (Instagram, X, LinkedIn, TikTok).',
+      'Input your occupation/title and core skills/interests.',
+      'Select a vibe (minimal, creative, funny, professional).',
+      'Click Generate Bios and copy the one you like best.'
+    ],
+    faqs: [
+      {
+        question: 'What are character limits for bios?',
+        answer: 'Instagram allows 150 characters, X (Twitter) allows 160 characters, and TikTok allows 80 characters. The tool displays a warning if you exceed these limits.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Optimizing Your Social Media Bio',
+        content: 'Your bio is your digital elevator pitch. It should quickly convey who you are, what you do, and invite the visitor to take action (like clicking your website link).'
+      }
+    ]
+  },
+  {
+    id: 'YouTubeThumbnailResizer',
+    slug: 'youtube-thumbnail-resizer',
+    name: 'YouTube Thumbnail Resizer',
+    category: 'social',
+    shortDescription: 'Crop and resize images to standard YouTube thumbnail dimensions (1280 x 720).',
+    metaDescription: 'Free online YouTube Thumbnail Resizer. Resize and crop photos to exactly 1280 x 720 pixels in-browser.',
+    keywords: ['YouTube Thumbnail Resizer', 'crop thumbnail online', 'resize image to 1280x720', 'make youtube thumbnail size', 'image cropper 16:9'],
+    icon: 'Image',
+    howToUse: [
+      'Upload or drag-and-drop your image on the uploader.',
+      'Use the scale, rotation, and offset sliders to crop the image.',
+      'Choose output format (PNG or JPEG) and set JPEG quality.',
+      'Click Download Thumbnail to save.'
+    ],
+    faqs: [
+      {
+        question: 'What is the correct size for a YouTube thumbnail?',
+        answer: 'YouTube recommends a resolution of 1280 x 720 pixels with a 16:9 aspect ratio and a file size under 2MB.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Creating High-Converting YouTube Thumbnails',
+        content: 'Thumbnails are critical for driving CTR (Click-Through Rate). Ensure your visual focus is centered, text is highly legible, and the resolution is exactly 1280x720 to avoid black margins or cropping issues.'
+      }
+    ]
+  },
+  {
+    id: 'InstagramPostResizer',
+    slug: 'instagram-post-resizer',
+    name: 'Instagram Post Resizer',
+    category: 'social',
+    shortDescription: 'Crop and scale photos to standard Instagram post dimensions (1:1, 4:5, 1.91:1).',
+    metaDescription: 'Free online Instagram Post Resizer. Crop and scale images to 1080x1080, 1080x1350, or 1080x566 pixels instantly.',
+    keywords: ['Instagram Post Resizer', 'resize photo for instagram', 'crop image 4:5', 'make square photo online', 'crop instagram post'],
+    icon: 'Image',
+    howToUse: [
+      'Upload your image.',
+      'Select the target post format (Square 1:1, Portrait 4:5, Landscape 1.91:1).',
+      'Select fit or fill crop modes and adjust zoom/offsets.',
+      'Click Download Post to save.'
+    ],
+    faqs: [
+      {
+        question: 'What resolution does Instagram use for posts?',
+        answer: 'Instagram standardizes feed post widths to 1080 pixels. Sizing options are 1080x1080 (square), 1080x1350 (portrait), and 1080x566 (landscape).'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Feed Layout Ratios',
+        content: 'Vertical portrait images (4:5) take up the most screen real estate on mobile devices, making them highly effective for capturing attention compared to square or landscape posts.'
+      }
+    ]
+  },
+  {
+    id: 'StoryResizer',
+    slug: 'story-resizer',
+    name: 'Story Resizer',
+    category: 'social',
+    shortDescription: 'Crop and scale images to standard portrait story dimensions (1080 x 1920).',
+    metaDescription: 'Free online Story Resizer. Crop photos to 1080x1920 pixels with letterbox blur backgrounds in-browser.',
+    keywords: ['Story Resizer', 'instagram story size', 'resize image 9:16', 'make 1080x1920 online', 'story crop tool'],
+    icon: 'Image',
+    howToUse: [
+      'Upload your image.',
+      'Set crop mode to Fit or Fill. Fit mode enables canvas-blurred borders.',
+      'Adjust zoom, rotation, and alignment offsets.',
+      'Download the cropped 1080x1920 image.'
+    ],
+    faqs: [
+      {
+        question: 'What is the correct aspect ratio for Instagram Stories?',
+        answer: 'Instagram Stories use a 9:16 aspect ratio, which translates to a resolution of 1080 x 1920 pixels.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Avoiding Letterboxed Margins in Stories',
+        content: 'When uploading horizontal images to stories, they get padded with blank spaces. Our "blur letterbox" mode duplicates and blurs the background to create a clean, modern aesthetic.'
+      }
+    ]
+  },
+  {
+    id: 'FacebookCoverCreator',
+    slug: 'facebook-cover-creator',
+    name: 'Facebook Cover Creator',
+    category: 'social',
+    shortDescription: 'Create custom Facebook cover graphics with text overlays and background sizing.',
+    metaDescription: 'Free online Facebook Cover Creator. Overlay title and subtitle banners on photos resized to 820 x 312 pixels.',
+    keywords: ['Facebook Cover Creator', 'make fb cover photo', 'design facebook banner', 'facebook header maker', 'fb cover size crop'],
+    icon: 'Image',
+    howToUse: [
+      'Upload a background cover image.',
+      'Type in your Header and Subheader text overlays.',
+      'Set text color and background darken overlay opacity.',
+      'Adjust image zoom and offset positioning, then download.'
+    ],
+    faqs: [
+      {
+        question: 'What is the standard Facebook Cover dimension?',
+        answer: 'The desktop Facebook cover displays at 820 x 312 pixels, while mobile devices show it at 640 x 360 pixels. The tool exports at 820 x 312.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Optimizing Facebook Covers for Branding',
+        content: 'Your cover photo is the largest branding element on your Facebook page. Adding a clean overlay with your main title or value proposition makes your page look instantly professional.'
+      }
+    ]
+  },
+  {
+    id: 'LinkedInBannerResizer',
+    slug: 'linkedin-banner-resizer',
+    name: 'LinkedIn Banner Resizer',
+    category: 'social',
+    shortDescription: 'Crop and scale images to standard LinkedIn banner dimensions (1584 x 396).',
+    metaDescription: 'Free online LinkedIn Banner Resizer. Crop and scale photos to exactly 1584 x 396 pixels with 4:1 aspect ratio.',
+    keywords: ['LinkedIn Banner Resizer', 'crop linkedin banner', 'resize image to 1584x396', 'make linkedin header size', 'linkedin banner crop'],
+    icon: 'Image',
+    howToUse: [
+      'Upload a banner photo.',
+      'Use scale and offset sliders to crop to the 4:1 aspect ratio frame.',
+      'Select output format (PNG/JPEG).',
+      'Download your cropped LinkedIn header.'
+    ],
+    faqs: [
+      {
+        question: 'What are standard dimensions for a LinkedIn banner?',
+        answer: 'The recommended dimensions for a LinkedIn personal profile banner are 1584 x 396 pixels, which is a 4:1 aspect ratio.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Designing Banners for Professional Profiles',
+        content: 'Your LinkedIn header is prime real estate. Ensure key elements are centered and not on the left corner, where your profile avatar picture overlaps the banner.'
+      }
+    ]
+  },
+  {
+    id: 'WhatsAppLinkGenerator',
+    slug: 'whatsapp-link-generator',
+    name: 'WhatsApp Link Generator',
+    category: 'social',
+    shortDescription: 'Generate instant click-to-chat WhatsApp links and scan-ready QR codes.',
+    metaDescription: 'Free online WhatsApp Link Generator. Create custom wa.me links with messages and download QR codes.',
+    keywords: ['WhatsApp Link Generator', 'create wa.me link', 'whatsapp link with message', 'whatsapp qr code generator', 'click to chat generator'],
+    icon: 'MessageSquare',
+    howToUse: [
+      'Enter your country code (e.g. 91 for India) and phone number.',
+      'Type an optional pre-filled message.',
+      'Click Generate to create the click-to-chat URL and QR code.',
+      'Copy the link, scan to test, or download the QR code as a PNG.'
+    ],
+    faqs: [
+      {
+        question: 'How does click-to-chat work?',
+        answer: 'WhatsApp\'s wa.me links allow users to start a chat with you instantly without having your phone number saved in their contact list.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Benefits of Using WhatsApp QR Codes',
+        content: 'Adding a WhatsApp QR code or link to your email signatures, business cards, or product flyers makes it incredibly easy for customers to scan and ask questions immediately.'
+      }
+    ]
   }
 ];

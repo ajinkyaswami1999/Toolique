@@ -149,6 +149,17 @@ import BarcodeGenerator from '../tools/BarcodeGenerator';
 import InventoryCalculator from '../tools/InventoryCalculator';
 import GSTInvoiceGenerator from '../tools/GSTInvoiceGenerator';
 
+// New Social Media Tools
+import InstagramCaptionGenerator from '../tools/InstagramCaptionGenerator';
+import HashtagGenerator from '../tools/HashtagGenerator';
+import BioGenerator from '../tools/BioGenerator';
+import YouTubeThumbnailResizer from '../tools/YouTubeThumbnailResizer';
+import InstagramPostResizer from '../tools/InstagramPostResizer';
+import StoryResizer from '../tools/StoryResizer';
+import FacebookCoverCreator from '../tools/FacebookCoverCreator';
+import LinkedInBannerResizer from '../tools/LinkedInBannerResizer';
+import WhatsAppLinkGenerator from '../tools/WhatsAppLinkGenerator';
+
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
   SIPCalculator,
@@ -180,6 +191,17 @@ const toolComponents: Record<string, React.ComponentType> = {
   BarcodeGenerator,
   InventoryCalculator,
   GSTInvoiceGenerator,
+
+  // New Social Media Tools Registration
+  InstagramCaptionGenerator,
+  HashtagGenerator,
+  BioGenerator,
+  YouTubeThumbnailResizer,
+  InstagramPostResizer,
+  StoryResizer,
+  FacebookCoverCreator,
+  LinkedInBannerResizer,
+  WhatsAppLinkGenerator,
 
   // New Developer Tools Registration
   JSONValidator,
