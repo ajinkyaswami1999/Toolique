@@ -26,14 +26,16 @@ export default function SEO({ title, description, keywords, canonicalUrl, schema
     metaDescription.setAttribute('content', description);
 
     // 3. Update Meta Keywords
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
     if (keywords && keywords.length > 0) {
-      let metaKeywords = document.querySelector('meta[name="keywords"]');
       if (!metaKeywords) {
         metaKeywords = document.createElement('meta');
         metaKeywords.setAttribute('name', 'keywords');
         document.head.appendChild(metaKeywords);
       }
       metaKeywords.setAttribute('content', keywords.join(', '));
+    } else if (metaKeywords) {
+      metaKeywords.setAttribute('content', 'Toolique, Online Tools, Calculators, Developer Utilities');
     }
 
     // 4. Update Canonical Link
@@ -43,7 +45,8 @@ export default function SEO({ title, description, keywords, canonicalUrl, schema
       linkCanonical.setAttribute('rel', 'canonical');
       document.head.appendChild(linkCanonical);
     }
-    const currentUrl = canonicalUrl || window.location.href;
+    // Clean canonical URL by stripping query parameters/hash values to avoid duplicate content penalties
+    const currentUrl = canonicalUrl || (window.location.origin + window.location.pathname);
     linkCanonical.setAttribute('href', currentUrl);
 
     // 5. Update Open Graph Meta Tags (Dynamic Social Sharing)
@@ -80,7 +83,17 @@ export default function SEO({ title, description, keywords, canonicalUrl, schema
     setMetaName('twitter:description', description);
     setMetaName('twitter:image', 'https://toolique.in/og-image.png');
 
-    // 7. Inject JSON-LD Schema
+    // 7. Update Favicon Link
+    let linkFavicon = document.querySelector('link[rel="icon"]');
+    if (!linkFavicon) {
+      linkFavicon = document.createElement('link');
+      linkFavicon.setAttribute('rel', 'icon');
+      document.head.appendChild(linkFavicon);
+    }
+    linkFavicon.setAttribute('type', 'image/svg+xml');
+    linkFavicon.setAttribute('href', '/favicon.svg');
+
+    // 8. Inject JSON-LD Schema
     const existingScript = document.getElementById('json-ld-schema');
     if (existingScript) {
       existingScript.remove();
