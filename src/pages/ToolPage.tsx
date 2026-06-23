@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toolsList } from '../data/tools';
 import { additionalFaqs } from '../data/toolFaqs';
@@ -9,168 +10,168 @@ import RelatedTools from '../components/RelatedTools';
 import SEO from '../components/SEO';
 
 // Import all 31 tools
-import GSTCalculator from '../tools/GSTCalculator';
-import SIPCalculator from '../tools/SIPCalculator';
-import EMICalculator from '../tools/EMICalculator';
-import AgeCalculator from '../tools/AgeCalculator';
-import ExperienceCalculator from '../tools/ExperienceCalculator';
-import SQLFormatter from '../tools/SQLFormatter';
-import JSONFormatter from '../tools/JSONFormatter';
-import QRCodeGenerator from '../tools/QRCodeGenerator';
-import ImageCompressor from '../tools/ImageCompressor';
-import UPIQRGenerator from '../tools/UPIQRGenerator';
-import TDSCalculator from '../tools/TDSCalculator';
-import InHandSalaryCalculator from '../tools/InHandSalaryCalculator';
+const GSTCalculator = lazy(() => import('../tools/GSTCalculator'));
+const SIPCalculator = lazy(() => import('../tools/SIPCalculator'));
+const EMICalculator = lazy(() => import('../tools/EMICalculator'));
+const AgeCalculator = lazy(() => import('../tools/AgeCalculator'));
+const ExperienceCalculator = lazy(() => import('../tools/ExperienceCalculator'));
+const SQLFormatter = lazy(() => import('../tools/SQLFormatter'));
+const JSONFormatter = lazy(() => import('../tools/JSONFormatter'));
+const QRCodeGenerator = lazy(() => import('../tools/QRCodeGenerator'));
+const ImageCompressor = lazy(() => import('../tools/ImageCompressor'));
+const UPIQRGenerator = lazy(() => import('../tools/UPIQRGenerator'));
+const TDSCalculator = lazy(() => import('../tools/TDSCalculator'));
+const InHandSalaryCalculator = lazy(() => import('../tools/InHandSalaryCalculator'));
 
 // Phase 2 - Finance (8 tools)
-import FDCalculator from '../tools/FDCalculator';
-import RDCalculator from '../tools/RDCalculator';
-import PPFCalculator from '../tools/PPFCalculator';
-import NPSCalculator from '../tools/NPSCalculator';
-import GratuityCalculator from '../tools/GratuityCalculator';
-import HRACalculator from '../tools/HRACalculator';
-import CAGRCalculator from '../tools/CAGRCalculator';
-import GSTIncExcCalculator from '../tools/GSTIncExcCalculator';
+const FDCalculator = lazy(() => import('../tools/FDCalculator'));
+const RDCalculator = lazy(() => import('../tools/RDCalculator'));
+const PPFCalculator = lazy(() => import('../tools/PPFCalculator'));
+const NPSCalculator = lazy(() => import('../tools/NPSCalculator'));
+const GratuityCalculator = lazy(() => import('../tools/GratuityCalculator'));
+const HRACalculator = lazy(() => import('../tools/HRACalculator'));
+const CAGRCalculator = lazy(() => import('../tools/CAGRCalculator'));
+const GSTIncExcCalculator = lazy(() => import('../tools/GSTIncExcCalculator'));
 
 // Phase 2 - Utilities (5 tools)
-import PercentageCalculator from '../tools/PercentageCalculator';
-import DateCalculator from '../tools/DateCalculator';
-import DaysBetweenDates from '../tools/DaysBetweenDates';
-import CurrencyConverter from '../tools/CurrencyConverter';
-import UnitConverter from '../tools/UnitConverter';
+const PercentageCalculator = lazy(() => import('../tools/PercentageCalculator'));
+const DateCalculator = lazy(() => import('../tools/DateCalculator'));
+const DaysBetweenDates = lazy(() => import('../tools/DaysBetweenDates'));
+const CurrencyConverter = lazy(() => import('../tools/CurrencyConverter'));
+const UnitConverter = lazy(() => import('../tools/UnitConverter'));
 
 // Phase 2 - Developers (6 tools)
-import Base64Tool from '../tools/Base64Tool';
-import JWTDecoder from '../tools/JWTDecoder';
-import UUIDGenerator from '../tools/UUIDGenerator';
-import HashGenerator from '../tools/HashGenerator';
-import URLEncoderDecoder from '../tools/URLEncoderDecoder';
-import RegexTester from '../tools/RegexTester';
+const Base64Tool = lazy(() => import('../tools/Base64Tool'));
+const JWTDecoder = lazy(() => import('../tools/JWTDecoder'));
+const UUIDGenerator = lazy(() => import('../tools/UUIDGenerator'));
+const HashGenerator = lazy(() => import('../tools/HashGenerator'));
+const URLEncoderDecoder = lazy(() => import('../tools/URLEncoderDecoder'));
+const RegexTester = lazy(() => import('../tools/RegexTester'));
 
 // Phase 3 - Civil Engineering (9 tools)
-import ConstructionCostCalculator from '../tools/ConstructionCostCalculator';
-import BOQCalculator from '../tools/BOQCalculator';
-import ConcreteCalculator from '../tools/ConcreteCalculator';
-import BrickCalculator from '../tools/BrickCalculator';
-import RCCCalculator from '../tools/RCCCalculator';
-import SteelWeightCalculator from '../tools/SteelWeightCalculator';
-import ColumnDesignCalculator from '../tools/ColumnDesignCalculator';
-import SlabCalculator from '../tools/SlabCalculator';
-import FoundationCalculator from '../tools/FoundationCalculator';
+const ConstructionCostCalculator = lazy(() => import('../tools/ConstructionCostCalculator'));
+const BOQCalculator = lazy(() => import('../tools/BOQCalculator'));
+const ConcreteCalculator = lazy(() => import('../tools/ConcreteCalculator'));
+const BrickCalculator = lazy(() => import('../tools/BrickCalculator'));
+const RCCCalculator = lazy(() => import('../tools/RCCCalculator'));
+const SteelWeightCalculator = lazy(() => import('../tools/SteelWeightCalculator'));
+const ColumnDesignCalculator = lazy(() => import('../tools/ColumnDesignCalculator'));
+const SlabCalculator = lazy(() => import('../tools/SlabCalculator'));
+const FoundationCalculator = lazy(() => import('../tools/FoundationCalculator'));
 
 // Phase 3 - Architecture (7 tools)
-import FARFSICalculator from '../tools/FARFSICalculator';
-import StaircaseCalculator from '../tools/StaircaseCalculator';
-import RoomAreaCalculator from '../tools/RoomAreaCalculator';
-import CarpetAreaCalculator from '../tools/CarpetAreaCalculator';
-import FloorTileCalculator from '../tools/FloorTileCalculator';
-import PaintCalculator from '../tools/PaintCalculator';
-import WallpaperCalculator from '../tools/WallpaperCalculator';
+const FARFSICalculator = lazy(() => import('../tools/FARFSICalculator'));
+const StaircaseCalculator = lazy(() => import('../tools/StaircaseCalculator'));
+const RoomAreaCalculator = lazy(() => import('../tools/RoomAreaCalculator'));
+const CarpetAreaCalculator = lazy(() => import('../tools/CarpetAreaCalculator'));
+const FloorTileCalculator = lazy(() => import('../tools/FloorTileCalculator'));
+const PaintCalculator = lazy(() => import('../tools/PaintCalculator'));
+const WallpaperCalculator = lazy(() => import('../tools/WallpaperCalculator'));
 
 // Phase 3 - Interior Design (4 tools)
-import FlooringCostCalculator from '../tools/FlooringCostCalculator';
-import FalseCeilingCalculator from '../tools/FalseCeilingCalculator';
-import ModularKitchenCostCalculator from '../tools/ModularKitchenCostCalculator';
-import WardrobeCostCalculator from '../tools/WardrobeCostCalculator';
+const FlooringCostCalculator = lazy(() => import('../tools/FlooringCostCalculator'));
+const FalseCeilingCalculator = lazy(() => import('../tools/FalseCeilingCalculator'));
+const ModularKitchenCostCalculator = lazy(() => import('../tools/ModularKitchenCostCalculator'));
+const WardrobeCostCalculator = lazy(() => import('../tools/WardrobeCostCalculator'));
 
 
 // Phase 4 - Image Tools Expansion (13 tools)
-import ImageCropper from '../tools/ImageCropper';
-import ImageResizer from '../tools/ImageResizer';
-import ImageConverter from '../tools/ImageConverter';
-import ImageRotator from '../tools/ImageRotator';
-import ImageWatermark from '../tools/ImageWatermark';
-import ImageBlur from '../tools/ImageBlur';
-import BackgroundRemover from '../tools/BackgroundRemover';
-import MetadataViewer from '../tools/MetadataViewer';
-import ImageToBase64 from '../tools/ImageToBase64';
-import Base64ToImage from '../tools/Base64ToImage';
-import ImagesToZip from '../tools/ImagesToZip';
-import ImageColorPicker from '../tools/ImageColorPicker';
-import QRScannerImage from '../tools/QRScannerImage';
+const ImageCropper = lazy(() => import('../tools/ImageCropper'));
+const ImageResizer = lazy(() => import('../tools/ImageResizer'));
+const ImageConverter = lazy(() => import('../tools/ImageConverter'));
+const ImageRotator = lazy(() => import('../tools/ImageRotator'));
+const ImageWatermark = lazy(() => import('../tools/ImageWatermark'));
+const ImageBlur = lazy(() => import('../tools/ImageBlur'));
+const BackgroundRemover = lazy(() => import('../tools/BackgroundRemover'));
+const MetadataViewer = lazy(() => import('../tools/MetadataViewer'));
+const ImageToBase64 = lazy(() => import('../tools/ImageToBase64'));
+const Base64ToImage = lazy(() => import('../tools/Base64ToImage'));
+const ImagesToZip = lazy(() => import('../tools/ImagesToZip'));
+const ImageColorPicker = lazy(() => import('../tools/ImageColorPicker'));
+const QRScannerImage = lazy(() => import('../tools/QRScannerImage'));
 
 
 // Phase 5 - PDF Tools (16 tools)
-import PDFMerge from '../tools/PDFMerge';
-import PDFSplit from '../tools/PDFSplit';
-import PDFCompressor from '../tools/PDFCompressor';
-import PDFPageRemover from '../tools/PDFPageRemover';
-import PDFPageReorder from '../tools/PDFPageReorder';
-import PDFRotate from '../tools/PDFRotate';
-import PDFPasswordProtect from '../tools/PDFPasswordProtect';
-import PDFUnlock from '../tools/PDFUnlock';
-import PDFWatermark from '../tools/PDFWatermark';
-import PDFPageNumbering from '../tools/PDFPageNumbering';
-import ExtractTextPDF from '../tools/ExtractTextPDF';
-import PDFMetadataViewer from '../tools/PDFMetadataViewer';
-import PDFToWord from '../tools/PDFToWord';
-import WordToPDF from '../tools/WordToPDF';
-import ExcelToPDF from '../tools/ExcelToPDF';
-import PowerPointToPDF from '../tools/PowerPointToPDF';
+const PDFMerge = lazy(() => import('../tools/PDFMerge'));
+const PDFSplit = lazy(() => import('../tools/PDFSplit'));
+const PDFCompressor = lazy(() => import('../tools/PDFCompressor'));
+const PDFPageRemover = lazy(() => import('../tools/PDFPageRemover'));
+const PDFPageReorder = lazy(() => import('../tools/PDFPageReorder'));
+const PDFRotate = lazy(() => import('../tools/PDFRotate'));
+const PDFPasswordProtect = lazy(() => import('../tools/PDFPasswordProtect'));
+const PDFUnlock = lazy(() => import('../tools/PDFUnlock'));
+const PDFWatermark = lazy(() => import('../tools/PDFWatermark'));
+const PDFPageNumbering = lazy(() => import('../tools/PDFPageNumbering'));
+const ExtractTextPDF = lazy(() => import('../tools/ExtractTextPDF'));
+const PDFMetadataViewer = lazy(() => import('../tools/PDFMetadataViewer'));
+const PDFToWord = lazy(() => import('../tools/PDFToWord'));
+const WordToPDF = lazy(() => import('../tools/WordToPDF'));
+const ExcelToPDF = lazy(() => import('../tools/ExcelToPDF'));
+const PowerPointToPDF = lazy(() => import('../tools/PowerPointToPDF'));
 
 // New Restructured Categories Calculators
-import WordCounter from '../tools/WordCounter';
-import MetaTagGenerator from '../tools/MetaTagGenerator';
-import DiscountCalculator from '../tools/DiscountCalculator';
-import BMICalculator from '../tools/BMICalculator';
-import MileageCalculator from '../tools/MileageCalculator';
-import PasswordGenerator from '../tools/PasswordGenerator';
-import GPACalculator from '../tools/GPACalculator';
+const WordCounter = lazy(() => import('../tools/WordCounter'));
+const MetaTagGenerator = lazy(() => import('../tools/MetaTagGenerator'));
+const DiscountCalculator = lazy(() => import('../tools/DiscountCalculator'));
+const BMICalculator = lazy(() => import('../tools/BMICalculator'));
+const MileageCalculator = lazy(() => import('../tools/MileageCalculator'));
+const PasswordGenerator = lazy(() => import('../tools/PasswordGenerator'));
+const GPACalculator = lazy(() => import('../tools/GPACalculator'));
 
 // New Web Tools
-import OpenGraphPreview from '../tools/OpenGraphPreview';
-import RobotsTxtGenerator from '../tools/RobotsTxtGenerator';
-import SitemapGenerator from '../tools/SitemapGenerator';
-import CanonicalUrlGenerator from '../tools/CanonicalUrlGenerator';
-import FaviconGenerator from '../tools/FaviconGenerator';
-import HtmlEntityEncoder from '../tools/HtmlEntityEncoder';
-import CssMinifier from '../tools/CssMinifier';
-import JsMinifier from '../tools/JsMinifier';
-import CssBeautifier from '../tools/CssBeautifier';
-import JsBeautifier from '../tools/JsBeautifier';
+const OpenGraphPreview = lazy(() => import('../tools/OpenGraphPreview'));
+const RobotsTxtGenerator = lazy(() => import('../tools/RobotsTxtGenerator'));
+const SitemapGenerator = lazy(() => import('../tools/SitemapGenerator'));
+const CanonicalUrlGenerator = lazy(() => import('../tools/CanonicalUrlGenerator'));
+const FaviconGenerator = lazy(() => import('../tools/FaviconGenerator'));
+const HtmlEntityEncoder = lazy(() => import('../tools/HtmlEntityEncoder'));
+const CssMinifier = lazy(() => import('../tools/CssMinifier'));
+const JsMinifier = lazy(() => import('../tools/JsMinifier'));
+const CssBeautifier = lazy(() => import('../tools/CssBeautifier'));
+const JsBeautifier = lazy(() => import('../tools/JsBeautifier'));
 
 // New Developer Tools
-import JSONValidator from '../tools/JSONValidator';
-import JSONCompare from '../tools/JSONCompare';
-import SQLMinifier from '../tools/SQLMinifier';
-import XMLFormatter from '../tools/XMLFormatter';
-import YAMLFormatter from '../tools/YAMLFormatter';
-import HTMLFormatter from '../tools/HTMLFormatter';
-import TimestampConverter from '../tools/TimestampConverter';
-import CronGenerator from '../tools/CronGenerator';
-import LoremIpsumGenerator from '../tools/LoremIpsumGenerator';
+const JSONValidator = lazy(() => import('../tools/JSONValidator'));
+const JSONCompare = lazy(() => import('../tools/JSONCompare'));
+const SQLMinifier = lazy(() => import('../tools/SQLMinifier'));
+const XMLFormatter = lazy(() => import('../tools/XMLFormatter'));
+const YAMLFormatter = lazy(() => import('../tools/YAMLFormatter'));
+const HTMLFormatter = lazy(() => import('../tools/HTMLFormatter'));
+const TimestampConverter = lazy(() => import('../tools/TimestampConverter'));
+const CronGenerator = lazy(() => import('../tools/CronGenerator'));
+const LoremIpsumGenerator = lazy(() => import('../tools/LoremIpsumGenerator'));
 
 // New Business Tools
-import ProfitMarginCalculator from '../tools/ProfitMarginCalculator';
-import BreakEvenCalculator from '../tools/BreakEvenCalculator';
-import ROICalculator from '../tools/ROICalculator';
-import InvoiceNumberGenerator from '../tools/InvoiceNumberGenerator';
-import BarcodeGenerator from '../tools/BarcodeGenerator';
-import InventoryCalculator from '../tools/InventoryCalculator';
-import GSTInvoiceGenerator from '../tools/GSTInvoiceGenerator';
+const ProfitMarginCalculator = lazy(() => import('../tools/ProfitMarginCalculator'));
+const BreakEvenCalculator = lazy(() => import('../tools/BreakEvenCalculator'));
+const ROICalculator = lazy(() => import('../tools/ROICalculator'));
+const InvoiceNumberGenerator = lazy(() => import('../tools/InvoiceNumberGenerator'));
+const BarcodeGenerator = lazy(() => import('../tools/BarcodeGenerator'));
+const InventoryCalculator = lazy(() => import('../tools/InventoryCalculator'));
+const GSTInvoiceGenerator = lazy(() => import('../tools/GSTInvoiceGenerator'));
 
 // New Social Media Tools
-import InstagramCaptionGenerator from '../tools/InstagramCaptionGenerator';
-import HashtagGenerator from '../tools/HashtagGenerator';
-import BioGenerator from '../tools/BioGenerator';
-import YouTubeThumbnailResizer from '../tools/YouTubeThumbnailResizer';
-import InstagramPostResizer from '../tools/InstagramPostResizer';
-import StoryResizer from '../tools/StoryResizer';
-import FacebookCoverCreator from '../tools/FacebookCoverCreator';
-import LinkedInBannerResizer from '../tools/LinkedInBannerResizer';
-import WhatsAppLinkGenerator from '../tools/WhatsAppLinkGenerator';
+const InstagramCaptionGenerator = lazy(() => import('../tools/InstagramCaptionGenerator'));
+const HashtagGenerator = lazy(() => import('../tools/HashtagGenerator'));
+const BioGenerator = lazy(() => import('../tools/BioGenerator'));
+const YouTubeThumbnailResizer = lazy(() => import('../tools/YouTubeThumbnailResizer'));
+const InstagramPostResizer = lazy(() => import('../tools/InstagramPostResizer'));
+const StoryResizer = lazy(() => import('../tools/StoryResizer'));
+const FacebookCoverCreator = lazy(() => import('../tools/FacebookCoverCreator'));
+const LinkedInBannerResizer = lazy(() => import('../tools/LinkedInBannerResizer'));
+const WhatsAppLinkGenerator = lazy(() => import('../tools/WhatsAppLinkGenerator'));
 
 // Electrical Engineering Tools
-import VoltageDropCalculator from '../tools/VoltageDropCalculator';
-import CableSizeCalculator from '../tools/CableSizeCalculator';
-import LoadCalculator from '../tools/LoadCalculator';
-import PowerConsumptionCalculator from '../tools/PowerConsumptionCalculator';
-import UPSCalculator from '../tools/UPSCalculator';
-import SolarPanelCalculator from '../tools/SolarPanelCalculator';
-import BatteryBackupCalculator from '../tools/BatteryBackupCalculator';
-import kWToHPConverter from '../tools/kWToHPConverter';
-import TransformerCalculator from '../tools/TransformerCalculator';
-import LEDLightingCalculator from '../tools/LEDLightingCalculator';
+const VoltageDropCalculator = lazy(() => import('../tools/VoltageDropCalculator'));
+const CableSizeCalculator = lazy(() => import('../tools/CableSizeCalculator'));
+const LoadCalculator = lazy(() => import('../tools/LoadCalculator'));
+const PowerConsumptionCalculator = lazy(() => import('../tools/PowerConsumptionCalculator'));
+const UPSCalculator = lazy(() => import('../tools/UPSCalculator'));
+const SolarPanelCalculator = lazy(() => import('../tools/SolarPanelCalculator'));
+const BatteryBackupCalculator = lazy(() => import('../tools/BatteryBackupCalculator'));
+const kWToHPConverter = lazy(() => import('../tools/kWToHPConverter'));
+const TransformerCalculator = lazy(() => import('../tools/TransformerCalculator'));
+const LEDLightingCalculator = lazy(() => import('../tools/LEDLightingCalculator'));
 
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
@@ -417,7 +418,14 @@ export default function ToolPage() {
       {/* Main Tool Container */}
       <section className="mt-6">
         {ActiveToolComponent ? (
-          <ActiveToolComponent />
+          <Suspense fallback={
+            <div className="p-12 saas-card flex flex-col items-center justify-center space-y-4">
+              <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Loading calculator...</p>
+            </div>
+          }>
+            <ActiveToolComponent />
+          </Suspense>
         ) : (
           <div className="p-8 text-center rounded-2xl bg-zinc-900 border border-zinc-800">
             Component not implemented yet: {tool.id}
