@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react';
+import { useEffect } from 'react';
 
 interface SEOProps {
   title: string;
@@ -46,7 +46,41 @@ export default function SEO({ title, description, keywords, canonicalUrl, schema
     const currentUrl = canonicalUrl || window.location.href;
     linkCanonical.setAttribute('href', currentUrl);
 
-    // 5. Inject JSON-LD Schema
+    // 5. Update Open Graph Meta Tags (Dynamic Social Sharing)
+    const setMetaProperty = (property: string, content: string) => {
+      let meta = document.querySelector(`meta[property="${property}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('property', property);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    };
+
+    setMetaProperty('og:title', formattedTitle);
+    setMetaProperty('og:description', description);
+    setMetaProperty('og:type', 'website');
+    setMetaProperty('og:url', currentUrl);
+    setMetaProperty('og:image', 'https://toolique.in/og-image.png');
+    setMetaProperty('og:site_name', 'Toolique');
+
+    // 6. Update Twitter Card Meta Tags
+    const setMetaName = (name: string, content: string) => {
+      let meta = document.querySelector(`meta[name="${name}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', name);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    };
+
+    setMetaName('twitter:card', 'summary_large_image');
+    setMetaName('twitter:title', formattedTitle);
+    setMetaName('twitter:description', description);
+    setMetaName('twitter:image', 'https://toolique.in/og-image.png');
+
+    // 7. Inject JSON-LD Schema
     const existingScript = document.getElementById('json-ld-schema');
     if (existingScript) {
       existingScript.remove();

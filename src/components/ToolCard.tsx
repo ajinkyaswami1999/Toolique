@@ -22,7 +22,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
             <LucideIcon name={tool.icon} className="w-5 h-5" />
           </div>
           {categoryInfo && (
-            <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400">
+            <span className={`text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md border bg-gradient-to-r ${categoryInfo.colorClass}`}>
               {categoryInfo.name}
             </span>
           )}

@@ -108,6 +108,47 @@ import WordToPDF from '../tools/WordToPDF';
 import ExcelToPDF from '../tools/ExcelToPDF';
 import PowerPointToPDF from '../tools/PowerPointToPDF';
 
+// New Restructured Categories Calculators
+import WordCounter from '../tools/WordCounter';
+import MetaTagGenerator from '../tools/MetaTagGenerator';
+import DiscountCalculator from '../tools/DiscountCalculator';
+import BMICalculator from '../tools/BMICalculator';
+import MileageCalculator from '../tools/MileageCalculator';
+import PasswordGenerator from '../tools/PasswordGenerator';
+import GPACalculator from '../tools/GPACalculator';
+
+// New Web Tools
+import OpenGraphPreview from '../tools/OpenGraphPreview';
+import RobotsTxtGenerator from '../tools/RobotsTxtGenerator';
+import SitemapGenerator from '../tools/SitemapGenerator';
+import CanonicalUrlGenerator from '../tools/CanonicalUrlGenerator';
+import FaviconGenerator from '../tools/FaviconGenerator';
+import HtmlEntityEncoder from '../tools/HtmlEntityEncoder';
+import CssMinifier from '../tools/CssMinifier';
+import JsMinifier from '../tools/JsMinifier';
+import CssBeautifier from '../tools/CssBeautifier';
+import JsBeautifier from '../tools/JsBeautifier';
+
+// New Developer Tools
+import JSONValidator from '../tools/JSONValidator';
+import JSONCompare from '../tools/JSONCompare';
+import SQLMinifier from '../tools/SQLMinifier';
+import XMLFormatter from '../tools/XMLFormatter';
+import YAMLFormatter from '../tools/YAMLFormatter';
+import HTMLFormatter from '../tools/HTMLFormatter';
+import TimestampConverter from '../tools/TimestampConverter';
+import CronGenerator from '../tools/CronGenerator';
+import LoremIpsumGenerator from '../tools/LoremIpsumGenerator';
+
+// New Business Tools
+import ProfitMarginCalculator from '../tools/ProfitMarginCalculator';
+import BreakEvenCalculator from '../tools/BreakEvenCalculator';
+import ROICalculator from '../tools/ROICalculator';
+import InvoiceNumberGenerator from '../tools/InvoiceNumberGenerator';
+import BarcodeGenerator from '../tools/BarcodeGenerator';
+import InventoryCalculator from '../tools/InventoryCalculator';
+import GSTInvoiceGenerator from '../tools/GSTInvoiceGenerator';
+
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
   SIPCalculator,
@@ -121,6 +162,47 @@ const toolComponents: Record<string, React.ComponentType> = {
   UPIQRGenerator,
   TDSCalculator,
   InHandSalaryCalculator,
+
+  // New Calculators Registration
+  WordCounter,
+  MetaTagGenerator,
+  DiscountCalculator,
+  BMICalculator,
+  MileageCalculator,
+  PasswordGenerator,
+  GPACalculator,
+
+  // New Business Tools Registration
+  ProfitMarginCalculator,
+  BreakEvenCalculator,
+  ROICalculator,
+  InvoiceNumberGenerator,
+  BarcodeGenerator,
+  InventoryCalculator,
+  GSTInvoiceGenerator,
+
+  // New Developer Tools Registration
+  JSONValidator,
+  JSONCompare,
+  SQLMinifier,
+  XMLFormatter,
+  YAMLFormatter,
+  HTMLFormatter,
+  TimestampConverter,
+  CronGenerator,
+  LoremIpsumGenerator,
+
+  // New Web Tools Registration
+  OpenGraphPreview,
+  RobotsTxtGenerator,
+  SitemapGenerator,
+  CanonicalUrlGenerator,
+  FaviconGenerator,
+  HtmlEntityEncoder,
+  CssMinifier,
+  JsMinifier,
+  CssBeautifier,
+  JsBeautifier,
 
   // Phase 2 - Finance
   FDCalculator,
@@ -236,7 +318,7 @@ export default function ToolPage() {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     'name': tool.name,
-    'url': `https://Toolique/tool/${tool.slug}`,
+    'url': `https://toolique.in/tool/${tool.slug}`,
     'description': tool.shortDescription,
     'applicationCategory': tool.category === 'finance' ? 'FinanceApplication' : tool.category === 'developer' ? 'DeveloperApplication' : 'UtilityApplication',
     'operatingSystem': 'All',
@@ -249,6 +331,7 @@ export default function ToolPage() {
         title={`${tool.name} | Free Online Browser Tool`}
         description={tool.metaDescription}
         keywords={tool.keywords}
+        canonicalUrl={`https://toolique.in/tool/${tool.slug}`}
         schemaMarkup={toolSchema}
       />
 

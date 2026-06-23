@@ -12,7 +12,7 @@ export interface Tool {
   id: string;
   slug: string;
   name: string;
-  category: 'finance' | 'developer' | 'image' | 'utility' | 'civil' | 'architecture' | 'interior' | 'pdf';
+  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health';
   shortDescription: string;
   metaDescription: string;
   keywords: string[];
@@ -159,7 +159,7 @@ export const toolsList: Tool[] = [
     id: 'AgeCalculator',
     slug: 'age-calculator',
     name: 'Age Calculator',
-    category: 'utility',
+    category: 'datetime',
     shortDescription: 'Calculate your exact age in years, months, weeks, days, and countdown to next birthday.',
     metaDescription: 'Free online Age Calculator. Calculate your exact age from date of birth in years, months, days, hours, and find out the remaining days until your next birthday.',
     keywords: ['Age Calculator', 'Exact Age Calculator', 'DOB Calculator', 'Calculate age online', 'Birthday countdown'],
@@ -195,7 +195,7 @@ export const toolsList: Tool[] = [
     id: 'ExperienceCalculator',
     slug: 'experience-calculator',
     name: 'Experience Calculator',
-    category: 'utility',
+    category: 'datetime',
     shortDescription: 'Compute your total professional work experience in years, months, and days.',
     metaDescription: 'Calculate exact total work experience between multiple joining and relieving dates. Perfect for creating resumes, job applications, and HR payroll calculations.',
     keywords: ['Work Experience Calculator', 'Job Experience Calculator', 'Resume builder tool', 'Calculate total experience', 'HR tool experience calculator'],
@@ -302,7 +302,7 @@ export const toolsList: Tool[] = [
     id: 'QRCodeGenerator',
     slug: 'qr-code-generator',
     name: 'QR Code Generator',
-    category: 'utility',
+    category: 'social',
     shortDescription: 'Generate high-quality QR codes for URLs, text, Wi-Fi details, and download them.',
     metaDescription: 'Create custom QR codes for websites, texts, and contact details. Customize colors, sizes, and download the QR code as PNG in-browser.',
     keywords: ['QR Code Generator', 'Make QR code free', 'Download QR code PNG', 'Custom QR color generator', 'No-expiry QR code generator'],
@@ -374,7 +374,7 @@ export const toolsList: Tool[] = [
     id: 'UPIQRGenerator',
     slug: 'upi-qr-generator',
     name: 'UPI QR Code Generator',
-    category: 'finance',
+    category: 'security',
     shortDescription: 'Create standard Indian UPI payment QR codes for fast mobile scans and transfers.',
     metaDescription: 'Generate dynamic UPI QR codes for GPAY, PhonePe, Paytm, BHIM and Amazon Pay. Insert UPI ID, Payee Name, Amount, and Remarks for easy scans.',
     keywords: ['UPI QR Generator', 'Paytm QR maker', 'PhonePe QR code online', 'Indian UPI payment QR', 'Dynamic UPI QR generator', 'Bhumi QR code maker'],
@@ -813,7 +813,7 @@ export const toolsList: Tool[] = [
     id: 'PercentageCalculator',
     slug: 'percentage-calculator',
     name: 'Percentage Calculator',
-    category: 'utility',
+    category: 'student',
     shortDescription: 'Perform quick percentage calculations, ratio analyses, and percentage change outputs.',
     metaDescription: 'Free online Percentage Calculator. Solve "X% of Y", "X is what % of Y", and percentage increase/decrease instantly in your local browser.',
     keywords: ['Percentage Calculator', 'Calculate percentage change', 'What is percentage increase', 'Find ratio percentage', 'Percentage growth online'],
@@ -844,7 +844,7 @@ export const toolsList: Tool[] = [
     id: 'DateCalculator',
     slug: 'date-calculator',
     name: 'Date Calculator',
-    category: 'utility',
+    category: 'datetime',
     shortDescription: 'Add or subtract years, months, weeks, and days from a given date.',
     metaDescription: 'Perform date calculations online. Add or subtract years, months, and days from any calendar date instantly, accounting for leap years.',
     keywords: ['Date Calculator', 'Add days to date', 'Subtract months from date', 'Date offset tool', 'Calendar math calculator'],
@@ -876,7 +876,7 @@ export const toolsList: Tool[] = [
     id: 'DaysBetweenDates',
     slug: 'days-between-dates',
     name: 'Days Between Dates',
-    category: 'utility',
+    category: 'datetime',
     shortDescription: 'Calculate the total days, weeks, months, and years between two dates.',
     metaDescription: 'Calculate the number of days between two dates. View duration breakdowns in years, months, weeks, and hours. Option to include the end date.',
     keywords: ['Days Between Dates', 'Date duration calculator', 'Count days between dates', 'Calculate time difference', 'Days counter online'],
@@ -908,7 +908,7 @@ export const toolsList: Tool[] = [
     id: 'CurrencyConverter',
     slug: 'currency-converter',
     name: 'Currency Converter',
-    category: 'utility',
+    category: 'business',
     shortDescription: 'Convert values between major world currencies like INR, USD, EUR, and GBP.',
     metaDescription: 'Free online Currency Converter. Convert USD, INR, EUR, GBP, AED, CAD, AUD, and SGD using static reference rates. Fast, secure, and offline-ready.',
     keywords: ['Currency Converter', 'USD to INR rate', 'Convert EUR to INR', 'GBP conversion online', 'Exchange rate calculator'],
@@ -940,7 +940,7 @@ export const toolsList: Tool[] = [
     id: 'UnitConverter',
     slug: 'unit-converter',
     name: 'Unit Converter',
-    category: 'utility',
+    category: 'unit',
     shortDescription: 'Convert standard units of Length, Weight, Temperature, and Area.',
     metaDescription: 'Free online Unit Converter. Convert between Metric and Imperial units for length, weight, area, and temperature instantly in your browser.',
     keywords: ['Unit Converter', 'Convert kg to lbs', 'Celsius to Fahrenheit formula', 'Area converter online', 'Metric conversion tool'],
@@ -1160,7 +1160,7 @@ export const toolsList: Tool[] = [
   "id": "ConstructionCostCalculator",
   "slug": "construction-cost-calculator",
   "name": "Construction Cost Calculator",
-  "category": "civil",
+  "category": "architecture",
   "shortDescription": "Estimate the total cost of construction based on built-up area, quality, and location.",
   "metaDescription": "Free online House Construction Cost Calculator in India. Estimate total budget, material split, and labor split based on quality grades.",
   "keywords": [
@@ -2992,4 +2992,928 @@ export const toolsList: Tool[] = [
       }
     ]
   },
+  {
+    id: 'WordCounter',
+    slug: 'word-counter',
+    name: 'Word Counter',
+    category: 'text',
+    shortDescription: 'Count words, characters, sentences, paragraphs, and estimate reading/speaking times in real-time.',
+    metaDescription: 'Free online Word Counter. Count characters, words, sentences, paragraphs, and check estimated reading and speaking times instantly in browser.',
+    keywords: ['Word Counter', 'Character Counter', 'Count words online', 'Reading time estimator', 'Text length checker'],
+    icon: 'Type',
+    howToUse: [
+      'Type or paste your text into the input text area.',
+      'Check the real-time statistics panel on the side for words, characters, and sentences.',
+      'Use the case conversion buttons to instantly change text case (UPPERCASE, Title Case, etc.).',
+      'Click the Copy button to copy the updated text to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Does this Word Counter count spaces as characters?',
+        answer: 'Yes, it displays both characters with spaces and characters without spaces in the statistics sidebar.'
+      },
+      {
+        question: 'How is the reading time calculated?',
+        answer: 'It assumes an average adult reading speed of 225 words per minute (WPM).'
+      }
+    ],
+    sections: [
+      {
+        title: 'Importance of Text Statistics in Writing',
+        content: 'Maintaining specific word counts is crucial for SEO meta descriptions, essays, social posts, and copy writing. Keeping track of reading time ensures your content fits standard attention spans.'
+      }
+    ]
+  },
+  {
+    id: 'MetaTagGenerator',
+    slug: 'meta-tag-generator',
+    name: 'Meta Tag Generator',
+    category: 'web',
+    shortDescription: 'Generate SEO meta tags, Open Graph previews, and Twitter Card details for your website.',
+    metaDescription: 'Free online Meta Tag Generator. Generate search engine friendly SEO titles, descriptions, keywords, Open Graph, and Twitter metadata HTML.',
+    keywords: ['Meta Tag Generator', 'SEO tags creator', 'Open Graph tags generator', 'Twitter Cards generator', 'SEO code generator'],
+    icon: 'Globe',
+    howToUse: [
+      'Fill in your website title, description, and keywords.',
+      'Configure robots index/follow directives and authors details.',
+      'Add social sharing settings (Open Graph image, Twitter card sizes).',
+      'Copy the generated HTML meta codes from the output panel and paste them inside your HTML head section.'
+    ],
+    faqs: [
+      {
+        question: 'Why are meta tags important for SEO?',
+        answer: 'Meta tags provide metadata about your webpage directly to search engine bots, helping them index your page content and show accurate previews in search results.'
+      },
+      {
+        question: 'What is Open Graph?',
+        answer: 'Open Graph is a protocol developed by Facebook that allows web pages to become rich objects in social networks when shared.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Best Practices for Meta Tags',
+        content: 'Keep site titles under 60 characters and descriptions under 160 characters. Provide high-quality OG images (1200x630 pixels) to ensure your page looks professional when shared on social networks.'
+      }
+    ]
+  },
+  {
+    id: 'DiscountCalculator',
+    slug: 'discount-calculator',
+    name: 'Discount Calculator',
+    category: 'business',
+    shortDescription: 'Calculate the final price, savings, and tax allocations for discounted products.',
+    metaDescription: 'Free online Discount Calculator. Estimate discount amounts, tax splits, and final billing prices instantly with slider inputs.',
+    keywords: ['Discount Calculator', 'Calculate sales discount', 'Percentage off calculator', 'Final price calculator', 'Discount savings calculator'],
+    icon: 'Briefcase',
+    howToUse: [
+      'Enter the original price of the product.',
+      'Use the slider to select the discount rate (e.g. 20% OFF).',
+      'Add an optional sales tax percentage (e.g. 18% GST).',
+      'View the final discounted price, total discount savings, and tax splits.'
+    ],
+    faqs: [
+      {
+        question: 'How is the discount calculated with tax?',
+        answer: 'The discount is applied first to the original price, and the sales tax is calculated on top of the discounted price.'
+      },
+      {
+        question: 'Can I use this for retail shopping calculations?',
+        answer: 'Yes, it is designed for rapid retail math, helping shoppers find out their exact savings and final bills.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Formula for Discount Calculations',
+        content: 'Discount Amount = Original Price * (Discount Rate / 100)\nDiscounted Price = Original Price - Discount Amount\nFinal Price = Discounted Price * (1 + Tax Rate / 100)'
+      }
+    ]
+  },
+  {
+    id: 'BMICalculator',
+    slug: 'bmi-calculator',
+    name: 'BMI Calculator',
+    category: 'health',
+    shortDescription: 'Calculate your Body Mass Index (BMI) and check your corresponding healthy weight range.',
+    metaDescription: 'Free online BMI Calculator. Calculate body mass index using metric or imperial measurements and view weight category zones.',
+    keywords: ['BMI Calculator', 'Body Mass Index calculator', 'Healthy weight range', 'Body fat index', 'Metric BMI calculator'],
+    icon: 'Heart',
+    howToUse: [
+      'Select between Metric (kg/cm) and Imperial (lbs/inches) unit modes.',
+      'Enter your weight and height dimensions.',
+      'Review your BMI score and the corresponding weight category (Underweight, Normal, Overweight, Obese).',
+      'Consult the active progress bar mapping your score to health zones.'
+    ],
+    faqs: [
+      {
+        question: 'What is a normal BMI score?',
+        answer: 'A normal BMI range is between 18.5 and 24.9, according to WHO guidelines.'
+      },
+      {
+        question: 'Is BMI accurate for athletes?',
+        answer: 'BMI does not differentiate between muscle mass and fat, so highly muscular individuals or athletes may receive an overweight classification despite being healthy.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding BMI Categories',
+        content: 'Underweight: BMI less than 18.5\nNormal weight: BMI 18.5 to 24.9\nOverweight: BMI 25 to 29.9\nObesity: BMI 30 or higher'
+      }
+    ]
+  },
+  {
+    id: 'MileageCalculator',
+    slug: 'mileage-calculator',
+    name: 'Mileage Calculator',
+    category: 'automobile',
+    shortDescription: 'Calculate vehicle fuel efficiency and estimate fuel expenses per kilometer or mile.',
+    metaDescription: 'Free online Mileage Calculator. Calculate fuel efficiency (km/l or mpg) and total trip cost based on distance and fuel filled.',
+    keywords: ['Mileage Calculator', 'Fuel efficiency calculator', 'Calculate average fuel usage', 'Vehicle run cost', 'Trip cost estimator'],
+    icon: 'Car',
+    howToUse: [
+      'Input the total distance traveled during the trip in kilometers or miles.',
+      'Enter the quantity of fuel filled or consumed in liters or gallons.',
+      'Input the unit price of fuel (₹ per Liter).',
+      'Check the computed mileage and cost details per kilometer.'
+    ],
+    faqs: [
+      {
+        question: 'How is mileage calculated?',
+        answer: 'Mileage (km/l) = Distance Traveled / Fuel Consumed. A higher mileage indicates a more fuel-efficient vehicle.'
+      },
+      {
+        question: 'How can I improve my vehicle mileage?',
+        answer: 'Maintain recommended tyre pressure, avoid aggressive acceleration, and perform timely servicing.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Importance of Fuel Tracking',
+        content: 'Consistently monitoring your vehicle mileage helps identify mechanical issues early. A sudden drop in fuel efficiency could indicate spark plug wear, low tyre pressure, or fuel injector issues.'
+      }
+    ]
+  },
+  {
+    id: 'PasswordGenerator',
+    slug: 'password-generator',
+    name: 'Password Generator',
+    category: 'developer',
+    shortDescription: 'Create secure, highly customizable random passwords with strength indicators.',
+    metaDescription: 'Free online Password Generator. Create strong random passwords. Choose length, configure character sets, and copy secure passwords locally.',
+    keywords: ['Password Generator', 'Create strong password', 'Random password maker', 'Secure key generator', 'Local password checker'],
+    icon: 'Lock',
+    howToUse: [
+      'Select your desired password length using the slider (8 to 64 characters).',
+      'Toggle character options (Uppercase, Lowercase, Numbers, Symbols).',
+      'Optionally exclude similar looking characters for readability.',
+      'Click the Copy button or click the Regenerate button to create new variations.'
+    ],
+    faqs: [
+      {
+        question: 'Are my generated passwords secure?',
+        answer: 'Yes. All password generation processes run locally in your web browser memory. No passwords are sent or saved to any external servers.'
+      },
+      {
+        question: 'What makes a password strong?',
+        answer: 'A password is strong if it is long (at least 12-16 characters) and contains a mix of uppercase letters, lowercase letters, numbers, and special symbols.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Tips for Secure Password Management',
+        content: 'Never reuse passwords across multiple sites. Always use a dedicated password manager to store and organize your generated login credentials securely.'
+      }
+    ]
+  },
+  {
+    id: 'GPACalculator',
+    slug: 'gpa-calculator',
+    name: 'GPA Calculator',
+    category: 'student',
+    shortDescription: 'Calculate your semester GPA (SGPA) and cumulative CGPA based on course grades and credits.',
+    metaDescription: 'Free online GPA and CGPA Calculator. Calculate semester grades, select O/A/B/C/D grade points, and compute weighted averages.',
+    keywords: ['GPA Calculator', 'CGPA Calculator online', 'Semester grades estimator', 'Credits weightage calculator', 'College GPA tracker'],
+    icon: 'GraduationCap',
+    howToUse: [
+      'Add your courses and input their names, letter grades, and credits.',
+      'View your computed SGPA instantly on the results panel.',
+      'To find cumulative CGPA, enter your previous cumulative GPA and total earned credits.',
+      'Check the total credits and weighted grade average summaries.'
+    ],
+    faqs: [
+      {
+        question: 'What grading system is used here?',
+        answer: 'It uses the standard Indian university scale (O = 10, A+ = 9, A = 8, B+ = 7, B = 6, C = 5, D = 4, F = 0).'
+      },
+      {
+        question: 'How is GPA calculated?',
+        answer: 'GPA is the sum of (Grade Points * Credits) divided by the total number of Credits in the semester.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Weighted Average Calculations',
+        content: 'Calculators use weighted credits to reward higher-stakes courses (like main subjects vs labs). A high grade in a 4-credit course raises your GPA much more than a high grade in a 1-credit lab.'
+      }
+    ]
+  },
+  {
+    id: 'OpenGraphPreview',
+    slug: 'open-graph-preview',
+    name: 'Open Graph Preview',
+    category: 'web',
+    shortDescription: 'Configure and preview website social sharing cards for Facebook, Twitter, and LinkedIn.',
+    metaDescription: 'Free online Open Graph Preview tool. Generate and preview how your website link card will look on social media platforms.',
+    keywords: ['Open Graph Preview', 'OG card generator', 'Facebook meta preview', 'Twitter card preview', 'Social sharing meta'],
+    icon: 'Eye',
+    howToUse: [
+      'Enter the webpage title, description, and absolute image URL.',
+      'Select between Facebook, Twitter, or LinkedIn tabs to inspect the visual mockup.',
+      'Copy the completed Open Graph code from the output container.'
+    ],
+    faqs: [
+      {
+        question: 'What is the purpose of Open Graph previewing?',
+        answer: 'It lets you visually verify that your page title, description, and thumbnail align perfectly before publishing updates to production.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Social Card Specifications',
+        content: 'Facebook and LinkedIn prefer 1200x630 pixel sizes for optimal card resolution. Twitter summary large image cards utilize a similar 1.91:1 aspect ratio.'
+      }
+    ]
+  },
+  {
+    id: 'RobotsTxtGenerator',
+    slug: 'robots-txt-generator',
+    name: 'Robots.txt Generator',
+    category: 'web',
+    shortDescription: 'Generate standard robots.txt instructions to manage search crawler pathways.',
+    metaDescription: 'Free online Robots.txt Generator. Select default crawlers, specify disallow or allow rules, and generate robots.txt directives instantly.',
+    keywords: ['Robots.txt Generator', 'robots.txt creator', 'crawlers instructions', 'search bot rules', 'SEO robots.txt'],
+    icon: 'FileText',
+    howToUse: [
+      'Select the default crawler bot directive.',
+      'Enter allowed or disallowed relative pathways (e.g. /admin/).',
+      'Input your sitemap XML link and copy or download the compiled robots.txt file.'
+    ],
+    faqs: [
+      {
+        question: 'Where should the robots.txt file be uploaded?',
+        answer: 'It must be uploaded to the root directory of your website domain (e.g. yourwebsite.com/robots.txt).'
+      }
+    ],
+    sections: [
+      {
+        title: 'Robots.txt Directives standard',
+        content: 'Robots.txt is a voluntary standard. Respectable search crawlers (like Googlebot) follow it, but malicious bots can ignore it. Never use it to secure highly sensitive pages.'
+      }
+    ]
+  },
+  {
+    id: 'SitemapGenerator',
+    slug: 'sitemap-generator',
+    name: 'Sitemap Generator',
+    category: 'web',
+    shortDescription: 'Build standard XML sitemaps to optimize search engine crawl indexing.',
+    metaDescription: 'Free online XML Sitemap Generator. Paste webpage URLs and build structured sitemaps with update frequencies and priority weights.',
+    keywords: ['Sitemap Generator', 'XML sitemap builder', 'search indexing sitemap', 'website links indexer', 'SEO sitemaps'],
+    icon: 'FileCode',
+    howToUse: [
+      'Paste your webpage links (one link per line) into the editor.',
+      'Specify update frequency and priority weights.',
+      'Toggle whether to include last modification tags and copy/download the generated XML.'
+    ],
+    faqs: [
+      {
+        question: 'Why are XML sitemaps required?',
+        answer: 'They tell search crawlers about all the pages that exist on your domain, making it much easier for search engines to discover and index your pages.'
+      }
+    ],
+    sections: [
+      {
+        title: 'XML Sitemap Protocol guidelines',
+        content: 'An XML sitemap should contain absolute URLs and is limited to 50,000 URLs or 50MB uncompressed per sitemap file under protocol standards.'
+      }
+    ]
+  },
+  {
+    id: 'CanonicalUrlGenerator',
+    slug: 'canonical-url-generator',
+    name: 'Canonical URL Generator',
+    category: 'web',
+    shortDescription: 'Construct canonical tags and link headers to prevent duplicate content SEO penalties.',
+    metaDescription: 'Free online Canonical URL Generator. Build search engine compliant canonical tags to consolidate search ranking signals.',
+    keywords: ['Canonical URL Generator', 'link rel canonical', 'canonical header builder', 'duplicate content SEO', 'web canonical tool'],
+    icon: 'Link',
+    howToUse: [
+      'Enter your website domain and relative page slug.',
+      'Select query param stripping preferences.',
+      'Copy the link element tag or the equivalent HTTP link header.'
+    ],
+    faqs: [
+      {
+        question: 'What does a canonical tag do?',
+        answer: 'It tells search engines which URL is the master copy of a page, preventing duplicate content issues when a page is accessible via multiple URLs.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Preventing Duplicate Indexing',
+        content: 'Duplicate content can happen due to URL queries, tracking codes, or alternate HTTP/HTTPS routes. Canonicalization merges all ranking signals into your preferred primary link.'
+      }
+    ]
+  },
+  {
+    id: 'FaviconGenerator',
+    slug: 'favicon-generator',
+    name: 'Favicon Generator',
+    category: 'web',
+    shortDescription: 'Convert images to standard favicon dimensions and generate HTML markup links.',
+    metaDescription: 'Free online Favicon Generator. Resize source graphics to 16px, 32px, and 48px sizes, and copy browser link elements.',
+    keywords: ['Favicon Generator', 'create favicon online', 'icon resizer', 'website shortcut icon', 'apple touch icon'],
+    icon: 'Image',
+    howToUse: [
+      'Upload a square source graphic.',
+      'Verify the live sizes preview panel.',
+      'Download individual PNG sizes and copy the link tags into your HTML header.'
+    ],
+    faqs: [
+      {
+        question: 'What is a Apple Touch Icon?',
+        answer: 'It is a high-resolution favicon used by iOS devices when users bookmark or pin your webpage to their home screen.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Favicon Standard Specifications',
+        content: 'Standard browsers require 16x16 or 32x32 pixel shortcut icons. Apple iOS devices look for a 180x180 pixel image named apple-touch-icon.png in the root directory.'
+      }
+    ]
+  },
+  {
+    id: 'HtmlEntityEncoder',
+    slug: 'html-entity-encoder',
+    name: 'HTML Entity Encoder',
+    category: 'web',
+    shortDescription: 'Convert special characters to HTML character entities or decode them back to plain text.',
+    metaDescription: 'Free online HTML Entity Encoder and Decoder. Convert unsafe characters into secure code entity sequences instantly.',
+    keywords: ['HTML Entity Encoder', 'HTML character encoder', 'html entities decode', 'escape html online', 'unescape entities'],
+    icon: 'Globe',
+    howToUse: [
+      'Paste your string text or HTML snippet inside the input panel.',
+      'Toggle the mode setting (Encode or Decode).',
+      'Copy the processed string from the adjacent panel.'
+    ],
+    faqs: [
+      {
+        question: 'Why do we need to encode HTML entities?',
+        answer: 'Characters like < and > are reserved in HTML syntax. Encoding them to entities allows browsers to render them as text without executing them as code.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Reserved Characters in HTML',
+        content: 'Common entities include &lt; (<), &gt; (>), &amp; (&), &quot; ("), and &apos; (\').'
+      }
+    ]
+  },
+  {
+    id: 'CssMinifier',
+    slug: 'css-minifier',
+    name: 'CSS Minifier',
+    category: 'web',
+    shortDescription: 'Compress stylesheets by stripping comments, spaces, and redundant characters.',
+    metaDescription: 'Free online CSS Minifier. Remove whitespaces and comments from CSS stylesheets to optimize file load speeds.',
+    keywords: ['CSS Minifier', 'minify stylesheet', 'compress CSS online', 'remove css comments', 'CSS optimization'],
+    icon: 'FileCode',
+    howToUse: [
+      'Paste raw CSS inside the editor.',
+      'Inspect the original vs minified size savings statistics.',
+      'Copy the minified CSS from the result block.'
+    ],
+    faqs: [
+      {
+        question: 'Does CSS minification affect site functionality?',
+        answer: 'No, it only removes decorative styling rules spaces and comments, keeping stylesheet calculations fully readable by browsers.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Stylesheets Optimization benefits',
+        content: 'Minification reduces file transfer size, improving First Contentful Paint (FCP) times and overall page loading speeds.'
+      }
+    ]
+  },
+  {
+    id: 'JsMinifier',
+    slug: 'js-minifier',
+    name: 'JS Minifier',
+    category: 'web',
+    shortDescription: 'Compress JavaScript script blocks by removing comment notations and spaces.',
+    metaDescription: 'Free online JS Minifier. Compress JavaScript code blocks, strip debug lines, and optimize scripts performance.',
+    keywords: ['JS Minifier', 'minify javascript', 'compress JS online', 'optimize scripts', 'JS comments remover'],
+    icon: 'FileCode',
+    howToUse: [
+      'Paste raw JavaScript code inside the textarea.',
+      'Review the compression savings indicator.',
+      'Copy the optimized JavaScript string.'
+    ],
+    faqs: [
+      {
+        question: 'Will minification break my variable scopes?',
+        answer: 'This minifier removes comments and whitespaces safely. For advanced renaming or obfuscation, full bundlers are recommended.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Script payload optimization',
+        content: 'Smaller JS files accelerate code execution speeds and reduce processing delays on mobile devices.'
+      }
+    ]
+  },
+  {
+    id: 'CssBeautifier',
+    slug: 'css-formatter',
+    name: 'CSS Formatter',
+    category: 'developer',
+    shortDescription: 'Format minified or messy CSS with clear indentations and line breaks.',
+    metaDescription: 'Free online CSS Formatter. Format stylesheets, add proper spaces and line breaks for clean readability.',
+    keywords: ['CSS Formatter', 'CSS beautifier', 'format stylesheet', 'beautify css online', 'clean CSS spacing'],
+    icon: 'FileCode',
+    howToUse: [
+      'Paste messy or minified CSS code.',
+      'Configure preferred indent spaces (2 or 4).',
+      'Copy the beautified CSS structure.'
+    ],
+    faqs: [
+      {
+        question: 'Does formatting CSS change loading speeds?',
+        answer: 'Formatting adds spaces, which increases file size slightly. It is recommended during development, while minification is used for production.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Readability in collaborative development',
+        content: 'Standardizing stylesheet indentations makes it much easier for team members to read, edit, and audit CSS files.'
+      }
+    ]
+  },
+  {
+    id: 'JsBeautifier',
+    slug: 'js-formatter',
+    name: 'JS Formatter',
+    category: 'developer',
+    shortDescription: 'Format minified or compressed JavaScript code into readable layouts.',
+    metaDescription: 'Free online JS Formatter. Beautify JavaScript script blocks with clean indentations and structured line breaks.',
+    keywords: ['JS Formatter', 'JS beautifier', 'format javascript', 'clean JS spacing', 'javascript format tool'],
+    icon: 'FileCode',
+    howToUse: [
+      'Paste messy or minified JS scripts.',
+      'Select indent spaces size (2 or 4).',
+      'Copy the beautifully formatted JS output.'
+    ],
+    faqs: [
+      {
+        question: 'Can this formatter decode obfuscated code?',
+        answer: 'It formats layout spacing and indentation, making minified code readable, but it cannot restore original variable names if they were obfuscated.'
+      }
+    ],
+    sections: [
+      {
+        title: 'JavaScript formatting standards',
+        content: 'Clean formatting is essential for debugging and code audits. It organizes block statements, variable declarations, and returns cleanly.'
+      }
+    ]
+  },
+  {
+    id: 'JSONValidator',
+    slug: 'json-validator',
+    name: 'JSON Validator',
+    category: 'developer',
+    shortDescription: 'Validate, parse, check syntax, and format raw JSON schemas for errors.',
+    metaDescription: 'Validate JSON structure online. Locate syntax errors, identify character position issues, and format JSON payloads.',
+    keywords: ['JSON Validator', 'Validate JSON online', 'JSON parser error checker', 'check JSON syntax', 'clean JSON format'],
+    icon: 'Code',
+    howToUse: [
+      'Type or paste your raw JSON string into the input text area.',
+      'Click "Validate JSON" to verify its structure.',
+      'Review structural validation output or error line highlights.',
+      'Use the format or minify buttons to adjust spacing.'
+    ],
+    faqs: [
+      {
+        question: 'How does the JSON validator find errors?',
+        answer: 'It runs the JSON parser and catches syntax exceptions, pinpointing the character index and line number where brackets, commas, or quotes mismatch.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Valid JSON Specifications',
+        content: 'JSON keys and string values must be enclosed in double quotes. Single quotes, trailing commas, and unescaped line breaks are common syntax violations.'
+      }
+    ]
+  },
+  {
+    id: 'JSONCompare',
+    slug: 'json-compare',
+    name: 'JSON Compare',
+    category: 'developer',
+    shortDescription: 'Compare and diff two JSON strings side-by-side with sorted-key structural matching.',
+    metaDescription: 'Compare two JSON objects side-by-side. Highlights modified, added, and deleted lines with recursive sorted keys.',
+    keywords: ['JSON Compare', 'JSON diff tool', 'Compare JSON online', 'Side-by-side JSON match', 'structural JSON diff'],
+    icon: 'Columns',
+    howToUse: [
+      'Paste the original JSON on the left and the comparison JSON on the right.',
+      'Click "Compare JSON".',
+      'Review side-by-side highlights indicating differences.'
+    ],
+    faqs: [
+      {
+        question: 'Does key order affect the JSON comparison?',
+        answer: 'No. The tool recursively sorts all keys alphabetically before diffing, ensuring true structural matching regardless of initial order.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Structural Diffing Benefits',
+        content: 'API payloads often contain identical keys in different orders. By sorting key attributes, this comparison validator highlights actual value differences instead of order changes.'
+      }
+    ]
+  },
+  {
+    id: 'SQLMinifier',
+    slug: 'sql-minifier',
+    name: 'SQL Minifier',
+    category: 'developer',
+    shortDescription: 'Minify and compress SQL queries by removing comments and unnecessary spaces.',
+    metaDescription: 'Free online SQL Minifier. Remove queries comments, indentations, and extra newlines to compress SQL commands.',
+    keywords: ['SQL Minifier', 'Compress SQL query', 'minify SQL online', 'strip SQL comments', 'DB query optimizer'],
+    icon: 'Database',
+    howToUse: [
+      'Paste your raw SQL query into the text area.',
+      'Review minification statistics: original vs compressed sizes.',
+      'Copy the minified single-line SQL query.'
+    ],
+    faqs: [
+      {
+        question: 'Does SQL minification impact query execution?',
+        answer: 'No, it only removes aesthetic spacing and comments. Database engines parse minified statements exactly the same as formatted ones.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Minification Use Cases',
+        content: 'Minification is useful for embedding queries in application source code, config files, or reducing logs bandwidth when sending query lists.'
+      }
+    ]
+  },
+  {
+    id: 'XMLFormatter',
+    slug: 'xml-formatter',
+    name: 'XML Formatter',
+    category: 'developer',
+    shortDescription: 'Validate, format, and minify XML nodes with customizable indent sizes.',
+    metaDescription: 'Free online XML Formatter. Pretty-print messy XML documents, indent child tags, and check XML syntax.',
+    keywords: ['XML Formatter', 'format XML online', 'XML beautifier', 'XML validator', 'minify XML'],
+    icon: 'FileCode',
+    howToUse: [
+      'Paste your raw XML code block.',
+      'Select your preferred indentation size (2, 4, or 8 spaces).',
+      'Click Format XML to indent or Minify XML to compress tags.'
+    ],
+    faqs: [
+      {
+        question: 'Can I format malformed XML?',
+        answer: 'No, the formatter validates tags. If there are mismatched tags or unclosed braces, it will display a parser error details block.'
+      }
+    ],
+    sections: [
+      {
+        title: 'XML Node Hierarchies',
+        content: 'XML relies on structured parent-child nests. Formatting enforces visible tag margins to easily trace hierarchy structures in config profiles.'
+      }
+    ]
+  },
+  {
+    id: 'YAMLFormatter',
+    slug: 'yaml-formatter',
+    name: 'YAML Formatter',
+    category: 'developer',
+    shortDescription: 'Beautify, validate, and convert YAML configurations into JSON payloads.',
+    metaDescription: 'Format and validate YAML files. Cleanup nested indentation spaces and convert YAML configurations to JSON schemas.',
+    keywords: ['YAML Formatter', 'YAML beautifier', 'validate YAML', 'convert YAML to JSON', 'YAML editor'],
+    icon: 'FileText',
+    howToUse: [
+      'Paste your YAML document.',
+      'Select indent spaces and click Format YAML.',
+      'Use Convert to JSON to translate the config into a JSON string.'
+    ],
+    faqs: [
+      {
+        question: 'Why is YAML formatting strict?',
+        answer: 'Unlike JSON or XML, YAML uses whitespace indentation to define structures instead of brackets. Missing or extra spaces will break parsing.'
+      }
+    ],
+    sections: [
+      {
+        title: 'YAML vs JSON Configurations',
+        content: 'YAML is highly readable and clean, making it a standard choice for Docker, Kubernetes, and CI/CD pipelines. Converting to JSON helps validate payloads for API payloads.'
+      }
+    ]
+  },
+  {
+    id: 'HTMLFormatter',
+    slug: 'html-formatter',
+    name: 'HTML Formatter',
+    category: 'developer',
+    shortDescription: 'Format, pretty-print, and minify HTML tags and code blocks.',
+    metaDescription: 'Free online HTML Formatter. Pretty-print messy HTML structures, indent tags, and compress web page sources.',
+    keywords: ['HTML Formatter', 'format HTML online', 'HTML beautifier', 'minify HTML', 'clean tags indent'],
+    icon: 'Code',
+    howToUse: [
+      'Paste raw HTML source.',
+      'Click Format HTML to clean nesting or Minify HTML to strip tags spacing.'
+    ],
+    faqs: [
+      {
+        question: 'Does this formatter strip comments?',
+        answer: 'Minification strips standard HTML comments (`<!-- -->`), while formatting preserves them cleanly.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Aesthetic Markup Structure',
+        content: 'Indentations aid developers in debugging complex div layouts and checking elements closure bounds.'
+      }
+    ]
+  },
+  {
+    id: 'TimestampConverter',
+    slug: 'timestamp-converter',
+    name: 'Timestamp Converter',
+    category: 'developer',
+    shortDescription: 'Convert Unix Epoch timestamps to local time, UTC, and calendar dates.',
+    metaDescription: 'Free online Unix Timestamp Converter. Convert seconds/milliseconds epoch timestamps to ISO dates and relative times.',
+    keywords: ['Timestamp Converter', 'Unix epoch converter', 'epoch seconds to date', 'millis to ISO', 'convert timestamp'],
+    icon: 'Clock',
+    howToUse: [
+      'Type epoch integers to get UTC, local, and relative date/times.',
+      'Use the date-time calendar picker to output equivalent seconds/milliseconds epoch values.'
+    ],
+    faqs: [
+      {
+        question: 'What is Unix Epoch time?',
+        answer: 'It is the number of seconds that have elapsed since January 1, 1970 (midnight UTC/GMT), not counting leap seconds.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Seconds vs Milliseconds Timestamps',
+        content: 'Standard Unix timestamps use seconds (10 digits). JavaScript and Java applications default to millisecond integers (13 digits).'
+      }
+    ]
+  },
+  {
+    id: 'CronGenerator',
+    slug: 'cron-generator',
+    name: 'Cron Generator',
+    category: 'developer',
+    shortDescription: 'Build standard cron scheduling expressions and predict execution intervals.',
+    metaDescription: 'Free online Cron Expression Generator. Set minutes, hours, days, and months, translate cron into plain text, and list next run times.',
+    keywords: ['Cron Generator', 'Cron expression builder', 'schedule cron online', 'next execution times', 'cron translator'],
+    icon: 'Calendar',
+    howToUse: [
+      'Select one of the presets or input values in fields.',
+      'Review human translation meaning and copy the expression.'
+    ],
+    faqs: [
+      {
+        question: 'What do the 5 cron parts represent?',
+        answer: 'Standard crontab lines contain: Minute (0-59), Hour (0-23), Day of Month (1-31), Month (1-12), and Day of Week (0-6, where 0 is Sunday).'
+      }
+    ],
+    sections: [
+      {
+        title: 'Predictive Execution Logs',
+        content: 'Verifying next execution dates helps avoid misconfigurations that could fire cron jobs at unintended times.'
+      }
+    ]
+  },
+  {
+    id: 'LoremIpsumGenerator',
+    slug: 'lorem-ipsum-generator',
+    name: 'Lorem Ipsum Generator',
+    category: 'developer',
+    shortDescription: 'Generate standard dummy Lorem Ipsum placeholder text paragraphs or lists.',
+    metaDescription: 'Free online Lorem Ipsum Generator. Create custom paragraphs, sentences, words, or lists with optional HTML wrappers.',
+    keywords: ['Lorem Ipsum Generator', 'placeholder text generator', 'dummy copy generator', 'lorem ipsum paragraphs', 'HTML lorem list'],
+    icon: 'AlignLeft',
+    howToUse: [
+      'Pick generator type (paragraphs/sentences/words/lists) and drag the quantity slider.',
+      'Toggle tags wrapper or starting word constraints.',
+      'Copy the output text.'
+    ],
+    faqs: [
+      {
+        question: 'Where does Lorem Ipsum come from?',
+        answer: 'It is derived from Cicero\'s classical Latin literature "de Finibus Bonorum et Malorum" from 45 BC.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Designing with Placeholders',
+        content: 'Dummy copy helps designers inspect page typographies and layout balances without being distracted by readable context.'
+      }
+    ]
+  },
+  {
+    id: 'ProfitMarginCalculator',
+    slug: 'profit-margin-calculator',
+    name: 'Profit Margin Calculator',
+    category: 'business',
+    shortDescription: 'Calculate Gross Profit, Gross Margin, and Markup based on product costs and selling prices.',
+    metaDescription: 'Free online Profit Margin Calculator. Estimate gross profit, margin percentages, and markups easily.',
+    keywords: ['Profit Margin Calculator', 'Gross profit margin', 'calculate markup percentage', 'margin calculator online', 'sales profit estimator'],
+    icon: 'TrendingUp',
+    howToUse: [
+      'Enter the unit buying cost (buying price).',
+      'Enter the selling price or your target margin percentage.',
+      'Review computed gross profit, margin ratio, and markup percentages.'
+    ],
+    faqs: [
+      {
+        question: 'What is the difference between margin and markup?',
+        answer: 'Margin is calculated as profit divided by selling price. Markup is calculated as profit divided by cost price.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Importance of Margin Planning',
+        content: 'Planning margins ensures operational overheads like shipping, storage, and transaction fees are fully covered before final net returns.'
+      }
+    ]
+  },
+  {
+    id: 'BreakEvenCalculator',
+    slug: 'break-even-calculator',
+    name: 'Break-even Calculator',
+    category: 'business',
+    shortDescription: 'Evaluate operational costs and unit sales price to find your break-even volume.',
+    metaDescription: 'Free online Break-even Calculator. Determine critical sales volumes and revenue totals required to cover overheads.',
+    keywords: ['Break-even Calculator', 'break-even analysis', 'calculate BEP sales', 'contribution margin', 'pricing calculator'],
+    icon: 'BarChart3',
+    howToUse: [
+      'Input your total fixed operating overheads (rent, salaries).',
+      'Input the variable cost of producing a single unit.',
+      'Input the selling price per unit to see the break-even parameters.'
+    ],
+    faqs: [
+      {
+        question: 'Why is contribution margin ratio important?',
+        answer: 'It shows the percentage of sales revenue that goes toward covering fixed costs, helping you understand how scaling volume affects profit margins.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Fixed vs Variable Costs',
+        content: 'Fixed costs remain constant regardless of sales volumes (e.g. office rent). Variable costs scale proportionally with the number of units produced (e.g. packaging).'
+      }
+    ]
+  },
+  {
+    id: 'ROICalculator',
+    slug: 'roi-calculator',
+    name: 'ROI Calculator',
+    category: 'business',
+    shortDescription: 'Evaluate Return on Investment ratios and annualized compounding gains.',
+    metaDescription: 'Free online ROI Calculator. Compute absolute profit gains, percentage returns, and annualized growth rates.',
+    keywords: ['ROI Calculator', 'return on investment', 'calculate annualized ROI', 'compounding capital gains', 'investment yield'],
+    icon: 'TrendingUp',
+    howToUse: [
+      'Enter the initial investment amount.',
+      'Enter the final returned amount (ending value).',
+      'Specify the holding duration in months or years to calculate annualized yields.'
+    ],
+    faqs: [
+      {
+        question: 'How is annualized ROI different from absolute ROI?',
+        answer: 'Absolute ROI shows total gains from start to end, whereas annualized ROI adjusts returns to show geometric average compounding rates per year.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Analyzing Investment Efficiency',
+        content: 'ROI allows businesses to compare the relative efficiency of different capital allocations (e.g., marketing campaigns vs new hardware purchases).'
+      }
+    ]
+  },
+  {
+    id: 'InvoiceNumberGenerator',
+    slug: 'invoice-number-generator',
+    name: 'Invoice Number Generator',
+    category: 'business',
+    shortDescription: 'Generate customized sequential serial numbers for invoices and billing quotes.',
+    metaDescription: 'Free online Invoice Number Generator. Customize prefixes, date stamps, and padded counters to build serial runs in bulk.',
+    keywords: ['Invoice Number Generator', 'invoice serial builder', 'generate invoice sequence', 'billing counter tool', 'document number maker'],
+    icon: 'Hash',
+    howToUse: [
+      'Input prefix codes (e.g. INV) and choose separators.',
+      'Select date stamp inclusion formats and pad digit width.',
+      'Set starting numbers and use the slider to generate lists.'
+    ],
+    faqs: [
+      {
+        question: 'Can I copy the generated sequence list?',
+        answer: 'Yes, click "Copy List" to copy all generated invoice numbers separated by newlines.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Standardizing Billing Sequences',
+        content: 'Unique, sequential numbering is vital for audit tracking, tax filings, and avoiding double billing in account registers.'
+      }
+    ]
+  },
+  {
+    id: 'BarcodeGenerator',
+    slug: 'barcode-generator',
+    name: 'Barcode Generator',
+    category: 'business',
+    shortDescription: 'Generate standard Code39 barcode labels online and export as PNG files.',
+    metaDescription: 'Free online Barcode Generator. Convert alphanumeric strings into high-resolution Code39 barcodes and download them instantly.',
+    keywords: ['Barcode Generator', 'create Code39 barcode', 'barcode maker online', 'download barcode PNG', 'sku bar code generator'],
+    icon: 'Barcode',
+    howToUse: [
+      'Input alphanumeric characters representing SKU or product IDs.',
+      'Verify barcode scan bars render correctly.',
+      'Click Download PNG Barcode to save.'
+    ],
+    faqs: [
+      {
+        question: 'What characters does Code39 support?',
+        answer: 'It supports uppercase letters (A-Z), numbers (0-9), spaces, and symbols: - . $ / + %'
+      }
+    ],
+    sections: [
+      {
+        title: 'Barcode Integration in Inventory',
+        content: 'Barcode labels streamline warehouses logging, product checkout speeds, and reduce manual entry errors.'
+      }
+    ]
+  },
+  {
+    id: 'InventoryCalculator',
+    slug: 'inventory-calculator',
+    name: 'Inventory Calculator',
+    category: 'business',
+    shortDescription: 'Calculate Cost of Goods Sold (COGS), average inventory valuation, and turnover ratios.',
+    metaDescription: 'Free online Inventory Calculator. Evaluate COGS, average inventory values, turnover ratios, and sell-through days.',
+    keywords: ['Inventory Calculator', 'calculate COGS', 'inventory turnover ratio', 'average days to sell', 'inventory stock health'],
+    icon: 'BarChart2',
+    howToUse: [
+      'Enter beginning inventory value at the start of your calculation window.',
+      'Add the cost of new purchases made.',
+      'Subtract ending inventory values to see turnover efficiency.'
+    ],
+    faqs: [
+      {
+        question: 'What does a high inventory turnover ratio indicate?',
+        answer: 'A higher turnover ratio indicates strong sales velocity and efficient stock management, reducing carrying overheads.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Managing Inventory Carrying Costs',
+        content: 'Holding stock too long ties up working capital and increases warehouse lease costs. Checking average days to sell aids replenishment schedules.'
+      }
+    ]
+  },
+  {
+    id: 'GSTInvoiceGenerator',
+    slug: 'gst-invoice-generator',
+    name: 'GST Invoice Generator',
+    category: 'business',
+    shortDescription: 'Create and download PDF tax invoices with automated GST calculations and state supply choices.',
+    metaDescription: 'Free online GST Invoice Generator. Auto-calculate CGST, SGST, and IGST components, and download A4 invoice PDFs.',
+    keywords: ['GST Invoice Generator', 'create tax invoice PDF', 'calculate GST invoice', 'same state GST calculator', 'IGST invoice builder'],
+    icon: 'FileSpreadsheet',
+    howToUse: [
+      'Fill in seller details and client details (GSTINs and addresses).',
+      'Input invoice metadata, numbers, and specify state supply tax type.',
+      'Add line items with quantity, unit rates, and GST percentage tiers, and click Download PDF.'
+    ],
+    faqs: [
+      {
+        question: 'Are invoices saved on any server?',
+        answer: 'No. All details are processed client-side in browser memory. No data is stored, protecting client privacy.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Indian GST Invoice Rules',
+        content: 'Same-state transactions must separate tax into CGST (Central) and SGST (State) equally. Inter-state transactions aggregate tax into IGST (Integrated).'
+      }
+    ]
+  }
 ];

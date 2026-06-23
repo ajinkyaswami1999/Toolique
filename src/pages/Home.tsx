@@ -1,5 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon, Sliders, Hammer, Compass, Palette, HelpCircle, ArrowRight, ShieldAlert, Zap, Globe, FileText } from 'lucide-react';
+import {
+  Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon,
+  Hammer, Compass, Palette, HelpCircle, ArrowRight, ShieldAlert, Zap,
+  Globe, FileText, Share2, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart, Type
+} from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { categories } from '../data/categories';
 import ToolCard from '../components/ToolCard';
@@ -9,13 +13,22 @@ import { useSearchParams } from 'react-router-dom';
 
 const categoryIcons: Record<string, React.ComponentType<any>> = {
   finance: IndianRupee,
-  developer: Code,
-  image: ImageIcon,
-  utility: Sliders,
   civil: Hammer,
   architecture: Compass,
   interior: Palette,
   pdf: FileText,
+  image: ImageIcon,
+  developer: Code,
+  web: Globe,
+  text: Type,
+  social: Share2,
+  datetime: Calendar,
+  unit: Scale,
+  security: Lock,
+  student: GraduationCap,
+  automobile: Car,
+  business: Briefcase,
+  health: Heart,
 };
 
 // Lists of featured, popular and recently added tool IDs
@@ -156,12 +169,13 @@ export default function Home() {
         title="Toolique | Modern In-Browser Calculators & Engineering Utilities"
         description="Free in-browser tools. Compute GST, SIP, construction cost, concrete splits, staircase layouts, RERA carpet, paint liters, and modular kitchen designs locally."
         keywords={['Online Tools', 'GST Calculator', 'SIP Calculator', 'Construction cost estimator', 'RERA carpet calculator', 'staircase riser calculation', 'Image compressor online']}
+        canonicalUrl="https://toolique.in/"
         schemaMarkup={homeSchema}
       />
 
       {/* Hero Section */}
       {!(searchParams.get('view') === 'all' || selectedCategory !== 'all' || searchQuery) && (
-        <section className="text-center max-w-4xl mx-auto space-y-6 pt-6 md:pt-12">
+        <section className="text-center max-w-4xl mx-auto space-y-4 pt-2 md:pt-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/10 dark:border-indigo-400/10 bg-indigo-500/5 text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
             <Sparkles className="w-3.5 h-3.5" />
             <span>No servers, no tracking, completely instant</span>
@@ -216,10 +230,10 @@ export default function Home() {
                 return prev;
               }, { replace: true });
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
               selectedCategory === 'all' && !searchParams.get('view')
-                ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 border-zinc-900 dark:border-white'
-                : 'bg-transparent text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:text-zinc-900 dark:hover:text-white'
+                ? 'bg-gradient-to-r from-zinc-900 to-zinc-800 text-white dark:from-white dark:to-zinc-100 dark:text-zinc-950 border-transparent shadow-sm'
+                : 'bg-white/40 dark:bg-zinc-900/30 text-zinc-550 dark:text-zinc-400 border-zinc-200/60 dark:border-zinc-800/60 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-300 dark:hover:border-zinc-705'
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
@@ -231,10 +245,10 @@ export default function Home() {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
                   selectedCategory === cat.id
-                    ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 border-zinc-900 dark:border-white'
-                    : 'bg-transparent text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:text-zinc-900 dark:hover:text-white'
+                    ? `bg-gradient-to-r ${cat.colorClass} border-transparent shadow-sm`
+                    : 'bg-white/40 dark:bg-zinc-900/30 text-zinc-550 dark:text-zinc-400 border-zinc-200/60 dark:border-zinc-800/60 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-300 dark:hover:border-zinc-705'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -250,8 +264,8 @@ export default function Home() {
 
       {/* Conditional Rendering: If searching, filtering, or view all is selected, show directory list. Else, show structured SaaS landing layout */}
       {searchQuery || selectedCategory !== 'all' || searchParams.get('view') === 'all' ? (
-        <section className="max-w-6xl mx-auto space-y-6">
-          <div className="flex justify-between items-center max-w-5xl mx-auto px-2">
+        <section className="max-w-7xl 2xl:max-w-none mx-auto space-y-6">
+          <div className="flex justify-between items-center px-2">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
               {searchQuery
                 ? 'Search Results'
@@ -262,7 +276,7 @@ export default function Home() {
             <span className="text-xs font-bold text-indigo-500">{filteredTools.length} found</span>
           </div>
           {filteredTools.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
               {filteredTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
@@ -278,7 +292,7 @@ export default function Home() {
       ) : (
         <>
           {/* Featured Tools Grid */}
-          <section className="max-w-6xl mx-auto space-y-6">
+          <section className="max-w-7xl 2xl:max-w-none mx-auto space-y-6">
             <div className="flex justify-between items-center px-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Featured Platforms</h3>
               <button
@@ -295,7 +309,7 @@ export default function Home() {
                 <span>View all</span> <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {featuredTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
@@ -303,9 +317,9 @@ export default function Home() {
           </section>
 
           {/* Popular Tools Grid */}
-          <section className="max-w-6xl mx-auto space-y-6">
+          <section className="max-w-7xl 2xl:max-w-none mx-auto space-y-6">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 px-2">Popular Calculations</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {popularTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}
@@ -313,9 +327,9 @@ export default function Home() {
           </section>
 
           {/* Recently Added Tools Grid */}
-          <section className="max-w-6xl mx-auto space-y-6">
+          <section className="max-w-7xl 2xl:max-w-none mx-auto space-y-6">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 px-2">Recently Released</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {recentTools.map((tool) => (
                 <ToolCard key={tool.id} tool={tool} />
               ))}

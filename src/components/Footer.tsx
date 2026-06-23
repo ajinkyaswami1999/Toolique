@@ -6,7 +6,7 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-zinc-200/80 dark:border-zinc-900 bg-zinc-100/30 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
           {/* Brand Info */}
@@ -44,13 +44,18 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/?category=interior" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
-                  Interior Design
+                <Link to="/?category=pdf" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                  PDF Utilities
                 </Link>
               </li>
               <li>
-                <Link to="/?category=finance" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
-                  Finance & Developer
+                <Link to="/?category=developer" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                  Developer Tools
+                </Link>
+              </li>
+              <li>
+                <Link to="/?category=image" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition">
+                  Image Tools
                 </Link>
               </li>
             </ul>

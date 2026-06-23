@@ -37,6 +37,12 @@
 .saas-input {
   @apply w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/40 text-sm text-zinc-900 dark:text-zinc-100 font-medium placeholder-zinc-400 dark:placeholder-zinc-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 focus:outline-none transition;
 }
+.saas-input-with-prefix {
+  padding-left: 2.25rem !important;
+}
+.saas-input-with-suffix {
+  padding-right: 2.25rem !important;
+}
 
 .saas-select {
   @apply w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/40 text-sm text-zinc-900 dark:text-zinc-100 font-medium focus:border-indigo-500 focus:outline-none transition;
