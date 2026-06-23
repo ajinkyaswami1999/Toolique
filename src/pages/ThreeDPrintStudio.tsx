@@ -231,13 +231,38 @@ const stats = [
   { value: 'Fast', label: 'Performance', desc: 'Instant calculations and reports' }
 ];
 
-const ESTIMATOR_MATERIALS = [
-  { id: 'pla', name: 'PLA', density: 1.24, color: 'text-amber-600 dark:text-amber-400 border-amber-500/20 bg-amber-500/5' },
-  { id: 'petg', name: 'PETG', density: 1.27, color: 'text-indigo-600 dark:text-indigo-400 border-indigo-500/20 bg-indigo-500/5' },
-  { id: 'abs', name: 'ABS', density: 1.04, color: 'text-rose-600 dark:text-rose-400 border-rose-500/20 bg-rose-500/5' },
-  { id: 'tpu', name: 'TPU', density: 1.21, color: 'text-emerald-600 dark:text-emerald-400 border-emerald-500/20 bg-emerald-500/5' },
-  { id: 'resin', name: 'Resin', density: 1.12, color: 'text-cyan-600 dark:text-cyan-400 border-cyan-500/20 bg-cyan-500/5' }
-];
+const FILAMENT_PRICE_GUIDE: Record<string, Array<{ brand: string, price: number }>> = {
+  pla: [
+    { brand: 'Wol3D (Eco PLA)', price: 850 },
+    { brand: 'Creality (Value PLA)', price: 1050 },
+    { brand: 'Wol3D (Pro+ PLA)', price: 1100 },
+    { brand: 'eSun (PLA+ Premium)', price: 1350 }
+  ],
+  abs: [
+    { brand: 'Generic Economy ABS', price: 800 },
+    { brand: 'Wol3D Standard ABS', price: 950 },
+    { brand: 'Creality Value ABS', price: 1150 },
+    { brand: 'eSun Premium ABS+', price: 1250 }
+  ],
+  petg: [
+    { brand: 'Generic Economy PETG', price: 900 },
+    { brand: 'Wol3D Standard PETG', price: 1100 },
+    { brand: 'Creality Value PETG', price: 1200 },
+    { brand: 'eSun Premium PETG', price: 1400 }
+  ],
+  asa: [
+    { brand: 'Generic Import ASA', price: 1500 },
+    { brand: 'Creality Standard ASA', price: 1850 },
+    { brand: 'Wol3D Professional ASA', price: 1900 },
+    { brand: 'eSun High-Performance ASA', price: 2100 }
+  ],
+  cf: [
+    { brand: 'Generic CF-PETG Spool', price: 2100 },
+    { brand: 'Wol3D CF-PLA Spool', price: 2400 },
+    { brand: 'Creality CF-PLA Spool', price: 2600 },
+    { brand: 'eSun Premium ePA-CF Spool', price: 2800 }
+  ]
+};
 
 export default function ThreeDPrintStudio() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -253,11 +278,8 @@ export default function ThreeDPrintStudio() {
   const [nozzleTemp, setNozzleTemp] = useState(220);
   const [bedTemp, setBedTemp] = useState(60);
 
-  // Quick Estimator States
-  const [estMaterial, setEstMaterial] = useState('pla');
-  const [estWeight, setEstWeight] = useState(150);
-  const [estPrice, setEstPrice] = useState(1500);
-  const estSpoolSize = 1000;
+  // Indian Filament Price Index State
+  const [indexMaterial, setIndexMaterial] = useState<'pla' | 'abs' | 'petg' | 'asa' | 'cf'>('pla');
 
   // Dynamic simulation values
   useEffect(() => {
@@ -303,13 +325,7 @@ export default function ThreeDPrintStudio() {
 
   const featuredTools = allTools.filter(t => featuredSlugs.includes(t.slug));
 
-  // Quick Estimator Calculation
-  const selectedMat = ESTIMATOR_MATERIALS.find(m => m.id === estMaterial) || ESTIMATOR_MATERIALS[0];
-  const calculatedCost = (estWeight * (estPrice / estSpoolSize)).toFixed(2);
-  // 1.75mm cross-sectional area: A = pi * r^2 = Math.PI * (1.75 / 2)^2 = 2.40528 mm2
-  const calculatedLength = estMaterial === 'resin'
-    ? 0
-    : (estWeight / (selectedMat.density * 2.40528));
+  // Calculations not required for Price Index
 
   const faqs = [
     {
@@ -418,84 +434,57 @@ export default function ThreeDPrintStudio() {
             Professional 3D printing calculators for filament cost, print pricing, material usage, print farms, Bambu Lab, HueForge, resin printing, and production planning.
           </p>
 
-          {/* Quick Material Cost Estimator Playground */}
-          <div className="p-5 rounded-2xl bg-zinc-50/40 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 backdrop-blur-md space-y-4">
+          {/* Indian Filament Price Index Card */}
+          <div className="p-5 rounded-2xl bg-zinc-50/40 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 backdrop-blur-md space-y-4 text-left">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
-                <Sliders className="w-3.5 h-3.5" />
-                <span>Quick Cost Estimator</span>
+                <Sliders className="w-3.5 h-3.5 text-indigo-500" />
+                <span>India Filament Price Index</span>
               </span>
-              <span className="text-[9px] font-bold text-indigo-500 dark:text-indigo-400 uppercase">Live Preview</span>
+              <span className="text-[9px] font-bold text-indigo-600 dark:text-indigo-400 uppercase">Representative Rates</span>
             </div>
 
-            {/* Material Selector Row */}
+            {/* Price Index Tabs row */}
             <div className="grid grid-cols-5 gap-1.5">
-              {ESTIMATOR_MATERIALS.map(m => {
-                const isSelected = estMaterial === m.id;
+              {(['pla', 'abs', 'petg', 'asa', 'cf'] as const).map(mat => {
+                const isSelected = indexMaterial === mat;
                 return (
                   <button
-                    key={m.id}
-                    onClick={() => setEstMaterial(m.id)}
+                    key={mat}
+                    onClick={() => setIndexMaterial(mat)}
                     className={`py-1.5 px-1 rounded-lg border text-[10px] font-bold tracking-wider uppercase transition cursor-pointer text-center ${
                       isSelected
                         ? 'border-indigo-500/80 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shadow-sm'
                         : 'border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/20 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-700'
                     }`}
                   >
-                    {m.name}
+                    {mat}
                   </button>
                 );
               })}
             </div>
 
-            {/* Input Slider Controls */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <div className="flex justify-between text-[10px] font-semibold text-zinc-500 dark:text-zinc-400">
-                  <span>Weight:</span>
-                  <span className="font-bold text-zinc-800 dark:text-zinc-200">{estWeight}g</span>
+            {/* Price Table Listings */}
+            <div className="space-y-2 pt-1">
+              {FILAMENT_PRICE_GUIDE[indexMaterial].map((item, idx) => (
+                <div key={idx} className="flex justify-between items-center py-2 px-3 rounded-xl bg-white/50 dark:bg-zinc-950/40 border border-zinc-200/40 dark:border-zinc-800/30 text-[11px] font-semibold">
+                  <span className="text-zinc-700 dark:text-zinc-300">{item.brand}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-indigo-600 dark:text-indigo-400">₹{item.price} / kg</span>
+                    <Link
+                      to={`/tool/3d-printing-cost-calculator?price=${item.price}&material=${indexMaterial}`}
+                      className="px-2 py-0.5 rounded bg-indigo-500/10 hover:bg-indigo-550 dark:hover:bg-indigo-500 hover:text-white text-indigo-600 dark:text-indigo-400 text-[9px] font-extrabold transition cursor-pointer"
+                    >
+                      Use
+                    </Link>
+                  </div>
                 </div>
-                <input
-                  type="range"
-                  min="10"
-                  max="1000"
-                  step="10"
-                  value={estWeight}
-                  onChange={(e) => setEstWeight(Number(e.target.value))}
-                  className="w-full h-1.5 rounded-lg bg-zinc-200 dark:bg-zinc-800 accent-indigo-500 cursor-pointer"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <div className="flex justify-between text-[10px] font-semibold text-zinc-500 dark:text-zinc-400">
-                  <span>Price per Spool:</span>
-                  <span className="font-bold text-zinc-800 dark:text-zinc-200">₹{estPrice}</span>
-                </div>
-                <input
-                  type="range"
-                  min="500"
-                  max="5000"
-                  step="100"
-                  value={estPrice}
-                  onChange={(e) => setEstPrice(Number(e.target.value))}
-                  className="w-full h-1.5 rounded-lg bg-zinc-200 dark:bg-zinc-800 accent-indigo-500 cursor-pointer"
-                />
-              </div>
+              ))}
             </div>
 
-            {/* Estimator Outputs */}
-            <div className="pt-2 border-t border-zinc-250/60 dark:border-zinc-800/60 grid grid-cols-2 gap-2 text-center">
-              <div className="p-2 rounded-xl bg-white/50 dark:bg-zinc-900/20 border border-zinc-200/40 dark:border-zinc-800/30">
-                <span className="block text-[8px] font-bold text-zinc-400 dark:text-zinc-500 uppercase">Estimated Material Cost</span>
-                <span className="text-sm font-extrabold text-indigo-600 dark:text-indigo-400">₹{calculatedCost}</span>
-              </div>
-              <div className="p-2 rounded-xl bg-white/50 dark:bg-zinc-900/20 border border-zinc-200/40 dark:border-zinc-800/30">
-                <span className="block text-[8px] font-bold text-zinc-400 dark:text-zinc-500 uppercase">Estimated length (1.75mm)</span>
-                <span className="text-sm font-extrabold text-cyan-600 dark:text-cyan-400">
-                  {estMaterial === 'resin' ? 'N/A (Liquid)' : `${calculatedLength.toFixed(1)}m`}
-                </span>
-              </div>
-            </div>
+            <p className="text-[9px] font-semibold text-zinc-400 dark:text-zinc-500 text-center leading-relaxed">
+              Use these rates directly inside the <Link to="/tool/3d-printing-cost-calculator" className="text-indigo-500 hover:underline font-bold">3D Printing Cost Calculator</Link> to build precise estimates.
+            </p>
           </div>
 
           <div className="pt-2 flex justify-start">

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Settings, Copy, Check, Trash2, Plus, Download, Save,
   FileText, AlertTriangle, Printer, Sparkles, Sliders, RefreshCw, Layers
@@ -21,13 +22,17 @@ const DEFAULT_SETTINGS: CalculatorSettings = {
   platformCommission: 10,
   paymentGateway: 2,
   packagingBoxCost: 30,
-  courierHandlingCost: 100,
+  courierHandlingCost: 105,
   currencySymbol: '₹',
   productCategories: ['Action Figure', 'Functional Part', 'Prototype', 'Art/Sculpture', 'Lithophane', 'Batch Production', 'Other'],
   roundingRule: 'nearest'
 };
 
 export default function ThreeDPrintingCostCalculator() {
+  const [searchParams] = useSearchParams();
+  const paramPrice = searchParams.get('price');
+  const paramMaterial = searchParams.get('material');
+
   // Load settings and history from localStorage
   const [settings, setSettings] = useState<CalculatorSettings>(() => {
     const saved = localStorage.getItem('toolique_3d_cost_settings');
@@ -118,6 +123,20 @@ export default function ThreeDPrintingCostCalculator() {
   const [outputs, setOutputs] = useState<CostCalculatorOutputs | null>(null);
   const [copied, setCopied] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Load URL search parameters if any
+  useEffect(() => {
+    if (paramPrice) {
+      const parsedPrice = parseFloat(paramPrice);
+      if (!isNaN(parsedPrice) && parsedPrice > 0) {
+        setFilamentPrice(parsedPrice);
+      }
+    }
+    if (paramMaterial) {
+      const matUpper = paramMaterial.toUpperCase();
+      setName(`My ${matUpper} Print`);
+    }
+  }, [paramPrice, paramMaterial]);
 
   // Sync settings form on open
   useEffect(() => {
