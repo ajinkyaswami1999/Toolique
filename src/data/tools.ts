@@ -4494,28 +4494,50 @@ export const toolsList: Tool[] = [
     name: '3D Printing Cost Calculator',
     category: '3d-printing',
     shortDescription: 'Estimate overall cost including filament, electricity, machine wear, and labor markup.',
-    metaDescription: 'Free online 3D printing calculator. calculate estimate overall cost including filament, electricity, machine wear, and labor markup.',
-    keywords: ["3d printing cost","print price estimator","electricity cost print","labor markup print"],
+    metaDescription: 'Free online 3D printing pricing calculator. Estimate materials cost, slicing/operations labor, power, packaging box cost, platform commissions, and taxes.',
+    keywords: ["3d printing cost","print price estimator","electricity cost print","labor markup print", "3d printing cost calculator", "filament pricing"],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
+      'Enter your product details (name, category, and optional notes).',
+      'Provide your filament specifications (price per spool, weight used, wastage margin, and failed prints).',
+      'Input machine run time, electricity rate, depreciation wear, and operational labour hours.',
+      'Specify standard packaging, shipping, dynamic custom accessories, commission rates, and tax parameters.',
+      'Review suggestions in the sticky panel, load defaults, manage history records, or print a professional PDF invoice quote.'
     ],
     faqs: [
       {
-        question: 'Is the 3D Printing Cost Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+        question: 'What is a 3D Printing Cost Calculator?',
+        answer: 'A 3D Printing Cost Calculator is a specialized tool that helps makers, print farms, and Etsy sellers calculate the exact production cost and optimal retail selling price of their 3D printed objects. It aggregates raw materials, power consumption, machine wear, operations labor, shipping packaging, custom items, overhead commissions, and GST taxes.'
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+        question: 'How do you calculate 3D printing price?',
+        answer: 'To calculate the price, start by finding the raw filament cost (weight * price per gram). Add electricity cost (print duration * wattage * utility rate). Add machine depreciation and operational labor (slicing, design, packaging, post-processing). Add shipping packaging, bubble wraps, and custom inserts. Finally, factor in platform commissions, gateway fees, GST taxes, and your target profit margin percentage to arrive at the final retail selling price.'
+      },
+      {
+        question: 'What is a typical machine depreciation wear rate?',
+        answer: 'For standard hobbyist desktop printers (like Bambu Lab or Creality), a typical depreciation wear rate ranges from ₹5.00 to ₹15.00 per print hour. This covers nozzle wear, belt stretching, fan life cycles, and eventually amortizing the initial printer purchase price over its expected lifespan.'
+      },
+      {
+        question: 'How do platform commissions affect pricing?',
+        answer: 'Platforms like Etsy or Shopify take commission fees (ranging from 5% to 15%) and payment gateway fees (around 2% to 3%) on the final sale value. Failing to incorporate these overheads in your pricing will directly erode your profit margins. The 3D Printing Cost Calculator automates these business calculations.'
+      },
+      {
+        question: 'Should I charge for slicing and setup times?',
+        answer: 'Yes! Slicing, print bed preparation, model cleaning, post-curing, support removal, and packaging are active labour tasks. Neglecting labour costs is the most common mistake made by new print farm operators. Always factor in an hourly rate for operations labor.'
       }
     ],
     sections: [
       {
-        title: 'Understanding 3D Printing Cost Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+        title: 'What is a 3D Printing Cost Calculator?',
+        content: 'A 3D Printing Cost Calculator is a specialized tool designed to solve the pricing problem for makers, hobbyists, Etsy merchants, and professional print farm operators. Setting prices based on guesswork often leads to losses or overpricing. This calculator aggregates raw material costs, printer power draw, machine depreciation wear, post-processing labor, third-party sales overheads, and taxes into a unified formula.'
+      },
+      {
+        title: 'How to Calculate 3D Printing Cost?',
+        content: 'To calculate the price of a 3D printed object, you must account for all stages of production:\n\n1. Material cost: weight in grams multiplied by the cost per gram of the filament spool (including failed prints and support structure waste).\n2. Electricity: machine wattage multiplied by the printing duration in hours, converted to kWh and multiplied by the utility rate.\n3. Depreciation: wear and tear per hour to cover nozzle wear, belt replacements, and eventual printer replacements.\n4. Labour: design, slicing, post-processing, and packaging hours multiplied by your hourly rate.\n5. Overheads: platform commissions, payment gateways, marketing costs, shipping, and taxes (GST).'
+      },
+      {
+        title: 'Formula Explanation',
+        content: 'The calculator uses a dual-tier calculation cascade:\n\nProduction Cost = Filament Cost + Electricity Cost + Machine Cost + Labour Cost + Extra Material Cost + Custom Cost + Miscellaneous Cost\n\nSelling Price = Production Cost + Business Overheads + Profit Margin + GST\n\nFinal Selling Price = Selling Price - Discount\n\nWhere Business Overheads includes platform commission, payment gateway fees, and marketing cost margins. Rounding is optionally applied to the final suggested selling price to provide attractive rounded options (nearest ₹49 or ₹99).'
       }
     ]
   },
