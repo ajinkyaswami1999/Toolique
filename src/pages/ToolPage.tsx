@@ -173,6 +173,46 @@ const kWToHPConverter = lazy(() => import('../tools/kWToHPConverter'));
 const TransformerCalculator = lazy(() => import('../tools/TransformerCalculator'));
 const LEDLightingCalculator = lazy(() => import('../tools/LEDLightingCalculator'));
 
+const FilamentCostCalculator = lazy(() => import('../tools/FilamentCostCalculator'));
+const ThreeDPrintingCostCalculator = lazy(() => import('../tools/ThreeDPrintingCostCalculator'));
+const PrintProfitCalculator = lazy(() => import('../tools/PrintProfitCalculator'));
+const PrintFarmRevenueCalculator = lazy(() => import('../tools/PrintFarmRevenueCalculator'));
+const FilamentWeightCalculator = lazy(() => import('../tools/FilamentWeightCalculator'));
+const FilamentUsageCalculator = lazy(() => import('../tools/FilamentUsageCalculator'));
+const RemainingFilamentCalculator = lazy(() => import('../tools/RemainingFilamentCalculator'));
+const MaterialCostComparison = lazy(() => import('../tools/MaterialCostComparison'));
+const PrintTimeEstimator = lazy(() => import('../tools/PrintTimeEstimator'));
+const LayerHeightCalculator = lazy(() => import('../tools/LayerHeightCalculator'));
+const PrintSpeedCalculator = lazy(() => import('../tools/PrintSpeedCalculator'));
+const NozzleFlowCalculator = lazy(() => import('../tools/NozzleFlowCalculator'));
+const VolumetricFlowCalculator = lazy(() => import('../tools/VolumetricFlowCalculator'));
+const CoolingFanRecommendation = lazy(() => import('../tools/CoolingFanRecommendation'));
+const NozzleSizeComparison = lazy(() => import('../tools/NozzleSizeComparison'));
+const LineWidthCalculator = lazy(() => import('../tools/LineWidthCalculator'));
+const LayerWidthCalculator = lazy(() => import('../tools/LayerWidthCalculator'));
+const STLVolumeCalculator = lazy(() => import('../tools/STLVolumeCalculator'));
+const STLBoundingBoxCalculator = lazy(() => import('../tools/STLBoundingBoxCalculator'));
+const ScaleCalculator = lazy(() => import('../tools/ScaleCalculator'));
+const ModelWeightCalculator = lazy(() => import('../tools/ModelWeightCalculator'));
+const ResinCostCalculator = lazy(() => import('../tools/ResinCostCalculator'));
+const ResinVolumeCalculator = lazy(() => import('../tools/ResinVolumeCalculator'));
+const ExposureTimeHelper = lazy(() => import('../tools/ExposureTimeHelper'));
+const ElectricityCostCalculator = lazy(() => import('../tools/ElectricityCostCalculator'));
+const PackagingCostCalculator = lazy(() => import('../tools/PackagingCostCalculator'));
+const ShippingCostCalculator = lazy(() => import('../tools/ShippingCostCalculator'));
+const MachineUtilizationCalculator = lazy(() => import('../tools/MachineUtilizationCalculator'));
+const MonthlyProductionCalculator = lazy(() => import('../tools/MonthlyProductionCalculator'));
+const PrintQueueTimeCalculator = lazy(() => import('../tools/PrintQueueTimeCalculator'));
+const HueForgeFilamentCalculator = lazy(() => import('../tools/HueForgeFilamentCalculator'));
+const HueForgeLayerCalculator = lazy(() => import('../tools/HueForgeLayerCalculator'));
+const HueForgeColorSwapPlanner = lazy(() => import('../tools/HueForgeColorSwapPlanner'));
+const AMSFilamentPlanner = lazy(() => import('../tools/AMSFilamentPlanner'));
+const FilamentChangeEstimator = lazy(() => import('../tools/FilamentChangeEstimator'));
+const PurgeWasteCalculator = lazy(() => import('../tools/PurgeWasteCalculator'));
+const FlushVolumeCalculator = lazy(() => import('../tools/FlushVolumeCalculator'));
+const AMSSlotPlanner = lazy(() => import('../tools/AMSSlotPlanner'));
+const BuildPlateUtilizationCalculator = lazy(() => import('../tools/BuildPlateUtilizationCalculator'));
+
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
   SIPCalculator,
@@ -334,6 +374,45 @@ const toolComponents: Record<string, React.ComponentType> = {
   WordToPDF,
   ExcelToPDF,
   PowerPointToPDF,
+  FilamentCostCalculator,
+  ThreeDPrintingCostCalculator,
+  PrintProfitCalculator,
+  PrintFarmRevenueCalculator,
+  FilamentWeightCalculator,
+  FilamentUsageCalculator,
+  RemainingFilamentCalculator,
+  MaterialCostComparison,
+  PrintTimeEstimator,
+  LayerHeightCalculator,
+  PrintSpeedCalculator,
+  NozzleFlowCalculator,
+  VolumetricFlowCalculator,
+  CoolingFanRecommendation,
+  NozzleSizeComparison,
+  LineWidthCalculator,
+  LayerWidthCalculator,
+  STLVolumeCalculator,
+  STLBoundingBoxCalculator,
+  ScaleCalculator,
+  ModelWeightCalculator,
+  ResinCostCalculator,
+  ResinVolumeCalculator,
+  ExposureTimeHelper,
+  ElectricityCostCalculator,
+  PackagingCostCalculator,
+  ShippingCostCalculator,
+  MachineUtilizationCalculator,
+  MonthlyProductionCalculator,
+  PrintQueueTimeCalculator,
+  HueForgeFilamentCalculator,
+  HueForgeLayerCalculator,
+  HueForgeColorSwapPlanner,
+  AMSFilamentPlanner,
+  FilamentChangeEstimator,
+  PurgeWasteCalculator,
+  FlushVolumeCalculator,
+  AMSSlotPlanner,
+  BuildPlateUtilizationCalculator,
 };
 
 export default function ToolPage() {

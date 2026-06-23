@@ -239,7 +239,7 @@ export default function Home() {
             <LayoutGrid className="w-3.5 h-3.5" />
             <span>All Categories</span>
           </button>
-          {categories.map((cat) => {
+          {categories.filter((cat) => cat.id !== '3d-printing').map((cat) => {
             const Icon = categoryIcons[cat.id] || LayoutGrid;
             return (
               <button

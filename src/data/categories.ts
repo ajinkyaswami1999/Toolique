@@ -132,5 +132,12 @@ export const categories: Category[] = [
     description: 'Track BMI, basal metabolic rate (BMR), calorie requirements, and daily water intake targets.',
     icon: 'Heart',
     colorClass: 'from-rose-500/10 to-pink-500/10 text-rose-700 dark:text-rose-455 border-rose-500/20'
+  },
+  {
+    id: '3d-printing',
+    name: '3D Printing',
+    description: 'Calculate filament costs, print pricing, resin volume, print farm capacity, and Bambu Lab AMS templates.',
+    icon: 'Printer',
+    colorClass: 'from-indigo-500/10 to-blue-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/20'
   }
 ];

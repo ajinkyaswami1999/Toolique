@@ -12,7 +12,7 @@ export interface Tool {
   id: string;
   slug: string;
   name: string;
-  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health';
+  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health' | '3d-printing';
   shortDescription: string;
   metaDescription: string;
   keywords: string[];
@@ -4457,4 +4457,1213 @@ export const toolsList: Tool[] = [
       }
     ]
   },
+  {
+    id: 'FilamentCostCalculator',
+    slug: 'filament-cost-calculator',
+    name: 'Filament Cost Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate the exact filament cost of 3D prints based on weight, price, and spool specifications.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate the exact filament cost of 3d prints based on weight, price, and spool specifications.',
+    keywords: ["filament cost","3d print price","filament weight cost","slicing calculator"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Filament Cost Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Filament Cost Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'ThreeDPrintingCostCalculator',
+    slug: '3d-printing-cost-calculator',
+    name: '3D Printing Cost Calculator',
+    category: '3d-printing',
+    shortDescription: 'Estimate overall cost including filament, electricity, machine wear, and labor markup.',
+    metaDescription: 'Free online 3D printing calculator. calculate estimate overall cost including filament, electricity, machine wear, and labor markup.',
+    keywords: ["3d printing cost","print price estimator","electricity cost print","labor markup print"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the 3D Printing Cost Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding 3D Printing Cost Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'PrintProfitCalculator',
+    slug: 'print-profit-calculator',
+    name: 'Print Profit Calculator',
+    category: '3d-printing',
+    shortDescription: 'Determine net earnings, margins, and platform transaction fees for 3D printed sales.',
+    metaDescription: 'Free online 3D printing calculator. calculate determine net earnings, margins, and platform transaction fees for 3d printed sales.',
+    keywords: ["print profit","selling 3d prints","etsy print profit","margin calculator"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Print Profit Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Print Profit Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'PrintFarmRevenueCalculator',
+    slug: 'print-farm-revenue-calculator',
+    name: 'Print Farm Revenue Calculator',
+    category: '3d-printing',
+    shortDescription: 'Project daily, monthly, and yearly revenue forecasts for multiple 3D printers.',
+    metaDescription: 'Free online 3D printing calculator. calculate project daily, monthly, and yearly revenue forecasts for multiple 3d printers.',
+    keywords: ["print farm","3d printer revenue","farm profitability","capacity yield"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Print Farm Revenue Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Print Farm Revenue Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'FilamentWeightCalculator',
+    slug: 'filament-weight-calculator',
+    name: 'Filament Weight Calculator',
+    category: '3d-printing',
+    shortDescription: 'Convert filament roll length directly to weight based on material densities.',
+    metaDescription: 'Free online 3D printing calculator. calculate convert filament roll length directly to weight based on material densities.',
+    keywords: ["filament weight","length to weight","pla density","abs weight calculator"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Filament Weight Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Filament Weight Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'FilamentUsageCalculator',
+    slug: 'filament-usage-calculator',
+    name: 'Filament Usage Calculator',
+    category: '3d-printing',
+    shortDescription: 'Project total rolls required and cost splits for large multi-part batch orders.',
+    metaDescription: 'Free online 3D printing calculator. calculate project total rolls required and cost splits for large multi-part batch orders.',
+    keywords: ["filament usage","batch printing","spool requirements","material planner"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Filament Usage Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Filament Usage Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'RemainingFilamentCalculator',
+    slug: 'remaining-filament-calculator',
+    name: 'Remaining Filament Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate the leftover filament on a spool using tare spool weights.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate the leftover filament on a spool using tare spool weights.',
+    keywords: ["remaining filament","spool tare weight","leftover filament","empty spool weight"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Remaining Filament Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Remaining Filament Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'MaterialCostComparison',
+    slug: 'material-cost-comparison',
+    name: 'Material Cost Comparison',
+    category: '3d-printing',
+    shortDescription: 'Compare running costs per gram across PLA, PETG, ABS, and Nylon.',
+    metaDescription: 'Free online 3D printing calculator. calculate compare running costs per gram across pla, petg, abs, and nylon.',
+    keywords: ["filament comparison","pla vs petg cost","best cheap filament","resin cost comparison"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Material Cost Comparison accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Material Cost Comparison',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'PrintTimeEstimator',
+    slug: 'print-time-estimator',
+    name: 'Print Time Estimator',
+    category: '3d-printing',
+    shortDescription: 'Estimate 3D print durations based on print speeds, layer counts, and height.',
+    metaDescription: 'Free online 3D printing calculator. calculate estimate 3d print durations based on print speeds, layer counts, and height.',
+    keywords: ["print time","time estimator 3d","slicing runtime","bambu print time"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Print Time Estimator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Print Time Estimator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'LayerHeightCalculator',
+    slug: 'layer-height-calculator',
+    name: 'Layer Height Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate optimal layer heights for vertical detail quality.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate optimal layer heights for vertical detail quality.',
+    keywords: ["layer height","optimal details 3d","magic layer heights","nozzle height limits"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Layer Height Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Layer Height Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'PrintSpeedCalculator',
+    slug: 'print-speed-calculator',
+    name: 'Print Speed Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate the actual print travel speed based on segment lengths and times.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate the actual print travel speed based on segment lengths and times.',
+    keywords: ["print speed","travel speed 3d","feedrate calculator","actual print speed"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Print Speed Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Print Speed Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'NozzleFlowCalculator',
+    slug: 'nozzle-flow-calculator',
+    name: 'Nozzle Flow Calculator',
+    category: '3d-printing',
+    shortDescription: 'Determine output extrusion volume rates based on printing speed.',
+    metaDescription: 'Free online 3D printing calculator. calculate determine output extrusion volume rates based on printing speed.',
+    keywords: ["nozzle flow rate","extrusion rate","mm3/s flow","flow limits print"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Nozzle Flow Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Nozzle Flow Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'VolumetricFlowCalculator',
+    slug: 'volumetric-flow-calculator',
+    name: 'Volumetric Flow Calculator',
+    category: '3d-printing',
+    shortDescription: 'Determine your hotend volumetric flow limit (mm³/s) based on max feedrate.',
+    metaDescription: 'Free online 3D printing calculator. calculate determine your hotend volumetric flow limit (mm³/s) based on max feedrate.',
+    keywords: ["max volumetric flow","volumetric speed limit","extruder maximum flow","hotend limit"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Volumetric Flow Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Volumetric Flow Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'CoolingFanRecommendation',
+    slug: 'cooling-fan-recommendation',
+    name: 'Cooling Fan Recommendation',
+    category: '3d-printing',
+    shortDescription: 'Calculate optimal fan percentages for layer adhesion and overhang bridges.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate optimal fan percentages for layer adhesion and overhang bridges.',
+    keywords: ["cooling fan percentage","filament fan requirements","overhang cooling 3d","fan speeds"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Cooling Fan Recommendation accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Cooling Fan Recommendation',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'NozzleSizeComparison',
+    slug: 'nozzle-size-comparison',
+    name: 'Nozzle Size Comparison',
+    category: '3d-printing',
+    shortDescription: 'Compare print speeds, structural strengths, and resolution details across nozzles.',
+    metaDescription: 'Free online 3D printing calculator. calculate compare print speeds, structural strengths, and resolution details across nozzles.',
+    keywords: ["nozzle size comparison","0.4mm vs 0.6mm nozzle","thick nozzles details","best nozzle size"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Nozzle Size Comparison accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Nozzle Size Comparison',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'LineWidthCalculator',
+    slug: 'line-width-calculator',
+    name: 'Line Width Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate optimal extrusion line widths for solid layer bonding.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate optimal extrusion line widths for solid layer bonding.',
+    keywords: ["line width","extrusion width","nozzle width setup","slicer line width"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Line Width Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Line Width Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'LayerWidthCalculator',
+    slug: 'layer-width-calculator',
+    name: 'Layer Width Calculator',
+    category: '3d-printing',
+    shortDescription: 'Determine overlapping paths widths for perimeter walls and shell count values.',
+    metaDescription: 'Free online 3D printing calculator. calculate determine overlapping paths widths for perimeter walls and shell count values.',
+    keywords: ["layer width","shell overlaps","wall thicknesses 3d","perimeter overlap"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Layer Width Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Layer Width Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'STLVolumeCalculator',
+    slug: 'stl-volume-calculator',
+    name: 'STL Volume Calculator',
+    category: '3d-printing',
+    shortDescription: 'Parse STL files locally in your browser to calculate exact cubic volume and mass weight.',
+    metaDescription: 'Free online 3D printing calculator. calculate parse stl files locally in your browser to calculate exact cubic volume and mass weight.',
+    keywords: ["stl volume parser","measure stl mesh volume","stl file mass weight","stl cost calculator"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the STL Volume Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding STL Volume Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'STLBoundingBoxCalculator',
+    slug: 'stl-bounding-box-calculator',
+    name: 'STL Bounding Box Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate the maximum X, Y, Z boundary dimensions of STL models.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate the maximum x, y, z boundary dimensions of stl models.',
+    keywords: ["stl bounds size","stl bounding box","stl dimensions meter","check stl plate fit"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the STL Bounding Box Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding STL Bounding Box Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'ScaleCalculator',
+    slug: 'scale-calculator',
+    name: 'Scale Calculator',
+    category: '3d-printing',
+    shortDescription: 'Convert model dimensions to different percentages and aspect ratios.',
+    metaDescription: 'Free online 3D printing calculator. calculate convert model dimensions to different percentages and aspect ratios.',
+    keywords: ["model scale convert","upscale downscale 3d","dimensions ratio planner","percent scale mm"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Scale Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Scale Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'ModelWeightCalculator',
+    slug: 'model-weight-calculator',
+    name: 'Model Weight Calculator',
+    category: '3d-printing',
+    shortDescription: 'Find model weights using cubic volumes and material densities.',
+    metaDescription: 'Free online 3D printing calculator. calculate find model weights using cubic volumes and material densities.',
+    keywords: ["model weight calculator","pla prints weight","3d mesh mass weight","filament weight gram"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Model Weight Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Model Weight Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'ResinCostCalculator',
+    slug: 'resin-cost-calculator',
+    name: 'Resin Cost Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate the liquid UV resin cost for SLA/MSLA 3D prints.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate the liquid uv resin cost for sla/msla 3d prints.',
+    keywords: ["resin cost print","liquid resin price","sla print cost calculator","uv resin cost"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Resin Cost Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Resin Cost Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'ResinVolumeCalculator',
+    slug: 'resin-volume-calculator',
+    name: 'Resin Volume Calculator',
+    category: '3d-printing',
+    shortDescription: 'Convert resin volume (ml) to mass weight based on liquid densities.',
+    metaDescription: 'Free online 3D printing calculator. calculate convert resin volume (ml) to mass weight based on liquid densities.',
+    keywords: ["resin volume weight","ml to grams resin","sla resin density","resin weight g"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Resin Volume Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Resin Volume Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'ExposureTimeHelper',
+    slug: 'exposure-time-helper',
+    name: 'Exposure Time Helper',
+    category: '3d-printing',
+    shortDescription: 'Provides recommended UV exposure times based on printer screen light intensity.',
+    metaDescription: 'Free online 3D printing calculator. calculate provides recommended uv exposure times based on printer screen light intensity.',
+    keywords: ["exposure times SLA","resin light cure times","mono screen exposure","cure layers helper"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Exposure Time Helper accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Exposure Time Helper',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'ElectricityCostCalculator',
+    slug: 'electricity-cost-calculator',
+    name: 'Electricity Cost Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate operational power consumption utility costs for your printers.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate operational power consumption utility costs for your printers.',
+    keywords: ["printer power cost","electricity draw 3d","power bill print","calculator printing power"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Electricity Cost Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Electricity Cost Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'PackagingCostCalculator',
+    slug: 'packaging-cost-calculator',
+    name: 'Packaging Cost Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate boxes, bubble wraps, and logo labels packaging material costs.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate boxes, bubble wraps, and logo labels packaging material costs.',
+    keywords: ["packaging cost print","shipping packaging material","box bubble wrap cost","3d print business packing"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Packaging Cost Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Packaging Cost Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'ShippingCostCalculator',
+    slug: 'shipping-cost-calculator',
+    name: 'Shipping Cost Calculator',
+    category: '3d-printing',
+    shortDescription: 'Estimate shipping margins and final delivery pricing splits.',
+    metaDescription: 'Free online 3D printing calculator. calculate estimate shipping margins and final delivery pricing splits.',
+    keywords: ["shipping cost print","courier weight delivery","etsy shipping price","3d print shipment cost"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Shipping Cost Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Shipping Cost Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'MachineUtilizationCalculator',
+    slug: 'machine-utilization-calculator',
+    name: 'Machine Utilization Calculator',
+    category: '3d-printing',
+    shortDescription: 'Track active machine setups and calculate farm uptime percentages.',
+    metaDescription: 'Free online 3D printing calculator. calculate track active machine setups and calculate farm uptime percentages.',
+    keywords: ["machine utilization","printer farm efficiency","uptime calculation 3d","farm yield metrics"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Machine Utilization Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Machine Utilization Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'MonthlyProductionCalculator',
+    slug: 'monthly-production-calculator',
+    name: 'Monthly Production Calculator',
+    category: '3d-printing',
+    shortDescription: 'Estimate total monthly unit production capacities and yield values.',
+    metaDescription: 'Free online 3D printing calculator. calculate estimate total monthly unit production capacities and yield values.',
+    keywords: ["monthly production print","farm scale prints quantity","max production capacity","3d prints monthly output"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Monthly Production Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Monthly Production Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'PrintQueueTimeCalculator',
+    slug: 'print-queue-time-calculator',
+    name: 'Print Queue Time Calculator',
+    category: '3d-printing',
+    shortDescription: 'Determine job queue wait times based on farm workloads.',
+    metaDescription: 'Free online 3D printing calculator. calculate determine job queue wait times based on farm workloads.',
+    keywords: ["print queue backlog","farm workload wait times","queue time planner","delivery delay estimates"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Print Queue Time Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Print Queue Time Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'HueForgeFilamentCalculator',
+    slug: 'hueforge-filament-calculator',
+    name: 'HueForge Filament Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate layer boundaries and transmission distances for HueForge painting layers.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate layer boundaries and transmission distances for hueforge painting layers.',
+    keywords: ["hueforge filament","transmission distance td","color swap layer height","hueforge swap planner"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the HueForge Filament Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding HueForge Filament Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'HueForgeLayerCalculator',
+    slug: 'hueforge-layer-calculator',
+    name: 'HueForge Layer Calculator',
+    category: '3d-printing',
+    shortDescription: 'Determine layer number indices from physical heights for slicer settings.',
+    metaDescription: 'Free online 3D printing calculator. calculate determine layer number indices from physical heights for slicer settings.',
+    keywords: ["hueforge layer parser","mm to layer index","slicer color swap step","hueforge details height"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the HueForge Layer Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding HueForge Layer Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'HueForgeColorSwapPlanner',
+    slug: 'hueforge-color-swap-planner',
+    name: 'HueForge Color Swap Planner',
+    category: '3d-printing',
+    shortDescription: 'Plan color swaps listing instructions for HueForge model setups.',
+    metaDescription: 'Free online 3D printing calculator. calculate plan color swaps listing instructions for hueforge model setups.',
+    keywords: ["color swap instructions","hueforge swap steps","filament layer change planner","color change checklist"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the HueForge Color Swap Planner accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding HueForge Color Swap Planner',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'AMSFilamentPlanner',
+    slug: 'ams-filament-planner',
+    name: 'AMS Filament Planner',
+    category: '3d-printing',
+    shortDescription: 'Organize slot colors and filament rolls assignments for multi-color AMS assemblies.',
+    metaDescription: 'Free online 3D printing calculator. calculate organize slot colors and filament rolls assignments for multi-color ams assemblies.',
+    keywords: ["bambu ams slots","ams color planning","multi color ams mapping","bambu lab filament mapping"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the AMS Filament Planner accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding AMS Filament Planner',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'FilamentChangeEstimator',
+    slug: 'filament-change-estimator',
+    name: 'Filament Change Estimator',
+    category: '3d-printing',
+    shortDescription: 'Estimate time added to print runs by AMS filament retracting changes.',
+    metaDescription: 'Free online 3D printing calculator. calculate estimate time added to print runs by ams filament retracting changes.',
+    keywords: ["filament change times","bambu ams changes duration","multi color time increase","retracting AMS cycles"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Filament Change Estimator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Filament Change Estimator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'PurgeWasteCalculator',
+    slug: 'purge-waste-calculator',
+    name: 'Purge Waste Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate plastic mass waste in purge towers and poop shoots.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate plastic mass waste in purge towers and poop shoots.',
+    keywords: ["purge waste bambu","ams flush poop weight","waste cost calculator","flush volume plastic"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Purge Waste Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Purge Waste Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'FlushVolumeCalculator',
+    slug: 'flush-volume-calculator',
+    name: 'Flush Volume Calculator',
+    category: '3d-printing',
+    shortDescription: 'Calculate optimized purge flushes for dark-to-light filament changes.',
+    metaDescription: 'Free online 3D printing calculator. calculate calculate optimized purge flushes for dark-to-light filament changes.',
+    keywords: ["bambu lab flush settings","poop volume light dark","flush matrix ams","color purge values"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Flush Volume Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Flush Volume Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'AMSSlotPlanner',
+    slug: 'ams-slot-planner',
+    name: 'AMS Slot Planner',
+    category: '3d-printing',
+    shortDescription: 'Map color and support interface slots for Bambu Lab X1C, P1S, or A1 setups.',
+    metaDescription: 'Free online 3D printing calculator. calculate map color and support interface slots for bambu lab x1c, p1s, or a1 setups.',
+    keywords: ["ams slots mapper","bambu colors order","support interface slot","bambu multicolor checklist"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the AMS Slot Planner accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding AMS Slot Planner',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'BuildPlateUtilizationCalculator',
+    slug: 'build-plate-utilization-calculator',
+    name: 'Build Plate Utilization Calculator',
+    category: '3d-printing',
+    shortDescription: 'Check nesting limits for model sizes relative to Bambu 256x256mm build plates.',
+    metaDescription: 'Free online 3D printing calculator. calculate check nesting limits for model sizes relative to bambu 256x256mm build plates.',
+    keywords: ["nesting build plate","bambu build plate size","256x256 build plate fit","nesting parts quantity"],
+    icon: 'Printer',
+    howToUse: [
+      'Enter the print configuration values in the inputs panel.',
+      'View the calculated results automatically in the outputs card.',
+      'Copy the calculated specifications to your clipboard.'
+    ],
+    faqs: [
+      {
+        question: 'Is the Build Plate Utilization Calculator accurate?',
+        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+      },
+      {
+        question: 'Are my STL files uploaded to any servers?',
+        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Build Plate Utilization Calculator',
+        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  }
 ];

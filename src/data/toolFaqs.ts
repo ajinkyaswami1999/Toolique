@@ -7058,5 +7058,3203 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
     }
   ],
+  "FilamentCostCalculator": [
+    {
+        "question": "Question 1 about Filament Cost Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Filament Cost Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Filament Cost Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Filament Cost Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Filament Cost Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Filament Cost Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Filament Cost Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Filament Cost Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Filament Cost Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Filament Cost Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Filament Cost Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Filament Cost Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Filament Cost Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Filament Cost Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Filament Cost Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Filament Cost Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Filament Cost Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Filament Cost Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Filament Cost Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Filament Cost Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Filament Cost Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Filament Cost Calculator calculations."
+    }
+],
+  "ThreeDPrintingCostCalculator": [
+    {
+        "question": "Question 1 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 2 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 3 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 4 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 5 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 6 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 7 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 8 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 9 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 10 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 11 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 12 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 13 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 14 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 15 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 16 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 17 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 18 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 19 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for 3D Printing Cost Calculator calculations."
+    },
+    {
+        "question": "Question 20 about 3D Printing Cost Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for 3D Printing Cost Calculator calculations."
+    }
+],
+  "PrintProfitCalculator": [
+    {
+        "question": "Question 1 about Print Profit Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Print Profit Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Print Profit Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Print Profit Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Print Profit Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Print Profit Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Print Profit Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Print Profit Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Print Profit Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Print Profit Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Print Profit Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Print Profit Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Print Profit Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Print Profit Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Print Profit Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Print Profit Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Print Profit Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Print Profit Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Print Profit Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Print Profit Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Print Profit Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Print Profit Calculator calculations."
+    }
+],
+  "PrintFarmRevenueCalculator": [
+    {
+        "question": "Question 1 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Print Farm Revenue Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Print Farm Revenue Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Print Farm Revenue Calculator calculations."
+    }
+],
+  "FilamentWeightCalculator": [
+    {
+        "question": "Question 1 about Filament Weight Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Filament Weight Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Filament Weight Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Filament Weight Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Filament Weight Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Filament Weight Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Filament Weight Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Filament Weight Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Filament Weight Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Filament Weight Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Filament Weight Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Filament Weight Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Filament Weight Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Filament Weight Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Filament Weight Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Filament Weight Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Filament Weight Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Filament Weight Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Filament Weight Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Filament Weight Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Filament Weight Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Filament Weight Calculator calculations."
+    }
+],
+  "FilamentUsageCalculator": [
+    {
+        "question": "Question 1 about Filament Usage Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Filament Usage Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Filament Usage Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Filament Usage Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Filament Usage Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Filament Usage Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Filament Usage Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Filament Usage Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Filament Usage Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Filament Usage Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Filament Usage Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Filament Usage Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Filament Usage Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Filament Usage Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Filament Usage Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Filament Usage Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Filament Usage Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Filament Usage Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Filament Usage Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Filament Usage Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Filament Usage Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Filament Usage Calculator calculations."
+    }
+],
+  "RemainingFilamentCalculator": [
+    {
+        "question": "Question 1 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Remaining Filament Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Remaining Filament Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Remaining Filament Calculator calculations."
+    }
+],
+  "MaterialCostComparison": [
+    {
+        "question": "Question 1 about Material Cost Comparison?",
+        "answer": "This is the answer number 1 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 2 about Material Cost Comparison?",
+        "answer": "This is the answer number 2 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 3 about Material Cost Comparison?",
+        "answer": "This is the answer number 3 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 4 about Material Cost Comparison?",
+        "answer": "This is the answer number 4 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 5 about Material Cost Comparison?",
+        "answer": "This is the answer number 5 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 6 about Material Cost Comparison?",
+        "answer": "This is the answer number 6 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 7 about Material Cost Comparison?",
+        "answer": "This is the answer number 7 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 8 about Material Cost Comparison?",
+        "answer": "This is the answer number 8 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 9 about Material Cost Comparison?",
+        "answer": "This is the answer number 9 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 10 about Material Cost Comparison?",
+        "answer": "This is the answer number 10 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 11 about Material Cost Comparison?",
+        "answer": "This is the answer number 11 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 12 about Material Cost Comparison?",
+        "answer": "This is the answer number 12 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 13 about Material Cost Comparison?",
+        "answer": "This is the answer number 13 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 14 about Material Cost Comparison?",
+        "answer": "This is the answer number 14 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 15 about Material Cost Comparison?",
+        "answer": "This is the answer number 15 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 16 about Material Cost Comparison?",
+        "answer": "This is the answer number 16 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 17 about Material Cost Comparison?",
+        "answer": "This is the answer number 17 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 18 about Material Cost Comparison?",
+        "answer": "This is the answer number 18 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 19 about Material Cost Comparison?",
+        "answer": "This is the answer number 19 clarifying specifications for Material Cost Comparison calculations."
+    },
+    {
+        "question": "Question 20 about Material Cost Comparison?",
+        "answer": "This is the answer number 20 clarifying specifications for Material Cost Comparison calculations."
+    }
+],
+  "PrintTimeEstimator": [
+    {
+        "question": "Question 1 about Print Time Estimator?",
+        "answer": "This is the answer number 1 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 2 about Print Time Estimator?",
+        "answer": "This is the answer number 2 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 3 about Print Time Estimator?",
+        "answer": "This is the answer number 3 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 4 about Print Time Estimator?",
+        "answer": "This is the answer number 4 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 5 about Print Time Estimator?",
+        "answer": "This is the answer number 5 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 6 about Print Time Estimator?",
+        "answer": "This is the answer number 6 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 7 about Print Time Estimator?",
+        "answer": "This is the answer number 7 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 8 about Print Time Estimator?",
+        "answer": "This is the answer number 8 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 9 about Print Time Estimator?",
+        "answer": "This is the answer number 9 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 10 about Print Time Estimator?",
+        "answer": "This is the answer number 10 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 11 about Print Time Estimator?",
+        "answer": "This is the answer number 11 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 12 about Print Time Estimator?",
+        "answer": "This is the answer number 12 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 13 about Print Time Estimator?",
+        "answer": "This is the answer number 13 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 14 about Print Time Estimator?",
+        "answer": "This is the answer number 14 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 15 about Print Time Estimator?",
+        "answer": "This is the answer number 15 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 16 about Print Time Estimator?",
+        "answer": "This is the answer number 16 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 17 about Print Time Estimator?",
+        "answer": "This is the answer number 17 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 18 about Print Time Estimator?",
+        "answer": "This is the answer number 18 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 19 about Print Time Estimator?",
+        "answer": "This is the answer number 19 clarifying specifications for Print Time Estimator calculations."
+    },
+    {
+        "question": "Question 20 about Print Time Estimator?",
+        "answer": "This is the answer number 20 clarifying specifications for Print Time Estimator calculations."
+    }
+],
+  "LayerHeightCalculator": [
+    {
+        "question": "Question 1 about Layer Height Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Layer Height Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Layer Height Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Layer Height Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Layer Height Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Layer Height Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Layer Height Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Layer Height Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Layer Height Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Layer Height Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Layer Height Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Layer Height Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Layer Height Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Layer Height Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Layer Height Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Layer Height Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Layer Height Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Layer Height Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Layer Height Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Layer Height Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Layer Height Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Layer Height Calculator calculations."
+    }
+],
+  "PrintSpeedCalculator": [
+    {
+        "question": "Question 1 about Print Speed Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Print Speed Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Print Speed Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Print Speed Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Print Speed Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Print Speed Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Print Speed Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Print Speed Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Print Speed Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Print Speed Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Print Speed Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Print Speed Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Print Speed Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Print Speed Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Print Speed Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Print Speed Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Print Speed Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Print Speed Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Print Speed Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Print Speed Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Print Speed Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Print Speed Calculator calculations."
+    }
+],
+  "NozzleFlowCalculator": [
+    {
+        "question": "Question 1 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Nozzle Flow Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Nozzle Flow Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Nozzle Flow Calculator calculations."
+    }
+],
+  "VolumetricFlowCalculator": [
+    {
+        "question": "Question 1 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Volumetric Flow Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Volumetric Flow Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Volumetric Flow Calculator calculations."
+    }
+],
+  "CoolingFanRecommendation": [
+    {
+        "question": "Question 1 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 1 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 2 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 2 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 3 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 3 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 4 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 4 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 5 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 5 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 6 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 6 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 7 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 7 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 8 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 8 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 9 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 9 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 10 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 10 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 11 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 11 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 12 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 12 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 13 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 13 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 14 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 14 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 15 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 15 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 16 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 16 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 17 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 17 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 18 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 18 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 19 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 19 clarifying specifications for Cooling Fan Recommendation calculations."
+    },
+    {
+        "question": "Question 20 about Cooling Fan Recommendation?",
+        "answer": "This is the answer number 20 clarifying specifications for Cooling Fan Recommendation calculations."
+    }
+],
+  "NozzleSizeComparison": [
+    {
+        "question": "Question 1 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 1 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 2 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 2 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 3 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 3 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 4 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 4 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 5 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 5 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 6 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 6 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 7 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 7 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 8 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 8 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 9 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 9 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 10 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 10 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 11 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 11 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 12 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 12 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 13 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 13 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 14 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 14 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 15 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 15 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 16 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 16 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 17 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 17 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 18 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 18 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 19 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 19 clarifying specifications for Nozzle Size Comparison calculations."
+    },
+    {
+        "question": "Question 20 about Nozzle Size Comparison?",
+        "answer": "This is the answer number 20 clarifying specifications for Nozzle Size Comparison calculations."
+    }
+],
+  "LineWidthCalculator": [
+    {
+        "question": "Question 1 about Line Width Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Line Width Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Line Width Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Line Width Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Line Width Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Line Width Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Line Width Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Line Width Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Line Width Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Line Width Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Line Width Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Line Width Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Line Width Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Line Width Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Line Width Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Line Width Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Line Width Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Line Width Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Line Width Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Line Width Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Line Width Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Line Width Calculator calculations."
+    }
+],
+  "LayerWidthCalculator": [
+    {
+        "question": "Question 1 about Layer Width Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Layer Width Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Layer Width Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Layer Width Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Layer Width Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Layer Width Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Layer Width Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Layer Width Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Layer Width Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Layer Width Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Layer Width Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Layer Width Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Layer Width Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Layer Width Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Layer Width Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Layer Width Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Layer Width Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Layer Width Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Layer Width Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Layer Width Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Layer Width Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Layer Width Calculator calculations."
+    }
+],
+  "STLVolumeCalculator": [
+    {
+        "question": "Question 1 about STL Volume Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 2 about STL Volume Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 3 about STL Volume Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 4 about STL Volume Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 5 about STL Volume Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 6 about STL Volume Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 7 about STL Volume Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 8 about STL Volume Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 9 about STL Volume Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 10 about STL Volume Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 11 about STL Volume Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 12 about STL Volume Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 13 about STL Volume Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 14 about STL Volume Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 15 about STL Volume Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 16 about STL Volume Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 17 about STL Volume Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 18 about STL Volume Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 19 about STL Volume Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for STL Volume Calculator calculations."
+    },
+    {
+        "question": "Question 20 about STL Volume Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for STL Volume Calculator calculations."
+    }
+],
+  "STLBoundingBoxCalculator": [
+    {
+        "question": "Question 1 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 2 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 3 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 4 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 5 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 6 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 7 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 8 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 9 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 10 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 11 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 12 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 13 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 14 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 15 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 16 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 17 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 18 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 19 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for STL Bounding Box Calculator calculations."
+    },
+    {
+        "question": "Question 20 about STL Bounding Box Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for STL Bounding Box Calculator calculations."
+    }
+],
+  "ScaleCalculator": [
+    {
+        "question": "Question 1 about Scale Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Scale Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Scale Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Scale Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Scale Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Scale Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Scale Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Scale Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Scale Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Scale Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Scale Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Scale Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Scale Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Scale Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Scale Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Scale Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Scale Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Scale Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Scale Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Scale Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Scale Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Scale Calculator calculations."
+    }
+],
+  "ModelWeightCalculator": [
+    {
+        "question": "Question 1 about Model Weight Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Model Weight Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Model Weight Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Model Weight Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Model Weight Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Model Weight Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Model Weight Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Model Weight Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Model Weight Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Model Weight Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Model Weight Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Model Weight Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Model Weight Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Model Weight Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Model Weight Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Model Weight Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Model Weight Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Model Weight Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Model Weight Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Model Weight Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Model Weight Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Model Weight Calculator calculations."
+    }
+],
+  "ResinCostCalculator": [
+    {
+        "question": "Question 1 about Resin Cost Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Resin Cost Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Resin Cost Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Resin Cost Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Resin Cost Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Resin Cost Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Resin Cost Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Resin Cost Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Resin Cost Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Resin Cost Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Resin Cost Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Resin Cost Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Resin Cost Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Resin Cost Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Resin Cost Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Resin Cost Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Resin Cost Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Resin Cost Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Resin Cost Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Resin Cost Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Resin Cost Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Resin Cost Calculator calculations."
+    }
+],
+  "ResinVolumeCalculator": [
+    {
+        "question": "Question 1 about Resin Volume Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Resin Volume Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Resin Volume Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Resin Volume Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Resin Volume Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Resin Volume Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Resin Volume Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Resin Volume Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Resin Volume Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Resin Volume Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Resin Volume Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Resin Volume Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Resin Volume Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Resin Volume Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Resin Volume Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Resin Volume Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Resin Volume Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Resin Volume Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Resin Volume Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Resin Volume Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Resin Volume Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Resin Volume Calculator calculations."
+    }
+],
+  "ExposureTimeHelper": [
+    {
+        "question": "Question 1 about Exposure Time Helper?",
+        "answer": "This is the answer number 1 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 2 about Exposure Time Helper?",
+        "answer": "This is the answer number 2 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 3 about Exposure Time Helper?",
+        "answer": "This is the answer number 3 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 4 about Exposure Time Helper?",
+        "answer": "This is the answer number 4 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 5 about Exposure Time Helper?",
+        "answer": "This is the answer number 5 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 6 about Exposure Time Helper?",
+        "answer": "This is the answer number 6 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 7 about Exposure Time Helper?",
+        "answer": "This is the answer number 7 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 8 about Exposure Time Helper?",
+        "answer": "This is the answer number 8 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 9 about Exposure Time Helper?",
+        "answer": "This is the answer number 9 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 10 about Exposure Time Helper?",
+        "answer": "This is the answer number 10 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 11 about Exposure Time Helper?",
+        "answer": "This is the answer number 11 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 12 about Exposure Time Helper?",
+        "answer": "This is the answer number 12 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 13 about Exposure Time Helper?",
+        "answer": "This is the answer number 13 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 14 about Exposure Time Helper?",
+        "answer": "This is the answer number 14 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 15 about Exposure Time Helper?",
+        "answer": "This is the answer number 15 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 16 about Exposure Time Helper?",
+        "answer": "This is the answer number 16 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 17 about Exposure Time Helper?",
+        "answer": "This is the answer number 17 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 18 about Exposure Time Helper?",
+        "answer": "This is the answer number 18 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 19 about Exposure Time Helper?",
+        "answer": "This is the answer number 19 clarifying specifications for Exposure Time Helper calculations."
+    },
+    {
+        "question": "Question 20 about Exposure Time Helper?",
+        "answer": "This is the answer number 20 clarifying specifications for Exposure Time Helper calculations."
+    }
+],
+  "ElectricityCostCalculator": [
+    {
+        "question": "Question 1 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Electricity Cost Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Electricity Cost Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Electricity Cost Calculator calculations."
+    }
+],
+  "PackagingCostCalculator": [
+    {
+        "question": "Question 1 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Packaging Cost Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Packaging Cost Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Packaging Cost Calculator calculations."
+    }
+],
+  "ShippingCostCalculator": [
+    {
+        "question": "Question 1 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Shipping Cost Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Shipping Cost Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Shipping Cost Calculator calculations."
+    }
+],
+  "MachineUtilizationCalculator": [
+    {
+        "question": "Question 1 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Machine Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Machine Utilization Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Machine Utilization Calculator calculations."
+    }
+],
+  "MonthlyProductionCalculator": [
+    {
+        "question": "Question 1 about Monthly Production Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Monthly Production Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Monthly Production Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Monthly Production Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Monthly Production Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Monthly Production Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Monthly Production Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Monthly Production Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Monthly Production Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Monthly Production Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Monthly Production Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Monthly Production Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Monthly Production Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Monthly Production Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Monthly Production Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Monthly Production Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Monthly Production Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Monthly Production Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Monthly Production Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Monthly Production Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Monthly Production Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Monthly Production Calculator calculations."
+    }
+],
+  "PrintQueueTimeCalculator": [
+    {
+        "question": "Question 1 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Print Queue Time Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Print Queue Time Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Print Queue Time Calculator calculations."
+    }
+],
+  "HueForgeFilamentCalculator": [
+    {
+        "question": "Question 1 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 2 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 3 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 4 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 5 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 6 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 7 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 8 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 9 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 10 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 11 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 12 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 13 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 14 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 15 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 16 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 17 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 18 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 19 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for HueForge Filament Calculator calculations."
+    },
+    {
+        "question": "Question 20 about HueForge Filament Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for HueForge Filament Calculator calculations."
+    }
+],
+  "HueForgeLayerCalculator": [
+    {
+        "question": "Question 1 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 2 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 3 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 4 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 5 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 6 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 7 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 8 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 9 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 10 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 11 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 12 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 13 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 14 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 15 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 16 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 17 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 18 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 19 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for HueForge Layer Calculator calculations."
+    },
+    {
+        "question": "Question 20 about HueForge Layer Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for HueForge Layer Calculator calculations."
+    }
+],
+  "HueForgeColorSwapPlanner": [
+    {
+        "question": "Question 1 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 1 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 2 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 2 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 3 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 3 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 4 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 4 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 5 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 5 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 6 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 6 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 7 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 7 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 8 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 8 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 9 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 9 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 10 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 10 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 11 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 11 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 12 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 12 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 13 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 13 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 14 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 14 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 15 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 15 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 16 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 16 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 17 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 17 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 18 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 18 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 19 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 19 clarifying specifications for HueForge Color Swap Planner calculations."
+    },
+    {
+        "question": "Question 20 about HueForge Color Swap Planner?",
+        "answer": "This is the answer number 20 clarifying specifications for HueForge Color Swap Planner calculations."
+    }
+],
+  "AMSFilamentPlanner": [
+    {
+        "question": "Question 1 about AMS Filament Planner?",
+        "answer": "This is the answer number 1 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 2 about AMS Filament Planner?",
+        "answer": "This is the answer number 2 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 3 about AMS Filament Planner?",
+        "answer": "This is the answer number 3 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 4 about AMS Filament Planner?",
+        "answer": "This is the answer number 4 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 5 about AMS Filament Planner?",
+        "answer": "This is the answer number 5 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 6 about AMS Filament Planner?",
+        "answer": "This is the answer number 6 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 7 about AMS Filament Planner?",
+        "answer": "This is the answer number 7 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 8 about AMS Filament Planner?",
+        "answer": "This is the answer number 8 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 9 about AMS Filament Planner?",
+        "answer": "This is the answer number 9 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 10 about AMS Filament Planner?",
+        "answer": "This is the answer number 10 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 11 about AMS Filament Planner?",
+        "answer": "This is the answer number 11 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 12 about AMS Filament Planner?",
+        "answer": "This is the answer number 12 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 13 about AMS Filament Planner?",
+        "answer": "This is the answer number 13 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 14 about AMS Filament Planner?",
+        "answer": "This is the answer number 14 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 15 about AMS Filament Planner?",
+        "answer": "This is the answer number 15 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 16 about AMS Filament Planner?",
+        "answer": "This is the answer number 16 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 17 about AMS Filament Planner?",
+        "answer": "This is the answer number 17 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 18 about AMS Filament Planner?",
+        "answer": "This is the answer number 18 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 19 about AMS Filament Planner?",
+        "answer": "This is the answer number 19 clarifying specifications for AMS Filament Planner calculations."
+    },
+    {
+        "question": "Question 20 about AMS Filament Planner?",
+        "answer": "This is the answer number 20 clarifying specifications for AMS Filament Planner calculations."
+    }
+],
+  "FilamentChangeEstimator": [
+    {
+        "question": "Question 1 about Filament Change Estimator?",
+        "answer": "This is the answer number 1 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 2 about Filament Change Estimator?",
+        "answer": "This is the answer number 2 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 3 about Filament Change Estimator?",
+        "answer": "This is the answer number 3 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 4 about Filament Change Estimator?",
+        "answer": "This is the answer number 4 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 5 about Filament Change Estimator?",
+        "answer": "This is the answer number 5 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 6 about Filament Change Estimator?",
+        "answer": "This is the answer number 6 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 7 about Filament Change Estimator?",
+        "answer": "This is the answer number 7 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 8 about Filament Change Estimator?",
+        "answer": "This is the answer number 8 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 9 about Filament Change Estimator?",
+        "answer": "This is the answer number 9 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 10 about Filament Change Estimator?",
+        "answer": "This is the answer number 10 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 11 about Filament Change Estimator?",
+        "answer": "This is the answer number 11 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 12 about Filament Change Estimator?",
+        "answer": "This is the answer number 12 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 13 about Filament Change Estimator?",
+        "answer": "This is the answer number 13 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 14 about Filament Change Estimator?",
+        "answer": "This is the answer number 14 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 15 about Filament Change Estimator?",
+        "answer": "This is the answer number 15 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 16 about Filament Change Estimator?",
+        "answer": "This is the answer number 16 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 17 about Filament Change Estimator?",
+        "answer": "This is the answer number 17 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 18 about Filament Change Estimator?",
+        "answer": "This is the answer number 18 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 19 about Filament Change Estimator?",
+        "answer": "This is the answer number 19 clarifying specifications for Filament Change Estimator calculations."
+    },
+    {
+        "question": "Question 20 about Filament Change Estimator?",
+        "answer": "This is the answer number 20 clarifying specifications for Filament Change Estimator calculations."
+    }
+],
+  "PurgeWasteCalculator": [
+    {
+        "question": "Question 1 about Purge Waste Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Purge Waste Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Purge Waste Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Purge Waste Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Purge Waste Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Purge Waste Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Purge Waste Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Purge Waste Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Purge Waste Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Purge Waste Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Purge Waste Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Purge Waste Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Purge Waste Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Purge Waste Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Purge Waste Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Purge Waste Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Purge Waste Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Purge Waste Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Purge Waste Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Purge Waste Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Purge Waste Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Purge Waste Calculator calculations."
+    }
+],
+  "FlushVolumeCalculator": [
+    {
+        "question": "Question 1 about Flush Volume Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Flush Volume Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Flush Volume Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Flush Volume Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Flush Volume Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Flush Volume Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Flush Volume Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Flush Volume Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Flush Volume Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Flush Volume Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Flush Volume Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Flush Volume Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Flush Volume Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Flush Volume Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Flush Volume Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Flush Volume Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Flush Volume Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Flush Volume Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Flush Volume Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Flush Volume Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Flush Volume Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Flush Volume Calculator calculations."
+    }
+],
+  "AMSSlotPlanner": [
+    {
+        "question": "Question 1 about AMS Slot Planner?",
+        "answer": "This is the answer number 1 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 2 about AMS Slot Planner?",
+        "answer": "This is the answer number 2 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 3 about AMS Slot Planner?",
+        "answer": "This is the answer number 3 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 4 about AMS Slot Planner?",
+        "answer": "This is the answer number 4 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 5 about AMS Slot Planner?",
+        "answer": "This is the answer number 5 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 6 about AMS Slot Planner?",
+        "answer": "This is the answer number 6 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 7 about AMS Slot Planner?",
+        "answer": "This is the answer number 7 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 8 about AMS Slot Planner?",
+        "answer": "This is the answer number 8 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 9 about AMS Slot Planner?",
+        "answer": "This is the answer number 9 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 10 about AMS Slot Planner?",
+        "answer": "This is the answer number 10 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 11 about AMS Slot Planner?",
+        "answer": "This is the answer number 11 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 12 about AMS Slot Planner?",
+        "answer": "This is the answer number 12 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 13 about AMS Slot Planner?",
+        "answer": "This is the answer number 13 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 14 about AMS Slot Planner?",
+        "answer": "This is the answer number 14 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 15 about AMS Slot Planner?",
+        "answer": "This is the answer number 15 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 16 about AMS Slot Planner?",
+        "answer": "This is the answer number 16 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 17 about AMS Slot Planner?",
+        "answer": "This is the answer number 17 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 18 about AMS Slot Planner?",
+        "answer": "This is the answer number 18 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 19 about AMS Slot Planner?",
+        "answer": "This is the answer number 19 clarifying specifications for AMS Slot Planner calculations."
+    },
+    {
+        "question": "Question 20 about AMS Slot Planner?",
+        "answer": "This is the answer number 20 clarifying specifications for AMS Slot Planner calculations."
+    }
+],
+  "BuildPlateUtilizationCalculator": [
+    {
+        "question": "Question 1 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 1 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 2 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 2 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 3 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 3 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 4 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 4 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 5 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 5 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 6 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 6 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 7 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 7 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 8 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 8 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 9 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 9 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 10 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 10 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 11 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 11 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 12 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 12 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 13 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 13 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 14 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 14 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 15 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 15 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 16 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 16 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 17 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 17 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 18 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 18 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 19 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 19 clarifying specifications for Build Plate Utilization Calculator calculations."
+    },
+    {
+        "question": "Question 20 about Build Plate Utilization Calculator?",
+        "answer": "This is the answer number 20 clarifying specifications for Build Plate Utilization Calculator calculations."
+    }
+]
 };
 
