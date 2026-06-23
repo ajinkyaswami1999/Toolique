@@ -56,6 +56,7 @@ export default function ThreeDPrintingCostCalculator() {
   // Settings Panel state
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [settingsForm, setSettingsForm] = useState<CalculatorSettings>({ ...settings });
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   // History list expanded state
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -711,10 +712,97 @@ Calculated via Toolique 3D Printing Cost Calculator.`;
 
           {/* 2. Filament Cost */}
           <div className="saas-card p-6 space-y-4">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
-              <Layers className="w-4 h-4" />
-              <span>2. Filament Cost</span>
-            </h3>
+            <div className="flex justify-between items-center pb-2 border-b border-zinc-200/60 dark:border-zinc-800/60">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+                <Layers className="w-4 h-4" />
+                <span>2. Filament Cost</span>
+              </h3>
+              <button
+                onClick={() => setIsGuideOpen(!isGuideOpen)}
+                className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+              >
+                {isGuideOpen ? 'Hide Brand Prices' : 'Show Indian Brand Prices'}
+              </button>
+            </div>
+
+            {isGuideOpen && (
+              <div className="p-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/30 border border-zinc-200/60 dark:border-zinc-800/60 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Representative Filament Rates in India (1kg spool)</span>
+                  <span className="text-[9px] font-semibold text-zinc-405">Click Apply to set price</span>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[220px] overflow-y-auto pr-1">
+                  {/* eSun */}
+                  <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200/40 dark:border-zinc-800/40 space-y-2">
+                    <span className="text-[10px] font-bold text-indigo-650 dark:text-indigo-400 uppercase">eSun (Premium Import)</span>
+                    <div className="space-y-1.5 text-[10px] font-semibold text-zinc-650 dark:text-zinc-400">
+                      <div className="flex justify-between items-center">
+                        <span>PLA+</span>
+                        <button onClick={() => setFilamentPrice(1350)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹1,350</button>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>PETG</span>
+                        <button onClick={() => setFilamentPrice(1400)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹1,400</button>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>TPU 95A</span>
+                        <button onClick={() => setFilamentPrice(2400)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹2,400</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* WOL3D */}
+                  <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200/40 dark:border-zinc-800/40 space-y-2">
+                    <span className="text-[10px] font-bold text-indigo-655 dark:text-indigo-400 uppercase">WOL3D (Value Focus)</span>
+                    <div className="space-y-1.5 text-[10px] font-semibold text-zinc-655 dark:text-zinc-400">
+                      <div className="flex justify-between items-center">
+                        <span>Eco PLA</span>
+                        <button onClick={() => setFilamentPrice(850)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹850</button>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Pro+ PLA</span>
+                        <button onClick={() => setFilamentPrice(1100)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹1,100</button>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>TPU</span>
+                        <button onClick={() => setFilamentPrice(1800)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹1,800</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Creality */}
+                  <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200/40 dark:border-zinc-800/40 space-y-2">
+                    <span className="text-[10px] font-bold text-indigo-650 dark:text-indigo-400 uppercase">Creality (Standard)</span>
+                    <div className="space-y-1.5 text-[10px] font-semibold text-zinc-650 dark:text-zinc-400">
+                      <div className="flex justify-between items-center">
+                        <span>Value PLA</span>
+                        <button onClick={() => setFilamentPrice(1050)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹1,050</button>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Hyper PLA</span>
+                        <button onClick={() => setFilamentPrice(1450)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹1,450</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Generic/Others */}
+                  <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200/40 dark:border-zinc-800/40 space-y-2">
+                    <span className="text-[10px] font-bold text-indigo-650 dark:text-indigo-400 uppercase">Generic / Special</span>
+                    <div className="space-y-1.5 text-[10px] font-semibold text-zinc-655 dark:text-zinc-400">
+                      <div className="flex justify-between items-center">
+                        <span>Generic PLA</span>
+                        <button onClick={() => setFilamentPrice(750)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹750</button>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Premium Import</span>
+                        <button onClick={() => setFilamentPrice(2800)} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500 hover:text-white transition cursor-pointer font-bold">₹2,800</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
