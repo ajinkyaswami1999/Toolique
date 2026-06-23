@@ -1002,16 +1002,16 @@ export const toolsList: Tool[] = [
   {
     id: 'JWTDecoder',
     slug: 'jwt-decoder',
-    name: 'JWT Decoder',
+    name: 'JWT Decoder & Encoder',
     category: 'developer',
-    shortDescription: 'Decode JSON Web Tokens (JWT) header, payload, and signatures instantly.',
-    metaDescription: 'Parse and validate JSON Web Tokens (JWT) online. View header claims, payload values, signature details, and token expiration statuses in real-time.',
-    keywords: ['JWT Decoder', 'Decode JSON Web Token', 'JWT expiry check', 'JWT payload parser', 'Developer debugging tool'],
+    shortDescription: 'Decode and encode JSON Web Tokens (JWT) instantly. Parse or generate headers, payloads, and signatures.',
+    metaDescription: 'Decode and encode JSON Web Tokens (JWT) online. View header claims, payload values, signature details, token expiration, or sign new tokens in real-time.',
+    keywords: ['JWT Decoder', 'JWT Encoder', 'Encode JWT', 'Decode JSON Web Token', 'JWT expiry check', 'JWT signer'],
     icon: 'Key',
     howToUse: [
-      'Paste your encoded JSON Web Token (JWT) into the text box.',
-      'Review the token expiration status and timestamps.',
-      'Inspect the formatted JSON structures for the Header and Payload segments.'
+      'Choose the Decoder or Encoder tab at the top.',
+      'Decoder: Paste an encoded JWT to inspect its header, payload claims, signature structure, and validity.',
+      'Encoder: Edit Header/Payload JSON, provide a signature secret, and instantly generate a signed JWT.'
     ],
     faqs: [
       {
@@ -1021,12 +1021,20 @@ export const toolsList: Tool[] = [
       {
         question: 'Can this tool verify token signatures?',
         answer: 'No. Signature verification requires the server-side secret key or public certificate. This tool decodes and parses the structure for debugging client claims.'
+      },
+      {
+        question: 'Does this tool support encoding JWTs?',
+        answer: 'Yes! Switch to the Encoder tab to generate signed JWTs using HMAC-SHA256 (HS256) entirely client-side.'
       }
     ],
     sections: [
       {
         title: 'Decoding JWT Structure',
         content: 'A JWT is composed of three parts separated by dots (.): Header, Payload, and Signature. The Header contains metadata, the Payload houses custom data claims, and the Signature validates message integrity.'
+      },
+      {
+        title: 'Decoding vs Encoding JWTs',
+        content: 'Decoding allows you to view the public content of a token (Header and Payload) without a key. Encoding allows you to construct a token and sign it using a secret key (HS255) to verify its integrity.'
       }
     ]
   },
