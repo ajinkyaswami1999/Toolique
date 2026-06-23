@@ -177,12 +177,11 @@ export default function ThreeDPrintStudio() {
     const el = document.getElementById('studio-directory');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
-
   return (
-    <div className="bg-zinc-950 text-zinc-100 rounded-3xl border border-zinc-800 shadow-2xl p-6 md:p-12 space-y-16 mt-4 relative overflow-hidden">
+    <div className="bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl p-6 md:p-12 space-y-16 mt-4 relative overflow-hidden">
       {/* Background Neon Glows */}
-      <div className="absolute top-[-10%] left-[20%] w-[300px] h-[300px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[10%] w-[250px] h-[250px] bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-[-10%] left-[20%] w-[300px] h-[300px] bg-indigo-500/[0.05] dark:bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[10%] w-[250px] h-[250px] bg-cyan-500/[0.05] dark:bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
 
       <SEO
         title="3D Print Studio - Free 3D Printing Calculators & Tools"
@@ -193,14 +192,14 @@ export default function ThreeDPrintStudio() {
 
       {/* Hero Section */}
       <section className="text-center max-w-4xl mx-auto space-y-6 pt-6 relative z-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/5 text-[10px] font-bold uppercase tracking-wider text-cyan-400">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/5 text-[10px] font-bold uppercase tracking-wider text-cyan-500 dark:text-cyan-400">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Professional Maker Tools</span>
         </div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.1] bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.1] bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 via-indigo-600 to-purple-600 dark:from-cyan-400 dark:via-indigo-400 dark:to-purple-400">
           3D Print Studio
         </h1>
-        <p className="text-sm md:text-base text-zinc-400 leading-relaxed max-w-2xl mx-auto">
+        <p className="text-sm md:text-base text-zinc-550 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto">
           Professional 3D printing calculators for filament cost, print pricing, material usage, print farms, Bambu Lab, HueForge, resin printing, and production planning.
         </p>
 
@@ -217,9 +216,9 @@ export default function ThreeDPrintStudio() {
 
       {/* Featured Tools Section */}
       <section className="space-y-6 relative z-10">
-        <div className="border-b border-zinc-800 pb-3 flex justify-between items-center">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-cyan-400">Featured Toolkits</h2>
-          <span className="text-[10px] font-bold text-zinc-550 uppercase tracking-wider">Top 6 Calculators</span>
+        <div className="border-b border-zinc-200 dark:border-zinc-800 pb-3 flex justify-between items-center">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">Featured Toolkits</h2>
+          <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-550 uppercase tracking-wider">Top 6 Calculators</span>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -228,17 +227,17 @@ export default function ThreeDPrintStudio() {
               <Link
                 key={tool.slug}
                 to={`/tool/${tool.slug}`}
-                className="group p-6 rounded-2xl bg-zinc-900/30 border border-zinc-850 hover:border-cyan-500/30 hover:bg-zinc-900/50 hover:shadow-lg hover:shadow-cyan-500/[0.01] transition-all duration-300 flex flex-col justify-between"
+                className="group p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-850 hover:border-cyan-500/30 dark:hover:border-cyan-500/30 hover:bg-white dark:hover:bg-zinc-900/50 hover:shadow-lg hover:shadow-cyan-500/[0.01] transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="space-y-2">
-                  <h3 className="text-sm font-bold text-zinc-200 group-hover:text-cyan-400 transition">
+                  <h3 className="text-sm font-bold text-zinc-850 dark:text-zinc-200 group-hover:text-cyan-650 dark:group-hover:text-cyan-400 transition">
                     {tool.name}
                   </h3>
-                  <p className="text-[11px] text-zinc-450 leading-relaxed font-semibold">
+                  <p className="text-[11px] text-zinc-500 dark:text-zinc-455 leading-relaxed font-semibold">
                     {tool.desc}
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-zinc-900 flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-zinc-500 group-hover:text-zinc-300 transition">
+                <div className="mt-4 pt-3 border-t border-zinc-200 dark:border-zinc-900 flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-zinc-450 dark:text-zinc-500 group-hover:text-zinc-650 dark:group-hover:text-zinc-300 transition">
                   <span>{tool.group}</span>
                   <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition" />
                 </div>
@@ -250,19 +249,19 @@ export default function ThreeDPrintStudio() {
 
       {/* Search & Directory Header */}
       <section id="studio-directory" className="space-y-6 pt-6 relative z-10">
-        <div className="border-b border-zinc-800 pb-3">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-cyan-400">All 3D Printing Tools</h2>
+        <div className="border-b border-zinc-200 dark:border-zinc-800 pb-3">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">All 3D Printing Tools</h2>
         </div>
 
         {/* Large Search Input */}
         <div className="max-w-2xl mx-auto relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 w-5 h-5" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-5 h-5" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search 3D printing calculators..."
-            className="w-full pl-12 pr-4 py-4 rounded-xl border border-zinc-800 bg-zinc-900/40 text-sm font-semibold text-white focus:border-cyan-400 focus:outline-none transition"
+            className="w-full pl-12 pr-4 py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 text-sm font-semibold text-zinc-900 dark:text-white focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none transition shadow-sm"
           />
         </div>
 
@@ -272,8 +271,8 @@ export default function ThreeDPrintStudio() {
             onClick={() => setActiveGroup('all')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition border cursor-pointer ${
               activeGroup === 'all'
-                ? 'bg-zinc-100 text-zinc-950 border-white'
-                : 'bg-zinc-900/50 text-zinc-400 border-zinc-850 hover:text-white'
+                ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 border-zinc-900 dark:border-white shadow-sm'
+                : 'bg-zinc-100/50 dark:bg-zinc-900/50 text-zinc-550 dark:text-zinc-400 border-zinc-200/60 dark:border-zinc-850 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-300 dark:hover:border-zinc-705'
             }`}
           >
             All Toolkits
@@ -285,8 +284,8 @@ export default function ThreeDPrintStudio() {
                 onClick={() => setActiveGroup(group.name)}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition border cursor-pointer ${
                   activeGroup === group.name
-                    ? 'bg-cyan-500 text-zinc-950 border-cyan-400'
-                    : 'bg-zinc-900/50 text-zinc-400 border-zinc-850 hover:text-white'
+                    ? 'bg-cyan-600 dark:bg-cyan-500 text-white dark:text-zinc-950 border-cyan-600 dark:border-cyan-400 shadow-sm'
+                    : 'bg-zinc-100/50 dark:bg-zinc-900/50 text-zinc-550 dark:text-zinc-400 border-zinc-200/60 dark:border-zinc-850 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-300 dark:hover:border-zinc-705'
                 }`}
               >
                 {group.name}
@@ -304,22 +303,22 @@ export default function ThreeDPrintStudio() {
                 <Link
                   key={tool.slug}
                   to={`/tool/${tool.slug}`}
-                  className="group p-6 rounded-2xl bg-zinc-900/20 border border-zinc-850 hover:border-cyan-500/20 hover:bg-zinc-900/40 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
+                  className="group p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-900/20 border border-zinc-200 dark:border-zinc-850 hover:border-cyan-500/20 dark:hover:border-cyan-500/20 hover:bg-white dark:hover:bg-zinc-900/40 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between shadow-sm hover:shadow-md"
                 >
                   <div className="space-y-3">
-                    <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-zinc-800 text-zinc-400 group-hover:text-cyan-400 w-fit transition">
+                    <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 text-zinc-450 dark:text-zinc-400 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 w-fit transition">
                       <IconComponent className="w-5 h-5" />
                     </div>
                     <div className="space-y-1">
-                      <h3 className="text-xs font-bold text-zinc-200 group-hover:text-white transition">
+                      <h3 className="text-xs font-bold text-zinc-850 dark:text-zinc-200 group-hover:text-zinc-950 dark:group-hover:text-white transition">
                         {tool.name}
                       </h3>
-                      <p className="text-[11px] text-zinc-455 leading-relaxed font-semibold">
+                      <p className="text-[11px] text-zinc-500 dark:text-zinc-455 leading-relaxed font-semibold">
                         {tool.desc}
                       </p>
                     </div>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-zinc-900 flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-zinc-550 group-hover:text-zinc-400 transition">
+                  <div className="mt-4 pt-3 border-t border-zinc-200 dark:border-zinc-900 flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-zinc-450 dark:text-zinc-550 group-hover:text-zinc-650 dark:group-hover:text-zinc-400 transition">
                     <span>{tool.group}</span>
                     <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition" />
                   </div>
@@ -327,7 +326,7 @@ export default function ThreeDPrintStudio() {
               );
             })
           ) : (
-            <div className="col-span-full py-12 text-center text-zinc-550 font-semibold text-xs">
+            <div className="col-span-full py-12 text-center text-zinc-400 dark:text-zinc-550 font-semibold text-xs">
               No 3D printing calculators match your search filter criteria.
             </div>
           )}
@@ -336,9 +335,9 @@ export default function ThreeDPrintStudio() {
 
       {/* FAQs Section */}
       <section className="space-y-6 relative z-10">
-        <div className="border-b border-zinc-800 pb-3 flex justify-between items-center">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-cyan-400">Frequently Asked Questions</h2>
-          <span className="text-[10px] font-bold text-zinc-550 uppercase tracking-wider">FAQ Hub</span>
+        <div className="border-b border-zinc-200 dark:border-zinc-800 pb-3 flex justify-between items-center">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">Frequently Asked Questions</h2>
+          <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-550 uppercase tracking-wider">FAQ Hub</span>
         </div>
 
         <div className="max-w-3xl mx-auto space-y-4">
@@ -347,20 +346,20 @@ export default function ThreeDPrintStudio() {
             return (
               <div
                 key={idx}
-                className="rounded-xl border border-zinc-850 bg-zinc-900/10 overflow-hidden transition"
+                className="rounded-xl border border-zinc-200 dark:border-zinc-850 bg-zinc-50/50 dark:bg-zinc-900/10 overflow-hidden transition"
               >
                 <button
                   onClick={() => setOpenFaq(isOpen ? null : idx)}
-                  className="w-full p-4 flex justify-between items-center text-left text-zinc-200 hover:text-white font-bold text-xs cursor-pointer"
+                  className="w-full p-4 flex justify-between items-center text-left text-zinc-700 dark:text-zinc-200 hover:text-zinc-900 dark:hover:text-white font-bold text-xs cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-cyan-400 shrink-0" />
+                    <HelpCircle className="w-4 h-4 text-cyan-500 dark:text-cyan-400 shrink-0" />
                     <span>{faq.q}</span>
                   </div>
-                  <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 text-zinc-400 dark:text-zinc-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 text-[11px] text-zinc-400 leading-relaxed font-semibold border-t border-zinc-850 pt-3">
+                  <div className="px-4 pb-4 text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed font-semibold border-t border-zinc-200 dark:border-zinc-850 pt-3">
                     {faq.a}
                   </div>
                 )}

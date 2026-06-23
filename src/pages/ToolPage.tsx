@@ -464,18 +464,24 @@ export default function ToolPage() {
       {/* Breadcrumb & Navigation */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
         <Link
-          to="/"
+          to={tool.category === '3d-printing' ? "/3d-print-studio" : "/"}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Home</span>
+          <span>{tool.category === '3d-printing' ? "Back to 3D Print Studio" : "Back to Home"}</span>
         </Link>
         <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
           <Link to="/" className="hover:text-indigo-500 transition-colors">Home</Link>
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
-          <Link to={`/?category=${tool.category}`} className="capitalize hover:text-indigo-500 transition-colors">
-            {tool.category}
-          </Link>
+          {tool.category === '3d-printing' ? (
+            <Link to="/3d-print-studio" className="hover:text-indigo-500 transition-colors">
+              3D Print Studio
+            </Link>
+          ) : (
+            <Link to={`/?category=${tool.category}`} className="capitalize hover:text-indigo-500 transition-colors">
+              {tool.category}
+            </Link>
+          )}
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
           <span className="text-zinc-650 dark:text-zinc-300 font-medium">{tool.name}</span>
         </div>
