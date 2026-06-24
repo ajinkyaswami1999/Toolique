@@ -83,15 +83,7 @@ export default function SEO({ title, description, keywords, canonicalUrl, schema
     setMetaName('twitter:description', description);
     setMetaName('twitter:image', 'https://toolique.in/og-image.png');
 
-    // 7. Update Favicon Link
-    let linkFavicon = document.querySelector('link[rel="icon"]');
-    if (!linkFavicon) {
-      linkFavicon = document.createElement('link');
-      linkFavicon.setAttribute('rel', 'icon');
-      document.head.appendChild(linkFavicon);
-    }
-    linkFavicon.setAttribute('type', 'image/svg+xml');
-    linkFavicon.setAttribute('href', '/favicon.svg');
+
 
     // 8. Inject JSON-LD Schema
     const existingScript = document.getElementById('json-ld-schema');
