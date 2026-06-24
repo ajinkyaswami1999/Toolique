@@ -30,7 +30,7 @@ export default function Footer() {
           {/* Quick Categories */}
           <div>
             <h4 className="text-[10px] font-bold text-zinc-900 dark:text-zinc-300 tracking-wider uppercase mb-4">
-              Suite Directory
+              All Tools
             </h4>
             <ul className="space-y-2 text-xs font-semibold">
               <li>
