@@ -359,6 +359,25 @@ export default function ThreeDPrintStudio() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // CollectionPage Schema Markup for Answer Engine Optimization (AEO)
+  const studioSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    'name': '3D Print Studio - Free 3D Printing Calculators & Tools',
+    'description': 'Free 3D printing calculators for filament cost, print pricing, resin, print farms, Bambu Lab, HueForge, STL volume, electricity cost, and print profit.',
+    'url': 'https://toolique.in/3d-print-studio',
+    'mainEntity': {
+      '@type': 'ItemList',
+      'numberOfItems': allTools.length,
+      'itemListElement': allTools.map((tool, index) => ({
+        '@type': 'ListItem',
+        'position': index + 1,
+        'url': `https://toolique.in/tool/${tool.slug}`,
+        'name': tool.name
+      }))
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl p-6 md:p-12 space-y-16 mt-4 relative overflow-hidden">
       {/* CSS Styles injection */}
@@ -417,6 +436,7 @@ export default function ThreeDPrintStudio() {
         description="Free 3D printing calculators for filament cost, print pricing, resin, print farms, Bambu Lab, HueForge, STL volume, electricity cost, and print profit."
         keywords={['3D printing calculator', 'filament cost calculator', '3D print pricing calculator', 'print farm calculator', 'Bambu Lab tools', 'HueForge calculator', 'STL volume calculator']}
         canonicalUrl="https://toolique.in/3d-print-studio"
+        schemaMarkup={studioSchema}
       />
 
       {/* Hero Section */}

@@ -439,16 +439,45 @@ export default function ToolPage() {
 
   const ActiveToolComponent = toolComponents[tool.id];
 
-  // Schema markup for individual tool page (SoftwareApplication / WebAPI)
+  const mergedFaqs = [...tool.faqs, ...(additionalFaqs[tool.id] || [])];
+
+  // Combined Schema markup for Answer Engine Optimization (AEO)
   const toolSchema = {
     '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    'name': tool.name,
-    'url': `https://toolique.in/tool/${tool.slug}`,
-    'description': tool.shortDescription,
-    'applicationCategory': tool.category === 'finance' ? 'FinanceApplication' : tool.category === 'developer' ? 'DeveloperApplication' : 'UtilityApplication',
-    'operatingSystem': 'All',
-    'browserRequirements': 'Requires JavaScript. Requires HTML5.'
+    '@graph': [
+      {
+        '@type': 'WebApplication',
+        '@id': `https://toolique.in/tool/${tool.slug}#webapp`,
+        'name': tool.name,
+        'url': `https://toolique.in/tool/${tool.slug}`,
+        'description': tool.shortDescription,
+        'applicationCategory': tool.category === 'finance' ? 'FinanceApplication' : tool.category === 'developer' ? 'DeveloperApplication' : 'UtilityApplication',
+        'operatingSystem': 'All',
+        'browserRequirements': 'Requires JavaScript. Requires HTML5.'
+      },
+      ...(tool.howToUse && tool.howToUse.length > 0 ? [{
+        '@type': 'HowTo',
+        '@id': `https://toolique.in/tool/${tool.slug}#howto`,
+        'name': `How to use ${tool.name}`,
+        'step': tool.howToUse.map((stepText, index) => ({
+          '@type': 'HowToStep',
+          'position': index + 1,
+          'text': stepText
+        }))
+      }] : []),
+      ...(mergedFaqs && mergedFaqs.length > 0 ? [{
+        '@type': 'FAQPage',
+        '@id': `https://toolique.in/tool/${tool.slug}#faq`,
+        'mainEntity': mergedFaqs.map(faq => ({
+          '@type': 'Question',
+          'name': faq.question,
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': faq.answer
+          }
+        }))
+      }] : [])
+    ]
   };
 
   return (

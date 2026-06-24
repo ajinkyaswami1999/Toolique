@@ -155,12 +155,30 @@ export default function Home() {
 
   const homeSchema = {
     '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    'name': 'Toolique',
-    'url': 'https://Toolique.in',
-    'description': 'Free online browser-based civil, architecture, interior design, finance, and developer tools optimized for Indian standards.',
-    'applicationCategory': 'BusinessApplication, DeveloperApplication, DesignApplication, UtilityApplication',
-    'operatingSystem': 'All'
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': 'https://toolique.in/#website',
+        'name': 'Toolique',
+        'url': 'https://toolique.in',
+        'description': 'Free online browser-based civil, architecture, interior design, finance, and developer tools optimized for Indian standards.',
+        'potentialAction': {
+          '@type': 'SearchAction',
+          'target': 'https://toolique.in/?q={search_term_string}',
+          'query-input': 'required name=search_term_string'
+        }
+      },
+      {
+        '@type': 'WebApplication',
+        '@id': 'https://toolique.in/#webapp',
+        'name': 'Toolique Suite',
+        'url': 'https://toolique.in',
+        'description': 'Free online browser-based civil, architecture, interior design, finance, and developer tools optimized for Indian standards.',
+        'applicationCategory': 'BusinessApplication, DeveloperApplication, DesignApplication, UtilityApplication',
+        'operatingSystem': 'All',
+        'browserRequirements': 'Requires JavaScript. Requires HTML5.'
+      }
+    ]
   };
 
   return (
