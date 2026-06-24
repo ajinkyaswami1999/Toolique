@@ -237,6 +237,7 @@ const ComplexNumberCalculator = lazy(() => import('../tools/ComplexNumberCalcula
 const VectorCalculator = lazy(() => import('../tools/VectorCalculator'));
 const RegressionCalculator = lazy(() => import('../tools/RegressionCalculator'));
 const ProbabilityDistributionCalculator = lazy(() => import('../tools/ProbabilityDistributionCalculator'));
+const AdvancedBOQCalculatorIndia = lazy(() => import('../tools/AdvancedBOQCalculatorIndia'));
 
 
 const toolComponents: Record<string, React.ComponentType> = {
@@ -461,10 +462,16 @@ const toolComponents: Record<string, React.ComponentType> = {
   VectorCalculator,
   RegressionCalculator,
   ProbabilityDistributionCalculator,
+  AdvancedBOQCalculatorIndia,
 };
 
-export default function ToolPage() {
-  const { slug } = useParams<{ slug: string }>();
+interface ToolPageProps {
+  overrideSlug?: string;
+}
+
+export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
+  const { slug: paramSlug } = useParams<{ slug: string }>();
+  const slug = overrideSlug || paramSlug;
   const tool = toolsList.find((t) => t.slug === slug);
 
   if (!tool) {

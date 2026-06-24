@@ -6343,5 +6343,38 @@ export const toolsList: Tool[] = [
         content: 'Continuous and discrete probability distributions describe variations in nature and systems, supporting safety factors design, failure rates, and quality assurances.'
       }
     ]
+  },
+  {
+    id: 'AdvancedBOQCalculatorIndia',
+    slug: 'advanced-boq-calculator-india',
+    name: 'Advanced BOQ Calculator India',
+    category: 'civil',
+    shortDescription: 'Create detailed construction BOQs with quantities, material estimates, floor-wise costing, and Excel/PDF export.',
+    metaDescription: 'Free online construction BOQ calculator. Estimate material and labor costs, generate rate analysis, and export professional reports.',
+    keywords: ['boq calculator', 'construction estimation', 'bill of quantities india', 'building material estimator', 'rate analysis calculator'],
+    icon: 'Calculator',
+    howToUse: [
+      'Set up your project details, location, built-up area, tax/margin rates.',
+      'Configure floors and rooms to structure the work layout.',
+      'Add items to the spreadsheet-style table, entering dimensions and selecting work categories.',
+      'Choose formula presets or input rates for materials, labor, and transport.',
+      'Review material estimations, run inflation scenario simulators, and export a professional multi-sheet Excel or styled PDF report.'
+    ],
+    faqs: [
+      {
+        question: 'What is a Bill of Quantities (BOQ)?',
+        answer: 'A Bill of Quantities (BOQ) is a document prepared by a quantity surveyor or engineer that details the quantities of materials, labor, and equipment needed for a construction project, allowing contractors to quote prices.'
+      },
+      {
+        question: 'How is the final rate for each item calculated?',
+        answer: 'The final rate is the sum of base material, labor, equipment, transport, and other costs, adjusted for wastage percentage, contractor margin, and GST.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Preparing a BOQ for Construction in India',
+        content: 'Preparation of a detailed BOQ involves structural measurement takes, choosing appropriate work item descriptions matching CPWD or State DSR (Delhi Schedule of Rates) specifications, estimating wastage coefficients, and applying current local labor and material market rates.'
+      }
+    ]
   }
 ];

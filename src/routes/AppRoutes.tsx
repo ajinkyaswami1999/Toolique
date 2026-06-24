@@ -15,6 +15,7 @@ export default function AppRoutes() {
       <Route path="/" element={<Home />} />
       <Route path="/3d-print-studio" element={<ThreeDPrintStudio />} />
       <Route path="/math-studio" element={<MathStudio />} />
+      <Route path="/tools/advanced-boq-calculator-india" element={<ToolPage overrideSlug="advanced-boq-calculator-india" />} />
       <Route path="/tool/:slug" element={<ToolPage />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
