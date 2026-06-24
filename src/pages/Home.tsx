@@ -259,7 +259,7 @@ export default function Home() {
             <LayoutGrid className="w-3.5 h-3.5" />
             <span>All Categories</span>
           </button>
-          {categories.filter((cat) => cat.id !== '3d-printing').map((cat) => {
+          {categories.filter((cat) => cat.id !== '3d-printing' && cat.id !== 'math-studio').map((cat) => {
             const Icon = categoryIcons[cat.id] || LayoutGrid;
             return (
               <button
@@ -330,7 +330,7 @@ export default function Home() {
             viewMode === 'grouped' ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {categories
-                  .filter((cat) => cat.id !== '3d-printing')
+                  .filter((cat) => cat.id !== '3d-printing' && cat.id !== 'math-studio')
                   .map((cat) => {
                     const categoryTools = filteredTools.filter((t) => t.category === cat.id);
                     if (categoryTools.length === 0) return null;

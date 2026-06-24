@@ -139,5 +139,12 @@ export const categories: Category[] = [
     description: 'Calculate filament costs, print pricing, resin volume, print farm capacity, and Bambu Lab AMS templates.',
     icon: 'Printer',
     colorClass: 'from-indigo-500/10 to-blue-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/20'
+  },
+  {
+    id: 'math-studio',
+    name: 'Advanced Math Studio',
+    description: 'Solve equations, analyze data, calculate geometry, convert engineering units, and explore advanced mathematics.',
+    icon: 'Calculator',
+    colorClass: 'from-violet-500/10 to-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/20'
   }
 ];

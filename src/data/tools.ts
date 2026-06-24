@@ -12,7 +12,7 @@ export interface Tool {
   id: string;
   slug: string;
   name: string;
-  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health' | '3d-printing';
+  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health' | '3d-printing' | 'math-studio';
   shortDescription: string;
   metaDescription: string;
   keywords: string[];
@@ -5685,6 +5685,662 @@ export const toolsList: Tool[] = [
       {
         title: 'Understanding Build Plate Utilization Calculator',
         content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+      }
+    ]
+  },
+  {
+    id: 'EquationSolver',
+    slug: 'equation-solver',
+    name: 'Equation Solver',
+    category: 'math-studio',
+    shortDescription: 'Solve linear, quadratic, and simultaneous equations with step-by-step solutions.',
+    metaDescription: 'Free online equation solver. Solve linear, quadratic, and simultaneous equations with detailed step-by-step workings and graphic visualization.',
+    keywords: ['equation solver', 'solve quadratic equation', 'solve simultaneous equations', 'linear equation solver', 'step by step math solver'],
+    icon: 'Binary',
+    howToUse: [
+      'Select the equation type: Linear (ax + b = 0), Quadratic (ax² + bx + c = 0), or Simultaneous equations.',
+      'Enter the coefficients for your equation in the input fields.',
+      'View the calculated roots, discriminant, and step-by-step algebraic solutions instantly in the outputs panel.',
+      'Toggle the interactive coordinate graph to visualize the equation lines or quadratic curve.'
+    ],
+    faqs: [
+      {
+        question: 'What types of equations can this tool solve?',
+        answer: 'This solver currently handles Linear equations of the form ax + b = 0, Quadratic equations of the form ax² + bx + c = 0, and 2-variable Simultaneous equations.'
+      },
+      {
+        question: 'How are complex quadratic roots handled?',
+        answer: 'If the discriminant (D = b² - 4ac) is negative, the calculator automatically computes complex conjugate roots (of the form x = real ± imag*i) and displays the imaginary steps.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Algebraic Equation Solving principles',
+        content: 'Equations form the foundation of algebra. Linear equations describe straight lines and represent constant rates of change, while quadratic equations represent parabolas with vertices. Simultaneous equations find the unique point where two independent lines intersect. This tool provides visual previews of these mathematical objects to build intuitive comprehension.'
+      }
+    ]
+  },
+  {
+    id: 'MatrixCalculator',
+    slug: 'matrix-calculator',
+    name: 'Matrix Calculator',
+    category: 'math-studio',
+    shortDescription: 'Perform matrix arithmetic, find determinants, inverses, rank, and transposes.',
+    metaDescription: 'Perform matrix addition, multiplication, determinant, rank, transpose, and inverse operations online. Supports matrices up to 4x4.',
+    keywords: ['matrix calculator', 'matrix multiplication', 'matrix inverse online', 'calculate matrix rank', 'determinant calculator'],
+    icon: 'Grid',
+    howToUse: [
+      'Choose the dimensions of your matrices (ranging from 2x2 to 4x4).',
+      'Fill in the matrix cells with your numeric coefficients.',
+      'Select the operation: Addition, Subtraction, Multiplication, Transpose, Determinant, Inverse, or Rank.',
+      'Review the step-by-step arithmetic breakdown and export the result matrix as a CSV file.'
+    ],
+    faqs: [
+      {
+        question: 'What is a matrix determinant?',
+        answer: 'The determinant is a scalar value calculated from a square matrix. It provides critical information about the matrix, such as whether it is invertible (determinant is non-zero) and the scaling factor of the transformation.'
+      },
+      {
+        question: 'Can I multiply matrices of different dimensions?',
+        answer: 'Yes, matrix multiplication is possible if the number of columns in the first matrix equals the number of rows in the second matrix.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Applications of Matrix Algebra',
+        content: 'Matrices represent linear transformations in space and are heavily utilized in computer graphics, engineering structures, economic modeling, and physics. Finding the inverse of a matrix allows solving systems of linear equations, while computing the rank determines the dimensionality of the vector space spanned by its rows or columns.'
+      }
+    ]
+  },
+  {
+    id: 'StatisticsCalculator',
+    slug: 'statistics-calculator',
+    name: 'Statistics Calculator',
+    category: 'math-studio',
+    shortDescription: 'Compute mean, median, mode, standard deviation, variance, and plot box/histogram charts.',
+    metaDescription: 'Free online statistics calculator. Input numerical datasets to find mean, median, standard deviation, quartiles, range, box plots, and frequency tables.',
+    keywords: ['statistics calculator', 'standard deviation calculator', 'mean median mode', 'variance calculator', 'box plot generator'],
+    icon: 'BarChart3',
+    howToUse: [
+      'Enter or paste your dataset as a list of numbers separated by commas.',
+      'View the computed summary statistics, including mean, median, mode, sample variance, standard deviation, and interquartile range.',
+      'Inspect the generated distribution histogram and box-and-whisker plot.',
+      'Copy the detailed text report or download the frequency table data.'
+    ],
+    faqs: [
+      {
+        question: 'What is the difference between sample variance and population variance?',
+        answer: 'Sample variance divides the sum of squared differences by (n - 1) (Bessel\'s correction) to provide an unbiased estimate from sample data, whereas population variance divides by n.'
+      },
+      {
+        question: 'How is the box plot constructed?',
+        answer: 'The box plot displays the five-number summary: Minimum, First Quartile (Q1), Median (Q2), Third Quartile (Q3), and Maximum, visually representing dataset spread and skewness.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Descriptive Statistics Overview',
+        content: 'Descriptive statistics summarize and organize characteristics of a dataset. Measures of central tendency (mean, median, mode) pinpoint the center of the distribution, while measures of variability (variance, standard deviation, range) quantify the scatter of observations.'
+      }
+    ]
+  },
+  {
+    id: 'DataAnalysisCalculator',
+    slug: 'data-analysis-calculator',
+    name: 'Data Analysis Calculator',
+    category: 'math-studio',
+    shortDescription: 'Analyze tabular data, detect outliers, perform regressions, and plot scatter charts.',
+    metaDescription: 'Upload CSV or paste spreadsheet datasets. Compute correlation matrices, run linear regression trendlines, detect outliers, and generate scatter plots.',
+    keywords: ['data analysis calculator', 'linear regression online', 'correlation matrix calculator', 'outlier detector', 'scatter plot generator'],
+    icon: 'TrendingUp',
+    howToUse: [
+      'Upload a CSV file or paste your tabular spreadsheet data directly.',
+      'Select which columns represent the independent (X) and dependent (Y) variables.',
+      'Review the correlation index, regression formula (y = mx + c), and standard errors.',
+      'Inspect the scatter plot showing the data points overlaid with the linear regression trendline.'
+    ],
+    faqs: [
+      {
+        question: 'How does this tool detect outliers?',
+        answer: 'Outliers are flagged using the standard IQR (Interquartile Range) method. Any value that falls below Q1 - 1.5*IQR or above Q3 + 1.5*IQR is categorized as an outlier.'
+      },
+      {
+        question: 'What is the R-squared (R²) value?',
+        answer: 'R-squared (coefficient of determination) indicates the proportion of variance in the dependent variable that is predictable from the independent variable, ranging from 0 (no fit) to 1 (perfect fit).'
+      }
+    ],
+    sections: [
+      {
+        title: 'Principles of Linear Regression',
+        content: 'Linear regression models the relationship between a scalar response and one or more explanatory variables. It seeks to find the line of best fit by minimizing the sum of squared residuals, providing forecasting capabilities for engineering, economic, and scientific studies.'
+      }
+    ]
+  },
+  {
+    id: 'UnitConverterPro',
+    slug: 'unit-converter-pro',
+    name: 'Unit Converter Pro',
+    category: 'math-studio',
+    shortDescription: 'Convert length, area, volume, pressure, speed, torque, density, and 10+ other dimensions.',
+    metaDescription: 'High precision online unit converter. Convert length, volume, force, pressure, torque, energy, speed, density, and data storage easily.',
+    keywords: ['unit converter', 'pressure converter', 'torque conversion', 'density converter', 'engineering unit conversion'],
+    icon: 'Scale',
+    howToUse: [
+      'Select the conversion dimension (e.g. Length, Pressure, Torque, Volume).',
+      'Input the value and select the source and target units from the searchable lists.',
+      'Toggle unit directions using the swap button.',
+      'Manage your favorite unit pairs and review recent conversions saved in your local history.'
+    ],
+    faqs: [
+      {
+        question: 'Which engineering units are supported?',
+        answer: 'This converter supports 16 physical dimensions including technical units like Pascals, PSI, Newton-meters, foot-pounds, speed, volume, and computer data storage bytes.'
+      },
+      {
+        question: 'Can I save units I use frequently?',
+        answer: 'Yes. You can click the star next to any unit pair to save it as a favorite in your LocalStorage, making it instantly accessible when you load the converter.'
+      }
+    ],
+    sections: [
+      {
+        title: 'The Importance of Precise Conversions',
+        content: 'Engineering design requires transferring values between metric and imperial dimensions. Simple rounding errors in torque, pressure, or density conversions can compromise structural integrity. This tool supports floating-point precision adjustments to satisfy professional requirements.'
+      }
+    ]
+  },
+  {
+    id: 'GeometrySolver',
+    slug: 'geometry-solver',
+    name: 'Geometry Solver',
+    category: 'math-studio',
+    shortDescription: 'Solve triangles (SSS, SAS, ASA, AAS), polygons, circles, and coordinate metrics.',
+    metaDescription: 'Solve 2D geometry shapes. Compute side-lengths, interior angles, perimeters, and areas for triangles, circles, and polygons with dynamic SVG diagrams.',
+    keywords: ['geometry solver', 'triangle solver SSS', 'circle calculator area', 'polygon solver', 'solve triangle SAS'],
+    icon: 'Compass',
+    howToUse: [
+      'Select the geometry shape: Triangle, Circle, Rectangle, Trapezoid, or Regular Polygon.',
+      'Choose the input criteria (for triangles: SSS, SAS, ASA, or AAS).',
+      'Enter the known dimensions in the input forms.',
+      'Inspect the solved angles, missing sides, formulas, and the dynamically rendered SVG diagram.'
+    ],
+    faqs: [
+      {
+        question: 'What is SSS, SAS, ASA, and AAS?',
+        answer: 'These terms refer to the known dimensions of a triangle: Side-Side-Side, Side-Angle-Side, Angle-Side-Angle, and Angle-Angle-Side. They represent the minimum constraints required to solve a triangle uniquely.'
+      },
+      {
+        question: 'How are the SVG diagrams generated?',
+        answer: 'The diagrams are computed client-side using coordinate geometry to map the solved coordinates, rendering a scaled vector representation matching your values.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Trigonometry & Spatial Mathematics',
+        content: 'Solving triangles relies on basic trigonometric relations like the Law of Sines and the Law of Cosines. Polygons and trapezoids are resolved by decomposing them into triangles and applying coordinate matrices to extract surface areas and boundary perimeters.'
+      }
+    ]
+  },
+  {
+    id: 'VolumeCalculator3D',
+    slug: '3d-geometry-volume-calculator',
+    name: '3D Geometry & Volume Calculator',
+    category: 'math-studio',
+    shortDescription: 'Calculate volume, surface area, and capacity in litres for cylinders, cones, and spheres.',
+    metaDescription: 'Online 3D geometry calculator. Compute volume, surface area, and capacity in litres for cubes, cylinders, cones, spheres, frustums, and pipes.',
+    keywords: ['volume calculator', 'cylinder volume calculator', 'sphere surface area', 'tank capacity litres', 'pipe volume calculator'],
+    icon: 'Box',
+    howToUse: [
+      'Choose the 3D shape (Cube, Cylinder, Cone, Sphere, Frustum, Pyramid, or Pipe/Tank).',
+      'Enter the dimensional inputs (radii, heights, lengths).',
+      'Review computed volume, total/lateral surface area, and capacity in litres.',
+      'Check the 3D isometric SVG vector preview for structural visual cues.'
+    ],
+    faqs: [
+      {
+        question: 'How is pipe/tank volume computed?',
+        answer: 'Pipe volume uses hollow cylinder formula: V = π * (R² - r²) * L. Tank capacity integrates standard volume formulas with litre conversions (1 cubic meter = 1000 litres).'
+      },
+      {
+        question: 'What is a frustum?',
+        answer: 'A frustum is a cone or pyramid with its top cut off by a plane parallel to its base, commonly found in architectural columns, conical hoppers, and circular bins.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Volumetric and Spatial Calculations',
+        content: 'Three-dimensional calculations are key in design layout, civil material estimates (concrete cubic volume), tank design, and hydraulic pipe sizing. Surface area governs heat transfer rates and paint requirements, while internal volume determines fluid capacity.'
+      }
+    ]
+  },
+  {
+    id: 'ProbabilityCalculator',
+    slug: 'probability-calculator',
+    name: 'Probability Calculator',
+    category: 'math-studio',
+    shortDescription: 'Compute combinations, permutations, binomials, and normal distribution graphs.',
+    metaDescription: 'Calculate permutations, combinations, binomial probability density, normal distribution Z-scores, and sample size margins with interactive graphs.',
+    keywords: ['probability calculator', 'permutations combinations', 'binomial probability calculator', 'z score normal distribution', 'sample size calculator'],
+    icon: 'Activity',
+    howToUse: [
+      'Select the probability module: Combinations/Permutations, Binomial distribution, or Normal distribution.',
+      'Enter the inputs (number of trials, success probabilities, bounds).',
+      'Review the computed outcome and mathematical probability formulas.',
+      'Examine the interactive distribution curve plot showing standard deviations and z-scores.'
+    ],
+    faqs: [
+      {
+        question: 'What is the difference between permutation and combination?',
+        answer: 'Permutations account for the order of selection (e.g. arranging medals), while combinations ignore the order (e.g. selecting a committee).'
+      },
+      {
+        question: 'What does a Z-score represent?',
+        answer: 'A Z-score indicates how many standard deviations an observation is from the mean of a normal distribution. It normalizes datasets to determine probability densities.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Statistical Probability Slabs',
+        content: 'Probability distributions describe the likelihood of outcomes in random events. The binomial distribution represents discrete scenarios (e.g. coin flips), while the normal distribution describes continuous natural variations (e.g. component tolerances, test marks).'
+      }
+    ]
+  },
+  {
+    id: 'CoordinateGeometryCalculator',
+    slug: 'coordinate-geometry-calculator',
+    name: 'Coordinate Geometry Calculator',
+    category: 'math-studio',
+    shortDescription: 'Compute distance, midpoint, slope, line equation, and plot line segments.',
+    metaDescription: 'Free online coordinate geometry calculator. Solve distance between points, midpoint, slope, line formulas, and circles with SVG coordinate graphs.',
+    keywords: ['coordinate geometry calculator', 'distance formula points', 'midpoint calculator', 'slope of a line', 'circle equation coordinate'],
+    icon: 'LineChart',
+    howToUse: [
+      'Enter the coordinates of your points (X1, Y1) and (X2, Y2).',
+      'Select the coordinate metrics: Distance, Midpoint, Slope, Line Equation, or Point-to-Line clearances.',
+      'Review formulas, step-by-step Cartesian calculations, and intercepts.',
+      'Inspect the generated SVG coordinate grid showing points, lines, and midpoints plotted dynamically.'
+    ],
+    faqs: [
+      {
+        question: 'How is the point-to-line distance calculated?',
+        answer: 'It uses the perpendicular distance formula: d = |A*x0 + B*y0 + C| / √(A² + B²), where Ax + By + C = 0 is the line equation and (x0, y0) is the point.'
+      },
+      {
+        question: 'What coordinate formats are supported?',
+        answer: 'The calculator handles positive, negative, and fractional coordinate points, automatically centering the SVG graph to fit the bounding box of the points.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Cartesian Coordinate System principles',
+        content: 'Coordinate geometry connects algebra and geometry. By mapping points onto a Cartesian plane, geometric curves are expressed as algebraic equations, allowing automated pathing, structural modeling, and spatial clearance analysis.'
+      }
+    ]
+  }
+,
+  {
+    id: 'DerivativeCalculator',
+    slug: 'derivative-calculator',
+    name: 'Derivative Calculator with Steps',
+    category: 'math-studio',
+    shortDescription: 'Solve derivatives symbolically and evaluate them at a point with graphical displays.',
+    metaDescription: 'Free online symbolic derivative calculator. Solve first, second, and higher-order derivatives with step-by-step calculus workings and function plotting.',
+    keywords: ['derivative calculator', 'symbolic derivative', 'first derivative', 'second derivative', 'calculus solver'],
+    icon: 'Activity',
+    howToUse: [
+      'Enter the function expression (e.g. x^2 + 3*x, sin(x)).',
+      'Select the differentiation variable (defaults to x).',
+      'Choose the derivative order (1st, 2nd, etc.).',
+      'Optionally specify a point x to evaluate the numerical value of the derivative.',
+      'Examine the symbolic result, step steps, and interactive function curves overlay.'
+    ],
+    faqs: [
+      {
+        question: 'Does this calculator solve derivatives symbolically?',
+        answer: 'Yes, it computes exact analytical derivatives using symbolic calculus rules.'
+      },
+      {
+        question: 'How are exponents formatted?',
+        answer: 'Use the caret symbol (^) for powers, for example: x^3 for x cubed, or e^x for natural exponential.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Understanding Derivatives',
+        content: 'The derivative represents the instantaneous rate of change of a function with respect to its variable. Geometrically, it corresponds to the slope of the tangent line to the curve at a given point.'
+      }
+    ]
+  },
+  {
+    id: 'IntegralCalculator',
+    slug: 'integral-calculator',
+    name: 'Integral Calculator with Graph',
+    category: 'math-studio',
+    shortDescription: 'Compute indefinite and definite integrals symbolically or numerically with graphs.',
+    metaDescription: 'Calculate indefinite and definite integrals online. Features step-by-step symbolic derivation, numerical Simpsons fallback, and area plots.',
+    keywords: ['integral calculator', 'indefinite integral', 'definite integral', 'area under curve', 'simpsons rule integration'],
+    icon: 'Binary',
+    howToUse: [
+      'Choose between Indefinite or Definite integration mode.',
+      'Enter the function expression to integrate.',
+      'Specify upper and lower limits if Definite mode is active.',
+      'Review the calculated anti-derivative, numeric area-under-curve, and highlighted SVG shape plotting.'
+    ],
+    faqs: [
+      {
+        question: 'How is defnite integration solved numerically?',
+        answer: 'If the symbolic engine cannot resolve the antiderivative, it falls back to Simpson\'s numerical integration rule for precise area estimation.'
+      }
+    ],
+    sections: [
+      {
+        title: 'The Fundamental Theorem of Calculus',
+        content: 'Integration connects areas under curves with anti-derivatives. A definite integral evaluates the net accumulated area between bounds, while the indefinite integral gives the families of antiderivative functions.'
+      }
+    ]
+  },
+  {
+    id: 'LimitCalculator',
+    slug: 'limit-calculator',
+    name: 'Limit Calculator Online',
+    category: 'math-studio',
+    shortDescription: 'Analyze function limits from the left, right, or two-sided with approximation tables.',
+    metaDescription: 'Free online limit calculator. Analyze left-hand, right-hand, and two-sided limits at any value, including infinity, with numeric tables.',
+    keywords: ['limit calculator', 'two sided limit', 'left hand limit', 'limit at infinity', 'calculus limit solver'],
+    icon: 'TrendingUp',
+    howToUse: [
+      'Enter the function and the target limit value (use infinity/inf for limits at infinity).',
+      'Select whether to evaluate the limit from the left, right, or both sides.',
+      'Inspect the numerical convergence table and local coordinate graph around the target value.'
+    ],
+    faqs: [
+      {
+        question: 'What is a two-sided limit?',
+        answer: 'A two-sided limit exists only if the left-hand limit equals the right-hand limit as the variable approaches the target point.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Concept of Limits in Calculus',
+        content: 'Limits form the foundation of calculus, defining continuity, derivatives, and integrals. They describe the behavior of a function near a point, rather than exactly at it.'
+      }
+    ]
+  },
+  {
+    id: 'GraphingCalculator',
+    slug: 'graphing-calculator',
+    name: 'Graphing Calculator Online',
+    category: 'math-studio',
+    shortDescription: 'Plot multiple functions on an interactive Cartesian plane with zooming and panning.',
+    metaDescription: 'Free online graphing calculator. Plot multiple mathematical functions, zoom, pan, toggle grids, and export graphs as SVG/PNG.',
+    keywords: ['graphing calculator', 'plot functions online', 'multi function grapher', 'cartesian coordinate plane', 'graph plotter export'],
+    icon: 'LineChart',
+    howToUse: [
+      'Add or remove function input rows (e.g. y = sin(x), y = x^2).',
+      'Use sliders or fields to adjust the X and Y coordinate viewport ranges.',
+      'Zoom and pan around using the graphing viewport controls.',
+      'Export the final coordinate graph directly as a high-quality SVG or PNG file.'
+    ],
+    faqs: [
+      {
+        question: 'Can I plot multiple functions simultaneously?',
+        answer: 'Yes, you can add multiple input fields to overlay curves and identify intersections visually.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Visualizing Functions',
+        content: 'Plotting functions on a coordinate grid provides immediate intuitive feedback about domain limits, roots, vertices, asymptotes, and intersection profiles.'
+      }
+    ]
+  },
+  {
+    id: 'NumericalRootFinder',
+    slug: 'numerical-root-finder',
+    name: 'Newton-Raphson and Bisection Method Calculator',
+    category: 'math-studio',
+    shortDescription: 'Find equation roots using Bisection, Newton-Raphson, and Secant iterations.',
+    metaDescription: 'Solve non-linear equations numerically using Bisection, Newton-Raphson, and Secant methods. Features step-by-step iteration tables.',
+    keywords: ['numerical root finder', 'bisection method solver', 'newton raphson online', 'secant method calculator', 'root iterations table'],
+    icon: 'Calculator',
+    howToUse: [
+      'Input the function expression f(x).',
+      'Select the numerical method (Bisection, Newton, or Secant).',
+      'Provide initial guess limits or root bounds.',
+      'Set tolerance thresholds and maximum iteration limits.',
+      'Review the convergence step-by-step log, graph plot, and export iterations to CSV.'
+    ],
+    faqs: [
+      {
+        question: 'When should I use the Newton-Raphson method?',
+        answer: 'Newton-Raphson is highly efficient due to quadratic convergence, but requires a good initial guess and a non-zero derivative.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Numerical Methods for Root Finding',
+        content: 'When algebraic techniques fail to solve f(x) = 0 (such as for transcendental equations), numerical algorithms iteratively approximate roots within bounds.'
+      }
+    ]
+  },
+  {
+    id: 'NumericalIntegrationCalculator',
+    slug: 'numerical-integration-calculator',
+    name: 'Numerical Integration Calculator',
+    category: 'math-studio',
+    shortDescription: 'Estimate definite integrals using Trapezoidal, Simpson 1/3, and Simpson 3/8 rules.',
+    metaDescription: 'Free online numerical integration calculator. Compare Trapezoidal, Simpson\'s 1/3, and Simpson\'s 3/8 rules with interval tables and area plots.',
+    keywords: ['numerical integration', 'trapezoidal rule calculator', 'simpsons rule integration', 'numerical integral comparison', 'simpson 3/8 rule'],
+    icon: 'Grid',
+    howToUse: [
+      'Enter the function and upper/lower definite limits.',
+      'Set the desired number of intervals (subdivisions).',
+      'Select the rule: Trapezoidal, Simpson\'s 1/3, or Simpson\'s 3/8.',
+      'Compare approximation accuracy, inspect weights, and export interval data.'
+    ],
+    faqs: [
+      {
+        question: 'What are the interval requirements for Simpson\'s rules?',
+        answer: 'Simpson\'s 1/3 rule requires an even number of intervals (n), while Simpson\'s 3/8 rule requires n to be a multiple of 3.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Approximating Area Under Curves',
+        content: 'Numerical integration approximates definite integrals by dividing the area into geometric panels (trapezoids or parabolas) and summing their weights.'
+      }
+    ]
+  },
+  {
+    id: 'DifferentialEquationSolver',
+    slug: 'differential-equation-solver',
+    name: 'Differential Equation Solver Online',
+    category: 'math-studio',
+    shortDescription: 'Solve first-order initial value problems using RK4, Euler, and Improved Euler methods.',
+    metaDescription: 'Solve first-order ODEs numerically. Compare Euler, Heun, and Runge-Kutta 4th Order (RK4) approximation methods side-by-side with CSV exports.',
+    keywords: ['differential equation solver', 'runge kutta 4 solver', 'euler method calculator', 'heun method ode', 'first order IVP solver'],
+    icon: 'Compass',
+    howToUse: [
+      'Enter the derivative function expression dy/dx = f(x, y).',
+      'Specify the initial conditions (x0, y0) and the end x limit.',
+      'Set the step size parameter (h).',
+      'Select and compare approximation methods on the live line plot.'
+    ],
+    faqs: [
+      {
+        question: 'What is the RK4 method?',
+        answer: 'Runge-Kutta 4th Order is a highly accurate numerical solver that evaluates four slopes per step to achieve 4th-order global error scaling.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Numerical ODE Solvers',
+        content: 'Initial Value Problems (IVPs) in physics and engineering represent dynamic rates of change. Numerical methods trace approximating step trajectories when analytic solutions are unavailable.'
+      }
+    ]
+  },
+  {
+    id: 'LinearProgrammingSolver',
+    slug: 'linear-programming-solver',
+    name: 'Linear Programming Solver',
+    category: 'math-studio',
+    shortDescription: 'Optimize linear objective functions subject to linear constraints using simplex.',
+    metaDescription: 'Optimize objective functions subject to linear constraints. Solve simplex linear programming problems online. Visualizes 2D constraints regions.',
+    keywords: ['linear programming solver', 'simplex method calculator', 'optimize linear constraints', 'production planning lp', 'simplex tableau solver'],
+    icon: 'Scale',
+    howToUse: [
+      'Select Optimization Goal: Maximize or Minimize.',
+      'Define objective function coefficients (e.g. Z = c1*x1 + c2*x2).',
+      'Add linear constraints with coefficients, inequality relations (<=, >=, =), and RHS bounds.',
+      'Run solver to view basic variables, slack amounts, and the constraint space polygon.'
+    ],
+    faqs: [
+      {
+        question: 'What is the simplex algorithm?',
+        answer: 'The Simplex algorithm moves along the vertices of a multi-dimensional constraint polytope to locate the optimal objective value.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Linear Optimization Applications',
+        content: 'Linear programming maximizes yields or minimizes costs in business operations, resource allocations, logistics, and diet formulations.'
+      }
+    ]
+  },
+  {
+    id: 'FourierTransformTool',
+    slug: 'fourier-transform-tool',
+    name: 'Fourier Transform Calculator',
+    category: 'math-studio',
+    shortDescription: 'Compute Discrete Fourier Transforms (FFT) of signal arrays to analyze frequency spectra.',
+    metaDescription: 'Fast Fourier Transform (FFT) calculator. Paste signal data or generate waves. Inspect time and frequency domain charts with dominant frequencies.',
+    keywords: ['fourier transform calculator', 'fft calculator online', 'frequency spectrum analyzer', 'power spectrum dft', 'sampling rate nyquist'],
+    icon: 'Activity',
+    howToUse: [
+      'Generate a sample signal (Sine, Square, or Mixed frequencies) or paste your own CSV data.',
+      'Input the sampling rate frequency (Fs).',
+      'Compute the FFT to extract time-domain waveforms and frequency amplitude spectra.'
+    ],
+    faqs: [
+      {
+        question: 'What is the Nyquist frequency?',
+        answer: 'The Nyquist frequency is half the sampling rate (Fs / 2). It represents the maximum frequency that can be resolved without aliasing.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Fourier Analysis Basics',
+        content: 'Fourier transforms decompose signals from the time domain into constituent sinusoids in the frequency domain, enabling filter design and spectral diagnostics.'
+      }
+    ]
+  },
+  {
+    id: 'ComplexNumberCalculator',
+    slug: 'complex-number-calculator',
+    name: 'Complex Number Calculator',
+    category: 'math-studio',
+    shortDescription: 'Perform complex algebra, roots, powers, and plot on an Argand diagram.',
+    metaDescription: 'Solve complex number equations. Add, multiply, divide, exponentiate, find roots, and convert rectangular to polar form with Argand plots.',
+    keywords: ['complex number calculator', 'argand diagram calculator', 'polar form complex', 'de moivre roots', 'phasor conversion'],
+    icon: 'Box',
+    howToUse: [
+      'Enter two complex numbers in rectangular form (a + bi) or polar form (r, theta).',
+      'Select the arithmetic operation, conjugate, power, or roots count.',
+      'Examine formulas, step-by-step phasor details, and vectors on the Argand plane.'
+    ],
+    faqs: [
+      {
+        question: 'What is De Moivre\'s theorem?',
+        answer: 'De Moivre\'s theorem calculates powers and roots of complex numbers in polar coordinates: z^n = r^n * (cos(nθ) + i sin(nθ)).'
+      }
+    ],
+    sections: [
+      {
+        title: 'Complex Planes in Engineering',
+        content: 'Complex numbers model two-dimensional vectors, playing vital roles in electrical AC impedance, signal parsing, and control loops feedback.'
+      }
+    ]
+  },
+  {
+    id: 'VectorCalculator',
+    slug: 'vector-calculator',
+    name: 'Vector Calculator',
+    category: 'math-studio',
+    shortDescription: 'Calculate dot products, cross products, projections, and angles for 2D/3D vectors.',
+    metaDescription: 'Perform vector operations in 2D and 3D space. Calculate dot products, cross products, magnitudes, projections, and angles with vector diagrams.',
+    keywords: ['vector calculator', 'cross product solver', 'dot product calculator', 'vector projection', 'angle between vectors'],
+    icon: 'LineChart',
+    howToUse: [
+      'Choose coordinate dimensions: 2D or 3D.',
+      'Enter vector coefficients for Vector U and Vector V.',
+      'Select the operation: Add, Subtract, Dot Product, Cross Product, Projection, or Unit Vector.',
+      'View calculation formulas, midpoints, coordinates, and 2D vector plots.'
+    ],
+    faqs: [
+      {
+        question: 'What does the cross product represent?',
+        answer: 'The cross product of two 3D vectors is a vector perpendicular to both, with a magnitude proportional to the area of the spanned parallelogram.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Vector Spaces and Coordinate Mechanics',
+        content: 'Vectors represent magnitude and direction, defining structural clearances, force calculations, and pathing matrices in engineering disciplines.'
+      }
+    ]
+  },
+  {
+    id: 'RegressionCalculator',
+    slug: 'regression-calculator',
+    name: 'Regression Calculator',
+    category: 'math-studio',
+    shortDescription: 'Fit linear, polynomial, and exponential regression models to X/Y datasets.',
+    metaDescription: 'Fit data to linear, polynomial, or exponential curves online. Calculates regression equations, R2, predicted values, and residuals plots.',
+    keywords: ['regression calculator', 'polynomial curve fitting', 'exponential regression online', 'least squares regression', 'residuals scatter plot'],
+    icon: 'TrendingUp',
+    howToUse: [
+      'Paste your numeric X and Y coordinate data or upload a CSV file.',
+      'Select the regression fit model: Linear, Polynomial (up to degree 4), or Exponential.',
+      'Input an optional forecast X value to predict future Y estimates.',
+      'Inspect the scatter curve fit and download calculations summaries.'
+    ],
+    faqs: [
+      {
+        question: 'When should I select exponential regression?',
+        answer: 'Use exponential regression when the rate of change is proportional to the current value, such as population growths or capacitor discharge loops.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Regression Fits and Curve Modeling',
+        content: 'Regression analyzes dependencies between variables. The R-squared metric represents the proportion of variance explained by the model.'
+      }
+    ]
+  },
+  {
+    id: 'ProbabilityDistributionCalculator',
+    slug: 'probability-distribution-calculator',
+    name: 'Probability Distribution Calculator',
+    category: 'math-studio',
+    shortDescription: 'Analyze Poisson, Exponential, Binomial, and Normal curves with PDF/CDF bounds.',
+    metaDescription: 'Analyze probability distributions online. Calculate PDF/PMF, CDF, means, variances, and range probabilities for Normal, Binomial, Poisson, and Exponential models.',
+    keywords: ['probability distribution calculator', 'poisson pmf calculator', 'normal cdf solver', 'exponential distribution calculator', 'distribution standard deviation'],
+    icon: 'Activity',
+    howToUse: [
+      'Select the distribution: Normal, Binomial, Poisson, or Exponential.',
+      'Adjust parameter settings (mean, variance, trials, rates).',
+      'Set X boundaries (e.g. X <= x, or a <= X <= b) to calculate range probability.',
+      'Examine the PDF curve plot showing standard bounds.'
+    ],
+    faqs: [
+      {
+        question: 'What is the Poisson distribution used for?',
+        answer: 'Poisson models discrete counts of events occurring within fixed intervals, e.g. customer phone calls per hour or website visits per minute.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Statistical Distributions in Practice',
+        content: 'Continuous and discrete probability distributions describe variations in nature and systems, supporting safety factors design, failure rates, and quality assurances.'
       }
     ]
   }

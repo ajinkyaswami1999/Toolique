@@ -7,12 +7,14 @@ import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsConditions from '../pages/TermsConditions';
 import Disclaimer from '../pages/Disclaimer';
 import ThreeDPrintStudio from '../pages/ThreeDPrintStudio';
+import MathStudio from '../pages/MathStudio';
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/3d-print-studio" element={<ThreeDPrintStudio />} />
+      <Route path="/math-studio" element={<MathStudio />} />
       <Route path="/tool/:slug" element={<ToolPage />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />

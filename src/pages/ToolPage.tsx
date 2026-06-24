@@ -213,6 +213,32 @@ const FlushVolumeCalculator = lazy(() => import('../tools/FlushVolumeCalculator'
 const AMSSlotPlanner = lazy(() => import('../tools/AMSSlotPlanner'));
 const BuildPlateUtilizationCalculator = lazy(() => import('../tools/BuildPlateUtilizationCalculator'));
 
+// Advanced Math Studio Tools
+const EquationSolver = lazy(() => import('../tools/EquationSolver'));
+const MatrixCalculator = lazy(() => import('../tools/MatrixCalculator'));
+const StatisticsCalculator = lazy(() => import('../tools/StatisticsCalculator'));
+const DataAnalysisCalculator = lazy(() => import('../tools/DataAnalysisCalculator'));
+const UnitConverterPro = lazy(() => import('../tools/UnitConverterPro'));
+const GeometrySolver = lazy(() => import('../tools/GeometrySolver'));
+const VolumeCalculator3D = lazy(() => import('../tools/VolumeCalculator3D'));
+const ProbabilityCalculator = lazy(() => import('../tools/ProbabilityCalculator'));
+const CoordinateGeometryCalculator = lazy(() => import('../tools/CoordinateGeometryCalculator'));
+// Extended Math Studio Tools
+const DerivativeCalculator = lazy(() => import('../tools/DerivativeCalculator'));
+const IntegralCalculator = lazy(() => import('../tools/IntegralCalculator'));
+const LimitCalculator = lazy(() => import('../tools/LimitCalculator'));
+const GraphingCalculator = lazy(() => import('../tools/GraphingCalculator'));
+const NumericalRootFinder = lazy(() => import('../tools/NumericalRootFinder'));
+const NumericalIntegrationCalculator = lazy(() => import('../tools/NumericalIntegrationCalculator'));
+const DifferentialEquationSolver = lazy(() => import('../tools/DifferentialEquationSolver'));
+const LinearProgrammingSolver = lazy(() => import('../tools/LinearProgrammingSolver'));
+const FourierTransformTool = lazy(() => import('../tools/FourierTransformTool'));
+const ComplexNumberCalculator = lazy(() => import('../tools/ComplexNumberCalculator'));
+const VectorCalculator = lazy(() => import('../tools/VectorCalculator'));
+const RegressionCalculator = lazy(() => import('../tools/RegressionCalculator'));
+const ProbabilityDistributionCalculator = lazy(() => import('../tools/ProbabilityDistributionCalculator'));
+
+
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
   SIPCalculator,
@@ -413,6 +439,28 @@ const toolComponents: Record<string, React.ComponentType> = {
   FlushVolumeCalculator,
   AMSSlotPlanner,
   BuildPlateUtilizationCalculator,
+  EquationSolver,
+  MatrixCalculator,
+  StatisticsCalculator,
+  DataAnalysisCalculator,
+  UnitConverterPro,
+  GeometrySolver,
+  VolumeCalculator3D,
+  ProbabilityCalculator,
+  CoordinateGeometryCalculator,
+  DerivativeCalculator,
+  IntegralCalculator,
+  LimitCalculator,
+  GraphingCalculator,
+  NumericalRootFinder,
+  NumericalIntegrationCalculator,
+  DifferentialEquationSolver,
+  LinearProgrammingSolver,
+  FourierTransformTool,
+  ComplexNumberCalculator,
+  VectorCalculator,
+  RegressionCalculator,
+  ProbabilityDistributionCalculator,
 };
 
 export default function ToolPage() {
@@ -493,11 +541,11 @@ export default function ToolPage() {
       {/* Breadcrumb & Navigation */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
         <Link
-          to={tool.category === '3d-printing' ? "/3d-print-studio" : "/"}
+          to={tool.category === '3d-printing' ? "/3d-print-studio" : tool.category === 'math-studio' ? "/math-studio" : "/"}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{tool.category === '3d-printing' ? "Back to 3D Print Studio" : "Back to Home"}</span>
+          <span>{tool.category === '3d-printing' ? "Back to 3D Print Studio" : tool.category === 'math-studio' ? "Back to Math Studio" : "Back to Home"}</span>
         </Link>
         <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
           <Link to="/" className="hover:text-indigo-500 transition-colors">Home</Link>
@@ -505,6 +553,10 @@ export default function ToolPage() {
           {tool.category === '3d-printing' ? (
             <Link to="/3d-print-studio" className="hover:text-indigo-500 transition-colors">
               3D Print Studio
+            </Link>
+          ) : tool.category === 'math-studio' ? (
+            <Link to="/math-studio" className="hover:text-indigo-500 transition-colors">
+              Math Studio
             </Link>
           ) : (
             <Link to={`/?category=${tool.category}`} className="capitalize hover:text-indigo-500 transition-colors">

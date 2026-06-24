@@ -70,6 +70,7 @@ export default function Header() {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: '3D Print Studio', path: '/3d-print-studio' },
+    { name: 'Math Studio', path: '/math-studio' },
     { name: 'All Tools', path: '/?view=all' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' }
