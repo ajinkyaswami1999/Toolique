@@ -72,6 +72,9 @@ function generateShell(
   html = html.replace(/<title>[^<]*<\/title>/i, `<title>${title}</title>`);
   html = html.replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${description}" />`);
 
+  // Replace canonical link tag with page-specific URL
+  html = html.replace(/<link rel="canonical"[^>]*\/?>/i, `<link rel="canonical" href="${fullUrl}" />`);
+
   if (keywords.length > 0) {
     const keywordsMeta = `<meta name="keywords" content="${keywords.join(', ')}" />`;
     html = html.replace('</head>', `    ${keywordsMeta}\n  </head>`);
