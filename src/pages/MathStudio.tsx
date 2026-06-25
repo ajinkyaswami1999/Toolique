@@ -287,13 +287,36 @@ export default function MathStudio() {
     setHoveredPoint(null);
   };
 
+  const allMathTools = useMemo(() => {
+    return toolGroups.flatMap(group => group.tools);
+  }, []);
+
+  const studioSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    'name': 'Advanced Math Studio - Solve & Visualize Calculations Online',
+    'description': 'Explore 22 premium, browser-based calculators covering equation solving, matrix arithmetic, descriptive statistics, 2D/3D geometry, coordinate grids, and probability curves.',
+    'url': 'https://toolique.in/math-studio',
+    'mainEntity': {
+      '@type': 'ItemList',
+      'numberOfItems': allMathTools.length,
+      'itemListElement': allMathTools.map((tool, index) => ({
+        '@type': 'ListItem',
+        'position': index + 1,
+        'url': `https://toolique.in/tool/${tool.slug}`,
+        'name': tool.name
+      }))
+    }
+  };
+
   return (
     <>
       <SEO
         title="Advanced Math Studio - Solve & Visualize Calculations Online"
-        description="Explore 9 premium, browser-based calculators covering equation solving, matrix arithmetic, descriptive statistics, 2D/3D geometry, coordinate grids, and probability curves."
+        description="Explore 22 premium, browser-based calculators covering equation solving, matrix arithmetic, descriptive statistics, 2D/3D geometry, coordinate grids, and probability curves."
         keywords={['math studio', 'equation solver', 'matrix calculator', 'statistics calculator', 'unit converter pro', 'geometry solver', 'volume calculator 3d', 'probability calculator', 'coordinate geometry']}
         canonicalUrl="https://toolique.in/math-studio"
+        schemaMarkup={studioSchema}
       />
 
       <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-20">
