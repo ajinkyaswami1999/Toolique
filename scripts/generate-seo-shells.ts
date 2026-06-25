@@ -85,7 +85,8 @@ function generateShell(
   html = html.replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${description}" />`);
   html = html.replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${fullUrl}" />`);
 
-  // 3. Replace Twitter tags
+  // 3. Replace Twitter tags (upgrade card type to summary_large_image)
+  html = html.replace(/<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:card" content="summary_large_image" />`);
   html = html.replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${title}" />`);
   html = html.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${description}" />`);
   html = html.replace(/<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:url" content="${fullUrl}" />`);
@@ -135,24 +136,56 @@ toolsList.forEach((tool) => {
 
   const title = `${tool.name} | Toolique`;
   const description = tool.metaDescription || tool.shortDescription;
+  const toolUrl = `https://www.toolique.in/${routePath}`;
+
+  // Build BreadcrumbList based on category
+  let breadcrumbItems: object[];
+  if (tool.category === '3d-printing') {
+    breadcrumbItems = [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.toolique.in/' },
+      { '@type': 'ListItem', position: 2, name: '3D Print Studio', item: 'https://www.toolique.in/3d-print-studio' },
+      { '@type': 'ListItem', position: 3, name: tool.name, item: toolUrl },
+    ];
+  } else if (tool.category === 'math-studio') {
+    breadcrumbItems = [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.toolique.in/' },
+      { '@type': 'ListItem', position: 2, name: 'Math Studio', item: 'https://www.toolique.in/math-studio' },
+      { '@type': 'ListItem', position: 3, name: tool.name, item: toolUrl },
+    ];
+  } else {
+    breadcrumbItems = [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.toolique.in/' },
+      { '@type': 'ListItem', position: 2, name: tool.category, item: `https://www.toolique.in/?category=${tool.category}` },
+      { '@type': 'ListItem', position: 3, name: tool.name, item: toolUrl },
+    ];
+  }
 
   // Build structured schema markup
   const toolSchema = {
     '@context': 'https://schema.org',
     '@graph': [
       {
+        '@type': 'BreadcrumbList',
+        '@id': `${toolUrl}#breadcrumb`,
+        'itemListElement': breadcrumbItems
+      },
+      {
         '@type': 'WebApplication',
-        '@id': `https://www.toolique.in/${routePath}#webapp`,
+        '@id': `${toolUrl}#webapp`,
         'name': tool.name,
-        'url': `https://www.toolique.in/${routePath}`,
+        'url': toolUrl,
         'description': tool.shortDescription,
-        'applicationCategory': tool.category === 'finance' ? 'FinanceApplication' : tool.category === 'developer' ? 'DeveloperApplication' : 'UtilityApplication',
+        'applicationCategory': tool.category === 'finance'
+          ? 'FinanceApplication'
+          : tool.category === 'developer'
+          ? 'DeveloperApplication'
+          : 'UtilityApplication',
         'operatingSystem': 'All',
         'browserRequirements': 'Requires JavaScript. Requires HTML5.'
       },
       ...(tool.howToUse && tool.howToUse.length > 0 ? [{
         '@type': 'HowTo',
-        '@id': `https://www.toolique.in/${routePath}#howto`,
+        '@id': `${toolUrl}#howto`,
         'name': `How to use ${tool.name}`,
         'step': tool.howToUse.map((stepText, index) => ({
           '@type': 'HowToStep',
@@ -162,7 +195,7 @@ toolsList.forEach((tool) => {
       }] : []),
       ...(tool.faqs && tool.faqs.length > 0 ? [{
         '@type': 'FAQPage',
-        '@id': `https://www.toolique.in/${routePath}#faq`,
+        '@id': `${toolUrl}#faq`,
         'mainEntity': tool.faqs.map(faq => ({
           '@type': 'Question',
           'name': faq.question,

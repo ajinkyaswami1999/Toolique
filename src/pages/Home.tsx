@@ -160,21 +160,21 @@ export default function Home() {
     '@graph': [
       {
         '@type': 'WebSite',
-        '@id': 'https://toolique.in/#website',
+        '@id': 'https://www.toolique.in/#website',
         'name': 'Toolique',
-        'url': 'https://toolique.in',
+        'url': 'https://www.toolique.in',
         'description': 'Free online browser-based civil, architecture, interior design, finance, and developer tools optimized for Indian standards.',
         'potentialAction': {
           '@type': 'SearchAction',
-          'target': 'https://toolique.in/?q={search_term_string}',
+          'target': 'https://www.toolique.in/?q={search_term_string}',
           'query-input': 'required name=search_term_string'
         }
       },
       {
         '@type': 'WebApplication',
-        '@id': 'https://toolique.in/#webapp',
+        '@id': 'https://www.toolique.in/#webapp',
         'name': 'Toolique Suite',
-        'url': 'https://toolique.in',
+        'url': 'https://www.toolique.in',
         'description': 'Free online browser-based civil, architecture, interior design, finance, and developer tools optimized for Indian standards.',
         'applicationCategory': 'BusinessApplication, DeveloperApplication, DesignApplication, UtilityApplication',
         'operatingSystem': 'All',
@@ -189,7 +189,7 @@ export default function Home() {
         title="Toolique | Modern In-Browser Calculators & Engineering Utilities"
         description="Free in-browser tools. Compute GST, SIP, construction cost, concrete splits, staircase layouts, RERA carpet, paint liters, and modular kitchen designs locally."
         keywords={['Online Tools', 'GST Calculator', 'SIP Calculator', 'Construction cost estimator', 'RERA carpet calculator', 'staircase riser calculation', 'Image compressor online']}
-        canonicalUrl="https://toolique.in/"
+        canonicalUrl="https://www.toolique.in/"
         schemaMarkup={homeSchema}
       />
 

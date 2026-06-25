@@ -1,5 +1,29 @@
-﻿User-agent: *
+User-agent: *
+Allow: /
+
+# Prevent indexing of duplicate query-parameter URLs
+# (search results and filtered views are handled by canonical tags)
+Disallow: /*?q=
+Disallow: /*?category=
+Disallow: /*?view=
+
+# Allow major crawlers full access to all tool pages and sitemaps
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
 Allow: /
 
 Sitemap: https://www.toolique.in/sitemap.xml
-

@@ -63,8 +63,11 @@ export default function SEO({ title, description, keywords, canonicalUrl, schema
     setMetaProperty('og:title', formattedTitle);
     setMetaProperty('og:description', description);
     setMetaProperty('og:type', 'website');
+    setMetaProperty('og:locale', 'en_IN');
     setMetaProperty('og:url', currentUrl);
-    setMetaProperty('og:image', 'https://toolique.in/og-image.png');
+    setMetaProperty('og:image', 'https://www.toolique.in/favicon-512x512.png');
+    setMetaProperty('og:image:width', '512');
+    setMetaProperty('og:image:height', '512');
     setMetaProperty('og:site_name', 'Toolique');
 
     // 6. Update Twitter Card Meta Tags

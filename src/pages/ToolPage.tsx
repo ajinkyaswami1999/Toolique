@@ -501,14 +501,42 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
   const mergedFaqs = [...tool.faqs, ...(additionalFaqs[tool.id] || [])];
 
   // Combined Schema markup for Answer Engine Optimization (AEO)
+  const toolRoutePath = tool.slug === 'advanced-boq-calculator-india'
+    ? `tools/${tool.slug}`
+    : `tool/${tool.slug}`;
+  const toolUrl = `https://www.toolique.in/${toolRoutePath}`;
+
+  const breadcrumbItems = tool.category === '3d-printing'
+    ? [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.toolique.in/' },
+        { '@type': 'ListItem', 'position': 2, 'name': '3D Print Studio', 'item': 'https://www.toolique.in/3d-print-studio' },
+        { '@type': 'ListItem', 'position': 3, 'name': tool.name, 'item': toolUrl },
+      ]
+    : tool.category === 'math-studio'
+    ? [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.toolique.in/' },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Math Studio', 'item': 'https://www.toolique.in/math-studio' },
+        { '@type': 'ListItem', 'position': 3, 'name': tool.name, 'item': toolUrl },
+      ]
+    : [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.toolique.in/' },
+        { '@type': 'ListItem', 'position': 2, 'name': categoryName, 'item': `https://www.toolique.in/?category=${tool.category}` },
+        { '@type': 'ListItem', 'position': 3, 'name': tool.name, 'item': toolUrl },
+      ];
+
   const toolSchema = {
     '@context': 'https://schema.org',
     '@graph': [
       {
+        '@type': 'BreadcrumbList',
+        '@id': `${toolUrl}#breadcrumb`,
+        'itemListElement': breadcrumbItems
+      },
+      {
         '@type': 'WebApplication',
-        '@id': `https://toolique.in/tool/${tool.slug}#webapp`,
+        '@id': `${toolUrl}#webapp`,
         'name': tool.name,
-        'url': `https://toolique.in/tool/${tool.slug}`,
+        'url': toolUrl,
         'description': tool.shortDescription,
         'applicationCategory': tool.category === 'finance' ? 'FinanceApplication' : tool.category === 'developer' ? 'DeveloperApplication' : 'UtilityApplication',
         'operatingSystem': 'All',
@@ -516,7 +544,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       },
       ...(tool.howToUse && tool.howToUse.length > 0 ? [{
         '@type': 'HowTo',
-        '@id': `https://toolique.in/tool/${tool.slug}#howto`,
+        '@id': `${toolUrl}#howto`,
         'name': `How to use ${tool.name}`,
         'step': tool.howToUse.map((stepText, index) => ({
           '@type': 'HowToStep',
@@ -526,7 +554,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       }] : []),
       ...(mergedFaqs && mergedFaqs.length > 0 ? [{
         '@type': 'FAQPage',
-        '@id': `https://toolique.in/tool/${tool.slug}#faq`,
+        '@id': `${toolUrl}#faq`,
         'mainEntity': mergedFaqs.map(faq => ({
           '@type': 'Question',
           'name': faq.question,
@@ -545,7 +573,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
         title={`${tool.name} | Free Online Browser Tool`}
         description={tool.metaDescription}
         keywords={tool.keywords}
-        canonicalUrl={`https://toolique.in/tool/${tool.slug}`}
+        canonicalUrl={toolUrl}
         schemaMarkup={toolSchema}
       />
 
