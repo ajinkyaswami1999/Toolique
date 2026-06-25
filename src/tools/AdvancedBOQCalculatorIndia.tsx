@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowLeft, Trash2, Copy, Calculator,
+  Trash2, Copy, Calculator,
   Building, Search, Coins, FileText, FileSpreadsheet, Eye
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
@@ -345,6 +345,17 @@ export default function AdvancedBOQCalculator() {
 
   // Helper trigger for updates
   const updateActiveProject = (updated: Project) => {
+    // 1. If floors are defined, sync builtUpArea to the sum of floor areas
+    const totalFloorArea = updated.floors.reduce((sum, f) => sum + (f.area || 0), 0);
+    if (updated.floors.length > 0) {
+      updated.builtUpArea = totalFloorArea;
+    }
+
+    // 2. Recalculate all items to reflect project-level changes (like GST, Margin, or default wastage changes)
+    updated.items = updated.items.map(item =>
+      calculateItemAmount({ ...item }, updated.gstPercent, updated.contractorMarginPercent)
+    );
+
     setAutosaveIndicator('Saving...');
     setProjects(prev => prev.map(p => p.id === updated.id ? updated : p));
     setTimeout(() => setAutosaveIndicator('Saved'), 500);
@@ -425,9 +436,9 @@ export default function AdvancedBOQCalculator() {
             description: 'Concrete PCC bed',
             specification: 'Laying PCC M10 (1:4:8) course below wall footing',
             unit: 'cum',
-            length: 45,
-            width: 3,
-            height: 0.33,
+            length: 13.72,
+            width: 0.91,
+            height: 0.10,
             count: 4,
             formulaType: 'volume',
             manualQty: 0,
@@ -456,9 +467,9 @@ export default function AdvancedBOQCalculator() {
             description: 'Outer load bearing walls',
             specification: 'Fly ash bricks wall masonry with 1:6 cement-sand mortar',
             unit: 'cum',
-            length: 45,
-            width: 0.75,
-            height: 10,
+            length: 13.72,
+            width: 0.23,
+            height: 3.05,
             count: 4,
             formulaType: 'volume',
             manualQty: 0,
@@ -540,6 +551,66 @@ export default function AdvancedBOQCalculator() {
             finalRate: 36.23,
             totalAmount: 22824.9,
             remarks: 'Interior emulsions coating'
+          },
+          {
+            id: 'i6',
+            code: 'WPF-01',
+            categoryId: '11',
+            floorId: 'f2',
+            roomId: 'all',
+            description: 'Terrace waterproofing treatment',
+            specification: 'Providing and laying integral cement-based waterproofing treatment with brick bat coba',
+            unit: 'Sq ft',
+            length: 50,
+            width: 20,
+            height: 0,
+            count: 1,
+            formulaType: 'area',
+            manualQty: 0,
+            manualAmount: 0,
+            calculatedQty: 1000,
+            wastagePercent: 5,
+            netQty: 1050,
+            rateMaterial: 45,
+            rateLabour: 15,
+            rateEquipment: 2,
+            rateTransport: 1,
+            rateOther: 1,
+            contractorMarginPercent: 10,
+            gstPercent: 18,
+            finalRate: 83.00,
+            totalAmount: 87150,
+            remarks: 'Brick bat coba waterproofing'
+          },
+          {
+            id: 'i7',
+            code: 'BRK-02',
+            categoryId: '8',
+            floorId: 'f2',
+            roomId: 'all',
+            description: 'Terrace Parapet wall brickwork',
+            specification: 'Fly ash brick masonry 115mm thick for parapet wall in cement mortar 1:4',
+            unit: 'Cum',
+            length: 42.67,
+            width: 0.115,
+            height: 0.91,
+            count: 1,
+            formulaType: 'volume',
+            manualQty: 0,
+            manualAmount: 0,
+            calculatedQty: 4.47,
+            wastagePercent: 5,
+            netQty: 4.69,
+            rateMaterial: 2800,
+            rateLabour: 850,
+            rateEquipment: 5,
+            rateTransport: 10,
+            rateOther: 10,
+            contractorMarginPercent: 10,
+            gstPercent: 18,
+            finalRate: 4770.15,
+            totalAmount: 22372.00,
+            remarks: '3 ft high parapet wall'
           }
         ]
       };
@@ -692,6 +763,11 @@ export default function AdvancedBOQCalculator() {
         ]
       };
     }
+
+    // Recalculate all items to ensure consistent calculations immediately upon loading the template
+    newProj.items = newProj.items.map(item =>
+      calculateItemAmount({ ...item }, newProj.gstPercent, newProj.contractorMarginPercent)
+    );
 
     setProjects(prev => [...prev, newProj]);
     setActiveProjectId(newProjId);
@@ -942,27 +1018,130 @@ export default function AdvancedBOQCalculator() {
 
   const handleAddFloor = () => {
     if (!activeProject || !newFloorName.trim()) return;
+    const newFloorId = 'f_' + Date.now();
     const newFloor: Floor = {
-      id: 'f_' + Date.now(),
+      id: newFloorId,
       name: newFloorName,
       area: newFloorArea,
       height: 3.3,
       notes: ''
     };
+
+    // Clone standard items from the Ground Floor (f1) to the new floor (exclude excavation/PCC/site prep)
+    const sourceFloorId = activeProject.floors[0]?.id || 'f1';
+    const sourceFloor = activeProject.floors[0];
+    const sourceArea = sourceFloor ? sourceFloor.area : 1000;
+    const areaFactor = sourceArea > 0 ? newFloorArea / sourceArea : 1;
+
+    const clonedItems: BOQItem[] = [];
+    activeProject.items.forEach(item => {
+      // Only clone items that belong to the source floor
+      // Exclude Site Prep (1), Excavation (2), Filling (3), PCC (4)
+      if (item.floorId === sourceFloorId && !['1', '2', '3', '4'].includes(item.categoryId)) {
+        const copy = { ...item };
+        copy.id = 'item_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        copy.floorId = newFloorId;
+        copy.code = `${item.code}-FLR`;
+        
+        // Scale dimensions based on new floor area relative to source floor area
+        if (areaFactor !== 1) {
+          if (copy.formulaType === 'area') {
+            copy.length = Number((copy.length * Math.sqrt(areaFactor)).toFixed(2));
+            copy.width = Number((copy.width * Math.sqrt(areaFactor)).toFixed(2));
+          } else if (copy.formulaType === 'volume') {
+            copy.length = Number((copy.length * Math.sqrt(areaFactor)).toFixed(2));
+            copy.width = Number((copy.width * Math.sqrt(areaFactor)).toFixed(2));
+          } else if (copy.formulaType === 'length') {
+            copy.length = Number((copy.length * Math.sqrt(areaFactor)).toFixed(2));
+          } else if (copy.formulaType === 'count') {
+            copy.count = Math.max(1, Math.round(copy.count * areaFactor));
+          } else if (copy.formulaType === 'manual') {
+            copy.manualQty = Number((copy.manualQty * areaFactor).toFixed(2));
+          }
+        }
+
+        clonedItems.push(copy);
+      }
+    });
+
     const updatedFloors = [...activeProject.floors, newFloor];
-    updateActiveProject({ ...activeProject, floors: updatedFloors });
+    const updatedItems = [...activeProject.items, ...clonedItems];
+    updateActiveProject({ ...activeProject, floors: updatedFloors, items: updatedItems });
     setNewFloorName('');
   };
 
   const handleRemoveFloor = (floorId: string) => {
     if (!activeProject) return;
+    const targetFloor = activeProject.floors.find(f => f.id === floorId);
+    if (!targetFloor) return;
+    const nameLower = targetFloor.name.toLowerCase().trim();
+    if (nameLower === 'ground floor' || nameLower === 'terrace') {
+      alert("Ground Floor and Terrace are required minimum floors and cannot be deleted.");
+      return;
+    }
+
     const updatedFloors = activeProject.floors.filter(f => f.id !== floorId);
-    // clean orphaned rooms & items mapped
     const updatedRooms = activeProject.rooms.filter(r => r.floorId !== floorId);
-    const updatedItems = activeProject.items.map(item =>
-      item.floorId === floorId ? { ...item, floorId: 'all' } : item
-    );
+    // Delete items associated with the deleted floor so calculations decrease
+    const updatedItems = activeProject.items.filter(item => item.floorId !== floorId);
     updateActiveProject({ ...activeProject, floors: updatedFloors, rooms: updatedRooms, items: updatedItems });
+  };
+
+  const handleUpdateFloorArea = (floorId: string, newArea: number) => {
+    if (!activeProject) return;
+    const floor = activeProject.floors.find(f => f.id === floorId);
+    if (!floor) return;
+    const oldArea = floor.area || 1;
+    if (oldArea === newArea) return;
+
+    const ratio = newArea / oldArea;
+
+    // Calculate old and new total built-up areas
+    const oldTotal = activeProject.floors.reduce((sum, f) => sum + (f.area || 0), 0);
+    const newTotal = oldTotal - oldArea + newArea;
+    const totalRatio = oldTotal > 0 ? newTotal / oldTotal : 1;
+
+    // Map through floors and update area
+    const updatedFloors = activeProject.floors.map(f =>
+      f.id === floorId ? { ...f, area: newArea } : f
+    );
+
+    // Scale all items
+    const updatedItems = activeProject.items.map(item => {
+      let itemFactor = 1;
+      if (item.floorId === floorId) {
+        itemFactor = ratio;
+      } else if (item.floorId === 'all') {
+        itemFactor = totalRatio;
+      }
+
+      if (itemFactor === 1) return item;
+
+      // Scale dimensions based on formula type
+      const copy = { ...item };
+      if (copy.formulaType === 'area') {
+        copy.length = Number((copy.length * Math.sqrt(itemFactor)).toFixed(2));
+        copy.width = Number((copy.width * Math.sqrt(itemFactor)).toFixed(2));
+      } else if (copy.formulaType === 'volume') {
+        copy.length = Number((copy.length * Math.sqrt(itemFactor)).toFixed(2));
+        copy.width = Number((copy.width * Math.sqrt(itemFactor)).toFixed(2));
+      } else if (copy.formulaType === 'length') {
+        copy.length = Number((copy.length * Math.sqrt(itemFactor)).toFixed(2));
+      } else if (copy.formulaType === 'count') {
+        copy.count = Math.max(1, Math.round(copy.count * itemFactor));
+      } else if (copy.formulaType === 'manual') {
+        copy.manualQty = Number((copy.manualQty * itemFactor).toFixed(2));
+      }
+
+      return copy;
+    });
+
+    updateActiveProject({
+      ...activeProject,
+      floors: updatedFloors,
+      items: updatedItems,
+      builtUpArea: newTotal
+    });
   };
 
   const handleAddRoom = () => {
@@ -1403,134 +1582,119 @@ export default function AdvancedBOQCalculator() {
         keywords={['boq calculator', 'bill of quantities india', 'building estimator', 'civil costing tool', 'excel boq export']}
       />
 
-      {/* Breadcrumbs */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4 mb-6">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Home</span>
-        </Link>
-        <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
-          <Link to="/" className="hover:text-indigo-500 transition-colors">Home</Link>
-          <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
-          <span className="text-zinc-650 dark:text-zinc-300 font-medium">BOQ Calculator</span>
-        </div>
-      </div>
-
-      <div className="max-w-[1600px] mx-auto px-4">
-        {/* Title Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-indigo-500/10 text-indigo-650 dark:text-indigo-400">
-              <Calculator className="w-7 h-7" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-black text-zinc-900 dark:text-white">
-                Advanced BOQ Calculator India
-              </h1>
-              <p className="text-xs text-zinc-550 dark:text-zinc-450 mt-0.5">
-                Detailed quantity estimations, material splits, rate analysis, and scenario comparisons for construction projects.
-              </p>
+      {/* ── Premium Hero Header ── */}
+      <div className="relative overflow-hidden rounded-3xl mb-8 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border border-indigo-900/40 shadow-2xl">
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(255,255,255,.05) 24px,rgba(255,255,255,.05) 25px),repeating-linear-gradient(90deg,transparent,transparent 24px,rgba(255,255,255,.05) 24px,rgba(255,255,255,.05) 25px)' }} />
+        <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-indigo-500/15 blur-2xl pointer-events-none" />
+        <div className="relative z-10 p-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+          <div>
+            <div className="flex items-center gap-4">
+              <div className="p-3.5 rounded-2xl bg-amber-500/20 border border-amber-400/30 shadow-lg shadow-amber-500/10">
+                <Calculator className="w-8 h-8 text-amber-400" />
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                  Advanced BOQ Calculator <span className="text-amber-400">India</span>
+                </h1>
+                <p className="text-sm text-indigo-300 mt-1">Professional quantity estimation, rate analysis &amp; scenario costing workspace</p>
+              </div>
             </div>
           </div>
-
-          {/* Project Choice Bar */}
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <select
-              value={activeProjectId}
-              onChange={(e) => setActiveProjectId(e.target.value)}
-              className="px-3 py-2 text-xs font-bold rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-850 dark:text-white"
-            >
-              <option value="">-- Select Active Project --</option>
-              {projects.map(p => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </select>
-            <button
-              onClick={createBlankProject}
-              className="px-3.5 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-750 text-white rounded-xl transition shrink-0"
-            >
-              + New Project
-            </button>
-            {activeProjectId && (
-              <button
-                onClick={() => deleteProject(activeProjectId)}
-                className="px-3.5 py-2 text-xs font-bold bg-red-650 hover:bg-red-800 text-white rounded-xl transition shrink-0 flex items-center justify-center"
-                title="Delete Active Project"
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-2xl px-3 py-2">
+              <Building className="w-4 h-4 text-indigo-300 shrink-0" />
+              <select
+                value={activeProjectId}
+                onChange={(e) => setActiveProjectId(e.target.value)}
+                className="bg-transparent text-white text-xs font-bold focus:outline-none min-w-[180px] cursor-pointer"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <option value="" className="text-zinc-900">— Select Project —</option>
+                {projects.map(p => (
+                  <option key={p.id} value={p.id} className="text-zinc-900">{p.name}</option>
+                ))}
+              </select>
+            </div>
+            <button onClick={createBlankProject} className="px-4 py-2 text-xs font-bold bg-indigo-500 hover:bg-indigo-400 text-white rounded-xl transition shadow-lg shadow-indigo-500/30">+ New Project</button>
+            {activeProjectId && (
+              <button onClick={() => deleteProject(activeProjectId)} className="p-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 border border-red-500/30 rounded-xl transition" title="Delete Active Project">
+                <Trash2 className="w-4 h-4" />
               </button>
+            )}
+            {activeProject && (
+              <div className="flex items-center gap-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-2">
+                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-wider">{activeProject.items.length} Items</span>
+                <span className="w-px h-4 bg-emerald-700" />
+                <span className="text-[10px] font-black text-emerald-300 font-mono">₹{summaryTotals.grandTotal.toLocaleString('en-IN')}</span>
+              </div>
             )}
           </div>
         </div>
+      </div>
 
-        {/* Workspace Layout */}
-        {!activeProject ? (
-          /* Landing Empty State */
-          <div className="text-center py-20 bg-zinc-50/50 dark:bg-zinc-950/20 border border-dashed border-zinc-250 dark:border-zinc-850 rounded-2xl max-w-xl mx-auto space-y-6">
-            <Building className="w-12 h-12 text-zinc-400 mx-auto" />
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-white">No Project Workspace Active</h2>
-            <p className="text-xs text-zinc-550 max-w-md mx-auto">
-              Start by building a blank project worksheet or load predefined standard estimation templates matching Indian regional rates.
-            </p>
-            <div className="flex justify-center gap-3">
-              <button
-                onClick={() => loadTemplate('small_house')}
-                className="px-4 py-2 bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-bold text-xs rounded-xl"
-              >
-                Load G+0 House Template
+      {/* Autosave badge */}
+      {activeProject && (
+        <div className="flex justify-end mb-4">
+          <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-3 py-1 rounded-full border ${autosaveIndicator === 'Saved' ? 'bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-950/30 dark:border-emerald-800 dark:text-emerald-400' : 'bg-amber-50 border-amber-200 text-amber-600 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-400'}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${autosaveIndicator === 'Saved' ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'}`} />
+            {autosaveIndicator}
+          </span>
+        </div>
+      )}
+
+      {/* ── Main Workspace ── */}
+      {!activeProject ? (
+        <div className="py-20 px-4">
+          <div className="max-w-3xl mx-auto text-center space-y-8">
+            <div className="inline-flex p-5 rounded-3xl bg-gradient-to-br from-indigo-100 to-blue-50 dark:from-indigo-950/60 dark:to-slate-900 border border-indigo-200 dark:border-indigo-800 shadow-xl">
+              <Building className="w-16 h-16 text-indigo-500" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-zinc-900 dark:text-white">No Project Workspace Active</h2>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 max-w-lg mx-auto">Start fresh or load a pre-filled Indian construction template with realistic local material rates.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+              <button onClick={() => loadTemplate('small_house')} className="group p-5 bg-white dark:bg-zinc-900 border-2 border-indigo-200 dark:border-indigo-800 hover:border-indigo-500 rounded-2xl shadow-sm hover:shadow-indigo-100 dark:hover:shadow-indigo-900 transition-all text-left">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><span className="text-xl">🏠</span></div>
+                <div className="font-black text-zinc-900 dark:text-white text-sm">G+0 Residential</div>
+                <div className="text-xs text-zinc-500 mt-1">Foundation, RCC slab, brickwork, tiles, paint</div>
               </button>
-              <button
-                onClick={() => loadTemplate('kitchen')}
-                className="px-4 py-2 border border-zinc-300 dark:border-zinc-800 font-bold text-xs rounded-xl text-zinc-700 dark:text-zinc-350"
-              >
-                Load Kitchen Template
+              <button onClick={() => loadTemplate('kitchen')} className="group p-5 bg-white dark:bg-zinc-900 border-2 border-amber-200 dark:border-amber-800 hover:border-amber-500 rounded-2xl shadow-sm transition-all text-left">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><span className="text-xl">🍳</span></div>
+                <div className="font-black text-zinc-900 dark:text-white text-sm">Modular Kitchen</div>
+                <div className="text-xs text-zinc-500 mt-1">Interior renovation — tiles, electrical, plumbing</div>
+              </button>
+              <button onClick={createBlankProject} className="group p-5 bg-white dark:bg-zinc-900 border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-500 rounded-2xl shadow-sm transition-all text-left">
+                <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><span className="text-xl">📋</span></div>
+                <div className="font-black text-zinc-900 dark:text-white text-sm">Blank Project</div>
+                <div className="text-xs text-zinc-500 mt-1">Start from scratch with your own BOQ items</div>
               </button>
             </div>
           </div>
-        ) : (
-          /* Active Estimation Studio */
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* 1. Left Sidebar: Settings, Floors, Rooms */}
             <div className="lg:col-span-3 space-y-6">
-              {/* Project settings details */}
-              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-sm space-y-4">
-                <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-850 pb-3">
-                  <h3 className="text-xs font-black text-zinc-400 uppercase tracking-wider">Project Configuration</h3>
-                  <span className="text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 px-2 py-0.5 rounded font-mono">
-                    {autosaveIndicator}
-                  </span>
+              {/* Project Config Card */}
+              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm">
+                <div className="px-5 py-3.5 bg-gradient-to-r from-indigo-50 to-slate-50 dark:from-indigo-950/40 dark:to-slate-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-md bg-indigo-500 flex items-center justify-center shrink-0 text-white text-[11px]">⚙</div>
+                  <h3 className="text-xs font-black text-zinc-700 dark:text-zinc-200 uppercase tracking-wider">Project Config</h3>
                 </div>
-
-                <div className="space-y-3 text-xs">
+                <div className="p-5 space-y-3.5 text-xs">
                   <div>
-                    <label className="block font-bold text-zinc-550 mb-1">Project Name</label>
-                    <input
-                      type="text"
-                      value={activeProject.name}
-                      onChange={(e) => updateActiveProject({ ...activeProject, name: e.target.value })}
-                      className="w-full px-2 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono text-zinc-900 dark:text-white"
-                    />
+                    <label className="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Project Name</label>
+                    <input type="text" value={activeProject.name} onChange={(e) => updateActiveProject({ ...activeProject, name: e.target.value })} className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 font-bold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30" />
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block font-bold text-zinc-550 mb-1">Client Name</label>
-                      <input
-                        type="text"
-                        value={activeProject.client}
-                        onChange={(e) => updateActiveProject({ ...activeProject, client: e.target.value })}
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono text-zinc-900 dark:text-white"
-                      />
+                      <label className="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Client</label>
+                      <input type="text" value={activeProject.client} onChange={(e) => updateActiveProject({ ...activeProject, client: e.target.value })} className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30" />
                     </div>
                     <div>
-                      <label className="block font-bold text-zinc-550 mb-1">Project Type</label>
-                      <select
-                        value={activeProject.projectType}
-                        onChange={(e) => updateActiveProject({ ...activeProject, projectType: e.target.value as any })}
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 text-zinc-900 dark:text-white"
-                      >
+                      <label className="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Type</label>
+                      <select value={activeProject.projectType} onChange={(e) => updateActiveProject({ ...activeProject, projectType: e.target.value as any })} className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30">
                         <option value="residential">Residential</option>
                         <option value="commercial">Commercial</option>
                         <option value="renovation">Renovation</option>
@@ -1539,247 +1703,254 @@ export default function AdvancedBOQCalculator() {
                       </select>
                     </div>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block font-bold text-zinc-555 mb-1">Built Area (sq ft)</label>
+                      <label className="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Built Area (sqft)</label>
                       <input
                         type="number"
                         value={activeProject.builtUpArea}
                         onChange={(e) => updateActiveProject({ ...activeProject, builtUpArea: parseFloat(e.target.value) || 0 })}
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono"
+                        disabled={activeProject.floors.length > 0}
+                        title={activeProject.floors.length > 0 ? "Calculated from sum of floor areas" : "Set project built area"}
+                        className={`w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 font-mono text-zinc-900 dark:text-white focus:outline-none ${
+                          activeProject.floors.length > 0
+                            ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 cursor-not-allowed"
+                            : "bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-indigo-500/30"
+                        }`}
                       />
                     </div>
                     <div>
-                      <label className="block font-bold text-zinc-555 mb-1">GST Tax Rate (%)</label>
-                      <input
-                        type="number"
-                        value={activeProject.gstPercent}
-                        onChange={(e) => updateActiveProject({ ...activeProject, gstPercent: parseFloat(e.target.value) || 0 })}
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono"
-                      />
+                      <label className="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">GST (%)</label>
+                      <input type="number" value={activeProject.gstPercent} onChange={(e) => updateActiveProject({ ...activeProject, gstPercent: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 font-mono text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30" />
                     </div>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2.5">
                     <div>
-                      <label className="block font-bold text-zinc-555 mb-1">Contractor Margin (%)</label>
-                      <input
-                        type="number"
-                        value={activeProject.contractorMarginPercent}
-                        onChange={(e) => updateActiveProject({ ...activeProject, contractorMarginPercent: parseFloat(e.target.value) || 0 })}
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono"
-                      />
+                      <label className="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Margin (%)</label>
+                      <input type="number" value={activeProject.contractorMarginPercent} onChange={(e) => updateActiveProject({ ...activeProject, contractorMarginPercent: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 font-mono text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30" />
                     </div>
                     <div>
-                      <label className="block font-bold text-zinc-555 mb-1">Contingencies (%)</label>
-                      <input
-                        type="number"
-                        value={activeProject.contingencyPercent}
-                        onChange={(e) => updateActiveProject({ ...activeProject, contingencyPercent: parseFloat(e.target.value) || 0 })}
-                        className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono"
-                      />
+                      <label className="block font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Contingency (%)</label>
+                      <input type="number" value={activeProject.contingencyPercent} onChange={(e) => updateActiveProject({ ...activeProject, contingencyPercent: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 font-mono text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30" />
                     </div>
                   </div>
-                </div>
-
-                <div className="pt-3 border-t border-zinc-100 dark:border-zinc-850 flex gap-2">
-                  <button
-                    onClick={handleBackupExport}
-                    className="flex-1 py-2 border border-zinc-200 dark:border-zinc-800 text-[10px] font-black uppercase rounded-lg hover:bg-zinc-50"
-                  >
-                    Export Backup
-                  </button>
-                  <label className="flex-1 py-2 border border-zinc-200 dark:border-zinc-800 text-[10px] font-black uppercase rounded-lg hover:bg-zinc-50 text-center cursor-pointer">
-                    <span>Import JSON</span>
-                    <input
-                      type="file"
-                      accept=".json"
-                      onChange={handleBackupImport}
-                      className="hidden"
-                    />
-                  </label>
+                  <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 flex gap-2">
+                    <button onClick={handleBackupExport} className="flex-1 py-2 border border-zinc-200 dark:border-zinc-700 text-[10px] font-black uppercase rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition">Export JSON</button>
+                    <label className="flex-1 py-2 border border-zinc-200 dark:border-zinc-700 text-[10px] font-black uppercase rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition text-center cursor-pointer">Import JSON<input type="file" accept=".json" onChange={handleBackupImport} className="hidden" /></label>
+                  </div>
                 </div>
               </div>
 
-              {/* Floors and Rooms Manager Section */}
-              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-sm space-y-4">
-                <h3 className="text-xs font-black text-zinc-400 uppercase tracking-wider border-b border-zinc-100 dark:border-zinc-850 pb-2">
-                  Floors & Structural Levels
-                </h3>
-                <div className="space-y-2 max-h-40 overflow-y-auto">
-                  {activeProject.floors.map(f => (
-                    <div key={f.id} className="flex justify-between items-center bg-zinc-50 dark:bg-zinc-950 p-2 rounded-xl text-xs">
-                      <span className="font-bold text-zinc-700 dark:text-zinc-300">{f.name}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10px] text-zinc-400">{f.area} sqft</span>
-                        <button
-                          onClick={() => handleRemoveFloor(f.id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+              {/* Floors Card */}
+              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm">
+                <div className="px-5 py-3.5 bg-gradient-to-r from-blue-50 to-slate-50 dark:from-blue-950/30 dark:to-slate-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-md bg-blue-500 flex items-center justify-center shrink-0 text-[10px]">🏢</div>
+                  <h3 className="text-xs font-black text-zinc-700 dark:text-zinc-200 uppercase tracking-wider">Floors</h3>
+                  <span className="ml-auto text-[10px] font-bold text-blue-500 bg-blue-50 dark:bg-blue-950/50 px-2 py-0.5 rounded-full">{activeProject.floors.length}</span>
                 </div>
-
-                {/* Add Floor Mini form */}
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Floor Name"
-                    value={newFloorName}
-                    onChange={(e) => setNewFloorName(e.target.value)}
-                    className="flex-1 px-2.5 py-1 text-xs border border-zinc-250 dark:border-zinc-800 rounded-lg bg-zinc-50/50"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Area"
-                    value={newFloorArea}
-                    onChange={(e) => setNewFloorArea(parseInt(e.target.value) || 1000)}
-                    className="w-16 px-2.5 py-1 text-xs border border-zinc-250 dark:border-zinc-800 rounded-lg bg-zinc-50/50 font-mono"
-                  />
-                  <button
-                    onClick={handleAddFloor}
-                    className="px-3 py-1 bg-zinc-900 text-white rounded-lg text-xs font-bold"
-                  >
-                    +
-                  </button>
-                </div>
-
-                {/* Rooms manager */}
-                <h3 className="text-xs font-black text-zinc-400 uppercase tracking-wider border-b border-zinc-100 dark:border-zinc-850 pb-2 pt-2">
-                  Rooms / Estimation Zones
-                </h3>
-                <div className="space-y-2 max-h-40 overflow-y-auto">
-                  {activeProject.rooms.map(r => {
-                    const floorName = activeProject.floors.find(f => f.id === r.floorId)?.name || 'Unknown Floor';
-                    return (
-                      <div key={r.id} className="flex justify-between items-center bg-zinc-50 dark:bg-zinc-950 p-2 rounded-xl text-xs">
-                        <div>
-                          <span className="font-bold text-zinc-700 dark:text-zinc-300 block">{r.name}</span>
-                          <span className="text-[9px] text-zinc-400 block font-mono">{floorName}</span>
+                <div className="p-4 space-y-3">
+                  <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                    {activeProject.floors.map((f, idx) => {
+                      const isProtected = f.name.toLowerCase().trim() === 'ground floor' || f.name.toLowerCase().trim() === 'terrace';
+                      return (
+                        <div key={f.id} className="flex justify-between items-center bg-blue-50/60 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40 px-3 py-2 rounded-xl text-xs">
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-lg bg-blue-500 text-white text-[9px] font-black flex items-center justify-center shrink-0">{idx + 1}</span>
+                            <div>
+                              <span className="font-bold text-zinc-800 dark:text-zinc-200 block">{f.name}</span>
+                              <div className="flex items-center gap-1 mt-0.5">
+                                <input
+                                  type="number"
+                                  value={f.area || ''}
+                                  onChange={(e) => handleUpdateFloorArea(f.id, parseInt(e.target.value) || 0)}
+                                  className="w-14 px-1 py-0.5 text-[10px] font-mono border border-zinc-200 dark:border-zinc-850 rounded bg-white/80 dark:bg-zinc-950/80 focus:outline-none focus:ring-1 focus:ring-blue-500/50 text-zinc-800 dark:text-zinc-200"
+                                  title="Edit floor area"
+                                />
+                                <span className="text-[10px] text-zinc-400 select-none">sqft</span>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleRemoveFloor(f.id)}
+                            disabled={isProtected}
+                            title={isProtected ? "Minimum required floor (cannot be deleted)" : "Delete floor"}
+                            className={`p-1 transition ${
+                              isProtected
+                                ? "text-zinc-300 dark:text-zinc-700 cursor-not-allowed"
+                                : "text-red-400 hover:text-red-650"
+                            }`}
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
                         </div>
-                        <button
-                          onClick={() => handleRemoveRoom(r.id)}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800/80">
+                    <input
+                      type="text"
+                      placeholder="Floor Name (e.g. Ground Floor)"
+                      value={newFloorName}
+                      onChange={(e) => setNewFloorName(e.target.value)}
+                      className="w-full px-3 py-1.5 text-xs border border-zinc-200 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-blue-400/30 text-zinc-900 dark:text-white"
+                    />
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <input
+                          type="number"
+                          placeholder="Area"
+                          value={newFloorArea || ''}
+                          onChange={(e) => setNewFloorArea(parseInt(e.target.value) || 0)}
+                          className="w-full pl-3 pr-9 py-1.5 text-xs border border-zinc-200 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-950 font-mono focus:outline-none focus:ring-2 focus:ring-blue-400/30 text-zinc-900 dark:text-white"
+                        />
+                        <span className="absolute right-2.5 top-1.5 text-[9px] text-zinc-400 font-bold select-none">sqft</span>
                       </div>
-                    );
-                  })}
-                </div>
-
-                {/* Add Room Mini form */}
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Room/Zone Name"
-                    value={newRoomName}
-                    onChange={(e) => setNewRoomName(e.target.value)}
-                    className="flex-1 px-2.5 py-1 text-xs border border-zinc-250 dark:border-zinc-800 rounded-lg bg-zinc-50/50"
-                  />
-                  <select
-                    value={newRoomFloorId}
-                    onChange={(e) => setNewRoomFloorId(e.target.value)}
-                    className="w-24 px-2.5 py-1 text-xs border border-zinc-250 dark:border-zinc-800 rounded-lg bg-zinc-50/50"
-                  >
-                    <option value="">-- Floor --</option>
-                    {activeProject.floors.map(f => (
-                      <option key={f.id} value={f.id}>{f.name}</option>
-                    ))}
-                  </select>
-                  <button
-                    onClick={handleAddRoom}
-                    className="px-3 py-1 bg-zinc-900 text-white rounded-lg text-xs font-bold"
-                  >
-                    +
-                  </button>
+                      <button
+                        onClick={handleAddFloor}
+                        className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-blue-500/10 flex items-center justify-center shrink-0"
+                      >
+                        Add Floor
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              {/* Rooms Card */}
+              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm">
+                <div className="px-5 py-3.5 bg-gradient-to-r from-violet-50 to-slate-50 dark:from-violet-950/30 dark:to-slate-900 border-b border-zinc-200 dark:border-zinc-800 flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-md bg-violet-500 flex items-center justify-center shrink-0 text-[10px]">🚪</div>
+                  <h3 className="text-xs font-black text-zinc-700 dark:text-zinc-200 uppercase tracking-wider">Rooms / Zones</h3>
+                  <span className="ml-auto text-[10px] font-bold text-violet-500 bg-violet-50 dark:bg-violet-950/50 px-2 py-0.5 rounded-full">{activeProject.rooms.length}</span>
+                </div>
+                <div className="p-4 space-y-3">
+                  <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                    {activeProject.rooms.map(r => {
+                      const floorName = activeProject.floors.find(f => f.id === r.floorId)?.name || '—';
+                      return (
+                        <div key={r.id} className="flex justify-between items-center bg-violet-50/60 dark:bg-violet-950/20 border border-violet-100 dark:border-violet-900/40 px-3 py-2 rounded-xl text-xs">
+                          <div>
+                            <span className="font-bold text-zinc-800 dark:text-zinc-200 block">{r.name}</span>
+                            <span className="text-[10px] text-violet-500 font-medium">{floorName}</span>
+                          </div>
+                          <button onClick={() => handleRemoveRoom(r.id)} className="text-red-400 hover:text-red-600 transition p-1"><Trash2 className="w-3 h-3" /></button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800/80">
+                    <input
+                      type="text"
+                      placeholder="Room Name (e.g. Living Room)"
+                      value={newRoomName}
+                      onChange={(e) => setNewRoomName(e.target.value)}
+                      className="w-full px-3 py-1.5 text-xs border border-zinc-200 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-violet-400/30 text-zinc-900 dark:text-white"
+                    />
+                    <div className="flex gap-2">
+                      <select
+                        value={newRoomFloorId}
+                        onChange={(e) => setNewRoomFloorId(e.target.value)}
+                        className="flex-1 px-3 py-1.5 text-xs border border-zinc-200 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-violet-400/30 text-zinc-900 dark:text-white"
+                      >
+                        <option value="">Floor</option>
+                        {activeProject.floors.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+                      </select>
+                      <button
+                        onClick={handleAddRoom}
+                        className="px-4 py-1.5 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-xs font-bold transition shadow-md shadow-violet-500/10 flex items-center justify-center shrink-0"
+                      >
+                        Add Room
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             {/* 2. Main Workspace: Spreadsheet view & Filters */}
             <div className="lg:col-span-9 space-y-6">
               {/* Toolbar & Filters */}
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-3">
-                  <div className="relative">
+                <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+                  <div className="relative flex-1 sm:flex-initial">
                     <Search className="absolute left-3 top-2.5 w-4 h-4 text-zinc-400" />
                     <input
                       type="text"
                       placeholder="Search items..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-9 pr-4 py-2 text-xs border border-zinc-250 dark:border-zinc-800 rounded-xl bg-zinc-50/50 focus:outline-none w-52 text-zinc-900 dark:text-white"
+                      className="w-full sm:w-52 pl-9 pr-4 py-2 text-xs border border-zinc-200 dark:border-zinc-750 rounded-xl bg-zinc-50/50 dark:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 text-zinc-900 dark:text-white transition"
                     />
                   </div>
 
-                  <select
-                    value={selectedCategoryFilter}
-                    onChange={(e) => setSelectedCategoryFilter(e.target.value)}
-                    className="px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-zinc-850 dark:text-white"
-                  >
-                    <option value="all">All Categories</option>
-                    {DEFAULT_CATEGORIES.map(c => (
-                      <option key={c.id} value={c.id}>{c.name}</option>
-                    ))}
-                  </select>
+                  <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 w-full sm:w-auto">
+                    <select
+                      value={selectedCategoryFilter}
+                      onChange={(e) => setSelectedCategoryFilter(e.target.value)}
+                      className="px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-750 rounded-xl bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition cursor-pointer"
+                    >
+                      <option value="all">All Categories</option>
+                      {DEFAULT_CATEGORIES.map(c => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
 
-                  <select
-                    value={selectedFloorFilter}
-                    onChange={(e) => setSelectedFloorFilter(e.target.value)}
-                    className="px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-zinc-850 dark:text-white"
-                  >
-                    <option value="all">All Floors</option>
-                    {activeProject.floors.map(f => (
-                      <option key={f.id} value={f.id}>{f.name}</option>
-                    ))}
-                  </select>
+                    <select
+                      value={selectedFloorFilter}
+                      onChange={(e) => setSelectedFloorFilter(e.target.value)}
+                      className="px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-750 rounded-xl bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition cursor-pointer"
+                    >
+                      <option value="all">All Floors</option>
+                      {activeProject.floors.map(f => (
+                        <option key={f.id} value={f.id}>{f.name}</option>
+                      ))}
+                    </select>
 
-                  <select
-                    value={selectedRoomFilter}
-                    onChange={(e) => setSelectedRoomFilter(e.target.value)}
-                    className="px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-zinc-850 dark:text-white"
-                  >
-                    <option value="all">All Rooms</option>
-                    {activeProject.rooms.map(r => (
-                      <option key={r.id} value={r.id}>{r.name}</option>
-                    ))}
-                  </select>
+                    <select
+                      value={selectedRoomFilter}
+                      onChange={(e) => setSelectedRoomFilter(e.target.value)}
+                      className="px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-750 rounded-xl bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition cursor-pointer"
+                    >
+                      <option value="all">All Rooms</option>
+                      {activeProject.rooms.map(r => (
+                        <option key={r.id} value={r.id}>{r.name}</option>
+                      ))}
+                    </select>
 
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
-                    className="px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-zinc-850 dark:text-white"
-                  >
-                    <option value="none">Sort: Default</option>
-                    <option value="code">Sort: Code</option>
-                    <option value="amount">Sort: Amount</option>
-                    <option value="category">Sort: Category</option>
-                  </select>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value as any)}
+                      className="px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-750 rounded-xl bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition cursor-pointer"
+                    >
+                      <option value="none">Sort: Default</option>
+                      <option value="code">Sort: Code</option>
+                      <option value="amount">Sort: Amount</option>
+                      <option value="category">Sort: Category</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2 w-full lg:w-auto justify-end">
                   <button
                     onClick={() => setShowRateLibrary(true)}
-                    className="px-3.5 py-2 text-xs border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 font-bold rounded-xl text-zinc-700 dark:text-zinc-350"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold border border-zinc-200 dark:border-zinc-750 rounded-xl bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-750 dark:text-zinc-350 transition"
                   >
+                    <Coins className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                     Rate Library
                   </button>
                   <button
                     onClick={handleAddItem}
-                    className="px-3.5 py-2 text-xs bg-zinc-900 hover:bg-zinc-950 text-white dark:bg-white dark:text-zinc-900 font-bold rounded-xl"
+                    className="inline-flex items-center gap-1 px-4 py-2 text-xs bg-indigo-650 hover:bg-indigo-600 text-white font-bold rounded-xl transition shadow-lg shadow-indigo-650/20"
                   >
                     + Add Item
                   </button>
                   {selectedItemIds.length > 0 && (
                     <button
                       onClick={handleBulkDelete}
-                      className="px-3.5 py-2 text-xs bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-650 dark:text-red-400 border border-red-500/25 font-bold rounded-xl transition"
                     >
+                      <Trash2 className="w-3.5 h-3.5 shrink-0" />
                       Delete ({selectedItemIds.length})
                     </button>
                   )}
@@ -1789,47 +1960,50 @@ export default function AdvancedBOQCalculator() {
               {/* BOQ Spreadsheet Table */}
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm">
                 <div className="overflow-x-auto max-w-full">
-                  <table className="w-full text-left border-collapse text-xs">
+                  <table className="w-full text-left border-collapse text-xs min-w-[1250px]">
                     <thead>
                       <tr className="bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-150 dark:border-zinc-800 text-[10px] text-zinc-400 font-bold uppercase">
-                        <th className="py-3 px-3 w-8 text-center">
+                        <th className="py-3 px-3 w-10 text-center">
                           <input
                             type="checkbox"
                             checked={filteredBOQItems.length > 0 && filteredBOQItems.every(i => selectedItemIds.includes(i.id))}
                             onChange={() => toggleSelectAll(filteredBOQItems)}
-                            className="rounded"
+                            className="rounded accent-indigo-600 cursor-pointer"
                           />
                         </th>
-                        <th className="py-3 px-3 w-16">Code</th>
-                        <th className="py-3 px-3 w-28">Category</th>
-                        <th className="py-3 px-3 w-32">Description</th>
-                        <th className="py-3 px-3 w-16">Unit</th>
-                        <th className="py-3 px-3 w-28">Dimensions (L x W x H)</th>
-                        <th className="py-3 px-3 w-12">Count</th>
-                        <th className="py-3 px-3 w-20">Base Rate</th>
-                        <th className="py-3 px-3 w-24">Final Rate (Taxes)</th>
-                        <th className="py-3 px-3 w-24 text-right">Amount (₹)</th>
-                        <th className="py-3 px-3 w-24 text-center">Actions</th>
+                        <th className="py-3 px-3 w-20">Code</th>
+                        <th className="py-3 px-3 w-32">Category</th>
+                        <th className="py-3 px-3 w-64">Description</th>
+                        <th className="py-3 px-3 w-20 text-center">Unit</th>
+                        <th className="py-3 px-3 w-60 text-center">Dimensions &amp; Nos (L × W × H × Count)</th>
+                        <th className="py-3 px-3 w-24 text-right">Base Rate</th>
+                        <th className="py-3 px-3 w-28 text-right">Final Rate (Taxes)</th>
+                        <th className="py-3 px-3 w-28 text-right">Amount (₹)</th>
+                        <th className="py-3 px-3 w-28 text-center">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-150 dark:divide-zinc-850">
                       {filteredBOQItems.length === 0 ? (
                         <tr>
-                          <td colSpan={11} className="py-12 text-center text-zinc-400 font-medium">
-                            No matching items found. Add a new item or clear filters.
+                          <td colSpan={10} className="py-12 text-center text-zinc-400 font-medium">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <span className="text-2xl">🔍</span>
+                              <p className="text-sm font-bold text-zinc-700 dark:text-zinc-300">No items found matching your filters</p>
+                              <p className="text-xs text-zinc-400 dark:text-zinc-500">Add a new item or clear your active filters above.</p>
+                            </div>
                           </td>
                         </tr>
                       ) : (
                         filteredBOQItems.map(item => {
                           const baseRateSum = (item.rateMaterial || 0) + (item.rateLabour || 0) + (item.rateEquipment || 0) + (item.rateTransport || 0) + (item.rateOther || 0);
                           return (
-                            <tr key={item.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/10 text-zinc-700 dark:text-zinc-300">
+                            <tr key={item.id} className="hover:bg-zinc-50/60 dark:hover:bg-zinc-800/10 text-zinc-700 dark:text-zinc-300 even:bg-zinc-50/20 dark:even:bg-zinc-950/10 transition-colors">
                               <td className="py-2.5 px-3 text-center">
                                 <input
                                   type="checkbox"
                                   checked={selectedItemIds.includes(item.id)}
                                   onChange={() => toggleSelectItem(item.id)}
-                                  className="rounded"
+                                  className="rounded accent-indigo-600 cursor-pointer"
                                 />
                               </td>
                               <td className="py-2.5 px-3 font-mono">
@@ -1837,17 +2011,17 @@ export default function AdvancedBOQCalculator() {
                                   type="text"
                                   value={item.code}
                                   onChange={(e) => handleUpdateItemCell(item.id, 'code', e.target.value)}
-                                  className="w-full bg-transparent font-bold focus:outline-none border-b border-transparent hover:border-zinc-300 focus:border-indigo-500 font-mono"
+                                  className="w-full bg-transparent font-bold focus:outline-none border-b border-transparent hover:border-zinc-300 dark:hover:border-zinc-700 focus:border-indigo-500 font-mono text-zinc-900 dark:text-white transition"
                                 />
                               </td>
                               <td className="py-2.5 px-3">
                                 <select
                                   value={item.categoryId}
                                   onChange={(e) => handleUpdateItemCell(item.id, 'categoryId', e.target.value)}
-                                  className="w-full bg-transparent focus:outline-none"
+                                  className="w-full bg-transparent focus:outline-none text-zinc-800 dark:text-zinc-200 border-b border-transparent hover:border-zinc-300 dark:hover:border-zinc-700 focus:border-indigo-500 cursor-pointer transition"
                                 >
                                   {DEFAULT_CATEGORIES.map(c => (
-                                    <option key={c.id} value={c.id}>{c.name}</option>
+                                    <option key={c.id} value={c.id} className="text-zinc-900">{c.name}</option>
                                   ))}
                                 </select>
                               </td>
@@ -1856,85 +2030,89 @@ export default function AdvancedBOQCalculator() {
                                   type="text"
                                   value={item.description}
                                   onChange={(e) => handleUpdateItemCell(item.id, 'description', e.target.value)}
-                                  className="w-full bg-transparent focus:outline-none font-bold border-b border-transparent hover:border-zinc-300 focus:border-indigo-500"
+                                  className="w-full bg-transparent focus:outline-none font-semibold text-zinc-805 dark:text-zinc-200 border-b border-transparent hover:border-zinc-300 dark:hover:border-zinc-700 focus:border-indigo-500 transition"
                                 />
                               </td>
-                              <td className="py-2.5 px-3">
+                              <td className="py-2.5 px-3 text-center">
                                 <select
                                   value={item.unit}
                                   onChange={(e) => handleUpdateItemCell(item.id, 'unit', e.target.value)}
-                                  className="w-full bg-transparent focus:outline-none text-[11px]"
+                                  className="w-full bg-transparent focus:outline-none text-zinc-800 dark:text-zinc-200 border-b border-transparent hover:border-zinc-300 dark:hover:border-zinc-700 focus:border-indigo-500 text-[11px] cursor-pointer transition text-center"
                                 >
                                   {['Nos', 'Rmt', 'Sq ft', 'Sq m', 'Cft', 'Cum', 'Kg', 'Ton', 'Bag', 'Litre', 'Set', 'Lump Sum'].map(u => (
-                                    <option key={u} value={u}>{u}</option>
+                                    <option key={u} value={u} className="text-zinc-900">{u}</option>
                                   ))}
                                 </select>
                               </td>
-                              {/* Dimensions input cells */}
+                              {/* Consolidated dimensions input cell */}
                               <td className="py-2.5 px-3">
-                                <div className="flex items-center gap-1 font-mono text-[11px]">
+                                <div className="flex items-center gap-1 font-mono text-[11px] justify-center">
                                   <input
                                     type="number"
                                     value={item.length || ''}
                                     placeholder="L"
+                                    title="Length"
                                     onChange={(e) => handleUpdateItemCell(item.id, 'length', parseFloat(e.target.value) || 0)}
-                                    className="w-8 bg-transparent text-center focus:outline-none hover:bg-zinc-100"
+                                    className="w-12 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded px-1 py-0.5 text-center focus:outline-none focus:ring-1 focus:ring-indigo-500 text-zinc-900 dark:text-white"
                                   />
-                                  <span>x</span>
+                                  <span className="text-zinc-400">×</span>
                                   <input
                                     type="number"
                                     value={item.width || ''}
                                     placeholder="W"
+                                    title="Width"
                                     onChange={(e) => handleUpdateItemCell(item.id, 'width', parseFloat(e.target.value) || 0)}
-                                    className="w-8 bg-transparent text-center focus:outline-none hover:bg-zinc-100"
+                                    className="w-12 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded px-1 py-0.5 text-center focus:outline-none focus:ring-1 focus:ring-indigo-500 text-zinc-900 dark:text-white"
                                   />
-                                  <span>x</span>
+                                  <span className="text-zinc-400">×</span>
                                   <input
                                     type="number"
                                     value={item.height || ''}
                                     placeholder="H"
+                                    title="Height"
                                     onChange={(e) => handleUpdateItemCell(item.id, 'height', parseFloat(e.target.value) || 0)}
-                                    className="w-8 bg-transparent text-center focus:outline-none hover:bg-zinc-100"
+                                    className="w-12 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded px-1 py-0.5 text-center focus:outline-none focus:ring-1 focus:ring-indigo-500 text-zinc-900 dark:text-white"
+                                  />
+                                  <span className="text-zinc-400">×</span>
+                                  <input
+                                    type="number"
+                                    value={item.count || ''}
+                                    placeholder="Nos"
+                                    title="Count"
+                                    onChange={(e) => handleUpdateItemCell(item.id, 'count', parseInt(e.target.value) || 1)}
+                                    className="w-12 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded px-1 py-0.5 text-center font-bold text-indigo-650 dark:text-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-zinc-900 dark:text-white"
                                   />
                                 </div>
                               </td>
-                              <td className="py-2.5 px-3">
-                                <input
-                                  type="number"
-                                  value={item.count || ''}
-                                  onChange={(e) => handleUpdateItemCell(item.id, 'count', parseInt(e.target.value) || 1)}
-                                  className="w-full bg-transparent text-center focus:outline-none hover:bg-zinc-100 font-mono"
-                                />
+                              <td className="py-2.5 px-3 font-mono text-zinc-505 text-right">
+                                ₹{baseRateSum.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
                               </td>
-                              <td className="py-2.5 px-3 font-mono text-zinc-500">
-                                ₹{baseRateSum.toFixed(1)}
-                              </td>
-                              <td className="py-2.5 px-3 font-mono font-bold text-zinc-900 dark:text-white">
-                                ₹{item.finalRate.toFixed(1)}
+                              <td className="py-2.5 px-3 font-mono font-bold text-zinc-900 dark:text-white text-right">
+                                ₹{item.finalRate.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
                               </td>
                               <td className="py-2.5 px-3 font-mono text-right font-black text-indigo-650 dark:text-indigo-400">
                                 ₹{item.totalAmount.toLocaleString('en-IN')}
                               </td>
                               {/* Actions on rows */}
                               <td className="py-2.5 px-3 text-center">
-                                <div className="flex items-center justify-center gap-2">
+                                <div className="flex items-center justify-center gap-1">
                                   <button
                                     onClick={() => setActiveRateAnalysisItemId(item.id)}
-                                    className="p-1 hover:bg-zinc-100 rounded text-zinc-500 hover:text-indigo-600"
+                                    className="p-1.5 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded-lg text-zinc-400 hover:text-indigo-600 transition"
                                     title="Rate Analysis Breakdown"
                                   >
                                     <Eye className="w-3.5 h-3.5" />
                                   </button>
                                   <button
                                     onClick={() => handleDuplicateItem(item.id)}
-                                    className="p-1 hover:bg-zinc-100 rounded text-zinc-500 hover:text-emerald-500"
+                                    className="p-1.5 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 rounded-lg text-zinc-400 hover:text-emerald-500 transition"
                                     title="Duplicate row"
                                   >
                                     <Copy className="w-3.5 h-3.5" />
                                   </button>
                                   <button
                                     onClick={() => handleDeleteItem(item.id)}
-                                    className="p-1 hover:bg-zinc-100 rounded text-zinc-500 hover:text-red-500"
+                                    className="p-1.5 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg text-zinc-400 hover:text-red-500 transition"
                                     title="Delete row"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
@@ -1946,6 +2124,21 @@ export default function AdvancedBOQCalculator() {
                         })
                       )}
                     </tbody>
+                    {filteredBOQItems.length > 0 && (
+                      <tfoot className="bg-zinc-50 dark:bg-zinc-950/50 font-bold border-t border-zinc-200 dark:border-zinc-800">
+                        <tr className="text-zinc-800 dark:text-zinc-200">
+                          <td colSpan={5} className="py-3.5 px-3 text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider text-[10px]">Filtered Subtotal</td>
+                          <td className="py-3.5 px-3 font-mono text-[11px] text-zinc-400 text-center">
+                            {filteredBOQItems.length} items
+                          </td>
+                          <td colSpan={2} className="py-3.5 px-3"></td>
+                          <td className="py-3.5 px-3 font-mono text-right text-sm text-indigo-650 dark:text-indigo-400 font-black">
+                            ₹{filteredBOQItems.reduce((sum, item) => sum + item.totalAmount, 0).toLocaleString('en-IN')}
+                          </td>
+                          <td className="py-3.5 px-3"></td>
+                        </tr>
+                      </tfoot>
+                    )}
                   </table>
                 </div>
               </div>
@@ -1953,44 +2146,78 @@ export default function AdvancedBOQCalculator() {
               {/* 3. Materials Estimations Summary */}
               {materialEstimationTotals && (
                 <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm space-y-4">
-                  <h3 className="text-xs font-black text-zinc-400 uppercase tracking-wider border-b border-zinc-100 dark:border-zinc-850 pb-2">
-                    Estimated Indian Construction Materials Breakdown
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
-                    <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-150 dark:border-zinc-850">
-                      <span className="text-[10px] text-zinc-450 block uppercase">Cement Bags</span>
-                      <span className="text-lg font-black text-zinc-900 dark:text-white">{materialEstimationTotals.cementBags} Bags</span>
+                  <div className="flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-850 pb-3">
+                    <span className="text-lg">🧱</span>
+                    <h3 className="text-xs font-black text-zinc-700 dark:text-zinc-200 uppercase tracking-wider">
+                      Estimated Indian Construction Materials Breakdown
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                    <div className="bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border-l-4 border-l-amber-500 border border-zinc-150 dark:border-zinc-850 shadow-sm hover:shadow-md transition">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">🥫</span>
+                        <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Cement Bags</span>
+                      </div>
+                      <span className="text-base font-black text-zinc-900 dark:text-white font-mono">{materialEstimationTotals.cementBags.toLocaleString()} Bags</span>
                     </div>
-                    <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-150 dark:border-zinc-850">
-                      <span className="text-[10px] text-zinc-455 block uppercase">Sand Volume</span>
-                      <span className="text-lg font-black text-zinc-900 dark:text-white">{materialEstimationTotals.sandCft} Cft</span>
+
+                    <div className="bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border-l-4 border-l-yellow-600 border border-zinc-150 dark:border-zinc-850 shadow-sm hover:shadow-md transition">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">⏳</span>
+                        <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Sand Volume</span>
+                      </div>
+                      <span className="text-base font-black text-zinc-900 dark:text-white font-mono">{materialEstimationTotals.sandCft.toLocaleString()} Cft</span>
                     </div>
-                    <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-150 dark:border-zinc-850">
-                      <span className="text-[10px] text-zinc-455 block uppercase">Coarse Aggregate</span>
-                      <span className="text-lg font-black text-zinc-900 dark:text-white">{materialEstimationTotals.aggregateCft} Cft</span>
+
+                    <div className="bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border-l-4 border-l-zinc-500 border border-zinc-150 dark:border-zinc-850 shadow-sm hover:shadow-md transition">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">🪨</span>
+                        <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Coarse Aggregate</span>
+                      </div>
+                      <span className="text-base font-black text-zinc-900 dark:text-white font-mono">{materialEstimationTotals.aggregateCft.toLocaleString()} Cft</span>
                     </div>
-                    <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-150 dark:border-zinc-850">
-                      <span className="text-[10px] text-zinc-455 block uppercase">Reinforcement Steel</span>
-                      <span className="text-lg font-black text-zinc-900 dark:text-white">{materialEstimationTotals.steelKg} Kg</span>
+
+                    <div className="bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border-l-4 border-l-blue-600 border border-zinc-150 dark:border-zinc-850 shadow-sm hover:shadow-md transition">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">⛓️</span>
+                        <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-550 uppercase tracking-wider">Reinforcement Steel</span>
+                      </div>
+                      <span className="text-base font-black text-zinc-900 dark:text-white font-mono">{materialEstimationTotals.steelKg.toLocaleString()} Kg</span>
                     </div>
-                    <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-150 dark:border-zinc-850">
-                      <span className="text-[10px] text-zinc-455 block uppercase">Brick / Block Count</span>
-                      <span className="text-lg font-black text-zinc-900 dark:text-white">{materialEstimationTotals.brickCount} Pcs</span>
+
+                    <div className="bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border-l-4 border-l-orange-600 border border-zinc-150 dark:border-zinc-850 shadow-sm hover:shadow-md transition">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">🧱</span>
+                        <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 uppercase tracking-wider">Brick / Block Count</span>
+                      </div>
+                      <span className="text-base font-black text-zinc-900 dark:text-white font-mono">{materialEstimationTotals.brickCount.toLocaleString()} Pcs</span>
                     </div>
-                    <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-150 dark:border-zinc-850">
-                      <span className="text-[10px] text-zinc-455 block uppercase">Flooring Tiles</span>
-                      <span className="text-lg font-black text-zinc-900 dark:text-white">{materialEstimationTotals.tileCount} Tiles</span>
+
+                    <div className="bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border-l-4 border-l-teal-600 border border-zinc-150 dark:border-zinc-850 shadow-sm hover:shadow-md transition">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">🟫</span>
+                        <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 uppercase tracking-wider">Flooring Tiles</span>
+                      </div>
+                      <span className="text-base font-black text-zinc-900 dark:text-white font-mono">{materialEstimationTotals.tileCount.toLocaleString()} Tiles</span>
                     </div>
-                    <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-150 dark:border-zinc-850">
-                      <span className="text-[10px] text-zinc-455 block uppercase">Tile Adhesive</span>
-                      <span className="text-lg font-black text-zinc-900 dark:text-white">{materialEstimationTotals.adhesiveBags} Bags</span>
+
+                    <div className="bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border-l-4 border-l-violet-600 border border-zinc-150 dark:border-zinc-850 shadow-sm hover:shadow-md transition">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">🧴</span>
+                        <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 uppercase tracking-wider">Tile Adhesive</span>
+                      </div>
+                      <span className="text-base font-black text-zinc-900 dark:text-white font-mono">{materialEstimationTotals.adhesiveBags.toLocaleString()} Bags</span>
                     </div>
-                    <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-150 dark:border-zinc-850">
-                      <span className="text-[10px] text-zinc-455 block uppercase">Wall Emulsion Paint</span>
-                      <span className="text-lg font-black text-zinc-900 dark:text-white">{materialEstimationTotals.paintLitres} Ltrs</span>
+
+                    <div className="bg-zinc-50 dark:bg-zinc-950 p-4 rounded-xl border-l-4 border-l-rose-500 border border-zinc-150 dark:border-zinc-850 shadow-sm hover:shadow-md transition">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">🎨</span>
+                        <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 uppercase tracking-wider">Wall Emulsion Paint</span>
+                      </div>
+                      <span className="text-base font-black text-zinc-900 dark:text-white font-mono">{materialEstimationTotals.paintLitres.toLocaleString()} Ltrs</span>
                     </div>
                   </div>
-                  <div className="text-[10px] text-rose-500/80 font-bold bg-rose-50/40 p-3 rounded-xl border border-rose-100/40">
+                  <div className="text-[10px] text-rose-500/80 font-bold bg-rose-50/40 dark:bg-rose-950/20 p-3 rounded-xl border border-rose-100/40 dark:border-rose-900/40">
                     * Note: These are rough rule-of-thumb quantities for budgeting and planning only. Actual steel structural and concrete grades details must be validated by a structural designer.
                   </div>
                 </div>
@@ -1998,73 +2225,101 @@ export default function AdvancedBOQCalculator() {
 
               {/* 4. Scenario Simulator Sliders */}
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm space-y-4">
-                <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-850 pb-2">
-                  <h3 className="text-xs font-black text-zinc-400 uppercase tracking-wider">
-                    Indian Market Rates & Inflation Scenario Simulator
-                  </h3>
+                <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-850 pb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🎛️</span>
+                    <h3 className="text-xs font-black text-zinc-700 dark:text-zinc-200 uppercase tracking-wider">
+                      Indian Market Rates &amp; Inflation Scenario Simulator
+                    </h3>
+                  </div>
                   <button
                     onClick={() => {
                       setSimCement(0); setSimSteel(0); setSimLabour(0); setSimTile(0); setSimInflation(0);
                     }}
-                    className="text-[10px] font-bold text-indigo-500 uppercase hover:underline"
+                    className="text-[10px] font-black text-indigo-600 hover:text-indigo-500 uppercase tracking-wider transition"
                   >
                     Reset Deviations
                   </button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6 text-xs font-bold text-zinc-650 dark:text-zinc-350">
-                  <div className="space-y-1.5">
-                    <span className="flex justify-between">Cement Cost: <span>{simCement >= 0 ? '+' : ''}{simCement}%</span></span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span>Cement Cost</span>
+                      <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-black ${simCement > 0 ? 'bg-red-500/10 text-red-600 dark:text-red-400' : simCement < 0 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'}`}>
+                        {simCement >= 0 ? '+' : ''}{simCement}%
+                      </span>
+                    </div>
                     <input
                       type="range"
                       min={-50}
                       max={50}
                       value={simCement}
                       onChange={(e) => setSimCement(parseInt(e.target.value))}
-                      className="w-full accent-indigo-600"
+                      className="w-full accent-indigo-650 bg-zinc-200 dark:bg-zinc-800 h-1 rounded-lg cursor-pointer animate-pulse-on-drag"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <span className="flex justify-between">TMT Steel Rebar: <span>{simSteel >= 0 ? '+' : ''}{simSteel}%</span></span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span>TMT Steel Rebar</span>
+                      <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-black ${simSteel > 0 ? 'bg-red-500/10 text-red-600 dark:text-red-400' : simSteel < 0 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'}`}>
+                        {simSteel >= 0 ? '+' : ''}{simSteel}%
+                      </span>
+                    </div>
                     <input
                       type="range"
                       min={-50}
                       max={50}
                       value={simSteel}
                       onChange={(e) => setSimSteel(parseInt(e.target.value))}
-                      className="w-full accent-indigo-600"
+                      className="w-full accent-indigo-650 bg-zinc-200 dark:bg-zinc-800 h-1 rounded-lg cursor-pointer"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <span className="flex justify-between">Labor Standard Wages: <span>{simLabour >= 0 ? '+' : ''}{simLabour}%</span></span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span>Labor Standard Wages</span>
+                      <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-black ${simLabour > 0 ? 'bg-red-500/10 text-red-650 dark:text-red-400' : simLabour < 0 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'}`}>
+                        {simLabour >= 0 ? '+' : ''}{simLabour}%
+                      </span>
+                    </div>
                     <input
                       type="range"
                       min={-50}
                       max={50}
                       value={simLabour}
                       onChange={(e) => setSimLabour(parseInt(e.target.value))}
-                      className="w-full accent-indigo-600"
+                      className="w-full accent-indigo-650 bg-zinc-200 dark:bg-zinc-800 h-1 rounded-lg cursor-pointer"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <span className="flex justify-between">Tiles Materials: <span>{simTile >= 0 ? '+' : ''}{simTile}%</span></span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span>Tiles Materials</span>
+                      <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-black ${simTile > 0 ? 'bg-red-500/10 text-red-650 dark:text-red-400' : simTile < 0 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'}`}>
+                        {simTile >= 0 ? '+' : ''}{simTile}%
+                      </span>
+                    </div>
                     <input
                       type="range"
                       min={-50}
                       max={50}
                       value={simTile}
                       onChange={(e) => setSimTile(parseInt(e.target.value))}
-                      className="w-full accent-indigo-600"
+                      className="w-full accent-indigo-650 bg-zinc-200 dark:bg-zinc-800 h-1 rounded-lg cursor-pointer"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <span className="flex justify-between">General Cost Index: <span>{simInflation >= 0 ? '+' : ''}{simInflation}%</span></span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span>General Cost Index</span>
+                      <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-black ${simInflation > 0 ? 'bg-red-500/10 text-red-600 dark:text-red-400' : simInflation < 0 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'}`}>
+                        {simInflation >= 0 ? '+' : ''}{simInflation}%
+                      </span>
+                    </div>
                     <input
                       type="range"
                       min={-30}
                       max={30}
                       value={simInflation}
                       onChange={(e) => setSimInflation(parseInt(e.target.value))}
-                      className="w-full accent-indigo-600"
+                      className="w-full accent-indigo-650 bg-zinc-200 dark:bg-zinc-800 h-1 rounded-lg cursor-pointer"
                     />
                   </div>
                 </div>
@@ -2073,9 +2328,12 @@ export default function AdvancedBOQCalculator() {
               {/* 5. Custom Cost Distributions SVG Donut Chart */}
               {chartCategoryData.length > 0 && (
                 <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
-                  <h3 className="text-xs font-black text-zinc-400 uppercase tracking-wider mb-4">
-                    Top 5 Cost Categories Distribution
-                  </h3>
+                  <div className="flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-850 pb-3 mb-4">
+                    <span className="text-lg">📊</span>
+                    <h3 className="text-xs font-black text-zinc-700 dark:text-zinc-200 uppercase tracking-wider">
+                      Top 5 Cost Categories Distribution
+                    </h3>
+                  </div>
                   <div className="flex flex-col md:flex-row items-center gap-8">
                     {/* SVG Pie Chart */}
                     <div className="relative w-44 h-44 shrink-0">
@@ -2109,27 +2367,32 @@ export default function AdvancedBOQCalculator() {
                       </svg>
                       {/* Central label */}
                       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span className="text-[10px] text-zinc-400 font-bold uppercase">Estimated</span>
-                        <span className="text-xs font-black text-zinc-900 dark:text-white">Breakdown</span>
+                        <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Estimated</span>
+                        <span className="text-xs font-black text-zinc-800 dark:text-white">Cost Share</span>
                       </div>
                     </div>
 
-                    {/* Chart Legend */}
-                    <div className="flex-1 space-y-2 text-xs">
+                    {/* Chart Legend with Progress Bars */}
+                    <div className="flex-1 space-y-3.5 w-full text-xs">
                       {(() => {
                         const totalAmt = chartCategoryData.reduce((sum, item) => sum + item.amount, 0);
                         const colors = ['#6366f1', '#a855f7', '#10b981', '#f59e0b', '#3b82f6'];
                         return chartCategoryData.map((item, idx) => {
                           const pct = totalAmt > 0 ? (item.amount / totalAmt) * 100 : 0;
                           return (
-                            <div key={`legend-${idx}`} className="flex justify-between items-center">
-                              <span className="flex items-center gap-2 text-zinc-700 dark:text-zinc-350">
-                                <span className="w-3 h-3 rounded-full inline-block" style={{ backgroundColor: colors[idx % colors.length] }} />
-                                <span>{item.name}</span>
-                              </span>
-                              <span className="font-mono font-bold text-zinc-900 dark:text-white">
-                                ₹{item.amount.toLocaleString('en-IN')} ({pct.toFixed(1)}%)
-                              </span>
+                            <div key={`legend-${idx}`} className="space-y-1">
+                              <div className="flex justify-between items-center">
+                                <span className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300 font-bold">
+                                  <span className="w-2.5 h-2.5 rounded-full inline-block shrink-0" style={{ backgroundColor: colors[idx % colors.length] }} />
+                                  <span>{item.name}</span>
+                                </span>
+                                <span className="font-mono font-bold text-zinc-900 dark:text-white">
+                                  ₹{item.amount.toLocaleString('en-IN')} <span className="text-zinc-400 dark:text-zinc-550 text-[10px]">({pct.toFixed(1)}%)</span>
+                                </span>
+                              </div>
+                              <div className="w-full h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, backgroundColor: colors[idx % colors.length] }} />
+                              </div>
                             </div>
                           );
                         });
@@ -2144,71 +2407,86 @@ export default function AdvancedBOQCalculator() {
 
         {/* 6. Sticky Bottom / Summary Widget panel */}
         {activeProject && (
-          <div className="sticky bottom-6 mt-8 max-w-7xl mx-auto bg-zinc-900 text-white border border-zinc-800 rounded-3xl p-6 shadow-xl grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
-            <div className="space-y-1">
-              <span className="text-[10px] text-zinc-450 block uppercase tracking-wider font-bold">
-                Grand Total Estimated (Rs)
-              </span>
-              <div className="text-2xl font-black text-emerald-400 flex items-baseline gap-1.5 font-mono">
-                ₹{summaryTotals.grandTotal.toLocaleString('en-IN')}
-                <span className="text-xs text-zinc-400 font-bold block uppercase">
-                  (Incl. Taxes)
-                </span>
-              </div>
-            </div>
-
-            <div className="space-y-1 border-l border-zinc-800 pl-6">
-              <span className="text-[10px] text-zinc-455 block uppercase tracking-wider font-bold">
-                Cost Per Built Sq Ft
-              </span>
-              <div className="text-lg font-bold text-white font-mono">
-                ₹{totalFloorAreaSqft > 0 ? (summaryTotals.grandTotal / totalFloorAreaSqft).toFixed(2) : '0.00'} / sqft
-              </div>
-            </div>
-
-            {/* Scenario selector */}
-            <div className="space-y-1.5 border-l border-zinc-800 pl-6">
-              <span className="text-[10px] text-zinc-450 block uppercase tracking-wider font-bold">
-                Scenario Versioning
-              </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleDuplicateToScenario('budget')}
-                  className="px-2.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-[10px] font-bold uppercase transition"
-                >
-                  Save Budget (85%)
-                </button>
-                <button
-                  onClick={() => handleDuplicateToScenario('premium')}
-                  className="px-2.5 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-[10px] font-bold uppercase transition"
-                >
-                  Save Premium (125%)
-                </button>
-              </div>
-              {customRatesScenario.budget > 0 && (
-                <div className="text-[9px] text-zinc-400 font-mono mt-1.5 space-y-0.5">
-                  <div>Saved Budget: ₹{customRatesScenario.budget.toLocaleString('en-IN')}</div>
-                  <div>Saved Premium: ₹{customRatesScenario.premium.toLocaleString('en-IN')}</div>
+          <div className="sticky bottom-6 mt-8 w-full bg-zinc-950/90 backdrop-blur-md text-white border border-zinc-800 rounded-3xl p-6 shadow-2xl z-40">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 items-center">
+              {/* Metric 1: Grand Total */}
+              <div className="space-y-1 col-span-2 md:col-span-1">
+                <span className="text-[9px] text-zinc-400 block uppercase tracking-wider font-extrabold">Grand Total (Rs)</span>
+                <div className="text-xl md:text-2xl font-black text-emerald-450 font-mono tracking-tight">
+                  ₹{summaryTotals.grandTotal.toLocaleString('en-IN')}
                 </div>
-              )}
-            </div>
+                <span className="text-[9px] text-zinc-500 font-bold block uppercase">(Incl. GST &amp; Margin)</span>
+              </div>
 
-            {/* Reports actions */}
-            <div className="flex items-center gap-3 md:justify-end">
-              <button
-                onClick={handleExportPDF}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-650 hover:bg-red-750 text-white text-xs font-bold transition flex-1 md:flex-none"
-              >
-                <FileText className="w-4 h-4" />
-                <span>PDF Report</span>
-              </button>
-              <button
-                onClick={handleExportExcel}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex-1 md:flex-none"
-              >
-                <FileSpreadsheet className="w-4 h-4" />
-                <span>Excel Sheet</span>
-              </button>
+              {/* Metric 2: Cost per Sq Ft */}
+              <div className="space-y-1 border-l border-zinc-800 pl-4">
+                <span className="text-[9px] text-zinc-400 block uppercase tracking-wider font-extrabold">Cost / Built Area</span>
+                <div className="text-base font-bold text-white font-mono">
+                  ₹{totalFloorAreaSqft > 0 ? (summaryTotals.grandTotal / totalFloorAreaSqft).toFixed(2) : '0.00'} <span className="text-[10px] text-zinc-400">/sqft</span>
+                </div>
+                <span className="text-[9px] text-zinc-500 font-bold block uppercase">{totalFloorAreaSqft.toLocaleString()} sqft area</span>
+              </div>
+
+              {/* Metric 3: Base Cost */}
+              <div className="space-y-1 border-l border-zinc-800 pl-4">
+                <span className="text-[9px] text-zinc-400 block uppercase tracking-wider font-extrabold">Raw Base Cost</span>
+                <div className="text-base font-bold text-indigo-300 font-mono">
+                  ₹{summaryTotals.baseTotal.toLocaleString('en-IN')}
+                </div>
+                <span className="text-[9px] text-zinc-500 font-bold block uppercase">Material &amp; Wages</span>
+              </div>
+
+              {/* Metric 4: Taxes & Markups */}
+              <div className="space-y-1 border-l border-zinc-800 pl-4">
+                <span className="text-[9px] text-zinc-400 block uppercase tracking-wider font-extrabold">Taxes &amp; Markups</span>
+                <div className="text-base font-bold text-amber-450 font-mono">
+                  ₹{(summaryTotals.gstTotal + summaryTotals.marginTotal + summaryTotals.contingencyTotal).toLocaleString('en-IN')}
+                </div>
+                <span className="text-[9px] text-zinc-500 font-bold block uppercase">GST, Margin &amp; Cont.</span>
+              </div>
+
+              {/* Metric 5: Actions / Exports */}
+              <div className="flex flex-col gap-2 border-l border-zinc-800 pl-4 col-span-2 md:col-span-1">
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleExportPDF}
+                    className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-red-600 hover:bg-red-750 text-white text-[11px] font-bold transition flex-1"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>PDF</span>
+                  </button>
+                  <button
+                    onClick={handleExportExcel}
+                    className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold transition flex-1"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5" />
+                    <span>Excel</span>
+                  </button>
+                </div>
+                {/* Scenario buttons */}
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => handleDuplicateToScenario('budget')}
+                    className="flex-1 py-1 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-[8px] font-black uppercase text-zinc-300 transition"
+                    title="Save current estimate to budget slot"
+                  >
+                    + Budget
+                  </button>
+                  <button
+                    onClick={() => handleDuplicateToScenario('premium')}
+                    className="flex-1 py-1 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-[8px] font-black uppercase text-zinc-300 transition"
+                    title="Save current estimate to premium slot"
+                  >
+                    + Premium
+                  </button>
+                </div>
+                {customRatesScenario.budget > 0 && (
+                  <div className="text-[8px] text-zinc-400 font-mono flex justify-between gap-1 mt-0.5">
+                    <span>Bgt: ₹{(customRatesScenario.budget/100000).toFixed(1)}L</span>
+                    <span>Prm: ₹{(customRatesScenario.premium/100000).toFixed(1)}L</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -2216,89 +2494,97 @@ export default function AdvancedBOQCalculator() {
         {/* 7. Rate Analysis Details Modal */}
         {activeRateAnalysisItem && activeProject && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-3xl p-6 max-w-lg w-full space-y-4">
+            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
               <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-850 pb-3">
                 <h4 className="text-xs font-black text-zinc-400 uppercase tracking-wider">
                   Item Rate Analysis ({activeRateAnalysisItem.code})
                 </h4>
                 <button
                   onClick={() => setActiveRateAnalysisItemId(null)}
-                  className="text-zinc-400 hover:text-zinc-650 text-sm font-bold"
+                  className="text-zinc-450 hover:text-zinc-650 text-sm font-bold"
                 >
                   ✕ Close
                 </button>
               </div>
 
-              <div className="space-y-3 text-xs font-mono">
-                <div className="bg-zinc-50 dark:bg-zinc-900 p-3 rounded-xl">
-                  <span className="text-[10px] text-zinc-400 block mb-1">Item Description</span>
-                  <span className="font-bold text-zinc-900 dark:text-white">{activeRateAnalysisItem.description}</span>
+              <div className="space-y-3.5 text-xs">
+                <div className="bg-zinc-50 dark:bg-zinc-900/50 p-4 rounded-xl border border-zinc-150 dark:border-zinc-850">
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-bold uppercase tracking-wider block mb-1">Item Description</span>
+                  <span className="font-bold text-zinc-900 dark:text-white leading-relaxed">{activeRateAnalysisItem.description}</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="block text-zinc-450 font-bold">Material Base Rate (₹)</label>
+                    <label className="block text-zinc-450 dark:text-zinc-500 font-bold">Material Base Rate (₹)</label>
                     <input
                       type="number"
                       value={activeRateAnalysisItem.rateMaterial}
                       onChange={(e) => handleUpdateItemCell(activeRateAnalysisItem.id, 'rateMaterial', parseFloat(e.target.value) || 0)}
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 font-mono"
+                      className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-750 bg-zinc-50 dark:bg-zinc-950 font-mono text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="block text-zinc-450 font-bold">Labour Base Rate (₹)</label>
+                    <label className="block text-zinc-455 dark:text-zinc-500 font-bold">Labour Base Rate (₹)</label>
                     <input
                       type="number"
                       value={activeRateAnalysisItem.rateLabour}
                       onChange={(e) => handleUpdateItemCell(activeRateAnalysisItem.id, 'rateLabour', parseFloat(e.target.value) || 0)}
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 font-mono"
+                      className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-750 bg-zinc-50 dark:bg-zinc-950 font-mono text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
-                  <div>
-                    <label className="block text-[10px] text-zinc-455 font-bold mb-1">Equipment</label>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <label className="block text-[10px] text-zinc-450 dark:text-zinc-500 font-bold text-center">Equipment</label>
                     <input
                       type="number"
                       value={activeRateAnalysisItem.rateEquipment}
                       onChange={(e) => handleUpdateItemCell(activeRateAnalysisItem.id, 'rateEquipment', parseFloat(e.target.value) || 0)}
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 font-mono text-center"
+                      className="w-full px-2 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-750 bg-zinc-50 dark:bg-zinc-950 font-mono text-center text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition"
                     />
                   </div>
-                  <div>
-                    <label className="block text-[10px] text-zinc-455 font-bold mb-1">Transport</label>
+                  <div className="space-y-1">
+                    <label className="block text-[10px] text-zinc-455 dark:text-zinc-500 font-bold text-center">Transport</label>
                     <input
                       type="number"
                       value={activeRateAnalysisItem.rateTransport}
                       onChange={(e) => handleUpdateItemCell(activeRateAnalysisItem.id, 'rateTransport', parseFloat(e.target.value) || 0)}
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 font-mono text-center"
+                      className="w-full px-2 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-750 bg-zinc-50 dark:bg-zinc-950 font-mono text-center text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition"
                     />
                   </div>
-                  <div>
-                    <label className="block text-[10px] text-zinc-455 font-bold mb-1">Other Costs</label>
+                  <div className="space-y-1">
+                    <label className="block text-[10px] text-zinc-455 dark:text-zinc-500 font-bold text-center">Other Costs</label>
                     <input
                       type="number"
                       value={activeRateAnalysisItem.rateOther}
                       onChange={(e) => handleUpdateItemCell(activeRateAnalysisItem.id, 'rateOther', parseFloat(e.target.value) || 0)}
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 font-mono text-center"
+                      className="w-full px-2 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-750 bg-zinc-50 dark:bg-zinc-950 font-mono text-center text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition"
                     />
                   </div>
                 </div>
 
-                {/* Local rate details summary */}
-                <div className="pt-3 border-t border-zinc-100 dark:border-zinc-850 flex justify-between font-bold text-zinc-700 dark:text-zinc-300">
-                  <span>GST Rate applied:</span>
-                  <span>{activeRateAnalysisItem.gstPercent !== undefined ? activeRateAnalysisItem.gstPercent : activeProject.gstPercent}%</span>
-                </div>
-                <div className="flex justify-between font-bold text-zinc-700 dark:text-zinc-300">
-                  <span>Contractor Margin:</span>
-                  <span>{activeRateAnalysisItem.contractorMarginPercent !== undefined ? activeRateAnalysisItem.contractorMarginPercent : activeProject.contractorMarginPercent}%</span>
+                <div className="pt-3 border-t border-zinc-150 dark:border-zinc-800 space-y-1.5 text-xs text-zinc-650 dark:text-zinc-350">
+                  <div className="flex justify-between">
+                    <span className="font-semibold">GST Rate applied:</span>
+                    <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200">{activeRateAnalysisItem.gstPercent !== undefined ? activeRateAnalysisItem.gstPercent : activeProject.gstPercent}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-semibold">Contractor Markup:</span>
+                    <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200">{activeRateAnalysisItem.contractorMarginPercent !== undefined ? activeRateAnalysisItem.contractorMarginPercent : activeProject.contractorMarginPercent}%</span>
+                  </div>
                 </div>
 
-                <div className="pt-3 border-t border-zinc-150 dark:border-zinc-850 flex justify-between font-black text-sm text-indigo-650 dark:text-indigo-400">
-                  <span>Final Built-up Unit Rate:</span>
-                  <span>₹{activeRateAnalysisItem.finalRate.toFixed(2)} / {activeRateAnalysisItem.unit}</span>
+                {/* Premium Gradient Result Panel */}
+                <div className="mt-6 p-4 rounded-2xl bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-900 border border-indigo-500/25 text-white flex justify-between items-center shadow-lg shadow-indigo-950/40">
+                  <div>
+                    <span className="text-[10px] text-indigo-300 font-black uppercase tracking-wider block">Final Unit Rate</span>
+                    <span className="text-[9px] text-indigo-200/60 font-semibold block">(Incl. Taxes &amp; Markup)</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xl font-black text-amber-450 font-mono">₹{activeRateAnalysisItem.finalRate.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    <span className="text-xs text-indigo-300 font-bold block">/ {activeRateAnalysisItem.unit}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2308,7 +2594,7 @@ export default function AdvancedBOQCalculator() {
         {/* 8. Rate Library Modal */}
         {showRateLibrary && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-3xl p-6 max-w-3xl w-full max-h-[85vh] overflow-y-auto space-y-4">
+            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-3xl p-6 max-w-3xl w-full max-h-[85vh] overflow-y-auto space-y-4 shadow-2xl">
               <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-850 pb-3">
                 <h4 className="text-xs font-black text-zinc-400 uppercase tracking-wider flex items-center gap-2">
                   <Coins className="w-4 h-4 text-indigo-500" />
@@ -2322,29 +2608,58 @@ export default function AdvancedBOQCalculator() {
                 </button>
               </div>
 
-              {/* Rate items list */}
-              <div className="space-y-2.5">
-                {rateLibrary.map(rate => (
-                  <div key={rate.id} className="flex justify-between items-center p-3 bg-zinc-50 dark:bg-zinc-950 border border-zinc-150 dark:border-zinc-850 rounded-2xl text-xs font-mono">
-                    <div>
-                      <span className="text-[10px] text-zinc-455 font-bold uppercase tracking-wider block">{rate.code}</span>
-                      <strong className="text-zinc-900 dark:text-white font-bold block">{rate.description}</strong>
-                      <span className="text-[10px] text-zinc-400 block mt-0.5">Unit: {rate.unit} | Material base: ₹{rate.rateMaterial}</span>
-                    </div>
+              {/* Rate items list with Cost Breakdown mini-bars */}
+              <div className="space-y-3">
+                {rateLibrary.map(rate => {
+                  const baseSum = (rate.rateMaterial || 0) + (rate.rateLabour || 0) + (rate.rateEquipment || 0) + (rate.rateTransport || 0) + (rate.rateOther || 0);
+                  const matPct = baseSum > 0 ? ((rate.rateMaterial || 0) / baseSum) * 100 : 0;
+                  const labPct = baseSum > 0 ? ((rate.rateLabour || 0) / baseSum) * 100 : 0;
+                  const eqPct = baseSum > 0 ? ((rate.rateEquipment || 0) / baseSum) * 100 : 0;
+                  const transPct = baseSum > 0 ? ((rate.rateTransport || 0) / baseSum) * 100 : 0;
+                  const othPct = baseSum > 0 ? ((rate.rateOther || 0) / baseSum) * 100 : 0;
 
-                    <div className="flex gap-2">
-                      {activeProject && activeProject.items.map(item => (
-                        <button
-                          key={item.id}
-                          onClick={() => handleApplyRate(rate, item.id)}
-                          className="px-2.5 py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold uppercase text-[9px] rounded-lg transition"
-                        >
-                          Apply to {item.code}
-                        </button>
-                      ))}
+                  return (
+                    <div key={rate.id} className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-850 rounded-2xl text-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="space-y-1.5 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase rounded font-mono">{rate.code}</span>
+                          <strong className="text-zinc-900 dark:text-white font-bold block">{rate.description}</strong>
+                        </div>
+                        <span className="text-[10px] text-zinc-400 dark:text-zinc-500 block">Unit: {rate.unit} | Base cost sum: ₹{baseSum.toLocaleString('en-IN')}</span>
+                        
+                        {/* Cost Breakdown mini progress bar */}
+                        <div className="w-full space-y-1 max-w-lg">
+                          <div className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden flex">
+                            <div style={{ width: `${matPct}%` }} className="bg-indigo-500 h-full" title={`Material: ₹${rate.rateMaterial}`} />
+                            <div style={{ width: `${labPct}%` }} className="bg-amber-500 h-full" title={`Labour: ₹${rate.rateLabour}`} />
+                            <div style={{ width: `${eqPct}%` }} className="bg-emerald-500 h-full" title={`Equipment: ₹${rate.rateEquipment}`} />
+                            <div style={{ width: `${transPct}%` }} className="bg-blue-500 h-full" title={`Transport: ₹${rate.rateTransport}`} />
+                            <div style={{ width: `${othPct}%` }} className="bg-zinc-400 h-full" title={`Other: ₹${rate.rateOther}`} />
+                          </div>
+                          <div className="text-[9px] text-zinc-450 dark:text-zinc-500 flex flex-wrap gap-x-2.5 gap-y-0.5 font-mono">
+                            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500" /> Mat: ₹{rate.rateMaterial}</span>
+                            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Lab: ₹{rate.rateLabour}</span>
+                            {rate.rateEquipment > 0 && <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Eq: ₹{rate.rateEquipment}</span>}
+                            {rate.rateTransport > 0 && <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Trans: ₹{rate.rateTransport}</span>}
+                            {rate.rateOther > 0 && <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-zinc-400" /> Oth: ₹{rate.rateOther}</span>}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1.5 md:justify-end items-center shrink-0">
+                        {activeProject && activeProject.items.map(item => (
+                          <button
+                            key={item.id}
+                            onClick={() => handleApplyRate(rate, item.id)}
+                            className="px-2.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 font-bold uppercase text-[9px] rounded-lg transition"
+                          >
+                            Apply to {item.code}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -2352,33 +2667,38 @@ export default function AdvancedBOQCalculator() {
 
         {/* 9. SEO & Educational FAQ section below */}
         <div className="max-w-7xl mx-auto mt-16 space-y-12">
-          {/* FAQ section */}
+          {/* FAQ section with numbered step cards */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 shadow-sm">
-            <h2 className="text-lg font-black text-zinc-900 dark:text-white mb-6">
-              Frequently Asked Questions (FAQ)
+            <h2 className="text-lg font-black text-zinc-900 dark:text-white mb-8 border-b border-zinc-100 dark:border-zinc-850 pb-3 flex items-center gap-2">
+              <span className="text-xl">💡</span>
+              <span>Frequently Asked Questions &amp; Concepts</span>
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs leading-relaxed text-zinc-650 dark:text-zinc-350">
-              <div className="space-y-2">
-                <h3 className="font-bold text-zinc-900 dark:text-white">What is a Bill of Quantities (BOQ)?</h3>
-                <p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="relative p-6 rounded-2xl border border-zinc-150 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20 hover:shadow-md transition">
+                <span className="absolute top-4 right-4 text-3xl font-black text-indigo-500/10">01</span>
+                <h3 className="font-bold text-zinc-900 dark:text-white text-sm mb-2 pr-8">What is a Bill of Quantities (BOQ)?</h3>
+                <p className="text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
                   A Bill of Quantities (BOQ) is a detailed schedule of work items, showing descriptive specifications, measurements units, quantities, and unit rates. It is prepared by quantity surveyors or estimator engineers to finalize cost budgets and float contractor tenders.
                 </p>
               </div>
-              <div className="space-y-2">
-                <h3 className="font-bold text-zinc-900 dark:text-white">What factors are included in the Rate Analysis?</h3>
-                <p>
+              <div className="relative p-6 rounded-2xl border border-zinc-150 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20 hover:shadow-md transition">
+                <span className="absolute top-4 right-4 text-3xl font-black text-amber-500/10">02</span>
+                <h3 className="font-bold text-zinc-900 dark:text-white text-sm mb-2 pr-8">What factors are included in the Rate Analysis?</h3>
+                <p className="text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
                   Rate analysis breaks down the final unit cost of any construction task. It aggregates primary material costs, skilled/unskilled labor wages, machinery/shuttering depreciation, transit/transport charges, wastage surcharges (typically 2-10%), contractor profit margins (typically 10-15%), and GST (usually 18%).
                 </p>
               </div>
-              <div className="space-y-2">
-                <h3 className="font-bold text-zinc-900 dark:text-white">How does the Material Estimation preset function?</h3>
-                <p>
+              <div className="relative p-6 rounded-2xl border border-zinc-150 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20 hover:shadow-md transition">
+                <span className="absolute top-4 right-4 text-3xl font-black text-emerald-500/10">03</span>
+                <h3 className="font-bold text-zinc-900 dark:text-white text-sm mb-2 pr-8">How does the Material Estimation preset function?</h3>
+                <p className="text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
                   For typical categories like Concrete, Brickwork, Plaster, and Tiles, the calculator applies material volume multipliers to output concrete constituent bags, masonry blocks count, tile boxes, adhesive bags, and paint coverage volume requirements.
                 </p>
               </div>
-              <div className="space-y-2">
-                <h3 className="font-bold text-zinc-900 dark:text-white">How do I export results to Excel?</h3>
-                <p>
+              <div className="relative p-6 rounded-2xl border border-zinc-150 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20 hover:shadow-md transition">
+                <span className="absolute top-4 right-4 text-3xl font-black text-blue-500/10">04</span>
+                <h3 className="font-bold text-zinc-900 dark:text-white text-sm mb-2 pr-8">How do I export results to Excel?</h3>
+                <p className="text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
                   By clicking the "Excel Sheet" button, the estimator compiles project summaries, detailed BOQ items, material breakdowns, and rate analysis tables into separate sheets of a standard `.xlsx` spreadsheet workbook.
                 </p>
               </div>
@@ -2390,25 +2710,25 @@ export default function AdvancedBOQCalculator() {
             <h2 className="text-lg font-black text-zinc-900 dark:text-white">
               Preparing a BOQ for Construction in India
             </h2>
-            <p className="text-xs text-zinc-650 dark:text-zinc-350 leading-relaxed">
+            <p className="text-xs text-zinc-650 dark:text-zinc-350 leading-relaxed font-normal">
               Preparing a Bill of Quantities (BOQ) for construction in India requires a systematic approach to ensure accuracy and avoid cost overruns. In the Indian market, builders and contractors reference either the Central Public Works Department (CPWD) Delhi Schedule of Rates (DSR) or state-specific schedule lists.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-zinc-650 dark:text-zinc-350">
-              <div className="p-5 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border border-zinc-150 dark:border-zinc-850 space-y-2">
-                <h3 className="font-black text-zinc-800 dark:text-white uppercase text-[10px] tracking-wider">1. Measurements Take-Off</h3>
+              <div className="p-5 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border border-zinc-150 dark:border-zinc-850 space-y-2 hover:shadow-md transition">
+                <h3 className="font-black text-zinc-800 dark:text-white uppercase text-[10px] tracking-wider flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-indigo-500" /> 1. Measurements Take-Off</h3>
                 <p className="leading-relaxed">
                   Engineers record length, width, and height coordinates directly from structural and architectural drawings. Preset mathematical formulas help compute areas ($L \times W$) and volumes ($L \times W \times H$).
                 </p>
               </div>
-              <div className="p-5 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border border-zinc-150 dark:border-zinc-850 space-y-2">
-                <h3 className="font-black text-zinc-800 dark:text-white uppercase text-[10px] tracking-wider">2. Rate Analysis</h3>
+              <div className="p-5 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border border-zinc-150 dark:border-zinc-850 space-y-2 hover:shadow-md transition">
+                <h3 className="font-black text-zinc-800 dark:text-white uppercase text-[10px] tracking-wider flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500" /> 2. Rate Analysis</h3>
                 <p className="leading-relaxed">
                   Every civil item rate is analyzed by breaking down materials (cement, steel, aggregate, bricks), labor wages (masons, helpers, bar benders), transit fees, contractor margin (usually 10-15%), and tax compliance (18% GST).
                 </p>
               </div>
-              <div className="p-5 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border border-zinc-150 dark:border-zinc-850 space-y-2">
-                <h3 className="font-black text-zinc-800 dark:text-white uppercase text-[10px] tracking-wider">3. Wastage Allowance</h3>
+              <div className="p-5 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border border-zinc-150 dark:border-zinc-850 space-y-2 hover:shadow-md transition">
+                <h3 className="font-black text-zinc-800 dark:text-white uppercase text-[10px] tracking-wider flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500" /> 3. Wastage Allowance</h3>
                 <p className="leading-relaxed">
                   Wastage is an inevitable part of civil construction. Standard values applied in India are 3-5% for reinforcement steel, 5% for bricks, 8% for ceramic/vitrified flooring tiles, and 5% for paints.
                 </p>
@@ -2417,21 +2737,20 @@ export default function AdvancedBOQCalculator() {
 
             {/* Related Tools link section */}
             <div className="pt-6 border-t border-zinc-100 dark:border-zinc-850">
-              <span className="text-[10px] font-black text-zinc-400 uppercase tracking-wider block mb-3">Related Calculators</span>
-              <div className="flex flex-wrap gap-2.5 text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                <Link to="/tool/concrete-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 transition">Concrete Estimator</Link>
-                <Link to="/tool/brick-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 transition">Brick Calculator</Link>
-                <Link to="/tool/rcc-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 transition">RCC Slab Calculator</Link>
-                <Link to="/tool/steel-weight-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 transition">Steel Rebar Weight</Link>
-                <Link to="/tool/construction-cost-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 transition">Construction Cost Index</Link>
-                <Link to="/tool/floor-tile-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 transition">Tile Estimator</Link>
-                <Link to="/tool/paint-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 transition">Paint Coverage Estimator</Link>
-                <Link to="/tool/far-fsi-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 transition">FAR / FSI Clearances</Link>
+              <span className="text-[10px] font-black text-zinc-400 dark:text-zinc-500 uppercase tracking-wider block mb-3">Related Calculators</span>
+              <div className="flex flex-wrap gap-2.5 text-xs font-bold text-zinc-750 dark:text-zinc-350">
+                <Link to="/tool/concrete-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Concrete Estimator</Link>
+                <Link to="/tool/brick-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Brick Calculator</Link>
+                <Link to="/tool/rcc-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">RCC Slab Calculator</Link>
+                <Link to="/tool/steel-weight-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Steel Rebar Weight</Link>
+                <Link to="/tool/construction-cost-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Construction Cost Index</Link>
+                <Link to="/tool/floor-tile-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Tile Estimator</Link>
+                <Link to="/tool/paint-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Paint Coverage Estimator</Link>
+                <Link to="/tool/far-fsi-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">FAR / FSI Clearances</Link>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </>
   );
 }

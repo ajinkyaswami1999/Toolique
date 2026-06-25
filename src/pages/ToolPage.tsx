@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toolsList } from '../data/tools';
 import { additionalFaqs } from '../data/toolFaqs';
+import { categories } from '../data/categories';
 import { ArrowLeft } from 'lucide-react';
 import AdPlaceholder from '../components/AdPlaceholder';
 import FAQSection from '../components/FAQSection';
@@ -494,6 +495,9 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
 
   const ActiveToolComponent = toolComponents[tool.id];
 
+  const categoryObj = categories.find((c) => c.id === tool.category);
+  const categoryName = categoryObj ? categoryObj.name : tool.category;
+
   const mergedFaqs = [...tool.faqs, ...(additionalFaqs[tool.id] || [])];
 
   // Combined Schema markup for Answer Engine Optimization (AEO)
@@ -566,8 +570,8 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
               Math Studio
             </Link>
           ) : (
-            <Link to={`/?category=${tool.category}`} className="capitalize hover:text-indigo-500 transition-colors">
-              {tool.category}
+            <Link to={`/?category=${tool.category}`} className="hover:text-indigo-500 transition-colors">
+              {categoryName}
             </Link>
           )}
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
@@ -576,14 +580,16 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       </div>
 
       {/* Tool Header */}
-      <div className="space-y-3 text-left">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-zinc-905 dark:text-zinc-50 tracking-tight">
-          {tool.name}
-        </h1>
-        <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-4xl">
-          {tool.shortDescription}
-        </p>
-      </div>
+      {!tool.hideLayoutHeader && (
+        <div className="space-y-3 text-left">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-zinc-905 dark:text-zinc-50 tracking-tight">
+            {tool.name}
+          </h1>
+          <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-4xl">
+            {tool.shortDescription}
+          </p>
+        </div>
+      )}
 
       {/* Ad slot - Top Banner */}
       <AdPlaceholder slot={`tool-top-${tool.slug}`} type="banner" />

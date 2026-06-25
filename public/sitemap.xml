@@ -2,37 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Core Static Pages -->
   <url>
-    <loc>https://Toolique/</loc>
+    <loc>https://www.toolique.in/</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://Toolique/about</loc>
+    <loc>https://www.toolique.in/about</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://Toolique/contact</loc>
+    <loc>https://www.toolique.in/contact</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://Toolique/privacy-policy</loc>
+    <loc>https://www.toolique.in/privacy-policy</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://Toolique/terms-conditions</loc>
+    <loc>https://www.toolique.in/terms-conditions</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://Toolique/disclaimer</loc>
+    <loc>https://www.toolique.in/disclaimer</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
@@ -40,85 +40,85 @@
 
   <!-- Finance Tools -->
   <url>
-    <loc>https://Toolique/tool/gst-calculator</loc>
+    <loc>https://www.toolique.in/tool/gst-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/sip-calculator</loc>
+    <loc>https://www.toolique.in/tool/sip-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/emi-calculator</loc>
+    <loc>https://www.toolique.in/tool/emi-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/upi-qr-generator</loc>
+    <loc>https://www.toolique.in/tool/upi-qr-generator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/tds-calculator</loc>
+    <loc>https://www.toolique.in/tool/tds-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/in-hand-salary-calculator</loc>
+    <loc>https://www.toolique.in/tool/in-hand-salary-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/fd-calculator</loc>
+    <loc>https://www.toolique.in/tool/fd-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/rd-calculator</loc>
+    <loc>https://www.toolique.in/tool/rd-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/ppf-calculator</loc>
+    <loc>https://www.toolique.in/tool/ppf-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/nps-calculator</loc>
+    <loc>https://www.toolique.in/tool/nps-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/gratuity-calculator</loc>
+    <loc>https://www.toolique.in/tool/gratuity-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/hra-calculator</loc>
+    <loc>https://www.toolique.in/tool/hra-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/cagr-calculator</loc>
+    <loc>https://www.toolique.in/tool/cagr-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/gst-inclusive-exclusive-calculator</loc>
+    <loc>https://www.toolique.in/tool/gst-inclusive-exclusive-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -126,43 +126,43 @@
 
   <!-- Utility Tools -->
   <url>
-    <loc>https://Toolique/tool/age-calculator</loc>
+    <loc>https://www.toolique.in/tool/age-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/experience-calculator</loc>
+    <loc>https://www.toolique.in/tool/experience-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/percentage-calculator</loc>
+    <loc>https://www.toolique.in/tool/percentage-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/date-calculator</loc>
+    <loc>https://www.toolique.in/tool/date-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/days-between-dates</loc>
+    <loc>https://www.toolique.in/tool/days-between-dates</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/currency-converter</loc>
+    <loc>https://www.toolique.in/tool/currency-converter</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/unit-converter</loc>
+    <loc>https://www.toolique.in/tool/unit-converter</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -170,13 +170,13 @@
 
   <!-- Image & QR Tools -->
   <url>
-    <loc>https://Toolique/tool/qr-code-generator</loc>
+    <loc>https://www.toolique.in/tool/qr-code-generator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/image-compressor</loc>
+    <loc>https://www.toolique.in/tool/image-compressor</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -184,49 +184,49 @@
 
   <!-- Developer Tools -->
   <url>
-    <loc>https://Toolique/tool/sql-formatter</loc>
+    <loc>https://www.toolique.in/tool/sql-formatter</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/json-formatter</loc>
+    <loc>https://www.toolique.in/tool/json-formatter</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/base64-encoder-decoder</loc>
+    <loc>https://www.toolique.in/tool/base64-encoder-decoder</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/jwt-decoder</loc>
+    <loc>https://www.toolique.in/tool/jwt-decoder</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/uuid-generator</loc>
+    <loc>https://www.toolique.in/tool/uuid-generator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/hash-generator</loc>
+    <loc>https://www.toolique.in/tool/hash-generator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/url-encoder-decoder</loc>
+    <loc>https://www.toolique.in/tool/url-encoder-decoder</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/regex-tester</loc>
+    <loc>https://www.toolique.in/tool/regex-tester</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -234,55 +234,55 @@
 
   <!-- Civil Engineering Tools -->
   <url>
-    <loc>https://Toolique/tool/construction-cost-calculator</loc>
+    <loc>https://www.toolique.in/tool/construction-cost-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/boq-calculator</loc>
+    <loc>https://www.toolique.in/tool/boq-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/concrete-calculator</loc>
+    <loc>https://www.toolique.in/tool/concrete-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/brick-calculator</loc>
+    <loc>https://www.toolique.in/tool/brick-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/rcc-calculator</loc>
+    <loc>https://www.toolique.in/tool/rcc-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/steel-weight-calculator</loc>
+    <loc>https://www.toolique.in/tool/steel-weight-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/column-design-calculator</loc>
+    <loc>https://www.toolique.in/tool/column-design-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/slab-calculator</loc>
+    <loc>https://www.toolique.in/tool/slab-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/foundation-calculator</loc>
+    <loc>https://www.toolique.in/tool/foundation-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -290,43 +290,43 @@
 
   <!-- Architecture Tools -->
   <url>
-    <loc>https://Toolique/tool/far-fsi-calculator</loc>
+    <loc>https://www.toolique.in/tool/far-fsi-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/staircase-calculator</loc>
+    <loc>https://www.toolique.in/tool/staircase-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/room-area-calculator</loc>
+    <loc>https://www.toolique.in/tool/room-area-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/carpet-area-calculator</loc>
+    <loc>https://www.toolique.in/tool/carpet-area-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/floor-tile-calculator</loc>
+    <loc>https://www.toolique.in/tool/floor-tile-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/paint-calculator</loc>
+    <loc>https://www.toolique.in/tool/paint-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/wallpaper-calculator</loc>
+    <loc>https://www.toolique.in/tool/wallpaper-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -334,25 +334,25 @@
 
   <!-- Interior Design Tools -->
   <url>
-    <loc>https://Toolique/tool/flooring-cost-calculator</loc>
+    <loc>https://www.toolique.in/tool/flooring-cost-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/false-ceiling-calculator</loc>
+    <loc>https://www.toolique.in/tool/false-ceiling-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/modular-kitchen-cost-calculator</loc>
+    <loc>https://www.toolique.in/tool/modular-kitchen-cost-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/wardrobe-cost-calculator</loc>
+    <loc>https://www.toolique.in/tool/wardrobe-cost-calculator</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -360,409 +360,409 @@
 
   <!-- PDF Tools -->
   <url>
-    <loc>https://Toolique/tool/pdf-merge</loc>
+    <loc>https://www.toolique.in/tool/pdf-merge</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-split</loc>
+    <loc>https://www.toolique.in/tool/pdf-split</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-compressor</loc>
+    <loc>https://www.toolique.in/tool/pdf-compressor</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-page-remover</loc>
+    <loc>https://www.toolique.in/tool/pdf-page-remover</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-page-reorder</loc>
+    <loc>https://www.toolique.in/tool/pdf-page-reorder</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-rotate</loc>
+    <loc>https://www.toolique.in/tool/pdf-rotate</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-password-protect</loc>
+    <loc>https://www.toolique.in/tool/pdf-password-protect</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-unlock</loc>
+    <loc>https://www.toolique.in/tool/pdf-unlock</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-watermark</loc>
+    <loc>https://www.toolique.in/tool/pdf-watermark</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-page-numbering</loc>
+    <loc>https://www.toolique.in/tool/pdf-page-numbering</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/extract-text-pdf</loc>
+    <loc>https://www.toolique.in/tool/extract-text-pdf</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-metadata-viewer</loc>
+    <loc>https://www.toolique.in/tool/pdf-metadata-viewer</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/pdf-to-word</loc>
+    <loc>https://www.toolique.in/tool/pdf-to-word</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/word-to-pdf</loc>
+    <loc>https://www.toolique.in/tool/word-to-pdf</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/excel-to-pdf</loc>
+    <loc>https://www.toolique.in/tool/excel-to-pdf</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/powerpoint-to-pdf</loc>
+    <loc>https://www.toolique.in/tool/powerpoint-to-pdf</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/word-counter</loc>
+    <loc>https://www.toolique.in/tool/word-counter</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/meta-tag-generator</loc>
+    <loc>https://www.toolique.in/tool/meta-tag-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/discount-calculator</loc>
+    <loc>https://www.toolique.in/tool/discount-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/bmi-calculator</loc>
+    <loc>https://www.toolique.in/tool/bmi-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/mileage-calculator</loc>
+    <loc>https://www.toolique.in/tool/mileage-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/password-generator</loc>
+    <loc>https://www.toolique.in/tool/password-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/gpa-calculator</loc>
+    <loc>https://www.toolique.in/tool/gpa-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/open-graph-preview</loc>
+    <loc>https://www.toolique.in/tool/open-graph-preview</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/robots-txt-generator</loc>
+    <loc>https://www.toolique.in/tool/robots-txt-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/sitemap-generator</loc>
+    <loc>https://www.toolique.in/tool/sitemap-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/canonical-url-generator</loc>
+    <loc>https://www.toolique.in/tool/canonical-url-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/favicon-generator</loc>
+    <loc>https://www.toolique.in/tool/favicon-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/html-entity-encoder</loc>
+    <loc>https://www.toolique.in/tool/html-entity-encoder</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/css-minifier</loc>
+    <loc>https://www.toolique.in/tool/css-minifier</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/js-minifier</loc>
+    <loc>https://www.toolique.in/tool/js-minifier</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/css-formatter</loc>
+    <loc>https://www.toolique.in/tool/css-formatter</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/js-formatter</loc>
+    <loc>https://www.toolique.in/tool/js-formatter</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/json-validator</loc>
+    <loc>https://www.toolique.in/tool/json-validator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/json-compare</loc>
+    <loc>https://www.toolique.in/tool/json-compare</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/sql-minifier</loc>
+    <loc>https://www.toolique.in/tool/sql-minifier</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/xml-formatter</loc>
+    <loc>https://www.toolique.in/tool/xml-formatter</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/yaml-formatter</loc>
+    <loc>https://www.toolique.in/tool/yaml-formatter</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/html-formatter</loc>
+    <loc>https://www.toolique.in/tool/html-formatter</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/timestamp-converter</loc>
+    <loc>https://www.toolique.in/tool/timestamp-converter</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/cron-generator</loc>
+    <loc>https://www.toolique.in/tool/cron-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/lorem-ipsum-generator</loc>
+    <loc>https://www.toolique.in/tool/lorem-ipsum-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/profit-margin-calculator</loc>
+    <loc>https://www.toolique.in/tool/profit-margin-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/break-even-calculator</loc>
+    <loc>https://www.toolique.in/tool/break-even-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/roi-calculator</loc>
+    <loc>https://www.toolique.in/tool/roi-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/invoice-number-generator</loc>
+    <loc>https://www.toolique.in/tool/invoice-number-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/barcode-generator</loc>
+    <loc>https://www.toolique.in/tool/barcode-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/inventory-calculator</loc>
+    <loc>https://www.toolique.in/tool/inventory-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/gst-invoice-generator</loc>
+    <loc>https://www.toolique.in/tool/gst-invoice-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/instagram-caption-generator</loc>
+    <loc>https://www.toolique.in/tool/instagram-caption-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/hashtag-generator</loc>
+    <loc>https://www.toolique.in/tool/hashtag-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/bio-generator</loc>
+    <loc>https://www.toolique.in/tool/bio-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/youtube-thumbnail-resizer</loc>
+    <loc>https://www.toolique.in/tool/youtube-thumbnail-resizer</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/instagram-post-resizer</loc>
+    <loc>https://www.toolique.in/tool/instagram-post-resizer</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/story-resizer</loc>
+    <loc>https://www.toolique.in/tool/story-resizer</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/facebook-cover-creator</loc>
+    <loc>https://www.toolique.in/tool/facebook-cover-creator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/linkedin-banner-resizer</loc>
+    <loc>https://www.toolique.in/tool/linkedin-banner-resizer</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/whatsapp-link-generator</loc>
+    <loc>https://www.toolique.in/tool/whatsapp-link-generator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/voltage-drop-calculator</loc>
+    <loc>https://www.toolique.in/tool/voltage-drop-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/cable-size-calculator</loc>
+    <loc>https://www.toolique.in/tool/cable-size-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/load-calculator</loc>
+    <loc>https://www.toolique.in/tool/load-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/power-consumption-calculator</loc>
+    <loc>https://www.toolique.in/tool/power-consumption-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/ups-calculator</loc>
+    <loc>https://www.toolique.in/tool/ups-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/solar-panel-calculator</loc>
+    <loc>https://www.toolique.in/tool/solar-panel-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/battery-backup-calculator</loc>
+    <loc>https://www.toolique.in/tool/battery-backup-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/kw-hp-converter</loc>
+    <loc>https://www.toolique.in/tool/kw-hp-converter</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/transformer-calculator</loc>
+    <loc>https://www.toolique.in/tool/transformer-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://Toolique/tool/led-lighting-calculator</loc>
+    <loc>https://www.toolique.in/tool/led-lighting-calculator</loc>
     <lastmod>2026-06-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

@@ -1,5 +1,5 @@
 ﻿User-agent: *
 Allow: /
 
-Sitemap: https://Toolique/sitemap.xml
+Sitemap: https://www.toolique.in/sitemap.xml
 

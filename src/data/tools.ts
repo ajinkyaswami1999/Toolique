@@ -20,6 +20,7 @@ export interface Tool {
   howToUse: string[];
   faqs: ToolFAQ[];
   sections: ToolSection[];
+  hideLayoutHeader?: boolean;
 }
 
 export const toolsList: Tool[] = [
@@ -6349,6 +6350,7 @@ export const toolsList: Tool[] = [
     slug: 'advanced-boq-calculator-india',
     name: 'Advanced BOQ Calculator India',
     category: 'civil',
+    hideLayoutHeader: true,
     shortDescription: 'Create detailed construction BOQs with quantities, material estimates, floor-wise costing, and Excel/PDF export.',
     metaDescription: 'Free online construction BOQ calculator. Estimate material and labor costs, generate rate analysis, and export professional reports.',
     keywords: ['boq calculator', 'construction estimation', 'bill of quantities india', 'building material estimator', 'rate analysis calculator'],
