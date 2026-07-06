@@ -54,6 +54,60 @@ const staticPages = [
     title: '3D Print Studio | Toolique',
     description: 'Free 3D printing calculators for filament cost, print pricing, resin, print farms, Bambu Lab, HueForge, STL volume, electricity cost, and print profit.',
     keywords: ['3d printing calculator', 'filament cost', 'maker tools']
+  },
+  {
+    path: 'about-founder',
+    title: 'About Ajinkya Swami | Founder of Toolique & Voxelique',
+    description: 'Meet Ajinkya Swami, founder of Toolique and Voxelique. Learn about his experience in QA Automation, software development, engineering tools, 3D printing, and his mission to build high-quality free online tools.',
+    keywords: ['Ajinkya Swami', 'Toolique Founder', 'Voxelique Founder', 'QA Automation Engineer', '3D Printing cost calculator', 'About Ajinkya'],
+    schemaMarkup: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'BreadcrumbList',
+          '@id': 'https://www.toolique.in/about-founder#breadcrumb',
+          'itemListElement': [
+            { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.toolique.in/' },
+            { '@type': 'ListItem', 'position': 2, 'name': 'About Founder', 'item': 'https://www.toolique.in/about-founder' }
+          ]
+        },
+        {
+          '@type': 'Person',
+          '@id': 'https://www.toolique.in/about-founder#person',
+          'name': 'Ajinkya Swami',
+          'jobTitle': 'QA Automation Engineer & Full-Stack Builder',
+          'url': 'https://www.toolique.in/about-founder',
+          'image': 'https://www.toolique.in/favicon-512x512.png',
+          'sameAs': [
+            'https://github.com/ajinkyaswami1999',
+            'https://www.linkedin.com/in/ajinkya-swami-82751b191/',
+            'https://www.instagram.com/2ajinkya6/',
+            'https://www.instagram.com/voxelique/',
+            'https://www.toolique.in',
+            'https://voxelique.com'
+          ],
+          'worksFor': [
+            { '@type': 'Organization', 'name': 'Toolique', 'url': 'https://www.toolique.in' },
+            { '@type': 'Organization', 'name': 'Voxelique', 'url': 'https://voxelique.com' }
+          ]
+        },
+        {
+          '@type': 'Organization',
+          '@id': 'https://www.toolique.in/#organization',
+          'name': 'Toolique',
+          'url': 'https://www.toolique.in',
+          'logo': 'https://www.toolique.in/favicon-512x512.png',
+          'founder': { '@type': 'Person', 'name': 'Ajinkya Swami' }
+        },
+        {
+          '@type': 'Organization',
+          '@id': 'https://voxelique.com/#organization',
+          'name': 'Voxelique',
+          'url': 'https://voxelique.com',
+          'founder': { '@type': 'Person', 'name': 'Ajinkya Swami' }
+        }
+      ]
+    }
   }
 ];
 
@@ -125,7 +179,7 @@ function generateShell(
 
 // Generate static pages
 staticPages.forEach((page) => {
-  generateShell(page.path, page.title, page.description, page.keywords);
+  generateShell(page.path, page.title, page.description, page.keywords, (page as any).schemaMarkup);
 });
 
 // Generate dynamic tool pages

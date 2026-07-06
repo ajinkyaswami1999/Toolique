@@ -73,6 +73,7 @@ export default function Header() {
     { name: 'Math Studio', path: '/math-studio' },
     { name: 'All Tools', path: '/?view=all' },
     { name: 'About', path: '/about' },
+    { name: 'About Founder', path: '/about-founder' },
     { name: 'Contact', path: '/contact' }
   ];
 

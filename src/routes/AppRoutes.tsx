@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import Home from '../pages/Home';
 import ToolPage from '../pages/ToolPage';
 import About from '../pages/About';
@@ -9,6 +10,8 @@ import Disclaimer from '../pages/Disclaimer';
 import ThreeDPrintStudio from '../pages/ThreeDPrintStudio';
 import MathStudio from '../pages/MathStudio';
 
+const AboutFounder = lazy(() => import('../pages/AboutFounder'));
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -18,6 +21,15 @@ export default function AppRoutes() {
       <Route path="/tools/advanced-boq-calculator-india" element={<ToolPage overrideSlug="advanced-boq-calculator-india" />} />
       <Route path="/tool/:slug" element={<ToolPage />} />
       <Route path="/about" element={<About />} />
+      <Route path="/about-founder" element={
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
+            Loading...
+          </div>
+        }>
+          <AboutFounder />
+        </Suspense>
+      } />
       <Route path="/contact" element={<Contact />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-conditions" element={<TermsConditions />} />
