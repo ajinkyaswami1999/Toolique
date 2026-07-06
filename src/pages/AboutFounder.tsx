@@ -243,32 +243,32 @@ export default function AboutFounder() {
   // Timeline milestones
   const milestones = [
     {
-      year: '2020',
+      year: '2022',
       title: 'Career Launch (QA Engineer)',
       desc: 'Began professional journey in Quality Assurance, focusing on functional verification and finding structural code flaws.'
     },
     {
-      year: '2021',
+      year: '2024',
       title: 'QA Automation Specialist',
       desc: 'Designed high-fidelity testing frameworks using Selenium, Python, and API testing models to speed up release iterations.'
     },
     {
-      year: '2022',
+      year: '2025',
       title: 'Productivity Architect',
       desc: 'Built custom internal desktop scripts and browser automation extensions to reduce repetitive manual overhead.'
     },
     {
-      year: '2023',
+      year: '2026',
       title: 'Full-Stack Integration',
       desc: 'Self-taught modern frontend stacks (React, Next.js) and Node backend servers to bring personal software designs to life.'
     },
     {
-      year: '2024',
+      year: '2026',
       title: 'Founding Toolique',
       desc: 'Launched Toolique to deliver clean, ad-free, 100% browser-based utility calculators tailored for Indian engineering & finance.'
     },
     {
-      year: '2025',
+      year: '2026',
       title: 'Founding Voxelique & Maker Era',
       desc: 'Ventured into hardware prototyping and creative manufacturing, launching Voxelique for 3D printing custom design solutions.'
     },
