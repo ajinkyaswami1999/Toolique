@@ -533,14 +533,19 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
         'itemListElement': breadcrumbItems
       },
       {
-        '@type': 'WebApplication',
+        '@type': ['WebApplication', 'SoftwareApplication'],
         '@id': `${toolUrl}#webapp`,
         'name': tool.name,
         'url': toolUrl,
         'description': tool.shortDescription,
         'applicationCategory': tool.category === 'finance' ? 'FinanceApplication' : tool.category === 'developer' ? 'DeveloperApplication' : 'UtilityApplication',
         'operatingSystem': 'All',
-        'browserRequirements': 'Requires JavaScript. Requires HTML5.'
+        'browserRequirements': 'Requires JavaScript. Requires HTML5.',
+        'offers': {
+          '@type': 'Offer',
+          'price': '0',
+          'priceCurrency': 'INR'
+        }
       },
       ...(tool.howToUse && tool.howToUse.length > 0 ? [{
         '@type': 'HowTo',

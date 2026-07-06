@@ -224,7 +224,7 @@ toolsList.forEach((tool) => {
         'itemListElement': breadcrumbItems
       },
       {
-        '@type': 'WebApplication',
+        '@type': ['WebApplication', 'SoftwareApplication'],
         '@id': `${toolUrl}#webapp`,
         'name': tool.name,
         'url': toolUrl,
@@ -235,7 +235,12 @@ toolsList.forEach((tool) => {
           ? 'DeveloperApplication'
           : 'UtilityApplication',
         'operatingSystem': 'All',
-        'browserRequirements': 'Requires JavaScript. Requires HTML5.'
+        'browserRequirements': 'Requires JavaScript. Requires HTML5.',
+        'offers': {
+          '@type': 'Offer',
+          'price': '0',
+          'priceCurrency': 'INR'
+        }
       },
       ...(tool.howToUse && tool.howToUse.length > 0 ? [{
         '@type': 'HowTo',
