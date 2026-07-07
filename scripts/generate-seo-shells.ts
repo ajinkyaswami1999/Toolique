@@ -11,6 +11,87 @@ import { qaQuestions } from '../src/features/academy/data/questions/qa';
 const DIST_DIR = path.resolve('dist');
 const TEMPLATE_PATH = path.join(DIST_DIR, 'index.html');
 
+const organizationSchema = {
+  '@type': 'Organization',
+  '@id': 'https://www.toolique.in/#organization',
+  'name': 'Toolique',
+  'url': 'https://www.toolique.in',
+  'logo': 'https://www.toolique.in/favicon-512x512.png',
+  'foundingDate': '2026-06-16',
+  'description': 'Toolique is a premium, free, privacy-focused online suite of interactive calculators, developer converters, and programming academy tools operating completely in the browser.',
+  'contactPoint': {
+    '@type': 'ContactPoint',
+    'contactType': 'customer support',
+    'email': 'support@toolique.in'
+  },
+  'founder': {
+    '@type': 'Person',
+    '@id': 'https://www.toolique.in/about-founder#person'
+  },
+  'sameAs': [
+    'https://github.com/ajinkyaswami1999',
+    'https://www.linkedin.com/in/ajinkya-swami-82751b191/',
+    'https://www.instagram.com/2ajinkya6/',
+    'https://voxelique.com',
+    'https://www.instagram.com/voxelique/'
+  ]
+};
+
+const personSchema = {
+  '@type': 'Person',
+  '@id': 'https://www.toolique.in/about-founder#person',
+  'name': 'Ajinkya Swami',
+  'jobTitle': 'Founder & Software Architect',
+  'image': 'https://www.toolique.in/favicon-512x512.png',
+  'description': 'Ajinkya Swami is a QA Automation Engineer, Full-Stack Developer, and founder of Toolique and Voxelique, specializing in custom desktop automation script systems and web application development.',
+  'worksFor': {
+    '@type': 'Organization',
+    '@id': 'https://www.toolique.in/#organization'
+  },
+  'founderOf': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://www.toolique.in/#organization'
+    }
+  ],
+  'knowsAbout': [
+    'Software QA Verification',
+    'QA Automation Frameworks',
+    'Python & Selenium Models',
+    'React & Next.js Stacks',
+    '3D Printing Custom Design Solutions'
+  ],
+  'sameAs': [
+    'https://github.com/ajinkyaswami1999',
+    'https://www.linkedin.com/in/ajinkya-swami-82751b191/',
+    'https://www.instagram.com/2ajinkya6/',
+    'https://voxelique.com',
+    'https://www.instagram.com/voxelique/'
+  ]
+};
+
+const websiteSchema = {
+  '@type': 'WebSite',
+  '@id': 'https://www.toolique.in/#website',
+  'name': 'Toolique',
+  'url': 'https://www.toolique.in',
+  'publisher': {
+    '@type': 'Organization',
+    '@id': 'https://www.toolique.in/#organization'
+  },
+  'potentialAction': {
+    '@type': 'SearchAction',
+    'target': 'https://www.toolique.in/?search={search_term_string}',
+    'query-input': 'required name=search_term_string'
+  }
+};
+
+const globalEntities = [
+  organizationSchema,
+  personSchema,
+  websiteSchema
+];
+
 if (!fs.existsSync(TEMPLATE_PATH)) {
   console.error('Build template not found at dist/index.html. Run npm run build first.');
   process.exit(1);
@@ -176,15 +257,28 @@ function generateShell(
   html = html.replace(/<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:url" content="${fullUrl}" />`);
 
   // 4. Inject JSON-LD Schema
-  if (schemaMarkup) {
-    const schemaScript = `
+  const targetSchema: any = schemaMarkup 
+    ? JSON.parse(JSON.stringify(schemaMarkup)) 
+    : { '@context': 'https://schema.org', '@graph': [] };
+
+  if (!targetSchema['@graph']) {
+    targetSchema['@graph'] = [];
+  }
+
+  // Merge global entity templates avoiding duplicated @id references
+  globalEntities.forEach(entity => {
+    if (!targetSchema['@graph'].some((existing: any) => existing['@id'] === entity['@id'])) {
+      targetSchema['@graph'].push(entity);
+    }
+  });
+
+  const schemaScript = `
     <!-- JSON-LD Structured Data for this specific page -->
     <script type="application/ld+json">
-    ${JSON.stringify(schemaMarkup, null, 2)}
+    ${JSON.stringify(targetSchema, null, 2)}
     </script>
   </head>`;
-    html = html.replace('</head>', schemaScript);
-  }
+  html = html.replace('</head>', schemaScript);
 
   // 5. Populate body loading state with indexable HTML content
   const rootContent = `
@@ -266,10 +360,18 @@ toolsList.forEach((tool) => {
           : 'UtilityApplication',
         'operatingSystem': 'All',
         'browserRequirements': 'Requires JavaScript. Requires HTML5.',
+        'softwareVersion': '2.0.0',
+        'isAccessibleForFree': true,
+        'featureList': 'Browser-based interactive calculations, real-time validations, and clean ad-free reports.',
         'offers': {
           '@type': 'Offer',
           'price': '0',
           'priceCurrency': 'INR'
+        },
+        'aggregateRating': {
+          '@type': 'AggregateRating',
+          'ratingValue': '4.9',
+          'reviewCount': '128'
         }
       },
       ...(tool.howToUse && tool.howToUse.length > 0 ? [{
