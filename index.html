@@ -48,7 +48,7 @@
     <meta name="twitter:description" content="Free online developer, finance, tax, image and general utility tools optimized for Indian users - fast, free and browser-based." />
     <meta name="twitter:image" content="https://www.toolique.in/favicon-512x512.png" />
 
-    <!-- JSON-LD Structured Data for Search Engines (WebSite & Organization) -->
+    <!-- JSON-LD Structured Data for Search Engines (WebSite, Organization, Person) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -58,7 +58,7 @@
           "@id": "https://www.toolique.in/#website",
           "url": "https://www.toolique.in/",
           "name": "Toolique",
-          "description": "Free online developer, finance, tax, image and general utility tools optimized for Indian users - fast, free and browser-based.",
+          "description": "Free online developer, finance, tax, 3D printing and general utility tools - fast, free and browser-based.",
           "publisher": {
             "@id": "https://www.toolique.in/#organization"
           },
@@ -67,7 +67,7 @@
               "@type": "SearchAction",
               "target": {
                 "@type": "EntryPoint",
-                "urlTemplate": "https://www.toolique.in/?q={search_term_string}"
+                "urlTemplate": "https://www.toolique.in/?search={search_term_string}"
               },
               "query-input": "required name=search_term_string"
             }
@@ -87,6 +87,29 @@
           },
           "image": {
             "@id": "https://www.toolique.in/#logo"
+          },
+          "foundingDate": "2026-06-16",
+          "founder": {
+            "@type": "Person",
+            "@id": "https://www.toolique.in/about-founder#person"
+          },
+          "sameAs": [
+            "https://github.com/ajinkyaswami1999",
+            "https://www.linkedin.com/in/ajinkya-swami-82751b191/",
+            "https://www.instagram.com/2ajinkya6/",
+            "https://voxelique.com",
+            "https://www.instagram.com/voxelique/"
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://www.toolique.in/about-founder#person",
+          "name": "Ajinkya Swami",
+          "jobTitle": "Founder & Software Architect",
+          "image": "https://www.toolique.in/favicon-512x512.png",
+          "worksFor": {
+            "@type": "Organization",
+            "@id": "https://www.toolique.in/#organization"
           }
         }
       ]
@@ -94,7 +117,9 @@
     </script>
   </head>
   <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-150 transition-colors duration-300">
-    <div id="root"></div>
+    <div id="root">
+      <h1 style="display: none;">Toolique | Free Online Calculators & Developer Tools</h1>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "postbuild": "tsx scripts/generate-seo-shells.ts",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seo:audit": "tsx scripts/seo-audit.ts"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",

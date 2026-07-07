@@ -231,7 +231,7 @@ function generateShell(
   schemaMarkup?: object
 ) {
   const fullUrl = `https://www.toolique.in/${routePath}`;
-  let html = template;
+  let html = template.replace(/<script\s+type="application\/ld\+json">[\s\S]*?<\/script>/gi, '');
 
   // 1. Replace metadata
   html = html.replace(/<title>[^<]*<\/title>/i, `<title>${title}</title>`);
@@ -486,3 +486,67 @@ academyQuestions.forEach((q) => {
 });
 
 console.log('SEO pre-rendering shells generation complete!');
+
+// Programmatic XML Sitemap Generator
+function generateXmlSitemap() {
+  console.log('Compiling programmatic sitemap.xml...');
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  const urls: { loc: string; changefreq: string; priority: string }[] = [];
+
+  // 1. Add Homepage
+  urls.push({ loc: 'https://www.toolique.in/', changefreq: 'daily', priority: '1.0' });
+
+  // 2. Add static pages
+  staticPages.forEach(p => {
+    let priority = '0.5';
+    let freq = 'monthly';
+    if (p.path === 'academy') {
+      priority = '0.9';
+      freq = 'daily';
+    } else if (p.path === 'about-founder') {
+      priority = '0.7';
+      freq = 'monthly';
+    } else if (p.path.startsWith('academy/')) {
+      priority = '0.8';
+      freq = 'weekly';
+    }
+    urls.push({ loc: `https://www.toolique.in/${p.path}`, changefreq: freq, priority });
+  });
+
+  // 3. Add dynamic tools
+  toolsList.forEach(t => {
+    const path = t.slug === 'advanced-boq-calculator-india'
+      ? 'tools/advanced-boq-calculator-india'
+      : `tool/${t.slug}`;
+    urls.push({ loc: `https://www.toolique.in/${path}`, changefreq: 'weekly', priority: '0.8' });
+  });
+
+  // 4. Add academy categories
+  academyCategories.forEach(cat => {
+    urls.push({ loc: `https://www.toolique.in/academy/${cat.id}`, changefreq: 'weekly', priority: '0.7' });
+  });
+
+  // 5. Add academy questions
+  academyQuestions.forEach(q => {
+    const categoryId = q.id.startsWith('sql') ? 'sql' : q.id.startsWith('py') ? 'python' : q.id.startsWith('js') ? 'javascript' : q.id.startsWith('react') ? 'react' : 'qa';
+    urls.push({ loc: `https://www.toolique.in/academy/${categoryId}/question/${q.slug}`, changefreq: 'weekly', priority: '0.6' });
+  });
+
+  const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(u => `  <url>
+    <loc>${u.loc}</loc>
+    <lastmod>${todayStr}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join('\n')}
+</urlset>
+`;
+
+  fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), xmlContent, 'utf8');
+  fs.writeFileSync(path.resolve('public/sitemap.xml'), xmlContent, 'utf8');
+  console.log(`Programmatic sitemap.xml generated successfully in dist/ and public/! (${urls.length} URLs compiled)`);
+}
+
+generateXmlSitemap();
