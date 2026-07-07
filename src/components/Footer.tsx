@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart, Mail, Shield, AlertTriangle, FileText, Command, User } from 'lucide-react';
+import { Heart, Mail, Shield, AlertTriangle, FileText, Command, User, BookOpen } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -67,6 +67,11 @@ export default function Footer() {
               Resources & Privacy
             </h4>
             <ul className="space-y-2 text-xs font-semibold">
+              <li>
+                <Link to="/academy" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
+                  <BookOpen className="w-3.5 h-3.5" /> Academy
+                </Link>
+              </li>
               <li>
                 <Link to="/about" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-1.5">
                   <Mail className="w-3.5 h-3.5" /> About Us

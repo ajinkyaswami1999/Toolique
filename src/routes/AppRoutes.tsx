@@ -11,6 +11,10 @@ import ThreeDPrintStudio from '../pages/ThreeDPrintStudio';
 import MathStudio from '../pages/MathStudio';
 
 const AboutFounder = lazy(() => import('../pages/AboutFounder'));
+const AcademyLanding = lazy(() => import('../features/academy/pages/AcademyLanding'));
+const AcademyCategory = lazy(() => import('../features/academy/pages/AcademyCategory'));
+const AcademyQuestion = lazy(() => import('../features/academy/pages/AcademyQuestion'));
+const AcademyBookmarks = lazy(() => import('../features/academy/pages/AcademyBookmarks'));
 
 export default function AppRoutes() {
   return (
@@ -28,6 +32,26 @@ export default function AppRoutes() {
           </div>
         }>
           <AboutFounder />
+        </Suspense>
+      } />
+      <Route path="/academy" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Academy...</div>}>
+          <AcademyLanding />
+        </Suspense>
+      } />
+      <Route path="/academy/bookmarks" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Bookmarks...</div>}>
+          <AcademyBookmarks />
+        </Suspense>
+      } />
+      <Route path="/academy/:category" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Track...</div>}>
+          <AcademyCategory />
+        </Suspense>
+      } />
+      <Route path="/academy/:category/question/:questionSlug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Question...</div>}>
+          <AcademyQuestion />
         </Suspense>
       } />
       <Route path="/contact" element={<Contact />} />

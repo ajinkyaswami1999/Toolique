@@ -72,6 +72,7 @@ export default function Header() {
     { name: '3D Print Studio', path: '/3d-print-studio' },
     { name: 'Math Studio', path: '/math-studio' },
     { name: 'All Tools', path: '/?view=all' },
+    { name: 'Academy', path: '/academy' },
     { name: 'About', path: '/about' },
     { name: 'About Founder', path: '/about-founder' },
     { name: 'Contact', path: '/contact' }

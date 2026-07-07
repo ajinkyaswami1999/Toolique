@@ -1,6 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import { toolsList } from '../src/data/tools';
+import { academyCategories } from '../src/features/academy/data/categories';
+import { sqlQuestions } from '../src/features/academy/data/questions/sql';
+import { pythonQuestions } from '../src/features/academy/data/questions/python';
+import { javascriptQuestions } from '../src/features/academy/data/questions/javascript';
+import { reactQuestions } from '../src/features/academy/data/questions/react';
+import { qaQuestions } from '../src/features/academy/data/questions/qa';
 
 const DIST_DIR = path.resolve('dist');
 const TEMPLATE_PATH = path.join(DIST_DIR, 'index.html');
@@ -108,6 +114,18 @@ const staticPages = [
         }
       ]
     }
+  },
+  {
+    path: 'academy',
+    title: 'Toolique Academy | Learn Programming & QA Interview Prep',
+    description: 'Practice programming, software engineering, QA automation, and technical interview questions with dynamic daily challenges and progress tracking.',
+    keywords: ['programming academy', 'interview prep', 'qa automation', 'coding challenges']
+  },
+  {
+    path: 'academy/bookmarks',
+    title: 'Saved Challenges & Notes | Toolique Academy',
+    description: 'Review your bookmarked technical interview questions, coding challenges, and export your personal scratch notes.',
+    keywords: ['saved coding questions', 'bookmark interview prep', 'code notes']
   }
 ];
 
@@ -268,6 +286,89 @@ toolsList.forEach((tool) => {
   };
 
   generateShell(routePath, title, description, tool.keywords || [], toolSchema);
+});
+
+// Generate Academy Category pages
+academyCategories.forEach((cat) => {
+  const routePath = `academy/${cat.id}`;
+  const title = `${cat.name} | Toolique Academy`;
+  const description = cat.description;
+  const keywords = cat.topics || [];
+  
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `https://www.toolique.in/${routePath}#breadcrumb`,
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.toolique.in/' },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Academy', 'item': 'https://www.toolique.in/academy' },
+          { '@type': 'ListItem', 'position': 3, 'name': cat.name, 'item': `https://www.toolique.in/${routePath}` }
+        ]
+      }
+    ]
+  };
+
+  generateShell(routePath, title, description, keywords, schema);
+});
+
+const academyQuestions = [
+  ...sqlQuestions,
+  ...pythonQuestions,
+  ...javascriptQuestions,
+  ...reactQuestions,
+  ...qaQuestions
+];
+
+// Generate Academy Question pages
+academyQuestions.forEach((q) => {
+  const categoryId = q.id.startsWith('sql') ? 'sql' : q.id.startsWith('py') ? 'python' : q.id.startsWith('js') ? 'javascript' : q.id.startsWith('react') ? 'react' : 'qa';
+  const category = academyCategories.find(c => c.id === categoryId);
+  const routePath = `academy/${categoryId}/question/${q.slug}`;
+  const title = `${q.title} | ${category ? category.name : 'Academy'} Question`;
+  const description = `Solve the challenge: ${q.title}. Category: ${q.topic}. Practice technical questions with step-by-step solutions.`;
+  const keywords = q.tags || [];
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `https://www.toolique.in/${routePath}#breadcrumb`,
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.toolique.in/' },
+          { '@type': 'ListItem', 'position': 2, 'name': 'Academy', 'item': 'https://www.toolique.in/academy' },
+          { '@type': 'ListItem', 'position': 3, 'name': category ? category.name : 'Track', 'item': `https://www.toolique.in/academy/${categoryId}` },
+          { '@type': 'ListItem', 'position': 4, 'name': q.title, 'item': `https://www.toolique.in/${routePath}` }
+        ]
+      },
+      {
+        '@type': 'TechArticle',
+        '@id': `https://www.toolique.in/${routePath}#article`,
+        'headline': q.title,
+        'description': q.question,
+        'dependencies': q.topic,
+        'proficiencyLevel': q.difficulty
+      },
+      {
+        '@type': 'FAQPage',
+        '@id': `https://www.toolique.in/${routePath}#faq`,
+        'mainEntity': [
+          {
+            '@type': 'Question',
+            'name': `How to solve: ${q.title}?`,
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': q.explanation
+            }
+          }
+        ]
+      }
+    ]
+  };
+
+  generateShell(routePath, title, description, keywords, schema);
 });
 
 console.log('SEO pre-rendering shells generation complete!');
