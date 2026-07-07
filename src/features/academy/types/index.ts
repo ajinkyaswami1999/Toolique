@@ -13,6 +13,17 @@ export interface Question {
   sampleOutput?: string;
   companies?: string[];
   relatedQuestions?: string[]; // array of question slugs
+  
+  // Interactive Coding expansions
+  starterCode: string;
+  progressiveHints: string[];
+  optimizedAnswer?: string;
+  functionName?: string;
+  testCases?: { input: any[]; expected: any }[];
+  validationRules?: {
+    ignoreOrder?: boolean;
+    matchColumns?: string[];
+  };
 }
 
 export interface Category {

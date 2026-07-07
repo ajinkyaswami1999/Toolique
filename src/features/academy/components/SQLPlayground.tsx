@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
-import { Play, Download, Database, Code, Terminal } from 'lucide-react';
+import { Play, Download, Database, Code, Terminal, Layers } from 'lucide-react';
 import { saveQueryHistory, getQueryHistory, clearQueryHistory } from '../utils/db';
+import HTMLPlayground from './HTMLPlayground';
 
 declare global {
   interface Window {
@@ -11,7 +12,7 @@ declare global {
 }
 
 export default function SQLPlayground() {
-  const [activeTab, setActiveTab] = useState<'sql' | 'js' | 'python'>('sql');
+  const [activeTab, setActiveTab] = useState<'sql' | 'js' | 'python' | 'html'>('sql');
   const [sqlCode, setSqlCode] = useState('SELECT * FROM Customers;');
   const [jsCode, setJsCode] = useState('const greet = "Hello Toolique";\nconsole.log(greet);\ngreet + " Academy!";');
   const [pyCode, setPyCode] = useState('name = "Ajinkya"\nprint(f"Hello {name} from Python!")\n[x*2 for x in range(5)]');
@@ -32,12 +33,14 @@ export default function SQLPlayground() {
     } else if (activeTab === 'python' && !pyodide) {
       loadPythonRuntime();
     }
-    loadHistory();
+    if (activeTab !== 'html') {
+      loadHistory();
+    }
   }, [activeTab]);
 
   const loadHistory = async () => {
     try {
-      const history = await getQueryHistory(activeTab);
+      const history = await getQueryHistory(activeTab as any);
       setHistoryList(history);
     } catch {
       setHistoryList([]);
@@ -111,8 +114,7 @@ export default function SQLPlayground() {
 
   const handleRunSQL = async () => {
     if (!db) {
-      // Fallback Mock SQL Parser if offline
-      setConsoleOutput(['SQLite engine is loading or unavailable. Running in dry-run mode...']);
+      setConsoleOutput(['SQLite engine is loading or unavailable.']);
       return;
     }
     
@@ -138,7 +140,6 @@ export default function SQLPlayground() {
     const logs: string[] = [];
     const originalLog = console.log;
     
-    // Override console.log temporarily
     console.log = (...args) => {
       logs.push(args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' '));
     };
@@ -164,7 +165,6 @@ export default function SQLPlayground() {
     }
 
     try {
-      // Capture stdout
       pyodide.runPython(`
         import sys
         import io
@@ -194,7 +194,7 @@ export default function SQLPlayground() {
 
   const handleClearHistory = async () => {
     try {
-      await clearQueryHistory(activeTab);
+      await clearQueryHistory(activeTab as any);
       loadHistory();
     } catch (err) {
       console.error(err);
@@ -214,12 +214,11 @@ export default function SQLPlayground() {
     URL.revokeObjectURL(url);
   };
 
-  return (
-    <div className="space-y-6 text-left">
-      {/* Tab select header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
-        <div className="flex bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl">
-          {(['sql', 'js', 'python'] as const).map(tab => (
+  if (activeTab === 'html') {
+    return (
+      <div className="space-y-6">
+        <div className="flex bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl w-max">
+          {(['sql', 'js', 'python', 'html'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => {
@@ -233,13 +232,40 @@ export default function SQLPlayground() {
                   : 'text-zinc-500 hover:text-zinc-850 dark:hover:text-zinc-250'
               }`}
             >
-              {tab === 'sql' ? <Database className="w-3.5 h-3.5" /> : tab === 'js' ? <Code className="w-3.5 h-3.5" /> : <Terminal className="w-3.5 h-3.5" />}
-              {tab === 'sql' ? 'SQLite WASM' : tab === 'js' ? 'JavaScript Sandbox' : 'Python (Pyodide)'}
+              {tab === 'sql' ? <Database className="w-3.5 h-3.5" /> : tab === 'js' ? <Code className="w-3.5 h-3.5" /> : tab === 'python' ? <Terminal className="w-3.5 h-3.5" /> : <Layers className="w-3.5 h-3.5" />}
+              {tab === 'sql' ? 'SQLite' : tab === 'js' ? 'JavaScript' : tab === 'python' ? 'Python' : 'HTML & CSS'}
+            </button>
+          ))}
+        </div>
+        <HTMLPlayground />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 text-left">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
+        <div className="flex bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl">
+          {(['sql', 'js', 'python', 'html'] as const).map(tab => (
+            <button
+              key={tab}
+              onClick={() => {
+                setActiveTab(tab);
+                setConsoleOutput([]);
+                setQueryResults([]);
+              }}
+              className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+                activeTab === tab
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'text-zinc-500 hover:text-zinc-850 dark:hover:text-zinc-250'
+              }`}
+            >
+              {tab === 'sql' ? <Database className="w-3.5 h-3.5" /> : tab === 'js' ? <Code className="w-3.5 h-3.5" /> : tab === 'python' ? <Terminal className="w-3.5 h-3.5" /> : <Layers className="w-3.5 h-3.5" />}
+              {tab === 'sql' ? 'SQLite' : tab === 'js' ? 'JavaScript' : tab === 'python' ? 'Python' : 'HTML & CSS'}
             </button>
           ))}
         </div>
 
-        {/* Action Controls */}
         <div className="flex items-center gap-2">
           <button
             onClick={exportQuery}
@@ -258,10 +284,8 @@ export default function SQLPlayground() {
         </div>
       </div>
 
-      {/* Editor & output display grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Editor panel */}
-        <div className="col-span-1 lg:col-span-8 rounded-2xl border border-zinc-200 dark:border-zinc-850 overflow-hidden shadow-sm">
+        <div className="col-span-1 lg:col-span-8 rounded-2xl border border-zinc-200 dark:border-zinc-855 overflow-hidden shadow-sm">
           <Editor
             height="320px"
             language={activeTab === 'sql' ? 'sql' : activeTab === 'js' ? 'javascript' : 'python'}
@@ -283,10 +307,8 @@ export default function SQLPlayground() {
           />
         </div>
 
-        {/* Console Outputs & Query History */}
         <div className="col-span-1 lg:col-span-4 space-y-4">
-          {/* History */}
-          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/20 dark:bg-zinc-950/20 space-y-3">
+          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/20 dark:bg-zinc-955/20 space-y-3">
             <h4 className="text-[10px] font-black text-zinc-450 dark:text-zinc-555 uppercase tracking-wider flex justify-between">
               <span>Query History</span>
               {historyList.length > 0 && (
@@ -317,8 +339,7 @@ export default function SQLPlayground() {
             )}
           </div>
 
-          {/* Console Console logs */}
-          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-950 text-emerald-400 font-mono text-[11px] min-h-[8.5rem] max-h-48 overflow-y-auto space-y-1">
+          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-955 text-emerald-400 font-mono text-[11px] min-h-[8.5rem] max-h-48 overflow-y-auto space-y-1">
             <div className="text-[10px] font-bold text-zinc-500 border-b border-zinc-800/80 pb-1 mb-2">Console output:</div>
             {consoleOutput.length > 0 ? (
               consoleOutput.map((log, index) => (
@@ -331,7 +352,6 @@ export default function SQLPlayground() {
         </div>
       </div>
 
-      {/* SQL Result Table (SQL tab only) */}
       {activeTab === 'sql' && queryResults.length > 0 && (
         <div className="space-y-2 animate-fade-in text-left">
           <h4 className="text-[9px] font-black text-zinc-400 dark:text-zinc-555 uppercase">SQL Executed Rows</h4>

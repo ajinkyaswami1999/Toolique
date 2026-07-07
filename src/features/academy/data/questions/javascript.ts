@@ -8,6 +8,27 @@ export const javascriptQuestions: Question[] = [
     difficulty: 'beginner',
     topic: 'Scopes & Closures',
     tags: ['Closures', 'Scopes', 'Encapsulation'],
+    starterCode: `function createCounter() {\n  let count = 0;\n  return {\n    increment: function() {\n      // increment private state\n    },\n    getValue: function() {\n      // return value\n      return 0;\n    }\n  };\n}`,
+    progressiveHints: [
+      'Define a local count variable inside createCounter().',
+      'The returned object should have two functions: increment and getValue.',
+      'Inside increment, add 1 to your local count variable.',
+      'Inside getValue, return the count variable. Closure will retain access to it.'
+    ],
+    functionName: 'createCounter',
+    testCases: [
+      {
+        input: [],
+        expected: 2,
+        // Custom runner execution block
+        run: "(function() { const c = createCounter(); c.increment(); c.increment(); return c.getValue(); })()"
+      },
+      {
+        input: [],
+        expected: 0,
+        run: "(function() { const c = createCounter(); return c.getValue(); })()"
+      }
+    ] as any,
     question: `Write a JavaScript function \`createCounter()\` that returns an object containing two methods: \`increment()\` and \`getValue()\`. The counter value must be **fully private** and inaccessible from outside the function scope.
 
 ### Function Signature:
@@ -18,26 +39,11 @@ function createCounter() {
 \`\`\``,
     hint: 'Define a variable inside createCounter() and return an object with closures that reference this private variable.',
     explanation: `Closures allow inner functions to access variables defined in outer scopes:
-1. Define \`let count = 0\` inside \`createCounter()\`.
+1. Define \`let count = 0\` inside \`createCounterInstance()\`.
 2. Return an object with two methods. Since these methods are declared inside \`createCounter()\`, they retain access to \`count\` even after \`createCounter()\` finishes execution.
 3. Because \`count\` is not exposed on the returned object, it is completely secure and private.`,
-    answer: `\`\`\`javascript
-function createCounter() {
-  let count = 0;
-  return {
-    increment: function() {
-      count++;
-    },
-    getValue: function() {
-      return count;
-    }
-  };
-}
-\`\`\``,
-    sampleInput: `const counter = createCounter();
-counter.increment();
-counter.increment();
-console.log(counter.getValue());`,
+    answer: `function createCounter() {\n  let count = 0;\n  return {\n    increment: function() {\n      count++;\n    },\n    getValue: function() {\n      return count;\n    }\n  };\n}`,
+    sampleInput: `const counter = createCounter();\ncounter.increment();\ncounter.increment();\nconsole.log(counter.getValue());`,
     sampleOutput: `2`,
     companies: ['Wipro', 'Infosys', 'Capgemini'],
     relatedQuestions: ['js-promise-all-implementation']
@@ -49,6 +55,21 @@ console.log(counter.getValue());`,
     difficulty: 'intermediate',
     topic: 'Promises & Async/Await',
     tags: ['Promises', 'Async/Await', 'Interview'],
+    starterCode: `function promiseAll(promises) {\n  return new Promise((resolve, reject) => {\n    // Write implementation\n  });\n}`,
+    progressiveHints: [
+      'Return a new Promise instance.',
+      'Initialize an empty results array and a completedCount count variable.',
+      'Iterate over promises list and call Promise.resolve(p) for each item.',
+      'Keep index mappings aligned. Resolve outer promise when completedCount === promises.length.'
+    ],
+    functionName: 'promiseAll',
+    testCases: [
+      {
+        input: [],
+        expected: [1, 2, 3],
+        run: "promiseAll([Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)])"
+      }
+    ] as any,
     question: `Write a custom implementation of JavaScript's native \`Promise.all(promises)\` function. It should return a single promise that resolves when all input promises resolve, or rejects immediately if any input promise rejects.
 
 ### Function Signature:
@@ -65,42 +86,8 @@ function promiseAll(promises) {
 4. Store the resolved value in the \`results\` array at the corresponding index (preserving order). Increment \`completedCount\`.
 5. If \`completedCount === promises.length\`, resolve the outer promise.
 6. If any promise throws or rejects, reject the outer promise immediately.`,
-    answer: `\`\`\`javascript
-function promiseAll(promises) {
-  return new Promise((resolve, reject) => {
-    if (!Array.isArray(promises)) {
-      return reject(new TypeError('Arguments must be an array'));
-    }
-    
-    const results = [];
-    let completedCount = 0;
-    const total = promises.length;
-    
-    if (total === 0) {
-      return resolve([]);
-    }
-    
-    promises.forEach((p, index) => {
-      Promise.resolve(p)
-        .then(value => {
-          results[index] = value;
-          completedCount++;
-          if (completedCount === total) {
-            resolve(results);
-          }
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  });
-}
-\`\`\``,
-    sampleInput: `const p1 = Promise.resolve(3);
-const p2 = 42;
-const p3 = new Promise((resolve) => setTimeout(resolve, 100, 'foo'));
-
-promiseAll([p1, p2, p3]).then(console.log);`,
+    answer: `function promiseAll(promises) {\n  return new Promise((resolve, reject) => {\n    const results = [];\n    let completed = 0;\n    if (promises.length === 0) return resolve([]);\n    promises.forEach((p, idx) => {\n      Promise.resolve(p).then(res => {\n        results[idx] = res;\n        completed++;\n        if (completed === promises.length) resolve(results);\n      }).catch(reject);\n    });\n  });\n}`,
+    sampleInput: `const p1 = Promise.resolve(3);\nconst p2 = 42;\nconst p3 = new Promise((resolve) => setTimeout(resolve, 100, 'foo'));\n\npromiseAll([p1, p2, p3]).then(console.log);`,
     sampleOutput: `[3, 42, "foo"]`,
     companies: ['Google', 'Meta', 'Amazon', 'Microsoft'],
     relatedQuestions: ['js-closure-counter']
