@@ -126,6 +126,18 @@ const staticPages = [
     title: 'Saved Challenges & Notes | Toolique Academy',
     description: 'Review your bookmarked technical interview questions, coding challenges, and export your personal scratch notes.',
     keywords: ['saved coding questions', 'bookmark interview prep', 'code notes']
+  },
+  {
+    path: 'academy/learn',
+    title: 'Visual Explainers & Learn Path | Toolique Academy',
+    description: 'Master programming concepts visually. Explore interactive visualizers for SQL JOINs, Stacks, Queues, and Linked Lists.',
+    keywords: ['sql join visualizer', 'data structures visualization', 'visual coding explainers']
+  },
+  {
+    path: 'academy/playgrounds',
+    title: 'Interactive Playgrounds Sandbox | Toolique Academy',
+    description: 'Write and execute SQL queries, JavaScript scripts, and Python code in the browser with full console output logs.',
+    keywords: ['sql playground', 'javascript playground', 'python sandbox', 'online code editor']
   }
 ];
 

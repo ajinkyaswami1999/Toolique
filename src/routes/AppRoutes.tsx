@@ -15,6 +15,8 @@ const AcademyLanding = lazy(() => import('../features/academy/pages/AcademyLandi
 const AcademyCategory = lazy(() => import('../features/academy/pages/AcademyCategory'));
 const AcademyQuestion = lazy(() => import('../features/academy/pages/AcademyQuestion'));
 const AcademyBookmarks = lazy(() => import('../features/academy/pages/AcademyBookmarks'));
+const AcademyLearn = lazy(() => import('../features/academy/pages/AcademyLearn'));
+const AcademyPlayground = lazy(() => import('../features/academy/pages/AcademyPlayground'));
 
 export default function AppRoutes() {
   return (
@@ -37,6 +39,16 @@ export default function AppRoutes() {
       <Route path="/academy" element={
         <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Academy...</div>}>
           <AcademyLanding />
+        </Suspense>
+      } />
+      <Route path="/academy/learn" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Learn Paths...</div>}>
+          <AcademyLearn />
+        </Suspense>
+      } />
+      <Route path="/academy/playgrounds" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Playgrounds...</div>}>
+          <AcademyPlayground />
         </Suspense>
       } />
       <Route path="/academy/bookmarks" element={

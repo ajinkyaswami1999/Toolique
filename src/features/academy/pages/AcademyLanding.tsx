@@ -10,15 +10,23 @@ import {
   Bookmark, 
   SlidersHorizontal,
   TrendingUp,
-  Brain
+  Brain,
+  Terminal,
+  Download,
+  Upload,
+  Layers
 } from 'lucide-react';
 import SEO from '../../../components/SEO';
 import LucideIcon from '../../../components/LucideIcon';
 import { academyCategories } from '../data/categories';
 import { allQuestions } from '../data/questions/qa';
 import { useAcademyProgress } from '../hooks/useAcademyProgress';
-import { getDailyChallenge } from '../utils/challenge';
+
 import type { Question } from '../types';
+
+import JoinVisualizer from '../components/JoinVisualizer';
+import DataStructureVisual from '../components/DataStructureVisual';
+import FlashcardViewer from '../components/FlashcardViewer';
 
 export default function AcademyLanding() {
   const { progress } = useAcademyProgress();
@@ -27,7 +35,7 @@ export default function AcademyLanding() {
   const [selectedTopic, setSelectedTopic] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
 
-  const dailyChallenge = getDailyChallenge(allQuestions);
+
 
   // Statistics configuration
   const stats = [
@@ -73,6 +81,43 @@ export default function AcademyLanding() {
     { name: 'Code Master', desc: 'Solve 5+ Questions', earned: progress.completedQuestions.length >= 5, icon: Award }
   ];
 
+  // Backup data
+  const handleBackup = () => {
+    const backupData = {
+      progress: localStorage.getItem('toolique_academy_progress'),
+      spacedRepetition: localStorage.getItem('toolique_spaced_repetition')
+    };
+    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `toolique-academy-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Restore backup data
+  const handleRestore = (event: any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        if (parsed.progress) localStorage.setItem('toolique_academy_progress', parsed.progress);
+        if (parsed.spacedRepetition) localStorage.setItem('toolique_spaced_repetition', parsed.spacedRepetition);
+        alert('Restore completed successfully! Reloading page...');
+        window.location.reload();
+      } catch {
+        alert('Invalid backup file formatting.');
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <div className="space-y-12 py-4">
       <SEO
@@ -85,7 +130,7 @@ export default function AcademyLanding() {
         <div className="absolute top-0 right-0 w-36 h-36 bg-indigo-500/[0.04] dark:bg-indigo-500/[0.02] rounded-bl-full pointer-events-none" />
         <div className="relative z-10 space-y-6 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-bold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" /> Interactive Learning Platform
+            <Sparkles className="w-3.5 h-3.5" /> Offline-First Platform
           </div>
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-white leading-tight">
             Learn by Solving <span className="text-indigo-600 dark:text-indigo-400">Real Problems</span>
@@ -100,14 +145,18 @@ export default function AcademyLanding() {
             >
               Start Learning <ArrowRight className="w-4 h-4" />
             </button>
-            {dailyChallenge && (
-              <Link 
-                to={`/academy/${dailyChallenge.id.startsWith('sql') ? 'sql' : dailyChallenge.id.startsWith('py') ? 'python' : dailyChallenge.id.startsWith('js') ? 'javascript' : dailyChallenge.id.startsWith('react') ? 'react' : 'qa'}/question/${dailyChallenge.slug}`}
-                className="saas-button-secondary text-xs flex items-center gap-2"
-              >
-                <Flame className="w-4 h-4 text-orange-500 fill-orange-500/10" /> Today's Challenge
-              </Link>
-            )}
+            <Link 
+              to="/academy/playgrounds"
+              className="saas-button-secondary text-xs flex items-center gap-2"
+            >
+              <Terminal className="w-4 h-4" /> Code Playground
+            </Link>
+            <Link 
+              to="/academy/learn"
+              className="saas-button-secondary text-xs flex items-center gap-2"
+            >
+              <Layers className="w-4 h-4" /> Visual Explainers
+            </Link>
           </div>
         </div>
       </section>
@@ -130,7 +179,7 @@ export default function AcademyLanding() {
             <div className="flex-grow space-y-1.5">
               <div className="flex items-center justify-between text-xs font-bold">
                 <span className="text-zinc-800 dark:text-zinc-200">{progress.xp} Total XP</span>
-                <span className="text-zinc-450 dark:text-zinc-500">{currentLevelXp} / {nextLevelXp} XP</span>
+                <span className="text-zinc-455 dark:text-zinc-500">{currentLevelXp} / {nextLevelXp} XP</span>
               </div>
               <div className="w-full h-2 rounded-full bg-zinc-200 dark:bg-zinc-850 overflow-hidden">
                 <div className="h-full bg-indigo-600 dark:bg-indigo-400 transition-all duration-300" style={{ width: `${levelProgressPct}%` }} />
@@ -148,36 +197,52 @@ export default function AcademyLanding() {
               <span className="block text-lg font-black text-zinc-900 dark:text-white">
                 {progress.completedQuestions.length}
               </span>
-              <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-550 uppercase">Solved Challenges</span>
+              <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-555 uppercase">Solved Challenges</span>
             </div>
           </div>
         </div>
 
         {/* Badges and Milestones Card */}
         <div className="md:col-span-2 p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md space-y-4">
-          <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-650 uppercase tracking-wider flex items-center gap-1.5">
-            <Award className="w-4 h-4 text-yellow-500" /> Earned Badges
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-            {badges.map((badge, idx) => (
-              <div 
-                key={idx}
-                className={`p-3 rounded-xl border flex flex-col items-center justify-center text-center space-y-1.5 transition ${
-                  badge.earned 
-                    ? 'border-indigo-500/20 bg-indigo-500/5 text-zinc-800 dark:text-zinc-200' 
-                    : 'border-zinc-200/50 dark:border-zinc-850 bg-zinc-100/10 text-zinc-400 dark:text-zinc-600 opacity-60'
-                }`}
-                title={badge.desc}
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-650 uppercase tracking-wider flex items-center gap-1.5">
+              <Award className="w-4 h-4 text-yellow-500" /> Earned Badges
+            </h3>
+
+            {/* Backup Import/Export buttons */}
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={handleBackup}
+                className="text-[9px] font-bold text-zinc-500 hover:text-indigo-500 flex items-center gap-1 bg-zinc-100 dark:bg-zinc-900 px-2 py-1 rounded-md cursor-pointer"
               >
-                <div className={`p-2 rounded-lg ${badge.earned ? 'bg-indigo-500/10 text-indigo-500' : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-600'}`}>
-                  {(() => {
-                    const BadgeIcon = badge.icon;
-                    return <BadgeIcon className="w-5 h-5" />;
-                  })()}
+                <Download className="w-3 h-3" /> Backup
+              </button>
+              <label className="text-[9px] font-bold text-zinc-500 hover:text-indigo-500 flex items-center gap-1 bg-zinc-100 dark:bg-zinc-900 px-2 py-1 rounded-md cursor-pointer">
+                <Upload className="w-3 h-3" /> Restore
+                <input type="file" accept=".json" onChange={handleRestore} className="hidden" />
+              </label>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            {badges.map((badge, idx) => {
+              const BadgeIcon = badge.icon;
+              return (
+                <div 
+                  key={idx}
+                  className={`p-3 rounded-xl border flex flex-col items-center justify-center text-center space-y-1.5 transition ${
+                    badge.earned 
+                      ? 'border-indigo-500/20 bg-indigo-500/5 text-zinc-800 dark:text-zinc-200' 
+                      : 'border-zinc-200/50 dark:border-zinc-850 bg-zinc-100/10 text-zinc-400 dark:text-zinc-600 opacity-60'
+                  }`}
+                  title={badge.desc}
+                >
+                  <div className={`p-2 rounded-lg ${badge.earned ? 'bg-indigo-500/10 text-indigo-500' : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-600'}`}>
+                    <BadgeIcon className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-bold leading-tight">{badge.name}</span>
                 </div>
-                <span className="text-[10px] font-bold leading-tight">{badge.name}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -188,16 +253,27 @@ export default function AcademyLanding() {
           const IconComponent = stat.icon;
           return (
             <div key={idx} className="p-5 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/30 dark:bg-zinc-950/30 backdrop-blur-md flex items-center gap-4">
-              <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-450">
+              <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-655 dark:text-zinc-450">
                 <IconComponent className="w-5 h-5" />
               </div>
               <div>
                 <span className="block text-xl font-black text-zinc-900 dark:text-white">{stat.value}</span>
-                <span className="text-[10px] font-bold text-zinc-450 dark:text-zinc-550 uppercase">{stat.label}</span>
+                <span className="text-[10px] font-bold text-zinc-455 dark:text-zinc-555 uppercase">{stat.label}</span>
               </div>
             </div>
           );
         })}
+      </section>
+
+      {/* Flashcard decks inline section */}
+      <section className="max-w-5xl mx-auto">
+        <FlashcardViewer />
+      </section>
+
+      {/* SQL & DS Visualizers inline section */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <JoinVisualizer />
+        <DataStructureVisual />
       </section>
 
       {/* Questions Search & Filter Section */}
@@ -205,7 +281,7 @@ export default function AcademyLanding() {
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Search Input */}
           <div className="relative flex-grow">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-4 h-4" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-550 w-4 h-4" />
             <input
               type="text"
               placeholder="Search challenges by title, tag, or company (e.g. JOINs, Google)..."
@@ -216,7 +292,7 @@ export default function AcademyLanding() {
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 cursor-pointer shrink-0"
+            className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-55 dark:hover:bg-zinc-900 text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 cursor-pointer shrink-0"
           >
             <SlidersHorizontal className="w-4 h-4" /> Filters
           </button>
@@ -240,7 +316,7 @@ export default function AcademyLanding() {
               </select>
             </div>
             <div>
-              <label className="block text-[10px] font-bold text-zinc-450 dark:text-zinc-500 uppercase mb-1.5">Topics</label>
+              <label className="block text-[10px] font-bold text-zinc-455 dark:text-zinc-500 uppercase mb-1.5">Topics</label>
               <select
                 value={selectedTopic}
                 onChange={(e) => setSelectedTopic(e.target.value)}
@@ -313,11 +389,11 @@ export default function AcademyLanding() {
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="p-2.5 rounded-xl bg-zinc-105 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-450 group-hover:bg-indigo-500/15 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                    <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-455 group-hover:bg-indigo-500/15 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
                       <LucideIcon name={cat.icon} className="w-6 h-6" />
                     </div>
                     {isTrackSoon ? (
-                      <span className="text-[8px] font-bold text-zinc-450 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-0.5 rounded-md uppercase tracking-wider">
+                      <span className="text-[8px] font-bold text-zinc-455 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-0.5 rounded-md uppercase tracking-wider">
                         Cheatsheet
                       </span>
                     ) : (
