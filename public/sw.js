@@ -75,11 +75,12 @@ self.addEventListener('fetch', (event) => {
         });
 
         return networkResponse;
-      }).catch(() => {
+      }).catch((err) => {
         // Fallback for document pages if offline
         if (event.request.mode === 'navigate') {
           return caches.match('/index.html');
         }
+        throw err;
       });
     })
   );
