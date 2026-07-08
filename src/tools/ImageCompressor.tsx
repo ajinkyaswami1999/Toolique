@@ -1,6 +1,40 @@
 import { useState, useRef } from 'react';
 import { FileImage, Download, RefreshCw, Upload, Image as ImageIcon, SlidersHorizontal } from 'lucide-react';
 
+// Dynamically load heic2any from jsDelivr CDN
+const loadHeic2Any = async (): Promise<any> => {
+  if ((window as any).heic2any) {
+    return (window as any).heic2any;
+  }
+  return new Promise((resolve, reject) => {
+    const existingScript = document.getElementById('heic2any-cdn-script');
+    if (existingScript) {
+      const checkInterval = setInterval(() => {
+        if ((window as any).heic2any) {
+          clearInterval(checkInterval);
+          resolve((window as any).heic2any);
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        reject(new Error('HEIC converter library loading timed out.'));
+      }, 15000);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'heic2any-cdn-script';
+    script.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.js';
+    script.onload = () => {
+      resolve((window as any).heic2any);
+    };
+    script.onerror = () => {
+      reject(new Error('Failed to load HEIC converter library. Please check your internet connection.'));
+    };
+    document.body.appendChild(script);
+  });
+};
+
 export default function ImageCompressor() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [originalSize, setOriginalSize] = useState<number>(0);
@@ -20,7 +54,15 @@ export default function ImageCompressor() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [compressedUrl, setCompressedUrl] = useState<string | null>(null);
   const [compressing, setCompressing] = useState<boolean>(false);
+  const [heicConverting, setHeicConverting] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const isHeic = (file: File) => {
+    const name = file.name.toLowerCase();
+    return name.endsWith('.heic') || name.endsWith('.heif') || file.type === 'image/heic' || file.type === 'image/heif';
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -29,20 +71,58 @@ export default function ImageCompressor() {
     }
   };
 
-  const processFile = (file: File) => {
-    setSelectedFile(file);
-    setOriginalSize(file.size);
+  const processFile = async (file: File) => {
+    setError(null);
+    setInfoMessage(null);
+
+    // Revoke old object URLs to prevent memory leaks
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    if (compressedUrl) {
+      URL.revokeObjectURL(compressedUrl);
+      setCompressedUrl(null);
+    }
+
+    let fileToProcess = file;
+
+    if (isHeic(file)) {
+      setHeicConverting(true);
+      try {
+        const heic2anyLib = await loadHeic2Any();
+        const conversionResult = await heic2anyLib({
+          blob: file,
+          toType: 'image/jpeg',
+          quality: 0.9,
+        });
+
+        const resultBlob = Array.isArray(conversionResult) ? conversionResult[0] : conversionResult;
+        const newName = file.name.replace(/\.(heic|heif)$/i, '.jpg');
+        fileToProcess = new File([resultBlob], newName, { type: 'image/jpeg' });
+        setInfoMessage('HEIC photo successfully converted to JPEG in your browser.');
+      } catch (err: any) {
+        console.error('HEIC conversion failed:', err);
+        setError(err.message || 'Failed to convert HEIC image. Please upload a standard JPG, PNG, or WebP image.');
+        setHeicConverting(false);
+        return;
+      }
+      setHeicConverting(false);
+    }
+
+    setSelectedFile(fileToProcess);
+    setOriginalSize(fileToProcess.size);
     setCompressedSize(0);
     setCompressedUrl(null);
     setAchievedQuality(null);
     
-    const url = URL.createObjectURL(file);
+    const url = URL.createObjectURL(fileToProcess);
     setPreviewUrl(url);
 
     // Intelligently suggest target size based on original size
-    const maxKb = Math.ceil(file.size / 1024);
+    const maxKb = Math.ceil(fileToProcess.size / 1024);
     let suggestedKb = 150;
-    if (file.size > 1024 * 1024) {
+    if (fileToProcess.size > 1024 * 1024) {
       suggestedKb = 200;
     } else {
       suggestedKb = Math.max(5, Math.round(maxKb * 0.4));
@@ -56,97 +136,139 @@ export default function ImageCompressor() {
   const compressImage = () => {
     if (!selectedFile || !previewUrl) return;
     setCompressing(true);
+    setError(null);
+    setInfoMessage(null);
 
     const img = new Image();
-    img.src = previewUrl;
 
     img.onload = async () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
+      try {
+        const canvas = document.createElement('canvas');
+        let width = img.naturalWidth || img.width;
+        let height = img.naturalHeight || img.height;
 
-      // Handle Resolution resizing maintaining aspect ratio (only if resizeImage is checked)
-      if (resizeImage && (width > maxWidth || height > maxHeight)) {
-        const widthRatio = maxWidth / width;
-        const heightRatio = maxHeight / height;
-        const ratio = Math.min(widthRatio, heightRatio);
-        width = Math.round(width * ratio);
-        height = Math.round(height * ratio);
-      }
+        // Safety cap (max 4096px in either dimension) to prevent canvas memory/crash issues
+        const SAFETY_CAP = 4096;
+        if (width > SAFETY_CAP || height > SAFETY_CAP) {
+          const ratio = Math.min(SAFETY_CAP / width, SAFETY_CAP / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+          setInfoMessage(`Image resolution capped from ${img.naturalWidth || img.width}x${img.naturalHeight || img.height} to ${width}x${height} to prevent browser tab crash.`);
+        }
 
-      canvas.width = width;
-      canvas.height = height;
+        // Handle Resolution resizing maintaining aspect ratio (only if resizeImage is checked)
+        if (resizeImage && (width > maxWidth || height > maxHeight)) {
+          const widthRatio = maxWidth / width;
+          const heightRatio = maxHeight / height;
+          const ratio = Math.min(widthRatio, heightRatio);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
 
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          throw new Error('Failed to create canvas 2D context.');
+        }
         ctx.drawImage(img, 0, 0, width, height);
-      }
 
-      // Export compressed image as Blob
-      // PNG is lossless so we convert it to JPEG to get compression benefits
-      const mimeType = selectedFile.type === 'image/png' ? 'image/jpeg' : selectedFile.type;
+        // Export compressed image as Blob
+        const mimeType = selectedFile.type === 'image/png' ? 'image/jpeg' : selectedFile.type;
 
-      if (compressionMode === 'targetSize') {
-        const targetSizeBytes = targetSizeKb * 1024;
-        let minQ = 0.01;
-        let maxQ = 0.99;
-        let bestBlob: Blob | null = null;
-        let bestDiff = Infinity;
-        let bestQ = 0.5;
+        if (compressionMode === 'targetSize') {
+          const targetSizeBytes = targetSizeKb * 1024;
+          let minQ = 0.01;
+          let maxQ = 0.99;
+          let bestBlob: Blob | null = null;
+          let bestDiff = Infinity;
+          let bestQ = 0.5;
 
-        // Perform Binary Search across 8 iterations to find the quality matching target size
-        for (let i = 0; i < 8; i++) {
-          const midQ = (minQ + maxQ) / 2;
-          const blob = await new Promise<Blob | null>((resolve) => {
-            canvas.toBlob((b) => resolve(b), mimeType, midQ);
-          });
-          
-          if (!blob) break;
+          // Perform Binary Search across 6 iterations for efficiency on large files
+          for (let i = 0; i < 6; i++) {
+            const midQ = (minQ + maxQ) / 2;
 
-          const diff = blob.size - targetSizeBytes;
-          if (Math.abs(diff) < bestDiff) {
-            bestDiff = Math.abs(diff);
-            bestBlob = blob;
-            bestQ = midQ;
-          }
-
-          if (blob.size > targetSizeBytes) {
-            maxQ = midQ;
-          } else {
-            minQ = midQ;
-          }
-        }
-
-        if (bestBlob) {
-          setCompressedSize(bestBlob.size);
-          const compUrl = URL.createObjectURL(bestBlob);
-          setCompressedUrl(compUrl);
-          setAchievedQuality(Math.round(bestQ * 100));
-        }
-        setCompressing(false);
-      } else {
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              setCompressedSize(blob.size);
-              const compUrl = URL.createObjectURL(blob);
-              setCompressedUrl(compUrl);
-              setAchievedQuality(quality);
+            // Yield thread for large canvases to keep browser responsive
+            if (width * height > 2000000) {
+              await new Promise((resolve) => setTimeout(resolve, 15));
             }
-            setCompressing(false);
-          },
-          mimeType,
-          quality / 100
-        );
+
+            const blob = await new Promise<Blob | null>((resolve) => {
+              try {
+                canvas.toBlob((b) => resolve(b), mimeType, midQ);
+              } catch (e) {
+                resolve(null);
+              }
+            });
+            
+            if (!blob) break;
+
+            const diff = blob.size - targetSizeBytes;
+            if (Math.abs(diff) < bestDiff) {
+              bestDiff = Math.abs(diff);
+              bestBlob = blob;
+              bestQ = midQ;
+            }
+
+            if (blob.size > targetSizeBytes) {
+              maxQ = midQ;
+            } else {
+              minQ = midQ;
+            }
+          }
+
+          if (bestBlob) {
+            if (compressedUrl) {
+              URL.revokeObjectURL(compressedUrl);
+            }
+            setCompressedSize(bestBlob.size);
+            const compUrl = URL.createObjectURL(bestBlob);
+            setCompressedUrl(compUrl);
+            setAchievedQuality(Math.round(bestQ * 100));
+          } else {
+            throw new Error('Failed to generate compressed image.');
+          }
+          setCompressing(false);
+        } else {
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                if (compressedUrl) {
+                  URL.revokeObjectURL(compressedUrl);
+                }
+                setCompressedSize(blob.size);
+                const compUrl = URL.createObjectURL(blob);
+                setCompressedUrl(compUrl);
+                setAchievedQuality(quality);
+              } else {
+                setError('Failed to compress image.');
+              }
+              setCompressing(false);
+            },
+            mimeType,
+            quality / 100
+          );
+        }
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'An error occurred during compression.');
+        setCompressing(false);
       }
     };
+
+    img.onerror = () => {
+      setError('Failed to load image. The file format may be unsupported or corrupted.');
+      setCompressing(false);
+    };
+
+    img.src = previewUrl;
   };
 
   const downloadImage = () => {
     if (!compressedUrl || !selectedFile) return;
     const link = document.createElement('a');
     
-    // Change extension if it was compressed from png
     const originalName = selectedFile.name;
     const dotIdx = originalName.lastIndexOf('.');
     const nameWithoutExt = originalName.substring(0, dotIdx);
@@ -161,9 +283,17 @@ export default function ImageCompressor() {
     setSelectedFile(null);
     setOriginalSize(0);
     setCompressedSize(0);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    if (compressedUrl) {
+      URL.revokeObjectURL(compressedUrl);
+    }
     setPreviewUrl(null);
     setCompressedUrl(null);
     setAchievedQuality(null);
+    setError(null);
+    setInfoMessage(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -192,15 +322,37 @@ export default function ImageCompressor() {
           Compression Controls
         </h3>
 
-        {/* Upload box */}
-        {!selectedFile ? (
+        {/* Error Alert */}
+        {error && (
+          <div className="p-3.5 text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/50 rounded-xl flex items-center gap-2">
+            <span className="shrink-0 block w-1.5 h-1.5 rounded-full bg-rose-600 dark:bg-rose-400"></span>
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Info Alert */}
+        {infoMessage && (
+          <div className="p-3.5 text-xs font-semibold text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/20 border border-teal-150/50 dark:border-teal-900/40 rounded-xl flex items-center gap-2">
+            <span className="shrink-0 block w-1.5 h-1.5 rounded-full bg-teal-600 dark:bg-teal-400"></span>
+            <span>{infoMessage}</span>
+          </div>
+        )}
+
+        {/* Upload box / HEIC conversion loader */}
+        {heicConverting ? (
+          <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center bg-slate-50/50 dark:bg-slate-950/20">
+            <RefreshCw className="w-10 h-10 mx-auto text-teal-500 mb-3 animate-spin" />
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 block mb-1">Converting HEIC to JPEG...</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500">This happens locally in your browser. Please wait.</span>
+          </div>
+        ) : !selectedFile ? (
           <div 
             onClick={() => fileInputRef.current?.click()}
             className="border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-teal-500 rounded-2xl p-8 text-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/35 transition"
           >
             <Upload className="w-10 h-10 mx-auto text-slate-400 mb-3" />
             <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 block mb-1">Upload Photo</span>
-            <span className="text-xs text-slate-400 dark:text-slate-500">Supports JPEG, PNG, WebP</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500">Supports JPEG, PNG, WebP, HEIC</span>
             <input
               type="file"
               ref={fileInputRef}
