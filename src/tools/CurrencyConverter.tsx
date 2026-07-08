@@ -41,29 +41,66 @@ export default function CurrencyConverter() {
   const [lastUpdated, setLastUpdated] = useState<string>('');
   const [syncStatus, setSyncStatus] = useState<'loading' | 'success' | 'error'>('loading');
 
-  // Fetch Live Rates on Mount
+  // Fetch Resilient Live Rates on Mount
   useEffect(() => {
     setSyncStatus('loading');
-    fetch('https://open.er-api.com/v6/latest/USD')
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch currency rates');
-        return res.json();
-      })
-      .then((data) => {
-        if (data && data.rates) {
-          const newRates: Record<string, number> = {};
+
+    const endpoints = [
+      'https://open.er-api.com/v6/latest/USD',
+      'https://api.exchangerate-api.com/v4/latest/USD',
+      'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json'
+    ];
+
+    const tryFetch = async (index: number) => {
+      if (index >= endpoints.length) {
+        throw new Error('All exchange rate API endpoints failed.');
+      }
+      const url = endpoints[index];
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      const data = await res.json();
+      return { data, url };
+    };
+
+    const loadRates = async () => {
+      for (let i = 0; i < endpoints.length; i++) {
+        try {
+          const { data } = await tryFetch(i);
+          const ratesObj: Record<string, number> = {};
+          let fetchedRates: Record<string, number> = {};
+          let updatedTime = '';
+
+          if (data && data.rates) {
+            fetchedRates = data.rates;
+            if (data.time_last_update_utc) {
+              updatedTime = data.time_last_update_utc;
+            } else if (data.time_last_updated) {
+              updatedTime = new Date(data.time_last_updated * 1000).toUTCString();
+            }
+          } else if (data && data.usd) {
+            const keys = Object.keys(data.usd);
+            keys.forEach((k) => {
+              fetchedRates[k.toUpperCase()] = data.usd[k];
+            });
+            if (data.date) {
+              updatedTime = data.date;
+            }
+          }
+
+          // Map fetched rates or fall back
           Object.keys(fallbackRates).forEach((code) => {
-            if (data.rates[code]) {
-              newRates[code] = data.rates[code];
+            if (fetchedRates[code] !== undefined && fetchedRates[code] > 0) {
+              ratesObj[code] = fetchedRates[code];
             } else {
-              newRates[code] = fallbackRates[code];
+              ratesObj[code] = fallbackRates[code];
             }
           });
-          setRates(newRates);
+
+          setRates(ratesObj);
           setSyncStatus('success');
 
-          if (data.time_last_update_utc) {
-            const dateObj = new Date(data.time_last_update_utc);
+          if (updatedTime) {
+            const dateObj = new Date(updatedTime);
             const dateStr = dateObj.toLocaleDateString('en-IN', {
               day: 'numeric',
               month: 'short',
@@ -72,13 +109,21 @@ export default function CurrencyConverter() {
               minute: '2-digit',
             });
             setLastUpdated(dateStr);
+          } else {
+            setLastUpdated(new Date().toLocaleDateString('en-IN'));
           }
+          return; // Success, stop trying remaining endpoints
+        } catch (err) {
+          console.warn(`Exchange rate endpoint ${endpoints[i]} failed:`, err);
         }
-      })
-      .catch((err) => {
-        console.error('Error loading live currency rates:', err);
-        setSyncStatus('error');
-      });
+      }
+      throw new Error('All exchange rate API endpoints failed.');
+    };
+
+    loadRates().catch((err) => {
+      console.error('All live currency rate APIs failed:', err);
+      setSyncStatus('error');
+    });
   }, []);
 
   // Compute conversion on input or rate changes
