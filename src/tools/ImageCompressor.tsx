@@ -1,38 +1,10 @@
 import { useState, useRef } from 'react';
 import { FileImage, Download, RefreshCw, Upload, Image as ImageIcon, SlidersHorizontal } from 'lucide-react';
 
-// Dynamically load heic2any from jsDelivr CDN
+// Dynamically load heic2any locally via Vite code-splitting
 const loadHeic2Any = async (): Promise<any> => {
-  if ((window as any).heic2any) {
-    return (window as any).heic2any;
-  }
-  return new Promise((resolve, reject) => {
-    const existingScript = document.getElementById('heic2any-cdn-script');
-    if (existingScript) {
-      const checkInterval = setInterval(() => {
-        if ((window as any).heic2any) {
-          clearInterval(checkInterval);
-          resolve((window as any).heic2any);
-        }
-      }, 100);
-      setTimeout(() => {
-        clearInterval(checkInterval);
-        reject(new Error('HEIC converter library loading timed out.'));
-      }, 15000);
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = 'heic2any-cdn-script';
-    script.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.js';
-    script.onload = () => {
-      resolve((window as any).heic2any);
-    };
-    script.onerror = () => {
-      reject(new Error('Failed to load HEIC converter library. Please check your internet connection.'));
-    };
-    document.body.appendChild(script);
-  });
+  const module = await import('heic2any');
+  return module.default;
 };
 
 export default function ImageCompressor() {
