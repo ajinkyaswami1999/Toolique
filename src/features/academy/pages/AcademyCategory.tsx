@@ -29,7 +29,7 @@ export default function AcademyCategory() {
   const [interviewDifficulty, setInterviewDifficulty] = useState('all');
   const [interviewTimeLimit, setInterviewTimeLimit] = useState(15); // in minutes
 
-  const category = academyCategories.find(c => c.id === categoryId);
+  const category = academyCategories.find(c => c.id === categoryId?.toLowerCase());
 
   if (!category) {
     return (

@@ -44,7 +44,9 @@ export default function AcademyQuestion() {
 
   // Map category ID to its question list
   const getQuestions = () => {
-    switch (categoryId) {
+    if (!categoryId) return [];
+    const normalized = categoryId.toLowerCase();
+    switch (normalized) {
       case 'sql': return sqlQuestions;
       case 'python': return pythonQuestions;
       case 'javascript': return javascriptQuestions;

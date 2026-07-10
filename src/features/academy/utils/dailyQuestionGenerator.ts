@@ -15,7 +15,7 @@ function getSeededRandom(seedStr: string) {
 }
 
 // Generate deterministic variations of a question
-function makeVariation(q: Question, index: number, rand: () => number): Question {
+function makeVariation(q: Question, index: number, rand: () => number, dateStr: string): Question {
   const seed = Math.floor(rand() * 100);
   const titles = [
     `${q.title} (Production Variant)`,
@@ -27,8 +27,8 @@ function makeVariation(q: Question, index: number, rand: () => number): Question
 
   return {
     ...q,
-    id: `${q.id}-var-${index}-${seed}`,
-    slug: `${q.slug}-var-${index}-${seed}`,
+    id: `${q.id}-var-${index}-${dateStr}-${seed}`,
+    slug: `${q.slug}-var-${index}-${dateStr}-${seed}`,
     title: selectedTitle
   };
 }
@@ -99,7 +99,7 @@ export function getDailyQuestions(
         const targetQ = shuffled[k % shuffled.length];
         const isDuplicate = k >= shuffled.length;
         if (isDuplicate) {
-          result.push(makeVariation(targetQ, k, rand));
+          result.push(makeVariation(targetQ, k, rand, dateStr));
         } else {
           result.push({
             ...targetQ,
