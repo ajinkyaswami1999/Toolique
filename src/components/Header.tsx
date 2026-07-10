@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Sun, Moon, Search, Menu, X, Command } from 'lucide-react';
+import { Sun, Moon, Search, Menu, X, Command, User } from 'lucide-react';
 import { toolsList } from '../data/tools';
 
 export default function Header() {
@@ -23,14 +23,9 @@ export default function Header() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (navQuery.trim()) {
-      navigate(`/?q=${encodeURIComponent(navQuery.trim())}`);
+      navigate(`/tools?q=${encodeURIComponent(navQuery.trim())}`);
       setNavQuery('');
       setIsOpen(false);
-      // Smooth scroll to search area if on homepage
-      setTimeout(() => {
-        const el = document.getElementById('tools-section');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
     }
   };
 
@@ -39,7 +34,6 @@ export default function Header() {
     const savedTheme = localStorage.getItem('theme');
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    // Default to dark mode if no theme saved (dark-first)
     if (savedTheme === 'dark' || (!savedTheme && systemTheme) || !savedTheme) {
       document.documentElement.classList.add('dark');
       setIsDarkMode(true);
@@ -62,26 +56,24 @@ export default function Header() {
     }
   };
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location]);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: '3D Print Studio', path: '/3d-print-studio' },
-    { name: 'Math Studio', path: '/math-studio' },
-    { name: 'All Tools', path: '/?view=all' },
+    { name: 'Tools', path: '/tools' },
+    { name: 'AI Studio', path: '/ai' },
     { name: 'Academy', path: '/academy' },
-    { name: 'About', path: '/about' },
+    { name: 'Playground', path: '/playground' },
+    { name: '3D Studio', path: '/3d-printing' },
+    { name: 'Resources', path: '/blog' },
+    { name: 'About Toolique', path: '/about' },
     { name: 'About Founder', path: '/about-founder' },
     { name: 'Contact', path: '/contact' }
   ];
 
   const isActive = (path: string) => {
-    if (path === '/') return location.pathname === '/' && !location.search;
-    if (path.includes('?view=all')) return location.pathname === '/' && location.search.includes('view=all');
-    if (path.startsWith('/#')) return false; // Anchor links
+    if (path === '/tools') return location.pathname === '/tools' || location.pathname === '/';
     return location.pathname.startsWith(path);
   };
 
@@ -121,6 +113,15 @@ export default function Header() {
 
         {/* Utility Actions */}
         <div className="flex items-center gap-4">
+          {/* User Dashboard Profile */}
+          <Link
+            to="/dashboard"
+            className="flex items-center justify-center p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-650 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white bg-zinc-100/50 dark:bg-zinc-900/40 hover:bg-zinc-100 dark:hover:bg-zinc-900/80 transition-all cursor-pointer"
+            title="User Profile & Dashboard"
+          >
+            <User className="w-4.5 h-4.5" />
+          </Link>
+
           {/* Theme Switcher - Segmented Control */}
           <div className="flex items-center p-0.5 rounded-xl bg-zinc-200/50 dark:bg-zinc-900/80 border border-zinc-200/60 dark:border-zinc-800/80">
             <button

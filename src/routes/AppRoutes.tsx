@@ -18,10 +18,63 @@ const AcademyBookmarks = lazy(() => import('../features/academy/pages/AcademyBoo
 const AcademyLearn = lazy(() => import('../features/academy/pages/AcademyLearn'));
 const AcademyPlayground = lazy(() => import('../features/academy/pages/AcademyPlayground'));
 
+const AIStudio = lazy(() => import('../pages/AIStudio'));
+const PlaygroundHub = lazy(() => import('../pages/PlaygroundHub'));
+const BlogResources = lazy(() => import('../pages/BlogResources'));
+const Dashboard = lazy(() => import('../pages/Dashboard'));
+const CategoryLanding = lazy(() => import('../pages/CategoryLanding'));
+
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/tools" element={<Home />} />
+      <Route path="/tools/:categoryName" element={
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
+            Loading Category...
+          </div>
+        }>
+          <CategoryLanding />
+        </Suspense>
+      } />
+      <Route path="/ai" element={
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
+            Loading AI Studio...
+          </div>
+        }>
+          <AIStudio />
+        </Suspense>
+      } />
+      <Route path="/playground" element={
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
+            Loading Playground...
+          </div>
+        }>
+          <PlaygroundHub />
+        </Suspense>
+      } />
+      <Route path="/dashboard" element={
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
+            Loading Profile...
+          </div>
+        }>
+          <Dashboard />
+        </Suspense>
+      } />
+      <Route path="/blog" element={
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
+            Loading Resources...
+          </div>
+        }>
+          <BlogResources />
+        </Suspense>
+      } />
+      <Route path="/3d-printing" element={<ThreeDPrintStudio />} />
       <Route path="/3d-print-studio" element={<ThreeDPrintStudio />} />
       <Route path="/math-studio" element={<MathStudio />} />
       <Route path="/tools/advanced-boq-calculator-india" element={<ToolPage overrideSlug="advanced-boq-calculator-india" />} />

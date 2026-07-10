@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { toolsList } from '../src/data/tools';
+import { categories } from '../src/data/categories';
 import { academyCategories } from '../src/features/academy/data/categories';
 import { sqlQuestions } from '../src/features/academy/data/questions/sql';
 import { pythonQuestions } from '../src/features/academy/data/questions/python';
@@ -219,6 +220,42 @@ const staticPages = [
     title: 'Interactive Playgrounds Sandbox | Toolique Academy',
     description: 'Write and execute SQL queries, JavaScript scripts, and Python code in the browser with full console output logs.',
     keywords: ['sql playground', 'javascript playground', 'python sandbox', 'online code editor']
+  },
+  {
+    path: 'ai',
+    title: 'AI Studio | Toolique',
+    description: 'Evolve your developer and QA workflows. Use browser-sandboxed AI models to generate SQL queries, test validation cases, and regex patterns instantly.',
+    keywords: ['ai studio', 'ai sql generator', 'ai test case generator', 'ai regex generator']
+  },
+  {
+    path: 'playground',
+    title: 'Interactive Developer Playground | Toolique',
+    description: 'Write, format, lint, and run JavaScript, JSON parsing lists, Python scripts, or send REST API calls directly from a premium sandboxed web client.',
+    keywords: ['developer playground', 'online ide', 'javascript runner', 'rest client']
+  },
+  {
+    path: 'blog',
+    title: 'Knowledge Base & Resources | Toolique',
+    description: 'Explore technical articles, developer roadmap explainers, and comprehensive calculation guides linked back to browser-based playgrounds and tools.',
+    keywords: ['developer blog', 'sql joins guide', '3d printing pricing guide', 'gst calculator explanation']
+  },
+  {
+    path: 'dashboard',
+    title: 'Local User Profile & Dashboard | Toolique',
+    description: 'Monitor your developer academy progress, bookmarks list, coding challenge history logs, and manage local notes and backup exports without registration.',
+    keywords: ['user dashboard', 'local profile', 'developer progress tracking']
+  },
+  {
+    path: 'tools',
+    title: 'Ecosystem Tools & Free Online Calculators | Toolique',
+    description: 'Ecosystem search listing of free online developer tools, finance calculators, PWA tools, and civil metrics utilities.',
+    keywords: ['online utilities', 'developer tools', 'gst calculators']
+  },
+  {
+    path: '3d-printing',
+    title: '3D Printing cost & filament calculators | Toolique',
+    description: 'Dedicated 3D printing calculator tools for cost calculations, filament weight estimation, AMS slot planning, and resin volumes.',
+    keywords: ['3d printing cost', 'filament calculator', 'maker settings']
   }
 ];
 
@@ -402,6 +439,29 @@ toolsList.forEach((tool) => {
   generateShell(routePath, title, description, tool.keywords || [], toolSchema);
 });
 
+// Generate Category pages
+categories.forEach((cat) => {
+  const routePath = `tools/${cat.id}`;
+  const title = `${cat.name} Tools & Free Online Calculators | Toolique`;
+  const description = cat.description;
+  const keywords = [cat.name, `${cat.name.toLowerCase()} calculators`, 'online tools'];
+  
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        '@id': `https://www.toolique.in/${routePath}#collection`,
+        'name': `${cat.name} Calculators & Tools`,
+        'description': cat.description,
+        'url': `https://www.toolique.in/${routePath}`
+      }
+    ]
+  };
+
+  generateShell(routePath, title, description, keywords, schema);
+});
+
 // Generate Academy Category pages
 academyCategories.forEach((cat) => {
   const routePath = `academy/${cat.id}`;
@@ -525,6 +585,11 @@ function generateXmlSitemap() {
   // 4. Add academy categories
   academyCategories.forEach(cat => {
     urls.push({ loc: `https://www.toolique.in/academy/${cat.id}`, changefreq: 'weekly', priority: '0.7' });
+  });
+
+  // Add tools categories landing pages
+  categories.forEach(cat => {
+    urls.push({ loc: `https://www.toolique.in/tools/${cat.id}`, changefreq: 'weekly', priority: '0.7' });
   });
 
   // 5. Add academy questions
