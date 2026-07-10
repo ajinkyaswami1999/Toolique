@@ -24,6 +24,7 @@ import { javascriptQuestions } from '../data/questions/javascript';
 import { reactQuestions } from '../data/questions/react';
 import { qaQuestions } from '../data/questions/qa';
 import { useAcademyProgress } from '../hooks/useAcademyProgress';
+import { getDailyQuestions } from '../utils/dailyQuestionGenerator';
 import { validateSQLQuery, validateJSCode, validatePythonCode, type ValidationResult } from '../utils/validation';
 
 export default function AcademyQuestion() {
@@ -54,7 +55,15 @@ export default function AcademyQuestion() {
   };
 
   const questions = getQuestions();
-  const question = questions.find(q => q.slug === questionSlug);
+  let question = questions.find(q => q.slug === questionSlug);
+  if (!question && questionSlug && (questionSlug.includes('-daily-') || questionSlug.includes('-var-'))) {
+    const dateMatch = questionSlug.match(/\d{4}-\d{2}-\d{2}/);
+    if (dateMatch) {
+      const dateStr = dateMatch[0];
+      const dailyPool = getDailyQuestions(categoryId || '', dateStr, questions);
+      question = dailyPool.find(q => q.slug === questionSlug);
+    }
+  }
 
   const [code, setCode] = useState('');
   const [validation, setValidation] = useState<ValidationResult | null>(null);

@@ -18,12 +18,13 @@ import { javascriptQuestions } from '../data/questions/javascript';
 import { reactQuestions } from '../data/questions/react';
 import { qaQuestions } from '../data/questions/qa';
 import { useAcademyProgress } from '../hooks/useAcademyProgress';
+import DailyQuestionSystem from '../components/DailyQuestionSystem';
 
 export default function AcademyCategory() {
   const { category: categoryId } = useParams();
   const navigate = useNavigate();
-  const { progress } = useAcademyProgress();
-  const [activeTab, setActiveTab] = useState<'practice' | 'roadmap' | 'cheatsheet'>('practice');
+  const { progress, completeQuestion } = useAcademyProgress();
+  const [activeTab, setActiveTab] = useState<'practice' | 'daily' | 'roadmap' | 'cheatsheet'>('practice');
   const [interviewMode, setInterviewMode] = useState(false);
   const [interviewDifficulty, setInterviewDifficulty] = useState('all');
   const [interviewTimeLimit, setInterviewTimeLimit] = useState(15); // in minutes
@@ -142,6 +143,16 @@ export default function AcademyCategory() {
         >
           Practice Challenges
         </button>
+        <button
+          onClick={() => setActiveTab('daily')}
+          className={`py-3 px-6 text-xs font-bold border-b-2 cursor-pointer transition ${
+            activeTab === 'daily'
+              ? 'border-indigo-600 dark:border-indigo-400 text-zinc-900 dark:text-white'
+              : 'border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-300'
+          }`}
+        >
+          Daily Challenges (15/15)
+        </button>
         {category.roadmap.length > 0 && (
           <button
             onClick={() => setActiveTab('roadmap')}
@@ -170,6 +181,14 @@ export default function AcademyCategory() {
 
       {/* Tab Contents */}
       <div className="space-y-8">
+        {activeTab === 'daily' && (
+          <DailyQuestionSystem
+            categoryId={category.id}
+            staticQuestions={questions}
+            progress={progress}
+            onXpEarned={(xp) => completeQuestion('reward-claim-' + Math.random(), xp)}
+          />
+        )}
         {activeTab === 'practice' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Left Content: Questions and Practice Areas */}
