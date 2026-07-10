@@ -71,7 +71,25 @@ export function useAcademyProgress() {
         lastActiveDate: todayStr
       };
     } else if (diffDays > 1) {
-      // Streak broken. Reset streak to 1
+      // Streak broken. Check if user has streak shields
+      let shields = 0;
+      try {
+        const savedShields = localStorage.getItem('toolique_streak_shields') || '0';
+        shields = parseInt(savedShields);
+      } catch (e) {}
+
+      if (shields > 0) {
+        // Consume one streak shield
+        shields = shields - 1;
+        localStorage.setItem('toolique_streak_shields', shields.toString());
+        // Streak stays preserved! We just advance the active date
+        return {
+          ...curr,
+          lastActiveDate: todayStr
+        };
+      }
+
+      // Reset streak to 1 if no shield is available
       return {
         ...curr,
         streak: 1,

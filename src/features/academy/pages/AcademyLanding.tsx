@@ -14,7 +14,8 @@ import {
   Terminal,
   Download,
   Upload,
-  Layers
+  Layers,
+  Gift
 } from 'lucide-react';
 import SEO from '../../../components/SEO';
 import LucideIcon from '../../../components/LucideIcon';
@@ -28,14 +29,17 @@ import JoinVisualizer from '../components/JoinVisualizer';
 import DataStructureVisual from '../components/DataStructureVisual';
 import FlashcardViewer from '../components/FlashcardViewer';
 
+import GamificationStudio from '../components/GamificationStudio';
+import SkillTree from '../components/SkillTree';
+import LearningInsights from '../components/LearningInsights';
+
 export default function AcademyLanding() {
-  const { progress } = useAcademyProgress();
+  const { progress, completeQuestion } = useAcademyProgress();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const [selectedTopic, setSelectedTopic] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
-
-
+  const [activeStudioTab, setActiveStudioTab] = useState<'tracks' | 'gamification' | 'skilltree' | 'insights'>('tracks');
 
   // Statistics configuration
   const stats = [
@@ -126,16 +130,16 @@ export default function AcademyLanding() {
       />
 
       {/* Hero Section */}
-      <section className="relative p-8 sm:p-12 rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-gradient-to-br from-white/70 to-white/30 dark:from-zinc-900/60 dark:to-zinc-950/30 backdrop-blur-md overflow-hidden text-center max-w-5xl mx-auto">
+      <section className="relative p-8 sm:p-12 rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-gradient-to-br from-white/70 to-white/30 dark:from-zinc-900/60 dark:to-zinc-950/30 backdrop-blur-md overflow-hidden text-center max-w-5xl mx-auto animate-fadeIn">
         <div className="absolute top-0 right-0 w-36 h-36 bg-indigo-500/[0.04] dark:bg-indigo-500/[0.02] rounded-bl-full pointer-events-none" />
         <div className="relative z-10 space-y-6 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-650 dark:text-indigo-400 text-[10px] font-bold uppercase tracking-wider border border-indigo-500/15">
             <Sparkles className="w-3.5 h-3.5" /> Offline-First Platform
           </div>
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-white leading-tight">
             Learn by Solving <span className="text-indigo-600 dark:text-indigo-400">Real Problems</span>
           </h1>
-          <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
+          <p className="text-sm sm:text-base text-zinc-505 dark:text-zinc-400 leading-relaxed font-medium">
             Practice programming, QA automation, engineering, and technical interview questions with step-by-step solutions, explanations, and daily practice challenges.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
@@ -164,7 +168,7 @@ export default function AcademyLanding() {
       {/* Gamification Dashboard & Progress Tracker */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
         {/* User Progress Stats Card */}
-        <div className="p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md space-y-4">
+        <div className="p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md space-y-4 text-left">
           <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-650 uppercase tracking-wider flex items-center justify-between">
             Your Profile
             <Link to="/academy/bookmarks" className="text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
@@ -181,7 +185,7 @@ export default function AcademyLanding() {
                 <span className="text-zinc-800 dark:text-zinc-200">{progress.xp} Total XP</span>
                 <span className="text-zinc-455 dark:text-zinc-500">{currentLevelXp} / {nextLevelXp} XP</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-zinc-200 dark:bg-zinc-850 overflow-hidden">
+              <div className="w-full h-2 rounded-full bg-zinc-200 dark:bg-zinc-855 overflow-hidden">
                 <div className="h-full bg-indigo-600 dark:bg-indigo-400 transition-all duration-300" style={{ width: `${levelProgressPct}%` }} />
               </div>
             </div>
@@ -203,7 +207,7 @@ export default function AcademyLanding() {
         </div>
 
         {/* Badges and Milestones Card */}
-        <div className="md:col-span-2 p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md space-y-4">
+        <div className="md:col-span-2 p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md space-y-4 text-left">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-650 uppercase tracking-wider flex items-center gap-1.5">
               <Award className="w-4 h-4 text-yellow-500" /> Earned Badges
@@ -232,7 +236,7 @@ export default function AcademyLanding() {
                   className={`p-3 rounded-xl border flex flex-col items-center justify-center text-center space-y-1.5 transition ${
                     badge.earned 
                       ? 'border-indigo-500/20 bg-indigo-500/5 text-zinc-800 dark:text-zinc-200' 
-                      : 'border-zinc-200/50 dark:border-zinc-850 bg-zinc-100/10 text-zinc-400 dark:text-zinc-600 opacity-60'
+                      : 'border-zinc-200/50 dark:border-zinc-850 bg-zinc-100/10 text-zinc-455 dark:text-zinc-600 opacity-60'
                   }`}
                   title={badge.desc}
                 >
@@ -247,195 +251,263 @@ export default function AcademyLanding() {
         </div>
       </section>
 
-      {/* Dynamic Statistics Grid */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-        {stats.map((stat, idx) => {
-          const IconComponent = stat.icon;
-          return (
-            <div key={idx} className="p-5 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/30 dark:bg-zinc-950/30 backdrop-blur-md flex items-center gap-4">
-              <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-655 dark:text-zinc-450">
-                <IconComponent className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="block text-xl font-black text-zinc-900 dark:text-white">{stat.value}</span>
-                <span className="text-[10px] font-bold text-zinc-455 dark:text-zinc-555 uppercase">{stat.label}</span>
-              </div>
-            </div>
-          );
-        })}
-      </section>
+      {/* Academy Feature Tabs Selector */}
+      <div className="max-w-5xl mx-auto border-b border-zinc-200 dark:border-zinc-850 pb-2 flex flex-wrap items-center justify-center sm:justify-start gap-2">
+        <button
+          onClick={() => setActiveStudioTab('tracks')}
+          className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+            activeStudioTab === 'tracks' 
+              ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 shadow-sm' 
+              : 'text-zinc-500 hover:text-zinc-800'
+          }`}
+        >
+          <BookOpen className="w-3.5 h-3.5" />
+          <span>Learning Tracks</span>
+        </button>
+        <button
+          onClick={() => setActiveStudioTab('gamification')}
+          className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+            activeStudioTab === 'gamification' 
+              ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 shadow-sm' 
+              : 'text-zinc-500 hover:text-zinc-800'
+          }`}
+        >
+          <Gift className="w-3.5 h-3.5" />
+          <span>Rewards Studio</span>
+        </button>
+        <button
+          onClick={() => setActiveStudioTab('skilltree')}
+          className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+            activeStudioTab === 'skilltree' 
+              ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 shadow-sm' 
+              : 'text-zinc-500 hover:text-zinc-800'
+          }`}
+        >
+          <Layers className="w-3.5 h-3.5" />
+          <span>Interactive Skill Tree</span>
+        </button>
+        <button
+          onClick={() => setActiveStudioTab('insights')}
+          className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+            activeStudioTab === 'insights' 
+              ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 shadow-sm' 
+              : 'text-zinc-500 hover:text-zinc-800'
+          }`}
+        >
+          <Brain className="w-3.5 h-3.5" />
+          <span>Insights & Analytics</span>
+        </button>
+      </div>
 
-      {/* Flashcard decks inline section */}
-      <section className="max-w-5xl mx-auto">
-        <FlashcardViewer />
-      </section>
-
-      {/* SQL & DS Visualizers inline section */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
-        <JoinVisualizer />
-        <DataStructureVisual />
-      </section>
-
-      {/* Questions Search & Filter Section */}
-      <section className="max-w-5xl mx-auto space-y-4">
-        <div className="flex flex-col sm:flex-row gap-3">
-          {/* Search Input */}
-          <div className="relative flex-grow">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-550 w-4 h-4" />
-            <input
-              type="text"
-              placeholder="Search challenges by title, tag, or company (e.g. JOINs, Google)..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-xs font-semibold focus:outline-none focus:border-indigo-500 placeholder-zinc-400 dark:placeholder-zinc-650"
-            />
-          </div>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-55 dark:hover:bg-zinc-900 text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 cursor-pointer shrink-0"
-          >
-            <SlidersHorizontal className="w-4 h-4" /> Filters
-          </button>
-        </div>
-
-        {/* Filter Sliders */}
-        {showFilters && (
-          <div className="p-4 rounded-xl border border-zinc-200/60 dark:border-zinc-800/80 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-md grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-[10px] font-bold text-zinc-450 dark:text-zinc-500 uppercase mb-1.5">Difficulty</label>
-              <select
-                value={selectedDifficulty}
-                onChange={(e) => setSelectedDifficulty(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-semibold focus:outline-none text-zinc-850 dark:text-zinc-200"
-              >
-                <option value="all">All Difficulties</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-                <option value="interview">Interview Questions</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[10px] font-bold text-zinc-455 dark:text-zinc-500 uppercase mb-1.5">Topics</label>
-              <select
-                value={selectedTopic}
-                onChange={(e) => setSelectedTopic(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-semibold focus:outline-none text-zinc-850 dark:text-zinc-200"
-              >
-                <option value="all">All Topics</option>
-                {allTopics.map(t => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+      {/* RENDER ACTIVE TAB */}
+      <div className="max-w-5xl mx-auto">
+        {activeStudioTab === 'gamification' && (
+          <GamificationStudio progress={progress} onRewardEarned={(xpReward) => completeQuestion('reward-claim-' + Math.random(), xpReward)} />
         )}
 
-        {/* Question search results list */}
-        {searchQuery.trim() && (
-          <div className="saas-card p-4 space-y-2 max-h-72 overflow-y-auto">
-            <h4 className="text-[10px] font-bold text-zinc-400 dark:text-zinc-650 uppercase tracking-wider px-2">
-              Search Results ({filteredQuestions.length})
-            </h4>
-            {filteredQuestions.length > 0 ? (
-              filteredQuestions.map(q => {
-                const track = q.id.startsWith('sql') ? 'sql' : q.id.startsWith('py') ? 'python' : q.id.startsWith('js') ? 'javascript' : q.id.startsWith('react') ? 'react' : 'qa';
+        {activeStudioTab === 'skilltree' && (
+          <SkillTree progress={progress} />
+        )}
+
+        {activeStudioTab === 'insights' && (
+          <LearningInsights progress={progress} />
+        )}
+
+        {activeStudioTab === 'tracks' && (
+          <div className="space-y-12 text-left">
+            {/* Dynamic Statistics Grid */}
+            <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {stats.map((stat, idx) => {
+                const IconComponent = stat.icon;
                 return (
-                  <Link
-                    key={q.id}
-                    to={`/academy/${track}/question/${q.slug}`}
-                    className="flex items-center justify-between p-2.5 rounded-lg hover:bg-zinc-100/50 dark:hover:bg-zinc-900/40 transition group"
-                  >
-                    <div className="flex flex-col text-left">
-                      <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">{q.title}</span>
-                      <span className="text-[9px] text-zinc-400 mt-0.5">{q.topic} • {q.tags.join(', ')}</span>
+                  <div key={idx} className="p-5 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/30 dark:bg-zinc-950/30 backdrop-blur-md flex items-center gap-4">
+                    <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-655 dark:text-zinc-450">
+                      <IconComponent className="w-5 h-5" />
                     </div>
-                    <span className={`saas-badge text-[8px] font-bold px-2 py-0.5 rounded border capitalize ${
-                      q.difficulty === 'beginner' 
-                        ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600'
-                        : q.difficulty === 'intermediate'
-                        ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-600'
-                        : q.difficulty === 'advanced'
-                        ? 'bg-rose-500/10 border-rose-500/20 text-rose-600'
-                        : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600'
-                    }`}>
-                      {q.difficulty}
-                    </span>
-                  </Link>
-                );
-              })
-            ) : (
-              <div className="py-6 text-center text-xs text-zinc-450 dark:text-zinc-600">No questions found matching your search parameters.</div>
-            )}
-          </div>
-        )}
-      </section>
-
-      {/* Learning Tracks Grid */}
-      <section id="academy-tracks" className="scroll-mt-24 max-w-5xl mx-auto space-y-6">
-        <h2 className="text-2xl font-black text-zinc-900 dark:text-white text-center sm:text-left">
-          Select Your Learning Track
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {academyCategories.map((cat) => {
-            const solvedCount = progress.completedQuestions.filter(id => id.startsWith(cat.id)).length;
-            const isTrackSoon = cat.id !== 'sql' && cat.id !== 'python' && cat.id !== 'javascript' && cat.id !== 'react' && cat.id !== 'qa';
-
-            return (
-              <div
-                key={cat.id}
-                className="p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-gradient-to-br from-white/70 to-white/30 dark:from-zinc-900/60 dark:to-zinc-950/30 shadow-sm flex flex-col justify-between group hover:border-indigo-500/30 transition-all duration-300 relative overflow-hidden"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-455 group-hover:bg-indigo-500/15 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
-                      <LucideIcon name={cat.icon} className="w-6 h-6" />
+                    <div>
+                      <span className="block text-xl font-black text-zinc-900 dark:text-white">{stat.value}</span>
+                      <span className="text-[10px] font-bold text-zinc-455 dark:text-zinc-555 uppercase">{stat.label}</span>
                     </div>
-                    {isTrackSoon ? (
-                      <span className="text-[8px] font-bold text-zinc-455 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-0.5 rounded-md uppercase tracking-wider">
-                        Cheatsheet
-                      </span>
-                    ) : (
-                      <span className="text-[8px] font-bold text-emerald-600 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md uppercase tracking-wider">
-                        Practice
-                      </span>
-                    )}
                   </div>
+                );
+              })}
+            </section>
 
-                  <div className="space-y-1.5 text-left">
-                    <h3 className="text-base font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
-                      {cat.name}
-                    </h3>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed min-h-[3rem]">
-                      {cat.description}
-                    </p>
+            {/* Flashcard decks inline section */}
+            <section>
+              <FlashcardViewer />
+            </section>
+
+            {/* SQL & DS Visualizers inline section */}
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <JoinVisualizer />
+              <DataStructureVisual />
+            </section>
+
+            {/* Questions Search & Filter Section */}
+            <section className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-3">
+                {/* Search Input */}
+                <div className="relative flex-grow">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-455 dark:text-zinc-550 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Search challenges by title, tag, or company (e.g. JOINs, Google)..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-955 text-xs font-semibold focus:outline-none focus:border-indigo-500 placeholder-zinc-450 dark:placeholder-zinc-650"
+                  />
+                </div>
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-55 dark:hover:bg-zinc-900 text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 cursor-pointer shrink-0"
+                >
+                  <SlidersHorizontal className="w-4 h-4" /> Filters
+                </button>
+              </div>
+
+              {/* Filter Sliders */}
+              {showFilters && (
+                <div className="p-4 rounded-xl border border-zinc-200/60 dark:border-zinc-800/80 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-md grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fadeIn">
+                  <div>
+                    <label className="block text-[10px] font-bold text-zinc-450 dark:text-zinc-505 uppercase mb-1.5">Difficulty</label>
+                    <select
+                      value={selectedDifficulty}
+                      onChange={(e) => setSelectedDifficulty(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-semibold focus:outline-none text-zinc-850 dark:text-zinc-200"
+                    >
+                      <option value="all">All Difficulties</option>
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                      <option value="interview">Interview Questions</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-zinc-455 dark:text-zinc-505 uppercase mb-1.5">Topics</label>
+                    <select
+                      value={selectedTopic}
+                      onChange={(e) => setSelectedTopic(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-semibold focus:outline-none text-zinc-850 dark:text-zinc-200"
+                    >
+                      <option value="all">All Topics</option>
+                      {allTopics.map(t => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
+              )}
 
-                <div className="pt-4 border-t border-zinc-200/50 dark:border-zinc-850/80 mt-4 flex items-center justify-between text-[11px] text-zinc-450 dark:text-zinc-500">
-                  <div className="flex items-center gap-1.5">
-                    <TrendingUp className="w-3.5 h-3.5" />
-                    <span>{cat.learningTime}</span>
-                  </div>
-                  {!isTrackSoon && (
-                    <span className="font-bold text-indigo-600 dark:text-indigo-400">
-                      {solvedCount} Solved
-                    </span>
+              {/* Question search results list */}
+              {searchQuery.trim() && (
+                <div className="saas-card p-4 space-y-2 max-h-72 overflow-y-auto">
+                  <h4 className="text-[10px] font-bold text-zinc-400 dark:text-zinc-650 uppercase tracking-wider px-2">
+                    Search Results ({filteredQuestions.length})
+                  </h4>
+                  {filteredQuestions.length > 0 ? (
+                    filteredQuestions.map(q => {
+                      const track = q.id.startsWith('sql') ? 'sql' : q.id.startsWith('py') ? 'python' : q.id.startsWith('js') ? 'javascript' : q.id.startsWith('react') ? 'react' : 'qa';
+                      return (
+                        <Link
+                          key={q.id}
+                          to={`/academy/${track}/question/${q.slug}`}
+                          className="flex items-center justify-between p-2.5 rounded-lg hover:bg-zinc-100/50 dark:hover:bg-zinc-900/40 transition group"
+                        >
+                          <div className="flex flex-col text-left">
+                            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition">{q.title}</span>
+                            <span className="text-[9px] text-zinc-400 mt-0.5">{q.topic} • {q.tags.join(', ')}</span>
+                          </div>
+                          <span className={`saas-badge text-[8px] font-bold px-2 py-0.5 rounded border capitalize ${
+                            q.difficulty === 'beginner' 
+                              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600'
+                              : q.difficulty === 'intermediate'
+                              ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-600'
+                              : q.difficulty === 'advanced'
+                              ? 'bg-rose-500/10 border-rose-500/20 text-rose-600'
+                              : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600'
+                          }`}>
+                            {q.difficulty}
+                          </span>
+                        </Link>
+                      );
+                    })
+                  ) : (
+                    <div className="py-6 text-center text-xs text-zinc-450 dark:text-zinc-600">No questions found matching your search parameters.</div>
                   )}
                 </div>
+              )}
+            </section>
 
-                <Link
-                  to={`/academy/${cat.id}`}
-                  className="mt-4 saas-button-secondary text-xs py-2 w-full justify-center"
-                >
-                  {isTrackSoon ? 'View Cheat Sheet' : 'Continue Learning'}
-                </Link>
+            {/* Learning Tracks Grid */}
+            <section id="academy-tracks" className="scroll-mt-24 space-y-6">
+              <h2 className="text-2xl font-black text-zinc-900 dark:text-white text-center sm:text-left">
+                Select Your Learning Track
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {academyCategories.map((cat) => {
+                  const solvedCount = progress.completedQuestions.filter(id => id.startsWith(cat.id)).length;
+                  const isTrackSoon = cat.id !== 'sql' && cat.id !== 'python' && cat.id !== 'javascript' && cat.id !== 'react' && cat.id !== 'qa';
+
+                  return (
+                    <div
+                      key={cat.id}
+                      className="p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-gradient-to-br from-white/70 to-white/30 dark:from-zinc-900/60 dark:to-zinc-950/30 shadow-sm flex flex-col justify-between group hover:border-indigo-500/30 transition-all duration-300 relative overflow-hidden"
+                    >
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-455 group-hover:bg-indigo-500/15 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                            <LucideIcon name={cat.icon} className="w-6 h-6" />
+                          </div>
+                          {isTrackSoon ? (
+                            <span className="text-[8px] font-bold text-zinc-455 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-0.5 rounded-md uppercase tracking-wider">
+                              Cheatsheet
+                            </span>
+                          ) : (
+                            <span className="text-[8px] font-bold text-emerald-600 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md uppercase tracking-wider">
+                              Practice
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="space-y-1.5 text-left">
+                          <h3 className="text-base font-bold text-zinc-900 dark:text-white group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition">
+                            {cat.name}
+                          </h3>
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed min-h-[3rem]">
+                            {cat.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-zinc-200/50 dark:border-zinc-850/80 mt-4 flex items-center justify-between text-[11px] text-zinc-450 dark:text-zinc-500">
+                        <div className="flex items-center gap-1.5">
+                          <TrendingUp className="w-3.5 h-3.5" />
+                          <span>{cat.learningTime}</span>
+                        </div>
+                        {!isTrackSoon && (
+                          <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                            {solvedCount} Solved
+                          </span>
+                        )}
+                      </div>
+
+                      <Link
+                        to={`/academy/${cat.id}`}
+                        className="mt-4 saas-button-secondary text-xs py-2 w-full justify-center"
+                      >
+                        {isTrackSoon ? 'View Cheat Sheet' : 'Continue Learning'}
+                      </Link>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
-      </section>
+            </section>
+          </div>
+        )}
+      </div>
+
     </div>
   );
 }
