@@ -132,6 +132,10 @@ export default function Footer() {
   const [email, setEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success'>('idle');
 
+  const isExternalOrStatic = (url: string) => {
+    return url.startsWith('http') || url.startsWith('mailto:') || url.endsWith('.xml') || url.includes('#');
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setShowBackToTop(window.scrollY > 400);
@@ -246,9 +250,15 @@ export default function Footer() {
           <ul className="space-y-2.5 text-xs font-semibold">
             {footerConfig.columns.platform.links.map((link, idx) => (
               <li key={idx}>
-                <Link to={link.link} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:translate-x-0.5 duration-200">
-                  {link.label}
-                </Link>
+                {isExternalOrStatic(link.link) ? (
+                  <a href={link.link} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:translate-x-0.5 duration-200">
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link to={link.link} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:translate-x-0.5 duration-200">
+                    {link.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -278,8 +288,8 @@ export default function Footer() {
           <ul className="space-y-2.5 text-xs font-semibold">
             {footerConfig.columns.company.links.map((link, idx) => (
               <li key={idx}>
-                {link.link.startsWith('http') ? (
-                  <a href={link.link} target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:translate-x-0.5 duration-200">
+                {isExternalOrStatic(link.link) ? (
+                  <a href={link.link} target={link.link.startsWith('http') ? "_blank" : undefined} rel={link.link.startsWith('http') ? "noopener noreferrer" : undefined} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:translate-x-0.5 duration-200">
                     {link.label}
                   </a>
                 ) : (
@@ -416,9 +426,15 @@ export default function Footer() {
 
         <div className="flex items-center gap-4">
           {footerConfig.bottom.quickLinks.map((link, idx) => (
-            <Link key={idx} to={link.link} className="hover:text-indigo-655 dark:hover:text-indigo-400 transition-colors">
-              {link.label}
-            </Link>
+            isExternalOrStatic(link.link) ? (
+              <a key={idx} href={link.link} className="hover:text-indigo-655 dark:hover:text-indigo-400 transition-colors">
+                {link.label}
+              </a>
+            ) : (
+              <Link key={idx} to={link.link} className="hover:text-indigo-655 dark:hover:text-indigo-400 transition-colors">
+                {link.label}
+              </Link>
+            )
           ))}
           <span className="flex items-center gap-1 font-bold text-emerald-500">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />

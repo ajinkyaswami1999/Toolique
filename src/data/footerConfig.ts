@@ -31,8 +31,8 @@ export const footerConfig = {
         { label: "Developer Playground", link: "/playground" },
         { label: "3D Printing Studio", link: "/3d-printing" },
         { label: "Resources", link: "/blog" },
-        { label: "Roadmap", link: "/roadmap" },
-        { label: "Changelog", link: "/changelog" }
+        //{ label: "Roadmap", link: "/roadmap" },
+        //{ label: "Changelog", link: "/changelog" }
       ]
     },
     categories: {
@@ -57,11 +57,11 @@ export const footerConfig = {
         { label: "About Toolique", link: "/about" },
         { label: "About Founder", link: "/about-founder" },
         { label: "Contact", link: "/contact" },
-        { label: "FAQ", link: "/faq" },
-        { label: "Privacy Policy", link: "/privacy" },
-        { label: "Terms of Service", link: "/terms" },
+        { label: "FAQ", link: "/about#faq" },
+        { label: "Privacy Policy", link: "/privacy-policy" },
+        { label: "Terms of Service", link: "/terms-conditions" },
         { label: "Disclaimer", link: "/disclaimer" },
-        { label: "Cookie Policy", link: "/cookie-policy" },
+        { label: "Cookie Policy", link: "/privacy-policy#cookies" },
         { label: "Sitemap", link: "/sitemap.xml" },
         { label: "Report Issue", link: "https://github.com/ajinkyaswami1999/Toolique/issues" }
       ]
@@ -104,8 +104,8 @@ export const footerConfig = {
     builtBy: "Built with ❤️ in India by Ajinkya Swami.",
     version: "v1.2.4",
     quickLinks: [
-      { label: "Privacy", link: "/privacy" },
-      { label: "Terms", link: "/terms" },
+      { label: "Privacy", link: "/privacy-policy" },
+      { label: "Terms", link: "/terms-conditions" },
       { label: "Sitemap", link: "/sitemap.xml" },
       { label: "Status", link: "/status" }
     ]
