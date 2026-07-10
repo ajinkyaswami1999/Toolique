@@ -261,9 +261,9 @@ export default function AcademyQuestion() {
         <AlertTriangle className="w-12 h-12 text-rose-500 mx-auto" />
         <h2 className="text-2xl font-black text-zinc-900 dark:text-white">Question Not Found</h2>
         <p className="text-zinc-500 text-xs">The challenge you are looking for does not exist or has been removed.</p>
-        <Link to={`/academy/${categoryId}`} className="saas-button-primary text-xs w-full justify-center">
+        <a href={`/academy/${categoryId}`} className="saas-button-primary text-xs w-full justify-center">
           Return to Track
-        </Link>
+        </a>
       </div>
     );
   }
@@ -363,12 +363,12 @@ export default function AcademyQuestion() {
       {/* Back button and title header */}
       <div className="space-y-4">
         {!isInterviewMode && (
-          <Link 
-            to={`/academy/${categoryId}`}
+          <a 
+            href={`/academy/${categoryId}`}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Back to {categoryId?.toUpperCase()} Track
-          </Link>
+          </a>
         )}
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-6">
