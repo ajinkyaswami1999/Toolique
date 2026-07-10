@@ -483,11 +483,11 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
           The tool you are looking for does not exist or has been relocated.
         </p>
         <Link
-          to="/"
+          to="/tools"
           className="saas-button-primary inline-flex"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Home</span>
+          <span>Back to Tools</span>
         </Link>
       </div>
     );
@@ -584,28 +584,28 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
 
       {/* Breadcrumb & Navigation */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
-        <Link
-          to={tool.category === '3d-printing' ? "/3d-print-studio" : tool.category === 'math-studio' ? "/math-studio" : "/"}
+        <a
+          href={tool.category === '3d-printing' ? "/3d-print-studio" : tool.category === 'math-studio' ? "/math-studio" : "/tools"}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{tool.category === '3d-printing' ? "Back to 3D Print Studio" : tool.category === 'math-studio' ? "Back to Math Studio" : "Back to Home"}</span>
-        </Link>
+          <span>{tool.category === '3d-printing' ? "Back to 3D Print Studio" : tool.category === 'math-studio' ? "Back to Math Studio" : "Back to Tools"}</span>
+        </a>
         <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
-          <Link to="/" className="hover:text-indigo-500 transition-colors">Home</Link>
+          <a href="/" className="hover:text-indigo-500 transition-colors">Home</a>
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
           {tool.category === '3d-printing' ? (
-            <Link to="/3d-print-studio" className="hover:text-indigo-500 transition-colors">
+            <a href="/3d-print-studio" className="hover:text-indigo-500 transition-colors">
               3D Print Studio
-            </Link>
+            </a>
           ) : tool.category === 'math-studio' ? (
-            <Link to="/math-studio" className="hover:text-indigo-500 transition-colors">
+            <a href="/math-studio" className="hover:text-indigo-500 transition-colors">
               Math Studio
-            </Link>
+            </a>
           ) : (
-            <Link to={`/?category=${tool.category}`} className="hover:text-indigo-500 transition-colors">
+            <a href={`/tools/${tool.category}`} className="hover:text-indigo-500 transition-colors">
               {categoryName}
-            </Link>
+            </a>
           )}
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
           <span className="text-zinc-650 dark:text-zinc-300 font-medium">{tool.name}</span>

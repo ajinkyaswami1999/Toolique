@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
 import { ArrowLeft, RotateCcw, Download, BarChart2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import * as math from 'mathjs';
 import SEO from '../components/SEO';
 import { computeFFT, type FFTResult } from '../utils/mathAdvanced';
@@ -204,17 +203,17 @@ export default function FourierTransformTool() {
 
       {/* Breadcrumbs */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4 mb-6">
-        <Link
-          to="/math-studio"
+        <a
+          href="/math-studio"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Math Studio</span>
-        </Link>
+        </a>
         <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
-          <Link to="/" className="hover:text-indigo-500 transition-colors">Home</Link>
+          <a href="/" className="hover:text-indigo-500 transition-colors">Home</a>
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
-          <Link to="/math-studio" className="hover:text-indigo-500 transition-colors">Math Studio</Link>
+          <a href="/math-studio" className="hover:text-indigo-500 transition-colors">Math Studio</a>
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
           <span className="text-zinc-650 dark:text-zinc-300 font-medium">FFT Spectral Analyzer</span>
         </div>
