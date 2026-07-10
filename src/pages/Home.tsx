@@ -3,7 +3,7 @@ import {
   Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon,
   Hammer, Compass, Palette, ArrowRight,
   Globe, FileText, Share2, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart, Type,
-  Flame, Award, BookOpen, ExternalLink, Printer, Cpu, Code2, Terminal
+  Flame, Award, BookOpen, ExternalLink, Printer, Cpu, Code2, Terminal, Calculator
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { categories } from '../data/categories';
@@ -76,6 +76,7 @@ export default function Home() {
     { id: 'academy', title: 'Academy', desc: 'Learn SQL, QA & Python', link: '/academy', icon: GraduationCap, color: 'text-teal-500 bg-teal-500/5 border-teal-500/10' },
     { id: 'playground', title: 'Developer Playground', desc: 'Interactive coding environments', link: '/playground', icon: Code2, color: 'text-blue-500 bg-blue-500/5 border-blue-500/10' },
     { id: '3d-printing', title: '3D Printing Studio', desc: 'Professional maker tools', link: '/3d-printing', icon: Printer, color: 'text-orange-500 bg-orange-500/5 border-orange-500/10' },
+    { id: 'math-studio', title: 'Advanced Math Studio', desc: 'Equation solvers & geometry tools', link: '/math-studio', icon: Calculator, color: 'text-rose-500 bg-rose-500/5 border-rose-500/10' },
     { id: 'resources', title: 'Resources', desc: 'Blogs, Guides & Tutorials', link: '/blog', icon: BookOpen, color: 'text-emerald-500 bg-emerald-500/5 border-emerald-500/10' }
   ];
 

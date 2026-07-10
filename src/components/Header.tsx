@@ -67,6 +67,7 @@ export default function Header() {
     { name: 'Academy', path: '/academy' },
     { name: 'Playground', path: '/playground' },
     { name: '3D Studio', path: '/3d-printing' },
+    { name: 'Math Studio', path: '/math-studio' },
     { name: 'Resources', path: '/blog' },
     { name: 'About', path: '/about' }
   ];
