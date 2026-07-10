@@ -61,19 +61,18 @@ export default function Header() {
   }, [location]);
 
   const navLinks = [
+    { name: 'Home', path: '/' },
     { name: 'Tools', path: '/tools' },
     { name: 'AI Studio', path: '/ai' },
     { name: 'Academy', path: '/academy' },
     { name: 'Playground', path: '/playground' },
     { name: '3D Studio', path: '/3d-printing' },
     { name: 'Resources', path: '/blog' },
-    { name: 'About Toolique', path: '/about' },
-    { name: 'About Founder', path: '/about-founder' },
-    { name: 'Contact', path: '/contact' }
+    { name: 'About', path: '/about' }
   ];
 
   const isActive = (path: string) => {
-    if (path === '/tools') return location.pathname === '/tools' || location.pathname === '/';
+    if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
 

@@ -247,9 +247,31 @@ const staticPages = [
   },
   {
     path: 'tools',
-    title: 'Ecosystem Tools & Free Online Calculators | Toolique',
-    description: 'Ecosystem search listing of free online developer tools, finance calculators, PWA tools, and civil metrics utilities.',
-    keywords: ['online utilities', 'developer tools', 'gst calculators']
+    title: 'Free Online Tools & Professional Calculators | Toolique',
+    description: 'Find the right tool instantly. Browse our complete directory of free online developer tools, financial calculators, unit converters, civil estimators, and text utilities.',
+    keywords: ['online tools', 'free calculators', 'developer tools', 'utility directory'],
+    schemaMarkup: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'CollectionPage',
+          '@id': 'https://www.toolique.in/tools#collection',
+          'name': 'Free Online Tools & Professional Calculators',
+          'description': 'Browse our complete directory of free online developer tools, financial calculators, unit converters, civil estimators, and text utilities.',
+          'url': 'https://www.toolique.in/tools',
+          'about': {
+            '@type': 'ItemList',
+            'name': 'Toolique Product Catalog',
+            'itemListElement': toolsList.slice(0, 15).map((t, idx) => ({
+              '@type': 'ListItem',
+              'position': idx + 1,
+              'url': `https://www.toolique.in/tool/${t.slug}`,
+              'name': t.name
+            }))
+          }
+        }
+      ]
+    }
   },
   {
     path: '3d-printing',

@@ -1,16 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon,
-  Hammer, Compass, Palette, HelpCircle, ArrowRight, ShieldAlert, Zap,
+  Hammer, Compass, Palette, ArrowRight,
   Globe, FileText, Share2, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart, Type,
-  Grid, List
+  Flame, Award, BookOpen, ExternalLink, Printer, Cpu, Code2, Terminal
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { categories } from '../data/categories';
 import ToolCard from '../components/ToolCard';
-import AdPlaceholder from '../components/AdPlaceholder';
 import SEO from '../components/SEO';
-import { useSearchParams, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const categoryIcons: Record<string, React.ComponentType<any>> = {
   finance: IndianRupee,
@@ -30,489 +29,511 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
   automobile: Car,
   business: Briefcase,
   health: Heart,
+  '3d-printing': Printer,
+  'math-studio': Scale
 };
 
-// Lists of featured, popular and recently added tool IDs
-const featuredToolIds = ['GSTCalculator', 'ConstructionCostCalculator', 'FARFSICalculator', 'ImageCompressor'];
-const popularToolIds = ['SIPCalculator', 'EMICalculator', 'ConcreteCalculator', 'InHandSalaryCalculator'];
-const recentToolIds = ['ModularKitchenCostCalculator', 'WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator'];
-
 export default function Home() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const searchQuery = searchParams.get('q') || '';
-  const selectedCategory = searchParams.get('category') || 'all';
-  const [viewMode, setViewMode] = useState<'grouped' | 'list'>('grouped');
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [featuredTab, setFeaturedTab] = useState<'trending' | 'recent' | 'popular'>('trending');
 
-  const setSearchQuery = (q: string) => {
-    setSearchParams((prev) => {
-      if (q) prev.set('q', q);
-      else prev.delete('q');
-      return prev;
-    }, { replace: true });
-  };
-
-  const setSelectedCategory = (cat: string) => {
-    setSearchParams((prev) => {
-      if (cat && cat !== 'all') {
-        prev.set('category', cat);
-        prev.delete('view');
-      } else {
-        prev.delete('category');
-        prev.delete('view');
-      }
-      return prev;
-    }, { replace: true });
-  };
-
-  const isFirstRender = useRef(true);
-  const prevCategoryRef = useRef(selectedCategory);
-  const prevViewRef = useRef(searchParams.get('view'));
-  const prevQRef = useRef(searchParams.get('q') || '');
-
-  // Scroll to tools-section or top of page if we have active filter parameters in URL
   useEffect(() => {
-    const currentView = searchParams.get('view');
-    const hasCategory = searchParams.get('category');
-    const hasQ = searchParams.get('q');
+    try {
+      const saved = localStorage.getItem('toolique_recent_searches');
+      if (saved) setRecentSearches(JSON.parse(saved));
+      else setRecentSearches(['concrete calculator', 'json formatter', 'gst calculator']);
+    } catch (e) {}
+  }, []);
 
-    const categoryChanged = (hasCategory || 'all') !== (prevCategoryRef.current || 'all');
-    const qChanged = (hasQ || '') !== prevQRef.current;
-    const viewChanged = currentView !== prevViewRef.current;
-
-    const isTyping = document.activeElement?.id === 'home-search-input';
-
-    const navigatedToCategory = hasCategory && hasCategory !== 'all';
-    const navigatedToQuery = hasQ && hasQ.trim() !== '';
-
-    if (!isTyping) {
-      if (isFirstRender.current) {
-        // On initial mount, scroll if we have a specific category or query
-        if (navigatedToCategory || navigatedToQuery) {
-          const el = document.getElementById('tools-section');
-          if (el) {
-            setTimeout(() => {
-              el.scrollIntoView({ behavior: 'smooth' });
-            }, 150);
-          }
-        }
-      } else {
-        // On subsequent renders
-        if ((categoryChanged && navigatedToCategory) || (qChanged && navigatedToQuery)) {
-          const el = document.getElementById('tools-section');
-          if (el) {
-            setTimeout(() => {
-              el.scrollIntoView({ behavior: 'smooth' });
-            }, 150);
-          }
-        } else if (
-          (viewChanged && currentView === 'all') || 
-          (!hasCategory && !hasQ && (categoryChanged || qChanged || viewChanged))
-        ) {
-          // If view changed to 'all' (Directory) or cleared filters (Home), scroll to top of the page
-          setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }, 150);
-        }
-      }
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Add to recent searches
+      const updated = [searchQuery.trim(), ...recentSearches.filter(s => s !== searchQuery.trim())].slice(0, 5);
+      setRecentSearches(updated);
+      localStorage.setItem('toolique_recent_searches', JSON.stringify(updated));
+      navigate(`/tools?q=${encodeURIComponent(searchQuery.trim())}`);
     }
+  };
 
-    isFirstRender.current = false;
-    prevCategoryRef.current = hasCategory || 'all';
-    prevViewRef.current = currentView;
-    prevQRef.current = hasQ || '';
-  }, [searchParams]);
+  // Get trending, popular, and recent tools from toolsList
+  // We can filter them by specific lists or metrics
+  const trendingTools = toolsList.filter(t => ['GSTCalculator', 'ConstructionCostCalculator', 'ImageCompressor', 'SIPCalculator'].includes(t.id));
+  const popularTools = toolsList.filter(t => ['EMICalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'ModularKitchenCostCalculator'].includes(t.id));
+  const recentTools = toolsList.filter(t => ['WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator', 'FARFSICalculator'].includes(t.id));
 
-  const filteredTools = toolsList.filter((tool) => {
-    const query = searchQuery.toLowerCase().trim();
-    const matchesSearch =
-      !query ||
-      (tool.name || '').toLowerCase().includes(query) ||
-      (tool.shortDescription || '').toLowerCase().includes(query) ||
-      (tool.keywords || []).some((k) => (k || '').toLowerCase().includes(query));
+  const getActiveTabTools = () => {
+    if (featuredTab === 'recent') return recentTools;
+    if (featuredTab === 'popular') return popularTools;
+    return trendingTools;
+  };
 
-    const matchesCategory =
-      selectedCategory === 'all' || tool.category === selectedCategory;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  const featuredTools = toolsList.filter(t => featuredToolIds.includes(t.id));
-  const popularTools = toolsList.filter(t => popularToolIds.includes(t.id));
-  const recentTools = toolsList.filter(t => recentToolIds.includes(t.id));
-
-  const siteFaqs = [
-    {
-      question: 'Are my calculations private and safe?',
-      answer: 'Yes. All calculations, string formatting, and image compression execute entirely inside your local browser sandbox. No file, code block, or cost estimate is uploaded to our servers, assuring 100% data privacy.'
-    },
-    {
-      question: 'Is Toolique completely free to use?',
-      answer: 'Yes, Toolique is 100% free with no subscription tiers or limitations. It is supported solely by non-intrusive display banners.'
-    },
-    {
-      question: 'Are municipal building bylaws standard across the tools?',
-      answer: 'Our building calculators (like FAR/FSI and staircase dimensions) use standard Indian NBC (National Building Code) guidelines. Local Municipal Corporation bylaws can vary slightly.'
-    }
+  const platforms = [
+    { id: 'tools', title: 'Tools', desc: '300+ Browser Utilities', link: '/tools', icon: LayoutGrid, color: 'text-indigo-500 bg-indigo-500/5 border-indigo-500/10' },
+    { id: 'ai', title: 'AI Studio', desc: 'AI-powered productivity', link: '/ai', icon: Sparkles, color: 'text-purple-500 bg-purple-500/5 border-purple-500/10' },
+    { id: 'academy', title: 'Academy', desc: 'Learn SQL, QA & Python', link: '/academy', icon: GraduationCap, color: 'text-teal-500 bg-teal-500/5 border-teal-500/10' },
+    { id: 'playground', title: 'Developer Playground', desc: 'Interactive coding environments', link: '/playground', icon: Code2, color: 'text-blue-500 bg-blue-500/5 border-blue-500/10' },
+    { id: '3d-printing', title: '3D Printing Studio', desc: 'Professional maker tools', link: '/3d-printing', icon: Printer, color: 'text-orange-500 bg-orange-500/5 border-orange-500/10' },
+    { id: 'resources', title: 'Resources', desc: 'Blogs, Guides & Tutorials', link: '/blog', icon: BookOpen, color: 'text-emerald-500 bg-emerald-500/5 border-emerald-500/10' }
   ];
 
-  const homeSchema = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'WebSite',
-        '@id': 'https://www.toolique.in/#website',
-        'name': 'Toolique',
-        'url': 'https://www.toolique.in',
-        'description': 'Free online browser-based civil, architecture, interior design, finance, and developer tools optimized for Indian standards.',
-        'potentialAction': {
-          '@type': 'SearchAction',
-          'target': 'https://www.toolique.in/?q={search_term_string}',
-          'query-input': 'required name=search_term_string'
-        }
-      },
-      {
-        '@type': 'WebApplication',
-        '@id': 'https://www.toolique.in/#webapp',
-        'name': 'Toolique Suite',
-        'url': 'https://www.toolique.in',
-        'description': 'Free online browser-based civil, architecture, interior design, finance, and developer tools optimized for Indian standards.',
-        'applicationCategory': 'BusinessApplication, DeveloperApplication, DesignApplication, UtilityApplication',
-        'operatingSystem': 'All',
-        'browserRequirements': 'Requires JavaScript. Requires HTML5.'
-      }
-    ]
-  };
-
   return (
-    <div className="space-y-16 py-4">
+    <div className="space-y-20 pb-16 animate-fadeIn text-left">
       <SEO 
-        title="Toolique | Modern In-Browser Calculators & Engineering Utilities"
-        description="Free in-browser tools. Compute GST, SIP, construction cost, concrete splits, staircase layouts, RERA carpet, paint liters, and modular kitchen designs locally."
-        keywords={['Online Tools', 'GST Calculator', 'SIP Calculator', 'Construction cost estimator', 'RERA carpet calculator', 'staircase riser calculation', 'Image compressor online']}
-        canonicalUrl="https://www.toolique.in/"
-        schemaMarkup={homeSchema}
+        title="Toolique | Free Online Professional Tools & Calculators" 
+        description="Toolique is a modern browser-based productivity ecosystem offering free developer tools, financial calculators, interactive code playgrounds, PDF files converters, and 3D printing modules."
       />
 
-      {/* Hero Section */}
-      {!(searchParams.get('view') === 'all' || selectedCategory !== 'all' || searchQuery) && (
-        <section className="text-center max-w-4xl mx-auto space-y-4 pt-2 md:pt-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/10 dark:border-indigo-400/10 bg-indigo-500/5 text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>No servers, no tracking, completely instant</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-white leading-[1.15]">
-            A simpler way to calculate, <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">design, and optimize</span>
-          </h1>
-          <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-            Fast, free browser utilities for Indian engineers, architects, designers, developers, and finance professionals. All calculations execute locally.
-          </p>
+      {/* SECTION 1: Premium Hero */}
+      <section className="relative pt-12 md:pt-20 text-center max-w-4xl mx-auto space-y-6">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20">
+          <Sparkles className="w-3 h-3 text-indigo-500" />
+          <span>No Servers • No Tracking • 100% Client-Side</span>
+        </div>
+        
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-zinc-900 dark:text-white leading-[1.12]">
+          Everything You Need to <br className="hidden sm:inline" />
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+            Build, Calculate, Learn & Create
+          </span>
+        </h1>
+        
+        <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto font-medium">
+          Toolique is a modern browser-based productivity platform offering free online tools, AI utilities, interactive playgrounds, learning resources, engineering calculators, and 3D printing solutions.
+        </p>
 
-          {/* Global Stats bar */}
-          <div className="flex justify-center items-center gap-8 pt-2 text-xs font-semibold text-zinc-400 dark:text-zinc-500">
-            <div>
-              <span className="text-lg font-black text-zinc-900 dark:text-white mr-1.5">{toolsList.length}</span>
-              Tools
-            </div>
-            <div className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-800" />
-            <div>
-              <span className="text-lg font-black text-zinc-900 dark:text-white mr-1.5">{categories.length}</span>
-              Categories
-            </div>
-          </div>
-        </section>
-      )}
+        <div className="flex flex-wrap justify-center gap-3 pt-4">
+          <Link
+            to="/tools"
+            className="px-6 py-3 rounded-2xl bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-sm shadow-md hover:scale-105 transition duration-300"
+          >
+            Explore Tools
+          </Link>
+          <Link
+            to="/academy"
+            className="px-6 py-3 rounded-2xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20 font-extrabold text-sm transition duration-300"
+          >
+            Start Learning
+          </Link>
+          <Link
+            to="/ai"
+            className="px-6 py-3 rounded-2xl bg-purple-500/5 hover:bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/10 font-extrabold text-sm transition duration-300"
+          >
+            AI Studio
+          </Link>
+          <Link
+            to="/playground"
+            className="px-6 py-3 rounded-2xl bg-blue-500/5 hover:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/10 font-extrabold text-sm transition duration-300"
+          >
+            Playground
+          </Link>
+        </div>
+      </section>
 
-      {/* Search & Category Filter Hub */}
-      <section id="tools-section" className="space-y-6 max-w-5xl mx-auto pt-2">
-        {/* Search Input */}
-        <div className="relative max-w-xl mx-auto">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-4.5 h-4.5" />
+      {/* SECTION 2: Global Search */}
+      <section className="max-w-2xl mx-auto space-y-4 pt-4">
+        <form onSubmit={handleSearchSubmit} className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-450 dark:text-zinc-500 w-5 h-5" />
           <input
-            id="home-search-input"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Type tool name, keyword, or category (e.g. concrete, cost)..."
-            className="saas-input pr-4 py-3 font-semibold shadow-sm focus:ring-indigo-500/10 focus:border-indigo-500"
-            style={{ paddingLeft: '3rem' }}
+            placeholder="Search entire platform (Tools, Academy, Playgrounds, AI...)"
+            className="saas-input pl-12 pr-4 py-3 text-xs font-semibold shadow-sm focus:ring-indigo-500/10 focus:border-indigo-500"
           />
+        </form>
+
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[10px] text-zinc-400 font-bold pl-2">
+          {recentSearches.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-zinc-500 uppercase tracking-wider">Recent:</span>
+              {recentSearches.map((s, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setSearchQuery(s);
+                    navigate(`/tools?q=${encodeURIComponent(s)}`);
+                  }}
+                  className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/80 hover:text-indigo-650 transition cursor-pointer"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-zinc-500 uppercase tracking-wider">Popular:</span>
+            {['concrete', 'sql formatter', 'gst invoice', 'sip'].map((s, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  setSearchQuery(s);
+                  navigate(`/tools?q=${encodeURIComponent(s)}`);
+                }}
+                className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/80 hover:text-indigo-650 transition cursor-pointer"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3: Platform Overview */}
+      <section className="space-y-6">
+        <div className="space-y-1">
+          <span className="text-[10px] font-black uppercase tracking-wider text-indigo-500">Ecosystem Products</span>
+          <h2 className="text-2xl font-black text-zinc-900 dark:text-white">Complete Productivity Suite</h2>
         </div>
 
-        {/* Category Filters */}
-        <div className="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto pt-2">
-          <button
-            onClick={() => {
-              setSelectedCategory('all');
-              setSearchParams((prev) => {
-                prev.delete('view');
-                prev.delete('category');
-                return prev;
-              }, { replace: true });
-            }}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
-              selectedCategory === 'all' && !searchParams.get('view')
-                ? 'bg-gradient-to-r from-zinc-900 to-zinc-800 text-white dark:from-white dark:to-zinc-100 dark:text-zinc-950 border-transparent shadow-sm'
-                : 'bg-white/40 dark:bg-zinc-900/30 text-zinc-550 dark:text-zinc-400 border-zinc-200/60 dark:border-zinc-800/60 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-300 dark:hover:border-zinc-705'
-            }`}
-          >
-            <LayoutGrid className="w-3.5 h-3.5" />
-            <span>All Categories</span>
-          </button>
-          {categories.filter((cat) => cat.id !== '3d-printing' && cat.id !== 'math-studio').map((cat) => {
-            const Icon = categoryIcons[cat.id] || LayoutGrid;
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {platforms.map((p) => {
+            const Icon = p.icon;
             return (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
-                  selectedCategory === cat.id
-                    ? `bg-gradient-to-r ${cat.colorClass} border-transparent shadow-sm`
-                    : 'bg-white/40 dark:bg-zinc-900/30 text-zinc-550 dark:text-zinc-400 border-zinc-200/60 dark:border-zinc-800/60 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-300 dark:hover:border-zinc-705'
-                }`}
+              <Link
+                key={p.id}
+                to={p.link}
+                className="saas-card p-6 flex items-start gap-4 hover:border-zinc-350 dark:hover:border-zinc-700 hover:-translate-y-1 transition duration-300 group"
               >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{cat.name}</span>
-              </button>
+                <div className={`p-3 rounded-2xl border ${p.color}`}>
+                  <Icon className="w-5 h-5" />
+                </div>
+                <div className="space-y-1 flex-grow">
+                  <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                    {p.title}
+                  </h3>
+                  <p className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold">{p.desc}</p>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white pt-2 transition">
+                    Explore <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition" />
+                  </span>
+                </div>
+              </Link>
             );
           })}
         </div>
       </section>
 
-      {/* Ad slot */}
-      <AdPlaceholder slot="home-top" type="banner" />
-
-      {/* Conditional Rendering: If searching, filtering, or view all is selected, show directory list. Else, show structured SaaS landing layout */}
-      {searchQuery || selectedCategory !== 'all' || searchParams.get('view') === 'all' ? (
-        <section className="max-w-7xl 2xl:max-w-none mx-auto space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-zinc-200/60 dark:border-zinc-800/60 pb-4 px-2">
-            <div>
-              <h3 className="text-base font-extrabold text-zinc-800 dark:text-zinc-150">
-                {searchQuery
-                  ? 'Search Results'
-                  : selectedCategory !== 'all'
-                  ? `${categories.find((c) => c.id === selectedCategory)?.name || 'Filtered'} Tools`
-                  : 'All Tools'}
-              </h3>
-              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-semibold mt-0.5">
-                {filteredTools.length} {filteredTools.length === 1 ? 'utility' : 'utilities'} available
-              </p>
-            </div>
-
-            {/* Dual-View Mode Toggles */}
-            <div className="flex items-center gap-1.5 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
-              <button
-                onClick={() => setViewMode('grouped')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
-                  viewMode === 'grouped'
-                    ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm border border-zinc-200 dark:border-zinc-700'
-                    : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
-                }`}
-              >
-                <Grid className="w-3.5 h-3.5" />
-                <span>Toolkit View</span>
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
-                  viewMode === 'list'
-                    ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm border border-zinc-200 dark:border-zinc-700'
-                    : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
-                }`}
-              >
-                <List className="w-3.5 h-3.5" />
-                <span>List View</span>
-              </button>
-            </div>
-          </div>
-
-          {filteredTools.length > 0 ? (
-            viewMode === 'grouped' ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categories
-                  .filter((cat) => cat.id !== '3d-printing' && cat.id !== 'math-studio')
-                  .map((cat) => {
-                    const categoryTools = filteredTools.filter((t) => t.category === cat.id);
-                    if (categoryTools.length === 0) return null;
-
-                    const Icon = categoryIcons[cat.id] || LayoutGrid;
-                    return (
-                      <div
-                        key={cat.id}
-                        className="saas-card p-6 flex flex-col justify-between hover:shadow-lg transition-all duration-300 border border-zinc-200 dark:border-zinc-800"
-                      >
-                        <div className="space-y-4">
-                          {/* Header */}
-                          <div className="flex items-center justify-between border-b border-zinc-200/60 dark:border-zinc-800/60 pb-3">
-                            <div className="flex items-center gap-2.5">
-                              <div className="p-2 rounded-xl bg-indigo-500/5 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-                                <Icon className="w-4.5 h-4.5" />
-                              </div>
-                              <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">
-                                {cat.name}
-                              </h3>
-                            </div>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-indigo-500/5 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-                              {categoryTools.length} {categoryTools.length === 1 ? 'Tool' : 'Tools'}
-                            </span>
-                          </div>
-
-                          <p className="text-xs text-zinc-450 dark:text-zinc-500 leading-relaxed font-semibold">
-                            {cat.description}
-                          </p>
-
-                          {/* Tool Links List */}
-                          <div className="space-y-2 py-1">
-                            {categoryTools.map((tool) => (
-                              <Link
-                                key={tool.id}
-                                decline-link-formatting="true"
-                                to={`/tool/${tool.slug}`}
-                                className="flex items-start gap-2 group/link py-1 hover:translate-x-1 transition-transform duration-200"
-                              >
-                                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500/30 group-hover/link:bg-indigo-505 mt-1.5 shrink-0 group-hover/link:scale-125 transition-transform" />
-                                <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 group-hover/link:text-indigo-600 dark:group-hover/link:text-indigo-400 transition-colors">
-                                  {tool.name}
-                                </span>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Footer Button to view category */}
-                        <div className="pt-4 border-t border-zinc-100 dark:border-zinc-900 mt-4">
-                          <button
-                            onClick={() => {
-                              setSelectedCategory(cat.id);
-                            }}
-                            className="w-full py-2 text-[10px] font-bold uppercase tracking-wider border border-zinc-200 dark:border-zinc-800 rounded-xl text-center cursor-pointer transition-colors bg-white dark:bg-zinc-950/60 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400"
-                          >
-                            Filter Category
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
-                {filteredTools.map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} />
-                ))}
-              </div>
-            )
-          ) : (
-            <div className="text-center py-16 rounded-2xl bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 shadow-sm max-w-md mx-auto">
-              <LayoutGrid className="w-12 h-12 text-zinc-300 dark:text-zinc-700 mx-auto mb-3" />
-              <div className="font-bold text-zinc-700 dark:text-zinc-200">No tools match your query</div>
-              <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1.5 px-4">Try checking spelling or clear search filters.</p>
-            </div>
-          )}
-        </section>
-      ) : (
-        <>
-          {/* Featured Tools Grid */}
-          <section className="max-w-7xl 2xl:max-w-none mx-auto space-y-6">
-            <div className="flex justify-between items-center px-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Featured Platforms</h3>
-              <button
-                onClick={() => {
-                  setSearchParams((prev) => {
-                    prev.set('view', 'all');
-                    prev.delete('category');
-                    prev.delete('q');
-                    return prev;
-                  }, { replace: true });
-                }}
-                className="text-xs font-semibold text-indigo-500 hover:text-indigo-600 flex items-center gap-0.5 cursor-pointer"
-              >
-                <span>View all</span> <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {featuredTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} />
-              ))}
-            </div>
-          </section>
-
-          {/* Popular Tools Grid */}
-          <section className="max-w-7xl 2xl:max-w-none mx-auto space-y-6">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 px-2">Popular Calculations</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {popularTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} />
-              ))}
-            </div>
-          </section>
-
-          {/* Recently Added Tools Grid */}
-          <section className="max-w-7xl 2xl:max-w-none mx-auto space-y-6">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 px-2">Recently Released</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {recentTools.map((tool) => (
-                <ToolCard key={tool.id} tool={tool} />
-              ))}
-            </div>
-          </section>
-        </>
-      )}
-
-      {/* Ad slot */}
-      <AdPlaceholder slot="home-middle" type="responsive" />
-
-      {/* Why Choose Us Section */}
-      <section className="max-w-5xl mx-auto space-y-8 pt-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-zinc-900 dark:text-white">Designed for high-performance privacy</h2>
-          <p className="text-xs text-zinc-400 dark:text-zinc-500">Why professionals choose Toolique for daily calculations.</p>
+      {/* SECTION 4: Popular Categories */}
+      <section className="space-y-6">
+        <div className="space-y-1">
+          <span className="text-[10px] font-black uppercase tracking-wider text-purple-500">Categories</span>
+          <h2 className="text-2xl font-black text-zinc-900 dark:text-white">Popular Sub-sections</h2>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="saas-card p-6 text-left space-y-4">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-              <ShieldAlert className="w-4.5 h-4.5" />
-            </div>
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-white">100% In-Browser Privacy</h3>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              No servers are involved. Every calculation runs entirely in your local sandbox, keeping financial ledgers and building maps completely private.
-            </p>
-          </div>
-          <div className="saas-card p-6 text-left space-y-4">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-              <Zap className="w-4.5 h-4.5" />
-            </div>
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-white">Instant Calculations</h3>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              By removing server API requests, operations complete instantly, providing real-time sliding updates and immediate graph distributions.
-            </p>
-          </div>
-          <div className="saas-card p-6 text-left space-y-4">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-              <Globe className="w-4.5 h-4.5" />
-            </div>
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-white">Indian Bylaw Optimizations</h3>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              Tailored specifically to Indian market specifications, from RERA standard carpet definitions to Indian tax brackets (GST, TDS).
-            </p>
-          </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {categories.slice(0, 8).map((cat) => {
+            const Icon = categoryIcons[cat.id] || LayoutGrid;
+            return (
+              <Link
+                key={cat.id}
+                to={`/tools/${cat.id}`}
+                className="p-5 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/40 dark:bg-zinc-900/30 hover:bg-white dark:hover:bg-zinc-900/80 hover:scale-[1.02] transition duration-300 flex flex-col items-center text-center gap-3 group"
+              >
+                <div className="p-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 group-hover:bg-indigo-500/10 group-hover:text-indigo-655 transition">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <h3 className="text-xs font-black text-zinc-800 dark:text-zinc-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                  {cat.name}
+                </h3>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
-      {/* Central FAQs Section */}
-      <section className="max-w-3xl mx-auto space-y-6 pt-6">
-        <h2 className="text-2xl font-bold text-zinc-900 dark:text-white text-center">Platform FAQs</h2>
-        <div className="space-y-4">
-          {siteFaqs.map((faq, idx) => (
-            <div key={idx} className="saas-card p-5 text-left flex gap-3.5">
-              <HelpCircle className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+      {/* SECTION 5: Featured Tools */}
+      <section className="space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+          <div className="space-y-1">
+            <span className="text-[10px] font-black uppercase tracking-wider text-teal-500">Top Utilities</span>
+            <h2 className="text-2xl font-black text-zinc-900 dark:text-white">Featured Platform Tools</h2>
+          </div>
+
+          {/* Featured Tabs */}
+          <div className="flex items-center p-0.5 rounded-xl bg-zinc-150 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800">
+            <button
+              onClick={() => setFeaturedTab('trending')}
+              className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition cursor-pointer ${
+                featuredTab === 'trending' ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm' : 'text-zinc-500'
+              }`}
+            >
+              Trending
+            </button>
+            <button
+              onClick={() => setFeaturedTab('recent')}
+              className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition cursor-pointer ${
+                featuredTab === 'recent' ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm' : 'text-zinc-500'
+              }`}
+            >
+              New Added
+            </button>
+            <button
+              onClick={() => setFeaturedTab('popular')}
+              className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition cursor-pointer ${
+                featuredTab === 'popular' ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm' : 'text-zinc-500'
+              }`}
+            >
+              Most Used
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {getActiveTabTools().map((tool) => (
+            <ToolCard key={tool.id} tool={tool} />
+          ))}
+        </div>
+      </section>
+
+      {/* SECTION 6: AI Studio Preview */}
+      <section className="p-8 md:p-12 rounded-3xl border border-zinc-200/80 dark:border-zinc-850/80 bg-zinc-50/50 dark:bg-zinc-900/10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div className="md:col-span-5 space-y-4">
+          <div className="p-3 rounded-2xl bg-purple-500/10 text-purple-500 border border-purple-500/10 w-fit">
+            <Sparkles className="w-6 h-6" />
+          </div>
+          <h2 className="text-2xl font-black text-zinc-900 dark:text-white">AI Studio Assistants</h2>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
+            Boost development outputs using browser-sandboxed artificial intelligence helpers. Create manual QA checks, format regex codes, and optimize select SQL blocks without credentials.
+          </p>
+          <Link
+            to="/ai"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-xs shadow-md"
+          >
+            <span>View AI Studio</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            { name: 'AI Test Case Generator', desc: 'Create manual QA suites and click locators.' },
+            { name: 'AI SQL Query Generator', desc: 'Convert english questions into SQL commands.' },
+            { name: 'AI Regex Designer', desc: 'Compose parsing expressions with matching tests.' },
+            { name: 'AI Bug Report Generator', desc: 'Generate descriptions and severity tags.' }
+          ].map((item, idx) => (
+            <div key={idx} className="p-4 rounded-2xl border border-zinc-200/40 dark:border-zinc-800/60 bg-white dark:bg-zinc-900/60 flex items-start gap-3">
+              <Cpu className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
               <div>
-                <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-200 mb-1">{faq.question}</h4>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">{faq.answer}</p>
+                <h4 className="text-xs font-black text-zinc-900 dark:text-white">{item.name}</h4>
+                <p className="text-[10px] text-zinc-450 dark:text-zinc-500 mt-1 leading-normal font-semibold">{item.desc}</p>
               </div>
             </div>
           ))}
         </div>
+      </section>
+
+      {/* SECTION 7: Academy Preview */}
+      <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div className="md:col-span-6 space-y-5">
+          <div className="p-3 rounded-2xl bg-teal-500/10 text-teal-500 border border-teal-500/10 w-fit">
+            <GraduationCap className="w-6 h-6" />
+          </div>
+          <h2 className="text-2xl font-black text-zinc-900 dark:text-white">Academy Learning Tracks</h2>
+          <p className="text-xs text-zinc-505 dark:text-zinc-400 leading-relaxed font-medium">
+            Master programming and QA interviews offline. Build confidence in SQL queries, Python scripts, JavaScript challenges, React hooks, and Playwright locators.
+          </p>
+
+          <div className="flex flex-wrap gap-2.5 pt-2">
+            {['SQL Database', 'Python Developer', 'QA Automation', 'React UI', 'Playwright QA'].map((track, i) => (
+              <span key={i} className="px-3 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/80 text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                {track}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Challenge Widget */}
+        <div className="md:col-span-6 saas-card p-6 border-teal-500/20 bg-teal-500/[0.01] space-y-4">
+          <div className="flex justify-between items-center pb-3 border-b border-zinc-100 dark:border-zinc-850">
+            <span className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
+              <Flame className="w-3.5 h-3.5 fill-current animate-bounce" />
+              <span>Today's Interview Challenge</span>
+            </span>
+            <span className="text-[9px] text-zinc-400 font-bold bg-zinc-100 dark:bg-zinc-850 px-2 py-0.5 rounded">Medium 15 XP</span>
+          </div>
+
+          <div className="space-y-2 text-left">
+            <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white">SQL Second Highest Salary</h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
+              Write a query to retrieve the second highest salary from the Employee table. Return null if no such record exists.
+            </p>
+          </div>
+
+          <Link
+            to="/academy"
+            className="w-full py-2.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-xs flex items-center justify-center gap-2 hover:scale-[1.01] transition"
+          >
+            <Award className="w-4 h-4 text-amber-500" />
+            <span>Solve Daily Challenge</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* SECTION 8: Developer Playground */}
+      <section className="p-8 md:p-12 rounded-3xl border border-zinc-200/80 dark:border-zinc-850/80 bg-zinc-50/50 dark:bg-zinc-900/10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            { name: 'SQL Query Playground', desc: 'Interact with SQLite database modules client-side.' },
+            { name: 'JSON Formatter Studio', desc: 'Format, validate, parse, and compare JSON nodes.' },
+            { name: 'Regex Sandbox Tester', desc: 'Inspect matching regular expressions instantly.' },
+            { name: 'REST HTTP API Agent', desc: 'Trigger mock client-side endpoints and responses.' }
+          ].map((playground, idx) => (
+            <div key={idx} className="p-4 rounded-2xl border border-zinc-200/40 dark:border-zinc-800/60 bg-white dark:bg-zinc-900/60 flex items-start gap-3">
+              <Terminal className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
+              <div>
+                <h4 className="text-xs font-black text-zinc-900 dark:text-white">{playground.name}</h4>
+                <p className="text-[10px] text-zinc-450 dark:text-zinc-500 mt-1 leading-normal font-semibold">{playground.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="md:col-span-5 space-y-4">
+          <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-500 border border-blue-500/10 w-fit">
+            <Code2 className="w-6 h-6" />
+          </div>
+          <h2 className="text-2xl font-black text-zinc-900 dark:text-white">Developer Sandbox Hub</h2>
+          <p className="text-xs text-zinc-505 dark:text-zinc-400 leading-relaxed font-medium">
+            Test and compile scripts without compiling installations locally. Run JavaScript console triggers or inspect JSON hierarchies directly in a robust editor environment.
+          </p>
+          <Link
+            to="/playground"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-xs shadow-md"
+          >
+            <span>Explore Playground</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      </section>
+
+      {/* SECTION 9: 3D Printing Studio */}
+      <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div className="md:col-span-6 space-y-5">
+          <div className="p-3 rounded-2xl bg-orange-500/10 text-orange-500 border border-orange-500/10 w-fit">
+            <Printer className="w-6 h-6" />
+          </div>
+          <h2 className="text-2xl font-black text-zinc-900 dark:text-white">3D Maker Printing Studio</h2>
+          <p className="text-xs text-zinc-505 dark:text-zinc-400 leading-relaxed font-medium">
+            Design and optimize 3D printing settings and cost models. Evaluate Bambu Lab AMS templates, electricity cost factors, and resin densities easily.
+          </p>
+          <div className="flex gap-3">
+            <Link
+              to="/3d-printing"
+              className="px-4 py-2.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-xs flex items-center gap-1.5 shadow-md"
+            >
+              <span>3D Studio</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <a
+              href="https://voxelique.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-zinc-700 dark:text-zinc-350 font-extrabold text-xs flex items-center gap-1.5 transition"
+            >
+              <span>Visit Voxelique</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
+
+        <div className="md:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            { name: 'Print Cost Calculator', desc: 'Estimate filament pricing and electricity ratios.' },
+            { name: 'AMS Slot Planner', desc: 'Plan color templates for AMS multi-spool configs.' },
+            { name: 'Print Time Estimator', desc: 'Model volumetric flows and speed limits.' },
+            { name: 'Resin Volume Utility', desc: 'Calculate resin tank volumes for SLA prints.' }
+          ].map((card, i) => (
+            <div key={i} className="saas-card p-5 border border-zinc-205 dark:border-zinc-850 flex flex-col justify-between h-32">
+              <h4 className="text-xs font-black text-zinc-900 dark:text-white">{card.name}</h4>
+              <p className="text-[10px] text-zinc-450 dark:text-zinc-500 leading-normal font-semibold mt-1">{card.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* SECTION 10: Latest Articles */}
+      <section className="space-y-6">
+        <div className="space-y-1">
+          <span className="text-[10px] font-black uppercase tracking-wider text-emerald-500">Guides</span>
+          <h2 className="text-2xl font-black text-zinc-900 dark:text-white">Knowledge Resources</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { title: 'SQL JOINs Explained Visually', desc: 'Venn diagrams mapping inner, left, and outer JOIN database queries.', link: '/blog' },
+            { title: 'Modern JSON Formatter Utilities', desc: 'How lightweight JSON payloads outperform complex XML structures.', link: '/blog' },
+            { title: 'Indian GST Invoice Formats', desc: 'Demystifying CGST, SGST, and reverse taxation structures.', link: '/blog' },
+            { title: '3D Printer Cost Calculations', desc: 'How to calculate filament weights and electricity bills.', link: '/blog' },
+            { title: 'Cable Sizes and Voltage Drop', desc: 'Guide to estimating load demands and cable thickness.', link: '/blog' },
+            { title: 'Wordpress and SEO optimization', desc: 'Maximize rich schemas and long-tail crawl rates.', link: '/blog' }
+          ].map((art, idx) => (
+            <div key={idx} className="saas-card p-5 flex flex-col justify-between h-40 border border-zinc-200/60 dark:border-zinc-850/60 hover:border-indigo-500/30 transition">
+              <div className="space-y-2">
+                <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-850 text-[9px] font-black text-zinc-500 uppercase tracking-wider">Tutorial</span>
+                <h4 className="text-xs font-black text-zinc-900 dark:text-white leading-snug">{art.title}</h4>
+                <p className="text-[10px] text-zinc-455 dark:text-zinc-500 leading-normal font-semibold">{art.desc}</p>
+              </div>
+              <Link to={art.link} className="text-[10px] font-extrabold text-indigo-650 dark:text-indigo-400 inline-flex items-center gap-1 hover:gap-1.5 transition-all">
+                Read Guide <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* SECTION 11: About Founder */}
+      <section className="p-8 md:p-12 rounded-3xl border border-zinc-200/80 dark:border-zinc-850/80 bg-zinc-50/30 dark:bg-zinc-900/10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-5">
+          <div className="w-14 h-14 rounded-2xl bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center text-white dark:text-zinc-900 font-black text-lg">
+            AS
+          </div>
+          <div>
+            <h3 className="text-base font-black text-zinc-900 dark:text-white">Ajinkya Swami</h3>
+            <p className="text-[11px] text-zinc-450 dark:text-zinc-500 font-semibold">Founder of Toolique & Voxelique</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <a
+            href="https://github.com/ajinkyaswami1999"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/80 text-[10px] font-black text-zinc-650 dark:text-zinc-400 hover:text-indigo-600 transition"
+          >
+            GitHub Profile
+          </a>
+          <a
+            href="https://www.linkedin.com/in/ajinkya-swami-82751b191/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-zinc-800/80 text-[10px] font-black text-zinc-650 dark:text-zinc-400 hover:text-indigo-600 transition"
+          >
+            LinkedIn Connect
+          </a>
+          <Link
+            to="/about-founder"
+            className="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-[10px] font-black hover:scale-105 transition"
+          >
+            Founder Biography
+          </Link>
+        </div>
+      </section>
+
+      {/* SECTION 12: CTA */}
+      <section className="text-center p-12 rounded-3xl bg-gradient-to-br from-indigo-950 via-zinc-950 to-indigo-950 text-white border border-zinc-850 shadow-xl space-y-5">
+        <h2 className="text-2xl md:text-3xl font-black">Ready to Explore?</h2>
+        <p className="text-xs text-zinc-400 max-w-md mx-auto leading-relaxed font-semibold">
+          Unlock 300+ free online developers and engineering calculation tools. No signup, no storage limits, completely secure inside your local browser.
+        </p>
+        <Link
+          to="/tools"
+          className="inline-block px-6 py-3 rounded-2xl bg-white text-zinc-900 font-extrabold text-xs shadow-md hover:scale-105 transition"
+        >
+          Browse All Tools
+        </Link>
       </section>
     </div>
   );

@@ -23,12 +23,21 @@ const PlaygroundHub = lazy(() => import('../pages/PlaygroundHub'));
 const BlogResources = lazy(() => import('../pages/BlogResources'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const CategoryLanding = lazy(() => import('../pages/CategoryLanding'));
+const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/tools" element={<Home />} />
+      <Route path="/tools" element={
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
+            Loading Directory...
+          </div>
+        }>
+          <ToolsDirectory />
+        </Suspense>
+      } />
       <Route path="/tools/:categoryName" element={
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
