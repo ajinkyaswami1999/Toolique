@@ -355,7 +355,7 @@ export default function AcademyLanding() {
                     placeholder="Search challenges by title, tag, or company (e.g. JOINs, Google)..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-955 text-xs font-semibold focus:outline-none focus:border-indigo-500 placeholder-zinc-450 dark:placeholder-zinc-650"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-xs font-semibold focus:outline-none focus:border-indigo-500 placeholder-zinc-450 dark:placeholder-zinc-650"
                   />
                 </div>
                 <button

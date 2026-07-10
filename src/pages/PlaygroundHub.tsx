@@ -9,6 +9,15 @@ export default function PlaygroundHub() {
   const [logs, setLogs] = useState<string[]>([]);
   const [executing, setExecuting] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'));
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDarkTheme(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   // REST API Client states
   const [apiUrl, setApiUrl] = useState<string>('https://jsonplaceholder.typicode.com/posts/1');
@@ -188,7 +197,7 @@ export default function PlaygroundHub() {
                 <Editor
                   height="100%"
                   language={activeTab === 'json' ? 'json' : activeTab === 'python' ? 'python' : 'javascript'}
-                  theme="vs-dark"
+                  theme={isDarkTheme ? 'vs-dark' : 'light'}
                   value={code}
                   onChange={(val) => setCode(val || '')}
                   options={{
@@ -239,8 +248,8 @@ export default function PlaygroundHub() {
 
               {/* REST Response Area */}
               <div className="flex-grow flex flex-col space-y-2">
-                <span className="text-[10px] font-bold text-zinc-450 dark:text-zinc-500">Response output:</span>
-                <pre className="flex-grow bg-zinc-950 text-indigo-400 p-4 rounded-xl font-mono text-[10px] leading-relaxed overflow-auto border border-zinc-850/80 text-left min-h-[250px]">
+                 <span className="text-[10px] font-bold text-zinc-450 dark:text-zinc-500">Response output:</span>
+                <pre className="flex-grow bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-indigo-400 p-4 rounded-xl font-mono text-[10px] leading-relaxed overflow-auto border border-zinc-200 dark:border-zinc-850/80 text-left min-h-[250px]">
                   <code>{apiResponse || 'Send a request to see output data.'}</code>
                 </pre>
               </div>
@@ -255,11 +264,11 @@ export default function PlaygroundHub() {
             <span>Console output logs</span>
           </div>
 
-          <div className="flex-grow bg-zinc-950 p-4 overflow-y-auto font-mono text-[11px] space-y-2 text-left min-h-[150px]">
+          <div className="flex-grow bg-zinc-100 dark:bg-zinc-950 p-4 overflow-y-auto font-mono text-[11px] space-y-2 text-left min-h-[150px]">
             {logs.length > 0 ? (
               logs.map((log, index) => (
                 <div key={index} className={`whitespace-pre-wrap ${
-                  log.startsWith('Runtime Error') ? 'text-rose-400' : 'text-zinc-300'
+                  log.startsWith('Runtime Error') ? 'text-rose-600 dark:text-rose-455' : 'text-zinc-800 dark:text-zinc-300'
                 }`}>
                   {log}
                 </div>

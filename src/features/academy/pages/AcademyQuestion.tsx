@@ -78,6 +78,15 @@ export default function AcademyQuestion() {
   const [copied, setCopied] = useState(false);
   const [scoreModal, setScoreModal] = useState(false);
   const [earnedXp, setEarnedXp] = useState<number | null>(null);
+  const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'));
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDarkTheme(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   // Playgrounds runtimes state
   const [db, setDb] = useState<any>(null);
@@ -533,7 +542,7 @@ export default function AcademyQuestion() {
                 language={categoryId === 'sql' ? 'sql' : categoryId === 'python' ? 'python' : 'javascript'}
                 value={code}
                 onChange={(val: string | undefined) => setCode(val || '')}
-                theme="vs-dark"
+                theme={isDarkTheme ? 'vs-dark' : 'light'}
                 options={{
                   minimap: { enabled: false },
                   fontSize: 12,

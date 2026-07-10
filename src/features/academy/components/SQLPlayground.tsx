@@ -21,6 +21,15 @@ export default function SQLPlayground() {
   const [queryResults, setQueryResults] = useState<any[]>([]);
   const [historyList, setHistoryList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'));
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDarkTheme(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   // SQL client instances
   const [db, setDb] = useState<any>(null);
@@ -295,7 +304,7 @@ export default function SQLPlayground() {
               if (activeTab === 'js') setJsCode(val || '');
               if (activeTab === 'python') setPyCode(val || '');
             }}
-            theme="vs-dark"
+            theme={isDarkTheme ? 'vs-dark' : 'light'}
             options={{
               minimap: { enabled: false },
               fontSize: 12,
@@ -308,7 +317,7 @@ export default function SQLPlayground() {
         </div>
 
         <div className="col-span-1 lg:col-span-4 space-y-4">
-          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/20 dark:bg-zinc-955/20 space-y-3">
+          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/20 dark:bg-zinc-905/20 space-y-3">
             <h4 className="text-[10px] font-black text-zinc-450 dark:text-zinc-555 uppercase tracking-wider flex justify-between">
               <span>Query History</span>
               {historyList.length > 0 && (
@@ -339,8 +348,8 @@ export default function SQLPlayground() {
             )}
           </div>
 
-          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-955 text-emerald-400 font-mono text-[11px] min-h-[8.5rem] max-h-48 overflow-y-auto space-y-1">
-            <div className="text-[10px] font-bold text-zinc-500 border-b border-zinc-800/80 pb-1 mb-2">Console output:</div>
+          <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-emerald-400 font-mono text-[11px] min-h-[8.5rem] max-h-48 overflow-y-auto space-y-1">
+            <div className="text-[10px] font-bold text-zinc-500 border-b border-zinc-200 dark:border-zinc-800/80 pb-1 mb-2">Console output:</div>
             {consoleOutput.length > 0 ? (
               consoleOutput.map((log, index) => (
                 <div key={index} className="leading-relaxed whitespace-pre-wrap">{log}</div>

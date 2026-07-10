@@ -8,6 +8,15 @@ export default function HTMLPlayground() {
   
   const [iframeSrcDoc, setIframeSrcDoc] = useState('');
   const [previewWidth, setPreviewWidth] = useState<'100%' | '768px' | '375px'>('100%');
+  const [isDarkTheme, setIsDarkTheme] = useState(() => document.documentElement.classList.contains('dark'));
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDarkTheme(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   // Trigger preview compilation
   const handleCompile = () => {
@@ -105,7 +114,7 @@ export default function HTMLPlayground() {
               language="html"
               value={htmlCode}
               onChange={(val: string | undefined) => setHtmlCode(val || '')}
-              theme="vs-dark"
+              theme={isDarkTheme ? 'vs-dark' : 'light'}
               options={{
                 minimap: { enabled: false },
                 fontSize: 11,
@@ -119,14 +128,14 @@ export default function HTMLPlayground() {
         </div>
 
         <div className="space-y-1">
-          <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-550 uppercase">style.css</span>
+          <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-555 uppercase">style.css</span>
           <div className="rounded-xl border border-zinc-200 dark:border-zinc-850 overflow-hidden shadow-sm">
             <Editor
               height="200px"
               language="css"
               value={cssCode}
               onChange={(val: string | undefined) => setCssCode(val || '')}
-              theme="vs-dark"
+              theme={isDarkTheme ? 'vs-dark' : 'light'}
               options={{
                 minimap: { enabled: false },
                 fontSize: 11,

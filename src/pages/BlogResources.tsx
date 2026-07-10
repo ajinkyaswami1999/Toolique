@@ -69,7 +69,7 @@ export default function BlogResources() {
       />
 
       {/* Header Panel */}
-      <div className="relative p-8 md:p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-teal-950 via-zinc-955 to-zinc-900 border border-zinc-800 shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div className="relative p-8 md:p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-teal-950 via-zinc-950 to-zinc-900 border border-zinc-800 shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div className="space-y-3 relative z-10 max-w-xl">
           <span className="px-3.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-teal-500/10 text-teal-400 border border-teal-500/25">
             Resources & Blog
