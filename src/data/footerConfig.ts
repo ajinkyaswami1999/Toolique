@@ -71,7 +71,7 @@ export const footerConfig = {
       links: [
         { label: "GitHub", link: "https://github.com/ajinkyaswami1999", icon: "Github" },
         { label: "LinkedIn", link: "https://linkedin.com/in/ajinkya-swami", icon: "Linkedin" },
-        { label: "Instagram", link: "https://instagram.com/ajinkyaswami1999", icon: "Instagram" },
+        { label: "Instagram", link: "https://instagram.com/ajinkyaswami.in", icon: "Instagram" },
         { label: "Voxelique", link: "https://voxelique.com", icon: "Printer" },
         { label: "Email", link: "mailto:support@toolique.com", icon: "Mail" },
         { label: "Discord", link: "https://discord.gg/toolique", icon: "MessageSquare", future: true },

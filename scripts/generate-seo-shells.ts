@@ -32,7 +32,7 @@ const organizationSchema = {
   'sameAs': [
     'https://github.com/ajinkyaswami1999',
     'https://www.linkedin.com/in/ajinkya-swami-82751b191/',
-    'https://www.instagram.com/2ajinkya6/',
+    'https://www.instagram.com/ajinkyaswami.in/',
     'https://voxelique.com',
     'https://www.instagram.com/voxelique/'
   ]
@@ -65,7 +65,7 @@ const personSchema = {
   'sameAs': [
     'https://github.com/ajinkyaswami1999',
     'https://www.linkedin.com/in/ajinkya-swami-82751b191/',
-    'https://www.instagram.com/2ajinkya6/',
+    'https://www.instagram.com/ajinkyaswami.in/',
     'https://voxelique.com',
     'https://www.instagram.com/voxelique/'
   ]
@@ -169,7 +169,7 @@ const staticPages = [
           'sameAs': [
             'https://github.com/ajinkyaswami1999',
             'https://www.linkedin.com/in/ajinkya-swami-82751b191/',
-            'https://www.instagram.com/2ajinkya6/',
+            'https://www.instagram.com/ajinkyaswami.in/',
             'https://www.instagram.com/voxelique/',
             'https://www.toolique.in',
             'https://voxelique.com'

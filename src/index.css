@@ -63,3 +63,12 @@ select option {
 .saas-button-secondary {
   @apply flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 font-bold text-sm hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200;
 }
+
+/* Subtle dot-grid texture for premium section backgrounds */
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dark .bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+}
