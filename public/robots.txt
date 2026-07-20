@@ -7,7 +7,7 @@ Disallow: /*?q=
 Disallow: /*?category=
 Disallow: /*?view=
 
-# Allow major crawlers full access to all tool pages and sitemaps
+# Allow major search engine crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -20,10 +20,30 @@ Allow: /
 User-agent: DuckDuckBot
 Allow: /
 
-User-agent: facebookexternalhit
+# Allow AI Answer Engines & LLM Web Crawlers for AEO (Answer Engine Optimization)
+User-agent: GPTBot
 Allow: /
 
-User-agent: Twitterbot
+User-agent: ChatGPT-User
 Allow: /
 
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# Sitemaps & Machine Readable Indexes
 Sitemap: https://www.toolique.in/sitemap.xml

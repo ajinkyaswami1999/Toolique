@@ -102,6 +102,12 @@ const template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
 
 const staticPages = [
   {
+    path: '404',
+    title: '404 - Page Not Found | Toolique',
+    description: 'The requested page could not be found on Toolique. Search our 100+ free online calculators and developer tools.',
+    keywords: ['404', 'page not found', 'toolique']
+  },
+  {
     path: 'about',
     title: 'About Us | Toolique',
     description: 'Learn more about Toolique - our mission to provide high-quality, privacy-focused calculators and developer tools.',
@@ -289,7 +295,8 @@ function generateShell(
   keywords: string[],
   schemaMarkup?: object
 ) {
-  const fullUrl = `https://www.toolique.in/${routePath}`;
+  const cleanPath = routePath.replace(/^\/+|\/+$/g, '');
+  const fullUrl = cleanPath === '' ? 'https://www.toolique.in/' : `https://www.toolique.in/${cleanPath}`;
   let html = template.replace(/<script\s+type="application\/ld\+json">[\s\S]*?<\/script>/gi, '');
 
   // 1. Replace metadata
@@ -637,3 +644,22 @@ ${urls.map(u => `  <url>
 }
 
 generateXmlSitemap();
+
+// Sync public static files to dist/
+['robots.txt', 'llms.txt', 'llms-full.txt'].forEach(file => {
+  const src = path.resolve('public', file);
+  const dest = path.join(DIST_DIR, file);
+  if (fs.existsSync(src)) {
+    fs.copyFileSync(src, dest);
+    console.log(`Synced ${file} to dist/`);
+  }
+});
+
+// Copy 404 shell to root dist/404.html for host routing
+const shell404 = path.join(DIST_DIR, '404', 'index.html');
+if (fs.existsSync(shell404)) {
+  fs.copyFileSync(shell404, path.join(DIST_DIR, '404.html'));
+  console.log('Synced 404.html to dist/ root');
+}
+
+

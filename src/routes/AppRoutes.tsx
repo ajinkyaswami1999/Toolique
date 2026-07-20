@@ -24,6 +24,7 @@ const BlogResources = lazy(() => import('../pages/BlogResources'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const CategoryLanding = lazy(() => import('../pages/CategoryLanding'));
 const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
+const NotFound = lazy(() => import('../pages/NotFound'));
 
 export default function AppRoutes() {
   return (
@@ -133,13 +134,9 @@ export default function AppRoutes() {
       <Route path="/terms-conditions" element={<TermsConditions />} />
       <Route path="/disclaimer" element={<Disclaimer />} />
       <Route path="*" element={
-        <div className="text-center py-20 space-y-4">
-          <h2 className="text-3xl font-black text-slate-800 dark:text-white">Page Not Found</h2>
-          <p className="text-slate-500">The page you are looking for does not exist.</p>
-          <a href="/" className="inline-block px-5 py-2 rounded-xl bg-teal-600 text-white font-bold text-sm">
-            Return Home
-          </a>
-        </div>
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
+          <NotFound />
+        </Suspense>
       } />
     </Routes>
   );

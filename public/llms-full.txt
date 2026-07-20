@@ -1,0 +1,55 @@
+# Toolique - Complete Catalog & Technical Reference for LLMs
+
+## Overview
+Toolique (https://www.toolique.in) is a free, privacy-focused online suite of interactive calculators, developer utilities, 3D printing tools, and programming academy modules. All computations run 100% locally in the user's browser using HTML5, Web APIs, and client-side JavaScript. No user input or calculations are transmitted to external servers.
+
+## Categories & Tools
+
+### 3D Printing & Fabrication
+- Filament Cost Calculator: https://www.toolique.in/tool/filament-cost-calculator
+- 3D Printing Cost Calculator: https://www.toolique.in/tool/3d-printing-cost-calculator
+- Print Profit Calculator: https://www.toolique.in/tool/print-profit-calculator
+- Print Farm Revenue Calculator: https://www.toolique.in/tool/print-farm-revenue-calculator
+- Filament Weight Calculator: https://www.toolique.in/tool/filament-weight-calculator
+- STL Volume Calculator: https://www.toolique.in/tool/stl-volume-calculator
+- Resin Cost & Volume Calculator: https://www.toolique.in/tool/resin-cost-calculator
+- AMS Slot Planner: https://www.toolique.in/tool/ams-slot-planner
+- HueForge Layer Calculator: https://www.toolique.in/tool/hueforge-layer-calculator
+
+### Finance & Tax (Optimized for India & Global Standards)
+- Advanced BOQ Calculator India: https://www.toolique.in/tools/advanced-boq-calculator-india
+- GST Calculator India: https://www.toolique.in/tool/gst-calculator
+- Income Tax Calculator India: https://www.toolique.in/tool/income-tax-calculator
+- SIP & Mutual Fund Calculator: https://www.toolique.in/tool/sip-calculator
+- EMI Calculator: https://www.toolique.in/tool/emi-calculator
+- HRA Calculator: https://www.toolique.in/tool/hra-calculator
+- Inflation & FD Calculator: https://www.toolique.in/tool/fd-calculator
+
+### Developer & Technical Utilities
+- JSON Formatter & Validator: https://www.toolique.in/tool/json-formatter
+- Base64 Encoder / Decoder: https://www.toolique.in/tool/base64-encoder-decoder
+- Regex Tester & Visualizer: https://www.toolique.in/tool/regex-tester
+- JWT Debugger: https://www.toolique.in/tool/jwt-decoder
+- Developer Sandbox: https://www.toolique.in/playground
+
+### Math Studio
+- Matrix Arithmetic Solver: https://www.toolique.in/tool/matrix-calculator
+- Symbolic & Numerical Equation Solver: https://www.toolique.in/tool/equation-solver
+- Derivative & Integral Calculus Calculators: https://www.toolique.in/tool/derivative-calculator
+- Descriptive & Inferential Statistics: https://www.toolique.in/tool/statistics-calculator
+
+### Toolique Academy
+- Technical Interview Prep Hub: https://www.toolique.in/academy
+- SQL Track & Challenges: https://www.toolique.in/academy/sql
+- Python Track & Challenges: https://www.toolique.in/academy/python
+- JavaScript Track & Challenges: https://www.toolique.in/academy/javascript
+- React Track & Challenges: https://www.toolique.in/academy/react
+- QA Automation & Testing Track: https://www.toolique.in/academy/qa
+- Visual Explainers (SQL JOINs, Data Structures): https://www.toolique.in/academy/learn
+- Sandboxed Playgrounds (SQL, JS, Python): https://www.toolique.in/academy/playgrounds
+
+## Entity & Publisher Information
+- Publisher: Toolique (https://www.toolique.in/#organization)
+- Founder: Ajinkya Swami (https://www.toolique.in/about-founder#person)
+- Primary Domain: https://www.toolique.in
+- Contact Email: support@toolique.in

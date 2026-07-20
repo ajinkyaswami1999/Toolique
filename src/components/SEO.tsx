@@ -45,8 +45,17 @@ export default function SEO({ title, description, keywords, canonicalUrl, schema
       linkCanonical.setAttribute('rel', 'canonical');
       document.head.appendChild(linkCanonical);
     }
-    // Clean canonical URL by stripping query parameters/hash values to avoid duplicate content penalties
-    const currentUrl = canonicalUrl || (window.location.origin + window.location.pathname);
+    
+    // Standardize canonical URL to https://www.toolique.in production domain without query params or trailing slashes
+    let currentUrl: string;
+    if (canonicalUrl) {
+      currentUrl = canonicalUrl;
+    } else {
+      const rawPath = window.location.pathname;
+      const cleanPath = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');
+      currentUrl = `https://www.toolique.in${cleanPath}`;
+    }
+
     linkCanonical.setAttribute('href', currentUrl);
 
     // 5. Update Open Graph Meta Tags (Dynamic Social Sharing)
@@ -84,7 +93,8 @@ export default function SEO({ title, description, keywords, canonicalUrl, schema
     setMetaName('twitter:card', 'summary_large_image');
     setMetaName('twitter:title', formattedTitle);
     setMetaName('twitter:description', description);
-    setMetaName('twitter:image', 'https://toolique.in/og-image.png');
+    setMetaName('twitter:url', currentUrl);
+    setMetaName('twitter:image', 'https://www.toolique.in/favicon-512x512.png');
 
 
 

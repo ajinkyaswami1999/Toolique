@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 
 const DIST_DIR = path.resolve('dist');
-const REPORT_PATH = path.resolve('C:/Users/payworld/.gemini/antigravity/brain/17962094-82c2-4379-9365-90dae24f6bdf/seo_audit_results.md');
 
 interface AuditIssue {
   file: string;
@@ -29,8 +28,10 @@ function walkDir(dir: string, callback: (filePath: string) => void) {
 }
 
 function runAudit() {
-  console.log('Starting Toolique automated SEO & Schema Audit...');
-  
+  console.log('=====================================================');
+  console.log('Toolique Automated Technical SEO, AEO & GEO Audit');
+  console.log('=====================================================\n');
+
   if (!fs.existsSync(DIST_DIR)) {
     console.error('Error: Build directory "dist/" does not exist. Run "npm run build" first.');
     process.exit(1);
@@ -40,6 +41,7 @@ function runAudit() {
   const robotsPath = path.join(DIST_DIR, 'robots.txt');
   const publicRobots = path.resolve('public/robots.txt');
   const targetRobots = fs.existsSync(robotsPath) ? robotsPath : (fs.existsSync(publicRobots) ? publicRobots : null);
+  
   if (!targetRobots) {
     issuesList.push({
       file: 'robots.txt',
@@ -57,13 +59,38 @@ function runAudit() {
         message: 'Robots.txt does not declare Sitemap path.'
       });
     }
+
+    // AEO Check: AI Crawlers in robots.txt
+    const aiBots = ['GPTBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended'];
+    const missingBots = aiBots.filter(bot => !robotsText.includes(bot));
+    if (missingBots.length > 0) {
+      issuesList.push({
+        file: 'robots.txt',
+        type: 'AEO Robots',
+        severity: 'low',
+        message: `Robots.txt does not explicitly configure AI bots: ${missingBots.join(', ')}.`
+      });
+    }
   }
 
-  // 2. Audit sitemap.xml
+  // 2. Audit llms.txt (AEO File)
+  const llmsPath = path.join(DIST_DIR, 'llms.txt');
+  const publicLlms = path.resolve('public/llms.txt');
+  if (!fs.existsSync(llmsPath) && !fs.existsSync(publicLlms)) {
+    issuesList.push({
+      file: 'llms.txt',
+      type: 'AEO File',
+      severity: 'medium',
+      message: 'Missing /llms.txt file for AI Large Language Model discovery.'
+    });
+  }
+
+  // 3. Audit sitemap.xml
   const sitemapPath = path.join(DIST_DIR, 'sitemap.xml');
   const publicSitemap = path.resolve('public/sitemap.xml');
   const targetSitemap = fs.existsSync(sitemapPath) ? sitemapPath : (fs.existsSync(publicSitemap) ? publicSitemap : null);
   let sitemapUrls: string[] = [];
+  
   if (!targetSitemap) {
     issuesList.push({
       file: 'sitemap.xml',
@@ -80,7 +107,7 @@ function runAudit() {
     }
   }
 
-  // 3. Scan HTML files
+  // 4. Scan pre-rendered HTML files
   walkDir(DIST_DIR, (filePath) => {
     totalFilesChecked++;
     const content = fs.readFileSync(filePath, 'utf8');
@@ -158,6 +185,16 @@ function runAudit() {
       });
     }
 
+    // Pre-rendering verification: check if body contains HTML in root
+    if (content.includes('<div id="root"></div>')) {
+      issuesList.push({
+        file: relativePath,
+        type: 'Pre-rendering',
+        severity: 'medium',
+        message: 'Blank #root container without pre-rendered fallback text for crawlers.'
+      });
+    }
+
     // Verify JSON-LD Schema
     const scriptRegex = /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/gi;
     let scriptMatch;
@@ -229,45 +266,24 @@ function runAudit() {
     }
   });
 
-  // Generate Report Markdown
+  // Output audit summary
   const highs = issuesList.filter(i => i.severity === 'high');
   const mediums = issuesList.filter(i => i.severity === 'medium');
   const lows = issuesList.filter(i => i.severity === 'low');
 
-  const reportContent = `# Toolique: Technical SEO & Schema Audit Report
+  console.log(`Audit Summary Metrics:`);
+  console.log(`- Scanned Files: ${totalFilesChecked}`);
+  console.log(`- Sitemap Registered URLs: ${sitemapUrls.length}`);
+  console.log(`- High Severity Errors: ${highs.length}`);
+  console.log(`- Medium Severity Warnings: ${mediums.length}`);
+  console.log(`- Low Severity Info: ${lows.length}`);
 
-This report presents dynamic results from the automated audit of the pre-rendered \`dist/\` build folder.
-
----
-
-## 1. Audit Summary Metrics
-
-- **Total HTML files scanned:** ${totalFilesChecked}
-- **High Severity Errors:** ${highs.length}
-- **Medium Severity Warnings:** ${mediums.length}
-- **Low Severity Notifications:** ${lows.length}
-- **Site Sitemap URL Count:** ${sitemapUrls.length}
-
----
-
-## 2. Issues Log
-
-${issuesList.length > 0 ? (
-  issuesList.map(issue => `- **[${issue.severity.toUpperCase()}]** [${issue.type}] in \`${issue.file}\`: ${issue.message}`).join('\n')
-) : (
-  '✅ Complete Pass! Zero technical SEO errors, missing headers, or malformed schemas found.'
-)}
-
----
-
-*Report generated automatically by \`npm run seo:audit\`.*
-`;
-
-  fs.writeFileSync(REPORT_PATH, reportContent, 'utf8');
-  console.log(`\nAudit completed successfully!`);
-  console.log(`Files scanned: ${totalFilesChecked}`);
-  console.log(`Total issues identified: ${issuesList.length} (High: ${highs.length}, Medium: ${mediums.length})`);
-  console.log(`Detailed audit report written to: ${REPORT_PATH}\n`);
+  if (issuesList.length === 0) {
+    console.log('\n✅ 100% Indexing, AEO & GEO Verification Passed cleanly!');
+  } else {
+    console.log(`\nIdentified Issues:`);
+    issuesList.forEach(i => console.log(` - [${i.severity.toUpperCase()}] [${i.type}] in ${i.file}: ${i.message}`));
+  }
 }
 
 runAudit();

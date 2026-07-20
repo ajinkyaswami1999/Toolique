@@ -167,7 +167,7 @@ export const skillsData: SkillCategory[] = [
   },
   {
     category: 'DevOps & Other',
-    skills: ['Git & GitHub', 'CI/CD Pipelines', 'Docker', 'Agile / Scrum', 'Jira', 'Rapid Prototyping'],
+    skills: ['Git & GitHub', 'Agile / Scrum', 'Jira', 'Rapid Prototyping'],
     icon: Wrench
   }
 ];

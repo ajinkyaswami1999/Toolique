@@ -1,0 +1,25 @@
+# Toolique - Free Online Calculators, Developer Tools & Academy
+> Toolique is a free, privacy-focused online suite of 100+ interactive calculators, developer utilities, 3D printing tools, math studio solvers, and programming academy tools operating completely in the browser without server data collection.
+
+## Core Capabilities & Tool Studios
+
+- [3D Print Studio](https://www.toolique.in/3d-print-studio): Filament cost, resin volume, print pricing, Bambu Lab AMS slot planner, HueForge layer planner, and print farm revenue calculators.
+- [Math Studio](https://www.toolique.in/math-studio): 22 browser-based mathematical tools covering equation solvers, matrix arithmetic, descriptive statistics, 2D/3D geometry, calculus derivatives/integrals, and Fourier transforms.
+- [Tools Directory](https://www.toolique.in/tools): Full catalog of 100+ free calculators spanning Finance (GST, HRA, SIP, EMI), Developer (JSON, Base64, Regex, JWT), Image processing, Civil/BOQ, and Text utilities.
+- [Developer Playground](https://www.toolique.in/playground): Client-side sandboxed environment for JavaScript execution, JSON manipulation, Python scripts, and REST API testing.
+- [AI Studio](https://www.toolique.in/ai): Browser-sandboxed AI models for instant SQL query generation, test case validation, and regex pattern synthesis.
+- [Toolique Academy](https://www.toolique.in/academy): Interactive coding challenges, technical interview prep (SQL, Python, JavaScript, React, QA Automation), visual explainers, and browser sandboxes.
+
+## Key Static & Informational Pages
+
+- [About Toolique](https://www.toolique.in/about): Platform mission, privacy-first client-side architecture, and tech stack details.
+- [About Founder](https://www.toolique.in/about-founder): Info on Ajinkya Swami, Software Architect and QA Automation Engineer.
+- [Knowledge Base & Blog](https://www.toolique.in/blog): Technical articles, calculation guides, and developer roadmaps.
+- [Privacy Policy](https://www.toolique.in/privacy-policy): Zero-data collection disclosure and local browser storage security.
+- [Terms & Conditions](https://www.toolique.in/terms-conditions): Usage rights and terms for online calculators.
+
+## Full Catalog & System Information
+
+- Full API & Tool Directory: [llms-full.txt](https://www.toolique.in/llms-full.txt)
+- XML Sitemap: [sitemap.xml](https://www.toolique.in/sitemap.xml)
+- Canonical Domain: https://www.toolique.in
