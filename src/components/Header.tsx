@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Sun, Moon, Search, Menu, X, Command, User } from 'lucide-react';
+import { Sun, Moon, Search, Menu, X, User } from 'lucide-react';
 import { toolsList } from '../data/tools';
+import { TooliqueLogo } from './Logo';
 
 export default function Header() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -82,13 +83,8 @@ export default function Header() {
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="flex items-center justify-center w-8.5 h-8.5 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 transition-transform duration-300 group-hover:rotate-12">
-            <Command className="w-4.5 h-4.5" />
-          </div>
-          <span className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
-            Toolique
-          </span>
+        <Link to="/" className="flex items-center group">
+          <TooliqueLogo iconSize="w-8.5 h-8.5" />
         </Link>
 
         {/* Desktop Navigation */}

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  ArrowRight, Command, Heart, ChevronUp, Mail, MessageSquare, Printer,
+  ArrowRight, Heart, ChevronUp, Mail, MessageSquare, Printer,
   Zap, ShieldCheck, MonitorCheck, Smartphone
 } from 'lucide-react';
 import { footerConfig } from '../data/footerConfig';
+import { TooliqueLogo } from './Logo';
 
 // Custom Inline SVGs for brand logos to prevent compilation issues with lucide-react brand icons
 const GithubIcon = ({ className = "w-5 h-5" }) => (
@@ -221,13 +222,8 @@ export default function Footer() {
         
         {/* Column 1: Brand Info */}
         <div className="lg:col-span-4 space-y-5">
-          <Link to="/" className="flex items-center gap-2 group w-fit" aria-label="Toolique Home">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 transition-transform duration-300 group-hover:rotate-12">
-              <Command className="w-4.5 h-4.5" />
-            </div>
-            <span className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
-              {footerConfig.companyDetails.logoText}
-            </span>
+          <Link to="/" className="group flex items-center w-fit" aria-label="Toolique Home">
+            <TooliqueLogo iconSize="w-9 h-9" showTagline={true} />
           </Link>
           <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-sm font-medium">
             {footerConfig.companyDetails.description}
