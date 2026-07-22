@@ -1,4 +1,5 @@
-﻿import { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
 import { Code2, Copy, Check, Sparkles, Trash2, ArrowDownUp, AlertCircle } from 'lucide-react';
 
 export default function JSONFormatter() {

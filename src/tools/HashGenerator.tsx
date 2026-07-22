@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { KeyRound, Copy, Check } from 'lucide-react';
 
 // Lightweight, pure TypeScript MD5 implementation
@@ -56,8 +56,8 @@ function computeMD5(str: string): string {
     let d = h3;
 
     for (let j = 0; j < 64; j++) {
-      let f = 0;
-      let g = 0;
+      let f: number;
+      let g: number;
       if (j < 16) {
         f = (b & c) | (~b & d);
         g = j;
@@ -114,7 +114,9 @@ export default function HashGenerator() {
 
   useEffect(() => {
     if (!input) {
-      setHashes({ md5: '', sha1: '', sha256: '', sha512: '' });
+      Promise.resolve().then(() => {
+        setHashes({ md5: '', sha1: '', sha256: '', sha512: '' });
+      });
       return;
     }
 

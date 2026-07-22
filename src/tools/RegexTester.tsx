@@ -1,4 +1,5 @@
-﻿import { useState, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useMemo } from 'react';
 import { Search } from 'lucide-react';
 
 interface MatchItem {
@@ -18,16 +19,15 @@ export default function RegexTester() {
     'Welcome to Toolique! We build awesome browser tools for Indian developers.'
   );
 
-  const [matches, setMatches] = useState<MatchItem[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [highlightedNodes, setHighlightedNodes] = useState<React.ReactNode[]>([]);
-
-  useEffect(() => {
-    setError(null);
-    setMatches([]);
-    setHighlightedNodes([testString]);
-
-    if (!pattern) return;
+  // Derived matches, error, and highlightedNodes
+  const { matches, error, highlightedNodes } = useMemo(() => {
+    if (!pattern) {
+      return {
+        matches: [],
+        error: null,
+        highlightedNodes: [testString]
+      };
+    }
 
     try {
       // Build flags string
@@ -64,8 +64,6 @@ export default function RegexTester() {
         }
       }
 
-      setMatches(list);
-
       // Construct highlighted node array
       const nodes: React.ReactNode[] = [];
       let lastIdx = 0;
@@ -93,9 +91,17 @@ export default function RegexTester() {
         nodes.push(testString.substring(lastIdx));
       }
 
-      setHighlightedNodes(nodes);
+      return {
+        matches: list,
+        error: null,
+        highlightedNodes: nodes
+      };
     } catch (err: any) {
-      setError(err.message || 'Invalid Regular Expression');
+      return {
+        matches: [],
+        error: err.message || 'Invalid Regular Expression',
+        highlightedNodes: [testString]
+      };
     }
   }, [pattern, flags, testString]);
 

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/purity */
+import { useState, useMemo } from 'react';
 import { Copy, Sparkles, AlignLeft, Check } from 'lucide-react';
 
 const LOREM_WORDS = [
@@ -25,39 +26,39 @@ export default function LoremIpsumGenerator() {
   const [count, setCount] = useState<number>(3);
   const [startWithLorem, setStartWithLorem] = useState<boolean>(true);
   const [includeHtml, setIncludeHtml] = useState<boolean>(false);
-  const [generatedText, setGeneratedText] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
+  const [regenTrigger, setRegenTrigger] = useState(0);
+  const generatedText = useMemo(() => {
+    if (regenTrigger < 0) return '';
+    const generateWords = (numWords: number): string => {
+      let result: string[] = [];
+      if (startWithLorem && numWords > 0) {
+        result = ["Lorem", "ipsum", "dolor", "sit", "amet"];
+      }
+      while (result.length < numWords) {
+        const idx = Math.floor(Math.random() * LOREM_WORDS.length);
+        result.push(LOREM_WORDS[idx]);
+      }
+      // Capitalize first letter
+      const text = result.join(' ');
+      return text.charAt(0).toUpperCase() + text.slice(1) + '.';
+    };
 
-  const generateWords = (numWords: number): string => {
-    let result: string[] = [];
-    if (startWithLorem && numWords > 0) {
-      result = ["Lorem", "ipsum", "dolor", "sit", "amet"];
-    }
-    while (result.length < numWords) {
-      const idx = Math.floor(Math.random() * LOREM_WORDS.length);
-      result.push(LOREM_WORDS[idx]);
-    }
-    // Capitalize first letter
-    const text = result.join(' ');
-    return text.charAt(0).toUpperCase() + text.slice(1) + '.';
-  };
+    const generateSentences = (numSentences: number): string => {
+      const sentences: string[] = [];
+      for (let i = 0; i < numSentences; i++) {
+        const sentenceLength = 6 + Math.floor(Math.random() * 12);
+        let s = generateWords(sentenceLength);
+        // Remove trailing period inside words helper if any, and ensure it ends with period
+        if (s.endsWith('.')) s = s.slice(0, -1);
+        sentences.push(s + '.');
+      }
+      if (startWithLorem && sentences.length > 0) {
+        sentences[0] = sentences[0].replace(/^[a-zA-Z]+/, "Lorem");
+      }
+      return sentences.join(' ');
+    };
 
-  const generateSentences = (numSentences: number): string => {
-    const sentences: string[] = [];
-    for (let i = 0; i < numSentences; i++) {
-      const sentenceLength = 6 + Math.floor(Math.random() * 12);
-      let s = generateWords(sentenceLength);
-      // Remove trailing period inside words helper if any, and ensure it ends with period
-      if (s.endsWith('.')) s = s.slice(0, -1);
-      sentences.push(s + '.');
-    }
-    if (startWithLorem && sentences.length > 0) {
-      sentences[0] = sentences[0].replace(/^[a-zA-Z]+/, "Lorem");
-    }
-    return sentences.join(' ');
-  };
-
-  const generateText = () => {
     let output = '';
 
     if (type === 'paragraphs') {
@@ -90,12 +91,12 @@ export default function LoremIpsumGenerator() {
       output = items.join('\n');
     }
 
-    setGeneratedText(output);
-  };
+    return output;
+  }, [type, count, startWithLorem, includeHtml, regenTrigger]);
 
-  useEffect(() => {
-    generateText();
-  }, [type, count, startWithLorem, includeHtml]);
+  const generateText = () => {
+    setRegenTrigger(prev => prev + 1);
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedText);

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Upload, Download, RotateCw, Image as ImageIcon } from 'lucide-react';
 
 export default function YouTubeThumbnailResizer() {
@@ -51,19 +51,7 @@ export default function YouTubeThumbnailResizer() {
     }
   };
 
-  // Render to canvas
-  useEffect(() => {
-    if (!imageSrc || !canvasRef.current) return;
-
-    const img = new Image();
-    img.src = imageSrc;
-    img.onload = () => {
-      imageRef.current = img;
-      draw();
-    };
-  }, [imageSrc, zoom, rotation, offsetX, offsetY, fitMode]);
-
-  const draw = () => {
+  const draw = useCallback(() => {
     const canvas = canvasRef.current;
     const img = imageRef.current;
     if (!canvas || !img) return;
@@ -107,12 +95,24 @@ export default function YouTubeThumbnailResizer() {
     );
 
     ctx.restore();
-  };
+  }, [format, rotation, fitMode, zoom, offsetX, offsetY]);
 
-  // Redraw when format changes (for background color toggle)
+  // Load and draw image
+  useEffect(() => {
+    if (!imageSrc) return;
+
+    const img = new Image();
+    img.src = imageSrc;
+    img.onload = () => {
+      imageRef.current = img;
+      draw();
+    };
+  }, [imageSrc, draw]);
+
+  // Redraw when format changes or draw logic updates
   useEffect(() => {
     draw();
-  }, [format]);
+  }, [draw]);
 
   const downloadImage = () => {
     const canvas = canvasRef.current;

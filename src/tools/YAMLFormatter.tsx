@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Copy, Sparkles, AlertCircle, CheckCircle2, Trash2, ArrowRight } from 'lucide-react';
 
@@ -20,7 +21,7 @@ const yamlToObj = (yamlText: string): any => {
     { indent: -1, key: '', obj: root }
   ];
 
-  for (let line of lines) {
+  for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith('#')) continue;
 

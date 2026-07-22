@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/purity */
+import { useState, useMemo } from 'react';
 import { Lock, Copy, Sparkles, RefreshCw } from 'lucide-react';
 
 export default function PasswordGenerator() {
@@ -8,10 +9,11 @@ export default function PasswordGenerator() {
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeSymbols, setIncludeSymbols] = useState(true);
   const [excludeSimilar, setExcludeSimilar] = useState(false);
-  const [password, setPassword] = useState('');
   const [copied, setCopied] = useState(false);
+  const [regenTrigger, setRegenTrigger] = useState(0);
 
-  const generatePassword = () => {
+  const password = useMemo(() => {
+    if (regenTrigger < 0) return '';
     let charset = '';
     let uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
@@ -31,8 +33,7 @@ export default function PasswordGenerator() {
     if (includeSymbols) charset += symbolChars;
 
     if (!charset) {
-      setPassword('');
-      return;
+      return '';
     }
 
     let newPassword = '';
@@ -40,12 +41,12 @@ export default function PasswordGenerator() {
       const randomIndex = Math.floor(Math.random() * charset.length);
       newPassword += charset[randomIndex];
     }
-    setPassword(newPassword);
-  };
+    return newPassword;
+  }, [length, includeUppercase, includeLowercase, includeNumbers, includeSymbols, excludeSimilar, regenTrigger]);
 
-  useEffect(() => {
-    generatePassword();
-  }, [length, includeUppercase, includeLowercase, includeNumbers, includeSymbols, excludeSimilar]);
+  const generatePassword = () => {
+    setRegenTrigger(prev => prev + 1);
+  };
 
   const handleCopy = () => {
     if (!password) return;

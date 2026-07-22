@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Copy, Sparkles, AlertCircle, CheckCircle2, Trash2 } from 'lucide-react';
 

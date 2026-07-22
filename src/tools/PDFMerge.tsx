@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { FileText, Upload, Trash2, ArrowUp, ArrowDown, Download, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';

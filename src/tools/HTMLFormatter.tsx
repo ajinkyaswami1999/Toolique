@@ -10,7 +10,7 @@ export default function HTMLFormatter() {
     if (!html.trim()) return '';
     
     let formatted = '';
-    const reg = /(<\/?[a-zA-Z0-9\-]+(?:\s+[a-zA-Z0-9\-]+(?:=(?:"[^"]*"|'[^']*'|[^>\s]+))?)*\s*\/?>)|([^<>]+)/g;
+    const reg = /(<\/?[a-zA-Z0-9-]+(?:\s+[a-zA-Z0-9-]+(?:=(?:"[^"]*"|'[^']*'|[^>\s]+))?)*\s*\/?>)|([^<>]+)/g;
     let pad = 0;
     
     // List of standard self-closing tags in HTML
@@ -28,7 +28,7 @@ export default function HTMLFormatter() {
         const isSelfClosingInline = tag.endsWith('/>');
 
         // Extract tag name
-        const tagNameMatch = tag.match(/<\/?([a-zA-Z0-9\-]+)/);
+        const tagNameMatch = tag.match(/<\/?([a-zA-Z0-9-]+)/);
         const tagName = tagNameMatch ? tagNameMatch[1] : '';
         const isStandardSelfClosing = selfClosingTags.test(tagName);
 

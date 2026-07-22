@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Percent, Copy, Check, Info } from 'lucide-react';
 
 type TransactionType = 'intra' | 'ut' | 'inter';
@@ -18,19 +18,9 @@ export default function GSTCalculator() {
   
   const [copied, setCopied] = useState<boolean>(false);
 
-  const [results, setResults] = useState({
-    baseAmount: 0,
-    cgstAmount: 0,
-    sgstAmount: 0,
-    utgstAmount: 0,
-    igstAmount: 0,
-    totalGst: 0,
-    totalAmount: 0,
-  });
-
   const slabs = [5, 12, 18, 28];
 
-  useEffect(() => {
+  const results = useMemo(() => {
     // Determine active rates based on transaction type and toggles
     let cgstRate = 0;
     let sgstRate = 0;
@@ -74,7 +64,7 @@ export default function GSTCalculator() {
 
     const totalGst = cgst + sgst + utgst + igst;
 
-    setResults({
+    return {
       baseAmount: Number(base.toFixed(2)),
       cgstAmount: Number(cgst.toFixed(2)),
       sgstAmount: Number(sgst.toFixed(2)),
@@ -82,7 +72,7 @@ export default function GSTCalculator() {
       igstAmount: Number(igst.toFixed(2)),
       totalGst: Number(totalGst.toFixed(2)),
       totalAmount: Number(total.toFixed(2)),
-    });
+    };
   }, [amount, gstRate, calcType, transactionType, includeCGST, includeSGST, includeUTGST, includeIGST]);
 
   const copyResults = () => {

@@ -21,7 +21,7 @@ export default function CssBeautifier() {
 
     // Re-introduce spacing around properties
     formatted = formatted.split('\n').map(line => {
-      let trimmed = line.trim();
+      const trimmed = line.trim();
       if (!trimmed) return '';
       if (trimmed.startsWith('}') || trimmed.startsWith('{') || trimmed.endsWith('{')) {
         return trimmed;

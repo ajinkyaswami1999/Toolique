@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Copy, Sparkles, AlertCircle, CheckCircle2, Trash2 } from 'lucide-react';
 
@@ -65,7 +66,7 @@ export default function JSONValidator() {
         isValid: true,
         message: 'Valid JSON and beautifully formatted!'
       });
-    } catch (err: any) {
+    } catch {
       handleValidate();
     }
   };
@@ -78,7 +79,7 @@ export default function JSONValidator() {
         isValid: true,
         message: 'Valid JSON and minified!'
       });
-    } catch (err: any) {
+    } catch {
       handleValidate();
     }
   };

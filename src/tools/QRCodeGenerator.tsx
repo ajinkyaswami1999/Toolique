@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { Download, Settings, RefreshCw } from 'lucide-react';
 
@@ -9,23 +9,23 @@ export default function QRCodeGenerator() {
   const [size, setSize] = useState<number>(300);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const generateQR = async () => {
-    if (!canvasRef.current) return;
-    try {
-      await QRCode.toCanvas(canvasRef.current, text || ' ', {
-        width: size,
-        margin: 2,
-        color: {
-          dark: fgColor,
-          light: bgColor,
-        },
-      });
-    } catch (err) {
-      console.error('QR Code generation error:', err);
-    }
-  };
-
   useEffect(() => {
+    const generateQR = async () => {
+      if (!canvasRef.current) return;
+      try {
+        await QRCode.toCanvas(canvasRef.current, text || ' ', {
+          width: size,
+          margin: 2,
+          color: {
+            dark: fgColor,
+            light: bgColor,
+          },
+        });
+      } catch (err) {
+        console.error('QR Code generation error:', err);
+      }
+    };
+
     generateQR();
   }, [text, fgColor, bgColor, size]);
 

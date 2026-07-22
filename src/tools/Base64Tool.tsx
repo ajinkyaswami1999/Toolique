@@ -1,39 +1,34 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Binary, Copy, Check, Trash2, Download, Upload } from 'lucide-react';
 
 export default function Base64Tool() {
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
   const [input, setInput] = useState<string>('Hello, Toolique!');
-  const [output, setOutput] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
 
-  useEffect(() => {
-    setError(null);
+  // Derived output and error
+  const { output, error } = useMemo(() => {
     if (!input) {
-      setOutput('');
-      return;
+      return { output: '', error: null };
     }
 
     try {
       if (mode === 'encode') {
         // Safe UTF-8 Base64 Encoding
         const encoded = btoa(unescape(encodeURIComponent(input)));
-        setOutput(encoded);
+        return { output: encoded, error: null };
       } else {
         // Safe UTF-8 Base64 Decoding
         // Remove whitespace/newlines from base64 string
         const cleanInput = input.replace(/\s+/g, '');
         const decoded = decodeURIComponent(escape(atob(cleanInput)));
-        setOutput(decoded);
+        return { output: decoded, error: null };
       }
-    } catch (err) {
-      setOutput('');
-      if (mode === 'decode') {
-        setError('Invalid Base64 string. Please check the character set and padding.');
-      } else {
-        setError('Encoding failed. Ensure valid text input.');
-      }
+    } catch {
+      const errorMsg = mode === 'decode'
+        ? 'Invalid Base64 string. Please check the character set and padding.'
+        : 'Encoding failed. Ensure valid text input.';
+      return { output: '', error: errorMsg };
     }
   }, [input, mode]);
 
@@ -46,8 +41,6 @@ export default function Base64Tool() {
 
   const handleClear = () => {
     setInput('');
-    setOutput('');
-    setError(null);
   };
 
   const handleDownload = () => {

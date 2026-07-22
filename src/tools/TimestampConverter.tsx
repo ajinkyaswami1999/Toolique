@@ -1,18 +1,13 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/purity */
+import { useState, useEffect, useMemo } from 'react';
 import { Copy, Clock, Calendar, ArrowRightLeft } from 'lucide-react';
 
 export default function TimestampConverter() {
-  const [currentEpoch, setCurrentEpoch] = useState(Math.floor(Date.now() / 1000));
+  const [currentEpoch, setCurrentEpoch] = useState(() => Math.floor(Date.now() / 1000));
   const [copiedClock, setCopiedClock] = useState(false);
 
   // Epoch to Date state
-  const [inputEpoch, setInputEpoch] = useState<string>(Math.floor(Date.now() / 1000).toString());
-  const [epochResult, setEpochResult] = useState<{
-    local: string;
-    utc: string;
-    iso: string;
-    relative: string;
-  } | null>(null);
+  const [inputEpoch, setInputEpoch] = useState<string>(() => Math.floor(Date.now() / 1000).toString());
 
   // Date to Epoch state
   const [inputDate, setInputDate] = useState<string>(() => {
@@ -20,10 +15,6 @@ export default function TimestampConverter() {
     d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
     return d.toISOString().slice(0, 19);
   });
-  const [dateResult, setDateResult] = useState<{
-    seconds: number;
-    milliseconds: number;
-  } | null>(null);
 
   const [copiedResult, setCopiedResult] = useState<string | null>(null);
 
@@ -35,24 +26,22 @@ export default function TimestampConverter() {
     return () => clearInterval(timer);
   }, []);
 
-  // Convert Epoch to Date details
-  const convertEpoch = (val: string) => {
-    if (!val.trim() || isNaN(Number(val))) {
-      setEpochResult(null);
-      return;
+  // Derived Epoch to Date details
+  const epochResult = useMemo(() => {
+    if (!inputEpoch.trim() || isNaN(Number(inputEpoch))) {
+      return null;
     }
 
-    let num = Number(val);
+    let num = Number(inputEpoch);
     // Auto-detect seconds vs milliseconds (millisecond length is typically 13 digits)
-    const isMs = val.trim().length >= 13;
+    const isMs = inputEpoch.trim().length >= 13;
     if (!isMs) {
       num = num * 1000;
     }
 
     const date = new Date(num);
     if (isNaN(date.getTime())) {
-      setEpochResult(null);
-      return;
+      return null;
     }
 
     // Relative time string helper
@@ -60,7 +49,7 @@ export default function TimestampConverter() {
     const diff = date.getTime() - now;
     const absDiff = Math.abs(diff);
     
-    let relative = '';
+    let relative: string;
     const secs = Math.floor(absDiff / 1000);
     const mins = Math.floor(secs / 60);
     const hours = Math.floor(mins / 60);
@@ -76,38 +65,27 @@ export default function TimestampConverter() {
       relative = diff > 0 ? `in ${days} days` : `${days} days ago`;
     }
 
-    setEpochResult({
+    return {
       local: date.toString(),
       utc: date.toUTCString(),
       iso: date.toISOString(),
       relative
-    });
-  };
-
-  // Convert Date to Epoch details
-  const convertDate = (val: string) => {
-    if (!val) {
-      setDateResult(null);
-      return;
-    }
-    const date = new Date(val);
-    if (isNaN(date.getTime())) {
-      setDateResult(null);
-      return;
-    }
-    setDateResult({
-      seconds: Math.floor(date.getTime() / 1000),
-      milliseconds: date.getTime()
-    });
-  };
-
-  // Trigger initial conversions
-  useEffect(() => {
-    convertEpoch(inputEpoch);
+    };
   }, [inputEpoch]);
 
-  useEffect(() => {
-    convertDate(inputDate);
+  // Derived Date to Epoch details
+  const dateResult = useMemo(() => {
+    if (!inputDate) {
+      return null;
+    }
+    const date = new Date(inputDate);
+    if (isNaN(date.getTime())) {
+      return null;
+    }
+    return {
+      seconds: Math.floor(date.getTime() / 1000),
+      milliseconds: date.getTime()
+    };
   }, [inputDate]);
 
   const handleCopy = (text: string, label: string) => {

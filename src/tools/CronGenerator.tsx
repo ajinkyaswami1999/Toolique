@@ -65,36 +65,40 @@ const translateCron = (cronStr: string): string => {
   if (parts.length < 5) return 'Invalid expression structure. Requires 5 space-separated parts.';
   const [min, hour, dom, month, dow] = parts;
 
-  let minDesc = '';
-  if (min === '*') minDesc = 'every minute';
-  else if (min.startsWith('*/')) minDesc = `every ${min.split('/')[1]} minutes`;
-  else minDesc = `at minute ${min}`;
+  const minDesc = min === '*'
+    ? 'every minute'
+    : min.startsWith('*/')
+    ? `every ${min.split('/')[1]} minutes`
+    : `at minute ${min}`;
 
-  let hourDesc = '';
-  if (hour === '*') hourDesc = 'every hour';
-  else if (hour.startsWith('*/')) hourDesc = `every ${hour.split('/')[1]} hours`;
-  else {
-    const h = parseInt(hour, 10);
-    const suffix = h >= 12 ? 'PM' : 'AM';
-    const displayHour = h % 12 === 0 ? 12 : h % 12;
-    hourDesc = `at ${displayHour} ${suffix}`;
-  }
+  const hourDesc = hour === '*'
+    ? 'every hour'
+    : hour.startsWith('*/')
+    ? `every ${hour.split('/')[1]} hours`
+    : (() => {
+        const h = parseInt(hour, 10);
+        const suffix = h >= 12 ? 'PM' : 'AM';
+        const displayHour = h % 12 === 0 ? 12 : h % 12;
+        return `at ${displayHour} ${suffix}`;
+      })();
 
-  let domDesc = '';
-  if (dom === '*') domDesc = 'every day';
-  else domDesc = `on day ${dom} of the month`;
+  const domDesc = dom === '*' 
+    ? 'every day' 
+    : `on day ${dom} of the month`;
 
-  let monthDesc = '';
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  if (month === '*') monthDesc = 'every month';
-  else if (month.includes(',')) monthDesc = `in ${month.split(',').map(m => months[parseInt(m, 10) - 1]).join(', ')}`;
-  else monthDesc = `in ${months[parseInt(month, 10) - 1] || 'month ' + month}`;
+  const monthDesc = month === '*'
+    ? 'every month'
+    : month.includes(',')
+    ? `in ${month.split(',').map(m => months[parseInt(m, 10) - 1]).join(', ')}`
+    : `in ${months[parseInt(month, 10) - 1] || 'month ' + month}`;
 
-  let dowDesc = '';
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  if (dow === '*') dowDesc = 'every day of the week';
-  else if (dow.includes(',')) dowDesc = `on ${dow.split(',').map(d => days[parseInt(d, 10)]).join(', ')}`;
-  else dowDesc = `on ${days[parseInt(dow, 10)] || 'weekday ' + dow}`;
+  const dowDesc = dow === '*'
+    ? 'every day of the week'
+    : dow.includes(',')
+    ? `on ${dow.split(',').map(d => days[parseInt(d, 10)]).join(', ')}`
+    : `on ${days[parseInt(dow, 15)] || 'weekday ' + dow}`;
 
   return `Runs ${minDesc}, ${hourDesc}, ${domDesc}, ${monthDesc}, ${dowDesc}.`;
 };

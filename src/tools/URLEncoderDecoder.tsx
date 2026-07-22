@@ -1,38 +1,31 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Link, Copy, Check, Trash2 } from 'lucide-react';
 
 export default function URLEncoderDecoder() {
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
   const [input, setInput] = useState<string>('https://Toolique/search?q=GST calculator & tools!');
-  const [output, setOutput] = useState<string>('');
   const [type, setType] = useState<'component' | 'uri'>('component');
-  const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
 
-  useEffect(() => {
-    setError(null);
+  // Derived output and error
+  const { output, error } = useMemo(() => {
     if (!input) {
-      setOutput('');
-      return;
+      return { output: '', error: null };
     }
 
     try {
       if (mode === 'encode') {
-        if (type === 'component') {
-          setOutput(encodeURIComponent(input));
-        } else {
-          setOutput(encodeURI(input));
-        }
+        const val = type === 'component' ? encodeURIComponent(input) : encodeURI(input);
+        return { output: val, error: null };
       } else {
-        if (type === 'component') {
-          setOutput(decodeURIComponent(input));
-        } else {
-          setOutput(decodeURI(input));
-        }
+        const val = type === 'component' ? decodeURIComponent(input) : decodeURI(input);
+        return { output: val, error: null };
       }
-    } catch (err) {
-      setOutput('');
-      setError('Decoding failed. Please ensure the input is a valid URL-encoded string (e.g. correct percentage escapes like %20).');
+    } catch {
+      return {
+        output: '',
+        error: 'Decoding failed. Please ensure the input is a valid URL-encoded string (e.g. correct percentage escapes like %20).'
+      };
     }
   }, [input, mode, type]);
 
@@ -45,8 +38,6 @@ export default function URLEncoderDecoder() {
 
   const handleClear = () => {
     setInput('');
-    setOutput('');
-    setError(null);
   };
 
   return (

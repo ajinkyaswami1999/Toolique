@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { RefreshCw, Copy, Check } from 'lucide-react';
 
 const STANDARDS = {
@@ -7,24 +7,13 @@ const STANDARDS = {
   electrical: { name: 'Electrical (1 HP ≈ 0.746 kW)', val: 0.746 }
 };
 
-export default function kWToHPConverter() {
+export default function KWToHPConverter() {
   const [standard, setStandard] = useState<'mechanical' | 'metric' | 'electrical'>('electrical');
   const [kw, setKw] = useState<number>(1);
-  const [hp, setHp] = useState<number>(1.341);
-  
-  const [activeInput, setActiveInput] = useState<'kw' | 'hp'>('kw');
   const [copied, setCopied] = useState<boolean>(false);
 
-  useEffect(() => {
-    const ratio = STANDARDS[standard].val;
-    if (activeInput === 'kw') {
-      const calculatedHp = kw / ratio;
-      setHp(isNaN(calculatedHp) ? 0 : calculatedHp);
-    } else {
-      const calculatedKw = hp * ratio;
-      setKw(isNaN(calculatedKw) ? 0 : calculatedKw);
-    }
-  }, [kw, hp, standard, activeInput]);
+  const ratio = STANDARDS[standard].val;
+  const hp = kw / ratio;
 
   const handleCopy = () => {
     const summary = `Power Conversion Report
@@ -41,9 +30,7 @@ Horsepower: ${hp.toFixed(4)} HP`;
 
   const handleReset = () => {
     setStandard('electrical');
-    setActiveInput('kw');
     setKw(1);
-    setHp(1.341);
   };
 
   return (
@@ -66,7 +53,7 @@ Horsepower: ${hp.toFixed(4)} HP`;
             <label className="block text-xs font-bold text-zinc-500 mb-1.5">HORSEPOWER STANDARD</label>
             <select
               value={standard}
-              onChange={(e) => setStandard(e.target.value as any)}
+              onChange={(e) => setStandard(e.target.value as 'mechanical' | 'metric' | 'electrical')}
               className="saas-select w-full"
             >
               <option value="electrical">{STANDARDS.electrical.name}</option>
@@ -83,8 +70,7 @@ Horsepower: ${hp.toFixed(4)} HP`;
                 type="number"
                 value={kw % 1 === 0 ? kw : Number(kw.toFixed(4))}
                 onChange={(e) => {
-                  setActiveInput('kw');
-                  setKw(Number(e.target.value));
+                  setKw(e.target.value === '' ? 0 : Number(e.target.value));
                 }}
                 className="saas-input flex-1 font-bold"
               />
@@ -97,7 +83,6 @@ Horsepower: ${hp.toFixed(4)} HP`;
               step="0.1"
               value={kw}
               onChange={(e) => {
-                setActiveInput('kw');
                 setKw(Number(e.target.value));
               }}
               className="w-full h-1 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-indigo-650"
@@ -112,8 +97,8 @@ Horsepower: ${hp.toFixed(4)} HP`;
                 type="number"
                 value={hp % 1 === 0 ? hp : Number(hp.toFixed(4))}
                 onChange={(e) => {
-                  setActiveInput('hp');
-                  setHp(Number(e.target.value));
+                  const val = e.target.value === '' ? 0 : Number(e.target.value);
+                  setKw(val * ratio);
                 }}
                 className="saas-input flex-1 font-bold"
               />
@@ -126,8 +111,7 @@ Horsepower: ${hp.toFixed(4)} HP`;
               step="0.1"
               value={hp}
               onChange={(e) => {
-                setActiveInput('hp');
-                setHp(Number(e.target.value));
+                setKw(Number(e.target.value) * ratio);
               }}
               className="w-full h-1 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-indigo-650"
             />

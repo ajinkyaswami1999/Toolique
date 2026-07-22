@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Database, Copy, Check, Sparkles, Trash2, ArrowDownUp } from 'lucide-react';
 
 export default function SQLFormatter() {
@@ -67,10 +67,10 @@ export default function SQLFormatter() {
 
     // Split SELECT columns if there are many?
     // We can keep it simple: clean indent on main keywords
-    let lines = sql.split('\n');
-    let formatted = lines
+    const lines = sql.split('\n');
+    const formatted = lines
       .map((line) => {
-        let trimmed = line.trim();
+        const trimmed = line.trim();
         // Add indentation for sub-clauses
         if (trimmed.startsWith('AND') || trimmed.startsWith('OR') || trimmed.startsWith('ON')) {
           return '  ' + trimmed;

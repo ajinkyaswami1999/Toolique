@@ -1,26 +1,34 @@
-﻿import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Fingerprint, Copy, Check, RefreshCw } from 'lucide-react';
+
+// Fallback UUID v4 generator if crypto.randomUUID isn't available
+const generateUUIDv4 = (): string => {
+  if (typeof window !== 'undefined' && typeof window.crypto?.randomUUID === 'function') {
+    return window.crypto.randomUUID();
+  }
+  // Fallback math-based uuid v4
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
 
 export default function UUIDGenerator() {
   const [count, setCount] = useState<number>(5);
   const [useUppercase, setUseUppercase] = useState<boolean>(false);
   const [includeHyphens, setIncludeHyphens] = useState<boolean>(true);
-  const [uuids, setUuids] = useState<string[]>([]);
+  
+  const [uuids, setUuids] = useState<string[]>(() => {
+    const list: string[] = [];
+    for (let i = 0; i < 5; i++) {
+      list.push(generateUUIDv4());
+    }
+    return list;
+  });
+
   const [copiedAll, setCopiedAll] = useState<boolean>(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
-
-  // Fallback UUID v4 generator if crypto.randomUUID isn't available
-  const generateUUIDv4 = (): string => {
-    if (typeof window.crypto.randomUUID === 'function') {
-      return window.crypto.randomUUID();
-    }
-    // Fallback math-based uuid v4
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      const r = (Math.random() * 16) | 0;
-      const v = c === 'x' ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    });
-  };
 
   const handleGenerate = () => {
     const list: string[] = [];
@@ -37,11 +45,6 @@ export default function UUIDGenerator() {
     }
     setUuids(list);
   };
-
-  // Initial load
-  useEffect(() => {
-    handleGenerate();
-  }, []);
 
   const handleCopyAll = () => {
     if (uuids.length === 0) return;

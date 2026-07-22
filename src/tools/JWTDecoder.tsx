@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Key, Copy, Check, ShieldAlert, ShieldCheck, Clock } from 'lucide-react';
 
 interface DecodedToken {
@@ -18,16 +18,6 @@ export default function JWTDecoder() {
   const [token, setToken] = useState<string>(
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjI1MTYyMzkwMjJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
   );
-  const [decoded, setDecoded] = useState<DecodedToken>({
-    header: null,
-    payload: null,
-    signature: '',
-    isExpired: null,
-    expirationTime: null,
-    issuedTime: null,
-    notBeforeTime: null,
-  });
-  const [error, setError] = useState<string | null>(null);
   const [copiedHeader, setCopiedHeader] = useState<boolean>(false);
   const [copiedPayload, setCopiedPayload] = useState<boolean>(false);
 
@@ -48,11 +38,7 @@ export default function JWTDecoder() {
     )
   );
   const [encodeSecret, setEncodeSecret] = useState<string>('your-256-bit-secret');
-  const [encodedHeader, setEncodedHeader] = useState<string>('');
-  const [encodedPayload, setEncodedPayload] = useState<string>('');
   const [encodedSignature, setEncodedSignature] = useState<string>('');
-  const [headerError, setHeaderError] = useState<string | null>(null);
-  const [payloadError, setPayloadError] = useState<string | null>(null);
   const [copiedToken, setCopiedToken] = useState<boolean>(false);
 
   // Helper Functions
@@ -101,26 +87,37 @@ export default function JWTDecoder() {
     return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
   }
 
-  // Decoder Effect
-  useEffect(() => {
-    setError(null);
+  // Derived decoded token and decoder error
+  const { decoded, error } = useMemo<{ decoded: DecodedToken; error: string | null }>(() => {
     if (!token) {
-      setDecoded({
-        header: null,
-        payload: null,
-        signature: '',
-        isExpired: null,
-        expirationTime: null,
-        issuedTime: null,
-        notBeforeTime: null,
-      });
-      return;
+      return {
+        error: null,
+        decoded: {
+          header: null,
+          payload: null,
+          signature: '',
+          isExpired: null,
+          expirationTime: null,
+          issuedTime: null,
+          notBeforeTime: null,
+        }
+      };
     }
 
     const segments = token.trim().split('.');
     if (segments.length !== 3) {
-      setError('A valid JWT must have 3 segments separated by dots (.)');
-      return;
+      return {
+        error: 'A valid JWT must have 3 segments separated by dots (.)',
+        decoded: {
+          header: null,
+          payload: null,
+          signature: '',
+          isExpired: null,
+          expirationTime: null,
+          issuedTime: null,
+          notBeforeTime: null,
+        }
+      };
     }
 
     try {
@@ -136,6 +133,7 @@ export default function JWTDecoder() {
       if (payloadDecoded.exp) {
         const expDate = new Date(payloadDecoded.exp * 1000);
         expirationTime = expDate.toLocaleString('en-IN');
+        // eslint-disable-next-line react-hooks/purity
         isExpired = expDate.getTime() < Date.now();
       }
 
@@ -147,54 +145,88 @@ export default function JWTDecoder() {
         notBeforeTime = new Date(payloadDecoded.nbf * 1000).toLocaleString('en-IN');
       }
 
-      setDecoded({
-        header: headerDecoded,
-        payload: payloadDecoded,
-        signature,
-        isExpired,
-        expirationTime,
-        issuedTime,
-        notBeforeTime,
-      });
-    } catch (err) {
-      setError('Failed to parse JWT segments. Please verify that the token is base64url encoded JSON.');
+      return {
+        error: null,
+        decoded: {
+          header: headerDecoded,
+          payload: payloadDecoded,
+          signature,
+          isExpired,
+          expirationTime,
+          issuedTime,
+          notBeforeTime,
+        }
+      };
+    } catch {
+      return {
+        error: 'Failed to parse JWT segments. Please verify that the token is base64url encoded JSON.',
+        decoded: {
+          header: null,
+          payload: null,
+          signature: '',
+          isExpired: null,
+          expirationTime: null,
+          issuedTime: null,
+          notBeforeTime: null,
+        }
+      };
     }
   }, [token]);
 
-  // Encoder Effect
+  // Derived encoder objects and validation errors
+  const {
+    headerError,
+    payloadError,
+    encodedHeader,
+    encodedPayload,
+    unsignedToken,
+  } = useMemo(() => {
+    let headerObj: object | null = null;
+    let payloadObj: object | null = null;
+    let headerErr: string | null = null;
+    let payloadErr: string | null = null;
+
+    try {
+      headerObj = JSON.parse(encodeHeader);
+    } catch (e) {
+      headerErr = `Invalid Header JSON: ${e instanceof Error ? e.message : String(e)}`;
+    }
+
+    try {
+      payloadObj = JSON.parse(encodePayload);
+    } catch (e) {
+      payloadErr = `Invalid Payload JSON: ${e instanceof Error ? e.message : String(e)}`;
+    }
+
+    const headerB64 = headerObj ? base64UrlEncode(JSON.stringify(headerObj)) : '';
+    const payloadB64 = payloadObj ? base64UrlEncode(JSON.stringify(payloadObj)) : '';
+    const unsigned = (headerErr || payloadErr) ? '' : `${headerB64}.${payloadB64}`;
+
+    return {
+      headerError: headerErr,
+      payloadError: payloadErr,
+      encodedHeader: headerB64,
+      encodedPayload: payloadB64,
+      unsignedToken: unsigned,
+    };
+  }, [encodeHeader, encodePayload]);
+
+  // Effect for signing
   useEffect(() => {
-    let hObj: object;
-    try {
-      hObj = JSON.parse(encodeHeader);
-      setHeaderError(null);
-    } catch (e: any) {
-      setHeaderError(`Invalid Header JSON: ${e.message}`);
+    if (!unsignedToken) {
+      Promise.resolve().then(() => {
+        setEncodedSignature('');
+      });
       return;
     }
-
-    let pObj: object;
-    try {
-      pObj = JSON.parse(encodePayload);
-      setPayloadError(null);
-    } catch (e: any) {
-      setPayloadError(`Invalid Payload JSON: ${e.message}`);
-      return;
-    }
-
-    const hB64 = base64UrlEncode(JSON.stringify(hObj));
-    const pB64 = base64UrlEncode(JSON.stringify(pObj));
-    setEncodedHeader(hB64);
-    setEncodedPayload(pB64);
-
-    const unsigned = `${hB64}.${pB64}`;
-    signHMAC256(unsigned, encodeSecret)
+    signHMAC256(unsignedToken, encodeSecret)
       .then((sig) => {
         setEncodedSignature(sig);
       })
       .catch((err) => {
         console.error('Signing error:', err);
       });
-  }, [encodeHeader, encodePayload, encodeSecret]);
+  }, [unsignedToken, encodeSecret]);
 
   const copySection = (data: object | null, setCopied: (v: boolean) => void) => {
     if (!data) return;
