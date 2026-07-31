@@ -69,6 +69,67 @@ const FloorTileCalculator = lazy(() => import('../tools/FloorTileCalculator'));
 const PaintCalculator = lazy(() => import('../tools/PaintCalculator'));
 const WallpaperCalculator = lazy(() => import('../tools/WallpaperCalculator'));
 const RampSlopeCalculator = lazy(() => import('../tools/RampSlopeCalculator'));
+const AreaCalculator = lazy(() => import('../tools/AreaCalculator'));
+const BuiltUpAreaCalculator = lazy(() => import('../tools/BuiltUpAreaCalculator'));
+const SuperBuiltUpAreaCalculator = lazy(() => import('../tools/SuperBuiltUpAreaCalculator'));
+const PlotCoverageCalculator = lazy(() => import('../tools/PlotCoverageCalculator'));
+const SpacePlanningCalculator = lazy(() => import('../tools/SpacePlanningCalculator'));
+const OccupancyLoadCalculator = lazy(() => import('../tools/OccupancyLoadCalculator'));
+const FloorEfficiencyCalculator = lazy(() => import('../tools/FloorEfficiencyCalculator'));
+const DoorSizeCalculator = lazy(() => import('../tools/DoorSizeCalculator'));
+const WindowSizeCalculator = lazy(() => import('../tools/WindowSizeCalculator'));
+const CorridorWidthCalculator = lazy(() => import('../tools/CorridorWidthCalculator'));
+const CeilingHeightCalculator = lazy(() => import('../tools/CeilingHeightCalculator'));
+const HeadroomCalculator = lazy(() => import('../tools/HeadroomCalculator'));
+const ParkingSpaceCalculator = lazy(() => import('../tools/ParkingSpaceCalculator'));
+const ElevatorCapacityCalculator = lazy(() => import('../tools/ElevatorCapacityCalculator'));
+const FireExitWidthCalculator = lazy(() => import('../tools/FireExitWidthCalculator'));
+const SiteCoverageCalculator = lazy(() => import('../tools/SiteCoverageCalculator'));
+const SetbackCalculator = lazy(() => import('../tools/SetbackCalculator'));
+const BuildingHeightCalculator = lazy(() => import('../tools/BuildingHeightCalculator'));
+const ShadowLengthCalculator = lazy(() => import('../tools/ShadowLengthCalculator'));
+const SunPathCalculator = lazy(() => import('../tools/SunPathCalculator'));
+const SiteOrientationTool = lazy(() => import('../tools/SiteOrientationTool'));
+const WindDirectionAnalyzer = lazy(() => import('../tools/WindDirectionAnalyzer'));
+const SiteSlopeCalculator = lazy(() => import('../tools/SiteSlopeCalculator'));
+const ContourIntervalCalculator = lazy(() => import('../tools/ContourIntervalCalculator'));
+const ArchitecturalScaleCalculator = lazy(() => import('../tools/ArchitecturalScaleCalculator'));
+const DrawingScaleConverter = lazy(() => import('../tools/DrawingScaleConverter'));
+const ScaleFactorCalculator = lazy(() => import('../tools/ScaleFactorCalculator'));
+const BlueprintAreaCalculator = lazy(() => import('../tools/BlueprintAreaCalculator'));
+const PDFScaleMeasurementTool = lazy(() => import('../tools/PDFScaleMeasurementTool'));
+const CADScaleConverter = lazy(() => import('../tools/CADScaleConverter'));
+const PolygonAreaCalculator = lazy(() => import('../tools/PolygonAreaCalculator'));
+const TriangleCalculator = lazy(() => import('../tools/TriangleCalculator'));
+const CircleCalculator = lazy(() => import('../tools/CircleCalculator'));
+const ArcCalculator = lazy(() => import('../tools/ArcCalculator'));
+const AngleCalculator = lazy(() => import('../tools/AngleCalculator'));
+const RadiusDiameterCalculator = lazy(() => import('../tools/RadiusDiameterCalculator'));
+const DaylightFactorCalculator = lazy(() => import('../tools/DaylightFactorCalculator'));
+const WindowToWallRatioCalculator = lazy(() => import('../tools/WindowToWallRatioCalculator'));
+const NaturalLightingCalculator = lazy(() => import('../tools/NaturalLightingCalculator'));
+const SolarExposureCalculator = lazy(() => import('../tools/SolarExposureCalculator'));
+const RoomVentilationCalculator = lazy(() => import('../tools/RoomVentilationCalculator'));
+const BuildingOrientationCalculator = lazy(() => import('../tools/BuildingOrientationCalculator'));
+const OccupantLoadCalculator = lazy(() => import('../tools/OccupantLoadCalculator'));
+const ExitCapacityCalculator = lazy(() => import('../tools/ExitCapacityCalculator'));
+const AccessibleRampCalculator = lazy(() => import('../tools/AccessibleRampCalculator'));
+const AccessibleToiletClearanceCalculator = lazy(() => import('../tools/AccessibleToiletClearanceCalculator'));
+const ParkingRequirementCalculator = lazy(() => import('../tools/ParkingRequirementCalculator'));
+const FireEscapeTravelDistanceCalculator = lazy(() => import('../tools/FireEscapeTravelDistanceCalculator'));
+const FloorAreaEstimator = lazy(() => import('../tools/FloorAreaEstimator'));
+const BuildingVolumeCalculator = lazy(() => import('../tools/BuildingVolumeCalculator'));
+const FacadeAreaCalculator = lazy(() => import('../tools/FacadeAreaCalculator'));
+const WallAreaCalculator = lazy(() => import('../tools/WallAreaCalculator'));
+const GlassAreaCalculator = lazy(() => import('../tools/GlassAreaCalculator'));
+const MaterialQuantityEstimator = lazy(() => import('../tools/MaterialQuantityEstimator'));
+const DWGVersionChecker = lazy(() => import('../tools/DWGVersionChecker'));
+const DXFViewer = lazy(() => import('../tools/DXFViewer'));
+const CADLayerCounter = lazy(() => import('../tools/CADLayerCounter'));
+const BIMFileInformationViewer = lazy(() => import('../tools/BIMFileInformationViewer'));
+const DrawingRevisionComparator = lazy(() => import('../tools/DrawingRevisionComparator'));
+const PDFDrawingMerger = lazy(() => import('../tools/PDFDrawingMerger'));
+
 
 // Phase 3 - Interior Design (4 tools)
 const FlooringCostCalculator = lazy(() => import('../tools/FlooringCostCalculator'));
@@ -365,6 +426,67 @@ const toolComponents: Record<string, React.ComponentType> = {
   PaintCalculator,
   WallpaperCalculator,
   RampSlopeCalculator,
+  AreaCalculator,
+  BuiltUpAreaCalculator,
+  SuperBuiltUpAreaCalculator,
+  PlotCoverageCalculator,
+  SpacePlanningCalculator,
+  OccupancyLoadCalculator,
+  FloorEfficiencyCalculator,
+  DoorSizeCalculator,
+  WindowSizeCalculator,
+  CorridorWidthCalculator,
+  CeilingHeightCalculator,
+  HeadroomCalculator,
+  ParkingSpaceCalculator,
+  ElevatorCapacityCalculator,
+  FireExitWidthCalculator,
+  SiteCoverageCalculator,
+  SetbackCalculator,
+  BuildingHeightCalculator,
+  ShadowLengthCalculator,
+  SunPathCalculator,
+  SiteOrientationTool,
+  WindDirectionAnalyzer,
+  SiteSlopeCalculator,
+  ContourIntervalCalculator,
+  ArchitecturalScaleCalculator,
+  DrawingScaleConverter,
+  ScaleFactorCalculator,
+  BlueprintAreaCalculator,
+  PDFScaleMeasurementTool,
+  CADScaleConverter,
+  PolygonAreaCalculator,
+  TriangleCalculator,
+  CircleCalculator,
+  ArcCalculator,
+  AngleCalculator,
+  RadiusDiameterCalculator,
+  DaylightFactorCalculator,
+  WindowToWallRatioCalculator,
+  NaturalLightingCalculator,
+  SolarExposureCalculator,
+  RoomVentilationCalculator,
+  BuildingOrientationCalculator,
+  OccupantLoadCalculator,
+  ExitCapacityCalculator,
+  AccessibleRampCalculator,
+  AccessibleToiletClearanceCalculator,
+  ParkingRequirementCalculator,
+  FireEscapeTravelDistanceCalculator,
+  FloorAreaEstimator,
+  BuildingVolumeCalculator,
+  FacadeAreaCalculator,
+  WallAreaCalculator,
+  GlassAreaCalculator,
+  MaterialQuantityEstimator,
+  DWGVersionChecker,
+  DXFViewer,
+  CADLayerCounter,
+  BIMFileInformationViewer,
+  DrawingRevisionComparator,
+  PDFDrawingMerger,
+
 
   // Phase 3 - Interior Design
   FlooringCostCalculator,
