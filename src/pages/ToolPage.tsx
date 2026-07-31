@@ -68,6 +68,7 @@ const CarpetAreaCalculator = lazy(() => import('../tools/CarpetAreaCalculator'))
 const FloorTileCalculator = lazy(() => import('../tools/FloorTileCalculator'));
 const PaintCalculator = lazy(() => import('../tools/PaintCalculator'));
 const WallpaperCalculator = lazy(() => import('../tools/WallpaperCalculator'));
+const RampSlopeCalculator = lazy(() => import('../tools/RampSlopeCalculator'));
 
 // Phase 3 - Interior Design (4 tools)
 const FlooringCostCalculator = lazy(() => import('../tools/FlooringCostCalculator'));
@@ -363,6 +364,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   FloorTileCalculator,
   PaintCalculator,
   WallpaperCalculator,
+  RampSlopeCalculator,
 
   // Phase 3 - Interior Design
   FlooringCostCalculator,
