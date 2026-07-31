@@ -1,4 +1,4 @@
-const CACHE_NAME = 'toolique-static-v2';
+const CACHE_NAME = 'toolique-static-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -45,6 +45,26 @@ self.addEventListener('fetch', (event) => {
 
   // Avoid caching API fetches directly (let runtime handle network fallback)
   if (event.request.url.includes('/api.github.com/')) {
+    return;
+  }
+
+  // Network-First strategy for pages/navigation to avoid stale index.html loading outdated bundle hashes
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          return caches.match('/index.html') || caches.match(event.request);
+        })
+    );
     return;
   }
 
