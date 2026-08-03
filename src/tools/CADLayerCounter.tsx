@@ -122,7 +122,7 @@ ${layers
               <span>3D Isometric CAD Layer Stack</span>
             </span>
 
-            <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-650 hover:bg-indigo-700 text-white text-[10px] font-bold cursor-pointer transition shadow-md">
+            <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-750 text-white text-[10px] font-bold cursor-pointer transition shadow-md">
               <span>Upload DXF / DWG</span>
               <input
                 type="file"
@@ -142,17 +142,25 @@ ${layers
             {/* Dark blueprint grid background */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f2937_1px,transparent_1px),linear-gradient(to_bottom,#1f2937_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] opacity-15 pointer-events-none" />
 
+            {/* CAD Coordinate Axis Indicator (bottom-left) */}
+            <div className="absolute bottom-4 left-4 flex flex-col gap-1 text-[8px] font-mono text-zinc-400 border border-zinc-800/60 bg-slate-900/60 p-2 rounded-lg pointer-events-none">
+              <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-rose-500"/><span>X-AXIS (RED)</span></div>
+              <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"/><span>Y-AXIS (GREEN)</span></div>
+              <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-sky-500"/><span>Z-AXIS (BLUE)</span></div>
+            </div>
+
             <div className="relative w-80 h-80 flex flex-col justify-center items-center select-none">
               {/* Stack Sheets */}
               {layers.map((layer, idx) => {
                 const isSelected = selectedLayer === layer.name;
                 const isHidden = !!hiddenLayers[layer.name];
                 
-                // Stack layout translation values
-                const offsetZ = idx * 28; // standard gap in stack
+                // Stack layout translation values - staggered along Y and Z for maximum legibility
+                const offsetZ = idx * 30; // standard height gap
+                const offsetY = idx * 15; // cascade offset to reveal lower cards
                 const hoverTransform = isSelected
-                  ? `rotateX(60deg) rotateZ(-30deg) translateZ(${offsetZ + 50}px) translateY(-30px)`
-                  : `rotateX(60deg) rotateZ(-30deg) translateZ(${offsetZ}px)`;
+                  ? `rotateX(60deg) rotateZ(-30deg) translateZ(${offsetZ + 60}px) translateY(${offsetY - 40}px)`
+                  : `rotateX(60deg) rotateZ(-30deg) translateZ(${offsetZ}px) translateY(${offsetY}px)`;
 
                 return (
                   <div
@@ -164,7 +172,7 @@ ${layers
                       opacity: isHidden ? 0.15 : 1
                     }}
                     onClick={() => setSelectedLayer(layer.name)}
-                    className={`absolute w-56 h-56 border rounded-2xl bg-slate-900/80 backdrop-blur-md transition-all duration-500 cursor-pointer flex flex-col justify-between p-4 ${
+                    className={`absolute w-56 h-56 border rounded-2xl bg-slate-900/85 backdrop-blur-md transition-all duration-500 cursor-pointer flex flex-col justify-between p-4 ${
                       isSelected ? 'z-40 border-2' : 'z-10'
                     }`}
                   >
