@@ -13,6 +13,7 @@ export interface Tool {
   slug: string;
   name: string;
   category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health' | '3d-printing' | 'math-studio';
+  subcategory?: string;
   shortDescription: string;
   metaDescription: string;
   keywords: string[];
@@ -1170,6 +1171,7 @@ export const toolsList: Tool[] = [
   "slug": "construction-cost-calculator",
   "name": "Construction Cost Calculator",
   "category": "architecture",
+  "subcategory": "Estimation",
   "shortDescription": "Estimate the total cost of construction based on built-up area, quality, and location.",
   "metaDescription": "Free online House Construction Cost Calculator in India. Estimate total budget, material split, and labor split based on quality grades.",
   "keywords": [
@@ -1543,6 +1545,7 @@ export const toolsList: Tool[] = [
   "slug": "far-fsi-calculator",
   "name": "FAR / FSI Calculator",
   "category": "architecture",
+  "subcategory": "Area & Space Planning",
   "shortDescription": "Calculate Floor Area Ratio (FAR) and Floor Space Index (FSI) for plot clearances.",
   "metaDescription": "Free online FAR / FSI Calculator. Check permissible built-up limits, floors, and utilized area ratios according to municipal bylaws.",
   "keywords": [
@@ -1585,6 +1588,7 @@ export const toolsList: Tool[] = [
   "slug": "staircase-calculator",
   "name": "Staircase Calculator",
   "category": "architecture",
+  "subcategory": "Building Design",
   "shortDescription": "Calculate stair riser heights, tread depths, number of steps, and pitch angles.",
   "metaDescription": "Free online Staircase Calculator. Estimate number of risers, tread sizes, total horizontal run, and staircase pitch angles in Imperial and Metric.",
   "keywords": [
@@ -1627,6 +1631,7 @@ export const toolsList: Tool[] = [
   "slug": "room-area-calculator",
   "name": "Room Area Calculator",
   "category": "architecture",
+  "subcategory": "Area & Space Planning",
   "shortDescription": "Add multiple rooms to build a layout and estimate Carpet, Built-up, and Super Built-up areas.",
   "metaDescription": "Interactive Room Area Calculator. Add bedrooms, kitchens, balconies, specify wall thickness, and check total carpet and built-up areas.",
   "keywords": [
@@ -1669,6 +1674,7 @@ export const toolsList: Tool[] = [
   "slug": "carpet-area-calculator",
   "name": "Carpet Area Calculator",
   "category": "architecture",
+  "subcategory": "Area & Space Planning",
   "shortDescription": "Convert between Carpet, Built-up, and Super Built-up areas using standard ratios.",
   "metaDescription": "Free online Carpet Area Calculator. Quick conversion tool to find RERA Carpet area from Super Built-up area and vice versa.",
   "keywords": [
@@ -1711,6 +1717,7 @@ export const toolsList: Tool[] = [
   "slug": "floor-tile-calculator",
   "name": "Floor Tile Calculator",
   "category": "architecture",
+  "subcategory": "Estimation",
   "shortDescription": "Calculate floor tile quantities, tile wastage buffers, and box quantities.",
   "metaDescription": "Online Floor Tile Calculator. Calculate vitrified, ceramic, or wooden floor tile counts, required boxes, and costs based on floor dimensions.",
   "keywords": [
@@ -1753,6 +1760,7 @@ export const toolsList: Tool[] = [
   "slug": "paint-calculator",
   "name": "Paint Calculator",
   "category": "architecture",
+  "subcategory": "Estimation",
   "shortDescription": "Calculate wall and ceiling paint volumes in liters, subtracting window/door areas.",
   "metaDescription": "Free online Paint Calculator. Estimate total paint liters required for rooms based on surface area, coats, and paint quality.",
   "keywords": [
@@ -1795,6 +1803,7 @@ export const toolsList: Tool[] = [
   "slug": "wallpaper-calculator",
   "name": "Wallpaper Calculator",
   "category": "architecture",
+  "subcategory": "Estimation",
   "shortDescription": "Calculate wallpaper rolls based on wall area and pattern match repeat margins.",
   "metaDescription": "Free online Wallpaper Calculator. Calculate standard rolls, pattern repeat margins, and total project costs based on wall size.",
   "keywords": [
@@ -6376,6 +6385,2081 @@ export const toolsList: Tool[] = [
       {
         title: 'Preparing a BOQ for Construction in India',
         content: 'Preparation of a detailed BOQ involves structural measurement takes, choosing appropriate work item descriptions matching CPWD or State DSR (Delhi Schedule of Rates) specifications, estimating wastage coefficients, and applying current local labor and material market rates.'
+      }
+    ]
+  }
+,
+  {
+    "id": "AreaCalculator",
+    "slug": "area-calculator",
+    "name": "Area Calculator",
+    "category": "architecture",
+    "subcategory": "Area & Space Planning",
+    "shortDescription": "Calculate the area of standard and irregular spaces.",
+    "metaDescription": "Free online Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Area Calculator",
+      "Area Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Area Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Area Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "BuiltUpAreaCalculator",
+    "slug": "built-up-area-calculator",
+    "name": "Built-up Area Calculator",
+    "category": "architecture",
+    "subcategory": "Area & Space Planning",
+    "shortDescription": "Calculate building built-up area incorporating exterior walls and balconies.",
+    "metaDescription": "Free online Built-up Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Built-up Area Calculator",
+      "Built-up Area Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Built-up Area Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Built-up Area Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "SuperBuiltUpAreaCalculator",
+    "slug": "super-built-up-area-calculator",
+    "name": "Super Built-up Area Calculator",
+    "category": "architecture",
+    "subcategory": "Area & Space Planning",
+    "shortDescription": "Calculate super built-up area including common areas and loading factor.",
+    "metaDescription": "Free online Super Built-up Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Super Built-up Area Calculator",
+      "Super Built-up Area Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Super Built-up Area Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Super Built-up Area Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "PlotCoverageCalculator",
+    "slug": "plot-coverage-calculator",
+    "name": "Plot Coverage Calculator",
+    "category": "architecture",
+    "subcategory": "Area & Space Planning",
+    "shortDescription": "Determine permissible ground footprint based on zoning coverage guidelines.",
+    "metaDescription": "Free online Plot Coverage Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Plot Coverage Calculator",
+      "Plot Coverage Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Plot Coverage Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Plot Coverage Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "SpacePlanningCalculator",
+    "slug": "space-planning-calculator",
+    "name": "Space Planning Calculator",
+    "category": "architecture",
+    "subcategory": "Area & Space Planning",
+    "shortDescription": "Calculate occupancy layout spreads and modular workspace allocations.",
+    "metaDescription": "Free online Space Planning Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Space Planning Calculator",
+      "Space Planning Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Space Planning Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Space Planning Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "OccupancyLoadCalculator",
+    "slug": "occupancy-load-calculator",
+    "name": "Occupancy Load Calculator",
+    "category": "architecture",
+    "subcategory": "Area & Space Planning",
+    "shortDescription": "Calculate load limits and maximum permissible occupants for safety.",
+    "metaDescription": "Free online Occupancy Load Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Occupancy Load Calculator",
+      "Occupancy Load Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Occupancy Load Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Occupancy Load Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "FloorEfficiencyCalculator",
+    "slug": "floor-efficiency-calculator",
+    "name": "Floor Efficiency Calculator",
+    "category": "architecture",
+    "subcategory": "Area & Space Planning",
+    "shortDescription": "Analyze the ratio of usable carpet area to the total gross area.",
+    "metaDescription": "Free online Floor Efficiency Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Floor Efficiency Calculator",
+      "Floor Efficiency Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Floor Efficiency Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Floor Efficiency Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "RampSlopeCalculator",
+    "slug": "ramp-slope-calculator",
+    "name": "Ramp Slope Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Compute ramp slope gradients, lengths, and heights for architectural access.",
+    "metaDescription": "Free online Ramp Slope Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Ramp Slope Calculator",
+      "Ramp Slope Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Ramp Slope Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Ramp Slope Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "DoorSizeCalculator",
+    "slug": "door-size-calculator",
+    "name": "Door Size Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Determine standard door clearances and dimensions based on occupant load.",
+    "metaDescription": "Free online Door Size Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Door Size Calculator",
+      "Door Size Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Door Size Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Door Size Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "WindowSizeCalculator",
+    "slug": "window-size-calculator",
+    "name": "Window Size Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Calculate required window dimensions for daylight and ventilation guidelines.",
+    "metaDescription": "Free online Window Size Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Window Size Calculator",
+      "Window Size Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Window Size Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Window Size Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "CorridorWidthCalculator",
+    "slug": "corridor-width-calculator",
+    "name": "Corridor Width Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Find minimum corridor width clearances according to occupant capacities.",
+    "metaDescription": "Free online Corridor Width Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Corridor Width Calculator",
+      "Corridor Width Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Corridor Width Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Corridor Width Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "CeilingHeightCalculator",
+    "slug": "ceiling-height-calculator",
+    "name": "Ceiling Height Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Compute minimum and recommended room ceiling heights by category.",
+    "metaDescription": "Free online Ceiling Height Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Ceiling Height Calculator",
+      "Ceiling Height Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Ceiling Height Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Ceiling Height Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "HeadroomCalculator",
+    "slug": "headroom-calculator",
+    "name": "Headroom Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Calculate stair and landing headroom clearances for code compliance.",
+    "metaDescription": "Free online Headroom Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Headroom Calculator",
+      "Headroom Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Headroom Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Headroom Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "ParkingSpaceCalculator",
+    "slug": "parking-space-calculator",
+    "name": "Parking Space Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Calculate parking layout dimensions, bays, and turning radii.",
+    "metaDescription": "Free online Parking Space Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Parking Space Calculator",
+      "Parking Space Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Parking Space Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Parking Space Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "ElevatorCapacityCalculator",
+    "slug": "elevator-capacity-calculator",
+    "name": "Elevator Capacity Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Estimate required elevator size, capacity, and count for buildings.",
+    "metaDescription": "Free online Elevator Capacity Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Elevator Capacity Calculator",
+      "Elevator Capacity Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Elevator Capacity Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Elevator Capacity Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "FireExitWidthCalculator",
+    "slug": "fire-exit-width-calculator",
+    "name": "Fire Exit Width Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Compute exit door widths based on total floor occupancy load limits.",
+    "metaDescription": "Free online Fire Exit Width Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Fire Exit Width Calculator",
+      "Fire Exit Width Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Fire Exit Width Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Fire Exit Width Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "SiteCoverageCalculator",
+    "slug": "site-coverage-calculator",
+    "name": "Site Coverage Calculator",
+    "category": "architecture",
+    "subcategory": "Site Planning",
+    "shortDescription": "Calculate building footprint percentage relative to the total site plot.",
+    "metaDescription": "Free online Site Coverage Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Site Coverage Calculator",
+      "Site Coverage Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Site Coverage Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Site Coverage Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "SetbackCalculator",
+    "slug": "setback-calculator",
+    "name": "Setback Calculator",
+    "category": "architecture",
+    "subcategory": "Site Planning",
+    "shortDescription": "Determine front, rear, and side setback boundary clear lines.",
+    "metaDescription": "Free online Setback Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Setback Calculator",
+      "Setback Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Setback Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Setback Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "BuildingHeightCalculator",
+    "slug": "building-height-calculator",
+    "name": "Building Height Calculator",
+    "category": "architecture",
+    "subcategory": "Site Planning",
+    "shortDescription": "Determine maximum permissible height based on road width and angular planes.",
+    "metaDescription": "Free online Building Height Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Building Height Calculator",
+      "Building Height Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Building Height Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Building Height Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "ShadowLengthCalculator",
+    "slug": "shadow-length-calculator",
+    "name": "Shadow Length Calculator",
+    "category": "architecture",
+    "subcategory": "Site Planning",
+    "shortDescription": "Compute architectural shadow cast lengths based on sun angles.",
+    "metaDescription": "Free online Shadow Length Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Shadow Length Calculator",
+      "Shadow Length Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Shadow Length Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Shadow Length Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "SunPathCalculator",
+    "slug": "sun-path-calculator",
+    "name": "Sun Path Calculator",
+    "category": "architecture",
+    "subcategory": "Site Planning",
+    "shortDescription": "Calculate solar angles, azimuth, and elevation for site coordinates.",
+    "metaDescription": "Free online Sun Path Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Sun Path Calculator",
+      "Sun Path Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Sun Path Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Sun Path Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "SiteOrientationTool",
+    "slug": "site-orientation-tool",
+    "name": "Site Orientation Tool",
+    "category": "architecture",
+    "subcategory": "Site Planning",
+    "shortDescription": "Analyze building orientation parameters for passive solar design.",
+    "metaDescription": "Free online Site Orientation Tool. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Site Orientation Tool",
+      "Site Orientation Tool calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Site Orientation Tool?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Site Orientation Tool",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "WindDirectionAnalyzer",
+    "slug": "wind-direction-analyzer",
+    "name": "Wind Direction Analyzer",
+    "category": "architecture",
+    "subcategory": "Site Planning",
+    "shortDescription": "Evaluate prevailing wind patterns for natural ventilation placement.",
+    "metaDescription": "Free online Wind Direction Analyzer. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Wind Direction Analyzer",
+      "Wind Direction Analyzer calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Wind Direction Analyzer?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Wind Direction Analyzer",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "SiteSlopeCalculator",
+    "slug": "site-slope-calculator",
+    "name": "Site Slope Calculator",
+    "category": "architecture",
+    "subcategory": "Site Planning",
+    "shortDescription": "Calculate site terrain slopes and grading rise/run percentages.",
+    "metaDescription": "Free online Site Slope Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Site Slope Calculator",
+      "Site Slope Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Site Slope Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Site Slope Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "ContourIntervalCalculator",
+    "slug": "contour-interval-calculator",
+    "name": "Contour Interval Calculator",
+    "category": "architecture",
+    "subcategory": "Site Planning",
+    "shortDescription": "Determine contour line heights and elevations from site map intervals.",
+    "metaDescription": "Free online Contour Interval Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Contour Interval Calculator",
+      "Contour Interval Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Contour Interval Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Contour Interval Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "ArchitecturalScaleCalculator",
+    "slug": "architectural-scale-calculator",
+    "name": "Architectural Scale Calculator",
+    "category": "architecture",
+    "subcategory": "Drawing & Scale Tools",
+    "shortDescription": "Convert physical drawing dimensions to real-world architectural lengths.",
+    "metaDescription": "Free online Architectural Scale Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Architectural Scale Calculator",
+      "Architectural Scale Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Architectural Scale Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Architectural Scale Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "DrawingScaleConverter",
+    "slug": "drawing-scale-converter",
+    "name": "Drawing Scale Converter",
+    "category": "architecture",
+    "subcategory": "Drawing & Scale Tools",
+    "shortDescription": "Convert dimensions between metric and imperial scale ratios.",
+    "metaDescription": "Free online Drawing Scale Converter. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Drawing Scale Converter",
+      "Drawing Scale Converter calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Drawing Scale Converter?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Drawing Scale Converter",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "ScaleFactorCalculator",
+    "slug": "scale-factor-calculator",
+    "name": "Scale Factor Calculator",
+    "category": "architecture",
+    "subcategory": "Drawing & Scale Tools",
+    "shortDescription": "Calculate conversion multiplier scale factors for CAD and printing.",
+    "metaDescription": "Free online Scale Factor Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Scale Factor Calculator",
+      "Scale Factor Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Scale Factor Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Scale Factor Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "BlueprintAreaCalculator",
+    "slug": "blueprint-area-calculator",
+    "name": "Blueprint Area Calculator",
+    "category": "architecture",
+    "subcategory": "Drawing & Scale Tools",
+    "shortDescription": "Estimate actual site and room areas directly from scaled drawings.",
+    "metaDescription": "Free online Blueprint Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Blueprint Area Calculator",
+      "Blueprint Area Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Blueprint Area Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Blueprint Area Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "PDFScaleMeasurementTool",
+    "slug": "pdf-scale-measurement-tool",
+    "name": "PDF Scale Measurement Tool",
+    "category": "architecture",
+    "subcategory": "Drawing & Scale Tools",
+    "shortDescription": "Calibrate and measure lengths on PDF drawings using dynamic scaling.",
+    "metaDescription": "Free online PDF Scale Measurement Tool. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "PDF Scale Measurement Tool",
+      "PDF Scale Measurement Tool calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the PDF Scale Measurement Tool?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for PDF Scale Measurement Tool",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "CADScaleConverter",
+    "slug": "cad-scale-converter",
+    "name": "CAD Scale Converter",
+    "category": "architecture",
+    "subcategory": "Drawing & Scale Tools",
+    "shortDescription": "Calculate model space vs layout space viewport scale factors.",
+    "metaDescription": "Free online CAD Scale Converter. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "CAD Scale Converter",
+      "CAD Scale Converter calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the CAD Scale Converter?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for CAD Scale Converter",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "PolygonAreaCalculator",
+    "slug": "polygon-area-calculator",
+    "name": "Polygon Area Calculator",
+    "category": "architecture",
+    "subcategory": "Geometry",
+    "shortDescription": "Calculate the area of regular and irregular multi-sided polygons.",
+    "metaDescription": "Free online Polygon Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Polygon Area Calculator",
+      "Polygon Area Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Polygon Area Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Polygon Area Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "TriangleCalculator",
+    "slug": "triangle-calculator",
+    "name": "Triangle Calculator",
+    "category": "architecture",
+    "subcategory": "Geometry",
+    "shortDescription": "Compute triangle areas, perimeter, side lengths, and angle values.",
+    "metaDescription": "Free online Triangle Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Triangle Calculator",
+      "Triangle Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Triangle Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Triangle Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "CircleCalculator",
+    "slug": "circle-calculator",
+    "name": "Circle Calculator",
+    "category": "architecture",
+    "subcategory": "Geometry",
+    "shortDescription": "Calculate circle area, diameter, circumference, and sectors.",
+    "metaDescription": "Free online Circle Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Circle Calculator",
+      "Circle Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Circle Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Circle Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "ArcCalculator",
+    "slug": "arc-calculator",
+    "name": "Arc Calculator",
+    "category": "architecture",
+    "subcategory": "Geometry",
+    "shortDescription": "Compute arch and curved wall lengths, radii, and chord details.",
+    "metaDescription": "Free online Arc Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Arc Calculator",
+      "Arc Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Arc Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Arc Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "AngleCalculator",
+    "slug": "angle-calculator",
+    "name": "Angle Calculator",
+    "category": "architecture",
+    "subcategory": "Geometry",
+    "shortDescription": "Determine pitch, slope angles, and trigonometric corner angles.",
+    "metaDescription": "Free online Angle Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Angle Calculator",
+      "Angle Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Angle Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Angle Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "RadiusDiameterCalculator",
+    "slug": "radius-diameter-calculator",
+    "name": "Radius & Diameter Calculator",
+    "category": "architecture",
+    "subcategory": "Geometry",
+    "shortDescription": "Convert and calculate circle properties from radius and diameter.",
+    "metaDescription": "Free online Radius & Diameter Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Radius & Diameter Calculator",
+      "Radius & Diameter Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Radius & Diameter Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Radius & Diameter Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "DaylightFactorCalculator",
+    "slug": "daylight-factor-calculator",
+    "name": "Daylight Factor Calculator",
+    "category": "architecture",
+    "subcategory": "Lighting & Environmental",
+    "shortDescription": "Calculate indoor daylight factor percentages for spatial illumination.",
+    "metaDescription": "Free online Daylight Factor Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Daylight Factor Calculator",
+      "Daylight Factor Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Daylight Factor Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Daylight Factor Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "WindowToWallRatioCalculator",
+    "slug": "window-to-wall-ratio-calculator",
+    "name": "Window-to-Wall Ratio Calculator",
+    "category": "architecture",
+    "subcategory": "Lighting & Environmental",
+    "shortDescription": "Compute WWR percentages for thermal and lighting efficiency compliance.",
+    "metaDescription": "Free online Window-to-Wall Ratio Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Window-to-Wall Ratio Calculator",
+      "Window-to-Wall Ratio Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Window-to-Wall Ratio Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Window-to-Wall Ratio Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "NaturalLightingCalculator",
+    "slug": "natural-lighting-calculator",
+    "name": "Natural Lighting Calculator",
+    "category": "architecture",
+    "subcategory": "Lighting & Environmental",
+    "shortDescription": "Estimate solar lux levels inside rooms based on glazing features.",
+    "metaDescription": "Free online Natural Lighting Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Natural Lighting Calculator",
+      "Natural Lighting Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Natural Lighting Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Natural Lighting Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "SolarExposureCalculator",
+    "slug": "solar-exposure-calculator",
+    "name": "Solar Exposure Calculator",
+    "category": "architecture",
+    "subcategory": "Lighting & Environmental",
+    "shortDescription": "Evaluate solar radiation exposure on facade surfaces.",
+    "metaDescription": "Free online Solar Exposure Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Solar Exposure Calculator",
+      "Solar Exposure Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Solar Exposure Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Solar Exposure Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "RoomVentilationCalculator",
+    "slug": "room-ventilation-calculator",
+    "name": "Room Ventilation Calculator",
+    "category": "architecture",
+    "subcategory": "Lighting & Environmental",
+    "shortDescription": "Calculate air change rates (ACH) and openable window areas.",
+    "metaDescription": "Free online Room Ventilation Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Room Ventilation Calculator",
+      "Room Ventilation Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Room Ventilation Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Room Ventilation Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "BuildingOrientationCalculator",
+    "slug": "building-orientation-calculator",
+    "name": "Building Orientation Calculator",
+    "category": "architecture",
+    "subcategory": "Lighting & Environmental",
+    "shortDescription": "Optimize building solar paths for thermal load distributions.",
+    "metaDescription": "Free online Building Orientation Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Building Orientation Calculator",
+      "Building Orientation Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Building Orientation Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Building Orientation Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "OccupantLoadCalculator",
+    "slug": "occupant-load-calculator",
+    "name": "Occupant Load Calculator",
+    "category": "architecture",
+    "subcategory": "Building Code Helpers",
+    "shortDescription": "Determine occupant load factor codes for various assembly categories.",
+    "metaDescription": "Free online Occupant Load Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Occupant Load Calculator",
+      "Occupant Load Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Occupant Load Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Occupant Load Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "ExitCapacityCalculator",
+    "slug": "exit-capacity-calculator",
+    "name": "Exit Capacity Calculator",
+    "category": "architecture",
+    "subcategory": "Building Code Helpers",
+    "shortDescription": "Compute total escape egress widths for emergency exits.",
+    "metaDescription": "Free online Exit Capacity Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Exit Capacity Calculator",
+      "Exit Capacity Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Exit Capacity Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Exit Capacity Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "AccessibleRampCalculator",
+    "slug": "accessible-ramp-calculator",
+    "name": "Accessible Ramp Calculator",
+    "category": "architecture",
+    "subcategory": "Building Code Helpers",
+    "shortDescription": "Calculate disabled-access ramp slopes conforming to ADA/Bylaw standards.",
+    "metaDescription": "Free online Accessible Ramp Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Accessible Ramp Calculator",
+      "Accessible Ramp Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Accessible Ramp Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Accessible Ramp Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "AccessibleToiletClearanceCalculator",
+    "slug": "accessible-toilet-clearance-calculator",
+    "name": "Accessible Toilet Clearance Calculator",
+    "category": "architecture",
+    "subcategory": "Building Code Helpers",
+    "shortDescription": "Verify accessible toilet clearances and turning space layouts.",
+    "metaDescription": "Free online Accessible Toilet Clearance Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Accessible Toilet Clearance Calculator",
+      "Accessible Toilet Clearance Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Accessible Toilet Clearance Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Accessible Toilet Clearance Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "ParkingRequirementCalculator",
+    "slug": "parking-requirement-calculator",
+    "name": "Parking Requirement Calculator",
+    "category": "architecture",
+    "subcategory": "Building Code Helpers",
+    "shortDescription": "Calculate mandatory parking bays required based on floor area.",
+    "metaDescription": "Free online Parking Requirement Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Parking Requirement Calculator",
+      "Parking Requirement Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Parking Requirement Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Parking Requirement Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "FireEscapeTravelDistanceCalculator",
+    "slug": "fire-escape-travel-distance-calculator",
+    "name": "Fire Escape Travel Distance Calculator",
+    "category": "architecture",
+    "subcategory": "Building Code Helpers",
+    "shortDescription": "Verify exit travel path distance compliance limits.",
+    "metaDescription": "Free online Fire Escape Travel Distance Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Fire Escape Travel Distance Calculator",
+      "Fire Escape Travel Distance Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Fire Escape Travel Distance Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Fire Escape Travel Distance Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "FloorAreaEstimator",
+    "slug": "floor-area-estimator",
+    "name": "Floor Area Estimator",
+    "category": "architecture",
+    "subcategory": "Estimation",
+    "shortDescription": "Estimate gross and net floor area splits for multi-story buildings.",
+    "metaDescription": "Free online Floor Area Estimator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Floor Area Estimator",
+      "Floor Area Estimator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Floor Area Estimator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Floor Area Estimator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "BuildingVolumeCalculator",
+    "slug": "building-volume-calculator",
+    "name": "Building Volume Calculator",
+    "category": "architecture",
+    "subcategory": "Estimation",
+    "shortDescription": "Calculate total building envelope volume for HVAC and cost projections.",
+    "metaDescription": "Free online Building Volume Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Building Volume Calculator",
+      "Building Volume Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Building Volume Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Building Volume Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "FacadeAreaCalculator",
+    "slug": "facade-area-calculator",
+    "name": "Facade Area Calculator",
+    "category": "architecture",
+    "subcategory": "Estimation",
+    "shortDescription": "Calculate exterior wall facade surface areas for cladding estimation.",
+    "metaDescription": "Free online Facade Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Facade Area Calculator",
+      "Facade Area Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Facade Area Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Facade Area Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "WallAreaCalculator",
+    "slug": "wall-area-calculator",
+    "name": "Wall Area Calculator",
+    "category": "architecture",
+    "subcategory": "Estimation",
+    "shortDescription": "Calculate internal wall surface areas subtracting door/window openings.",
+    "metaDescription": "Free online Wall Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Wall Area Calculator",
+      "Wall Area Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Wall Area Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Wall Area Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "GlassAreaCalculator",
+    "slug": "glass-area-calculator",
+    "name": "Glass Area Calculator",
+    "category": "architecture",
+    "subcategory": "Estimation",
+    "shortDescription": "Estimate structural glass and glazing area weights.",
+    "metaDescription": "Free online Glass Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Glass Area Calculator",
+      "Glass Area Calculator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Glass Area Calculator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Glass Area Calculator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "MaterialQuantityEstimator",
+    "slug": "material-quantity-estimator",
+    "name": "Material Quantity Estimator",
+    "category": "architecture",
+    "subcategory": "Estimation",
+    "shortDescription": "Determine standard cement, bricks, and concrete quantities for basic modules.",
+    "metaDescription": "Free online Material Quantity Estimator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Material Quantity Estimator",
+      "Material Quantity Estimator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Material Quantity Estimator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Material Quantity Estimator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "DWGVersionChecker",
+    "slug": "dwg-version-checker",
+    "name": "DWG Version Checker",
+    "category": "architecture",
+    "subcategory": "CAD & BIM Utilities",
+    "shortDescription": "Identify the release version and format of DWG file drawing headers.",
+    "metaDescription": "Free online DWG Version Checker. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "DWG Version Checker",
+      "DWG Version Checker calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the DWG Version Checker?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for DWG Version Checker",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "DXFViewer",
+    "slug": "dxf-viewer",
+    "name": "DXF Viewer",
+    "category": "architecture",
+    "subcategory": "CAD & BIM Utilities",
+    "shortDescription": "Inspect drawing exchanges and vector entities in browser.",
+    "metaDescription": "Free online DXF Viewer. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "DXF Viewer",
+      "DXF Viewer calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the DXF Viewer?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for DXF Viewer",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "CADLayerCounter",
+    "slug": "cad-layer-counter",
+    "name": "CAD Layer Counter",
+    "category": "architecture",
+    "subcategory": "CAD & BIM Utilities",
+    "shortDescription": "Count and list layers inside CAD dxf/dwg structural formats.",
+    "metaDescription": "Free online CAD Layer Counter. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "CAD Layer Counter",
+      "CAD Layer Counter calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the CAD Layer Counter?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for CAD Layer Counter",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "BIMFileInformationViewer",
+    "slug": "bim-file-information-viewer",
+    "name": "BIM File Information Viewer",
+    "category": "architecture",
+    "subcategory": "CAD & BIM Utilities",
+    "shortDescription": "Read basic metadata from IFC and Revit file formats.",
+    "metaDescription": "Free online BIM File Information Viewer. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "BIM File Information Viewer",
+      "BIM File Information Viewer calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the BIM File Information Viewer?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for BIM File Information Viewer",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "DrawingRevisionComparator",
+    "slug": "drawing-revision-comparator",
+    "name": "Drawing Revision Comparator",
+    "category": "architecture",
+    "subcategory": "CAD & BIM Utilities",
+    "shortDescription": "Visually overlay and compare revisions of architectural drawings.",
+    "metaDescription": "Free online Drawing Revision Comparator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "Drawing Revision Comparator",
+      "Drawing Revision Comparator calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the Drawing Revision Comparator?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for Drawing Revision Comparator",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "PDFDrawingMerger",
+    "slug": "pdf-drawing-merger",
+    "name": "PDF Drawing Merger",
+    "category": "architecture",
+    "subcategory": "CAD & BIM Utilities",
+    "shortDescription": "Merge multi-sheet architectural blueprints into a single vector PDF file.",
+    "metaDescription": "Free online PDF Drawing Merger. Calculate building dimensions, clearances, and code compliance in browser.",
+    "keywords": [
+      "PDF Drawing Merger",
+      "PDF Drawing Merger calculator",
+      "architectural planning",
+      "building design"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your units (Metric or Imperial).",
+      "Enter the required spatial and design parameters.",
+      "Review the compliance guidelines and results.",
+      "Export or copy the calculated parameters for blueprints."
+    ],
+    "faqs": [
+      {
+        "question": "What is the purpose of the PDF Drawing Merger?",
+        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Guidelines for PDF Drawing Merger",
+        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
       }
     ]
   }

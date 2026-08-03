@@ -34,6 +34,23 @@ export default function CategoryLanding() {
   // Filter tools belonging to this category
   const categoryTools = toolsList.filter((t) => t.category === category.id);
 
+  // Group tools by subcategory if available
+  const toolsBySubcategory: Record<string, typeof categoryTools> = {};
+  const toolsWithoutSubcategory: typeof categoryTools = [];
+  let hasSubcategories = false;
+
+  categoryTools.forEach((tool) => {
+    if (tool.subcategory) {
+      hasSubcategories = true;
+      if (!toolsBySubcategory[tool.subcategory]) {
+        toolsBySubcategory[tool.subcategory] = [];
+      }
+      toolsBySubcategory[tool.subcategory].push(tool);
+    } else {
+      toolsWithoutSubcategory.push(tool);
+    }
+  });
+
   // Load related FAQs from tools in this category
   const faqs: FAQItem[] = [];
   categoryTools.forEach((t) => {
@@ -96,17 +113,53 @@ export default function CategoryLanding() {
         </p>
       </div>
 
-      {/* Tools Grid */}
-      <div className="space-y-5">
-        <h2 className="text-xs font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">
-          Tools list in {category.name}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categoryTools.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
+      {/* Tools Grid / Groups */}
+      {hasSubcategories ? (
+        <div className="space-y-12">
+          {Object.entries(toolsBySubcategory).map(([subName, tools]) => (
+            <div key={subName} className="space-y-5">
+              <div className="flex items-center gap-2.5 border-b border-zinc-200/60 dark:border-zinc-800/80 pb-2.5">
+                <span className="w-1.5 h-4 bg-indigo-500 rounded-full"></span>
+                <h2 className="text-xs font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                  {subName} ({tools.length})
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {tools.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} />
+                ))}
+              </div>
+            </div>
           ))}
+          
+          {toolsWithoutSubcategory.length > 0 && (
+            <div className="space-y-5">
+              <div className="flex items-center gap-2.5 border-b border-zinc-200/60 dark:border-zinc-800/80 pb-2.5">
+                <span className="w-1.5 h-4 bg-zinc-400 rounded-full"></span>
+                <h2 className="text-xs font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                  Other Utilities ({toolsWithoutSubcategory.length})
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {toolsWithoutSubcategory.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      </div>
+      ) : (
+        <div className="space-y-5">
+          <h2 className="text-xs font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">
+            Tools list in {category.name}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {categoryTools.map((tool) => (
+              <ToolCard key={tool.id} tool={tool} />
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
         
