@@ -24,7 +24,6 @@ export default function CADLayerCounter() {
   const [hiddenLayers, setHiddenLayers] = useState<Record<string, boolean>>({});
   const [copied, setCopied] = useState(false);
 
-  // File parsing logic
   const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
     if (file) {
@@ -91,6 +90,7 @@ export default function CADLayerCounter() {
   };
 
   const activeSelected = layers.find((l) => l.name === selectedLayer) || layers[0];
+  const grandTotal = layers.reduce((acc, curr) => acc + (hiddenLayers[curr.name] ? 0 : curr.total), 0);
 
   const copyReport = () => {
     const text = `CAD Drawing Layer Count Audit
@@ -118,11 +118,11 @@ ${layers
         <div className="saas-card p-6 space-y-4">
           <h3 className="font-bold text-base flex items-center justify-between">
             <span className="flex items-center gap-2">
-              <Layers className="w-5 h-5 text-indigo-500" />
+              <Layers className="w-5 h-5 text-indigo-500 animate-pulse" />
               <span>3D Isometric CAD Layer Stack</span>
             </span>
 
-            <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-[10px] font-bold cursor-pointer transition">
+            <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-650 hover:bg-indigo-700 text-white text-[10px] font-bold cursor-pointer transition shadow-md">
               <span>Upload DXF / DWG</span>
               <input
                 type="file"
@@ -138,17 +138,20 @@ ${layers
           </p>
 
           {/* 3D Isometric container */}
-          <div className="relative w-full aspect-[16/10] bg-zinc-950 border-4 border-zinc-800 rounded-2xl flex items-center justify-center p-8 shadow-inner overflow-hidden">
-            <div className="relative w-72 h-72 flex flex-col justify-center items-center select-none">
+          <div className="relative w-full aspect-[16/10] bg-zinc-950 border border-zinc-800/80 rounded-2xl flex items-center justify-center p-8 shadow-2xl overflow-hidden">
+            {/* Dark blueprint grid background */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f2937_1px,transparent_1px),linear-gradient(to_bottom,#1f2937_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] opacity-15 pointer-events-none" />
+
+            <div className="relative w-80 h-80 flex flex-col justify-center items-center select-none">
               {/* Stack Sheets */}
               {layers.map((layer, idx) => {
                 const isSelected = selectedLayer === layer.name;
                 const isHidden = !!hiddenLayers[layer.name];
                 
                 // Stack layout translation values
-                const offsetZ = idx * 24; // standard gap in stack
+                const offsetZ = idx * 28; // standard gap in stack
                 const hoverTransform = isSelected
-                  ? `rotateX(60deg) rotateZ(-30deg) translateZ(${offsetZ + 40}px) translateY(-20px)`
+                  ? `rotateX(60deg) rotateZ(-30deg) translateZ(${offsetZ + 50}px) translateY(-30px)`
                   : `rotateX(60deg) rotateZ(-30deg) translateZ(${offsetZ}px)`;
 
                 return (
@@ -156,45 +159,71 @@ ${layers
                     key={layer.name}
                     style={{
                       transform: hoverTransform,
-                      borderColor: layer.color,
-                      opacity: isHidden ? 0.2 : 1
+                      borderColor: isSelected ? layer.color : `${layer.color}60`,
+                      boxShadow: isSelected ? `0 0 25px ${layer.color}30` : 'none',
+                      opacity: isHidden ? 0.15 : 1
                     }}
                     onClick={() => setSelectedLayer(layer.name)}
-                    className={`absolute w-48 h-48 border-2 rounded-2xl bg-slate-900/90 shadow-2xl transition-all duration-300 cursor-pointer flex flex-col justify-between p-4 ${
-                      isSelected ? 'ring-2 ring-indigo-500 ring-offset-2 ring-offset-zinc-950' : ''
+                    className={`absolute w-56 h-56 border rounded-2xl bg-slate-900/80 backdrop-blur-md transition-all duration-500 cursor-pointer flex flex-col justify-between p-4 ${
+                      isSelected ? 'z-40 border-2' : 'z-10'
                     }`}
                   >
                     <div className="flex justify-between items-center">
                       <span
                         style={{ color: layer.color }}
-                        className="text-[9px] font-black tracking-widest uppercase"
+                        className="text-[9px] font-black tracking-widest uppercase flex items-center gap-1.5"
                       >
-                        {layer.name}
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: layer.color }} />
+                        <span>{layer.name}</span>
                       </span>
                       <span className="text-[9px] font-black text-slate-500 font-mono">
-                        #{idx + 1}
+                        LAYER #{idx + 1}
                       </span>
                     </div>
 
                     {/* Vector outline mock inside each layer sheet */}
-                    <div className="flex-1 border border-slate-800/40 rounded-lg m-2 flex items-center justify-center relative">
-                      <div
-                        style={{ borderColor: layer.color }}
-                        className="w-12 h-12 border border-dashed rounded-full opacity-40 animate-pulse"
-                      />
-                      {isSelected && (
-                        <span className="absolute bottom-2 text-[7px] font-black text-slate-500 uppercase tracking-widest">
-                          Active Layer
-                        </span>
+                    <div className="flex-1 border border-slate-800/40 rounded-xl m-2 flex items-center justify-center relative overflow-hidden bg-slate-950/20">
+                      {layer.name === 'WALLS' && (
+                        <div className="w-full h-full flex items-center justify-center p-4">
+                          <svg className="w-full h-full" viewBox="0 0 100 100">
+                            <rect x="15" y="15" width="70" height="70" fill="none" stroke={layer.color} strokeWidth="2" />
+                            <line x1="50" y1="15" x2="50" y2="85" stroke={layer.color} strokeWidth="1" strokeDasharray="2 2" />
+                          </svg>
+                        </div>
+                      )}
+                      {layer.name === 'DOORS' && (
+                        <div className="w-full h-full flex items-center justify-center p-4">
+                          <svg className="w-full h-full" viewBox="0 0 100 100">
+                            <line x1="10" y1="50" x2="50" y2="50" stroke={layer.color} strokeWidth="2" />
+                            <path d="M 50 50 A 40 40 0 0 1 90 90" fill="none" stroke={layer.color} strokeWidth="2" strokeDasharray="3 3" />
+                            <line x1="50" y1="50" x2="90" y2="50" stroke={layer.color} strokeWidth="2" />
+                          </svg>
+                        </div>
+                      )}
+                      {layer.name === 'COLUMNS' && (
+                        <div className="w-full h-full flex items-center justify-center p-4">
+                          <svg className="w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="30" cy="30" r="8" fill="none" stroke={layer.color} strokeWidth="2" />
+                            <circle cx="70" cy="30" r="8" fill="none" stroke={layer.color} strokeWidth="2" />
+                            <circle cx="30" cy="70" r="8" fill="none" stroke={layer.color} strokeWidth="2" />
+                            <circle cx="70" cy="70" r="8" fill="none" stroke={layer.color} strokeWidth="2" />
+                          </svg>
+                        </div>
+                      )}
+                      {(!['WALLS', 'DOORS', 'COLUMNS'].includes(layer.name)) && (
+                        <div
+                          style={{ borderColor: layer.color }}
+                          className="w-16 h-16 border border-dashed rounded-full opacity-35 animate-pulse"
+                        />
                       )}
                     </div>
 
                     <div className="flex justify-between items-end">
-                      <span className="text-[8px] font-bold text-slate-450 uppercase">
-                        TOTAL: {layer.total}
+                      <span className="text-[9px] font-black text-slate-450">
+                        {layer.total} ENTITIES
                       </span>
                       <span className="text-[8px] font-mono text-slate-500">
-                        L:{layer.lines} C:{layer.circles}
+                        L:{layer.lines} C:{layer.circles} T:{layer.texts}
                       </span>
                     </div>
                   </div>
@@ -212,7 +241,7 @@ ${layers
             <div className="flex justify-between items-center mb-4">
               <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-1.5">
                 <FileSpreadsheet className="w-3.5 h-3.5 text-indigo-500" />
-                <span>Layer Schedule</span>
+                <span>Layer Statistics Schedule</span>
               </span>
               <button
                 onClick={copyReport}
@@ -223,42 +252,58 @@ ${layers
               </button>
             </div>
 
-            <div className="space-y-4">
-              {/* Layers List and switches */}
-              <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1">
+            <div className="space-y-5">
+              {/* Layers List with custom progress bars */}
+              <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-1">
                 {layers.map((layer) => {
                   const isSelected = selectedLayer === layer.name;
                   const isHidden = !!hiddenLayers[layer.name];
+                  const pct = grandTotal > 0 ? (layer.total / grandTotal) * 100 : 0;
                   
                   return (
                     <div
                       key={layer.name}
                       onClick={() => setSelectedLayer(layer.name)}
-                      className={`flex justify-between items-center p-2 rounded-lg border transition cursor-pointer text-xs ${
+                      className={`p-3 rounded-xl border transition cursor-pointer space-y-2 relative overflow-hidden ${
                         isSelected
                           ? 'bg-indigo-500/10 border-indigo-500/30'
                           : 'bg-zinc-50 dark:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800'
                       }`}
                     >
-                      <div className="flex items-center gap-2">
-                        <span
-                          style={{ backgroundColor: layer.color }}
-                          className="w-2.5 h-2.5 rounded-full shrink-0"
-                        />
-                        <span className="font-bold text-zinc-700 dark:text-zinc-350">{layer.name}</span>
+                      <div className="flex justify-between items-center text-xs">
+                        <div className="flex items-center gap-2">
+                          <span
+                            style={{ backgroundColor: layer.color }}
+                            className="w-2.5 h-2.5 rounded-full shrink-0"
+                          />
+                          <span className="font-bold text-zinc-700 dark:text-zinc-350">{layer.name}</span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <span className="font-bold font-mono text-[10px] text-zinc-400">
+                            {layer.total} ({pct.toFixed(0)}%)
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleHideLayer(layer.name);
+                            }}
+                            className="text-zinc-400 hover:text-zinc-650"
+                          >
+                            {isHidden ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        <span className="font-bold font-mono">{layer.total} items</span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleHideLayer(layer.name);
+                      {/* Progress Bar */}
+                      <div className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                        <div
+                          style={{
+                            width: `${pct}%`,
+                            backgroundColor: layer.color
                           }}
-                          className="text-zinc-450 hover:text-zinc-650"
-                        >
-                          {isHidden ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                        </button>
+                          className="h-full rounded-full transition-all duration-500"
+                        />
                       </div>
                     </div>
                   );
@@ -268,28 +313,22 @@ ${layers
               {/* Selected Layer stats */}
               <div className="border-t border-zinc-100 dark:border-zinc-800 pt-4 space-y-3 text-xs">
                 <span className="text-[10px] text-indigo-650 dark:text-indigo-400 font-black uppercase tracking-wider block">
-                  Selected Layer details ({activeSelected.name})
+                  Layer Entity Inventory ({activeSelected.name})
                 </span>
                 <div className="flex justify-between">
-                  <span className="text-zinc-400">Total Entities</span>
-                  <span className="font-bold font-mono text-zinc-950 dark:text-white">
-                    {activeSelected.total}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-400">Line elements (LINE)</span>
+                  <span className="text-zinc-400">Lines (LINE / POLYLINE)</span>
                   <span className="font-bold font-mono text-zinc-950 dark:text-white">
                     {activeSelected.lines}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-400">Circle elements (CIRCLE)</span>
+                  <span className="text-zinc-400">Circles & Arcs (CIRCLE)</span>
                   <span className="font-bold font-mono text-zinc-950 dark:text-white">
                     {activeSelected.circles}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-zinc-400">Text annotations (TEXT)</span>
+                <div className="flex justify-between border-t border-zinc-100 dark:border-zinc-800/80 pt-3">
+                  <span className="text-zinc-400">Text Annotations (TEXT)</span>
                   <span className="font-bold font-mono text-zinc-950 dark:text-white">
                     {activeSelected.texts}
                   </span>
