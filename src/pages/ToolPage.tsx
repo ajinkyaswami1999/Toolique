@@ -4,7 +4,6 @@ import { toolsList } from '../data/tools';
 import { additionalFaqs } from '../data/toolFaqs';
 import { categories } from '../data/categories';
 import { ArrowLeft } from 'lucide-react';
-import AdPlaceholder from '../components/AdPlaceholder';
 import FAQSection from '../components/FAQSection';
 import HowToUse from '../components/HowToUse';
 import RelatedTools from '../components/RelatedTools';
@@ -748,9 +747,6 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
         </div>
       )}
 
-      {/* Ad slot - Top Banner */}
-      <AdPlaceholder slot={`tool-top-${tool.slug}`} type="banner" />
-
       {/* Main Tool Container */}
       <section className="mt-6">
         {ActiveToolComponent ? (
@@ -768,9 +764,6 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
           </div>
         )}
       </section>
-
-      {/* Ad slot - Responsive Ad */}
-      <AdPlaceholder slot={`tool-middle-${tool.slug}`} type="responsive" />
 
       {/* How to Use Section */}
       <HowToUse steps={tool.howToUse} toolName={tool.name} />
