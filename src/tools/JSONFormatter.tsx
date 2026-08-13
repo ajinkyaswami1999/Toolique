@@ -616,7 +616,6 @@ export default function JSONFormatter() {
                         {(() => {
                           const lines = inputJson.split('\n');
                           const errLineIndex = error.line - 1;
-                          const targetLine = lines[errLineIndex] || '';
                           
                           // Show preceding, offending, and trailing line for context
                           const contextStart = Math.max(0, errLineIndex - 1);
@@ -866,7 +865,7 @@ interface TreeViewProps {
 
 function JSONTreeView({ data, searchTerm, defaultExpanded }: TreeViewProps) {
   // Helper to determine if a value should be rendered based on search criteria
-  const matchesSearch = (val: any, term: string): boolean => {
+  const matchesSearch = (term: string): boolean => {
     if (!term) return true;
     const t = term.toLowerCase();
     
@@ -884,7 +883,7 @@ function JSONTreeView({ data, searchTerm, defaultExpanded }: TreeViewProps) {
     return search(data);
   };
 
-  if (!matchesSearch(data, searchTerm)) {
+  if (!matchesSearch(searchTerm)) {
     return <div className="text-slate-400 text-xs italic">No matching keys or values found.</div>;
   }
 
