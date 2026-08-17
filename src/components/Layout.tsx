@@ -23,7 +23,7 @@ export default function Layout({ children }: LayoutProps) {
   }, [pathname, hash]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300 relative overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-300 relative">
       {/* Ambient background glow elements */}
       <div className="fixed -top-[10%] -left-[10%] w-[50vw] h-[50vw] max-w-[600px] bg-indigo-500/5 dark:bg-indigo-500/[0.02] rounded-full blur-[120px] pointer-events-none -z-10" />
       <div className="fixed -bottom-[10%] -right-[10%] w-[50vw] h-[50vw] max-w-[600px] bg-teal-500/5 dark:bg-teal-500/[0.015] rounded-full blur-[130px] pointer-events-none -z-10" />
