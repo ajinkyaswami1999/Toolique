@@ -8,6 +8,7 @@ import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsConditions from '../pages/TermsConditions';
 import Disclaimer from '../pages/Disclaimer';
 import ThreeDPrintStudio from '../pages/ThreeDPrintStudio';
+import Status from '../pages/Status';
 import MathStudio from '../pages/MathStudio';
 
 const AboutFounder = lazy(() => import('../pages/AboutFounder'));
@@ -133,6 +134,7 @@ export default function AppRoutes() {
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-conditions" element={<TermsConditions />} />
       <Route path="/disclaimer" element={<Disclaimer />} />
+      <Route path="/status" element={<Status />} />
       <Route path="*" element={
         <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
           <NotFound />
