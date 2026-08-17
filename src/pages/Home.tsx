@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon,
   Hammer, Compass, Palette, ArrowRight,
@@ -39,12 +39,25 @@ export default function Home() {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [featuredTab, setFeaturedTab] = useState<'trending' | 'recent' | 'popular'>('trending');
 
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem('toolique_recent_searches');
       if (saved) setRecentSearches(JSON.parse(saved));
       else setRecentSearches(['concrete calculator', 'json formatter', 'gst calculator']);
     } catch (e) {}
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -138,12 +151,18 @@ export default function Home() {
         <form onSubmit={handleSearchSubmit} className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-450 dark:text-zinc-500 w-5 h-5" />
           <input
+            ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search entire platform (Tools, Academy, Playgrounds, AI...)"
-            className="saas-input !pl-12 pr-4 py-3 text-xs font-semibold shadow-sm focus:ring-indigo-500/10 focus:border-indigo-500"
+            className="saas-input !pl-12 pr-16 py-3 text-xs font-semibold shadow-sm focus:ring-indigo-500/10 focus:border-indigo-500"
           />
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
+            <kbd className="hidden sm:inline-flex items-center h-5 select-none px-1.5 font-mono text-[9px] font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-500 border border-zinc-200/50 dark:border-zinc-800/80 rounded">
+              ⌘K
+            </kbd>
+          </div>
         </form>
 
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[10px] text-zinc-400 font-bold pl-2">

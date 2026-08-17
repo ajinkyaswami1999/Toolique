@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import {
   Search, Heart, Share2, Copy, Bookmark,
-  Clock, ArrowUpRight, ChevronRight, Check, ListFilter, LayoutGrid, HelpCircle,
+  Clock, ChevronRight, Check, ListFilter, LayoutGrid, HelpCircle, ArrowUpRight, X,
   IndianRupee, Hammer, Compass, Palette, FileText, Image as ImageIcon, Code, Globe, Type, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart as HeartIcon, Printer
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import type { Tool } from '../data/tools';
 import { categories } from '../data/categories';
 import SEO from '../components/SEO';
+import LucideIcon from '../components/LucideIcon';
 
 const categoryIcons: Record<string, React.ComponentType<any>> = {
   finance: IndianRupee,
@@ -32,7 +33,21 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
   'math-studio': Scale
 };
 
+const getToolBadge = (toolId: string) => {
+  if (['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator'].includes(toolId)) {
+    return { text: 'Popular', className: 'bg-emerald-500/10 dark:bg-emerald-500/5 text-emerald-700 dark:text-emerald-400 border-emerald-500/20' };
+  }
+  if (['FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor'].includes(toolId)) {
+    return { text: 'Trending', className: 'bg-amber-500/10 dark:bg-amber-500/5 text-amber-700 dark:text-amber-400 border-amber-500/20' };
+  }
+  if (['WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator'].includes(toolId)) {
+    return { text: 'New', className: 'bg-indigo-500/10 dark:bg-indigo-500/5 text-indigo-700 dark:text-indigo-400 border-indigo-500/20' };
+  }
+  return null;
+};
+
 export default function ToolsDirectory() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
   const activeCategory = searchParams.get('category') || 'all';
@@ -44,6 +59,11 @@ export default function ToolsDirectory() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [bookmarkedId, setBookmarkedId] = useState<string | null>(null);
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
   // Load favorites & views on mount
   useEffect(() => {
@@ -54,13 +74,38 @@ export default function ToolsDirectory() {
       const hist = localStorage.getItem('toolique_recent_history');
       if (hist) {
         const parsedHist = JSON.parse(hist);
-        // Map history names to tool list items
         const matchingTools = parsedHist
           .map((h: any) => toolsList.find(t => t.name === h.name))
           .filter(Boolean) as Tool[];
-        setRecentViews(matchingTools.slice(0, 5));
+        setRecentViews(matchingTools.slice(0, 8));
       }
-    } catch (e) {}
+    } catch (e) { }
+  }, []);
+
+  // Keyboard shortcut Ctrl+K / Cmd+K listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Click outside to close autocomplete suggestions
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const toggleFavorite = (toolId: string) => {
@@ -92,7 +137,7 @@ export default function ToolsDirectory() {
       }
       setBookmarkedId(tool.id);
       setTimeout(() => setBookmarkedId(null), 1500);
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const handleSearchChange = (val: string) => {
@@ -101,6 +146,7 @@ export default function ToolsDirectory() {
       else prev.delete('q');
       return prev;
     }, { replace: true });
+    setShowSuggestions(true);
   };
 
   const selectCategory = (catId: string) => {
@@ -108,7 +154,7 @@ export default function ToolsDirectory() {
       if (catId === 'all') prev.delete('category');
       else {
         prev.set('category', catId);
-        prev.delete('collection'); // clear collection to prioritize category selection
+        prev.delete('collection');
       }
       return prev;
     }, { replace: true });
@@ -119,15 +165,43 @@ export default function ToolsDirectory() {
       if (colId === 'all') prev.delete('collection');
       else {
         prev.set('collection', colId);
-        prev.delete('category'); // clear category to prioritize collection selection
+        prev.delete('category');
       }
       return prev;
     }, { replace: true });
   };
 
+  const addToHistory = (tool: Tool) => {
+    try {
+      const hist = localStorage.getItem('toolique_recent_history') || '[]';
+      const parsedHist = JSON.parse(hist);
+
+      const filteredHist = parsedHist.filter((h: any) => h.name !== tool.name);
+      const newItem = {
+        name: tool.name,
+        type: 'Tool Used',
+        timestamp: 'Just now',
+        link: tool.slug === 'advanced-boq-calculator-india' ? '/tools/advanced-boq-calculator-india' : `/tool/${tool.slug}`
+      };
+
+      const updated = [newItem, ...filteredHist].slice(0, 8);
+      localStorage.setItem('toolique_recent_history', JSON.stringify(updated));
+      setRecentViews(updated.map((h: any) => toolsList.find(t => t.name === h.name)).filter(Boolean) as Tool[]);
+    } catch (e) { }
+  };
+
+  const handlePopularSuggestionClick = (query: string) => {
+    setSearchParams((prev) => {
+      prev.set('q', query);
+      prev.delete('category');
+      prev.delete('collection');
+      return prev;
+    }, { replace: true });
+    setShowSuggestions(false);
+  };
+
   // Filter tools
   let filtered = toolsList.filter((tool) => {
-    // 1. Search Query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const match =
@@ -138,12 +212,10 @@ export default function ToolsDirectory() {
       if (!match) return false;
     }
 
-    // 2. Category
     if (activeCategory !== 'all') {
       if (tool.category !== activeCategory) return false;
     }
 
-    // 3. Collection filter mapping
     if (activeCollection !== 'all') {
       if (activeCollection === 'popular') {
         return ['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator'].includes(tool.id);
@@ -155,7 +227,7 @@ export default function ToolsDirectory() {
         return ['WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator'].includes(tool.id);
       }
       if (activeCollection === 'dev-picks') {
-        return ['sql-minifier', 'json-validator', 'regex-tester', 'jwt-decoder'].includes(tool.id) || tool.category === 'developer';
+        return ['SQLMinifier', 'JSONFormatter', 'RegexTester', 'JWTDecoder'].map(id => id.toLowerCase()).includes(tool.id.toLowerCase()) || tool.category === 'developer';
       }
       if (activeCollection === 'engineering-picks') {
         return tool.category === 'civil' || tool.category === 'electrical' || tool.category === 'math-studio';
@@ -174,7 +246,6 @@ export default function ToolsDirectory() {
       return a.name.localeCompare(b.name);
     }
     if (sortBy === 'newest') {
-      // simulate newest by ID matching
       return b.id.localeCompare(a.id);
     }
     if (sortBy === 'favorites') {
@@ -182,14 +253,13 @@ export default function ToolsDirectory() {
       const bFav = favorites.includes(b.id) ? 1 : 0;
       return bFav - aFav;
     }
-    // Default: popularity sorting
     const aIndex = toolsList.findIndex(t => t.id === a.id);
     const bIndex = toolsList.findIndex(t => t.id === b.id);
     return aIndex - bIndex;
   });
 
   const collectionsList = [
-    { id: 'all', name: 'All Collections' },
+    { id: 'all', name: 'All Tools' },
     { id: 'popular', name: 'Popular Utilities' },
     { id: 'trending', name: 'Trending' },
     { id: 'new', name: 'Newly Added' },
@@ -198,51 +268,136 @@ export default function ToolsDirectory() {
     { id: 'favorites', name: 'My Favorites' }
   ];
 
+  const popularSuggestions = [
+    { name: 'GST Calculator', query: 'GST Calculator' },
+    { name: 'SQL Formatter', query: 'SQL' },
+    { name: 'JSON Formatter', query: 'JSON' },
+    { name: 'EMI Calculator', query: 'EMI' }
+  ];
+
+  // Top 5 autocomplete matches
+  const autocompleteSuggestions = searchQuery.trim()
+    ? toolsList
+      .filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()))
+      .slice(0, 5)
+    : [];
+
+  const visibleCategories = showAllCategories ? categories : categories.slice(0, 8);
+
   return (
     <div className="space-y-8 pb-12 text-left animate-fadeIn">
-      <SEO 
-        title="Tools Directory | Complete Utilities Catalog | Toolique" 
+      <SEO
+        title="Tools Directory | Complete Utilities Catalog | Toolique"
         description="Browse hundreds of free browser-based online tools. Search, filter, and run developer extensions, financial calculators, engineering apps, and PDF scripts locally."
       />
 
       {/* Directory Hero */}
-      <div className="p-8 md:p-12 rounded-3xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-800/50 space-y-3">
-        <span className="px-3 py-1 rounded-lg bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-extrabold text-[10px] uppercase tracking-wider">
-          Complete Directory
-        </span>
+      <div className="space-y-2.5">
         <h1 className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
-          Find the Right Tool Instantly
+          All Tools
         </h1>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-xl font-medium leading-relaxed">
-          Browse hundreds of fast, offline-first calculators, text filters, and conversion suites execution-free in-browser.
+        <p className="text-sm text-zinc-550 dark:text-zinc-400 max-w-2xl font-semibold leading-relaxed">
+          255+ tools for developers, engineers, designers, finance, productivity, and everyday tasks.
         </p>
       </div>
 
-      {/* Search and Filters panel */}
-      <div className="sticky top-16 z-30 bg-zinc-50/80 dark:bg-zinc-950/80 backdrop-blur-md py-4 border-b border-zinc-200/50 dark:border-zinc-850/50 flex flex-col md:flex-row gap-4 items-center justify-between">
-        
-        {/* Sticky Search bar */}
-        <div className="relative w-full md:max-w-md flex-grow">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 w-4 h-4" />
+      {/* Search and Curation Panel */}
+      <div className="space-y-4">
+        {/* Sticky Search bar wrapper */}
+        <div ref={searchContainerRef} className="relative w-full">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-5 h-5" />
           <input
+            ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="Search tools by name, tag, or formula (e.g. concrete, Far)..."
-            className="saas-input !pl-10 pr-4 py-2.5 text-xs font-semibold focus:ring-indigo-500/10 focus:border-indigo-500"
+            onFocus={() => setShowSuggestions(true)}
+            placeholder="Search 255+ tools..."
+            className="saas-input !pl-12 pr-16 py-3.5 text-sm font-semibold focus:ring-indigo-500/10 focus:border-indigo-500 shadow-sm rounded-2xl"
           />
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchParams((prev) => {
+                    prev.delete('q');
+                    return prev;
+                  }, { replace: true });
+                  searchInputRef.current?.focus();
+                }}
+                className="pointer-events-auto p-1 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition cursor-pointer"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+            <kbd className="hidden sm:inline-flex items-center h-5 select-none px-1.5 font-mono text-[10px] font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-550 border border-zinc-200/50 dark:border-zinc-800/80 rounded-md">
+              ⌘K
+            </kbd>
+          </div>
+
+          {/* Autocomplete Dropdown */}
+          {showSuggestions && autocompleteSuggestions.length > 0 && (
+            <div className="absolute left-0 right-0 mt-2 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xl overflow-hidden py-1.5 z-50 animate-fadeIn animate-duration-200">
+              <div className="px-4 py-1.5 text-[9px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-550 border-b border-zinc-100 dark:border-zinc-900/50 mb-1">
+                Suggested Tools
+              </div>
+              {autocompleteSuggestions.map((tool) => (
+                <button
+                  key={tool.id}
+                  type="button"
+                  onClick={() => {
+                    setSearchParams((prev) => {
+                      prev.set('q', tool.name);
+                      prev.delete('category');
+                      prev.delete('collection');
+                      return prev;
+                    }, { replace: true });
+                    setShowSuggestions(false);
+                  }}
+                  className="flex items-center justify-between w-full px-4 py-2.5 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 transition group cursor-pointer text-left"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="p-1 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      <LucideIcon name={tool.icon} className="w-4 h-4" />
+                    </div>
+                    <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors">
+                      {tool.name}
+                    </span>
+                  </div>
+                  <span className="text-[9px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-550 bg-zinc-100 dark:bg-zinc-900/60 px-2 py-0.5 rounded border border-zinc-200/20 dark:border-zinc-800/40">
+                    {tool.category}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Filters Selectors */}
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          {/* Sorting */}
-          <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-500">
+        {/* Popular Suggestions & Sorting selector */}
+        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-450 dark:text-zinc-500 font-bold pl-1">
+            <span>Popular:</span>
+            {popularSuggestions.map((s, idx) => (
+              <button
+                key={idx}
+                onClick={() => handlePopularSuggestionClick(s.query)}
+                className="hover:text-indigo-650 dark:hover:text-indigo-400 transition cursor-pointer text-zinc-650 dark:text-zinc-400 font-semibold"
+              >
+                {s.name}
+                {idx < popularSuggestions.length - 1 && <span className="mx-1.5 text-zinc-300 dark:text-zinc-700">·</span>}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-550 dark:text-zinc-400 self-end sm:self-auto">
             <ListFilter className="w-3.5 h-3.5" />
             <span>Sort:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] font-extrabold text-zinc-800 dark:text-zinc-200 rounded-lg px-2.5 py-1.5 focus:outline-none"
+              className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 text-[11px] font-extrabold text-zinc-800 dark:text-zinc-200 rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer"
             >
               <option value="popularity">Most Popular</option>
               <option value="newest">Newest Added</option>
@@ -250,227 +405,313 @@ export default function ToolsDirectory() {
               <option value="favorites">Favorites First</option>
             </select>
           </div>
+        </div>
 
-          {/* Collection Tab */}
-          <select
-            value={activeCollection}
-            onChange={(e) => selectCollection(e.target.value)}
-            className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] font-extrabold text-zinc-800 dark:text-zinc-200 rounded-lg px-2.5 py-1.5 focus:outline-none md:hidden"
-          >
-            {collectionsList.map((col) => (
-              <option key={col.id} value={col.id}>{col.name}</option>
-            ))}
-          </select>
+        {/* Curation Pills/Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] border-b border-zinc-200/50 dark:border-zinc-850/50">
+          {collectionsList.map((col) => {
+            const isActive = activeCollection === col.id;
+            return (
+              <button
+                key={col.id}
+                onClick={() => selectCollection(col.id)}
+                className={`shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${isActive
+                    ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm'
+                    : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60'
+                  }`}
+              >
+                {col.name}
+              </button>
+            );
+          })}
 
-          {/* Mobile Filter Drawer Toggler */}
+          {/* Mobile Categories toggler in tabs line */}
           <button
             onClick={() => setShowFiltersMobile(!showFiltersMobile)}
-            className="md:hidden px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-[11px] font-bold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 transition cursor-pointer"
+            className="md:hidden shrink-0 px-3.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-xs font-bold text-zinc-600 dark:text-zinc-450 hover:bg-zinc-100 transition cursor-pointer"
           >
-            Categories
+            Categories {showFiltersMobile ? '▲' : '▼'}
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* SIDEBAR: Collections & Categories */}
-        <div className={`lg:col-span-3 space-y-6 ${showFiltersMobile ? 'block' : 'hidden md:block'}`}>
-          
-          {/* Collections Selector */}
-          <div className="space-y-2">
-            <span className="text-[10px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500 pl-1">
-              Curated Collections
-            </span>
-            <div className="flex flex-col gap-1">
-              {collectionsList.map((col) => (
-                <button
-                  key={col.id}
-                  onClick={() => selectCollection(col.id)}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer ${
-                    activeCollection === col.id
-                      ? 'bg-indigo-500/5 text-indigo-700 dark:text-indigo-400'
-                      : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60'
-                  }`}
-                >
-                  <span>{col.name}</span>
-                  {activeCollection === col.id && <Check className="w-3.5 h-3.5 text-indigo-500" />}
-                </button>
-              ))}
-            </div>
-          </div>
+      <div className="flex flex-col md:flex-row gap-8">
 
-          {/* Category Filter list */}
-          <div className="space-y-2">
+        {/* SIDEBAR: Categories list */}
+        <div className={`w-full md:w-[240px] shrink-0 space-y-6 ${showFiltersMobile ? 'block' : 'hidden md:block'}`}>
+          <div className="space-y-2 text-left">
             <span className="text-[10px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500 pl-1">
               Filter by Category
             </span>
             <div className="flex flex-col gap-1">
               <button
                 onClick={() => selectCategory('all')}
-                className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer ${
-                  activeCategory === 'all'
-                    ? 'bg-indigo-500/5 text-indigo-700 dark:text-indigo-400'
-                    : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60'
-                }`}
+                className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer border ${activeCategory === 'all'
+                    ? 'bg-indigo-500/5 text-indigo-700 dark:text-indigo-400 border-indigo-500/10'
+                    : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
+                  }`}
               >
                 <span>All Categories</span>
                 {activeCategory === 'all' && <Check className="w-3.5 h-3.5 text-indigo-500" />}
               </button>
-              
-              {categories.map((cat) => {
+
+              {visibleCategories.map((cat) => {
                 const Icon = categoryIcons[cat.id] || LayoutGrid;
+                const isActive = activeCategory === cat.id;
                 return (
                   <button
                     key={cat.id}
                     onClick={() => selectCategory(cat.id)}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer ${
-                      activeCategory === cat.id
-                        ? 'bg-indigo-500/5 text-indigo-700 dark:text-indigo-400'
-                        : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60'
-                    }`}
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer border ${isActive
+                        ? 'bg-indigo-500/5 text-indigo-700 dark:text-indigo-400 border-indigo-500/10'
+                        : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
+                      }`}
                   >
                     <div className="flex items-center gap-2">
                       <Icon className="w-3.5 h-3.5" />
                       <span>{cat.name}</span>
                     </div>
-                    {activeCategory === cat.id && <Check className="w-3.5 h-3.5 text-indigo-500" />}
+                    {isActive && <Check className="w-3.5 h-3.5 text-indigo-500" />}
                   </button>
                 );
               })}
+
+              {categories.length > 8 && (
+                <button
+                  onClick={() => setShowAllCategories(!showAllCategories)}
+                  className="w-full text-left px-3 py-2 rounded-xl text-[11px] font-extrabold text-indigo-650 dark:text-indigo-400 hover:bg-indigo-500/5 dark:hover:bg-indigo-950/20 transition cursor-pointer"
+                >
+                  {showAllCategories ? 'Show less categories ↑' : 'View all categories →'}
+                </button>
+              )}
             </div>
           </div>
+        </div>
 
-          {/* Recently Viewed Sidebar list */}
+        {/* MAIN LISTING WORKSPACE */}
+        <div className="flex-grow space-y-6">
+          {/* Recently Visited Quick row */}
           {recentViews.length > 0 && (
-            <div className="space-y-3 pt-4 border-t border-zinc-200/60 dark:border-zinc-850/60">
-              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500 pl-1 flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-2 text-left bg-zinc-50 dark:bg-zinc-900/20 p-3.5 rounded-2xl border border-zinc-200/50 dark:border-zinc-850/60">
+              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-550 pl-1 flex items-center gap-1.5 shrink-0">
                 <Clock className="w-3.5 h-3.5" />
-                <span>Recently Visited</span>
+                <span>Recently Visited:</span>
               </span>
-              <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-1.5">
                 {recentViews.map((tool) => (
                   <Link
                     key={tool.id}
-                    to={`/tool/${tool.slug}`}
-                    className="flex justify-between items-center p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900/40 transition group"
+                    to={tool.slug === 'advanced-boq-calculator-india' ? '/tools/advanced-boq-calculator-india' : `/tool/${tool.slug}`}
+                    onClick={() => addToHistory(tool)}
+                    className="px-2.5 py-1 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/80 hover:border-indigo-500/30 text-[11px] font-bold text-zinc-650 dark:text-zinc-350 hover:text-indigo-650 dark:hover:text-indigo-455 transition"
                   >
-                    <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 truncate max-w-[150px] group-hover:text-indigo-650 transition">
-                      {tool.name}
-                    </span>
-                    <ArrowUpRight className="w-3 h-3 text-zinc-400 group-hover:translate-x-0.5 transition" />
+                    {tool.name}
                   </Link>
                 ))}
               </div>
             </div>
           )}
-        </div>
 
-        {/* DIRECTORY LISTING */}
-        <div className="lg:col-span-9 space-y-6">
-          <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500 pl-1">
-            <span>Results ({filtered.length} Tools Matching)</span>
+          {/* Featured Tool Card */}
+          {!searchQuery && activeCategory === 'all' && activeCollection === 'all' && (
+            <div className="p-6 rounded-3xl bg-gradient-to-r from-indigo-500/[0.03] to-violet-500/[0.03] border border-indigo-500/10 dark:border-indigo-500/10 space-y-4 text-left animate-fadeIn">
+              <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                <span className="text-sm">⭐</span> Tool of the Week
+              </div>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1.5 max-w-xl">
+                  <h3 className="text-base font-extrabold text-zinc-900 dark:text-white tracking-tight">
+                    SQL Minifier
+                  </h3>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                    Minify and compress SQL queries by removing comments and unnecessary spaces. Ideal for optimizing database payloads and embedding scripts.
+                  </p>
+                </div>
+                <div className="shrink-0 flex items-center gap-2">
+                  <Link
+                    to="/tool/sql-minifier"
+                    onClick={() => {
+                      const sqlTool = toolsList.find(t => t.slug === 'sql-minifier');
+                      if (sqlTool) addToHistory(sqlTool);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-bold text-xs shadow-sm hover:shadow-indigo-500/10 active:scale-95 transition-all duration-200 cursor-pointer"
+                  >
+                    Try SQL Minifier →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Listing Count Header */}
+          <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-550 pl-1">
+            <div className="flex items-center gap-2">
+              <span>Results ({filtered.length} Tools Matching)</span>
+              {(searchQuery || activeCategory !== 'all' || activeCollection !== 'all') && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchParams({});
+                    setSortBy('popularity');
+                  }}
+                  className="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition lowercase cursor-pointer font-extrabold"
+                >
+                  (Reset Filters)
+                </button>
+              )}
+            </div>
             {activeCollection !== 'all' && (
-              <span className="text-indigo-600 dark:text-indigo-400 font-bold bg-indigo-500/5 px-2 py-0.5 rounded">
+              <span className="text-indigo-650 dark:text-indigo-400 font-bold bg-indigo-500/5 px-2 py-0.5 rounded border border-indigo-500/10">
                 Collection: {collectionsList.find(c => c.id === activeCollection)?.name}
               </span>
             )}
           </div>
-
           {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 animate-fadeIn">
-              {filtered.map((tool) => {
-                const Icon = categoryIcons[tool.category] || LayoutGrid;
-                const isFavorite = favorites.includes(tool.id);
-                return (
-                  <div
-                    key={tool.id}
-                    className="saas-card p-6 flex flex-col justify-between hover:border-zinc-350 dark:hover:border-zinc-700 transition duration-300 group"
-                  >
-                    <div className="space-y-3.5">
-                      <div className="flex justify-between items-start">
-                        <div className="p-3 rounded-2xl bg-zinc-100 dark:bg-zinc-900 text-zinc-550 dark:text-zinc-450 border border-zinc-200/50 dark:border-zinc-800/80 group-hover:bg-indigo-500/10 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors duration-300">
-                          <Icon className="w-5 h-5" />
-                        </div>
-                        
-                        {/* Favorites button */}
-                        <button
-                          onClick={() => toggleFavorite(tool.id)}
-                          className={`p-2 rounded-xl border hover:bg-zinc-50 dark:hover:bg-zinc-900 transition duration-300 cursor-pointer ${
-                            isFavorite 
-                              ? 'bg-rose-500/5 border-rose-500/10 text-rose-500' 
-                              : 'bg-white/40 dark:bg-zinc-900/30 border-zinc-200/60 dark:border-zinc-800/60 text-zinc-400 hover:text-rose-500'
-                          }`}
-                          title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                        >
-                          <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-current' : ''}`} />
-                        </button>
-                      </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fadeIn">
+                {filtered.map((tool) => {
+                  const isFavorite = favorites.includes(tool.id);
+                  const badge = getToolBadge(tool.id);
 
-                      <div className="space-y-1.5 text-left">
-                        <div className="flex flex-wrap gap-1.5">
-                          <span className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-zinc-900 text-zinc-500 border border-zinc-200/30 dark:border-zinc-800/60">
+                  return (
+                    <div
+                      key={tool.id}
+                      onClick={() => {
+                        addToHistory(tool);
+                        navigate(tool.slug === 'advanced-boq-calculator-india' ? '/tools/advanced-boq-calculator-india' : `/tool/${tool.slug}`);
+                      }}
+                      className="saas-card p-5 flex flex-col justify-between hover:border-indigo-500/20 dark:hover:border-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/[0.01] hover:-translate-y-0.5 transition-all duration-300 group relative cursor-pointer"
+                    >
+                      <div className="space-y-3.5">
+                        {/* Top actions/icons row */}
+                        <div className="flex justify-between items-start">
+                          <div className="p-2.5 rounded-xl bg-zinc-150/40 dark:bg-zinc-900/60 text-zinc-650 dark:text-zinc-400 border border-zinc-200/30 dark:border-zinc-800/60 group-hover:bg-indigo-500/10 group-hover:text-indigo-705 dark:group-hover:text-indigo-400 transition-colors duration-300">
+                            <LucideIcon name={tool.icon} className="w-4 h-4" />
+                          </div>
+
+                          <div className="flex items-center gap-1.5">
+                            {badge && (
+                              <span className={`px-2 py-0.5 rounded-lg text-[9px] font-extrabold uppercase tracking-wider border ${badge.className}`}>
+                                {badge.text}
+                              </span>
+                            )}
+
+                            {/* Favorites button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleFavorite(tool.id);
+                              }}
+                              className={`p-1.5 rounded-lg border hover:bg-zinc-50 dark:hover:bg-zinc-900 transition duration-300 cursor-pointer ${isFavorite
+                                  ? 'bg-rose-500/5 border-rose-500/10 text-rose-500'
+                                  : 'bg-white/40 dark:bg-zinc-900/30 border-zinc-200/60 dark:border-zinc-800/60 text-zinc-400 hover:text-rose-500'
+                                }`}
+                              title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                            >
+                              <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-current' : ''}`} />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Info block */}
+                        <div className="space-y-1.5 text-left">
+                          <span className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-550 border border-zinc-200/30 dark:border-zinc-800/60">
                             {tool.category}
                           </span>
+
+                          <h3 className="text-xs font-extrabold text-zinc-900 dark:text-white tracking-tight leading-snug group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition duration-300 truncate">
+                            {tool.name}
+                          </h3>
+
+                          <p className="text-[11px] text-zinc-450 dark:text-zinc-500 font-semibold leading-relaxed line-clamp-2 h-8">
+                            {tool.shortDescription}
+                          </p>
                         </div>
-                        <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white tracking-tight leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition duration-300">
-                          {tool.name}
-                        </h3>
-                        <p className="text-xs text-zinc-450 dark:text-zinc-500 font-medium leading-relaxed">
-                          {tool.shortDescription}
-                        </p>
-                      </div>
-                    </div>
 
-                    {/* Quick actions bar */}
-                    <div className="pt-5 mt-5 border-t border-zinc-100 dark:border-zinc-850/80 flex items-center justify-between gap-2.5">
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => handleBookmark(tool)}
-                          className="p-1.5 rounded-lg hover:bg-zinc-150 dark:hover:bg-zinc-900 text-zinc-450 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
-                          title="Save Bookmark"
-                        >
-                          {bookmarkedId === tool.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Bookmark className="w-3.5 h-3.5" />}
-                        </button>
-                        <button
-                          onClick={() => handleCopyLink(tool.slug)}
-                          className="p-1.5 rounded-lg hover:bg-zinc-150 dark:hover:bg-zinc-900 text-zinc-450 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
-                          title="Copy Tool Link"
-                        >
-                          {copiedId === tool.slug ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                        </button>
+                        {/* Tags/Keywords section */}
+                        {tool.keywords && tool.keywords.length > 0 && (
+                          <div className="flex flex-wrap gap-1 pt-1">
+                            {tool.keywords.slice(0, 3).map((kw, idx) => (
+                              <button
+                                key={idx}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSearchChange(kw);
+                                }}
+                                className="text-[9px] font-bold text-zinc-455 dark:text-zinc-555 hover:text-indigo-650 dark:hover:text-indigo-400 hover:bg-indigo-500/5 dark:hover:bg-indigo-500/5 bg-zinc-100/50 dark:bg-zinc-900/40 px-2 py-0.5 rounded border border-zinc-200/10 dark:border-zinc-800/10 transition cursor-pointer"
+                              >
+                                #{kw.split(' ')[0]}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
-                      <Link
-                        to={tool.slug === 'advanced-boq-calculator-india' ? '/tools/advanced-boq-calculator-india' : `/tool/${tool.slug}`}
-                        className="text-[10px] font-black uppercase tracking-wider text-zinc-850 dark:text-white flex items-center gap-1 group-hover:gap-1.5 transition-all"
-                      >
-                        <span>Open Tool</span>
-                        <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
-                      </Link>
+                      {/* Bottom CTA row */}
+                      <div className="pt-3 mt-3 border-t border-zinc-100 dark:border-zinc-850/80 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleBookmark(tool);
+                            }}
+                            className="p-1.5 rounded-lg hover:bg-zinc-150 dark:hover:bg-zinc-900 text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
+                            title="Save Bookmark"
+                          >
+                            {bookmarkedId === tool.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Bookmark className="w-3.5 h-3.5" />}
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCopyLink(tool.slug);
+                            }}
+                            className="p-1.5 rounded-lg hover:bg-zinc-150 dark:hover:bg-zinc-900 text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
+                            title="Copy Tool Link"
+                          >
+                            {copiedId === tool.slug ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                          </button>
+                        </div>
+
+                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 flex items-center gap-1 transition-all">
+                          <span>Open Tool</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 text-zinc-400 group-hover:text-indigo-500" />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-20 saas-card space-y-3">
-              <HelpCircle className="w-8 h-8 text-zinc-400 mx-auto animate-bounce" />
-              <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white">No tools found</h3>
-              <p className="text-xs text-zinc-455 max-w-xs mx-auto leading-relaxed">
-                We couldn't find any utilities matching your queries. Try resetting filters or search parameters.
-              </p>
-              <button
-                onClick={() => {
-                  setSearchParams({});
-                  setSortBy('popularity');
-                }}
-                className="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-[10px] uppercase tracking-wider cursor-pointer"
-              >
-                Reset Directories Filters
-              </button>
-            </div>
-          )}
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-20 saas-card space-y-4">
+                <div className="p-4 rounded-full bg-zinc-100 dark:bg-zinc-900 w-16 h-16 flex items-center justify-center mx-auto text-zinc-400 border border-zinc-200/50 dark:border-zinc-800/50">
+                  <HelpCircle className="w-8 h-8 animate-pulse" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white">No tools found</h3>
+                  <p className="text-xs text-zinc-450 dark:text-zinc-500 max-w-xs mx-auto leading-relaxed font-semibold">
+                    We couldn't find any utilities matching your queries. Try resetting filters or search parameters.
+                  </p>
+                </div>
+                <div className="flex justify-center gap-3">
+                  <button
+                    onClick={() => {
+                      setSearchParams({});
+                      setSortBy('popularity');
+                    }}
+                    className="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-[10px] uppercase tracking-wider cursor-pointer hover:opacity-90 transition shadow-sm"
+                  >
+                    Reset All Filters
+                  </button>
+                  <button
+                    onClick={() => {
+                      handlePopularSuggestionClick('GST Calculator');
+                    }}
+                    className="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/40 text-zinc-700 dark:text-zinc-300 font-extrabold text-[10px] uppercase tracking-wider cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900 transition"
+                  >
+                    Browse Popular Tools
+                  </button>
+                </div>
+              </div>
+            )}
         </div>
       </div>
     </div>
