@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import {
   Search, Heart, Share2, Copy, Bookmark,
-  Clock, ChevronRight, Check, ListFilter, LayoutGrid, HelpCircle, ArrowUpRight, X,
+  Clock, Check, ListFilter, LayoutGrid, HelpCircle, ArrowUpRight, X,
   IndianRupee, Hammer, Compass, Palette, FileText, Image as ImageIcon, Code, Globe, Type, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart as HeartIcon, Printer
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
