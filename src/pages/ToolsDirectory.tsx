@@ -229,7 +229,7 @@ export default function ToolsDirectory() {
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Search tools by name, tag, or formula (e.g. concrete, Far)..."
-            className="saas-input pl-10 pr-4 py-2.5 text-xs font-semibold focus:ring-indigo-500/10 focus:border-indigo-500"
+            className="saas-input !pl-10 pr-4 py-2.5 text-xs font-semibold focus:ring-indigo-500/10 focus:border-indigo-500"
           />
         </div>
 

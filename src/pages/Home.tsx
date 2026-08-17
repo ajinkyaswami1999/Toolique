@@ -142,7 +142,7 @@ export default function Home() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search entire platform (Tools, Academy, Playgrounds, AI...)"
-            className="saas-input pl-12 pr-4 py-3 text-xs font-semibold shadow-sm focus:ring-indigo-500/10 focus:border-indigo-500"
+            className="saas-input !pl-12 pr-4 py-3 text-xs font-semibold shadow-sm focus:ring-indigo-500/10 focus:border-indigo-500"
           />
         </form>
 
