@@ -32,7 +32,6 @@ const NPSCalculator = lazy(() => import('../tools/NPSCalculator'));
 const GratuityCalculator = lazy(() => import('../tools/GratuityCalculator'));
 const HRACalculator = lazy(() => import('../tools/HRACalculator'));
 const CAGRCalculator = lazy(() => import('../tools/CAGRCalculator'));
-const GSTIncExcCalculator = lazy(() => import('../tools/GSTIncExcCalculator'));
 
 // Phase 2 - Utilities (5 tools)
 const PercentageCalculator = lazy(() => import('../tools/PercentageCalculator'));
@@ -407,7 +406,6 @@ const toolComponents: Record<string, React.ComponentType> = {
   GratuityCalculator,
   HRACalculator,
   CAGRCalculator,
-  GSTIncExcCalculator,
 
   // Phase 2 - Utilities
   PercentageCalculator,

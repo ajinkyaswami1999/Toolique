@@ -31,42 +31,80 @@ export const toolsList: Tool[] = [
     slug: 'gst-calculator',
     name: 'GST Calculator',
     category: 'finance',
-    shortDescription: 'Calculate Indian Goods and Services Tax (GST) for adding or removing GST percentages.',
-    metaDescription: 'Free online Indian GST Calculator. Calculate CGST, SGST, IGST and net amount for adding or removing 5%, 12%, 18%, and 28% GST rates instantly in browser.',
-    keywords: ['GST Calculator', 'Indian GST Calculator', 'Calculate SGST CGST', 'Add GST online', 'Remove GST online', 'GST rates India'],
+    shortDescription: 'Calculate Indian Goods and Services Tax (GST) splits, reverse GST inclusive rates, discounts, and generate invoices.',
+    metaTitle: 'GST Calculator – Add/Remove GST, Reverse GST & Invoice splits',
+    metaDescription: 'Free online Indian GST Calculator. Calculate CGST, SGST, IGST, reverse GST, discounts, and invoice splits. Export results to PDF instantly.',
+    keywords: [
+      'GST Calculator',
+      'GST Calculator India',
+      'GST Calculator Online',
+      'GST Inclusive Calculator',
+      'GST Exclusive Calculator',
+      'Reverse GST Calculator',
+      'CGST Calculator',
+      'SGST Calculator',
+      'IGST Calculator',
+      'GST Percentage Calculator',
+      'GST Calculator for Invoice'
+    ],
     icon: 'Percent',
     howToUse: [
-      'Enter the initial amount (price of product/service).',
-      'Select the applicable GST slab (5%, 12%, 18%, 28%) or enter a custom rate.',
-      'Choose whether to "Add GST" (calculate tax on top of amount) or "Remove GST" (calculate base price from inclusive amount).',
-      'View the calculated Base Amount, CGST (Central GST), SGST (State GST), and Total Amount instantly.'
+      'Choose the calculation mode: Add GST (+) or Remove GST (-).',
+      'Enter the base amount (or inclusive final amount) and select the GST rate slab (5%, 12%, 18%, 28%).',
+      'Select the transaction type: Intra-state (CGST + SGST) or Inter-state (IGST).',
+      'Optionally toggle Advanced settings to add Quantity, Unit Prices, and flat/percentage discounts.',
+      'Review results, copy invoice details, or download as a PDF.'
     ],
     faqs: [
       {
-        question: 'What is GST and how does this calculator help?',
-        answer: 'GST stands for Goods and Services Tax, a unified indirect tax structure introduced in India. This calculator helps business owners, consumers, and accountants easily compute tax splits (CGST & SGST) or extract the base price from a GST-inclusive amount.'
+        question: 'How do I calculate GST on an amount?',
+        answer: 'To add GST, multiply the taxable amount by the GST rate and divide by 100. Formula: GST = Taxable Amount × GST Rate / 100.'
       },
       {
-        question: 'How are CGST and SGST calculated?',
-        answer: 'For intra-state transactions in India, GST is split equally between the Central Government (CGST) and State Government (SGST). For example, on an 18% GST rate, CGST is 9% and SGST is 9%.'
+        question: 'How do I remove GST from an inclusive amount?',
+        answer: 'To remove GST (Reverse GST), calculate the base taxable value first: Base = Inclusive Amount × 100 / (100 + GST Rate). Then subtract the base from the inclusive amount to find the tax.'
       },
       {
-        question: 'Is there any charge to use this GST calculator?',
-        answer: 'No, this GST calculator is 100% free and runs entirely in your web browser. No registration or payment is required.'
+        question: 'What is the formula for reverse GST?',
+        answer: 'Taxable Amount = Inclusive Amount × 100 / (100 + GST Rate); GST Amount = Inclusive Amount - Taxable Amount.'
+      },
+      {
+        question: 'How is CGST and SGST calculated?',
+        answer: 'For intra-state transactions, GST is divided equally: CGST = GST Rate / 2, and SGST = GST Rate / 2. For an 18% slab, 9% is CGST and 9% is SGST.'
+      },
+      {
+        question: 'How is IGST calculated?',
+        answer: 'For inter-state transactions, the entire tax goes to the Center as Integrated GST (IGST). For an 18% slab, IGST is the full 18%.'
+      },
+      {
+        question: 'Can I calculate GST after a discount?',
+        answer: 'Yes. In business transactions, GST is legally calculated on the net taxable value after subtracting trade or cash discounts from the subtotal.'
+      },
+      {
+        question: 'Can I calculate GST for multiple quantities?',
+        answer: 'Yes. Switch on the Advanced Calculator mode to specify Unit Price and Quantity. The tool will calculate Subtotal, subtract discounts, apply tax, and show the Grand Total.'
+      },
+      {
+        question: 'Is this GST calculator free?',
+        answer: 'Yes. This tool is completely free, secure, and operates entirely on the client-side inside your browser without uploading any data.'
       }
     ],
     sections: [
       {
         title: 'What is GST (Goods & Services Tax)?',
-        content: 'GST is a destination-based tax levied on the consumption of goods and services. It was introduced in India on July 1, 2017, to replace multiple cascading indirect taxes such as Service Tax, VAT, Central Excise, Entry Tax, and Octroi. It is structured to bring uniformity and transparency to the taxation system.'
+        content: 'GST is a unified destination-based indirect tax introduced in India on July 1, 2017. It replaced multiple cascading taxes like VAT, Service Tax, Central Excise, and Entry Tax. It streamlines tax administration, reduces compliance friction, and unifies the Indian market.'
       },
       {
-        title: 'Primary GST Slabs in India',
-        content: 'Currently, goods and services are classified under five primary tax slabs in India:\n- **0% (Exempted)**: Essential items like fresh milk, curd, fresh fruits, vegetables, and unbranded grains.\n- **5%**: Items of basic necessity like tea, coffee, edible oil, sugar, spices, and lifesaving drugs.\n- **12%**: Includes items like butter, cheese, ghee, fruit juices, computers, and mobile phones.\n- **18%**: The standard slab for most services (including IT, consulting, hotel stays), restaurants, toothpaste, soap, and capital goods.\n- **28%**: Applied to luxury and sin goods such as luxury cars, motorbikes, carbonated drinks, and air conditioners.'
+        title: 'How to Calculate GST?',
+        content: 'To calculate GST, you determine the net taxable value first. If a product is sold at ₹10,000 with an 18% tax rate, the GST is ₹10,000 × 18 / 100 = ₹1,800. The final invoice amount is ₹11,800. For reverse calculations, if the final price is ₹11,800, the taxable value is ₹11,800 × 100 / 118 = ₹10,000, and the GST portion is ₹1,800.'
       },
       {
-        title: 'GST Calculation Formula',
-        content: 'The calculator uses the following formulas for computations:\n\n1. **Add GST Mode (GST Inclusive)**:\n   - GST Amount = (Base Amount × GST Rate) / 100\n   - Total Amount = Base Amount + GST Amount\n\n2. **Remove GST Mode (GST Exclusive)**:\n   - Base Amount = (Total Amount × 100) / (100 + GST Rate)\n   - GST Amount = Total Amount - Base Amount'
+        title: 'CGST vs SGST vs IGST',
+        content: 'Transactions are categorized based on movement:\n- **Intra-State**: Goods/services supplied within the same state. Tax is split 50/50 between CGST (Central Government) and SGST (State Government).\n- **Inter-State**: Goods/services supplied between different states or imported. Collected fully as IGST by the Center and distributed to the consumption state.'
+      },
+      {
+        title: 'GST Calculation Examples',
+        content: 'Here are examples under standard Indian rates:\n- **5% (Necessities)**: ₹1,000 taxable value + 5% GST = ₹1,050 total (₹25 CGST + ₹25 SGST).\n- **12% (Computers/Processed foods)**: ₹5,000 + 12% = ₹5,600 total (₹300 CGST + ₹300 SGST).\n- **18% (Standard services)**: ₹10,000 + 18% = ₹11,800 total (₹900 CGST + ₹900 SGST).\n- **28% (Luxury/Sin goods)**: ₹50,000 + 28% = ₹64,000 total (₹7,000 CGST + ₹7,000 SGST).'
       }
     ]
   },
@@ -178,42 +216,88 @@ export const toolsList: Tool[] = [
     slug: 'emi-calculator',
     name: 'EMI Calculator',
     category: 'finance',
-    shortDescription: 'Compute your monthly Home, Car, or Personal loan EMIs and see amortization schedules.',
-    metaDescription: 'Calculate Equated Monthly Installment (EMI) for Home Loan, Car Loan or Personal Loan in India. View detailed interest splits and monthly amortization schedules.',
-    keywords: ['EMI Calculator', 'Home Loan EMI Calculator', 'Car Loan Calculator', 'Personal Loan EMI', 'Amortization schedule calculator'],
+    shortDescription: 'Compute your monthly Home, Car, or Personal loan EMIs, plan prepayments, compare loan options, and view amortization schedules.',
+    metaTitle: 'EMI Calculator – Loan EMI & Repayment Planner',
+    metaDescription: 'Free online Indian EMI Calculator with Amortization Schedule. Plan Home, Car, and Personal loans. Simulate prepayments, loan comparisons, and interest rate changes.',
+    keywords: [
+      'EMI Calculator',
+      'Loan EMI Calculator',
+      'Home Loan EMI Calculator',
+      'Car Loan EMI Calculator',
+      'Personal Loan EMI Calculator',
+      'EMI Calculator India',
+      'EMI Calculator with Amortization',
+      'Loan Repayment Calculator',
+      'Home Loan Interest Calculator',
+      'Prepayment Calculator'
+    ],
     icon: 'CreditCard',
     howToUse: [
-      'Enter the total Loan Amount (Principal) you wish to borrow.',
-      'Enter the Annual Interest Rate (%) charged by the bank.',
-      'Enter the Loan Tenure in years or months.',
-      'Examine the Monthly EMI, Total Interest Payable, and Total Amount to be repaid. You can also view a year-by-year repayment breakdown.'
+      'Choose a loan preset: Home Loan, Car Loan, Personal Loan, Education Loan, or Custom.',
+      'Enter the principal loan amount, interest rate, and tenure.',
+      'Optionally expand Advanced settings to add Processing fees, GST, and Insurance charges.',
+      'Review your Monthly EMI, Total Interest, and Total Repayment Cost instantly.',
+      'Simulate prepayment strategies (Reduce EMI vs. Reduce Tenure) or top-ups to see interest savings.',
+      'Compare up to 3 loan scenarios side-by-side or download your amortization schedule as a PDF/CSV.'
     ],
     faqs: [
       {
-        question: 'What does EMI mean?',
-        answer: 'EMI stands for Equated Monthly Installment. It is the fixed amount you pay to a bank or lender every month until the loan is fully paid off, consisting of both principal and interest components.'
+        question: 'What is EMI?',
+        answer: 'EMI stands for Equated Monthly Installment. It is a fixed payment made by a borrower to a lender at a specified date each calendar month, combining both interest and principal repayments.'
       },
       {
-        question: 'How is the EMI calculated?',
-        answer: 'EMI is calculated using the formula: EMI = [P x R x (1+R)^N]/[((1+R)^N)-1], where P is Principal loan amount, R is monthly interest rate (Annual Rate / 12 / 100), and N is loan tenure in number of months.'
+        question: 'How is EMI calculated?',
+        answer: 'EMI is calculated using the formula: EMI = [P × r × (1+r)^n] / [((1+r)^n) - 1], where P is Principal loan amount, r is monthly reducing interest rate (Annual rate / 12 / 100), and n is the tenure in months.'
       },
       {
-        question: 'How does loan tenure affect the EMI?',
-        answer: 'A longer tenure reduces your monthly EMI payments but increases the overall interest paid over the life of the loan. A shorter tenure increases the monthly EMI but saves you money on interest.'
+        question: 'Does increasing tenure reduce EMI?',
+        answer: 'Yes, stretching the tenure spreads the repayment over more months, which reduces the monthly EMI. However, it significantly increases the total interest cost over the life of the loan.'
+      },
+      {
+        question: 'Does increasing tenure increase total interest?',
+        answer: 'Yes. Because interest is charged on the outstanding balance month-on-month, a longer tenure keeps the principal outstanding for longer, leading to higher accumulated interest.'
+      },
+      {
+        question: 'What happens if I make a loan prepayment?',
+        answer: 'A loan prepayment is a lump-sum amount paid to the lender in addition to your standard EMI. This goes directly toward reducing the outstanding principal balance, reducing your future interest burden.'
+      },
+      {
+        question: 'Is it better to reduce EMI or tenure after prepayment?',
+        answer: 'Reducing tenure is generally much more cost-efficient because it saves significantly more interest. Reducing EMI is better if you need immediate relief in your monthly cash flow.'
+      },
+      {
+        question: 'How much loan can I afford?',
+        answer: 'Lenders typically look at your Fixed Obligation to Income Ratio (FOIR). Ideally, your total monthly EMI burden (including the new loan) should not exceed 40% to 50% of your net monthly income.'
+      },
+      {
+        question: 'How does interest rate affect EMI?',
+        answer: 'Since interest is calculated on a reducing balance, even a minor 0.5% rate change can result in thousands of rupees saved or added in EMIs over long terms like 15–20 years.'
+      },
+      {
+        question: 'What is an amortization schedule?',
+        answer: 'It is a month-by-month table showing the progression of your loan, detailing how much of each monthly payment goes toward principal repayment and how much goes toward interest, along with the outstanding balance.'
+      },
+      {
+        question: 'What is the difference between principal and interest?',
+        answer: 'Principal is the actual money you borrow from the lender. Interest is the fee charged by the lender for borrowing that money. Initially, a major portion of your EMI goes toward interest, but over time, the share shifts toward principal.'
       }
     ],
     sections: [
       {
-        title: 'The Mathematical Formula for EMI',
-        content: 'Loan installments are computed worldwide using this standard reducing-balance formula:\n\n**EMI = [P × r × (1 + r)ⁿ] / [ (1 + r)ⁿ - 1 ]**\n\nWhere:\n- **P**: Loan Principal Amount (the borrowed sum)\n- **r**: Monthly Interest Rate (Annual Rate / 12 / 100)\n- **n**: Loan Tenure in number of months'
+        title: 'Home Loan EMI Calculator',
+        content: 'Home loans are long-term commitments (15 to 30 years). Since the tenure is long, interest makes up a massive portion of the total repayment. Using a home loan EMI calculator helps you see the impact of interest rates and plan regular prepayments to finish the loan early.'
       },
       {
-        title: 'Loan Examples & Benchmarks',
-        content: 'Here are typical benchmark examples:\n- **Home Loan**: ₹30 Lakhs at 8.5% interest for 20 years. EMI works out to approx. ₹26,035/mo. Total interest paid is ₹32.48 Lakhs.\n- **Car Loan**: ₹7 Lakhs at 9.5% interest for 5 years. EMI works out to approx. ₹14,701/mo. Total interest paid is ₹1.82 Lakhs.\n- **Personal Loan**: ₹2 Lakhs at 12% interest for 3 years. EMI works out to approx. ₹6,643/mo. Total interest paid is ₹39,146.'
+        title: 'Car Loan & Personal Loan Calculator',
+        content: 'Car loans typically have tenures of 3 to 7 years with interest rates between 8% and 12%. Personal loans are unsecured with higher interest rates (10.5% to 24%) and shorter tenures (1 to 5 years). Estimating these EMIs helps avoid over-leveraging.'
       },
       {
-        title: 'Major Indian Banks Interest Rate Guide',
-        content: 'Typical interest rates across banks range as follows:\n- **Home Loans (SBI, HDFC, ICICI)**: 8.40% to 9.50% p.a.\n- **Car Loans (Axis, HDFC, SBI)**: 8.75% to 11.50% p.a.\n- **Personal Loans (All Banks)**: 10.50% to 18.00% p.a. depending on credit score (CIBIL).'
+        title: 'EMI Amortization Schedule',
+        content: 'The amortization schedule acts as your loan dashboard. By tracking opening and closing monthly balances, you can see how much principal has been retired. This is crucial for calculating tax benefits under Section 24(b) (interest) and Section 80C (principal) of the Income Tax Act in India.'
+      },
+      {
+        title: 'Loan Prepayment & How to Reduce Interest',
+        content: 'Making part-payments is the most effective way to save money. By paying an extra lump-sum equal to just one EMI per year, or by step-up prepayments by 5% annually, you can reduce a 20-year loan down to 12–15 years, saving lakhs in interest.'
       }
     ]
   },
@@ -836,41 +920,7 @@ export const toolsList: Tool[] = [
       }
     ]
   },
-  {
-    id: 'GSTIncExcCalculator',
-    slug: 'gst-inclusive-exclusive-calculator',
-    name: 'GST Inclusive/Exclusive Calculator',
-    category: 'finance',
-    shortDescription: 'Compare GST inclusive and exclusive pricing calculations side-by-side.',
-    metaDescription: 'Add or extract GST percentages. Compare GST Inclusive and Exclusive calculations side-by-side for 5%, 12%, 18%, and 28% tax slabs instantly.',
-    keywords: ['GST Inclusive Exclusive', 'Add GST online', 'Extract GST formula', 'Indian tax calculator inclusive', 'Calculate CGST SGST online'],
-    icon: 'Percent',
-    howToUse: [
-      'Enter the base or total amount in the input field.',
-      'Select the tax slab (5%, 12%, 18%, 28% or enter custom).',
-      'Examine the side-by-side split showing Net Price, GST Amount, CGST/SGST split, and Final Invoice values.'
-    ],
-    faqs: [
-      {
-        question: 'What is GST Inclusive price?',
-        answer: 'A GST inclusive price means the displayed price already includes the tax amount. The base price must be extracted to know the pre-tax cost.'
-      },
-      {
-        question: 'What is GST Exclusive price?',
-        answer: 'A GST exclusive price means the displayed price does not contain tax. GST will be added on top of this value to find the final billing amount.'
-      },
-      {
-        question: 'How do I extract GST from an inclusive amount?',
-        answer: 'To extract GST: GST Amount = Total Amount - (Total Amount × 100) / (100 + GST Rate).'
-      }
-    ],
-    sections: [
-      {
-        title: 'GST Inclusive vs Exclusive Pricing',
-        content: 'Understanding tax splits is vital for compliance and transparent billing. A GST Inclusive amount represents the total cost to the customer. When creating bills in India, businesses must separately list CGST and SGST splits to file their monthly GSTR-1 returns accurately.'
-      }
-    ]
-  },
+
   {
     id: 'PercentageCalculator',
     slug: 'percentage-calculator',
