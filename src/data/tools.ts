@@ -12,7 +12,7 @@ export interface Tool {
   id: string;
   slug: string;
   name: string;
-  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health' | '3d-printing' | 'math-studio';
+  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health' | '3d-printing' | 'math-studio' | 'qa';
   subcategory?: string;
   shortDescription: string;
   metaTitle?: string;
@@ -8518,6 +8518,334 @@ export const toolsList: Tool[] = [
       {
         "title": "Architectural Guidelines for PDF Drawing Merger",
         "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+      }
+    ]
+  },
+  {
+    "id": "TestCaseGenerator",
+    "slug": "test-case-generator",
+    "name": "Test Case Generator",
+    "category": "qa",
+    "shortDescription": "Generate professional QA test cases from feature criteria or customized scenarios.",
+    "metaDescription": "Free online QA Test Case Generator. Create structured test suites with pre-conditions, steps, priorities, and expected outcomes instantly.",
+    "keywords": ["test case generator", "qa test cases", "software testing tools", "jira test cases", "test scenario builder"],
+    "icon": "ShieldCheck",
+    "howToUse": [
+      "Choose a standard template (e.g. Login, Payment) or enter a custom feature name.",
+      "Specify optional feature descriptions to customize generated test parameters.",
+      "Review the generated test cases including steps, priority, and expected results.",
+      "Copy the output as Markdown or export it directly to a CSV sheet."
+    ],
+    "faqs": [
+      {
+        "question": "Does this tool send my feature details to a server?",
+        "answer": "No. All calculations and test case generation occur entirely in your local browser sandbox. No data is transmitted to our servers."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Structured QA Test Writing",
+        "content": "Writing structured test cases is crucial for QA automation and manual verification. Standard test cases contain title, preconditions, clear steps, and expected results to remove ambiguity during release verification."
+      }
+    ]
+  },
+  {
+    "id": "BugReportGenerator",
+    "slug": "bug-report-generator",
+    "name": "Bug Report Generator",
+    "category": "qa",
+    "shortDescription": "Create clean, detailed markdown bug reports to submit to Jira, GitHub, or development boards.",
+    "metaDescription": "Generate professional markdown-formatted bug reports with steps, environment configurations, and severity markers instantly.",
+    "keywords": ["bug report generator", "qa bug report", "markdown bug template", "jira bug writer", "qa template"],
+    "icon": "ShieldAlert",
+    "howToUse": [
+      "Input the bug title, component, severity level, and testing environment details.",
+      "Detail the step-by-step instructions to reproduce the issue.",
+      "State the expected vs actual behaviors, and document any temporary workaround.",
+      "Copy the generated Markdown report or reset the form to start over."
+    ],
+    "faqs": [
+      {
+        "question": "Why use a structured bug report generator?",
+        "answer": "Standardizing reports helps engineers identify, isolate, and debug software defects quickly without constant back-and-forth communication."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Best Practices in Bug Reporting",
+        "content": "A perfect bug report contains three core pillars: 1. Clean reproducible steps, 2. The exact delta between expected and actual behaviour, 3. Complete system environment variables (browser version, OS, API status)."
+      }
+    ]
+  },
+  {
+    "id": "TestDataGenerator",
+    "slug": "test-data-generator",
+    "name": "Test Data Generator",
+    "category": "qa",
+    "shortDescription": "Generate local mock data records (UUIDs, names, emails, phones, countries) in JSON, CSV, or SQL.",
+    "metaDescription": "Free online Test Data Generator. Create dummy datasets instantly for API testing, database initialization, and UI mock validation.",
+    "keywords": ["mock data generator", "test data generator", "dummy json data", "csv dataset builder", "sql insert generator"],
+    "icon": "FileSpreadsheet",
+    "howToUse": [
+      "Select the data columns/keys you want to include in your dataset.",
+      "Choose the target output format (JSON Array, CSV Sheet, or SQL Inserts).",
+      "Specify the number of rows (up to 1,000 records) to generate.",
+      "Click Generate, then copy or download the output file."
+    ],
+    "faqs": [
+      {
+        "question": "Is my mock data private?",
+        "answer": "Yes. This tool operates 100% locally in your browser. Mock datasets are constructed in-memory and never sent to external servers."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Role of Mock Datasets in Testing",
+        "content": "Developing with rich mock data prevents database pollution and allows QA teams to run automated integration scripts against stable, randomized data profiles."
+      }
+    ]
+  },
+  {
+    "id": "BoundaryValueAnalysis",
+    "slug": "boundary-value-analysis",
+    "name": "Boundary Value Analysis (BVA)",
+    "category": "qa",
+    "shortDescription": "Identify inputs at boundaries of range rules using standard 3-value boundary test design.",
+    "metaDescription": "Determine range testing boundaries mathematically. Calculate Min-1, Min, Min+1, Max-1, Max, and Max+1 values instantly.",
+    "keywords": ["boundary value analysis", "bva calculator", "qa test design", "black box testing", "range testing boundaries"],
+    "icon": "Ruler",
+    "howToUse": [
+      "Enter the minimum and maximum allowed range numbers on the left control panel.",
+      "Review the dynamic 3-value boundary table displaying computed results.",
+      "Copy the boundary data as a CSV table for test planning."
+    ],
+    "faqs": [
+      {
+        "question": "What is Boundary Value Analysis?",
+        "answer": "BVA is a black-box testing technique based on the observation that errors occur most frequently at the extreme limits of input ranges."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Why test boundaries?",
+        "content": "Conditional rules (like '<' vs '<=') are common sources of developer oversights. Testing the exact boundaries checks off both positive limits and invalid edge cases."
+      }
+    ]
+  },
+  {
+    "id": "EquivalencePartitioning",
+    "slug": "equivalence-partitioning",
+    "name": "Equivalence Partitioning (EP)",
+    "category": "qa",
+    "shortDescription": "Divide input ranges into valid and invalid partitions with suggested test values.",
+    "metaDescription": "Generate equivalence partitions and suggested test values. Simplify black box test case design by grouping parameters.",
+    "keywords": ["equivalence partitioning", "equivalence class partition", "black box test case design", "qa parameters list"],
+    "icon": "Layers",
+    "howToUse": [
+      "Load a standard preset (Age, Password, Discount) or create custom partitions.",
+      "Specify partition names, validity classes (Valid/Invalid), and parameters.",
+      "Copy the structured partitioning table as a Markdown outline."
+    ],
+    "faqs": [
+      {
+        "question": "What is Equivalence Partitioning?",
+        "answer": "It is a test design technique that groups inputs into classes expected to produce similar behaviors, allowing you to test one representative value from each class."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Combining EP and BVA",
+        "content": "QA engineers typically combine Equivalence Partitioning (to find the logical classes of inputs) with Boundary Value Analysis (to test the edge limits of those classes)."
+      }
+    ]
+  },
+  {
+    "id": "XPathSelectorTester",
+    "slug": "xpath-tester",
+    "name": "XPath Tester & Evaluator",
+    "category": "qa",
+    "shortDescription": "Test, debug and evaluate XPath queries against HTML or XML inputs locally.",
+    "metaDescription": "Evaluate XPath queries in real-time. View matching nodes, attributes, and text values directly in your browser.",
+    "keywords": ["xpath tester", "xpath evaluator", "query html xml", "test xpath query", "selenium locators"],
+    "icon": "Eye",
+    "howToUse": [
+      "Paste your HTML/XML source code in the input area.",
+      "Input your target XPath expression in the query field.",
+      "Inspect the matched node count and values in the output display."
+    ],
+    "faqs": [
+      {
+        "question": "Is this tool safe for sensitive HTML/XML files?",
+        "answer": "Yes. Processing is completed entirely inside your browser's DOM parser. Your files are never uploaded to any server."
+      }
+    ],
+    "sections": [
+      {
+        "title": "XPath for QA Automation",
+        "content": "XPath expressions are widely used in Selenium and Appium frameworks to locate elements. Clean XPaths ensure test runs are robust against minor layout changes."
+      }
+    ]
+  },
+  {
+    "id": "CementCalculator",
+    "slug": "cement-calculator",
+    "name": "Cement Calculator",
+    "category": "civil",
+    "shortDescription": "Calculate the cement bags required for concrete slabs, brick masonry, and wall plastering.",
+    "metaDescription": "Estimate cement bag requirements for slab casting, brickwork, and plastering. Standardizes calculations to 50kg bags.",
+    "keywords": ["cement calculator", "estimate cement bags", "civil engineering calculator", "masonry cement", "plaster cement"],
+    "icon": "Layers",
+    "howToUse": [
+      "Select your units (Feet or Meters) and choose your target application (Concrete, Masonry, Plaster).",
+      "Input structural dimensions and select mortar/concrete mix grade ratios.",
+      "Review the estimated bags required and material cost."
+    ],
+    "faqs": [
+      {
+        "question": "What is the standard volume of a cement bag?",
+        "answer": "A standard 50kg bag of cement has a volume of approximately 34.7 liters (or 1.226 cubic feet)."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Cement Volume Computations",
+        "content": "Calculations add a standard dry volume inflation factor (1.54 for concrete, 1.33 for mortar) to account for wet shrinkage and application drops."
+      }
+    ]
+  },
+  {
+    "id": "SandCalculator",
+    "slug": "sand-calculator",
+    "name": "Sand Calculator",
+    "category": "civil",
+    "shortDescription": "Calculate sand volume in cubic feet (CFT), brass, and metric tons for concrete and mortar.",
+    "metaDescription": "Calculate sand requirements for civil projects in CFT, Brass, and Tons. Supports concrete grades and mortar splits.",
+    "keywords": ["sand calculator", "calculate sand volume", "sand cft calculator", "brass sand", "construction sand"],
+    "icon": "Ruler",
+    "howToUse": [
+      "Select units and pick your construction task (Concrete, Masonry, Plaster).",
+      "Enter physical dimensions and select mix ratios.",
+      "View sand totals displayed in CFT, Brass, and Metric Tons."
+    ],
+    "faqs": [
+      {
+        "question": "How much CFT is 1 Brass of sand?",
+        "answer": "In Indian civil construction, 1 Brass is equal to 100 cubic feet (CFT) of material."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Sand Dry Density & Density Weights",
+        "content": "Sand weight calculations assume a standard dry sand density of 1,600 kg per cubic meter to compute accurate tonnage totals."
+      }
+    ]
+  },
+  {
+    "id": "PlasterCalculator",
+    "slug": "plaster-calculator",
+    "name": "Wall Plaster Calculator",
+    "category": "civil",
+    "shortDescription": "Calculate the cement bags and sand volume needed for internal and external wall plastering.",
+    "metaDescription": "Calculate cement bags and sand requirements for plastering jobs. Includes wastage and thickness adjustments.",
+    "keywords": ["plaster calculator", "wall plaster estimation", "plaster cement sand", "ceiling plaster calculator"],
+    "icon": "Layers",
+    "howToUse": [
+      "Select units (Feet or Meters) and enter the plaster area.",
+      "Select plaster thickness (6mm to 20mm) and mix ratio.",
+      "Input a wastage factor (standard is 15-20% for uneven walls).",
+      "Read the required cement bags, sand volume, and cost estimates."
+    ],
+    "faqs": [
+      {
+        "question": "What is the recommended plaster thickness?",
+        "answer": "Typically, 6mm is used for ceilings, 12mm for smooth internal brick walls, and 20mm for rough external brick walls."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Wastage in Wall Plastering",
+        "content": "Uneven masonry and joint filling consume extra mortar. Adding 15% to 20% wastage ensures you do not run out of materials on site."
+      }
+    ]
+  },
+  {
+    "id": "PlotAreaCalculator",
+    "slug": "plot-area-calculator",
+    "name": "Plot Area Calculator",
+    "category": "architecture",
+    "shortDescription": "Calculate area of rectangular, triangular or irregular 4-sided plots and convert to land units.",
+    "metaDescription": "Calculate land area for rectangular and irregular plots. Converts results to Sq. Ft, Sq. M, Acres, Hectares, Guntha, and Bigha.",
+    "keywords": ["plot area calculator", "land area calculator", "calculate plot size", "bigha calculator", "guntha calculator"],
+    "icon": "Ruler",
+    "howToUse": [
+      "Select the shape of your plot (Rectangle, Triangle, or 4-Side Irregular).",
+      "Enter the measured side dimensions.",
+      "Review the total plot area converted into standard regional units."
+    ],
+    "faqs": [
+      {
+        "question": "How are irregular quadrilateral plot areas calculated?",
+        "answer": "The plot is partitioned into two triangles using a diagonal measurement, and the area of both triangles is calculated using Heron's formula."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Land Units Variation in India",
+        "content": "Land units vary regionally. Standard units like Acres and Hectares are uniform, but units like Bigha and Guntha depend on local state land records."
+      }
+    ]
+  },
+  {
+    "id": "CompoundInterestCalculator",
+    "slug": "compound-interest-calculator",
+    "name": "Compound Interest Calculator",
+    "category": "finance",
+    "shortDescription": "Calculate future values and compound interest with flexible compounding intervals.",
+    "metaDescription": "Calculate the growth of your investments using compound interest. Compares monthly, quarterly, and annual compounding schedules.",
+    "keywords": ["compound interest calculator", "wealth compounder", "future value calculator", "compound growth"],
+    "icon": "TrendingUp",
+    "howToUse": [
+      "Input principal amount, annual interest rate, and years.",
+      "Select the compounding frequency (Monthly, Quarterly, Annually).",
+      "Observe the final maturity value and review the year-by-year compounding schedule."
+    ],
+    "faqs": [
+      {
+        "question": "What is compound interest?",
+        "answer": "Compound interest is interest calculated on the initial principal, which also includes all of the accumulated interest from previous periods."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Compound Interest Formula",
+        "content": "A = P * (1 + r/n)^(n*t), where A is maturity value, P is principal, r is rate, n is compounding frequency, and t is tenure in years."
+      }
+    ]
+  },
+  {
+    "id": "IncomeTaxCalculator",
+    "slug": "income-tax-calculator",
+    "name": "Income Tax Calculator",
+    "category": "finance",
+    "shortDescription": "Compare your tax liabilities under the Old vs New Tax Regimes for FY 2024-25.",
+    "metaDescription": "Indian Income Tax Calculator. Compare Old vs New Tax Regimes with 80C, 80D, and HRA deductions instantly.",
+    "keywords": ["income tax calculator", "old vs new tax regime", "income tax india", "tax saver calculator"],
+    "icon": "Landmark",
+    "howToUse": [
+      "Input your gross annual salary and income from other sources.",
+      "Declare your deductions (80C, 80D, HRA) on the input panel.",
+      "Compare old vs new regime liabilities and see which regime saves you more money."
+    ],
+    "faqs": [
+      {
+        "question": "What is the standard deduction in FY 2024-25?",
+        "answer": "A standard deduction of ₹50,000 is available to all salaried taxpayers under both the Old and New Tax Regimes."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Choosing Between Regimes",
+        "content": "The New Regime offers lower tax rates but allows zero deductions. The Old Regime is beneficial if you make substantial tax-saving investments (under 80C, HRA, home loan interest)."
       }
     ]
   }

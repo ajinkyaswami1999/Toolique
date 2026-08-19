@@ -3,7 +3,7 @@ import {
   Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon,
   Hammer, Compass, Palette, ArrowRight,
   Globe, FileText, Share2, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart, Type,
-  Flame, Award, ExternalLink, Printer, Cpu, Code2, Terminal, Calculator
+  Flame, Award, ExternalLink, Printer, Cpu, Code2, Terminal, Calculator, ShieldCheck
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import type { Tool } from '../data/tools';
@@ -101,12 +101,13 @@ export default function Home() {
   };
 
   const platforms = [
-    { id: 'tools', title: 'Tools', desc: '255+ productivity, developer, finance, and engineering tools.', link: '/tools', icon: LayoutGrid, color: 'text-indigo-500 bg-indigo-500/5 border-indigo-500/10' },
-    { id: 'ai', title: 'AI Studio', desc: 'AI-powered developer extensions and code helper utilities.', link: '/ai', icon: Sparkles, color: 'text-purple-500 bg-purple-500/5 border-purple-500/10' },
-    { id: 'academy', title: 'Academy', desc: 'Master programming and QA interviews with structured tracks.', link: '/academy', icon: GraduationCap, color: 'text-teal-500 bg-teal-500/5 border-teal-500/10' },
-    { id: 'playground', title: 'Developer Playground', desc: 'Interactive browser-sandboxed database and coding consoles.', link: '/playground', icon: Code2, color: 'text-blue-500 bg-blue-500/5 border-blue-500/10' },
-    { id: '3d-printing', title: '3D Printing Studio', desc: 'AMS slot planners, volumetric flow estimators, and filament calculators.', link: '/3d-printing', icon: Printer, color: 'text-orange-500 bg-orange-500/5 border-orange-500/10' },
-    { id: 'math-studio', title: 'Advanced Math Studio', desc: 'Equation solvers, data analysis tools, and geometry calculators.', link: '/math-studio', icon: Calculator, color: 'text-rose-500 bg-rose-500/5 border-rose-500/10' }
+    { id: 'calculators', title: 'Calculators Hub', desc: 'Finance, compound interest, standard calculators, tax estimators.', link: '/calculators', icon: Calculator, color: 'text-emerald-500 bg-emerald-500/5 border-emerald-500/10' },
+    { id: 'architecture', title: 'Architecture Suite', desc: 'Plot area, setback clearances, built-up calculations, and FAR compliance.', link: '/architecture', icon: Compass, color: 'text-violet-500 bg-violet-500/5 border-violet-500/10' },
+    { id: 'civil', title: 'Civil Engineering', desc: 'Concrete mixes, brick weight, plastering ratios, and construction cost estimators.', link: '/civil', icon: Hammer, color: 'text-blue-500 bg-blue-500/5 border-blue-500/10' },
+    { id: 'developer', title: 'Developer Utilities', desc: 'SQL formatting, JSON validation, JWT decode, Base64 converters.', link: '/developer', icon: Code, color: 'text-indigo-500 bg-indigo-500/5 border-indigo-500/10' },
+    { id: 'qa', title: 'QA Engineering', desc: 'Generate test cases, mock datasets, bug templates, boundary value analysis.', link: '/qa', icon: ShieldCheck, color: 'text-rose-500 bg-rose-500/5 border-rose-500/10' },
+    { id: 'ai', title: 'AI Studio', desc: 'AI-powered code generators, QA test automation, and regex builders.', link: '/ai', icon: Sparkles, color: 'text-purple-500 bg-purple-500/5 border-purple-500/10' },
+    { id: 'academy', title: 'Learning Academy', desc: 'Master programming and QA interviews with structured tracks.', link: '/academy', icon: GraduationCap, color: 'text-teal-500 bg-teal-500/5 border-teal-500/10' }
   ];
 
   return (
@@ -124,14 +125,14 @@ export default function Home() {
         </div>
         
         <h1 className="text-4xl sm:text-5xl md:text-6.5xl font-black tracking-tight text-zinc-900 dark:text-white leading-[1.12]">
-          Everything You Need to <br className="hidden sm:inline" />
+          Free Calculators &<br className="hidden sm:inline" />
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-            Build, Calculate, Learn & Create
+            Professional Online Tools
           </span>
         </h1>
         
         <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto font-semibold">
-          255+ free browser-based tools for developers, engineers, designers, creators and everyday productivity.
+          Calculate, convert, test and build with fast browser-based tools for finance, architecture, civil engineering, developers and QA professionals.
         </p>
 
         <div className="flex flex-wrap justify-center gap-4 pt-2">

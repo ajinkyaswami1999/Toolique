@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toolsList } from '../data/tools';
+import { getToolCanonicalPath, getCategoryCanonicalPath } from '../routes/AppRoutes';
 import { additionalFaqs } from '../data/toolFaqs';
 import { categories } from '../data/categories';
 import { ArrowLeft } from 'lucide-react';
@@ -301,6 +302,24 @@ const RegressionCalculator = lazy(() => import('../tools/RegressionCalculator'))
 const ProbabilityDistributionCalculator = lazy(() => import('../tools/ProbabilityDistributionCalculator'));
 const AdvancedBOQCalculatorIndia = lazy(() => import('../tools/AdvancedBOQCalculatorIndia'));
 
+// New QA Tools
+const TestCaseGenerator = lazy(() => import('../tools/TestCaseGenerator'));
+const BugReportGenerator = lazy(() => import('../tools/BugReportGenerator'));
+const TestDataGenerator = lazy(() => import('../tools/TestDataGenerator'));
+const BoundaryValueAnalysis = lazy(() => import('../tools/BoundaryValueAnalysis'));
+const EquivalencePartitioning = lazy(() => import('../tools/EquivalencePartitioning'));
+const XPathSelectorTester = lazy(() => import('../tools/XPathSelectorTester'));
+
+// New Civil/Architecture Tools
+const CementCalculator = lazy(() => import('../tools/CementCalculator'));
+const SandCalculator = lazy(() => import('../tools/SandCalculator'));
+const PlasterCalculator = lazy(() => import('../tools/PlasterCalculator'));
+const PlotAreaCalculator = lazy(() => import('../tools/PlotAreaCalculator'));
+
+// New Finance Calculators
+const CompoundInterestCalculator = lazy(() => import('../tools/CompoundInterestCalculator'));
+const IncomeTaxCalculator = lazy(() => import('../tools/IncomeTaxCalculator'));
+
 
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
@@ -587,6 +606,18 @@ const toolComponents: Record<string, React.ComponentType> = {
   RegressionCalculator,
   ProbabilityDistributionCalculator,
   AdvancedBOQCalculatorIndia,
+  TestCaseGenerator,
+  BugReportGenerator,
+  TestDataGenerator,
+  BoundaryValueAnalysis,
+  EquivalencePartitioning,
+  XPathSelectorTester,
+  CementCalculator,
+  SandCalculator,
+  PlasterCalculator,
+  PlotAreaCalculator,
+  CompoundInterestCalculator,
+  IncomeTaxCalculator,
 };
 
 interface ToolPageProps {
@@ -624,10 +655,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
   const mergedFaqs = [...tool.faqs, ...(additionalFaqs[tool.id] || [])];
 
   // Combined Schema markup for Answer Engine Optimization (AEO)
-  const toolRoutePath = tool.slug === 'advanced-boq-calculator-india'
-    ? `tools/${tool.slug}`
-    : `tool/${tool.slug}`;
-  const toolUrl = `https://www.toolique.in/${toolRoutePath}`;
+  const toolUrl = `https://www.toolique.in${getToolCanonicalPath(tool.category, tool.slug)}`;
 
   const breadcrumbItems = tool.category === '3d-printing'
     ? [
@@ -643,7 +671,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       ]
     : [
         { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.toolique.in/' },
-        { '@type': 'ListItem', 'position': 2, 'name': categoryName, 'item': `https://www.toolique.in/?category=${tool.category}` },
+        { '@type': 'ListItem', 'position': 2, 'name': categoryName, 'item': `https://www.toolique.in${getCategoryCanonicalPath(tool.category)}` },
         { '@type': 'ListItem', 'position': 3, 'name': tool.name, 'item': toolUrl },
       ];
 
@@ -708,11 +736,11 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       {/* Breadcrumb & Navigation */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
         <a
-          href={tool.category === '3d-printing' ? "/3d-print-studio" : tool.category === 'math-studio' ? "/math-studio" : "/tools"}
+          href={tool.category === '3d-printing' ? "/3d-print-studio" : tool.category === 'math-studio' ? "/math-studio" : getCategoryCanonicalPath(tool.category)}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{tool.category === '3d-printing' ? "Back to 3D Print Studio" : tool.category === 'math-studio' ? "Back to Math Studio" : "Back to Tools"}</span>
+          <span>{tool.category === '3d-printing' ? "Back to 3D Print Studio" : tool.category === 'math-studio' ? "Back to Math Studio" : `Back to ${categoryName}`}</span>
         </a>
         <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
           <a href="/" className="hover:text-indigo-500 transition-colors">Home</a>
@@ -726,7 +754,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
               Math Studio
             </a>
           ) : (
-            <a href={`/tools/${tool.category}`} className="hover:text-indigo-500 transition-colors">
+            <a href={getCategoryCanonicalPath(tool.category)} className="hover:text-indigo-500 transition-colors">
               {categoryName}
             </a>
           )}
@@ -764,6 +792,19 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
           </div>
         )}
       </section>
+
+      {/* Dynamic Security & Local computation disclaimers */}
+      {(tool.category === 'developer' || tool.category === 'security' || tool.category === 'qa' || tool.category === 'web') && (
+        <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-xs text-indigo-850 dark:text-indigo-400 font-semibold leading-relaxed">
+          🔒 <strong>Privacy Sandbox:</strong> Calculations occur locally in your browser. Your inputs and tokens are never transmitted to our servers.
+        </div>
+      )}
+
+      {(tool.category === 'architecture' || tool.category === 'civil') && (
+        <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-amber-800 dark:text-amber-400 font-semibold leading-relaxed">
+          ⚠️ <strong>Regulations Note:</strong> Regulations vary by location and authority. Verify applicable local building regulations before using these results for approvals or construction.
+        </div>
+      )}
 
       {/* How to Use Section */}
       <HowToUse steps={tool.howToUse} toolName={tool.name} />

@@ -11,13 +11,64 @@ interface FAQItem {
   answer: string;
 }
 
-export default function CategoryLanding() {
-  const { categoryName } = useParams<{ categoryName: string }>();
+interface CategoryLandingProps {
+  overrideCategory?: string;
+}
+
+const PILLARS = [
+  { id: 'calculators', name: 'Calculators Hub', description: 'Comprehensive calculators for finance, math, date-time, and health.', path: '/calculators' },
+  { id: 'architecture', name: 'Architecture Suite', description: 'Zonal bylaws, setback clearances, and carpet/built-up space planners.', path: '/architecture' },
+  { id: 'civil', name: 'Civil Engineering', description: 'Concrete mixes, brick counts, sand volumes, and slab quantities.', path: '/civil' },
+  { id: 'developer', name: 'Developer Utilities', description: 'SQL formatting, JSON validation, JWT inspects, and base64 codecs.', path: '/developer' },
+  { id: 'qa', name: 'QA Engineering', description: 'Generate test cases, mock datasets, bug templates, and boundary limits.', path: '/qa' }
+];
+
+export default function CategoryLanding({ overrideCategory }: CategoryLandingProps = {}) {
+  const { categoryName: paramCategory } = useParams<{ categoryName: string }>();
+  const categoryName = overrideCategory || paramCategory || 'calculators';
+
+  // Define categories under each pillar
+  const getPillarCategories = (pillar: string): string[] => {
+    if (pillar === 'calculators') {
+      return ['finance', 'datetime', 'unit', 'health', 'student', 'automobile', 'business', 'interior', 'electrical', 'pdf', 'image', 'text', 'social', 'security', '3d-printing', 'math-studio'];
+    }
+    if (pillar === 'architecture') {
+      return ['architecture'];
+    }
+    if (pillar === 'civil') {
+      return ['civil'];
+    }
+    if (pillar === 'developer') {
+      return ['developer', 'web'];
+    }
+    if (pillar === 'qa') {
+      return ['qa'];
+    }
+    return [pillar];
+  };
+
+  const pillarCategories = getPillarCategories(categoryName);
 
   // Find category metadata
-  const category = categories.find(
-    (c) => c.id === categoryName || (categoryName === '3d-printing' && c.id === '3d-printing')
-  );
+  const category = categoryName === 'calculators'
+    ? {
+        id: 'calculators',
+        name: 'Calculators',
+        description: 'Calculate, convert, and solve with fast browser-based tools for finance, unit conversions, date-time, and health.',
+        icon: 'Calculator',
+        colorClass: 'from-emerald-500/10 to-teal-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20'
+      }
+    : categoryName === 'qa'
+    ? {
+        id: 'qa',
+        name: 'QA Engineering',
+        description: 'Generate test cases, mock datasets, bug reports, and testing boundary parameters locally in browser.',
+        icon: 'ShieldAlert',
+        colorClass: 'from-rose-500/10 to-pink-500/10 text-rose-700 dark:text-rose-455 border-rose-500/20'
+      }
+    : categories.find(
+        (c) => c.id === categoryName || (categoryName === '3d-printing' && c.id === '3d-printing')
+      );
 
   if (!category) {
     return (
@@ -31,16 +82,24 @@ export default function CategoryLanding() {
     );
   }
 
-  // Filter tools belonging to this category
-  const categoryTools = toolsList.filter((t) => t.category === category.id);
+  // Filter tools belonging to this category / pillar
+  const categoryTools = toolsList.filter((t) => pillarCategories.includes(t.category));
 
-  // Group tools by subcategory if available
+  // Group tools by subcategory/original category if calculators
   const toolsBySubcategory: Record<string, typeof categoryTools> = {};
   const toolsWithoutSubcategory: typeof categoryTools = [];
   let hasSubcategories = false;
 
   categoryTools.forEach((tool) => {
-    if (tool.subcategory) {
+    if (categoryName === 'calculators') {
+      hasSubcategories = true;
+      const catObj = categories.find((c) => c.id === tool.category);
+      const groupName = catObj ? catObj.name : tool.category;
+      if (!toolsBySubcategory[groupName]) {
+        toolsBySubcategory[groupName] = [];
+      }
+      toolsBySubcategory[groupName].push(tool);
+    } else if (tool.subcategory) {
       hasSubcategories = true;
       if (!toolsBySubcategory[tool.subcategory]) {
         toolsBySubcategory[tool.subcategory] = [];
@@ -66,14 +125,14 @@ export default function CategoryLanding() {
     '@graph': [
       {
         '@type': 'CollectionPage',
-        '@id': `https://www.toolique.in/tools/${category.id}#collection`,
+        '@id': `https://www.toolique.in/${category.id}#collection`,
         'name': `${category.name} Calculators & Tools`,
         'description': category.description,
-        'url': `https://www.toolique.in/tools/${category.id}`
+        'url': `https://www.toolique.in/${category.id}`
       },
       ...(faqs.length > 0 ? [{
         '@type': 'FAQPage',
-        '@id': `https://www.toolique.in/tools/${category.id}#faq`,
+        '@id': `https://www.toolique.in/${category.id}#faq`,
         'mainEntity': faqs.map((f: FAQItem) => ({
           '@type': 'Question',
           'name': f.question,
@@ -86,8 +145,8 @@ export default function CategoryLanding() {
     ]
   };
 
-  // Find related categories
-  const relatedCategories = categories.filter((c) => c.id !== category.id).slice(0, 4);
+  // Find related categories (other pillars)
+  const relatedCategories = PILLARS.filter((p) => p.id !== categoryName);
 
   return (
     <div className="space-y-8 text-left animate-fadeIn">
@@ -171,7 +230,7 @@ export default function CategoryLanding() {
               <span>Frequently Asked Questions</span>
             </h2>
             <div className="space-y-4">
-              {faqs.map((faq: FAQItem, index: number) => (
+              {faqs.slice(0, 5).map((faq: FAQItem, index: number) => (
                 <div key={index} className="saas-card p-5 space-y-2 border border-zinc-200/60 dark:border-zinc-850/60">
                   <h3 className="text-xs font-black text-zinc-900 dark:text-white">
                     {faq.question}
@@ -189,13 +248,13 @@ export default function CategoryLanding() {
         <div className="lg:col-span-4 space-y-5">
           <h2 className="text-xs font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500 flex items-center gap-2">
             <LayoutGrid className="w-4 h-4 text-teal-500" />
-            <span>Related Categories</span>
+            <span>Core Pillars</span>
           </h2>
           <div className="space-y-3">
             {relatedCategories.map((c) => (
               <Link
                 key={c.id}
-                to={`/tools/${c.id}`}
+                to={c.path}
                 className="p-4 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white dark:bg-zinc-900/60 hover:bg-zinc-50 dark:hover:bg-zinc-850/40 cursor-pointer flex justify-between items-center transition duration-300"
               >
                 <div>

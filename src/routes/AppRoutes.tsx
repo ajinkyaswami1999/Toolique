@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Home from '../pages/Home';
 import ToolPage from '../pages/ToolPage';
@@ -10,6 +10,7 @@ import Disclaimer from '../pages/Disclaimer';
 import ThreeDPrintStudio from '../pages/ThreeDPrintStudio';
 import Status from '../pages/Status';
 import MathStudio from '../pages/MathStudio';
+import { toolsList } from '../data/tools';
 
 const AboutFounder = lazy(() => import('../pages/AboutFounder'));
 const AcademyLanding = lazy(() => import('../features/academy/pages/AcademyLanding'));
@@ -27,6 +28,48 @@ const CategoryLanding = lazy(() => import('../pages/CategoryLanding'));
 const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
+export function getToolCanonicalPath(category: string, slug: string): string {
+  if (category === 'civil') {
+    return `/civil/${slug}`;
+  } else if (category === 'architecture') {
+    return `/architecture/${slug}`;
+  } else if (['developer', 'web'].includes(category)) {
+    return `/developer/${slug}`;
+  } else if (category === 'qa') {
+    return `/qa/${slug}`;
+  } else {
+    return `/calculators/${slug}`;
+  }
+}
+
+export function getCategoryCanonicalPath(category: string): string {
+  if (category === 'civil') {
+    return `/civil`;
+  } else if (category === 'architecture') {
+    return `/architecture`;
+  } else if (['developer', 'web', 'security'].includes(category)) {
+    return `/developer`;
+  } else if (category === 'qa') {
+    return `/qa`;
+  } else {
+    return `/calculators`;
+  }
+}
+
+function LegacyToolRedirect() {
+  const { slug } = useParams<{ slug: string }>();
+  const tool = toolsList.find((t) => t.slug === slug);
+  if (!tool) {
+    return <Navigate to="/tools" replace />;
+  }
+  return <Navigate to={getToolCanonicalPath(tool.category, tool.slug)} replace />;
+}
+
+function LegacyCategoryRedirect() {
+  const { categoryName } = useParams<{ categoryName: string }>();
+  return <Navigate to={getCategoryCanonicalPath(categoryName || '')} replace />;
+}
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -40,15 +83,46 @@ export default function AppRoutes() {
           <ToolsDirectory />
         </Suspense>
       } />
-      <Route path="/tools/:categoryName" element={
-        <Suspense fallback={
-          <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
-            Loading Category...
-          </div>
-        }>
-          <CategoryLanding />
+
+      {/* Primary Pillar Category Routes */}
+      <Route path="/calculators" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Calculators...</div>}>
+          <CategoryLanding overrideCategory="calculators" />
         </Suspense>
       } />
+      <Route path="/architecture" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Architecture Suite...</div>}>
+          <CategoryLanding overrideCategory="architecture" />
+        </Suspense>
+      } />
+      <Route path="/civil" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Civil Engineering Suite...</div>}>
+          <CategoryLanding overrideCategory="civil" />
+        </Suspense>
+      } />
+      <Route path="/developer" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Developer Tools...</div>}>
+          <CategoryLanding overrideCategory="developer" />
+        </Suspense>
+      } />
+      <Route path="/qa" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading QA Tools...</div>}>
+          <CategoryLanding overrideCategory="qa" />
+        </Suspense>
+      } />
+
+      {/* Primary Pillar Tool Detail Routes */}
+      <Route path="/calculators/:slug" element={<ToolPage />} />
+      <Route path="/architecture/:slug" element={<ToolPage />} />
+      <Route path="/civil/:slug" element={<ToolPage />} />
+      <Route path="/developer/:slug" element={<ToolPage />} />
+      <Route path="/qa/:slug" element={<ToolPage />} />
+
+      {/* Legacy Category & Tool Redirects */}
+      <Route path="/tools/:categoryName" element={<LegacyCategoryRedirect />} />
+      <Route path="/tool/:slug" element={<LegacyToolRedirect />} />
+      <Route path="/tools/advanced-boq-calculator-india" element={<Navigate to="/civil/advanced-boq-calculator-india" replace />} />
+
       <Route path="/ai" element={
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
@@ -88,8 +162,6 @@ export default function AppRoutes() {
       <Route path="/3d-printing" element={<ThreeDPrintStudio />} />
       <Route path="/3d-print-studio" element={<ThreeDPrintStudio />} />
       <Route path="/math-studio" element={<MathStudio />} />
-      <Route path="/tools/advanced-boq-calculator-india" element={<ToolPage overrideSlug="advanced-boq-calculator-india" />} />
-      <Route path="/tool/:slug" element={<ToolPage />} />
       <Route path="/about" element={<About />} />
       <Route path="/about-founder" element={
         <Suspense fallback={

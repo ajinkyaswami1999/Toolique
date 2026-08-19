@@ -146,5 +146,12 @@ export const categories: Category[] = [
     description: 'Solve equations, analyze data, calculate geometry, convert engineering units, and explore advanced mathematics.',
     icon: 'Calculator',
     colorClass: 'from-violet-500/10 to-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/20'
+  },
+  {
+    id: 'qa',
+    name: 'QA Engineering',
+    description: 'Generate test cases, mock data, bug reports, and test parameters.',
+    icon: 'ShieldAlert',
+    colorClass: 'from-rose-500/10 to-pink-500/10 text-rose-700 dark:text-rose-455 border-rose-500/20'
   }
 ];

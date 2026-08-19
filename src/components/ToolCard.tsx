@@ -9,6 +9,8 @@ interface ToolCardProps {
   tool: Tool;
 }
 
+import { getToolCanonicalPath } from '../routes/AppRoutes';
+
 export default function ToolCard({ tool }: ToolCardProps) {
   const categoryInfo = categories.find((c) => c.id === tool.category);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -42,7 +44,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
 
   return (
     <Link
-      to={`/tool/${tool.slug}`}
+      to={getToolCanonicalPath(tool.category, tool.slug)}
       className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-indigo-500/40 dark:hover:border-indigo-500/40 hover:shadow-[0_8px_30px_rgb(99,102,241,0.03)] dark:hover:shadow-[0_8px_30px_rgb(99,102,241,0.015)] transition-all duration-300 transform hover:-translate-y-0.5"
     >
       <div>

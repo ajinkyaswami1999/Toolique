@@ -284,6 +284,36 @@ const staticPages = [
     title: '3D Printing cost & filament calculators | Toolique',
     description: 'Dedicated 3D printing calculator tools for cost calculations, filament weight estimation, AMS slot planning, and resin volumes.',
     keywords: ['3d printing cost', 'filament calculator', 'maker settings']
+  },
+  {
+    path: 'calculators',
+    title: 'Free Online Calculators - Finance, Age, Tax, BMI | Toolique',
+    description: 'Free online calculators for GST, SIP, EMI, compound interest, income tax, date differences, age, BMI, and general calculations.',
+    keywords: ['calculators', 'free calculators', 'gst calculator', 'sip calculator', 'emi calculator', 'age calculator']
+  },
+  {
+    path: 'architecture',
+    title: 'Architecture Calculators & Space Planners | Toolique',
+    description: 'Estimate floor area ratios (FAR/FSI), setback distances, carpet area, plot area, room sizes, and building clearance codes.',
+    keywords: ['architecture calculators', 'far calculator', 'setback calculator', 'carpet area calculator']
+  },
+  {
+    path: 'civil',
+    title: 'Civil Engineering & Construction Material Calculators | Toolique',
+    description: 'Estimate concrete mixes, cement bags, sand volumes, bricks, steel weights, plastering materials, and construction costs online.',
+    keywords: ['civil calculators', 'concrete calculator', 'cement bags estimator', 'construction cost calculator']
+  },
+  {
+    path: 'developer',
+    title: 'Developer Utilities & Code Formatters | Toolique',
+    description: 'Online developer utilities. Format SQL, beautify JSON, validate XML/YAML, decode JWT, test regex, and encode/decode URL/base64.',
+    keywords: ['developer tools', 'json formatter', 'sql formatter', 'jwt decoder', 'uuid generator']
+  },
+  {
+    path: 'qa',
+    title: 'QA Testing Case & Mock Data Generators | Toolique',
+    description: 'QA automation and manual testing tools. Generate test cases, mock datasets, bug reports, boundary limits, and evaluate XPath selectors.',
+    keywords: ['qa tools', 'test case generator', 'bug report generator', 'test data generator', 'xpath tester']
   }
 ];
 
@@ -372,15 +402,44 @@ staticPages.forEach((page) => {
   generateShell(page.path, page.title, page.description, page.keywords, (page as any).schemaMarkup);
 });
 
+function getToolCanonicalPath(category: string, slug: string): string {
+  if (category === 'civil') {
+    return `civil/${slug}`;
+  } else if (category === 'architecture') {
+    return `architecture/${slug}`;
+  } else if (['developer', 'web'].includes(category)) {
+    return `developer/${slug}`;
+  } else if (category === 'qa') {
+    return `qa/${slug}`;
+  } else {
+    return `calculators/${slug}`;
+  }
+}
+
+function getCategoryCanonicalPath(category: string): string {
+  if (category === 'civil') {
+    return `civil`;
+  } else if (category === 'architecture') {
+    return `architecture`;
+  } else if (['developer', 'web'].includes(category)) {
+    return `developer`;
+  } else if (category === 'qa') {
+    return `qa`;
+  } else {
+    return `calculators`;
+  }
+}
+
 // Generate dynamic tool pages
 toolsList.forEach((tool) => {
-  const routePath = tool.slug === 'advanced-boq-calculator-india'
-    ? 'tools/advanced-boq-calculator-india'
-    : `tool/${tool.slug}`;
+  const routePath = getToolCanonicalPath(tool.category, tool.slug);
 
   const title = `${tool.name} | Toolique`;
   const description = tool.metaDescription || tool.shortDescription;
   const toolUrl = `https://www.toolique.in/${routePath}`;
+
+  const categoryObj = categories.find(c => c.id === tool.category);
+  const catName = categoryObj ? categoryObj.name : tool.category;
 
   // Build BreadcrumbList based on category
   let breadcrumbItems: object[];
@@ -399,7 +458,7 @@ toolsList.forEach((tool) => {
   } else {
     breadcrumbItems = [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.toolique.in/' },
-      { '@type': 'ListItem', position: 2, name: tool.category, item: `https://www.toolique.in/?category=${tool.category}` },
+      { '@type': 'ListItem', position: 2, name: catName, item: `https://www.toolique.in/${getCategoryCanonicalPath(tool.category)}` },
       { '@type': 'ListItem', position: 3, name: tool.name, item: toolUrl },
     ];
   }
