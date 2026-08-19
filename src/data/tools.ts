@@ -75,15 +75,26 @@ export const toolsList: Tool[] = [
     slug: 'sip-calculator',
     name: 'SIP Calculator',
     category: 'finance',
-    shortDescription: 'Estimate the future returns of your Systematic Investment Plans (SIP) in mutual funds.',
-    metaDescription: 'Calculate the maturity value and wealth gains of your monthly Mutual Fund Systematic Investment Plan (SIP) based on expected annual returns and investment tenure.',
-    keywords: ['SIP Calculator', 'Mutual Fund SIP Calculator', 'Wealth Calculator India', 'SIP return estimator', 'Systematic Investment Plan calculator'],
+    shortDescription: 'Calculate SIP returns, future investment value, step-up growth, and inflation-adjusted wealth.',
+    metaTitle: 'SIP Calculator – Calculate SIP Returns, Future Value & Wealth',
+    metaDescription: 'Calculate SIP returns, future investment value, step-up SIP growth, inflation-adjusted wealth and required SIP for your financial goals with Toolique\'s free SIP Calculator.',
+    keywords: [
+      'SIP Calculator',
+      'SIP calculator India',
+      'SIP return calculator',
+      'mutual fund SIP calculator',
+      'SIP investment calculator',
+      'SIP maturity calculator',
+      'SIP interest calculator',
+      'monthly SIP calculator',
+      'step up SIP calculator'
+    ],
     icon: 'TrendingUp',
     howToUse: [
-      'Enter your desired Monthly Investment amount in Rupees.',
-      'Enter the Expected Annual Return Rate (%) you anticipate from the mutual fund.',
-      'Choose the Time Period in years for which you plan to invest.',
-      'Review the summary displaying your Total Invested Amount, Estimated Returns, and Total Maturity Value, accompanied by a growth breakdown table.'
+      'Enter your Monthly SIP amount and select investment duration and return rate.',
+      'Optionally toggle Step-Up to simulate increasing your investment annually.',
+      'Check the Goal-Based tab if you want to find the required SIP for a target corpus.',
+      'Review growth charts, return scenarios, inflation impact, and export PDF/CSV schedules.'
     ],
     faqs: [
       {
@@ -91,26 +102,74 @@ export const toolsList: Tool[] = [
         answer: 'SIP is a method of investing a fixed amount of money regularly in mutual funds, allowing you to invest small amounts over time and benefit from rupee cost averaging and compounding returns.'
       },
       {
-        question: 'What is the formula used to calculate SIP returns?',
-        answer: 'The SIP maturity amount is calculated using the formula: M = P × [((1 + i)^n - 1) / i] × (1 + i), where M is maturity value, P is monthly investment, i is periodic rate of interest (annual return / 12 / 100), and n is total number of monthly payments.'
+        question: 'How does a SIP calculator work?',
+        answer: 'It calculates the future value of regular recurring payments compounded monthly at an assumed annual rate over a specified tenure, adding annual step-ups or lumpsum factors if provided.'
       },
       {
-        question: 'Are actual SIP returns guaranteed?',
-        answer: 'No, mutual fund investments are subject to market risks. The returns calculated here are projections based on the constant growth rate you specify, for estimation purposes.'
+        question: 'How is SIP return calculated?',
+        answer: 'SIP returns are calculated using monthly compounding logic. For simple scenarios, the standard future value formula is used, while complex step-up models run month-by-month investment increments.'
+      },
+      {
+        question: 'Is SIP return guaranteed?',
+        answer: 'No. Mutual fund investments are market-linked and subject to market risks. Actual returns may vary, and historical projections do not guarantee future gains.'
+      },
+      {
+        question: 'What happens if I increase my SIP every year?',
+        answer: 'Increasing your monthly SIP annually (called Step-Up SIP) accelerates wealth accumulation drastically, generating a substantially larger corpus than a flat SIP.'
+      },
+      {
+        question: 'How much should I invest to reach ₹1 crore?',
+        answer: 'To reach ₹1 Crore in 15 years at an expected 12% annual return, you need starting SIP of ₹19,820/month. If you step up your SIP by 10% annually, you only need ₹10,250/month starting SIP.'
+      },
+      {
+        question: 'Is SIP better than lump-sum investment?',
+        answer: 'SIP is beneficial for building discipline and averaging market highs and lows. Lump-sum is better if you have a one-time surplus and want long-term market exposure.'
+      },
+      {
+        question: 'Can I stop my SIP?',
+        answer: 'Yes, you can pause or stop your mutual fund SIP at any time without penalty. Stored assets continue to grow compounded.'
+      },
+      {
+        question: 'Can I increase my SIP every year?',
+        answer: 'Yes, setting up a top-up or step-up SIP allows you to automate an annual increase in your investment alignment with salary hikes.'
+      },
+      {
+        question: 'How does inflation affect SIP returns?',
+        answer: 'Inflation reduces the purchasing power of money over time. A ₹1 Crore corpus in 25 years represents approximately ₹31.18 Lakh in today\'s purchasing power under 6% inflation.'
       }
     ],
     sections: [
       {
         title: 'What is a Systematic Investment Plan (SIP)?',
-        content: 'A Systematic Investment Plan (SIP) is an investment route offered by mutual funds where you invest a fixed sum of money at predefined intervals (usually monthly). Instead of trying to time the volatile stock market, a SIP allows you to accumulate shares/units steadily, instilling financial discipline and harnessing compounding.'
+        content: 'A Systematic Investment Plan (SIP) is an investment vehicle offered by mutual funds that allows you to invest a fixed amount regularly (monthly, quarterly, or yearly) into a selected fund. Instead of making a large lump-sum investment, SIP instills disciplined saving, averages out the cost of acquisition through market cycles, and harnesses the mathematical power of compounding.'
       },
       {
-        title: 'SIP vs Fixed Deposit (FD)',
-        content: 'Investing in SIPs and Fixed Deposits serves different risk appetites:\n- **Return Rate**: SIP returns are market-linked, historically yielding 12% to 15% per annum over long terms, whereas FDs offer guaranteed but lower returns of 6% to 7%.\n- **Risk**: SIPs have moderate to high risk depending on the fund category, while FDs have zero market risk.\n- **Inflation Protection**: Equity-linked SIPs are excellent tools to beat inflation, whereas FDs barely keep up with it.'
+        title: 'How Does SIP Work?',
+        content: 'When you invest via SIP, your money buys units of a mutual fund scheme on a specific date each month. If the market is down, the fund\'s Net Asset Value (NAV) is lower, meaning your money buys more units. If the market is up, your money buys fewer units. Over time, this averages out the cost per unit (Rupee Cost Averaging), protecting you from the risk of timing the market.'
+      },
+      {
+        title: 'How is SIP Return Calculated?',
+        content: 'Mutual fund returns are compounded annually, but contributions are monthly. Therefore, the calculator determines the returns by compounding each installment individually from the date of payment to the maturity date. For standard calculations, a monthly periodic interest rate (annual return / 12) is applied to the installments.'
       },
       {
         title: 'SIP Compounding Formula',
         content: 'The maturity value is estimated using the formula:\n\n**M = P × [ ( (1 + i)ⁿ - 1 ) / i ] × (1 + i)**\n\nWhere:\n- **M**: Future Maturity Value\n- **P**: Monthly Investment Amount\n- **i**: Monthly Interest Rate (Annual Rate / 12 / 100)\n- **n**: Total Number of Installments (Months × Years)'
+      },
+      {
+        title: 'What is Step-Up SIP?',
+        content: 'A Step-Up (or Top-Up) SIP is a feature that allows you to increase your SIP contribution amount by a fixed percentage or amount every year. As your income grows over your career, stepping up your SIP ensures you are investing a proportional amount of your savings. This minor annual increase builds massive incremental wealth over long tenures.'
+      },
+      {
+        title: 'How Much SIP is Needed to Reach ₹1 Crore?',
+        content: 'Reaching a target corpus of ₹1 Crore depends on your tenure and growth assumptions. For example, at a 12% expected annual return:\n- In 10 Years: Requires a SIP of ₹43,040 per month.\n- In 15 Years: Requires a SIP of ₹19,820 per month.\n- In 20 Years: Requires a SIP of ₹10,000 per month.\n- In 25 Years: Requires a SIP of ₹5,270 per month.'
+      },
+      {
+        title: 'SIP vs Lumpsum',
+        content: 'A SIP is ideal for salaried individuals to invest systematically and mitigate market volatility. A lump-sum investment is a one-time capital commitment. While a lump sum can generate higher returns if invested at a market bottom, it exposes you to high timing risks. SIP provides peace of mind and rupee cost averaging.'
+      },
+      {
+        title: 'How Inflation Affects SIP Returns',
+        content: 'While compounding grows your nominal corpus, inflation erodes the value of currency. For instance, ₹1 Crore will not buy the same goods and services 20 years from now. By applying a standard inflation rate (usually 6% in India), you can determine the actual purchasing power of your future wealth in today\'s money values. This helps set realistic financial goals.'
       }
     ]
   },
