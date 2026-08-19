@@ -15,6 +15,7 @@ export interface Tool {
   category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health' | '3d-printing' | 'math-studio';
   subcategory?: string;
   shortDescription: string;
+  metaTitle?: string;
   metaDescription: string;
   keywords: string[];
   icon: string;
@@ -1172,13 +1173,21 @@ export const toolsList: Tool[] = [
   "name": "Construction Cost Calculator",
   "category": "architecture",
   "subcategory": "Estimation",
-  "shortDescription": "Estimate the total cost of construction based on built-up area, quality, and location.",
-  "metaDescription": "Free online House Construction Cost Calculator in India. Estimate total budget, material split, and labor split based on quality grades.",
+  "shortDescription": "Comprehensive construction cost estimator and duration planner. Calculate building budgets, material quantity BOQ, and critical path timeline.",
+  "metaTitle": "Construction Cost Calculator | House Construction Cost per Sq Ft",
+  "metaDescription": "Free Construction Cost Calculator & Duration Planner. Estimate house building cost per sq ft, raw material quantities, labour man-days, and critical path timeline.",
   "keywords": [
     "construction cost calculator",
-    "building cost estimator",
-    "house construction cost India",
-    "material labor split calculator"
+    "house construction cost calculator",
+    "building construction cost calculator",
+    "construction cost per sq ft",
+    "house construction cost per sq ft",
+    "construction time calculator",
+    "building construction estimate",
+    "house construction estimate",
+    "construction material calculator",
+    "Gantt timeline planner",
+    "BOQ estimator"
   ],
   "icon": "Hammer",
   "howToUse": [

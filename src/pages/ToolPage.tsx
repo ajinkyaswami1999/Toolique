@@ -698,7 +698,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
   return (
     <div className="space-y-8 max-w-6xl mx-auto px-4 sm:px-6">
       <SEO
-        title={`${tool.name} | Free Online Browser Tool`}
+        title={tool.metaTitle || `${tool.name} | Free Online Browser Tool`}
         description={tool.metaDescription}
         keywords={tool.keywords}
         canonicalUrl={toolUrl}
