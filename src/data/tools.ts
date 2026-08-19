@@ -971,30 +971,64 @@ export const toolsList: Tool[] = [
     slug: 'currency-converter',
     name: 'Currency Converter',
     category: 'business',
-    shortDescription: 'Convert values between major world currencies like INR, USD, EUR, and GBP.',
-    metaDescription: 'Free online Currency Converter. Convert USD, INR, EUR, GBP, AED, CAD, AUD, and SGD using static reference rates. Fast, secure, and offline-ready.',
-    keywords: ['Currency Converter', 'USD to INR rate', 'Convert EUR to INR', 'GBP conversion online', 'Exchange rate calculator'],
+    shortDescription: 'Convert values between major fiat currencies with live rates, historical trends, forex markups, and travel calculators.',
+    metaTitle: 'Currency Converter – Live Exchange Rates & Money Planner',
+    metaDescription: 'Convert global currencies with current live exchange rates. Compare rates, analyze historical trends, calculate forex markup fees, and plan travel budgets.',
+    keywords: [
+      'Currency Converter',
+      'live exchange rates',
+      'USD to INR',
+      'GBP to INR',
+      'EUR to INR',
+      'AED to INR',
+      'forex calculator',
+      'money converter'
+    ],
     icon: 'Globe',
     howToUse: [
-      'Enter the amount you wish to convert.',
-      'Select the source currency (From) and target currency (To).',
-      'Click the Swap button if you wish to invert the currencies.',
-      'Review the converted output and popular conversion rates against INR.'
+      'Select standard converter, travel budget, forex markup, or salary converter tabs.',
+      'Enter the target monetary amount.',
+      'Select your starting currency and target currency.',
+      'View converted values, reverse rates, historical charts, and provider fees.'
     ],
     faqs: [
       {
-        question: 'Does this currency converter use live rates?',
-        answer: 'This converter uses static reference rates that are cached locally. It is intended for quick estimations without requiring an active internet connection.'
+        question: 'What is the difference between interbank rates and provider rates?',
+        answer: 'Interbank or mid-market rates are the real-time exchange rates at which banks trade currencies between themselves. Consumer providers (like banks, credit cards, or remittance services) usually add a markup or spread to this rate to make a profit.'
       },
       {
-        question: 'How secure is this converter?',
-        answer: '100% secure! No APIs are queried and no details are shared. All calculations run strictly in your web browser.'
+        question: 'Does the currency rate include bank markup fees?',
+        answer: 'No, default currency exchange rates represent mid-market rates. To calculate actual expenses, use our Forex Markup tab to specify provider commissions, spreads, and fixed fees.'
+      },
+      {
+        question: 'How often are exchange rates updated?',
+        answer: 'Our live rates crawl and sync with global markets every few hours using multiple redundant API gateways. If offline, the tool automatically falls back to a safe static market snapshot.'
+      },
+      {
+        question: 'What is a forex markup fee?',
+        answer: 'Forex markup is the percentage difference between the rate a provider gives you and the actual mid-market exchange rate. It is a hidden fee added to conversion transactions.'
+      },
+      {
+        question: 'Does this tool support cryptocurrency?',
+        answer: 'No. This tool is focused strictly on global fiat currencies (USD, INR, EUR, etc.) to ensure precision, reliability, and clarity for standard travel and business use.'
       }
     ],
     sections: [
       {
-        title: 'Global Currency Conversions',
-        content: 'Converting currencies is essential for travelers, cross-border freelancers, and export-import businesses. Understanding current rates helps estimate costs and pricing in native currencies.'
+        title: 'Understanding Exchange Rates',
+        content: 'An exchange rate is the value of one nation\'s currency relative to another. These values fluctuate constantly based on global economic health, inflation, interest rates, trade balances, and geopolitical conditions. Conversions are calculated by multiplying your starting principal by the current conversion ratio.'
+      },
+      {
+        title: 'The Role of Forex Markup Fees',
+        content: 'When exchanging money at airports, paying with credit cards abroad, or sending international wire transfers, the effective rate you receive is rarely the mid-market rate. Providers add a markup (typically 1.5% to 5%) and fixed commissions. Understanding these rates allows you to pick cost-effective payment methods while traveling.'
+      },
+      {
+        title: 'Cash vs Digital Currency Conversion',
+        content: 'Converting cash physically at a teller counter is generally the most expensive conversion method due to operational overhead. Digital conversion via multi-currency cards or specialized remittance providers offers rates closer to the mid-market standard, saving substantial sums on larger transfers.'
+      },
+      {
+        title: 'Cross-Border Salary & Budget Planning',
+        content: 'For remote freelancers and global businesses, currency volatility is a primary risk. Planning salaries or budgets in a stable currency (like USD or EUR) and translating equivalents regularly helps hedge against sudden fluctuations in local currency values.'
       }
     ]
   },
@@ -1003,30 +1037,69 @@ export const toolsList: Tool[] = [
     slug: 'unit-converter',
     name: 'Unit Converter',
     category: 'unit',
-    shortDescription: 'Convert standard units of Length, Weight, Temperature, and Area.',
-    metaDescription: 'Free online Unit Converter. Convert between Metric and Imperial units for length, weight, area, and temperature instantly in your browser.',
-    keywords: ['Unit Converter', 'Convert kg to lbs', 'Celsius to Fahrenheit formula', 'Area converter online', 'Metric conversion tool'],
+    shortDescription: 'Convert standard, professional, and regional units of Length, Weight, Area, Temperature, and more.',
+    metaTitle: 'Unit Converter – Convert Length, Weight, Area & Temperature',
+    metaDescription: 'Free online Unit Converter. Convert between metric, imperial and regional Indian units for length, weight, area, volume, temperature, and more instantly.',
+    keywords: [
+      'Unit Converter',
+      'Unit converter India',
+      'metric conversion calculator',
+      'convert length',
+      'convert weight',
+      'area converter',
+      'temperature converter',
+      'inches to cm',
+      'kg to lbs'
+    ],
     icon: 'Ruler',
     howToUse: [
-      'Select the measurement category: Length, Weight, Temperature, or Area.',
-      'Enter the numerical value to convert.',
-      'Select the source unit and target unit.',
-      'Review the result and standard conversion formulas.'
+      'Select a unit category (e.g. Length, Weight, Area) or search for units.',
+      'Enter the value to convert in the input field.',
+      'Choose the "From" and "To" units from searchable dropdowns.',
+      'Review the conversion result, calculation steps, and all equivalent values below.'
     ],
     faqs: [
       {
-        question: 'How are unit ratios calculated?',
-        answer: 'All ratios are calibrated against SI standard base units (meters for length, kilograms for weight, square meters for area) to ensure precision.'
+        question: 'How many feet are in a meter?',
+        answer: 'There are exactly 3.28084 feet in a meter. To convert meters to feet, multiply the value by 3.28084.'
       },
       {
-        question: 'How is temperature conversion handled?',
-        answer: 'Unlike linear units, temperature scales use offsets. The tool applies standard Celsius, Fahrenheit, and Kelvin equations directly.'
+        question: 'How many centimeters are in an inch?',
+        answer: 'There are exactly 2.54 centimeters in an inch. To convert inches to centimeters, multiply the value by 2.54.'
+      },
+      {
+        question: 'How many pounds are in a kilogram?',
+        answer: 'There are approximately 2.20462 pounds in a kilogram. To convert kilograms to pounds, multiply by 2.20462.'
+      },
+      {
+        question: 'How do you convert Celsius to Fahrenheit?',
+        answer: 'To convert Celsius to Fahrenheit, use the formula: F = (C × 9/5) + 32. For example, 25°C is (25 × 1.8) + 32 = 77°F.'
+      },
+      {
+        question: 'How many square feet are in a square meter?',
+        answer: 'There are approximately 10.7639 square feet in a square meter. To convert square meters to square feet, multiply by 10.7639.'
+      },
+      {
+        question: 'What are regional Indian land measurement units?',
+        answer: 'India uses local land measurement units like Bigha, Biswa, Kanal, Marla, and Gaj. Since their values vary geographically (e.g. Bigha in Rajasthan differs from Bigha in Punjab), our regional calculator provides state-wise conventions.'
       }
     ],
     sections: [
       {
-        title: 'Standardizing Conversions',
-        content: 'Converting between Metric and Imperial systems is essential in engineering, cooking, scientific calculations, and international trade.'
+        title: 'What is a Unit Converter?',
+        content: 'A unit converter is a tool that computes the equivalent value of a quantity in a different unit of measure. It translates values between different systems of measurement, such as the Metric system (International System of Units - SI) and the Imperial system, allowing professionals and students to communicate physical values without manual calculation errors.'
+      },
+      {
+        title: 'How to Convert Units',
+        content: 'To convert units, you multiply or divide the value by a standardized conversion factor. For example, since 1 kilometer equals 0.621371 miles, converting 10 kilometers to miles is calculated as: 10 × 0.621371 = 6.21371 miles. For offset-based scales like Temperature, you apply linear equations like F = C × 1.8 + 32.'
+      },
+      {
+        title: 'Metric vs Imperial Units',
+        content: 'The Metric system (meters, kilograms, liters) is decimal-based and used globally as the scientific standard. The Imperial system (feet, pounds, gallons) is primarily used in the United States and the United Kingdom. Knowing how to translate between these systems is crucial in international trade, design blueprints, travel, and culinary arts.'
+      },
+      {
+        title: 'Regional Indian Land Units Variation',
+        content: 'Land measurement in India often relies on regional terms rather than uniform metric sizes. Units like Bigha, Biswa, Kanal, and Marla are widely used in agricultural and real estate deals. However, a Bigha in Bengal is 1,600 square yards, while a Bigha in Uttar Pradesh can be 3,025 square yards. It is essential to double-check local bylaws and state land revenue guidelines when utilizing these conversions.'
       }
     ]
   },
