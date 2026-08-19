@@ -6420,13 +6420,17 @@ export const toolsList: Tool[] = [
     "name": "Area Calculator",
     "category": "architecture",
     "subcategory": "Area & Space Planning",
-    "shortDescription": "Calculate the area of standard and irregular spaces.",
-    "metaDescription": "Free online Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Calculate the total surface area of regular (square, rectangular, circular) and irregular multi-sided spaces.",
+    "metaTitle": "Area Calculator | Land & Room Surface Area Measurement",
+    "metaDescription": "Free online Area Calculator. Calculate total area of regular rectangular, triangular, circular, and complex irregular land plots or floor spaces.",
     "keywords": [
-      "Area Calculator",
-      "Area Calculator calculator",
-      "architectural planning",
-      "building design"
+      "area calculator",
+      "land area calculator",
+      "plot area calculator",
+      "calculate irregular land area",
+      "room area calculator online",
+      "square footage calculator",
+      "calculate square meters"
     ],
     "icon": "Compass",
     "howToUse": [
@@ -6454,13 +6458,17 @@ export const toolsList: Tool[] = [
     "name": "Built-up Area Calculator",
     "category": "architecture",
     "subcategory": "Area & Space Planning",
-    "shortDescription": "Calculate building built-up area incorporating exterior walls and balconies.",
-    "metaDescription": "Free online Built-up Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Calculate total building built-up area incorporating carpet area, balconies, and internal/external wall widths.",
+    "metaTitle": "Built-up Area Calculator | External Walls & Balconies Estimator",
+    "metaDescription": "Free online Built-up Area Calculator. Estimate total building built-up area including usable floor carpet, internal/external wall thickness, and balcony projections.",
     "keywords": [
-      "Built-up Area Calculator",
-      "Built-up Area Calculator calculator",
-      "architectural planning",
-      "building design"
+      "built up area calculator",
+      "calculate built up area",
+      "built up area formula",
+      "built up area of flat calculator",
+      "carpet area to built up area",
+      "calculate wall area of flat",
+      "bylaws built up limits"
     ],
     "icon": "Compass",
     "howToUse": [
@@ -6488,13 +6496,16 @@ export const toolsList: Tool[] = [
     "name": "Super Built-up Area Calculator",
     "category": "architecture",
     "subcategory": "Area & Space Planning",
-    "shortDescription": "Calculate super built-up area including common areas and loading factor.",
-    "metaDescription": "Free online Super Built-up Area Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Calculate total saleable super built-up area by applying apartment loading factors and common shared areas to the base built-up area.",
+    "metaTitle": "Super Built-up Area Calculator | Loading Factor & Common Area Estimator",
+    "metaDescription": "Free online Super Built-up Area Calculator. Estimate total saleable property area by adding common lift lobbies, stairs, and developer loading factors.",
     "keywords": [
-      "Super Built-up Area Calculator",
-      "Super Built-up Area Calculator calculator",
-      "architectural planning",
-      "building design"
+      "super built up area calculator",
+      "loading factor calculator flat",
+      "super built up area formula",
+      "saleable area calculator",
+      "carpet to super built up calculator",
+      "apartment common area ratio"
     ],
     "icon": "Compass",
     "howToUse": [
@@ -6559,13 +6570,16 @@ export const toolsList: Tool[] = [
     "name": "Space Planning Calculator",
     "category": "architecture",
     "subcategory": "Area & Space Planning",
-    "shortDescription": "Calculate occupancy layout spreads and modular workspace allocations.",
-    "metaDescription": "Free online Space Planning Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Optimize corporate office floor planning, desk layouts, department spacing, and spatial utilization metrics.",
+    "metaTitle": "Space Planning Calculator | Layout Density & Desk Allocation",
+    "metaDescription": "Free online Space Planning Calculator. Analyze corporate office desk layouts, department spacing, circular clearances, and floor area utilization density.",
     "keywords": [
-      "Space Planning Calculator",
-      "Space Planning Calculator calculator",
-      "architectural planning",
-      "building design"
+      "space planning calculator",
+      "office layout space planner",
+      "desk area calculator",
+      "floor utilization density tool",
+      "architectural space program calculator",
+      "workspace planner online"
     ],
     "icon": "Compass",
     "howToUse": [
@@ -6593,13 +6607,16 @@ export const toolsList: Tool[] = [
     "name": "Occupancy Load Calculator",
     "category": "architecture",
     "subcategory": "Area & Space Planning",
-    "shortDescription": "Calculate load limits and maximum permissible occupants for safety.",
-    "metaDescription": "Free online Occupancy Load Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Estimate maximum occupant capacity limits for building safety, egress planning, and IBC code clearances.",
+    "metaTitle": "Occupancy Load Calculator | Building Safety & Exit Code Limits",
+    "metaDescription": "Free online Occupancy Load Calculator. Calculate maximum permissible occupants for safety clearances based on room function and IBC egress codes.",
     "keywords": [
-      "Occupancy Load Calculator",
-      "Occupancy Load Calculator calculator",
-      "architectural planning",
-      "building design"
+      "occupancy load calculator",
+      "calculate occupant load",
+      "IBC occupancy load factor",
+      "maximum building occupancy calculator",
+      "exit width capacity estimator",
+      "fire safety occupancy calculation"
     ],
     "icon": "Compass",
     "howToUse": [
@@ -6627,13 +6644,16 @@ export const toolsList: Tool[] = [
     "name": "Floor Efficiency Calculator",
     "category": "architecture",
     "subcategory": "Area & Space Planning",
-    "shortDescription": "Analyze the ratio of usable carpet area to the total gross area.",
-    "metaDescription": "Free online Floor Efficiency Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Analyze floor space efficiency by calculating loss factors and net usable carpet area ratios.",
+    "metaTitle": "Floor Efficiency Calculator | Loss Factor & Usable Carpet Ratio",
+    "metaDescription": "Free online Floor Efficiency Calculator. Compute building core loss factors and the ratio of net usable carpet space to total gross floor area.",
     "keywords": [
-      "Floor Efficiency Calculator",
-      "Floor Efficiency Calculator calculator",
-      "architectural planning",
-      "building design"
+      "floor efficiency calculator",
+      "building loss factor calculator",
+      "floor efficiency ratio",
+      "net to gross area calculator",
+      "usable space calculator",
+      "commercial floor efficiency ratio"
     ],
     "icon": "Compass",
     "howToUse": [
