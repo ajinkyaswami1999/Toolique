@@ -1605,14 +1605,17 @@ export const toolsList: Tool[] = [
   "name": "Staircase Calculator",
   "category": "architecture",
   "subcategory": "Building Design",
-  "shortDescription": "Calculate stair riser heights, tread depths, number of steps, and pitch angles.",
-  "metaDescription": "Free online Staircase Calculator. Estimate number of risers, tread sizes, total horizontal run, and staircase pitch angles in Imperial and Metric.",
+  "shortDescription": "Calculate staircase riser heights, tread depths, number of steps, total run, and pitch angle to verify comfort and safety compliance.",
+  "metaTitle": "Staircase Calculator | Riser & Tread Dimension Estimator",
+  "metaDescription": "Free online Staircase Calculator. Calculate riser height, tread depth, stair run, steps count, and pitch angle with comfort index guidelines.",
   "keywords": [
-    "Staircase Calculator",
-    "riser tread calculator",
-    "stair pitch angle",
-    "stair design online",
-    "building code stairs"
+    "staircase calculator",
+    "stair riser and tread calculator",
+    "stair dimensions calculator",
+    "stairs calculator online",
+    "comfortable stair riser height",
+    "stair angle pitch estimator",
+    "stair run calculator"
   ],
   "icon": "Compass",
   "howToUse": [
@@ -1648,14 +1651,17 @@ export const toolsList: Tool[] = [
   "name": "Room Area Calculator",
   "category": "architecture",
   "subcategory": "Area & Space Planning",
-  "shortDescription": "Add multiple rooms to build a layout and estimate Carpet, Built-up, and Super Built-up areas.",
-  "metaDescription": "Interactive Room Area Calculator. Add bedrooms, kitchens, balconies, specify wall thickness, and check total carpet and built-up areas.",
+  "shortDescription": "Add multiple rooms to build a layout and calculate usable Carpet Area, Built-up Area, and Super Built-up Area with costs.",
+  "metaTitle": "Room Area Calculator | Carpet, Built-up & Super Built-up",
+  "metaDescription": "Free online Room Area Calculator. Calculate total carpet area, built-up area, and super built-up area of multiple rooms with wall thickness and loading factors.",
   "keywords": [
-    "Room Area Calculator",
-    "carpet built up calculator",
-    "super built up area tool",
-    "multiple rooms area calculator",
-    "room square footage"
+    "room area calculator",
+    "calculate room area square feet",
+    "room square footage calculator",
+    "carpet area vs built up area calculator",
+    "super built up area calculator",
+    "RERA carpet area calculator",
+    "square feet room calculator"
   ],
   "icon": "Compass",
   "howToUse": [
@@ -1691,14 +1697,17 @@ export const toolsList: Tool[] = [
   "name": "Carpet Area Calculator",
   "category": "architecture",
   "subcategory": "Area & Space Planning",
-  "shortDescription": "Convert between Carpet, Built-up, and Super Built-up areas using standard ratios.",
-  "metaDescription": "Free online Carpet Area Calculator. Quick conversion tool to find RERA Carpet area from Super Built-up area and vice versa.",
+  "shortDescription": "Convert between RERA Carpet, Built-up, and Super Built-up areas using standard ratios, wall thickness, and loading factors.",
+  "metaTitle": "Carpet Area Calculator | RERA Carpet to Super Built-up Converter",
+  "metaDescription": "Free online Carpet Area Calculator. Convert between RERA Carpet, Built-up, and Super Built-up areas using local loading factors and wall ratios.",
   "keywords": [
-    "Carpet Area Calculator",
+    "carpet area calculator",
+    "RERA carpet area calculator",
     "convert super built up to carpet",
-    "carpet to built up formula",
-    "RERA area converter",
-    "apartment carpet estimator"
+    "carpet area to built up area calculator",
+    "calculate carpet area of flat",
+    "apartment loading factor calculator",
+    "built up area converter"
   ],
   "icon": "Compass",
   "howToUse": [
@@ -6513,13 +6522,16 @@ export const toolsList: Tool[] = [
     "name": "Plot Coverage Calculator",
     "category": "architecture",
     "subcategory": "Area & Space Planning",
-    "shortDescription": "Determine permissible ground footprint based on zoning coverage guidelines.",
-    "metaDescription": "Free online Plot Coverage Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Calculate permissible ground footprint area and open space ratios based on local municipal zoning guidelines.",
+    "metaTitle": "Plot Coverage Calculator | Permissible Ground Footprint Estimator",
+    "metaDescription": "Free online Plot Coverage Calculator. Estimate permissible ground coverage, open space areas, and municipal zoning footprint ratio compliance.",
     "keywords": [
-      "Plot Coverage Calculator",
-      "Plot Coverage Calculator calculator",
-      "architectural planning",
-      "building design"
+      "plot coverage calculator",
+      "ground coverage ratio calculator",
+      "permissible footprint calculator",
+      "calculate open space ratio",
+      "building footprint calculator",
+      "municipal plot coverage bylaws"
     ],
     "icon": "Compass",
     "howToUse": [
@@ -6649,13 +6661,17 @@ export const toolsList: Tool[] = [
     "name": "Ramp Slope Calculator",
     "category": "architecture",
     "subcategory": "Building Design",
-    "shortDescription": "Compute ramp slope gradients, lengths, and heights for architectural access.",
-    "metaDescription": "Free online Ramp Slope Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Compute ramp run lengths, slope gradients, rise heights, and access codes (ADA/NBC) for building clearances.",
+    "metaTitle": "Ramp Slope Calculator | Wheelchair & Vehicle Ramp Gradients",
+    "metaDescription": "Free online Ramp Slope Calculator. Compute ramp run lengths, slope rise, percentage gradients, ratios, and ADA/NBC accessibility code compliance.",
     "keywords": [
-      "Ramp Slope Calculator",
-      "Ramp Slope Calculator calculator",
-      "architectural planning",
-      "building design"
+      "ramp slope calculator",
+      "wheelchair ramp slope calculator",
+      "ADA ramp slope calculator",
+      "ramp gradient calculator",
+      "calculate ramp length",
+      "ramp slope ratio calculator",
+      "access ramp slope standards"
     ],
     "icon": "Compass",
     "howToUse": [
@@ -6989,13 +7005,16 @@ export const toolsList: Tool[] = [
     "name": "Setback Calculator",
     "category": "architecture",
     "subcategory": "Site Planning",
-    "shortDescription": "Determine front, rear, and side setback boundary clear lines.",
-    "metaDescription": "Free online Setback Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Determine front, rear, and side setback boundary clearance lines based on building height and road widths.",
+    "metaTitle": "Building Setback Calculator | Front, Rear & Side Yards",
+    "metaDescription": "Free online Setback Calculator. Determine front yard, rear yard, and side boundary setback requirements based on plot size and building height.",
     "keywords": [
-      "Setback Calculator",
-      "Setback Calculator calculator",
-      "architectural planning",
-      "building design"
+      "setback calculator",
+      "building setback calculator",
+      "calculate yard setback",
+      "front setback calculator",
+      "side yard setback calculator",
+      "property boundary setback estimator"
     ],
     "icon": "Compass",
     "howToUse": [
@@ -7023,13 +7042,16 @@ export const toolsList: Tool[] = [
     "name": "Building Height Calculator",
     "category": "architecture",
     "subcategory": "Site Planning",
-    "shortDescription": "Determine maximum permissible height based on road width and angular planes.",
-    "metaDescription": "Free online Building Height Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "shortDescription": "Calculate maximum permissible building height based on adjacent road widths, setbacks, and angular height planes.",
+    "metaTitle": "Building Height Calculator | Permissible Height & Setback Angles",
+    "metaDescription": "Free online Building Height Calculator. Calculate max permissible building height based on road width, setbacks, angular planes, and local municipal bylaws.",
     "keywords": [
-      "Building Height Calculator",
-      "Building Height Calculator calculator",
-      "architectural planning",
-      "building design"
+      "building height calculator",
+      "calculate max building height",
+      "municipal building height limits",
+      "building height road width ratio",
+      "height clearance calculator",
+      "angular height plane bylaws"
     ],
     "icon": "Compass",
     "howToUse": [
