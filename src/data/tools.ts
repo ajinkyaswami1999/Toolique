@@ -1555,14 +1555,21 @@ export const toolsList: Tool[] = [
   "name": "FAR / FSI Calculator",
   "category": "architecture",
   "subcategory": "Area & Space Planning",
-  "shortDescription": "Calculate Floor Area Ratio (FAR) and Floor Space Index (FSI) for plot clearances.",
-  "metaDescription": "Free online FAR / FSI Calculator. Check permissible built-up limits, floors, and utilized area ratios according to municipal bylaws.",
+  "shortDescription": "Calculate Floor Area Ratio (FAR) and Floor Space Index (FSI) to verify permissible built-up limits and municipal zoning clearance.",
+  "metaTitle": "Floor Area Ratio (FAR) & Floor Space Index (FSI) Calculator",
+  "metaDescription": "Free online FAR & FSI Calculator. Calculate Floor Area Ratio (FAR), Floor Space Index (FSI), maximum permissible built-up area, and check municipal zoning compliance limits.",
   "keywords": [
     "FAR FSI Calculator",
     "Floor Area Ratio calculator",
-    "Floor Space Index India",
-    "municipal built-up compliance",
-    "max buildable area"
+    "Floor Space Index Calculator",
+    "FSI Calculator India",
+    "FAR Calculator online",
+    "calculate floor area ratio",
+    "how to calculate FSI",
+    "max permissible built up area",
+    "building permissible area calculator",
+    "plot FAR FSI calculations",
+    "municipal building bylaws FSI"
   ],
   "icon": "Compass",
   "howToUse": [
