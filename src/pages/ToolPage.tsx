@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Navigate } from 'react-router-dom';
 import { toolsList } from '../data/tools';
 import { getToolCanonicalPath, getCategoryCanonicalPath } from '../routes/AppRoutes';
 import { additionalFaqs } from '../data/toolFaqs';
@@ -36,7 +36,6 @@ const CAGRCalculator = lazy(() => import('../tools/CAGRCalculator'));
 // Phase 2 - Utilities (5 tools)
 const PercentageCalculator = lazy(() => import('../tools/PercentageCalculator'));
 const DateCalculator = lazy(() => import('../tools/DateCalculator'));
-const DaysBetweenDates = lazy(() => import('../tools/DaysBetweenDates'));
 const CurrencyConverter = lazy(() => import('../tools/CurrencyConverter'));
 const UnitConverter = lazy(() => import('../tools/UnitConverter'));
 
@@ -410,7 +409,6 @@ const toolComponents: Record<string, React.ComponentType> = {
   // Phase 2 - Utilities
   PercentageCalculator,
   DateCalculator,
-  DaysBetweenDates,
   CurrencyConverter,
   UnitConverter,
 
@@ -625,6 +623,11 @@ interface ToolPageProps {
 export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
   const { slug: paramSlug } = useParams<{ slug: string }>();
   const slug = overrideSlug || paramSlug;
+
+  if (slug === 'days-between-dates') {
+    return <Navigate to="/calculators/date-calculator" replace />;
+  }
+
   const tool = toolsList.find((t) => t.slug === slug);
 
   if (!tool) {

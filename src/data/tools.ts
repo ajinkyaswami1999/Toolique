@@ -597,39 +597,128 @@ export const toolsList: Tool[] = [
     slug: 'in-hand-salary-calculator',
     name: 'In-Hand Salary Calculator',
     category: 'finance',
-    shortDescription: 'Estimate your monthly take-home salary after PF, Professional Tax, and Income Tax deductions.',
-    metaDescription: 'Calculate your monthly In-Hand Salary from annual CTC in India. Compare tax liability under the New and Old Tax Regimes, including EPF and Professional Tax deductions.',
-    keywords: ['In-Hand Salary Calculator', 'CTC to Inhand Salary', 'Take-home salary India', 'New vs Old Tax Regime calculator', 'EPF deduction calculator', 'Salary income tax split'],
+    shortDescription: 'Calculate your estimated monthly take-home salary after PF, Professional Tax, and Income Tax deductions, and compare tax regimes.',
+    metaTitle: 'In-Hand Salary Calculator – CTC to Take-Home Salary Breakup',
+    metaDescription: 'Free online Indian In-Hand Salary Calculator. Break down CTC into Gross Salary, Net Take-Home, PF, Professional Tax, and compare Old vs. New Tax Regimes.',
+    keywords: [
+      'In Hand Salary Calculator',
+      'Salary Calculator India',
+      'CTC to In Hand Salary Calculator',
+      'CTC Calculator',
+      'Take Home Salary Calculator',
+      'Net Salary Calculator',
+      'Monthly Salary Calculator',
+      'Gross Salary Calculator',
+      'Salary Breakup Calculator',
+      'CTC Salary Calculator',
+      'Salary After Tax Calculator',
+      'Salary After PF Calculator',
+      'Income Tax Salary Calculator',
+      'New tax regime salary calculator',
+      'Old tax regime salary calculator',
+      'PF salary calculator',
+      'Professional tax salary calculator',
+      'Salary breakup from CTC',
+      'How much salary will I get in hand?'
+    ],
     icon: 'Wallet',
     howToUse: [
-      'Enter your Annual Gross CTC (Cost to Company).',
-      'Specify any annual variable pay or performance bonus included in the CTC (which is paid yearly).',
-      'Select the monthly Employee Provident Fund (EPF) option (12% of basic or custom amount).',
-      'Choose whether to calculate based on the New Tax Regime (default) or Old Tax Regime.',
-      'Check the detailed report showing the monthly basic pay, EPF deduction, Professional Tax (usually Rs. 200), calculated Income Tax, and final estimated monthly take-home salary.'
+      'Choose a calculator mode: CTC to In-Hand, Gross to In-Hand, or Desired Take-Home (Reverse).',
+      'Input the CTC or Gross amount and select the Financial Year (e.g. FY 2026-27).',
+      'Configure HRA, Variable Bonuses, Gratuity, and State-wise Professional Tax settings.',
+      'Check the side-by-side New vs. Old Tax Regime comparison to identify the better take-home option.',
+      'Analyze your salary breakup in the interactive table or download the complete report as a PDF.'
     ],
     faqs: [
       {
-        question: 'What is the difference between CTC and In-hand salary?',
-        answer: 'CTC (Cost to Company) is the total annual expense an employer incurs on an employee. In-hand salary is the actual net amount credited to your bank account every month after statutory deductions like EPF, Professional Tax, and Income Tax (TDS).'
+        question: 'What is in-hand salary?',
+        answer: 'In-hand salary is the net take-home salary credited to your bank account every month after statutory deductions like EPF, Professional Tax, and Income Tax TDS.'
       },
       {
-        question: 'Should I choose the New or Old Tax Regime?',
-        answer: 'The New Tax Regime offers lower tax slabs but removes most deductions (like 80C, 80D, HRA). The Old Tax Regime has higher tax slabs but allows standard tax savings. For high-earning individuals with no investments, the New Regime is generally beneficial, while those with significant investments/home loans may benefit from the Old Regime.'
+        question: 'How is in-hand salary calculated?',
+        answer: 'In-Hand Salary = Gross Salary − Employee PF − Professional Tax − Income Tax TDS. Gross salary is your CTC minus employer benefits (employer PF, NPS, and gratuity).'
       },
       {
-        question: 'What is the standard Professional Tax in India?',
-        answer: 'Professional Tax is a state-level tax on professions, trades, and employments. In most Indian states, the maximum Professional Tax is capped at Rs. 2,500 per annum, usually deducted as Rs. 200 per month (and Rs. 300 in February).'
+        question: 'What is the difference between CTC and in-hand salary?',
+        answer: 'CTC (Cost to Company) represents the total annual budget allocated by the company for you, which includes benefits you do not receive monthly (employer retirement funds, insurance). In-hand is cash-in-hand paid monthly.'
+      },
+      {
+        question: 'Does CTC include PF?',
+        answer: 'Yes. CTC typically includes both the Employer PF Contribution (12% of basic) and Employee PF Contribution (12% of basic).'
+      },
+      {
+        question: 'Does employer PF reduce in-hand salary?',
+        answer: 'Employer PF does not reduce your gross pay directly, but since it is included in your CTC, it reduces the remaining pool available for cash components, thereby indirectly lowering your in-hand salary.'
+      },
+      {
+        question: 'How much is 7 LPA in hand?',
+        answer: 'For a 7 LPA CTC in India under the New Tax Regime, the monthly take-home salary is approximately ₹54,000 to ₹56,000 depending on PF deduction choices and gratuity components.'
+      },
+      {
+        question: 'How much is 10 LPA in hand?',
+        answer: 'For a 10 LPA CTC, the monthly take-home is roughly ₹72,000 to ₹75,000 under the New Regime after standard deductions and PF splits.'
+      },
+      {
+        question: 'How much is 15 LPA in hand?',
+        answer: 'For a 15 LPA CTC, the monthly take-home is approximately ₹1,02,000 to ₹1,06,000 under the New Tax Regime.'
+      },
+      {
+        question: 'What is gross salary?',
+        answer: 'Gross salary is the total sum of cash earnings (Basic + HRA + Allowances + Bonuses) before any employee deductions (PF, PT, TDS) are subtracted.'
+      },
+      {
+        question: 'What is basic salary?',
+        answer: 'Basic salary is the core cash component of your salary structure, typically comprising 40% to 50% of the total Gross Salary. All statutory components like PF are calculated as percentages of basic.'
+      },
+      {
+        question: 'What is HRA?',
+        answer: 'HRA stands for House Rent Allowance. It is a salary component provided to meet rental expenses. Under the Old Tax Regime, you can claim tax exemption on a portion of HRA.'
+      },
+      {
+        question: 'What is Professional Tax?',
+        answer: 'Professional Tax is a state-level tax on employment. In states like Maharashtra and Karnataka, it is ₹200 per month (₹2,500 annually).'
+      },
+      {
+        question: 'How does income tax affect salary?',
+        answer: 'Income tax is deducted at source (TDS) by the employer monthly based on your projected annual taxable income and selected tax regime.'
+      },
+      {
+        question: 'Which tax regime gives higher take-home salary?',
+        answer: 'For salaried individuals with minimal tax-saving investments, the New Tax Regime generally gives higher take-home because of lower tax rates. For those with high HRA, home loans, and 80C investments, the Old Regime may offer higher take-home.'
+      },
+      {
+        question: 'Why is my in-hand salary lower than my CTC?',
+        answer: 'Because CTC includes employer-side retirement benefits (PF, NPS, gratuity), variable performance pay, and statutory tax deductions.'
+      },
+      {
+        question: 'Is bonus included in in-hand salary?',
+        answer: 'A bonus is subject to tax, but since it is usually paid annually or quarterly, it is not part of your regular monthly take-home cash flow.'
+      },
+      {
+        question: 'Is gratuity included in CTC?',
+        answer: 'Yes, most employers list the annual accrued gratuity (4.81% of basic salary) in the CTC block, even though it is only paid after completing 5 continuous years of service.'
+      },
+      {
+        question: 'How can I calculate salary after PF and tax?',
+        answer: 'Input your CTC into this tool. It will subtract the employer-side benefits to find Gross pay, calculate monthly PF, apply tax regimes slabs, deduct professional tax, and display the final net take-home.'
       }
     ],
-    sections: [
+    "sections": [
       {
-        title: 'CTC vs Gross Salary vs Take-Home Salary',
-        content: '- **CTC (Cost to Company)**: Includes all benefits such as Employer PF contributions, Gratuity, Health Insurance, and Variable Bonus.\n- **Gross Salary**: CTC minus variable pay and Employer PF contributions.\n- **Take-Home (In-Hand) Salary**: The net monthly credited sum after subtracting Employee PF (12%), Professional Tax (PT), and Income Tax TDS.'
+        "title": "CTC vs Gross vs In-Hand Salary Explained",
+        "content": "Understanding your salary slip components is crucial:\n- **CTC (Cost to Company)**: The total cost incurred by the employer. It includes basic, allowances, bonuses, employer PF/NPS contributions, gratuity, and corporate insurance premiums.\n- **Gross Salary**: The total cash salary paid before employee deductions. It equals CTC minus employer-side contributions.\n- **In-Hand (Net) Salary**: The actual monthly amount credited to your bank account. It is computed as Gross Salary minus Employee PF, Professional Tax, and TDS (Income Tax)."
       },
       {
-        title: 'New vs Old Tax Regime Comparison',
-        content: '- **New Regime (Standard)**: Offers lower tax rates across slabs. A standard deduction of ₹75,000 applies. No exemptions under Section 80C, HRA, or 80D can be claimed.\n- **Old Regime**: Offers higher tax rates but allows exemptions of up to ₹1.5 Lakhs under 80C (PPF, ELSS), HRA deductions, and ₹25,000/50,000 under 80D.'
+        "title": "How to Calculate In-Hand Salary in India",
+        "content": "To calculate your net take-home:\n1. Deduct non-cash items (employer PF, NPS, and gratuity) from CTC to determine Gross Salary.\n2. Deduct employee EPF (12% of Basic salary) and Professional Tax (typically ₹200/mo).\n3. Calculate annual taxable income by subtracting Standard Deduction (₹75,000 for New Regime, ₹50,000 for Old Regime) and other savings.\n4. Determine monthly TDS tax liability and subtract it to get Net take-home."
+      },
+      {
+        "title": "Old vs. New Tax Regime Salary breakups",
+        "content": "The New Tax Regime (default) has lower slab rates and a higher rebate limit (up to ₹7 Lakhs taxable income gets a full rebate under Section 87A). The Old Tax Regime has higher tax rates but allows exemptions for HRA (rent paid), Section 80C (up to ₹1.5 Lakhs), Section 80D (medical insurance), and Home Loan Interest."
+      },
+      {
+        "title": "How PF and Gratuity Affect Take-Home",
+        "content": "Employee Provident Fund (EPF) is a retirement savings vehicle. Employee contribution (12%) is deducted from your gross pay, directly reducing your monthly take-home, but building your retirement corpus. Gratuity (4.81% of basic) is a statutory benefit paid upon resignation/retirement after 5 years, included in CTC but excluded from monthly take-home."
       }
     ]
   },
@@ -681,17 +770,43 @@ export const toolsList: Tool[] = [
   {
     id: 'RDCalculator',
     slug: 'rd-calculator',
-    name: 'Recurring Deposit (RD) Calculator',
+    name: 'RD Calculator',
     category: 'finance',
-    shortDescription: 'Calculate the maturity amount and total interest earned on your monthly Recurring Deposit (RD).',
-    metaDescription: 'Calculate Recurring Deposit (RD) maturity value and interest. Compute monthly savings accumulation with quarterly compounding to match Indian bank passbooks.',
-    keywords: ['RD Calculator', 'Recurring Deposit Calculator', 'RD interest rates', 'Post office RD calculator', 'Monthly savings calculator India'],
+    shortDescription: 'Calculate the maturity amount, total interest earned, and compare interest rates across major Indian banks.',
+    metaTitle: 'RD Calculator – Recurring Deposit Interest & Bank Rates',
+    metaDescription: 'Calculate your Recurring Deposit (RD) maturity amount and interest. Compare HDFC, SBI, ICICI, and Axis RD interest rates with TDS and premature withdraw rules.',
+    keywords: [
+      'RD Calculator',
+      'Recurring Deposit Calculator',
+      'RD Interest Calculator',
+      'RD Maturity Calculator',
+      'RD Interest Rates',
+      'Best RD Interest Rates',
+      'RD Calculator India',
+      'SBI RD Calculator',
+      'HDFC RD Calculator',
+      'ICICI RD Calculator',
+      'Axis Bank RD Calculator',
+      'Kotak RD Calculator',
+      'PNB RD Calculator',
+      'Bank of Baroda RD Calculator',
+      'Canara Bank RD Calculator',
+      'Union Bank RD Calculator',
+      'Best Bank for RD',
+      'Highest RD Interest Rate',
+      'RD Interest Rate Calculator',
+      'Monthly RD Calculator',
+      'RD vs FD',
+      'RD vs SIP'
+    ],
     icon: 'TrendingUp',
     howToUse: [
-      'Enter your Monthly Deposit amount in Rupees.',
-      'Enter the Annual Interest Rate (%) offered by the bank.',
-      'Enter the investment Tenure in years or months.',
-      'Review the summary showing your Total Amount Deposited, Interest Earned, and final Maturity Value.'
+      'Enter your Monthly Deposit amount or select a target savings amount (Reverse Solver Mode).',
+      'Choose your investment tenure (in Months or Years) and select a major Indian bank to pull live interest rates.',
+      'Select whether you are a General Citizen or Senior Citizen (seniors typically receive an extra 0.50% return).',
+      'Review your estimated maturity amount, total principal invested, accumulated interest, and maturity date.',
+      'Check the Bank comparison dashboard to see where you can earn the highest rate.',
+      'Download your customized A4 PDF planning report or export data sheets to CSV.'
     ],
     faqs: [
       {
@@ -705,6 +820,30 @@ export const toolsList: Tool[] = [
       {
         question: 'Can I withdraw my RD before the tenure ends?',
         answer: 'Yes, premature withdrawal of RD is allowed, but banks usually charge a penalty (typically 0.5% to 1% lower than the applicable rate for the period the deposit remained with the bank).'
+      },
+      {
+        question: 'Is RD interest taxable?',
+        answer: 'Yes, interest earned on a Recurring Deposit is fully taxable under the head "Income from Other Sources" at your applicable income tax slab rates.'
+      },
+      {
+        question: 'What is TDS on RD interest?',
+        answer: 'Banks deduct Tax Deducted at Source (TDS) at 10% if the annual interest exceeds ₹40,000 (₹50,000 for senior citizens). If your total income is below the taxable limit, you can submit Form 15G or Form 15H to prevent TDS.'
+      },
+      {
+        question: 'Which bank offers the highest RD interest rate?',
+        answer: 'Interest rates vary by bank, tenure, and customer type. Generally, small finance banks offer higher rates (7.5% - 8.5%) compared to major public and private sector banks (6.5% - 7.2%).'
+      },
+      {
+        question: 'What happens if I miss an RD instalment?',
+        answer: 'Most banks charge a small late payment penalty (typically ₹1.50 per ₹100 per month) for missed instalments. Some banks allow a grace period, while others may reduce the overall maturity value.'
+      },
+      {
+        question: 'How does RD compare with SIP?',
+        answer: 'RD offers guaranteed interest and return of principal, making it risk-free. A mutual fund SIP (Systematic Investment Plan) is market-linked and offers higher return potential but carries investment risk.'
+      },
+      {
+        question: 'What is the difference between RD and FD?',
+        answer: 'An RD is built through small monthly investments, while a Fixed Deposit (FD) requires a one-time lump-sum investment at the start of the tenure.'
       }
     ],
     sections: [
@@ -713,8 +852,20 @@ export const toolsList: Tool[] = [
         content: 'A Recurring Deposit (RD) is an investment tool that helps individuals with a regular source of income to build a savings pool. Instead of investing a lump sum like in an FD, you invest a fixed monthly amount for a pre-determined period. RDs are ideal for individuals who want to build a secure financial cushion without committing large lump sums upfront.'
       },
       {
-        title: 'RD Compounding Formula',
+        title: 'RD Compounding Formula & Methodology',
         content: 'The maturity amount of a Recurring Deposit is calculated using the formula prescribed by the Indian Banks Association (IBA):\n\n**M = P × [ (1 + i)ⁿ - 1 ] / [ 1 - (1 + i)^(-1/3) ]**\n\nWhere:\n- **M**: Maturity Value\n- **P**: Monthly Installment Amount\n- **i**: Interest rate per quarter (r / 400)\n- **n**: Number of quarters (Number of months / 3)'
+      },
+      {
+        title: 'RD vs Fixed Deposit (FD)',
+        content: 'RD is suited for disciplined savers who can commit a portion of their monthly salary. FD is designed for investors who already have a lump sum (e.g. bonus, inheritance) and want to lock it in at a guaranteed rate. While both offer similar security, the compounding yield of an FD is slightly higher because the entire principal compounds from day one.'
+      },
+      {
+        title: 'RD vs Mutual Fund SIP',
+        content: 'An RD is a debt-based savings vehicle offering 100% principal safety. A SIP (Systematic Investment Plan) invests in equity or debt mutual funds. While equity SIPs have historically beaten inflation with 12%-15% returns over long periods, they carry market volatility and do not offer guaranteed maturity values.'
+      },
+      {
+        title: 'RD Taxation & TDS Rules',
+        content: 'Interest earned on RDs is added to your annual gross income and taxed as per your tax slab. Under Section 194A, banks deduct 10% TDS (20% if PAN is not provided) if the accumulated annual interest exceeds ₹40,000 for general taxpayers or ₹50,000 for senior citizens.'
       }
     ]
   },
@@ -761,42 +912,109 @@ export const toolsList: Tool[] = [
   {
     id: 'NPSCalculator',
     slug: 'nps-calculator',
-    name: 'National Pension System (NPS) Calculator',
+    name: 'NPS Calculator',
     category: 'finance',
-    shortDescription: 'Calculate your pension, lump sum corpus, and retirement wealth using the NPS retirement tool.',
-    metaDescription: 'Calculate National Pension Scheme (NPS) corpus, monthly pension amount, and lump sum payouts. Model equity vs debt allocations for tax saving under Sec 80CCD.',
-    keywords: ['NPS Calculator', 'National Pension System', 'Pension calculator India', 'NPS tax exemption', 'Retirement planning tools'],
+    shortDescription: 'Calculate your accumulated NPS maturity corpus, estimated monthly pension, and tax savings under Section 80CCD.',
+    metaTitle: 'NPS Calculator – National Pension & Annuity Planner',
+    metaDescription: 'Calculate your NPS maturity corpus, monthly pension, and tax savings under Sec 80CCD. Compare Tier I and Tier II plans with inflation adjustments.',
+    keywords: [
+      'NPS Calculator',
+      'NPS Pension Calculator',
+      'NPS Calculator India',
+      'National Pension System Calculator',
+      'NPS Retirement Calculator',
+      'NPS Corpus Calculator',
+      'NPS Pension Calculation',
+      'NPS Monthly Pension Calculator',
+      'NPS Lump Sum Calculator',
+      'NPS Annuity Calculator',
+      'NPS Contribution Calculator',
+      'NPS Tax Benefit Calculator',
+      'NPS Retirement Planning Calculator',
+      'NPS Calculator with Inflation',
+      'NPS Return Calculator',
+      'NPS Maturity Calculator',
+      'NPS Investment Calculator',
+      'NPS Corpus at Retirement',
+      'How much pension will I get from NPS?',
+      'How much should I invest in NPS?',
+      'NPS ₹5000 monthly calculator',
+      'NPS ₹10000 monthly calculator',
+      'NPS ₹15000 monthly calculator',
+      'NPS ₹20000 monthly calculator',
+      'NPS ₹50000 monthly contribution calculator'
+    ],
     icon: 'Wallet',
     howToUse: [
-      'Input your current age and planned retirement age (default: 60).',
-      'Enter your Monthly NPS Contribution.',
-      'Adjust your Expected Annual Return (%) based on your asset allocation (Equity/Debt).',
-      'Select the percentage of corpus to purchase annuity (minimum 40% is mandatory at retirement).',
-      'Adjust the expected annuity return rate (standard is 6% to 7%).',
-      'Examine the total accumulated wealth, lump sum withdrawal amount, and expected monthly pension.'
+      'Choose active tabs: Tier I Corpus, Tier II growth, desired Pension (Reverse Mode), or Offer Comparisons.',
+      'Select subscriber category (Government, Private Corporate, or self-employed citizen) and exit types.',
+      'Configure contributions, expected returns, and step-up annual increment percentages.',
+      'Set asset allocation (Equity, Debt, G-Secs) or choose lifecycle Auto Choice (LC75/50/25).',
+      'Review your estimated lump-sum payout, annuity corpus, monthly pension, and inflation-adjusted present value.',
+      'Download your customized A4 PDF planning report or export data sheets to CSV.'
     ],
     faqs: [
       {
-        question: 'What is the National Pension System (NPS)?',
-        answer: 'NPS is a voluntary, long-term retirement savings scheme designed to enable systematic savings during working life, managed by professional fund managers (PFM) regulated by PFRDA.'
+        question: 'What is NPS?',
+        answer: 'NPS stands for National Pension System. It is a government-backed retirement planning program designed to enable systematic savings during your employment years, regulated by PFRDA.'
       },
       {
-        question: 'What are the tax benefits of NPS?',
-        answer: 'NPS contributions are eligible for deduction up to ₹1.5 Lakhs under Sec 80C, plus an additional exclusive deduction of ₹50,000 under Section 80CCD(1B).'
+        question: 'How is NPS pension calculated?',
+        answer: 'Upon retirement, you allocate a portion (minimum 40%) of the projected maturity corpus to buy a life annuity program. Estimated Monthly Pension = Annuity Corpus × Expected Annuity Rate / 12.'
       },
       {
-        question: 'Is NPS withdrawal completely tax-free at age 60?',
-        answer: 'Yes. At age 60, you can withdraw up to 60% of the corpus as a tax-free lump sum. The remaining 40% must be used to purchase a pension annuity, which is taxable as regular income in the year received.'
+        question: 'What is the difference between Tier I and Tier II?',
+        answer: 'Tier I is the primary mandatory retirement account with strict withdrawal rules and eligible tax deductions. Tier II is a voluntary investment account with no lock-in and no tax benefits.'
+      },
+      {
+        question: 'Does employer NPS contribution save tax?',
+        answer: 'Yes. Under Section 80CCD(2), employer contributions up to 10% of basic salary + DA (14% for government employees) are eligible for tax deduction, over and above Section 80C limits.'
+      },
+      {
+        question: 'Is NPS withdrawal tax-free?',
+        answer: 'At age 60, up to 60% of the Tier I accumulated corpus can be withdrawn as a tax-free lump sum. The remaining 40% used for annuity purchases is tax-exempt, though the monthly pension payout is taxable as regular income.'
+      },
+      {
+        question: 'How much pension will I get from NPS?',
+        answer: 'It depends on your accumulated corpus, annuity ratio, and prevailing annuity rates. For instance, a ₹2.5 Crore corpus with 40% annuity (₹1 Crore) at a 6% annuity rate yields a pension of ₹50,000 per month.'
+      },
+      {
+        question: 'How much should I invest to get ₹50,000 monthly pension?',
+        answer: 'Assuming a 6% annuity rate and 40% annuity allocation, you need a maturity corpus of ₹2.5 Crores. Starting at age 30, a monthly contribution of ₹10,000 with a 10% annual step-up will easily yield this corpus by age 60.'
+      },
+      {
+        question: 'What happens if I exit premature from NPS?',
+        answer: 'In premature exits before age 60, you must allocate a minimum of 80% of the corpus to purchase an annuity, and only 20% can be withdrawn as a lump sum. If the total corpus is under ₹2.5 Lakhs, 100% lump sum withdrawal is allowed.'
+      },
+      {
+        question: 'Can I change my NPS asset allocation?',
+        answer: 'Yes. NPS allows you to switch between Active Choice (manually adjusting Equity, Corporate Bonds, G-Secs) and Auto Choice (Lifecycle funds LC75, LC50, LC25).'
+      },
+      {
+        question: 'What is Auto Choice in NPS?',
+        answer: 'Auto Choice automatically rebalances your asset allocation based on your age. For example, LC75 starts with 75% equity for young investors and reduces it progressively to 15% by age 55 to reduce risk.'
+      },
+      {
+        question: 'What are Section 80CCD deductions?',
+        answer: 'Section 80CCD(1) covers employee contributions up to ₹1.5 Lakhs (under 80C). Section 80CCD(1B) offers an additional exclusive deduction of ₹50,000. Section 80CCD(2) covers employer contributions.'
       }
     ],
-    sections: [
+    "sections": [
       {
-        title: 'Understanding the National Pension System (NPS)',
-        content: 'The National Pension System is an excellent tool for retirement wealth building. It lets you allocate your savings into three major asset classes: Equity (E), Corporate Bonds (C), and Government Securities (G). This flex-choice enables investors to earn higher returns than traditional EPF or PPF options.'
+        "title": "Understanding the National Pension System (NPS)",
+        "content": "The National Pension System is an excellent tool for retirement wealth building. It lets you allocate your savings into three major asset classes: Equity (E), Corporate Bonds (C), and Government Securities (G). This flex-choice enables investors to earn higher returns than traditional EPF or PPF options."
       },
       {
-        title: 'Annuity and Pension Rules',
-        content: 'When you reach the age of 60, you are allowed to withdraw a maximum of 60% of the accumulated corpus tax-free. The remaining 40% must be reinvested into a life annuity program via an Annuity Service Provider (ASP) to guarantee a regular monthly pension for the rest of your life.'
+        "title": "NPS Tier I vs Tier II Accounts",
+        "content": "Tier I is the core pension account. It has a lock-in until age 60 and offers tax deductions up to ₹2 Lakhs under Section 80C and 80CCD(1B). Tier II is a mutual-fund-like voluntary savings account with instant liquidity but no tax deductions."
+      },
+      {
+        "title": "Active Choice vs Auto Choice Lifecycle Funds",
+        "content": "Subscribers can select Active Choice to manually allocate assets (Equity cap is 75% for private employees). Auto Choice is a lifecycle-based allocator. There are three lifecycle options: Aggressive (LC75), Moderate (LC50), and Conservative (LC25), which automatically reduce equity risk as the subscriber gets older."
+      },
+      {
+        "title": "NPS Withdrawal Rules and Amendments",
+        "content": "At age 60 (Normal Exit), you can withdraw up to 60% of the corpus as a tax-free lump sum. The remaining 40% must be used to purchase a pension annuity. If the total corpus is less than ₹5 Lakhs, PFRDA permits a 100% lump-sum withdrawal."
       }
     ]
   },
@@ -984,38 +1202,7 @@ export const toolsList: Tool[] = [
       }
     ]
   },
-  {
-    id: 'DaysBetweenDates',
-    slug: 'days-between-dates',
-    name: 'Days Between Dates',
-    category: 'datetime',
-    shortDescription: 'Calculate the total days, weeks, months, and years between two dates.',
-    metaDescription: 'Calculate the number of days between two dates. View duration breakdowns in years, months, weeks, and hours. Option to include the end date.',
-    keywords: ['Days Between Dates', 'Date duration calculator', 'Count days between dates', 'Calculate time difference', 'Days counter online'],
-    icon: 'Calendar',
-    howToUse: [
-      'Select the Start Date.',
-      'Select the End Date.',
-      'Check the option "Include end date" if you want to include both boundary days.',
-      'View the total days difference and Y-M-D calendar breakdown.'
-    ],
-    faqs: [
-      {
-        question: 'Does this calculator support daylight saving shifts?',
-        answer: 'Yes, dates are normalized to midnight UTC to ensure that daylight saving switches do not introduce fractional days or errors.'
-      },
-      {
-        question: 'What is the purpose of "Include End Date"?',
-        answer: 'For many legal and rental contracts, the end date is inclusive, requiring an extra day to be added to the duration count.'
-      }
-    ],
-    sections: [
-      {
-        title: 'Why Count Days Between Dates?',
-        content: 'Calculating the exact duration between dates is crucial for maturity calculations of bonds, calculating elapsed interest, lease durations, academic terms, and project tracking.'
-      }
-    ]
-  },
+
   {
     id: 'CurrencyConverter',
     slug: 'currency-converter',
@@ -1732,55 +1919,120 @@ export const toolsList: Tool[] = [
   ]
 },
   {
-  "id": "FARFSICalculator",
-  "slug": "far-fsi-calculator",
-  "name": "FAR / FSI Calculator",
-  "category": "architecture",
-  "subcategory": "Area & Space Planning",
-  "shortDescription": "Calculate Floor Area Ratio (FAR) and Floor Space Index (FSI) to verify permissible built-up limits and municipal zoning clearance.",
-  "metaTitle": "Floor Area Ratio (FAR) & Floor Space Index (FSI) Calculator",
-  "metaDescription": "Free online FAR & FSI Calculator. Calculate Floor Area Ratio (FAR), Floor Space Index (FSI), maximum permissible built-up area, and check municipal zoning compliance limits.",
-  "keywords": [
-    "FAR FSI Calculator",
-    "Floor Area Ratio calculator",
-    "Floor Space Index Calculator",
-    "FSI Calculator India",
-    "FAR Calculator online",
-    "calculate floor area ratio",
-    "how to calculate FSI",
-    "max permissible built up area",
-    "building permissible area calculator",
-    "plot FAR FSI calculations",
-    "municipal building bylaws FSI"
-  ],
-  "icon": "Compass",
-  "howToUse": [
-    "Enter the plot area in square feet or square meters.",
-    "Specify the local permissible FSI/FAR value.",
-    "Input planned built-up area per floor and number of floors.",
-    "Verify FSI compliance status and check remaining buildable area."
-  ],
-  "faqs": [
-    {
-      "question": "What is FAR and FSI?",
-      "answer": "Floor Area Ratio (FAR) and Floor Space Index (FSI) are identical metrics representing the ratio of total floor area across all building levels to the plot area."
-    },
-    {
-      "question": "What is the formula for FSI?",
-      "answer": "FSI = Total Built-up Area / Plot Area. For example, on a 2000 sq ft plot with an FSI of 1.5, the total buildable floor area is 3000 sq ft."
-    }
-  ],
-  "sections": [
-    {
-      "title": "What is Floor Space Index?",
-      "content": "FSI is a zoning restriction used by local municipal development bodies to control building density, traffic management, and utility load distributions in urban areas."
-    },
-    {
-      "title": "FAR Calculation Formulas",
-      "content": "1. **Max Buildable Area** = Plot Area × FSI Value\n2. **Utilized Area** = Built-up Area per Floor × Number of Floors\n3. **Remaining Area** = Max Buildable Area - Utilized Area"
-    }
-  ]
-},
+    "id": "FARFSICalculator",
+    "slug": "far-fsi-calculator",
+    "name": "FAR / FSI Calculator",
+    "category": "architecture",
+    "subcategory": "Area & Space Planning",
+    "shortDescription": "Calculate Floor Area Ratio (FAR) and Floor Space Index (FSI), permissible built-up area, ground coverage limits, and floor plans.",
+    "metaTitle": "FAR / FSI Calculator – Floor Area Ratio & Permissible Built-up",
+    "metaDescription": "Calculate Floor Area Ratio (FAR) and Floor Space Index (FSI), permissible built-up area, ground coverage, setbacks, and building potential. Localized presets for Mumbai, Delhi, and Bengaluru.",
+    "keywords": [
+      "FAR Calculator",
+      "FSI Calculator",
+      "FAR FSI Calculator",
+      "FSI Calculation",
+      "FAR Calculation",
+      "How to calculate FSI",
+      "How to calculate FAR",
+      "FSI formula",
+      "FAR formula",
+      "Permissible FSI",
+      "Maximum FSI",
+      "FSI for residential building",
+      "Built-up area calculator",
+      "Permissible built-up area calculator",
+      "Plot area FSI calculator",
+      "Floor area ratio calculator",
+      "Floor space index calculator",
+      "FSI calculator India"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Choose calculation mode: Forward (Max Built-up) or Reverse (Required Plot, actual FSI, coverage).",
+      "Select plot units (sq ft, sq m, bigha, cents, guntha, etc.) and enter plot details.",
+      "Input permissible FSI/FAR ratio and ground coverage limit.",
+      "Optionally toggle Professional Mode to add setbacks (front, rear, side) and road width constraints.",
+      "Add floor-wise details in the Floor Area Planner to audit your utilization percentage.",
+      "Compare up to 3 building layouts side-by-side or download your planning report as a PDF."
+    ],
+    "faqs": [
+      {
+        "question": "What is FSI?",
+        "answer": "FSI stands for Floor Space Index. It represents the ratio of the total built-up floor area across all levels of a building to the total area of the plot it stands on."
+      },
+      {
+        "question": "What is FAR?",
+        "answer": "FAR stands for Floor Area Ratio. It is mathematically identical to FSI, but is sometimes expressed as a percentage instead of a decimal. For example, an FSI of 2.0 corresponds to a FAR of 200%."
+      },
+      {
+        "question": "What is the difference between FAR and FSI?",
+        "answer": "There is no mathematical difference. FSI is widely used in cities like Mumbai, Chennai, and Bengaluru as a decimal ratio (e.g., 2.5), whereas FAR is used in Delhi and northern regions as a percentage (e.g., 250%)."
+      },
+      {
+        "question": "How is FSI calculated?",
+        "answer": "FSI is calculated using the formula: FSI = Total Built-up Area / Plot Area. For instance, a 1,000 sq ft building on a 1,000 sq ft plot has an FSI of 1.0."
+      },
+      {
+        "question": "How is FAR calculated?",
+        "answer": "FAR is calculated using the formula: FAR = (Total Floor Area / Plot Area) × 100. A 2,000 sq ft building on a 1,000 sq ft plot has a FAR of 200%."
+      },
+      {
+        "question": "How do I calculate permissible built-up area?",
+        "answer": "Permissible Built-up Area = Plot Area × Permissible FSI. If your plot is 3,000 sq ft and the FSI is 1.5, you can construct a maximum of 4,500 sq ft gross floor area."
+      },
+      {
+        "question": "How much can I build on a 1,000 sq ft plot?",
+        "answer": "It depends on the permissible local FSI. If the FSI is 2.0, you can build up to 2,000 sq ft total floor area, distributed across multiple floors depending on ground coverage and setbacks."
+      },
+      {
+        "question": "Does FSI include all floor areas?",
+        "answer": "No. Most municipal bylaws exclude specific areas from FSI calculations, such as basements used for parking, open balconies, lift shafts, staircases, and fire escape pathways."
+      },
+      {
+        "question": "What is the relationship between FSI and ground coverage?",
+        "answer": "Ground coverage limits the footprint of the ground floor, while FSI controls the total building volume. For example, on a 2,000 sq ft plot with 50% coverage and FSI 2.0, the ground footprint cannot exceed 1,000 sq ft, and you can build 4 floors of 1,000 sq ft each to reach the 4,000 sq ft limit."
+      },
+      {
+        "question": "Does higher FSI mean more floors?",
+        "answer": "Yes, usually. A higher FSI allows you to build more total space, which requires stacking more floors if your ground coverage is limited by setbacks."
+      },
+      {
+        "question": "Does FSI determine building height?",
+        "answer": "FSI limits total volume, but building height is also governed by other bylaws, such as the width of the fronting road, set back margins, and airport boundary restrictions."
+      },
+      {
+        "question": "Does road width affect permissible development?",
+        "answer": "Yes. Most cities correlate permissible FSI with road width to prevent traffic congestion. Wider roads are generally allowed higher FSI (often through premium purchased FSI)."
+      },
+      {
+        "question": "Does FSI vary by location?",
+        "answer": "Yes, FSI varies significantly across cities, states, and zones. Core commercial zones have much higher FSI compared to residential suburbs or heritage zones."
+      },
+      {
+        "question": "Does residential FSI differ from commercial FSI?",
+        "answer": "Yes. Commercial buildings typically receive higher FSI allocations because they accommodate higher business densities, though they also require greater parking clearances."
+      }
+    ],
+    "sections": [
+      {
+        "title": "What is Floor Area Ratio & Floor Space Index?",
+        "content": "FAR and FSI are terms describing the density limit of a plot. Mathematically, they represent the total gross floor area divided by the net plot size. FSI is expressed as a ratio (e.g. 1.5, 2.5) while FAR is represented as a percentage (e.g. 150%, 250%). Municipal planning authorities use these indices to restrict building volumes to align with local infrastructure capacities."
+      },
+      {
+        "title": "FAR & FSI Formula",
+        "content": "The fundamental mathematical formulas are:\n- **FSI** = Total Built-up Area / Plot Area\n- **FAR (%)** = (Total Built-up Area / Plot Area) × 100\n- **Permissible Built-up Area** = Plot Area × Permissible FSI\n- **Required Plot Area** = Desired Floor Area / Permissible FSI"
+      },
+      {
+        "title": "FSI and Ground Coverage Relationship",
+        "content": "Ground coverage controls the maximum building footprint on the soil. A ground coverage of 40% means only 40% of the plot area can be built on at the ground level. The remaining 60% must be left open to the sky for setbacks, driveways, and landscaping. FSI dictates how high you can stack this footprint. For instance, on a 5,000 sq ft plot with 40% coverage (2,000 sq ft footprint) and FSI 2.0 (10,000 sq ft total area), you can build 5 floors of 2,000 sq ft each."
+      },
+      {
+        "title": "Factors Affecting Permissible Development",
+        "content": "Constructing a building involves multiple overlapping codes:\n- **Setbacks**: Minimum open spaces left on the front, rear, and sides of a building.\n- **Road Width**: Permissible FSI often increases as front road width increases (e.g., 9m vs 12m road).\n- **Zoning Classification**: Residential, commercial, mixed-use, or industrial zones have different base FSI tables."
+      }
+    ]
+  },
   {
   "id": "StaircaseCalculator",
   "slug": "staircase-calculator",
