@@ -45,7 +45,7 @@ function getRequestUserId(init?: RequestInit): string | null {
   const headers = init?.headers;
   if (!headers) return 'user-current';
 
-  let authHeader: string | null = null;
+  let authHeader: string | null;
   if (headers instanceof Headers) {
     authHeader = headers.get('Authorization');
   } else if (Array.isArray(headers)) {

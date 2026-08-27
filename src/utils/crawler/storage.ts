@@ -600,6 +600,7 @@ export class CrawlStorage {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async saveComparisonResult(jobId: string, results: any): Promise<void> {
     const database = await this.init();
     return new Promise((resolve, reject) => {
@@ -611,6 +612,7 @@ export class CrawlStorage {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async getComparisonResult(jobId: string): Promise<any | null> {
     const database = await this.init();
     return new Promise((resolve, reject) => {

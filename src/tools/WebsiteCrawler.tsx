@@ -1008,7 +1008,7 @@ export default function WebsiteCrawler() {
     } catch (e) {
       console.error('Failed to fetch crawl graph matrices:', e);
     }
-  }, [activeCrawlId, viewMode, selectedNodeId, hopsLimit, computeCoordinates, graphViewType, activeComparisonResult]);
+  }, [activeCrawlId, viewMode, selectedNodeId, hopsLimit, computeCoordinates, graphViewType, activeComparisonResult, storage]);
 
   const handleFindPath = async () => {
     if (!activeCrawlId || !pathSource || !pathDestination) return;

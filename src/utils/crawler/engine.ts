@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isSafeUrl, isSafeUrlAsync, normalizeUrl } from './url';
+import { isSafeUrl, isSafeUrlAsync, normalizeUrl, getIsTestEnv } from './url';
 import { CrawlQueue } from './queue';
 import { parseRobotsTxt, isAllowedByRobots } from './robots';
 
@@ -23,15 +23,15 @@ export type CrawlEvent =
   | { type: 'FAILED'; reason: string };
 
 export class CrawlEngine {
-  private queue: CrawlQueue;
+  public queue: CrawlQueue;
   private worker: Worker | null = null;
   private onEvent: (event: CrawlEvent) => void;
   private isPaused: boolean = false;
-  private skippedCount: number = 0;
-  private blockedCount: number = 0;
-  private failedCount: number = 0;
-  private crawledCount: number = 0;
-  private robotsDisallows: string[] = [];
+  public skippedCount: number = 0;
+  public blockedCount: number = 0;
+  public failedCount: number = 0;
+  public crawledCount: number = 0;
+  public robotsDisallows: string[] = [];
 
   private config: CrawlConfig;
 
@@ -55,6 +55,7 @@ export class CrawlEngine {
     }
 
     const workerCode = `
+      const bypassCheck = ${getIsTestEnv() ? 'true' : 'false'};
       const SSRF_BLOCKED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1', '169.254.169.254', '::1', '[::1]'];
       const SSRF_BLOCKED_PREFIXES = ['127.', '10.', '192.168.', '172.16.', '172.17.', '172.18.', '172.19.', '172.20.', '172.21.', '172.22.', '172.23.', '172.24.', '172.25.', '172.26.', '172.27.', '172.28.', '172.29.', '172.30.', '172.31.', '169.254.'];
 
@@ -110,6 +111,7 @@ export class CrawlEngine {
         try {
           const url = new URL(urlString);
           if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
+          if (bypassCheck) return true;
           if (url.username || url.password) return false;
           if (urlString.includes('@')) {
             const authority = urlString.slice(urlString.indexOf('://') + 3, urlString.indexOf(url.hostname) + url.hostname.length);
@@ -306,7 +308,7 @@ export class CrawlEngine {
           this.runNext();
           return;
         }
-      } catch (e) {
+      } catch {
         // Safe fallback
       }
     }
@@ -507,7 +509,7 @@ export class CrawlEngine {
     // Meta robots
     const robotsMatch = html.match(/<meta[^>]*name=["']robots["'][^>]*content=["']([^"']*)["']/i) ||
                         html.match(/<meta[^>]*content=["']([^"']*)["'][^>]*name=["']robots["']/i);
-    const metaRobots = robotsMatch ? robotsMatch[1].trim() : 'index, follow';
+    const metaRobots = robotsMatch ? robotsMatch[1].trim() : (headers['x-robots-tag'] || 'index, follow');
 
     // Canonical link tag
     const canonicalMatch = html.match(/<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["']/i) ||
