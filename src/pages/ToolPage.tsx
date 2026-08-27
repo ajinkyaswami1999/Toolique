@@ -46,6 +46,10 @@ const UUIDGenerator = lazy(() => import('../tools/UUIDGenerator'));
 const HashGenerator = lazy(() => import('../tools/HashGenerator'));
 const URLEncoderDecoder = lazy(() => import('../tools/URLEncoderDecoder'));
 const RegexTester = lazy(() => import('../tools/RegexTester'));
+const WebsiteSeoAudit = lazy(() => import('../tools/WebsiteSeoAudit'));
+const ApiTester = lazy(() => import('../tools/ApiTester'));
+const AdvancedDataCleaner = lazy(() => import('../tools/AdvancedDataCleaner'));
+const WebsiteCrawler = lazy(() => import('../tools/WebsiteCrawler'));
 
 // Phase 3 - Civil Engineering (9 tools)
 const ConstructionCostCalculator = lazy(() => import('../tools/ConstructionCostCalculator'));
@@ -419,6 +423,10 @@ const toolComponents: Record<string, React.ComponentType> = {
   HashGenerator,
   URLEncoderDecoder,
   RegexTester,
+  WebsiteSeoAudit,
+  ApiTester,
+  AdvancedDataCleaner,
+  WebsiteCrawler,
 
   // Phase 3 - Civil Engineering
   ConstructionCostCalculator,

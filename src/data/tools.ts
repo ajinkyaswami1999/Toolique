@@ -1374,16 +1374,50 @@ export const toolsList: Tool[] = [
   {
     id: 'JWTDecoder',
     slug: 'jwt-decoder',
-    name: 'JWT Decoder & Encoder',
+    name: 'JWT Decoder & Debugger',
     category: 'developer',
-    shortDescription: 'Decode and encode JSON Web Tokens (JWT) instantly. Parse or generate headers, payloads, and signatures.',
-    metaDescription: 'Decode and encode JSON Web Tokens (JWT) online. View header claims, payload values, signature details, token expiration, or sign new tokens in real-time.',
-    keywords: ['JWT Decoder', 'JWT Encoder', 'Encode JWT', 'Decode JSON Web Token', 'JWT expiry check', 'JWT signer'],
+    shortDescription: 'Decode, inspect, validate and debug JWT tokens instantly — directly in your browser.',
+    metaTitle: 'JWT Decoder & Debugger Online – Decode, Validate & Inspect JWT | Toolique',
+    metaDescription: 'Decode JWT tokens instantly. Inspect headers, payloads, claims, expiration, signatures and security issues with Toolique\'s free client-side JWT decoder and debugger.',
+    keywords: [
+      'JWT Decoder',
+      'JWT Decoder Online',
+      'JWT Token Decoder',
+      'Decode JWT',
+      'JWT Parser',
+      'JWT Inspector',
+      'JWT Encoder',
+      'JWT Generator',
+      'Generate JWT',
+      'Create JWT Token',
+      'JWT Debugger',
+      'JWT Validator',
+      'JWT Validation',
+      'Invalid JWT',
+      'JWT Invalid Signature',
+      'JWT Token Expired',
+      'JWT Audience Invalid',
+      'JWT Issuer Invalid',
+      'JWT Claims Decoder',
+      'JWT Header Decoder',
+      'JWT Payload Decoder',
+      'What is JWT',
+      'JWT Header Payload Signature',
+      'JWT Claims',
+      'JWT Exp Claim',
+      'JWT Iat Claim',
+      'JWT Nbf Claim',
+      'JWT vs OAuth',
+      'JWT vs Session'
+    ],
     icon: 'Key',
     howToUse: [
-      'Choose the Decoder or Encoder tab at the top.',
-      'Decoder: Paste an encoded JWT to inspect its header, payload claims, signature structure, and validity.',
-      'Encoder: Edit Header/Payload JSON, provide a signature secret, and instantly generate a signed JWT.'
+      'Paste your encoded JSON Web Token (JWT) into the input area. The tool will parse it immediately.',
+      'Check the Component Segmentation bar to view the Header (Red), Payload (Teal), and Signature (Amber) segments.',
+      'Review decoded header claims, payload JSON claims, and the live claims intelligence table.',
+      'Use the Claims Validators panel to check for expected issuer (iss) and audience (aud) values.',
+      'Audit the Security Scanner results to check token safety, lifetime duration, and sensitive key warnings.',
+      'Export redacted reports, print debugging sheets, or compile A4 PDFs locally.'
     ],
     faqs: [
       {
@@ -1391,22 +1425,309 @@ export const toolsList: Tool[] = [
         answer: 'A JWT is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object.'
       },
       {
-        question: 'Can this tool verify token signatures?',
-        answer: 'No. Signature verification requires the server-side secret key or public certificate. This tool decodes and parses the structure for debugging client claims.'
+        question: 'Is my token sent to the server for decoding?',
+        answer: 'No. Decoding, inspection, claims parsing, and security audits happen entirely client-side inside your browser. No token data leaves your device.'
       },
       {
-        question: 'Does this tool support encoding JWTs?',
-        answer: 'Yes! Switch to the Encoder tab to generate signed JWTs using HMAC-SHA256 (HS256) entirely client-side.'
+        question: 'Does this tool support verifying token signatures?',
+        answer: 'Yes. The tool verifies HMAC-SHA256 signatures locally in the browser if you provide the HMAC secret key. Public/private key verification (RSA/ECDSA) is supported via standard cryptographic libraries.'
+      },
+      {
+        question: 'How are claims validated in this tool?',
+        answer: 'The decoder evaluates exp (expiration), nbf (not before), and iat (issued at) timestamps against current system time, and audits custom claims based on user-supplied parameters.'
+      },
+      {
+        question: 'What does exp stand for in a JWT?',
+        answer: 'The exp claim specifies the expiration time of the token. Once this Unix timestamp is reached, the token must be rejected as invalid.'
+      },
+      {
+        question: 'Can JWT payloads contain sensitive secrets?',
+        answer: 'No. Standard JWTs are base64url encoded, which is easily readable without keys. Never store passwords, API keys, or private records inside a standard JWT payload.'
       }
     ],
     sections: [
       {
-        title: 'Decoding JWT Structure',
-        content: 'A JWT is composed of three parts separated by dots (.): Header, Payload, and Signature. The Header contains metadata, the Payload houses custom data claims, and the Signature validates message integrity.'
+        title: 'What is a JSON Web Token (JWT)?',
+        content: 'JSON Web Tokens (JWT) are an open standard (RFC 7519) for representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is digitally signed using a private key or a public/private key pair.'
       },
       {
-        title: 'Decoding vs Encoding JWTs',
-        content: 'Decoding allows you to view the public content of a token (Header and Payload) without a key. Encoding allows you to construct a token and sign it using a secret key (HS255) to verify its integrity.'
+        title: 'JWT Structure: Header, Payload & Signature',
+        content: 'A JSON Web Token consists of three parts separated by dots (.):\n- **Header**: Contains the token type (JWT) and signing algorithm (e.g. HS256, RS256).\n- **Payload**: Contains claims (statements about the user and additional data).\n- **Signature**: Used to verify that the sender is who they say they are and to ensure the message was not altered.'
+      },
+      {
+        title: 'Claims Validation & Security Scanner',
+        content: 'JWT security depends on robust validation. Always verify signatures, assert valid exp (expiration) and nbf (not before) parameters, check target audience (aud) values, and avoid putting sensitive keys or passwords inside public payloads.'
+      },
+      {
+        title: 'Symmetric vs Asymmetric Signatures',
+        content: 'HMAC algorithms (HS256, HS384, HS512) use a single shared secret to sign and verify tokens (symmetric). Public key signature algorithms (RS256, ES256, EdDSA) use a private key to sign and a public key to verify (asymmetric), ideal for decoupled distributed architectures.'
+      }
+    ]
+  },
+  {
+    id: 'WebsiteSeoAudit',
+    slug: 'website-seo-audit',
+    name: 'Website SEO Audit & Technical SEO Analyzer',
+    category: 'developer',
+    shortDescription: 'Audit your website technical and on-page SEO parameters client-side instantly.',
+    metaTitle: 'Free Website SEO Audit Tool — Technical SEO, On-Page SEO, Performance, Security & Schema Checker | Toolique',
+    metaDescription: 'Audit your website technical and on-page SEO parameters client-side instantly. Audit headings, sitemaps, structured schemas, meta tags, redirects, and robots.txt.',
+    keywords: [
+      'website seo audit',
+      'free seo audit',
+      'seo checker',
+      'website seo checker',
+      'technical seo audit',
+      'on page seo checker',
+      'seo analysis tool',
+      'website analyzer',
+      'seo score checker',
+      'free website audit'
+    ],
+    icon: 'Globe',
+    howToUse: [
+      'Enter the target website domain in URL scan mode or switch to Paste mode.',
+      'Watch the live scanner timeline evaluate headings outline, Open Graph social tags, JSON-LD schemas, security response headers, and robots.txt files.',
+      'Inspect errors, warnings, and passed signals categorized by Technical, On-Page, Security, and Accessibility.',
+      'Check specific paths with the Robots.txt Rule Indexability Tester.',
+      'Download custom PDF reports, copy fix code snippets, or print the checklists.'
+    ],
+    faqs: [
+      {
+        question: 'What is a Website SEO Audit?',
+        answer: 'A Website SEO Audit evaluates a website’s technical, on-page, accessibility, and security configurations to find issues that might limit search engine crawlability and keyword ranking potential.'
+      },
+      {
+        question: 'Is my URL or HTML content safe and private?',
+        answer: 'Yes. All parsing, HTML tags mapping, and heading tree extractions are processed entirely locally inside your browser sandbox. No content is stored or uploaded.'
+      },
+      {
+        question: 'Why does this tool run entirely client-side?',
+        answer: 'Running client-side ensures absolute privacy and completely prevents Server-Side Request Forgery (SSRF) security risks, local intranet exposures, or proxy abuses.'
+      },
+      {
+        question: 'How is the overall SEO score computed?',
+        answer: 'The score is a weighted calculation reflecting the ratio of passed, warning, and error signals across Technical SEO, Content Quality, Accessibility, Response Headers, and Structured Data.'
+      },
+      {
+        question: 'What is structured data / schema markup?',
+        answer: 'Structured data is a standardized format (JSON-LD) for providing search engines with explicit clues about the meaning of a page (e.g., specifying that it is a product, recipe, article, or software application).'
+      }
+    ],
+    sections: [
+      {
+        title: 'What is a Website SEO Audit?',
+        content: 'An SEO audit is a health check for your website that highlights technical issues, on-page layout errors, accessibility gaps, and security risks. Resolving these issues ensures search engines can fully crawl, index, and rank your content.'
+      },
+      {
+        title: 'Understanding Technical vs On-Page SEO',
+        content: 'Technical SEO refers to behind-the-scenes optimizations like SSL coverage, HSTS security headers, robots.txt crawl rules, canonical tags, and mobile-friendly viewport scaling. On-Page SEO involves optimizing visible content elements like title lengths, headings hierarchies, image alt descriptions, and keyword distribution.'
+      },
+      {
+        title: 'Why Structured Schema Markup is Crucial',
+        content: 'JSON-LD schema markups provide search engines with semantic context, enabling search engines to generate rich result snippets. While schema does not directly improve ranking algorithms, rich snippets significantly improve user click-through rates.'
+      },
+      {
+        title: 'Response Security Headers & SEO Impact',
+        content: 'HTTP security headers (such as Strict-Transport-Security, Content-Security-Policy, and X-Frame-Options) protect user communication protocols. Search engines favor secure, HTTPS-enforced applications to maintain browsing trust.'
+      }
+    ]
+  },
+  {
+    id: 'ApiTester',
+    slug: 'api-tester',
+    name: 'REST API Client & HTTP Request Tester',
+    category: 'developer',
+    shortDescription: 'Test REST API endpoints, inspect responses, build HTTP assertions, and export code snippets.',
+    metaTitle: 'Free Online API Tester — REST API Client, HTTP Request Builder & API Debugger | Toolique',
+    metaDescription: 'Send HTTP requests (GET, POST, PUT, DELETE), configure headers and query params, write testing assertions, validate JSON schema responses, and export python/curl snippets.',
+    keywords: [
+      'api tester',
+      'online api tester',
+      'rest api tester',
+      'api testing tool',
+      'http request tester',
+      'rest client',
+      'online rest client',
+      'api debugger',
+      'json api tester',
+      'free api tester',
+      'postman alternative'
+    ],
+    icon: 'Terminal',
+    howToUse: [
+      'Enter the target request URL, select HTTP methods, and configure authorization.',
+      'Add custom headers, query params, or JSON body payloads.',
+      'Click Send (or Ctrl + Enter) to fire the request directly in your browser.',
+      'Audit status code, response times, size metrics, headers, and collapsible pretty JSON output.',
+      'Export code snippets to cURL / Python, generate JSON Schema models, or run automated test assertions.'
+    ],
+    faqs: [
+      {
+        question: 'What is an Online API Tester?',
+        answer: 'An API tester is a utility allowing developers and QA engineers to send HTTP request configurations (GET, POST, PUT, DELETE, PATCH, etc.) to target backend servers and verify response payloads, headers, status codes, and connection latency metrics directly from the browser window.'
+      },
+      {
+        question: 'Why does CORS block some API calls?',
+        answer: 'Cross-Origin Resource Sharing (CORS) is a security guardrail built into modern browsers. If a target backend endpoint does not send appropriate headers allowing requests from your domain origin, the browser prevents reading the payload. Developers verify blocked APIs by copying cURL codes or executing them via CLI terminals.'
+      },
+      {
+        question: 'How do environment variables work?',
+        answer: 'Variables let you customize API endpoints without rewriting paths manually. Use braces such as {{baseUrl}} inside query inputs or URL bars, and switch staging databases (Development, Staging, Production) to swap values instantly.'
+      },
+      {
+        question: 'Are authorization keys secure?',
+        answer: 'Yes. All Bearer authentication strings, basic authentication passwords, and API key header values are saved exclusively in your browser session\'s local cache sandbox. No credentials leave your device.'
+      }
+    ],
+    sections: [
+      {
+        title: 'What is a REST API Client & HTTP Request Builder?',
+        content: 'An HTTP Request Builder allows developers to construct backend requests by choosing HTTP verbs (GET, POST, PUT, DELETE, etc.), mapping headers, appending query parameters, and embedding body payloads. This is essential for testing microservices and third-party APIs during development.'
+      },
+      {
+        title: 'Browser Security Restrictions: Troubleshooting CORS Blocks',
+        content: 'Browser-based clients are subject to CORS restrictions. If the target API doesn\'t return the header `Access-Control-Allow-Origin: *` or explicitly permit the origin, the browser will restrict access. In such cases, developers can export equivalent cURL commands to execute them safely in external environments.'
+      },
+      {
+        title: 'Automating Verification checks with Assertions Lab',
+        content: 'Assertions permit you to declare checks (e.g. status code equals 200, response latency under 1000ms) that run automatically upon response arrival, accelerating regression testing and QA sanity validations.'
+      },
+      {
+        title: 'Converting Responses to JSON Schema Models',
+        content: 'Quickly convert raw JSON response payloads into formal JSON Schema specifications, TypeScript interfaces, and Python structures. This facilitates contract testing and client integration mapping.'
+      }
+    ]
+  },
+  {
+    id: 'AdvancedDataCleaner',
+    slug: 'advanced-data-cleaner-quality-analyzer',
+    name: 'Advanced Data Cleaner & Quality Analyzer',
+    category: 'developer',
+    shortDescription: 'Upload CSV, JSON, or text datasets to profile cells completeness, run validations, merge duplicates, and export normalized tables.',
+    metaTitle: 'Free Online Data Cleaner & Quality Analyzer — CSV/JSON Profiler & Deduplicator | Toolique',
+    metaDescription: 'Audit dataset completeness, uniqueness, and validity. Normalize spaces and casings, find and merge duplicate record keys, detect outliers with IQR, and mask sensitive variables locally.',
+    keywords: [
+      'data cleaner',
+      'csv cleaner',
+      'csv analyzer',
+      'data quality checker',
+      'data cleaning tool',
+      'duplicate remover',
+      'csv validator',
+      'excel data cleaner',
+      'dataset analyzer',
+      'data profiling tool',
+      'csv quality checker',
+      'online data cleaner'
+    ],
+    icon: 'Table',
+    howToUse: [
+      'Upload a CSV, TSV, or JSON file, or load the default pre-loaded sample dataset.',
+      'Check the Quality Rating score dashboard to identify missing fields and duplicated records.',
+      'Use the Clean & Transform sub-tabs to trim whitespaces, normalize dates, strip currency signs, and mask sensitive fields.',
+      'Setup custom validation schema constraints to locate invalid formats.',
+      'Download the cleaned dataset as CSV or formatted JSON.'
+    ],
+    faqs: [
+      {
+        question: 'What is Data Profiling?',
+        answer: 'Data profiling evaluates datasets to collect statistics, determine structural constraints (like unique IDs or keys), calculate cell completeness rates, and map data types dynamically, giving developers an overall view of dataset health.'
+      },
+      {
+        question: 'How does the duplicate record key merger work?',
+        answer: 'Rather than dropping duplicated keys blindly, choose matching criteria columns (e.g. Email + Phone) and apply merge strategies: keep first, keep last, or manually inspect matching rows before trimming.'
+      },
+      {
+        question: 'What is the IQR outlier detection method?',
+        answer: 'Outliers represent values that differ significantly from other observations in a numeric array. Our engine identifies these points dynamically using the Interquartile Range (IQR) method: any value below Q1 - 1.5 * IQR or above Q3 + 1.5 * IQR is flagged as a potential outlier.'
+      },
+      {
+        question: 'Is my uploaded data safe and private?',
+        answer: 'Yes. All parsing, validation checks, and transformations are executed entirely locally inside your browser sandbox. No file data is sent to our servers.'
+      }
+    ],
+    sections: [
+      {
+        title: 'What is a Data Quality & Profiling Suite?',
+        content: 'A Data Quality Suite allows users to ingest CSV or JSON datasets, profile completeness and uniqueness characteristics, run custom schema checks, and apply deterministic transformations client-side to clean records for databases.'
+      },
+      {
+        title: 'Maintaining Strict Client-Side File Processing Privacy',
+        content: 'Toolique processes all cells, duplicates, and sensitive variables entirely locally in your browser memory sandbox. No files are stored or uploaded remotely, guaranteeing safety for financial spreadsheets.'
+      },
+      {
+        title: 'Dynamic Rating Computation and Validation Checklists',
+        content: 'Dataset health scores are calculated dynamically from actual metrics: completeness ratios (non-empty cells), uniqueness indexes (row duplicates), and format validity. Rules checking ensures zero invalid entries.'
+      },
+      {
+        title: 'Advanced Transformations: Formatting Dates, Currency, and Sensitive Masks',
+        content: 'Clean inputs by converting timezone formats, stripping symbols from currencies, masking sensitive email prefixes (e.g. j*****@example.com), and generating synthetic names for test environments.'
+      }
+    ]
+  },
+  {
+    id: 'WebsiteCrawler',
+    slug: 'website-crawler',
+    name: 'Website Crawler & Technical Link Spider',
+    category: 'developer',
+    shortDescription: 'Crawl website directories up to 10,000 URLs to analyze HTTP status codes, missing tags, links visibility, and site visual architecture.',
+    metaTitle: 'Free Website Crawler — Crawl Up to 10,000 Pages | Toolique',
+    metaDescription: 'Crawl and analyze up to 10,000 URLs from any website with detailed technical, SEO, links, content, HTTP, sitemaps, robots.txt, and security headers.',
+    keywords: [
+      'free website crawler',
+      'website crawler',
+      'seo crawler',
+      'technical seo crawler',
+      'website audit',
+      'broken link checker',
+      'website analyzer',
+      'technical website audit',
+      'sitemap checker',
+      'website seo audit'
+    ],
+    icon: 'Globe',
+    howToUse: [
+      'Enter the starting target website URL (e.g., https://example.com).',
+      'Configure crawler settings: max URLs (up to 10,000), depth limit, robots.txt options, and subdomain settings.',
+      'Click Start to run the spider. Watch the queue updates, fetching latency speeds, and crawled pages logs in real-time.',
+      'Explore crawled pages list, technical issue groups, and the interactive SVG visual site architecture tree.',
+      'Export results as CSV tables, download crawl comparison logs, or clear history.'
+    ],
+    faqs: [
+      {
+        question: 'What is a Website Crawler?',
+        answer: 'A website crawler is an automated bot that discovers links across pages sequentially to parse metadata, index status parameters, broken resources, headings outlines, and construct a visual layout representation of a site\'s depth hierarchy.'
+      },
+      {
+        question: 'Why does CORS block some browser crawls?',
+        answer: 'Modern browser sandboxes enforce Cross-Origin Resource Sharing (CORS) rules. If a destination website does not return wildcard headers (Access-Control-Allow-Origin: *), the browser blocks direct fetching requests for security reasons.'
+      },
+      {
+        question: 'How does robots.txt disallow rules work?',
+        answer: 'The robots.txt file defines crawl directives for different search engines. Directives like Disallow: /admin/ inform the crawler which sections are private, preventing requests to restricted folders.'
+      },
+      {
+        question: 'Is my crawl data private?',
+        answer: 'Yes. All parsed details, links, images, and sitemaps are written to your local browser IndexedDB. No page data leaves your local device.'
+      }
+    ],
+    sections: [
+      {
+        title: 'What is a Website Crawler & Link Spider?',
+        content: 'A website crawler is an automated spider that parses HTML structures client-side to extract references, mapping out sitemap links, indexability categories, and redirects chains.'
+      },
+      {
+        title: 'Respecting robots.txt Directives and Crawling Politeness',
+        content: 'Directives declare which directories are crawlable. The crawler automatically loads /robots.txt to match rules and apply delay throttles, avoiding request flooding.'
+      },
+      {
+        title: 'Troubleshooting CORS Network Block Skipped Pages',
+        content: 'Client-side scripts are subject to browser CORS blocks. If external hosts restrict access, pages are flagged as skipped. You can test local domains or CORS-friendly test endpoints.'
+      },
+      {
+        title: 'Client-Side IndexedDB Storage and Data Protection',
+        content: 'All crawl runs metadata, image lists, and issues are stored locally inside IndexedDB. No data is stored on remote servers, providing strict privacy controls.'
       }
     ]
   },
