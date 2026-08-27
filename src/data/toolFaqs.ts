@@ -2057,6 +2057,66 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "The tool is hosted publically at Toolique. For custom integrations, contact the administrator."
     }
   ],
+  "WebsiteSeoAudit": [
+    {
+      "question": "What is the main purpose of the Website SEO Audit?",
+      "answer": "The Website SEO Audit is designed to help users diagnose, validate, and optimize HTML elements, heading outlines, JSON-LD schemas, robots.txt crawler rules, and security headers locally in the browser."
+    },
+    {
+      "question": "Is my HTML source code safe with Website SEO Audit?",
+      "answer": "Yes. The auditing engine parses all tags, metadata lengths, and structured data blocks entirely client-side. No content, header details, or URLs are sent to our servers."
+    },
+    {
+      "question": "Does this tool verify structured data Rich Snippets eligibility?",
+      "answer": "No. The analyzer checks JSON syntax validity and key properties of structured data. Google Search Console remains the official standard for rich snippet eligibility validations."
+    },
+    {
+      "question": "Can I test if robots.txt blocks specific subdirectories?",
+      "answer": "Yes! Use the Robots.txt Rule Indexability Tester by typing a path like /admin/ to check if Disallow statements block crawlers."
+    }
+  ],
+  "ApiTester": [
+    {
+      "question": "What is the main purpose of the REST API Client & HTTP Request Tester?",
+      "answer": "The API Tester is a client-side debugger designed to help developers construct requests, map custom query parameters, inspect response bodies and headers, run assert tests, and export runnable code snippets."
+    },
+    {
+      "question": "Why does CORS block requests in the API Tester?",
+      "answer": "Browser security sandboxes enforce Cross-Origin Resource Sharing (CORS). If target servers do not return access-control wildcard headers, browser scripts are blocked. You can export the request as equivalent cURL commands to execute them locally in CLI terminals."
+    },
+    {
+      "question": "How are environment variables and authentication keys handled?",
+      "answer": "All variables, Bearer tokens, passwords, and custom collection objects are stored locally in your browser's private localStorage. No secret credentials are sent to our servers."
+    }
+  ],
+  "AdvancedDataCleaner": [
+    {
+      "question": "What is the main purpose of the Advanced Data Cleaner & Quality Analyzer?",
+      "answer": "The Advanced Data Cleaner & Quality Analyzer is a browser-based suite that evaluates dataset files locally, profiles statistics, runs validation schema checks, merges duplicate entries, and formats currencies and casing."
+    },
+    {
+      "question": "Is my dataset file data private and safe?",
+      "answer": "Yes. All parsing and transformations execute client-side. No rows, columns, or cell values are uploaded to Toolique servers."
+    },
+    {
+      "question": "How does the duplicate record detector determine duplicate keys?",
+      "answer": "You can select custom composite key columns (e.g. Email + Phone) to scan for duplicates. Once detected, you can apply merge strategies (keep first, keep last) to clean records."
+    }
+  ],
+  "WebsiteCrawler": [
+    {
+      "question": "What is the main purpose of the Website Crawler?",
+      "answer": "The Website Crawler is a browser-based spider that discovers links across web directories sequentially to evaluate status codes, titles, descriptions, and headings trees."
+    },
+    {
+      "question": "Why are some pages skipped due to CORS blocks?",
+      "answer": "Browser security sandboxes enforce CORS rules. If external target servers do not return origin wildcards, fetches fail. You can crawl local domains or sandbox test sites."
+    },
+    {
+      "question": "Where is my crawled pages data stored?",
+      "answer": "All session metadata, parsed image properties, and discovered sitemaps reside inside your browser's local IndexedDB. No data is stored or uploaded."
+    }
+  ],
   "UUIDGenerator": [
     {
       "question": "What is the main purpose of the UUID Generator?",
