@@ -2337,20 +2337,28 @@ export const toolsList: Tool[] = [
     ],
     "sections": [
       {
-        "title": "What is Floor Area Ratio & Floor Space Index?",
-        "content": "FAR and FSI are terms describing the density limit of a plot. Mathematically, they represent the total gross floor area divided by the net plot size. FSI is expressed as a ratio (e.g. 1.5, 2.5) while FAR is represented as a percentage (e.g. 150%, 250%). Municipal planning authorities use these indices to restrict building volumes to align with local infrastructure capacities."
+        "title": "What is Floor Area Ratio (FAR) & Floor Space Index (FSI)?",
+        "content": "Floor Area Ratio (FAR) and Floor Space Index (FSI) are town planning density limits that determine the maximum buildable floor area allowed on a piece of land. Mathematically, FSI is a decimal ratio (e.g., 1.5, 2.5) while FAR is represented as a percentage (e.g., 150%, 250%). For example, an FSI of 2.0 (or 200% FAR) on a 2,000 sq ft plot allows you to construct a maximum of 4,000 sq ft of total built-up area across all floor levels combined."
       },
       {
-        "title": "FAR & FSI Formula",
-        "content": "The fundamental mathematical formulas are:\n- **FSI** = Total Built-up Area / Plot Area\n- **FAR (%)** = (Total Built-up Area / Plot Area) × 100\n- **Permissible Built-up Area** = Plot Area × Permissible FSI\n- **Required Plot Area** = Desired Floor Area / Permissible FSI"
+        "title": "FSI & FAR Formula",
+        "content": "The mathematical equations governing FSI are simple and direct:\n\n• Floor Space Index (FSI) = Total Built-up Area / Plot Area\n• Floor Area Ratio (FAR) = (Total Built-up Area / Plot Area) × 100\n• Permissible Built-up Area = Plot Area × Permissible FSI\n• Required Plot Area = Desired Floor Area / Permissible FSI"
       },
       {
         "title": "FSI and Ground Coverage Relationship",
-        "content": "Ground coverage controls the maximum building footprint on the soil. A ground coverage of 40% means only 40% of the plot area can be built on at the ground level. The remaining 60% must be left open to the sky for setbacks, driveways, and landscaping. FSI dictates how high you can stack this footprint. For instance, on a 5,000 sq ft plot with 40% coverage (2,000 sq ft footprint) and FSI 2.0 (10,000 sq ft total area), you can build 5 floors of 2,000 sq ft each."
+        "content": "Ground coverage restricts the horizontal footprint of the building on the soil, while FSI controls the vertical volume. For instance, on a 5,000 sq ft plot with 40% ground coverage (2,000 sq ft maximum footprint) and an FSI of 2.0 (10,000 sq ft total permissible area), the ground floor footprint cannot exceed 2,000 sq ft. To fully utilize the 10,000 sq ft construction potential, you would stack five identical floor levels of 2,000 sq ft each."
       },
       {
-        "title": "Factors Affecting Permissible Development",
-        "content": "Constructing a building involves multiple overlapping codes:\n- **Setbacks**: Minimum open spaces left on the front, rear, and sides of a building.\n- **Road Width**: Permissible FSI often increases as front road width increases (e.g., 9m vs 12m road).\n- **Zoning Classification**: Residential, commercial, mixed-use, or industrial zones have different base FSI tables."
+        "title": "Step-by-Step FSI Area Calculation Example",
+        "content": "Let's calculate the permissible building potential for a typical residential plot in India:\n\n1. Plot Dimensions: 40 ft width by 60 ft depth = 2,400 sq ft plot area.\n2. Permissible FSI: 1.75 (from local municipal bye-laws).\n3. Maximum Ground Coverage: 50% (allows a 1,200 sq ft footprint).\n4. Total Permissible Built-up Area = 2,400 sq ft × 1.75 = 4,200 sq ft.\n5. Floor Plan Strategy:\n   - Ground Floor: 1,200 sq ft (utilizing full coverage)\n   - First Floor: 1,200 sq ft\n   - Second Floor: 1,200 sq ft\n   - Third Floor: 600 sq ft (remaining FSI capacity)\n   - Total Built-up: 4,200 sq ft (Exactly utilizing FSI limit)"
+      },
+      {
+        "title": "FSI Exclusions: What is Exempted from FSI?",
+        "content": "Not all constructed spaces count toward your permissible FSI. Under most Indian municipal rules (like MCGM DCPR 2034 or BBMP bye-laws), the following areas are usually 'Free of FSI' (excluded):\n\n• Basement areas used exclusively for car parking or installation of machinery/utilities.\n• Open-to-sky balconies, terraces, and ventilation shafts.\n• Staircase cabins, lift shafts, and common lift lobbies.\n• Stilt parking floors left open to the elements.\n• Fire escape staircases and refuge areas."
+      },
+      {
+        "title": "Gross Plot Area vs. Net Plot Area (Road Widening)",
+        "content": "FSI calculations are always based on the Net Plot Area, not the gross land area. If a portion of your plot is zoned for municipal road widening, public amenity reservations, or green belt setback dedication, that area must be deducted first. Permissible built-up area is then calculated using the remaining net plot size, though some authorities offer Compensatory FSI or Transferable Development Rights (TDR) for the surrendered land."
       }
     ]
   },

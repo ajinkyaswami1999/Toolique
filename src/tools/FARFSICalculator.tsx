@@ -26,17 +26,49 @@ interface HistoryItem {
   timestamp: string;
 }
 
+// --- Location Presets Matrix ---
+const locationPresets: Record<string, Record<string, Record<string, {
+  fsi: number;
+  authority: string;
+  doc: string;
+  verified: string;
+  notes: string;
+}>>> = {
+  maharashtra: {
+    mumbai: {
+      residential: { fsi: 2.50, authority: "MCGM", doc: "DCPR 2034", verified: "10 Mar 2026", notes: "Suburbs base FSI, premium FSI up to 0.50 can be purchased." },
+      commercial: { fsi: 3.00, authority: "MCGM", doc: "DCPR 2034", verified: "10 Mar 2026", notes: "Zonal commercial base indexes. Excludes staircase and lifts." }
+    },
+    pune: {
+      residential: { fsi: 1.10, authority: "PMC", doc: "Pune UDCPR", verified: "14 Jan 2026", notes: "Pune Municipal Corporation base suburban FSI limit." },
+      commercial: { fsi: 2.50, authority: "PMC", doc: "Pune UDCPR", verified: "14 Jan 2026", notes: "Subject to front road width and premium loading." }
+    }
+  },
+  delhi: {
+    delhi: {
+      residential: { fsi: 2.00, authority: "DDA", doc: "Delhi MPD 2021", verified: "05 Feb 2026", notes: "Delhi Development Authority standard plotted residential index." },
+      commercial: { fsi: 3.50, authority: "DDA", doc: "Delhi MPD 2021", verified: "05 Feb 2026", notes: "Core commercial nodes and high-density zones." }
+    }
+  },
+  karnataka: {
+    bengaluru: {
+      residential: { fsi: 1.75, authority: "BBMP", doc: "BBMP Building Bye-Laws", verified: "20 Feb 2026", notes: "Applicable for plots fronting roads wider than 9 meters." },
+      commercial: { fsi: 3.25, authority: "BBMP", doc: "BBMP Building Bye-Laws", verified: "20 Feb 2026", notes: "Excludes specific services ducts and parking basements." }
+    }
+  }
+};
+
 export default function FARFSICalculator() {
   // 1. Calculator Modes Toggles
   const [calcMode, setCalcMode] = useState<'forward' | 'reverse'>('forward');
   const [isProfessional, setIsProfessional] = useState<boolean>(false);
   const [unit, setUnit] = useState<UnitType>('sqft');
+  const lengthUnit = (unit === 'sqm' || unit === 'hectare') ? 'm' : 'ft';
 
   // 2. Core Inputs
   const [plotArea, setPlotArea] = useState<number>(2000);
   const [permissibleFsi, setPermissibleFsi] = useState<number>(2.0);
   const [groundCoverage, setGroundCoverage] = useState<number>(50); // %
-  const [numFloors, setNumFloors] = useState<number>(4);
   const [avgFloorHeight, setAvgFloorHeight] = useState<number>(3.0); // meters or 10 ft
   const [roadWidth, setRoadWidth] = useState<number>(12); // meters or 40 ft
   const [plotWidth, setPlotWidth] = useState<number>(40); // ft or meters
@@ -57,6 +89,7 @@ export default function FARFSICalculator() {
     { id: '3', name: 'Second Floor', area: 1000 },
     { id: '4', name: 'Third Floor', area: 1000 }
   ]);
+  const numFloors = plannedFloors.length;
 
   // 4. Reverse Calculator Inputs
   const [revMode, setRevMode] = useState<ReverseMode>('max_builtup');
@@ -84,16 +117,24 @@ export default function FARFSICalculator() {
   const [newHistoryName, setNewHistoryName] = useState<string>('My Plot Plan');
 
   // --- Area Unit Conversion Factor (Relative to sq ft) ---
-  const conversionFactors: Record<UnitType, number> = {
-    sqft: 1.0,
-    sqm: 10.7639,
-    sqyd: 9.0,
-    acre: 43560.0,
-    hectare: 107639.1,
-    cent: 435.6,
-    guntha: 1089.0,
-    bigha: 27000.0 // Standard/UP Bigha = 27,000 sq ft
-  };
+  const conversionFactors = useMemo((): Record<UnitType, number> => {
+    let bighaFactor = 27000.0; // Default UP/Delhi
+    if (statePreset === 'maharashtra') {
+      bighaFactor = 22500.0; // Maharashtra standard
+    } else if (statePreset === 'karnataka') {
+      bighaFactor = 27225.0; // Karnataka standard
+    }
+    return {
+      sqft: 1.0,
+      sqm: 10.7639,
+      sqyd: 9.0,
+      acre: 43560.0,
+      hectare: 107639.1,
+      cent: 435.6,
+      guntha: 1089.0,
+      bigha: bighaFactor
+    };
+  }, [statePreset]);
 
   // Convert current plot area when changing units
   const handleUnitSwitch = (newUnit: UnitType) => {
@@ -107,48 +148,28 @@ export default function FARFSICalculator() {
     setUnit(newUnit);
   };
 
-  // Load calculation history on mount
+  // Load calculation history and URL parameters on mount
   useEffect(() => {
     const cached = localStorage.getItem('toolique_far_hist');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (cached) setHistoryList(JSON.parse(cached));
-  }, []);
 
-  // --- Location Presets Matrix ---
-  const locationPresets: Record<string, Record<string, Record<string, {
-    fsi: number;
-    authority: string;
-    doc: string;
-    verified: string;
-    notes: string;
-  }>>> = {
-    maharashtra: {
-      mumbai: {
-        residential: { fsi: 2.50, authority: "MCGM", doc: "DCPR 2034", verified: "10 Mar 2026", notes: "Suburbs base FSI, premium FSI up to 0.50 can be purchased." },
-        commercial: { fsi: 3.00, authority: "MCGM", doc: "DCPR 2034", verified: "10 Mar 2026", notes: "Zonal commercial base indexes. Excludes staircase and lifts." }
-      },
-      pune: {
-        residential: { fsi: 1.10, authority: "PMC", doc: "Pune UDCPR", verified: "14 Jan 2026", notes: "Pune Municipal Corporation base suburban FSI limit." },
-        commercial: { fsi: 2.50, authority: "PMC", doc: "Pune UDCPR", verified: "14 Jan 2026", notes: "Subject to front road width and premium loading." }
-      }
-    },
-    delhi: {
-      delhi: {
-        residential: { fsi: 2.00, authority: "DDA", doc: "Delhi MPD 2021", verified: "05 Feb 2026", notes: "Delhi Development Authority standard plotted residential index." },
-        commercial: { fsi: 3.50, authority: "DDA", doc: "Delhi MPD 2021", verified: "05 Feb 2026", notes: "Core commercial nodes and high-density zones." }
-      }
-    },
-    karnataka: {
-      bengaluru: {
-        residential: { fsi: 1.75, authority: "BBMP", doc: "BBMP Building Bye-Laws", verified: "20 Feb 2026", notes: "Applicable for plots fronting roads wider than 9 meters." },
-        commercial: { fsi: 3.25, authority: "BBMP", doc: "BBMP Building Bye-Laws", verified: "20 Feb 2026", notes: "Excludes specific services ducts and parking basements." }
-      }
-    }
-  };
+    const params = new URLSearchParams(window.location.search);
+    const urlPlotArea = params.get('plotArea');
+    const urlFsi = params.get('fsi');
+    const urlMode = params.get('mode');
+    const urlUnit = params.get('unit');
+    
+    if (urlPlotArea) setPlotArea(parseFloat(urlPlotArea) || 2000);
+    if (urlFsi) setPermissibleFsi(parseFloat(urlFsi) || 2.0);
+    if (urlMode === 'forward' || urlMode === 'reverse') setCalcMode(urlMode as 'forward' | 'reverse');
+    if (urlUnit) setUnit(urlUnit as UnitType);
+  }, []);
 
   const activePreset = useMemo(() => {
     try {
       return locationPresets[statePreset]?.[cityPreset]?.[zonePreset] || null;
-    } catch (e) {
+    } catch {
       return null;
     }
   }, [statePreset, cityPreset, zonePreset]);
@@ -165,18 +186,9 @@ export default function FARFSICalculator() {
     const areaFactor = conversionFactors[unit];
     const plotAreaSqft = plotArea * areaFactor;
 
-    // Built-up capacities
-    const permissibleBuiltUpSqft = plotAreaSqft * permissibleFsi;
-    const maxGroundFootprintSqft = plotAreaSqft * (groundCoverage / 100);
-
-    // Dynamic Floor Area Planner Math
-    const totalPlannedBuiltUpSqft = plannedFloors.reduce((sum, f) => sum + (f.area || 0), 0) * (unit === 'sqft' ? 1 : areaFactor);
-    const utilizedFsi = plotAreaSqft > 0 ? (totalPlannedBuiltUpSqft / plotAreaSqft) : 0;
-    const remainingBuiltUpSqft = permissibleBuiltUpSqft - totalPlannedBuiltUpSqft;
-    const fsiUtilizationPercentage = permissibleBuiltUpSqft > 0 ? (totalPlannedBuiltUpSqft / permissibleBuiltUpSqft) * 100 : 0;
-
     // Footprint constraints under setbacks
     let setbackReductionFactor = 1.0;
+    let setbackLimitAreaSqft = Infinity;
     if (isProfessional && plotWidth > 0 && plotDepth > 0) {
       const netWidth = Math.max(0, plotWidth - setbackLeft - setbackRight);
       const netDepth = Math.max(0, plotDepth - setbackFront - setbackRear);
@@ -185,7 +197,21 @@ export default function FARFSICalculator() {
       if (nominalArea > 0) {
         setbackReductionFactor = buildableAreaRect / nominalArea;
       }
+      const isMetric = unit === 'sqm' || unit === 'hectare';
+      setbackLimitAreaSqft = isMetric ? (buildableAreaRect * conversionFactors['sqm']) : buildableAreaRect;
     }
+
+    // Built-up capacities
+    const permissibleBuiltUpSqft = plotAreaSqft * permissibleFsi;
+    const maxGroundFootprintSqft = isProfessional && plotWidth > 0 && plotDepth > 0
+      ? Math.min(plotAreaSqft * (groundCoverage / 100), setbackLimitAreaSqft)
+      : plotAreaSqft * (groundCoverage / 100);
+
+    // Dynamic Floor Area Planner Math
+    const totalPlannedBuiltUpSqft = plannedFloors.reduce((sum, f) => sum + (f.area || 0), 0) * (unit === 'sqft' ? 1 : areaFactor);
+    const utilizedFsi = plotAreaSqft > 0 ? (totalPlannedBuiltUpSqft / plotAreaSqft) : 0;
+    const remainingBuiltUpSqft = permissibleBuiltUpSqft - totalPlannedBuiltUpSqft;
+    const fsiUtilizationPercentage = permissibleBuiltUpSqft > 0 ? (totalPlannedBuiltUpSqft / permissibleBuiltUpSqft) * 100 : 0;
 
     // Status indicators
     let statusLabel = 'Low utilization';
@@ -224,7 +250,8 @@ export default function FARFSICalculator() {
     setbackFront,
     setbackRear,
     setbackLeft,
-    setbackRight
+    setbackRight,
+    conversionFactors
   ]);
 
   // --- Dynamic Floor Management ---
@@ -253,10 +280,6 @@ export default function FARFSICalculator() {
     setPlannedFloors(plannedFloors.map(f => f.id === id ? { ...f, area: val } : f));
   };
 
-  // Sync floor count when changing floors state
-  useEffect(() => {
-    setNumFloors(plannedFloors.length);
-  }, [plannedFloors]);
 
   // Sync floor elements when modifying floors input number
   const handleFloorsCountChange = (val: number) => {
@@ -294,7 +317,7 @@ export default function FARFSICalculator() {
       remainingFsi: pArea > 0 ? Math.max(0, fsiVal - (plannedArea / pArea)) : 0,
       remainingBuiltUpArea: Math.max(0, (pArea * fsiVal) - plannedArea)
     };
-  }, [revDesiredFloorArea, revPlotArea, revFsi, revFootprint, revPlannedArea, revMode]);
+  }, [revDesiredFloorArea, revPlotArea, revFsi, revFootprint, revPlannedArea]);
 
   // --- Multi Scenario comparisons ---
   const comparisonResults = useMemo(() => {
@@ -455,9 +478,10 @@ Status Audit         : ${calculations.statusLabel}`;
 
   const getShareLink = () => {
     const params = new URLSearchParams();
-    params.set('amount', plotArea.toString());
-    params.set('rate', permissibleFsi.toString());
+    params.set('plotArea', plotArea.toString());
+    params.set('fsi', permissibleFsi.toString());
     params.set('mode', calcMode);
+    params.set('unit', unit);
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
   };
 
@@ -553,7 +577,7 @@ Status Audit         : ${calculations.statusLabel}`;
                     <option value="hectare">Hectares</option>
                     <option value="cent">Cents</option>
                     <option value="guntha">Gunthas</option>
-                    <option value="bigha">Bigha (UP)</option>
+                    <option value="bigha">Bigha</option>
                   </select>
                 </div>
                 <input
@@ -562,6 +586,11 @@ Status Audit         : ${calculations.statusLabel}`;
                   onChange={(e) => setPlotArea(Math.max(0, parseFloat(e.target.value) || 0))}
                   className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono text-xs font-bold focus:outline-none"
                 />
+                {unit === 'bigha' && (
+                  <p className="text-[9px] text-zinc-500 dark:text-zinc-400 font-medium italic mt-1 leading-normal">
+                    ℹ️ Bigha conversion standard is set to {(conversionFactors.bigha).toLocaleString()} sq ft based on the {statePreset.charAt(0).toUpperCase() + statePreset.slice(1)} preset.
+                  </p>
+                )}
               </div>
 
               {/* Permissible FSI Index */}
@@ -627,7 +656,7 @@ Status Audit         : ${calculations.statusLabel}`;
                 <div className="p-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-zinc-850 space-y-4 pt-4 border-t">
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Road Width (m)</label>
+                      <label className="text-[9px] font-black uppercase text-zinc-400">Road Width ({lengthUnit})</label>
                       <input
                         type="number"
                         value={roadWidth}
@@ -653,20 +682,32 @@ Status Audit         : ${calculations.statusLabel}`;
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Plot Width</label>
+                      <label className="text-[9px] font-black uppercase text-zinc-400">Plot Width ({lengthUnit})</label>
                       <input
                         type="number"
                         value={plotWidth}
-                        onChange={(e) => setPlotWidth(Math.max(1, parseFloat(e.target.value) || 0))}
+                        onChange={(e) => {
+                          const val = Math.max(1, parseFloat(e.target.value) || 0);
+                          setPlotWidth(val);
+                          if (isProfessional && plotDepth > 0) {
+                            setPlotArea(val * plotDepth);
+                          }
+                        }}
                         className="w-full px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-850 rounded text-xs font-mono font-bold"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Plot Depth</label>
+                      <label className="text-[9px] font-black uppercase text-zinc-400">Plot Depth ({lengthUnit})</label>
                       <input
                         type="number"
                         value={plotDepth}
-                        onChange={(e) => setPlotDepth(Math.max(1, parseFloat(e.target.value) || 0))}
+                        onChange={(e) => {
+                          const val = Math.max(1, parseFloat(e.target.value) || 0);
+                          setPlotDepth(val);
+                          if (isProfessional && plotWidth > 0) {
+                            setPlotArea(plotWidth * val);
+                          }
+                        }}
                         className="w-full px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-850 rounded text-xs font-mono font-bold"
                       />
                     </div>
@@ -674,7 +715,7 @@ Status Audit         : ${calculations.statusLabel}`;
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Avg Floor Height (m)</label>
+                      <label className="text-[9px] font-black uppercase text-zinc-400">Avg Floor Height ({lengthUnit})</label>
                       <input
                         type="number"
                         step="0.1"
@@ -700,7 +741,7 @@ Status Audit         : ${calculations.statusLabel}`;
 
                   {/* Setbacks */}
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase text-zinc-400 block">Setbacks Clearance Guidelines</label>
+                    <label className="text-[9px] font-black uppercase text-zinc-400 block">Setbacks Clearance Guidelines ({lengthUnit})</label>
                     <div className="grid grid-cols-4 gap-2">
                       <div className="space-y-0.5">
                         <span className="text-[8px] text-zinc-400 uppercase block">Front</span>
