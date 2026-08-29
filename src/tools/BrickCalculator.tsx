@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Ruler, Copy, Check, RotateCcw } from 'lucide-react';
 import { getStoredRates, saveStoredRates, DEFAULT_CIVIL_RATES } from '../data/civilRatesData';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
@@ -33,16 +33,7 @@ export default function BrickCalculator() {
   const [copied, setCopied] = useState<boolean>(false);
   const [prices, setPrices] = useState(getStoredRates());
 
-  const [results, setResults] = useState({
-    numBricks: 0,
-    mortarVolume: 0, // cu m
-    cementBags: 0,
-    sandCuft: 0,
-    brickCost: 0,
-    cementCost: 0,
-    sandCost: 0,
-    totalCost: 0,
-  });
+
 
   // Listen for storage events to sync rates across calculators in real-time
   useEffect(() => {
@@ -53,7 +44,7 @@ export default function BrickCalculator() {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  useEffect(() => {
+  const results = useMemo(() => {
     // 1. Calculate wall volume u/s cubic meters
     const wallVolM3 = (wallLength * 0.3048) * (wallHeight * 0.3048) * ((thickness / 12) * 0.3048);
 
@@ -72,7 +63,7 @@ export default function BrickCalculator() {
     // 5. Compute mortar volume (in cubic meters)
     const cleanBricks = wallVolM3 / bVolWithMortar;
     const totalBrickVol = cleanBricks * bVol;
-    let wetMortarVol = wallVolM3 - totalBrickVol;
+    const wetMortarVol = wallVolM3 - totalBrickVol;
 
     // Expand wet mortar to dry volume (dry volume is approx 1.33 times wet volume)
     const dryMortarVol = wetMortarVol * 1.33;
@@ -98,7 +89,7 @@ export default function BrickCalculator() {
     const sandCost = roundedSand * (prices.sand || DEFAULT_CIVIL_RATES.sand);
     const totalCost = brickCost + cementCost + sandCost;
 
-    setResults({
+    return {
       numBricks: roundedBricks,
       mortarVolume: Number(wetMortarVol.toFixed(3)),
       cementBags: roundedCement,
@@ -107,7 +98,7 @@ export default function BrickCalculator() {
       cementCost: Math.round(cementCost),
       sandCost: Math.round(sandCost),
       totalCost: Math.round(totalCost),
-    });
+    };
   }, [wallLength, wallHeight, thickness, brickType, mortarRatio, wastage, prices]);
 
   const handlePriceChange = (key: keyof typeof DEFAULT_CIVIL_RATES, val: number) => {

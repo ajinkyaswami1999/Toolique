@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Ruler, Copy, Check, RotateCcw } from 'lucide-react';
 import { getStoredRates, saveStoredRates, DEFAULT_CIVIL_RATES } from '../data/civilRatesData';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
@@ -29,18 +29,7 @@ export default function ConcreteCalculator() {
   const [copied, setCopied] = useState<boolean>(false);
   const [prices, setPrices] = useState(getStoredRates());
 
-  const [results, setResults] = useState({
-    wetVolume: 0,
-    dryVolume: 0,
-    cementBags: 0,
-    sandCuft: 0,
-    aggregateCuft: 0,
-    waterLiters: 0,
-    cementCost: 0,
-    sandCost: 0,
-    aggregateCost: 0,
-    totalCost: 0,
-  });
+
 
   // Listen for storage events to sync rates across calculators in real-time
   useEffect(() => {
@@ -51,8 +40,8 @@ export default function ConcreteCalculator() {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  useEffect(() => {
-    let volM3 = 0;
+  const results = useMemo(() => {
+    let volM3: number;
     
     // Calculate wet volume in cubic meters
     if (unit === 'ft') {
@@ -99,7 +88,7 @@ export default function ConcreteCalculator() {
     const aggregateCost = roundedAggregate * (prices.aggregate || DEFAULT_CIVIL_RATES.aggregate);
     const totalCost = cementCost + sandCost + aggregateCost;
 
-    setResults({
+    return {
       wetVolume: Number(wetVolume.toFixed(3)),
       dryVolume: Number(dryVolume.toFixed(3)),
       cementBags: roundedCement,
@@ -110,7 +99,7 @@ export default function ConcreteCalculator() {
       sandCost: Math.round(sandCost),
       aggregateCost: Math.round(aggregateCost),
       totalCost: Math.round(totalCost),
-    });
+    };
   }, [length, width, thickness, unit, mix, wastage, prices]);
 
   const handlePriceChange = (key: keyof typeof DEFAULT_CIVIL_RATES, val: number) => {

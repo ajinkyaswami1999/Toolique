@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Compass, Copy, Check, RotateCcw } from 'lucide-react';
 
 export default function StaircaseCalculator() {
@@ -8,18 +8,20 @@ export default function StaircaseCalculator() {
   const [desiredTread, setDesiredTread] = useState<number>(10.5); // inches
   const [copied, setCopied] = useState<boolean>(false);
 
-  const [results, setResults] = useState({
-    numRisers: 0,
-    actualRiser: 0,
-    numTreads: 0,
-    totalRun: 0,
-    stairAngle: 0,
-    isCompliant: true,
-    complianceText: '',
-  });
 
-  useEffect(() => {
-    if (totalRise <= 0 || desiredRiser <= 0) return;
+
+  const results = useMemo(() => {
+    if (totalRise <= 0 || desiredRiser <= 0) {
+      return {
+        numRisers: 0,
+        actualRiser: 0,
+        numTreads: 0,
+        totalRun: 0,
+        stairAngle: 0,
+        isCompliant: true,
+        complianceText: 'Enter valid measurements',
+      };
+    }
 
     // Calculate number of risers (round to nearest whole number)
     const numRisers = Math.round(totalRise / desiredRiser) || 1;
@@ -65,7 +67,7 @@ export default function StaircaseCalculator() {
       }
     }
 
-    setResults({
+    return {
       numRisers,
       actualRiser: Number(actualRiser.toFixed(2)),
       numTreads,
@@ -73,7 +75,7 @@ export default function StaircaseCalculator() {
       stairAngle: Number(stairAngle.toFixed(1)),
       isCompliant,
       complianceText,
-    });
+    };
   }, [totalRise, desiredRiser, desiredTread, unit]);
 
   const copyReport = () => {

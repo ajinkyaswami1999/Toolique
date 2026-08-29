@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Layers, Copy, Check, RotateCcw } from 'lucide-react';
 import { getStoredRates, saveStoredRates, DEFAULT_CIVIL_RATES } from '../data/civilRatesData';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
@@ -9,19 +9,7 @@ export default function BOQCalculator() {
   const [copied, setCopied] = useState<boolean>(false);
   const [prices, setPrices] = useState(getStoredRates());
 
-  const [materials, setMaterials] = useState({
-    cementBags: 0,
-    cementCost: 0,
-    sandCuft: 0,
-    sandCost: 0,
-    aggregateCuft: 0,
-    aggregateCost: 0,
-    steelKg: 0,
-    steelCost: 0,
-    bricksCount: 0,
-    bricksCost: 0,
-    totalEstimatedCost: 0,
-  });
+
 
   // Listen for storage events to sync rates across calculators in real-time
   useEffect(() => {
@@ -32,7 +20,7 @@ export default function BOQCalculator() {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  useEffect(() => {
+  const materials = useMemo(() => {
     const totalBuiltArea = area * floors;
 
     // Rules of thumb for standard residential RCC construction u/s Indian conditions
@@ -50,7 +38,7 @@ export default function BOQCalculator() {
 
     const totalCost = cementCost + sandCost + aggregateCost + steelCost + bricksCost;
 
-    setMaterials({
+    return {
       cementBags: Math.round(cementBags),
       cementCost: Math.round(cementCost),
       sandCuft: Math.round(sandCuft),
@@ -62,7 +50,7 @@ export default function BOQCalculator() {
       bricksCount: Math.round(bricksCount),
       bricksCost: Math.round(bricksCost),
       totalEstimatedCost: Math.round(totalCost),
-    });
+    };
   }, [area, floors, prices]);
 
   const handlePriceChange = (key: keyof typeof DEFAULT_CIVIL_RATES, val: number) => {

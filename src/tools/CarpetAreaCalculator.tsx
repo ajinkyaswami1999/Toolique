@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Compass, Copy, Check, RotateCcw } from 'lucide-react';
 
 export default function CarpetAreaCalculator() {
@@ -10,19 +10,12 @@ export default function CarpetAreaCalculator() {
   const [loadingRatio, setLoadingRatio] = useState<number>(25); // % loading for common areas
   const [copied, setCopied] = useState<boolean>(false);
 
-  const [results, setResults] = useState({
-    carpetArea: 0,
-    internalWalls: 0,
-    reraCarpet: 0,
-    balconyArea: 0,
-    builtupArea: 0,
-    superBuiltupArea: 0,
-  });
 
-  useEffect(() => {
-    let carpet = 0;
-    let builtup = 0;
-    let superBuiltup = 0;
+
+  const results = useMemo(() => {
+    let carpet: number;
+    let builtup: number;
+    let superBuiltup: number;
 
     if (inputType === 'carpet') {
       carpet = inputValue;
@@ -49,14 +42,14 @@ export default function CarpetAreaCalculator() {
     const reraCarpet = carpet + internalWalls;
     const balconyArea = carpet * (balconyRatio / 100);
 
-    setResults({
+    return {
       carpetArea: Math.round(carpet),
       internalWalls: Math.round(internalWalls),
       reraCarpet: Math.round(reraCarpet),
       balconyArea: Math.round(balconyArea),
       builtupArea: Math.round(builtup),
       superBuiltupArea: Math.round(superBuiltup),
-    });
+    };
   }, [inputType, inputValue, wallRatio, balconyRatio, loadingRatio]);
 
   const copyReport = () => {

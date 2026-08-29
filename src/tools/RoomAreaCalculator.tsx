@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Compass, Plus, Trash2, Copy, Check, RotateCcw } from 'lucide-react';
 import { getStoredArchRates, saveStoredArchRates, DEFAULT_ARCH_RATES } from '../data/civilRatesData';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
@@ -26,15 +26,7 @@ export default function RoomAreaCalculator() {
     { id: '4', name: 'Balcony', length: 8, width: 4, includeInCarpet: false }, // Balconies excluded from RERA carpet
   ]);
 
-  const [results, setResults] = useState({
-    carpetArea: 0,
-    balconyArea: 0,
-    wallArea: 0,
-    builtupArea: 0,
-    superBuiltupArea: 0,
-    totalPropertyCost: 0,
-    totalFitoutCost: 0,
-  });
+
 
   // Sync rates via storage
   useEffect(() => {
@@ -45,7 +37,7 @@ export default function RoomAreaCalculator() {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  useEffect(() => {
+  const results = useMemo(() => {
     let innerCarpet = 0;
     let balcony = 0;
     let perimeterSum = 0;
@@ -80,7 +72,7 @@ export default function RoomAreaCalculator() {
     const fitoutRateSqUnit = unit === 'feet' ? baseFitoutRate : baseFitoutRate * 10.764;
     const totalFitoutCost = carpetArea * fitoutRateSqUnit;
 
-    setResults({
+    return {
       carpetArea: Number(carpetArea.toFixed(1)),
       balconyArea: Number(balcony.toFixed(1)),
       wallArea: Number(wallArea.toFixed(1)),
@@ -88,7 +80,7 @@ export default function RoomAreaCalculator() {
       superBuiltupArea: Number(superBuiltupArea.toFixed(1)),
       totalPropertyCost: Math.round(totalPropertyCost),
       totalFitoutCost: Math.round(totalFitoutCost),
-    });
+    };
   }, [rooms, wallThickness, loadingFactor, ratePerSqUnit, prices, unit]);
 
   const handlePriceChange = (key: keyof typeof DEFAULT_ARCH_RATES, val: number) => {
@@ -109,7 +101,7 @@ export default function RoomAreaCalculator() {
     setRooms(rooms.filter((r) => r.id !== id));
   };
 
-  const updateRoom = (id: string, field: keyof RoomItem, value: any) => {
+  const updateRoom = (id: string, field: keyof RoomItem, value: string | number | boolean) => {
     setRooms(
       rooms.map((r) => {
         if (r.id === id) {
@@ -124,7 +116,7 @@ export default function RoomAreaCalculator() {
     const areaUnit = unit === 'feet' ? 'sq ft' : 'sq m';
     const rateUnit = unit === 'feet' ? 'sq ft' : 'sq m';
 
-    let roomDetails = rooms
+    const roomDetails = rooms
       .map(
         (r) =>
           `- ${r.name}: ${r.length} x ${r.width} = ${(r.length * r.width).toFixed(1)} ${areaUnit} (${

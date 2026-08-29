@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   Check, RotateCcw, MapPin, Building2, Layers, 
   Settings, Users, Download, Share2, 
@@ -123,20 +123,11 @@ export default function ConstructionCostCalculator() {
   const totalBuiltUpArea = (areaPerFloor * floors) + (hasBasement ? basementArea : 0);
   const groundFootprint = groundFloorIncluded ? areaPerFloor : 0;
 
-  // Sync automatic labour strength estimates
-  useEffect(() => {
-    if (autoEstimateLabour) {
-      // Auto-estimate counts based on built-up area and number of floors
-      const estSkilled = Math.max(2, Math.round(totalBuiltUpArea / 400));
-      const estUnskilled = Math.max(4, Math.round(totalBuiltUpArea / 250));
-      const estSupervisors = Math.max(1, Math.round(totalBuiltUpArea / 1500));
-      
-      setSkilledCount(estSkilled);
-      setUnskilledCount(estUnskilled);
-      setSupervisorsCount(estSupervisors);
-      setContractorsCount(1);
-    }
-  }, [totalBuiltUpArea, autoEstimateLabour, floors]);
+  // Derived automatic labour strength estimates (synced in real-time)
+  const finalSkilledCount = autoEstimateLabour ? Math.max(2, Math.round(totalBuiltUpArea / 400)) : skilledCount;
+  const finalUnskilledCount = autoEstimateLabour ? Math.max(4, Math.round(totalBuiltUpArea / 250)) : unskilledCount;
+  const finalSupervisorsCount = autoEstimateLabour ? Math.max(1, Math.round(totalBuiltUpArea / 1500)) : supervisorsCount;
+  const finalContractorsCount = autoEstimateLabour ? 1 : contractorsCount;
 
   // Helper to retrieve current location multiplier
   const getLocationMultiplier = () => {
@@ -162,8 +153,8 @@ export default function ConstructionCostCalculator() {
 
     // Component-level calculations
     const componentsBreakdown = COMPONENT_CONFIG_LIST.map(comp => {
-      let qty = 0;
-      let basisText = "";
+      let qty: number;
+      let basisText: string;
       let rate = comp.baseRate;
 
       switch (comp.basis) {
@@ -236,7 +227,7 @@ export default function ConstructionCostCalculator() {
           }
           rate = rate * locMult * methodCostMult;
           break;
-        case "kitchens":
+        case "kitchens": {
           qty = numUnits; // 1 kitchen per unit default
           basisText = `${numUnits} Kitchens`;
           let kAdjust = 1.0;
@@ -245,7 +236,8 @@ export default function ConstructionCostCalculator() {
           else if (kitchenQuality === "basic") kAdjust = 0.7;
           rate = rate * qualMult * kAdjust * locMult;
           break;
-        case "bathrooms":
+        }
+        case "bathrooms": {
           qty = bathrooms;
           basisText = `${bathrooms} Bathrooms`;
           let bAdjust = 1.0;
@@ -254,7 +246,8 @@ export default function ConstructionCostCalculator() {
           else if (bathroomQuality === "basic") bAdjust = 0.75;
           rate = rate * qualMult * bAdjust * locMult;
           break;
-        case "special_features":
+        }
+        case "special_features": {
           // Special features sum
           let featCost = 0;
           selectedFeatures.forEach(featId => {
@@ -271,6 +264,7 @@ export default function ConstructionCostCalculator() {
           basisText = `${selectedFeatures.length} Add-on Features`;
           rate = featCost;
           break;
+        }
         default:
           qty = 1;
           basisText = "Formula basis";
@@ -450,7 +444,7 @@ export default function ConstructionCostCalculator() {
     const estUnskilled = Math.max(4, Math.round(totalBuiltUpArea / 250));
     const totalEst = estSkilled + estUnskilled;
     
-    const actualTotal = skilledCount + unskilledCount;
+    const actualTotal = finalSkilledCount + finalUnskilledCount;
     return totalEst > 0 ? actualTotal / totalEst : 1.0;
   };
 
@@ -1499,7 +1493,7 @@ Generated on ToolStack India Construction Calculator.`;
                       type="number"
                       min="1"
                       disabled={autoEstimateLabour}
-                      value={skilledCount || ''}
+                      value={finalSkilledCount || ''}
                       onChange={(e) => setSkilledCount(Math.max(1, parseInt(e.target.value) || 1))}
                       className="saas-input py-2 font-mono font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     />
@@ -1511,7 +1505,7 @@ Generated on ToolStack India Construction Calculator.`;
                       type="number"
                       min="2"
                       disabled={autoEstimateLabour}
-                      value={unskilledCount || ''}
+                      value={finalUnskilledCount || ''}
                       onChange={(e) => setUnskilledCount(Math.max(2, parseInt(e.target.value) || 2))}
                       className="saas-input py-2 font-mono font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     />
@@ -1523,7 +1517,7 @@ Generated on ToolStack India Construction Calculator.`;
                       type="number"
                       min="1"
                       disabled={autoEstimateLabour}
-                      value={supervisorsCount || ''}
+                      value={finalSupervisorsCount || ''}
                       onChange={(e) => setSupervisorsCount(Math.max(1, parseInt(e.target.value) || 1))}
                       className="saas-input py-2 font-mono font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     />
@@ -1535,7 +1529,7 @@ Generated on ToolStack India Construction Calculator.`;
                       type="number"
                       min="1"
                       disabled={autoEstimateLabour}
-                      value={contractorsCount || ''}
+                      value={finalContractorsCount || ''}
                       onChange={(e) => setContractorsCount(Math.max(1, parseInt(e.target.value) || 1))}
                       className="saas-input py-2 font-mono font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     />
@@ -1545,10 +1539,10 @@ Generated on ToolStack India Construction Calculator.`;
                 <div className="bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 p-4 rounded-xl text-xs space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-zinc-500">Estimated Total Crew size:</span>
-                    <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{skilledCount + unskilledCount + supervisorsCount + contractorsCount} Workers</span>
+                    <span className="font-bold text-zinc-800 dark:text-zinc-200 font-mono">{finalSkilledCount + finalUnskilledCount + finalSupervisorsCount + finalContractorsCount} Workers</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-zinc-500">Labour Strength Modifier:</span>
+                    <span className="text-zinc-550">Labour Strength Modifier:</span>
                     <span className="font-bold text-indigo-500 font-mono">{getLaborStrengthRatio().toFixed(2)}x (impacts timeline speed)</span>
                   </div>
                 </div>
