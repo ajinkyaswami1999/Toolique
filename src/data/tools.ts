@@ -6780,31 +6780,118 @@ export const toolsList: Tool[] = [
     slug: 'derivative-calculator',
     name: 'Derivative Calculator with Steps',
     category: 'math-studio',
-    shortDescription: 'Solve derivatives symbolically and evaluate them at a point with graphical displays.',
-    metaDescription: 'Free online symbolic derivative calculator. Solve first, second, and higher-order derivatives with step-by-step calculus workings and function plotting.',
-    keywords: ['derivative calculator', 'symbolic derivative', 'first derivative', 'second derivative', 'calculus solver'],
+    shortDescription: 'Solve first, second, and higher-order derivatives symbolically with step-by-step differentiation rules, tangent lines, and interactive function graphs.',
+    metaDescription: 'Free online derivative calculator with steps. Solve derivatives symbolically using power, product, quotient, and chain rules. Evaluates slopes, tangent line equations, and higher-order derivatives with graphs.',
+    keywords: [
+      'derivative calculator',
+      'derivative calculator with steps',
+      'symbolic differentiation solver',
+      'calculus derivative solver',
+      'first derivative calculator',
+      'second derivative calculator',
+      'chain rule calculator',
+      'product rule calculator',
+      'quotient rule calculator',
+      'tangent line calculator',
+      'derivative at a point',
+      'differentiation rules table',
+      'instantaneous rate of change',
+      'd/dx solver',
+      'step by step derivative'
+    ],
     icon: 'Activity',
     howToUse: [
-      'Enter the function expression (e.g. x^2 + 3*x, sin(x)).',
-      'Select the differentiation variable (defaults to x).',
-      'Choose the derivative order (1st, 2nd, etc.).',
-      'Optionally specify a point x to evaluate the numerical value of the derivative.',
-      'Examine the symbolic result, step steps, and interactive function curves overlay.'
+      'Enter any single-variable mathematical function (e.g. x^3 - 3*x^2 + 2*x, sin(x)*cos(x), e^(2*x), (x^2+1)/(x-1)).',
+      'Specify the differentiation variable (default is x).',
+      'Select the derivative order (1st derivative d/dx, 2nd derivative d²/dx², 3rd derivative d³/dx³, or 4th derivative d⁴/dx⁴).',
+      'Optionally input an evaluation point x = a to compute the slope, tangent line equation y = mx + b, normal line equation, and concavity.',
+      'Review the step-by-step differentiation breakdown, symbolic result, LaTeX output, and interactive multi-curve overlay graph.'
     ],
     faqs: [
       {
-        question: 'Does this calculator solve derivatives symbolically?',
-        answer: 'Yes, it computes exact analytical derivatives using symbolic calculus rules.'
+        question: 'What is a derivative in calculus?',
+        answer: 'A derivative measures the instantaneous rate of change of a function f(x) with respect to x. Geometrically, it equals the slope of the tangent line to the function\'s graph at any point (x, f(x)). Mathematically, it is defined by the limit: f\'(x) = lim(h->0) [f(x+h) - f(x)] / h.'
       },
       {
-        question: 'How are exponents formatted?',
-        answer: 'Use the caret symbol (^) for powers, for example: x^3 for x cubed, or e^x for natural exponential.'
+        question: 'What are the core differentiation rules used by this calculator?',
+        answer: 'This solver applies standard analytical calculus rules: (1) Power Rule: d/dx[xⁿ] = n·xⁿ⁻¹; (2) Constant Multiple Rule: d/dx[c·f(x)] = c·f\'(x); (3) Sum/Difference Rule: d/dx[f ± g] = f\' ± g\'; (4) Product Rule: d/dx[u·v] = u\'v + uv\'; (5) Quotient Rule: d/dx[u/v] = (u\'v - uv\')/v²; (6) Chain Rule: d/dx[f(g(x))] = f\'(g(x))·g\'(x); (7) Exponential Rule: d/dx[eˣ] = eˣ; and (8) Trigonometric Rules: d/dx[sin x] = cos x, d/dx[cos x] = -sin x, d/dx[tan x] = sec²x.'
+      },
+      {
+        question: 'How do you find the equation of a tangent line using derivatives?',
+        answer: 'To find the tangent line at x = a: (1) Compute y₀ = f(a) to get the point of tangency (a, y₀); (2) Evaluate the first derivative m = f\'(a) to determine the tangent slope; (3) Substitute into point-slope form: y - y₀ = m(x - a) to obtain the slope-intercept equation: y = m·x + (y₀ - m·a).'
+      },
+      {
+        question: 'What does the second derivative f\'\'(x) represent?',
+        answer: 'The second derivative represents the rate of change of the slope (acceleration and curvature). If f\'\'(a) > 0, the graph is concave upward (U-shaped, indicating a local minimum candidate). If f\'\'(a) < 0, the graph is concave downward (∩-shaped, indicating a local maximum candidate). If f\'\'(a) = 0 and changes sign, it identifies an inflection point.'
+      },
+      {
+        question: 'Does this derivative calculator solve higher-order derivatives?',
+        answer: 'Yes. You can compute first (f\'), second (f\'\'), third (f\'\'\'), and fourth (f⁴) derivatives symbolically by selecting the desired derivative order from the dropdown.'
+      },
+      {
+        question: 'How are trigonometric, exponential, and logarithmic functions formatted?',
+        answer: 'Use standard notation: sin(x), cos(x), tan(x), exp(x) or e^x for natural exponential, and log(x) or ln(x) for natural logarithm. For powers of trigonometric functions like sin²(x), write (sin(x))^2 or sin(x)^2.'
+      },
+      {
+        question: 'Can I copy the solution in LaTeX format for homework or scientific papers?',
+        answer: 'Yes. The calculator includes a 1-click \'Copy LaTeX\' button that generates clean KaTeX/LaTeX formatting (e.g. \\frac{d}{dx}[f(x)] = f\'(x)) ready to paste into Overleaf, LaTeX documents, or Markdown notes.'
+      },
+      {
+        question: 'Is this derivative solver free and calculated client-side?',
+        answer: 'Yes. All symbolic derivations and graph evaluations run 100% locally in your browser using secure client-side computation sandboxes, meaning your expressions are never stored or logged on external servers.'
       }
     ],
     sections: [
       {
-        title: 'Understanding Derivatives',
-        content: 'The derivative represents the instantaneous rate of change of a function with respect to its variable. Geometrically, it corresponds to the slope of the tangent line to the curve at a given point.'
+        title: 'Master Table of Calculus Differentiation Rules',
+        content: 'Calculus derivatives follow precise algebraic rules depending on the structural composition of the mathematical function:\n\n' +
+          '• Constant Rule: d/dx [c] = 0\n' +
+          '• Power Rule: d/dx [xⁿ] = n · xⁿ⁻¹\n' +
+          '• Constant Multiple Rule: d/dx [c · f(x)] = c · f\'(x)\n' +
+          '• Sum / Difference Rule: d/dx [f(x) ± g(x)] = f\'(x) ± g\'(x)\n' +
+          '• Product Rule: d/dx [u(x) · v(x)] = u\'(x) · v(x) + u(x) · v\'(x)\n' +
+          '• Quotient Rule: d/dx [u(x) / v(x)] = [u\'(x) · v(x) - u(x) · v\'(x)] / [v(x)]²\n' +
+          '• Chain Rule: d/dx [f(g(x))] = f\'(g(x)) · g\'(x)\n' +
+          '• Natural Exponential Rule: d/dx [eˣ] = eˣ  |  General Base: d/dx [aˣ] = aˣ · ln(a)\n' +
+          '• Natural Logarithmic Rule: d/dx [ln(x)] = 1/x  |  General Base: d/dx [log_a(x)] = 1 / [x · ln(a)]\n' +
+          '• Trigonometric Derivatives: d/dx [sin(x)] = cos(x), d/dx [cos(x)] = -sin(x), d/dx [tan(x)] = sec²(x)\n' +
+          '• Inverse Trig Derivatives: d/dx [arcsin(x)] = 1 / √(1 - x²), d/dx [arctan(x)] = 1 / (1 + x²)'
+      },
+      {
+        title: 'Geometric & Physical Meaning of Derivatives',
+        content: '1. Slope of the Tangent Line: At any given point x = a, the value f\'(a) represents the exact geometric gradient (slope m) of the straight line touching the curve without crossing it locally.\n\n' +
+          '2. Instantaneous Rate of Change: In physics, if s(t) represents position over time, then the first derivative v(t) = s\'(t) represents instantaneous velocity, and the second derivative a(t) = s\'\'(t) represents instantaneous acceleration.\n\n' +
+          '3. Finding Critical Points & Optimization: Setting f\'(x) = 0 locates critical points where the function has horizontal tangents, serving as candidates for local maximums, local minimums, or saddle points.'
+      },
+      {
+        title: 'Step-by-Step Worked Differentiation Examples',
+        content: 'Example 1: Polynomial Function\n' +
+          'Given f(x) = 3x⁴ - 5x² + 7x - 2\n' +
+          'Step 1: Differentiate term by term using Power Rule.\n' +
+          '• d/dx[3x⁴] = 3 · 4x³ = 12x³\n' +
+          '• d/dx[-5x²] = -5 · 2x = -10x\n' +
+          '• d/dx[7x] = 7 · 1 = 7\n' +
+          '• d/dx[-2] = 0\n' +
+          'Result: f\'(x) = 12x³ - 10x + 7\n\n' +
+          'Example 2: Product Rule\n' +
+          'Given f(x) = x² · sin(x)\n' +
+          'Let u = x² (u\' = 2x) and v = sin(x) (v\' = cos(x)).\n' +
+          'Apply Product Rule: f\'(x) = u\'v + uv\' = (2x) · sin(x) + x² · cos(x)\n' +
+          'Result: f\'(x) = 2x·sin(x) + x²·cos(x)\n\n' +
+          'Example 3: Tangent Line Equation at a Point\n' +
+          'Find the tangent line equation for f(x) = x² at x = 3:\n' +
+          '1. Point of tangency: y₀ = f(3) = 3² = 9 -> (3, 9)\n' +
+          '2. Derivative: f\'(x) = 2x\n' +
+          '3. Slope: m = f\'(3) = 2(3) = 6\n' +
+          '4. Tangent Line: y - 9 = 6(x - 3) => y = 6x - 18 + 9 => y = 6x - 9'
+      },
+      {
+        title: 'First & Second Derivative Tests for Curve Sketching',
+        content: 'Analyzing derivatives provides complete geometric insight into curve sketching:\n\n' +
+          '• Increasing vs. Decreasing: If f\'(x) > 0 on an interval, the function is strictly increasing. If f\'(x) < 0, it is strictly decreasing.\n' +
+          '• First Derivative Test: If f\'(x) changes from positive to negative at critical value c, f(c) is a local maximum. If f\'(x) changes from negative to positive, f(c) is a local minimum.\n' +
+          '• Second Derivative Test: If f\'(c) = 0 and f\'\'(c) > 0, then f(c) is a relative minimum (concave up). If f\'(c) = 0 and f\'\'(c) < 0, then f(c) is a relative maximum (concave down).\n' +
+          '• Points of Inflection: Occur where f\'\'(x) = 0 (or is undefined) and the concavity strictly transitions between concave up and concave down.'
       }
     ]
   },

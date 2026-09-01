@@ -75,6 +75,17 @@ export const workflows: Workflow[] = [
       { title: 'XPath Tester', description: 'Validate XPath and CSS selectors on HTML contexts.', slug: 'xpath-tester', id: 'XPathSelectorTester' },
       { title: 'Regex Tester', description: 'Test and check validation pattern expressions.', slug: 'regex-tester', id: 'RegexTester' }
     ]
+  },
+  {
+    id: 'calculus-analysis',
+    name: 'Calculus & Function Analysis Journey',
+    description: 'Solve limits, compute symbolic derivatives, find antiderivatives, and model ODE differential equations.',
+    steps: [
+      { title: 'Limit Evaluation', description: 'Analyze function limits and continuity bounds.', slug: 'limit-calculator', id: 'LimitCalculator' },
+      { title: 'Derivative & Tangent', description: 'Find symbolic derivatives, tangent slopes, and concavity.', slug: 'derivative-calculator', id: 'DerivativeCalculator' },
+      { title: 'Integral & Area', description: 'Compute definite/indefinite integrals and area under curve.', slug: 'integral-calculator', id: 'IntegralCalculator' },
+      { title: 'Differential Equations', description: 'Solve initial value ODEs and rate systems.', slug: 'differential-equation-solver', id: 'DifferentialEquationSolver' }
+    ]
   }
 ];
 

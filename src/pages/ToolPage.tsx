@@ -664,6 +664,18 @@ const crossSuiteSuggestions: Record<string, { text: string; linkText: string; li
     text: 'Extracting dynamic page variables or text patterns? Check your matching expressions inside the',
     linkText: 'Regex Tester',
     linkUrl: '/developer/regex-tester'
+  },
+  'derivative-calculator': {
+    label: 'Calculus Antiderivative',
+    text: 'Need to compute indefinite/definite integrals or find the area under this curve? Open the',
+    linkText: 'Integral Calculator with Graph',
+    linkUrl: '/calculators/integral-calculator'
+  },
+  'integral-calculator': {
+    label: 'Calculus Differentiation',
+    text: 'Need to find the symbolic derivative or tangent line equation at a point? Open the',
+    linkText: 'Derivative Calculator with Steps',
+    linkUrl: '/calculators/derivative-calculator'
   }
 };
 
