@@ -27,6 +27,7 @@ const Dashboard = lazy(() => import('../pages/Dashboard'));
 const CategoryLanding = lazy(() => import('../pages/CategoryLanding'));
 const ArchitectureHub = lazy(() => import('../pages/ArchitectureHub'));
 const QAHub = lazy(() => import('../pages/QAHub'));
+const FinanceHub = lazy(() => import('../pages/FinanceHub'));
 const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
@@ -53,6 +54,8 @@ export function getCategoryCanonicalPath(category: string): string {
     return `/developer`;
   } else if (category === 'qa') {
     return `/qa`;
+  } else if (category === 'finance') {
+    return `/finance`;
   } else {
     return `/calculators`;
   }
@@ -108,6 +111,11 @@ export default function AppRoutes() {
           <QAHub />
         </Suspense>
       } />
+      <Route path="/finance" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Finance Suite...</div>}>
+          <FinanceHub />
+        </Suspense>
+      } />
 
       {/* Primary Pillar Tool Detail Routes */}
       <Route path="/calculators/:slug" element={<ToolPage />} />
@@ -115,6 +123,7 @@ export default function AppRoutes() {
       <Route path="/civil/:slug" element={<ToolPage />} />
       <Route path="/developer/:slug" element={<ToolPage />} />
       <Route path="/qa/:slug" element={<ToolPage />} />
+      <Route path="/finance/:slug" element={<Navigate to="/calculators/:slug" replace />} />
 
       {/* Legacy Category & Tool Redirects */}
       <Route path="/tools/:categoryName" element={<LegacyCategoryRedirect />} />
@@ -122,6 +131,7 @@ export default function AppRoutes() {
       <Route path="/tools/advanced-boq-calculator-india" element={<Navigate to="/civil/advanced-boq-calculator-india" replace />} />
       <Route path="/architecture-tools" element={<Navigate to="/architecture" replace />} />
       <Route path="/qa-tools" element={<Navigate to="/qa" replace />} />
+      <Route path="/finance-tools" element={<Navigate to="/finance" replace />} />
 
       <Route path="/ai" element={
         <Suspense fallback={

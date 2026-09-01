@@ -9700,56 +9700,138 @@ export const toolsList: Tool[] = [
     ]
   },
   {
-    "id": "CompoundInterestCalculator",
-    "slug": "compound-interest-calculator",
-    "name": "Compound Interest Calculator",
-    "category": "finance",
-    "shortDescription": "Calculate future values and compound interest with flexible compounding intervals.",
-    "metaDescription": "Calculate the growth of your investments using compound interest. Compares monthly, quarterly, and annual compounding schedules.",
-    "keywords": ["compound interest calculator", "wealth compounder", "future value calculator", "compound growth"],
-    "icon": "TrendingUp",
-    "howToUse": [
-      "Input principal amount, annual interest rate, and years.",
-      "Select the compounding frequency (Monthly, Quarterly, Annually).",
-      "Observe the final maturity value and review the year-by-year compounding schedule."
+    id: 'CompoundInterestCalculator',
+    slug: 'compound-interest-calculator',
+    name: 'Compound Interest Calculator',
+    category: 'finance',
+    shortDescription: 'Calculate compound interest and future investment maturity values across daily, monthly, quarterly, and annual compounding frequencies.',
+    metaDescription: 'Free online Compound Interest Calculator. Calculate future investment value, total interest earned, and effective annual rate (EAR) with year-by-year compounding schedules.',
+    keywords: [
+      'compound interest calculator',
+      'compound interest calculator india',
+      'daily compound interest calculator',
+      'monthly compounding calculator',
+      'future value calculator',
+      'investment growth calculator',
+      'interest compounding formula',
+      'annual compound interest calculator',
+      'compound wealth calculator'
     ],
-    "faqs": [
+    icon: 'TrendingUp',
+    howToUse: [
+      'Enter the initial Principal Investment amount.',
+      'Input the Annual Nominal Interest Rate (%).',
+      'Specify the Investment Tenure in years or months.',
+      'Select the Compounding Frequency (Daily, Monthly, Quarterly, Semi-Annually, or Annually).',
+      'Optionally add recurring monthly or annual deposits to simulate disciplined savings.',
+      'Review the Future Maturity Value, Total Interest Earned, and year-by-year compounding growth chart.'
+    ],
+    faqs: [
       {
-        "question": "What is compound interest?",
-        "answer": "Compound interest is interest calculated on the initial principal, which also includes all of the accumulated interest from previous periods."
+        question: 'What is compound interest and how does it work?',
+        answer: 'Compound interest is interest earned on both the initial principal and the accumulated interest from previous periods. Unlike simple interest which remains constant, compound interest grows exponentially over time because each interest payout starts earning interest itself.'
+      },
+      {
+        question: 'What is the mathematical formula for compound interest?',
+        answer: 'The standard formula is: A = P × (1 + r / n)^(n × t), where A is the future maturity amount, P is initial principal, r is annual interest rate (as a decimal), n is number of compounding periods per year, and t is time period in years. Total Compound Interest = A − P.'
+      },
+      {
+        question: 'How does compounding frequency affect total returns?',
+        answer: 'The more frequently interest is compounded (e.g. daily vs. monthly vs. annually), the higher the effective annual return. For example, ₹1 Lakh at 10% compounded annually yields ₹10,000, while compounded daily it yields approximately ₹10,515 due to rapid continuous reinvestment.'
+      },
+      {
+        question: 'What is the Rule of 72 in compound interest?',
+        answer: 'The Rule of 72 is a quick mental math shortcut to estimate how many years it takes for your investment to double. Divide 72 by the annual interest rate: Years to Double ≈ 72 / Interest Rate. At 12% annual return, your money doubles in approximately 72 / 12 = 6 years.'
+      },
+      {
+        question: 'What is the difference between Simple Interest and Compound Interest?',
+        answer: 'Simple interest is calculated only on the original principal throughout the entire loan or investment tenure. Compound interest is calculated on the principal plus all interest earned in previous periods, resulting in exponential wealth accumulation over long time horizons.'
       }
     ],
-    "sections": [
+    sections: [
       {
-        "title": "Compound Interest Formula",
-        "content": "A = P * (1 + r/n)^(n*t), where A is maturity value, P is principal, r is rate, n is compounding frequency, and t is tenure in years."
+        title: 'The Power of Compounding Explained',
+        content: 'Albert Einstein famously referred to compound interest as the "eighth wonder of the world". The key driver of compounding is time: during the early years, the growth appears modest, but as accumulated interest begins generating its own returns, the growth curve bends steeply upward.\n\n' +
+          '• **Principal (P)**: The baseline lump sum initially invested.\n' +
+          '• **Rate (r)**: The nominal annual interest rate offered.\n' +
+          '• **Compounding Frequency (n)**: 365 for daily, 12 for monthly, 4 for quarterly, 2 for semi-annual, 1 for annual.\n' +
+          '• **Tenure (t)**: Duration of investment in years.'
+      },
+      {
+        title: 'Compounding Frequency Comparison (₹1,00,000 at 10% for 10 Years)',
+        content: 'See how compounding frequency boosts final maturity value on a ₹1,00,000 deposit at 10% p.a. over 10 years:\n\n' +
+          '• **Annually (n = 1)**: Maturity Value = ₹2,59,374 | Total Interest = ₹1,59,374\n' +
+          '• **Quarterly (n = 4)**: Maturity Value = ₹2,68,506 | Total Interest = ₹1,68,506\n' +
+          '• **Monthly (n = 12)**: Maturity Value = ₹2,70,704 | Total Interest = ₹1,70,704\n' +
+          '• **Daily (n = 365)**: Maturity Value = ₹2,71,791 | Total Interest = ₹1,71,791'
       }
     ]
   },
   {
-    "id": "IncomeTaxCalculator",
-    "slug": "income-tax-calculator",
-    "name": "Income Tax Calculator",
-    "category": "finance",
-    "shortDescription": "Compare your tax liabilities under the Old vs New Tax Regimes for FY 2024-25.",
-    "metaDescription": "Indian Income Tax Calculator. Compare Old vs New Tax Regimes with 80C, 80D, and HRA deductions instantly.",
-    "keywords": ["income tax calculator", "old vs new tax regime", "income tax india", "tax saver calculator"],
-    "icon": "Landmark",
-    "howToUse": [
-      "Input your gross annual salary and income from other sources.",
-      "Declare your deductions (80C, 80D, HRA) on the input panel.",
-      "Compare old vs new regime liabilities and see which regime saves you more money."
+    id: 'IncomeTaxCalculator',
+    slug: 'income-tax-calculator',
+    name: 'Income Tax Calculator',
+    category: 'finance',
+    shortDescription: 'Compare your income tax liabilities under the Old vs New Tax Regimes with the latest standard deduction, 80C, 80D, and HRA exemptions.',
+    metaDescription: 'Free online Indian Income Tax Calculator for FY 2024-25 and FY 2025-26. Compare Old vs New Tax Regimes, claim ₹75,000 standard deduction, 80C, 80D, and Section 87A rebates instantly.',
+    keywords: [
+      'income tax calculator',
+      'income tax calculator india',
+      'old vs new tax regime calculator',
+      'income tax calculator fy 2024-25',
+      'income tax calculator fy 2025-26',
+      'new tax regime slabs',
+      'standard deduction 75000',
+      'section 87a rebate calculator',
+      'salary tax calculator india',
+      'tax saving calculator 80c'
     ],
-    "faqs": [
+    icon: 'Landmark',
+    howToUse: [
+      'Enter your Gross Annual Salary and any Income from Other Sources (interest, dividends, rental income).',
+      'Select your Assessment Year / Financial Year (FY 2024-25 or FY 2025-26).',
+      'Under the Old Regime tab, input eligible deductions under Section 80C (PPF, ELSS, EPF), Section 80D (Health Insurance), Section 24(b) (Home Loan Interest), and Section 10(13A) (HRA).',
+      'Review the side-by-side comparison of Tax Payable, Cess, Section 87A Rebate, and identify the regime that saves you maximum tax.'
+    ],
+    faqs: [
       {
-        "question": "What is the standard deduction in FY 2024-25?",
-        "answer": "A standard deduction of ₹50,000 is available to all salaried taxpayers under both the Old and New Tax Regimes."
+        question: 'What is the standard deduction for salaried employees under the New Tax Regime?',
+        answer: 'For FY 2024-25 and FY 2025-26 (AY 2025-26 / AY 2026-27), the standard deduction under the New Tax Regime has been increased to ₹75,000 for salaried employees and pensioners (up from ₹50,000). Under the Old Tax Regime, the standard deduction remains ₹50,000.'
+      },
+      {
+        question: 'What is the Section 87A rebate limit under the New Tax Regime?',
+        answer: 'Under the New Tax Regime, resident individuals with total taxable income up to ₹7,00,000 are eligible for a full tax rebate of up to ₹25,000 under Section 87A. Combined with the ₹75,000 standard deduction, a salaried employee with a gross CTC of up to ₹7,75,000 pays ₹0 income tax.'
+      },
+      {
+        question: 'What are the New Tax Regime tax slabs for FY 2024-25 / FY 2025-26?',
+        answer: 'The revised New Tax Regime slabs are: (1) Up to ₹3,00,000: Nil; (2) ₹3,00,001 to ₹7,00,000: 5%; (3) ₹7,00,001 to ₹10,00,000: 10%; (4) ₹10,00,01 to ₹12,00,000: 15%; (5) ₹12,00,001 to ₹15,00,000: 20%; (6) Above ₹15,00,000: 30%. In addition, a 4% Health & Education Cess applies on the total tax payable.'
+      },
+      {
+        question: 'Which tax regime should I choose: Old or New?',
+        answer: 'Choose the New Tax Regime if your total deductions (80C, 80D, HRA, home loan interest) are less than ₹3.75 Lakhs to ₹4.25 Lakhs, as the lower tax rates provide higher net take-home salary. Choose the Old Tax Regime if you have large deductions exceeding ₹4 Lakhs annually.'
+      },
+      {
+        question: 'Can I switch between the Old and New Tax Regimes every year?',
+        answer: 'Salaried individuals without business or professional income can freely switch between the Old and New Tax Regimes every financial year at the time of filing their Income Tax Return (ITR).'
       }
     ],
-    "sections": [
+    sections: [
       {
-        "title": "Choosing Between Regimes",
-        "content": "The New Regime offers lower tax rates but allows zero deductions. The Old Regime is beneficial if you make substantial tax-saving investments (under 80C, HRA, home loan interest)."
+        title: 'New vs. Old Tax Regime Comparison Table (FY 2024-25 & FY 2025-26)',
+        content: 'Here is a quick side-by-side comparison of the core provisions:\n\n' +
+          '• **Standard Deduction**: ₹75,000 (New Regime) vs. ₹50,000 (Old Regime)\n' +
+          '• **Tax-Free Income Threshold (Salaried)**: ₹7,75,000 (New Regime with 87A rebate) vs. ₹5,50,000 (Old Regime)\n' +
+          '• **Section 80C Deductions (PPF, ELSS, EPF)**: Not Allowed in New Regime | Up to ₹1,50,000 allowed in Old Regime\n' +
+          '• **Section 80D (Health Insurance)**: Not Allowed in New Regime | Up to ₹75,000 allowed in Old Regime\n' +
+          '• **HRA Section 10(13A)**: Not Allowed in New Regime | Allowed in Old Regime\n' +
+          '• **Home Loan Interest Sec 24(b)**: Not Allowed in New Regime | Up to ₹2,00,000 allowed in Old Regime'
+      },
+      {
+        title: 'Breakeven Calculation: When Does Old Regime Win?',
+        content: 'For an individual earning ₹15 Lakhs gross salary:\n' +
+          '• Under the New Regime, tax payable is approximately ₹1,35,200 (including 4% cess).\n' +
+          '• Under the Old Regime with standard deduction (₹50k), Section 80C (₹1.5L), Section 80D (₹25k), and HRA (₹1.5L), total deductions = ₹3,75,000. Tax payable is approximately ₹1,53,400.\n' +
+          '• In this scenario, the New Regime saves over ₹18,000 in net taxes.'
       }
     ]
   }

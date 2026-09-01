@@ -86,6 +86,40 @@ export const workflows: Workflow[] = [
       { title: 'Integral & Area', description: 'Compute definite/indefinite integrals and area under curve.', slug: 'integral-calculator', id: 'IntegralCalculator' },
       { title: 'Differential Equations', description: 'Solve initial value ODEs and rate systems.', slug: 'differential-equation-solver', id: 'DifferentialEquationSolver' }
     ]
+  },
+  {
+    id: 'salary-tax-planning',
+    name: 'Salary, Tax & Deductions Planning',
+    description: 'Calculate in-hand salary, optimize HRA exemptions, verify TDS rates, and compare Old vs. New Tax Regimes.',
+    steps: [
+      { title: 'Take-Home Pay', description: 'Compute net monthly in-hand pay from annual CTC.', slug: 'in-hand-salary-calculator', id: 'InHandSalaryCalculator' },
+      { title: 'HRA Exemption', description: 'Maximize Section 10(13A) house rent allowance tax relief.', slug: 'hra-calculator', id: 'HRACalculator' },
+      { title: 'TDS Rates', description: 'Verify withholding tax deductions across Indian sections.', slug: 'tds-calculator', id: 'TDSCalculator' },
+      { title: 'Income Tax Regime', description: 'Compare Old vs. New tax slabs with standard deduction.', slug: 'income-tax-calculator', id: 'IncomeTaxCalculator' }
+    ]
+  },
+  {
+    id: 'wealth-investment-compounding',
+    name: 'Wealth Building & Investment Compounding',
+    description: 'Plan monthly mutual fund SIPs, evaluate CAGR returns, model compound interest, and lock in bank fixed/recurring deposits.',
+    steps: [
+      { title: 'SIP Growth', description: 'Forecast mutual fund wealth creation and maturity corpus.', slug: 'sip-calculator', id: 'SIPCalculator' },
+      { title: 'CAGR Returns', description: 'Calculate annualized compound growth on portfolios.', slug: 'cagr-calculator', id: 'CAGRCalculator' },
+      { title: 'Compound Interest', description: 'Model multi-frequency exponential interest compounding.', slug: 'compound-interest-calculator', id: 'CompoundInterestCalculator' },
+      { title: 'Fixed Deposit (FD)', description: 'Compute bank fixed deposit interest and senior citizen perks.', slug: 'fd-calculator', id: 'FDCalculator' },
+      { title: 'Recurring Deposit (RD)', description: 'Calculate disciplined monthly deposit maturity amounts.', slug: 'rd-calculator', id: 'RDCalculator' }
+    ]
+  },
+  {
+    id: 'retirement-pension-planning',
+    name: 'Retirement & Pension Security',
+    description: 'Build an EEE tax-free PPF corpus, forecast NPS pension annuities, calculate statutory gratuity, and manage loan debt.',
+    steps: [
+      { title: 'PPF Wealth', description: 'Calculate 15-year tax-free guaranteed returns under 80C.', slug: 'ppf-calculator', id: 'PPFCalculator' },
+      { title: 'NPS Pension', description: 'Estimate retirement corpus and monthly annuity payout.', slug: 'nps-calculator', id: 'NPSCalculator' },
+      { title: 'Gratuity Payout', description: 'Calculate statutory end-of-service gratuity entitlement.', slug: 'gratuity-calculator', id: 'GratuityCalculator' },
+      { title: 'Loan EMI Payoff', description: 'Model loan amortizations to achieve debt-free retirement.', slug: 'emi-calculator', id: 'EMICalculator' }
+    ]
   }
 ];
 

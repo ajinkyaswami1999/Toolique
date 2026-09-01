@@ -676,6 +676,54 @@ const crossSuiteSuggestions: Record<string, { text: string; linkText: string; li
     text: 'Need to find the symbolic derivative or tangent line equation at a point? Open the',
     linkText: 'Derivative Calculator with Steps',
     linkUrl: '/calculators/derivative-calculator'
+  },
+  'sip-calculator': {
+    label: 'CAGR Portfolio Return',
+    text: 'Want to calculate the exact annualized compound growth rate on your past lump sum or mutual fund investments? Open the',
+    linkText: 'CAGR Calculator',
+    linkUrl: '/calculators/cagr-calculator'
+  },
+  'cagr-calculator': {
+    label: 'SIP Mutual Funds',
+    text: 'Planning ongoing monthly investments to build future wealth with compounding? Try the',
+    linkText: 'SIP Calculator',
+    linkUrl: '/calculators/sip-calculator'
+  },
+  'in-hand-salary-calculator': {
+    label: 'Tax Regime Comparison',
+    text: 'Need to compare your exact tax payable under the Old vs. New Tax Regime with standard deductions? Check the',
+    linkText: 'Income Tax Calculator',
+    linkUrl: '/calculators/income-tax-calculator'
+  },
+  'income-tax-calculator': {
+    label: 'HRA Tax Exemption',
+    text: 'Paying house rent and looking to maximize your Section 10(13A) tax relief? Calculate your exact exemption in the',
+    linkText: 'HRA Calculator',
+    linkUrl: '/calculators/hra-calculator'
+  },
+  'ppf-calculator': {
+    label: 'NPS Retirement Pension',
+    text: 'Planning your long-term retirement corpus alongside 80C? Forecast your monthly pension and lump sum with the',
+    linkText: 'NPS Calculator',
+    linkUrl: '/calculators/nps-calculator'
+  },
+  'nps-calculator': {
+    label: 'PPF Guaranteed Wealth',
+    text: 'Looking for sovereign guaranteed, 100% tax-free EEE investment options? Model 15-year growth in the',
+    linkText: 'PPF Calculator',
+    linkUrl: '/calculators/ppf-calculator'
+  },
+  'fd-calculator': {
+    label: 'Recurring Deposit',
+    text: 'Prefer saving a fixed amount every month rather than a lump sum? Compute monthly interest compounding in the',
+    linkText: 'RD Calculator',
+    linkUrl: '/calculators/rd-calculator'
+  },
+  'rd-calculator': {
+    label: 'Fixed Deposit',
+    text: 'Have a lump sum amount to lock in safe bank interest with quarterly compounding? Check returns in the',
+    linkText: 'FD Calculator',
+    linkUrl: '/calculators/fd-calculator'
   }
 };
 

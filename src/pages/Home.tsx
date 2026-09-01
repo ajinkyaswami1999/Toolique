@@ -3,7 +3,7 @@ import {
   Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon,
   Hammer, Compass, Palette, ArrowRight,
   Globe, FileText, Share2, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart, Type,
-  Flame, Award, ExternalLink, Printer, Cpu, Code2, Terminal, Calculator, ShieldCheck
+  Flame, Award, ExternalLink, Printer, Cpu, Code2, Terminal, ShieldCheck
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import type { Tool } from '../data/tools';
@@ -101,7 +101,7 @@ export default function Home() {
   };
 
   const platforms = [
-    { id: 'calculators', title: 'Calculators Hub', desc: 'Finance, compound interest, standard calculators, tax estimators.', link: '/calculators', icon: Calculator, color: 'text-emerald-500 bg-emerald-500/5 border-emerald-500/10' },
+    { id: 'finance', title: 'Personal Finance & Tax', desc: 'Income tax slabs, in-hand salary from CTC, mutual fund SIPs, PPF, NPS, and loan EMIs.', link: '/finance', icon: IndianRupee, color: 'text-emerald-500 bg-emerald-500/5 border-emerald-500/10' },
     { id: 'architecture', title: 'Architecture & Civil', desc: 'Plot area, setbacks, RERA carpet, construction costs, concrete mixes, and material quantities.', link: '/architecture', icon: Compass, color: 'text-violet-500 bg-violet-500/5 border-violet-500/10' },
     { id: 'developer', title: 'Developer Utilities', desc: 'SQL formatting, JSON validation, JWT decode, Base64 converters.', link: '/developer', icon: Code, color: 'text-indigo-500 bg-indigo-500/5 border-indigo-500/10' },
     { id: 'qa', title: 'QA Engineering', desc: 'Generate test cases, mock datasets, bug templates, boundary value analysis.', link: '/qa', icon: ShieldCheck, color: 'text-rose-500 bg-rose-500/5 border-rose-500/10' },
