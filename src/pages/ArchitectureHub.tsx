@@ -184,7 +184,7 @@ export default function ArchitectureHub() {
             </h2>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {workflows.map((wf) => (
+            {workflows.filter(w => ['plot-to-material', 'room-to-finish'].includes(w.id)).map((wf) => (
               <div 
                 key={wf.id}
                 className="p-6 rounded-3xl border border-zinc-200/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition space-y-4 flex flex-col justify-between"
