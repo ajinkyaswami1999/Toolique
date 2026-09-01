@@ -102,8 +102,7 @@ export default function Home() {
 
   const platforms = [
     { id: 'calculators', title: 'Calculators Hub', desc: 'Finance, compound interest, standard calculators, tax estimators.', link: '/calculators', icon: Calculator, color: 'text-emerald-500 bg-emerald-500/5 border-emerald-500/10' },
-    { id: 'architecture', title: 'Architecture Suite', desc: 'Plot area, setback clearances, built-up calculations, and FAR compliance.', link: '/architecture', icon: Compass, color: 'text-violet-500 bg-violet-500/5 border-violet-500/10' },
-    { id: 'civil', title: 'Civil Engineering', desc: 'Concrete mixes, brick weight, plastering ratios, and construction cost estimators.', link: '/civil', icon: Hammer, color: 'text-blue-500 bg-blue-500/5 border-blue-500/10' },
+    { id: 'architecture', title: 'Architecture & Civil', desc: 'Plot area, setbacks, RERA carpet, construction costs, concrete mixes, and material quantities.', link: '/architecture', icon: Compass, color: 'text-violet-500 bg-violet-500/5 border-violet-500/10' },
     { id: 'developer', title: 'Developer Utilities', desc: 'SQL formatting, JSON validation, JWT decode, Base64 converters.', link: '/developer', icon: Code, color: 'text-indigo-500 bg-indigo-500/5 border-indigo-500/10' },
     { id: 'qa', title: 'QA Engineering', desc: 'Generate test cases, mock datasets, bug templates, boundary value analysis.', link: '/qa', icon: ShieldCheck, color: 'text-rose-500 bg-rose-500/5 border-rose-500/10' },
     { id: 'ai', title: 'AI Studio', desc: 'AI-powered code generators, QA test automation, and regex builders.', link: '/ai', icon: Sparkles, color: 'text-purple-500 bg-purple-500/5 border-purple-500/10' },

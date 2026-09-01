@@ -9450,6 +9450,60 @@ export const toolsList: Tool[] = [
     ]
   },
   {
+    "id": "TestScenarioGenerator",
+    "slug": "test-scenario-generator",
+    "name": "Test Scenario Generator",
+    "category": "qa",
+    "shortDescription": "Analyze raw software requirements to instantly generate positive and negative test scenarios.",
+    "metaDescription": "Generate high-level positive and negative test scenarios from user stories and specs. Export to CSV, JSON, or Markdown tables.",
+    "keywords": ["test scenario generator", "test scenario builder", "qa test design", "jira test scenarios", "user story testing"],
+    "icon": "Layers",
+    "howToUse": [
+      "Paste your user story or software specification in the requirement field.",
+      "Click Generate Scenarios to run the client-side parsing rules.",
+      "Review, edit, add, or remove scenarios as needed, and export to CSV, JSON, or Markdown."
+    ],
+    "faqs": [
+      {
+        "question": "What is the difference between a test case and a test scenario?",
+        "answer": "A test scenario is a high-level description of what is to be tested (e.g. 'Verify login success with valid credentials'). A test case is detailed, including specific test steps, inputs, pre-conditions, and expected results."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Positive vs. Negative Testing",
+        "content": "Positive testing verifies that the system works as expected under normal circumstances. Negative testing verifies that the system handles invalid input parameters, error conditions, and edge limits gracefully without crashing or leaking details."
+      }
+    ]
+  },
+  {
+    "id": "APIResponseComparator",
+    "slug": "api-response-comparator",
+    "name": "API Response Comparator & JSON Diff",
+    "category": "qa",
+    "shortDescription": "Compare expected and actual API JSON responses, identifying structural and value differences.",
+    "metaDescription": "Run deep structural comparisons between expected and actual API JSON payloads. Identify missing keys, extra keys, and value mismatches.",
+    "keywords": ["api response comparator", "json diff tool", "api contract test", "compare json payload", "json schema matcher"],
+    "icon": "Sliders",
+    "howToUse": [
+      "Paste the expected API JSON schema in the left textarea.",
+      "Paste the actual API JSON response in the right textarea.",
+      "Click Compare JSON Responses to check discrepancy ledger paths."
+    ],
+    "faqs": [
+      {
+        "question": "Does this tool support nested arrays and objects?",
+        "answer": "Yes. The comparator recursively traverses nested JSON objects and index-matches arrays, comparing values strictly."
+      }
+    ],
+    "sections": [
+      {
+        "title": "API Contract Verification in QA",
+        "content": "Automating API integration tests requires matching actual payloads against specifications. Mismatches can break downstream consumer applications."
+      }
+    ]
+  },
+  {
     "id": "CementCalculator",
     "slug": "cement-calculator",
     "name": "Cement Calculator",

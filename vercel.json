@@ -32,6 +32,621 @@
     }
   ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/tool/advanced-boq-calculator-india",
+      "destination": "/civil/advanced-boq-calculator-india",
+      "permanent": true
+    },
+    {
+      "source": "/tool/boq-calculator",
+      "destination": "/civil/boq-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/brick-calculator",
+      "destination": "/civil/brick-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/cement-calculator",
+      "destination": "/civil/cement-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/column-design-calculator",
+      "destination": "/civil/column-design-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/concrete-calculator",
+      "destination": "/civil/concrete-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/foundation-calculator",
+      "destination": "/civil/foundation-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/plaster-calculator",
+      "destination": "/civil/plaster-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/rcc-calculator",
+      "destination": "/civil/rcc-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/sand-calculator",
+      "destination": "/civil/sand-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/slab-calculator",
+      "destination": "/civil/slab-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/steel-weight-calculator",
+      "destination": "/civil/steel-weight-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/accessible-ramp-calculator",
+      "destination": "/architecture/accessible-ramp-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/accessible-toilet-clearance-calculator",
+      "destination": "/architecture/accessible-toilet-clearance-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/angle-calculator",
+      "destination": "/architecture/angle-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/arc-calculator",
+      "destination": "/architecture/arc-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/architectural-scale-calculator",
+      "destination": "/architecture/architectural-scale-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/area-calculator",
+      "destination": "/architecture/area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/bim-file-information-viewer",
+      "destination": "/architecture/bim-file-information-viewer",
+      "permanent": true
+    },
+    {
+      "source": "/tool/blueprint-area-calculator",
+      "destination": "/architecture/blueprint-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/building-height-calculator",
+      "destination": "/architecture/building-height-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/building-orientation-calculator",
+      "destination": "/architecture/building-orientation-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/building-volume-calculator",
+      "destination": "/architecture/building-volume-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/built-up-area-calculator",
+      "destination": "/architecture/built-up-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/cad-layer-counter",
+      "destination": "/architecture/cad-layer-counter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/cad-scale-converter",
+      "destination": "/architecture/cad-scale-converter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/carpet-area-calculator",
+      "destination": "/architecture/carpet-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/ceiling-height-calculator",
+      "destination": "/architecture/ceiling-height-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/circle-calculator",
+      "destination": "/architecture/circle-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/construction-cost-calculator",
+      "destination": "/architecture/construction-cost-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/contour-interval-calculator",
+      "destination": "/architecture/contour-interval-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/corridor-width-calculator",
+      "destination": "/architecture/corridor-width-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/daylight-factor-calculator",
+      "destination": "/architecture/daylight-factor-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/door-size-calculator",
+      "destination": "/architecture/door-size-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/drawing-revision-comparator",
+      "destination": "/architecture/drawing-revision-comparator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/drawing-scale-converter",
+      "destination": "/architecture/drawing-scale-converter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/dwg-version-checker",
+      "destination": "/architecture/dwg-version-checker",
+      "permanent": true
+    },
+    {
+      "source": "/tool/dxf-viewer",
+      "destination": "/architecture/dxf-viewer",
+      "permanent": true
+    },
+    {
+      "source": "/tool/elevator-capacity-calculator",
+      "destination": "/architecture/elevator-capacity-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/exit-capacity-calculator",
+      "destination": "/architecture/exit-capacity-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/facade-area-calculator",
+      "destination": "/architecture/facade-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/far-fsi-calculator",
+      "destination": "/architecture/far-fsi-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/fire-escape-travel-distance-calculator",
+      "destination": "/architecture/fire-escape-travel-distance-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/fire-exit-width-calculator",
+      "destination": "/architecture/fire-exit-width-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/floor-area-estimator",
+      "destination": "/architecture/floor-area-estimator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/floor-efficiency-calculator",
+      "destination": "/architecture/floor-efficiency-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/floor-tile-calculator",
+      "destination": "/architecture/floor-tile-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/glass-area-calculator",
+      "destination": "/architecture/glass-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/headroom-calculator",
+      "destination": "/architecture/headroom-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/material-quantity-estimator",
+      "destination": "/architecture/material-quantity-estimator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/natural-lighting-calculator",
+      "destination": "/architecture/natural-lighting-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/occupancy-load-calculator",
+      "destination": "/architecture/occupancy-load-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/occupant-load-calculator",
+      "destination": "/architecture/occupant-load-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/paint-calculator",
+      "destination": "/architecture/paint-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/parking-requirement-calculator",
+      "destination": "/architecture/parking-requirement-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/parking-space-calculator",
+      "destination": "/architecture/parking-space-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/pdf-drawing-merger",
+      "destination": "/architecture/pdf-drawing-merger",
+      "permanent": true
+    },
+    {
+      "source": "/tool/pdf-scale-measurement-tool",
+      "destination": "/architecture/pdf-scale-measurement-tool",
+      "permanent": true
+    },
+    {
+      "source": "/tool/plot-area-calculator",
+      "destination": "/architecture/plot-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/plot-coverage-calculator",
+      "destination": "/architecture/plot-coverage-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/polygon-area-calculator",
+      "destination": "/architecture/polygon-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/radius-diameter-calculator",
+      "destination": "/architecture/radius-diameter-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/ramp-slope-calculator",
+      "destination": "/architecture/ramp-slope-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/room-area-calculator",
+      "destination": "/architecture/room-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/room-ventilation-calculator",
+      "destination": "/architecture/room-ventilation-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/scale-factor-calculator",
+      "destination": "/architecture/scale-factor-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/setback-calculator",
+      "destination": "/architecture/setback-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/shadow-length-calculator",
+      "destination": "/architecture/shadow-length-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/site-coverage-calculator",
+      "destination": "/architecture/site-coverage-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/site-orientation-tool",
+      "destination": "/architecture/site-orientation-tool",
+      "permanent": true
+    },
+    {
+      "source": "/tool/site-slope-calculator",
+      "destination": "/architecture/site-slope-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/solar-exposure-calculator",
+      "destination": "/architecture/solar-exposure-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/space-planning-calculator",
+      "destination": "/architecture/space-planning-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/staircase-calculator",
+      "destination": "/architecture/staircase-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/sun-path-calculator",
+      "destination": "/architecture/sun-path-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/super-built-up-area-calculator",
+      "destination": "/architecture/super-built-up-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/triangle-calculator",
+      "destination": "/architecture/triangle-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/wall-area-calculator",
+      "destination": "/architecture/wall-area-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/wallpaper-calculator",
+      "destination": "/architecture/wallpaper-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/wind-direction-analyzer",
+      "destination": "/architecture/wind-direction-analyzer",
+      "permanent": true
+    },
+    {
+      "source": "/tool/window-size-calculator",
+      "destination": "/architecture/window-size-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/window-to-wall-ratio-calculator",
+      "destination": "/architecture/window-to-wall-ratio-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/advanced-data-cleaner-quality-analyzer",
+      "destination": "/developer/advanced-data-cleaner-quality-analyzer",
+      "permanent": true
+    },
+    {
+      "source": "/tool/api-tester",
+      "destination": "/developer/api-tester",
+      "permanent": true
+    },
+    {
+      "source": "/tool/base64-encoder-decoder",
+      "destination": "/developer/base64-encoder-decoder",
+      "permanent": true
+    },
+    {
+      "source": "/tool/canonical-url-generator",
+      "destination": "/developer/canonical-url-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/cron-generator",
+      "destination": "/developer/cron-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/css-formatter",
+      "destination": "/developer/css-formatter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/css-minifier",
+      "destination": "/developer/css-minifier",
+      "permanent": true
+    },
+    {
+      "source": "/tool/favicon-generator",
+      "destination": "/developer/favicon-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/hash-generator",
+      "destination": "/developer/hash-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/html-entity-encoder",
+      "destination": "/developer/html-entity-encoder",
+      "permanent": true
+    },
+    {
+      "source": "/tool/html-formatter",
+      "destination": "/developer/html-formatter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/js-formatter",
+      "destination": "/developer/js-formatter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/js-minifier",
+      "destination": "/developer/js-minifier",
+      "permanent": true
+    },
+    {
+      "source": "/tool/json-compare",
+      "destination": "/developer/json-compare",
+      "permanent": true
+    },
+    {
+      "source": "/tool/json-formatter",
+      "destination": "/developer/json-formatter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/json-validator",
+      "destination": "/developer/json-validator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/jwt-decoder",
+      "destination": "/developer/jwt-decoder",
+      "permanent": true
+    },
+    {
+      "source": "/tool/lorem-ipsum-generator",
+      "destination": "/developer/lorem-ipsum-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/meta-tag-generator",
+      "destination": "/developer/meta-tag-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/open-graph-preview",
+      "destination": "/developer/open-graph-preview",
+      "permanent": true
+    },
+    {
+      "source": "/tool/password-generator",
+      "destination": "/developer/password-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/regex-tester",
+      "destination": "/developer/regex-tester",
+      "permanent": true
+    },
+    {
+      "source": "/tool/robots-txt-generator",
+      "destination": "/developer/robots-txt-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/sitemap-generator",
+      "destination": "/developer/sitemap-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/sql-formatter",
+      "destination": "/developer/sql-formatter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/sql-minifier",
+      "destination": "/developer/sql-minifier",
+      "permanent": true
+    },
+    {
+      "source": "/tool/timestamp-converter",
+      "destination": "/developer/timestamp-converter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/url-encoder-decoder",
+      "destination": "/developer/url-encoder-decoder",
+      "permanent": true
+    },
+    {
+      "source": "/tool/uuid-generator",
+      "destination": "/developer/uuid-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/website-crawler",
+      "destination": "/developer/website-crawler",
+      "permanent": true
+    },
+    {
+      "source": "/tool/website-seo-audit",
+      "destination": "/developer/website-seo-audit",
+      "permanent": true
+    },
+    {
+      "source": "/tool/xml-formatter",
+      "destination": "/developer/xml-formatter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/yaml-formatter",
+      "destination": "/developer/yaml-formatter",
+      "permanent": true
+    },
+    {
+      "source": "/tool/boundary-value-analysis",
+      "destination": "/qa/boundary-value-analysis",
+      "permanent": true
+    },
+    {
+      "source": "/tool/bug-report-generator",
+      "destination": "/qa/bug-report-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/equivalence-partitioning",
+      "destination": "/qa/equivalence-partitioning",
+      "permanent": true
+    },
+    {
+      "source": "/tool/test-case-generator",
+      "destination": "/qa/test-case-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/test-data-generator",
+      "destination": "/qa/test-data-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tool/xpath-tester",
+      "destination": "/qa/xpath-tester",
+      "permanent": true
+    },
+    {
+      "source": "/tool/:slug",
+      "destination": "/calculators/:slug",
+      "permanent": true
+    }
   ]
 }

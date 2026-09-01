@@ -25,6 +25,8 @@ const PlaygroundHub = lazy(() => import('../pages/PlaygroundHub'));
 const BlogResources = lazy(() => import('../pages/BlogResources'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const CategoryLanding = lazy(() => import('../pages/CategoryLanding'));
+const ArchitectureHub = lazy(() => import('../pages/ArchitectureHub'));
+const QAHub = lazy(() => import('../pages/QAHub'));
 const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
@@ -92,22 +94,18 @@ export default function AppRoutes() {
       } />
       <Route path="/architecture" element={
         <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Architecture Suite...</div>}>
-          <CategoryLanding overrideCategory="architecture" />
+          <ArchitectureHub />
         </Suspense>
       } />
-      <Route path="/civil" element={
-        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Civil Engineering Suite...</div>}>
-          <CategoryLanding overrideCategory="civil" />
-        </Suspense>
-      } />
+      <Route path="/civil" element={<Navigate to="/architecture" replace />} />
       <Route path="/developer" element={
         <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Developer Tools...</div>}>
           <CategoryLanding overrideCategory="developer" />
         </Suspense>
       } />
       <Route path="/qa" element={
-        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading QA Tools...</div>}>
-          <CategoryLanding overrideCategory="qa" />
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading QA Workspace...</div>}>
+          <QAHub />
         </Suspense>
       } />
 
@@ -122,6 +120,8 @@ export default function AppRoutes() {
       <Route path="/tools/:categoryName" element={<LegacyCategoryRedirect />} />
       <Route path="/tool/:slug" element={<LegacyToolRedirect />} />
       <Route path="/tools/advanced-boq-calculator-india" element={<Navigate to="/civil/advanced-boq-calculator-india" replace />} />
+      <Route path="/architecture-tools" element={<Navigate to="/architecture" replace />} />
+      <Route path="/qa-tools" element={<Navigate to="/qa" replace />} />
 
       <Route path="/ai" element={
         <Suspense fallback={

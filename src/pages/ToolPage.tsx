@@ -4,7 +4,7 @@ import { toolsList } from '../data/tools';
 import { getToolCanonicalPath, getCategoryCanonicalPath } from '../routes/AppRoutes';
 import { additionalFaqs } from '../data/toolFaqs';
 import { categories } from '../data/categories';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import FAQSection from '../components/FAQSection';
 import HowToUse from '../components/HowToUse';
 import RelatedTools from '../components/RelatedTools';
@@ -311,6 +311,8 @@ const TestDataGenerator = lazy(() => import('../tools/TestDataGenerator'));
 const BoundaryValueAnalysis = lazy(() => import('../tools/BoundaryValueAnalysis'));
 const EquivalencePartitioning = lazy(() => import('../tools/EquivalencePartitioning'));
 const XPathSelectorTester = lazy(() => import('../tools/XPathSelectorTester'));
+const TestScenarioGenerator = lazy(() => import('../tools/TestScenarioGenerator'));
+const APIResponseComparator = lazy(() => import('../tools/APIResponseComparator'));
 
 // New Civil/Architecture Tools
 const CementCalculator = lazy(() => import('../tools/CementCalculator'));
@@ -616,12 +618,53 @@ const toolComponents: Record<string, React.ComponentType> = {
   BoundaryValueAnalysis,
   EquivalencePartitioning,
   XPathSelectorTester,
+  TestScenarioGenerator,
+  APIResponseComparator,
   CementCalculator,
   SandCalculator,
   PlasterCalculator,
   PlotAreaCalculator,
   CompoundInterestCalculator,
   IncomeTaxCalculator,
+};
+
+const crossSuiteSuggestions: Record<string, { text: string; linkText: string; linkUrl: string; label: string }> = {
+  'api-tester': {
+    label: 'JSON Helper',
+    text: 'Working with complex JSON payloads? Prettify, compress, or validate your parameters using the',
+    linkText: 'JSON Formatter & Validator',
+    linkUrl: '/developer/json-formatter'
+  },
+  'json-formatter': {
+    label: 'API Integration',
+    text: 'Need to test this JSON payload against a live HTTP API endpoint? Try the browser-based',
+    linkText: 'REST API HTTP Tester',
+    linkUrl: '/developer/api-tester'
+  },
+  'json-validator': {
+    label: 'JSON Schema Diff',
+    text: 'Comparing two different JSON outputs or schemas? Open the local client-side',
+    linkText: 'JSON Compare',
+    linkUrl: '/developer/json-compare'
+  },
+  'jwt-decoder': {
+    label: 'API Authentication',
+    text: 'Testing secure JWT-authenticated HTTP endpoints? Open the REST client to pass your decoded tokens in headers:',
+    linkText: 'Launch REST API Tester',
+    linkUrl: '/developer/api-tester'
+  },
+  'regex-tester': {
+    label: 'Validation Test Design',
+    text: 'Configuring input field validation pattern tests? Run BVA to calculate optimal test ranges:',
+    linkText: 'Boundary Value Analysis',
+    linkUrl: '/qa/boundary-value-analysis'
+  },
+  'xpath-tester': {
+    label: 'Pattern Matching',
+    text: 'Extracting dynamic page variables or text patterns? Check your matching expressions inside the',
+    linkText: 'Regex Tester',
+    linkUrl: '/developer/regex-tester'
+  }
 };
 
 interface ToolPageProps {
@@ -656,10 +699,25 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
     );
   }
 
+  // Canonical path validation to prevent duplicate indexing across pillars (calculators/civil/architecture/etc.)
+  const canonicalPath = getToolCanonicalPath(tool.category, tool.slug);
+  const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+
+  if (currentPath.toLowerCase() !== canonicalPath.toLowerCase()) {
+    return <Navigate to={canonicalPath} replace />;
+  }
+
   const ActiveToolComponent = toolComponents[tool.id];
+  const suggestion = crossSuiteSuggestions[tool.slug];
 
   const categoryObj = categories.find((c) => c.id === tool.category);
-  const categoryName = categoryObj ? categoryObj.name : tool.category;
+  let categoryName = categoryObj ? categoryObj.name : tool.category;
+  let categoryPath = getCategoryCanonicalPath(tool.category);
+
+  if (['architecture', 'civil', 'interior'].includes(tool.category)) {
+    categoryName = 'Architecture';
+    categoryPath = '/architecture';
+  }
 
   const mergedFaqs = [...tool.faqs, ...(additionalFaqs[tool.id] || [])];
 
@@ -680,7 +738,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       ]
     : [
         { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.toolique.in/' },
-        { '@type': 'ListItem', 'position': 2, 'name': categoryName, 'item': `https://www.toolique.in${getCategoryCanonicalPath(tool.category)}` },
+        { '@type': 'ListItem', 'position': 2, 'name': categoryName, 'item': `https://www.toolique.in${categoryPath}` },
         { '@type': 'ListItem', 'position': 3, 'name': tool.name, 'item': toolUrl },
       ];
 
@@ -745,7 +803,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       {/* Breadcrumb & Navigation */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
         <a
-          href={tool.category === '3d-printing' ? "/3d-print-studio" : tool.category === 'math-studio' ? "/math-studio" : getCategoryCanonicalPath(tool.category)}
+          href={tool.category === '3d-printing' ? "/3d-print-studio" : tool.category === 'math-studio' ? "/math-studio" : categoryPath}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -763,7 +821,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
               Math Studio
             </a>
           ) : (
-            <a href={getCategoryCanonicalPath(tool.category)} className="hover:text-indigo-500 transition-colors">
+            <a href={categoryPath} className="hover:text-indigo-500 transition-colors">
               {categoryName}
             </a>
           )}
@@ -784,6 +842,9 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
         </div>
       )}
 
+      {/* Curated Project Workflow (Stepper Timeline) */}
+      <RelatedTools currentToolSlug={tool.slug} category={tool.category} stepperOnly={true} />
+
       {/* Main Tool Container */}
       <section className="mt-6">
         {ActiveToolComponent ? (
@@ -801,6 +862,30 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
           </div>
         )}
       </section>
+
+      {/* Contextual Cross-Suite integration suggestions (Developer <-> QA) */}
+      {suggestion && (
+        <div className="p-5 rounded-2xl border border-indigo-500/10 dark:border-indigo-500/20 bg-indigo-500/5 text-left flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-indigo-500/20 transition">
+          <div className="space-y-1">
+            <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 text-[9px] font-black uppercase tracking-wider">
+              {suggestion.label}
+            </span>
+            <p className="text-xs text-zinc-655 dark:text-zinc-400 font-semibold leading-relaxed">
+              {suggestion.text}{' '}
+              <Link to={suggestion.linkUrl} className="text-indigo-600 dark:text-indigo-400 font-extrabold hover:underline">
+                {suggestion.linkText}
+              </Link>
+            </p>
+          </div>
+          <Link
+            to={suggestion.linkUrl}
+            className="saas-button-primary inline-flex items-center gap-1.5 py-1.5 px-3 text-xs shrink-0 self-stretch sm:sm:self-auto justify-center"
+          >
+            <span>Launch Tool</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      )}
 
       {/* Dynamic Security & Local computation disclaimers */}
       {(tool.category === 'developer' || tool.category === 'security' || tool.category === 'qa' || tool.category === 'web') && (

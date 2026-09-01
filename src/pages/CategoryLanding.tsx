@@ -17,8 +17,7 @@ interface CategoryLandingProps {
 
 const PILLARS = [
   { id: 'calculators', name: 'Calculators Hub', description: 'Comprehensive calculators for finance, math, date-time, and health.', path: '/calculators' },
-  { id: 'architecture', name: 'Architecture Suite', description: 'Zonal bylaws, setback clearances, and carpet/built-up space planners.', path: '/architecture' },
-  { id: 'civil', name: 'Civil Engineering', description: 'Concrete mixes, brick counts, sand volumes, and slab quantities.', path: '/civil' },
+  { id: 'architecture', name: 'Architecture & Civil Suite', description: 'Zonal bylaws, setbacks, RERA carpet, construction costs, and material estimates.', path: '/architecture' },
   { id: 'developer', name: 'Developer Utilities', description: 'SQL formatting, JSON validation, JWT inspects, and base64 codecs.', path: '/developer' },
   { id: 'qa', name: 'QA Engineering', description: 'Generate test cases, mock datasets, bug templates, and boundary limits.', path: '/qa' }
 ];
