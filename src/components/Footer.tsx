@@ -442,7 +442,7 @@ export default function Footer() {
       {/* -------------------- BACK TO TOP FLOATING BUTTON -------------------- */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 p-2.5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 shadow-xl hover:text-indigo-500 dark:hover:text-indigo-400 hover:scale-110 hover:-translate-y-1 active:scale-95 transition-all duration-300 z-50 cursor-pointer ${
+        className={`fixed bottom-6 right-22 sm:bottom-8 sm:right-26 p-3 rounded-2xl bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800/80 text-zinc-500 dark:text-zinc-400 shadow-xl hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-500/30 hover:scale-105 active:scale-95 transition-all duration-300 z-40 cursor-pointer ${
           showBackToTop ? 'opacity-100 translate-y-0 visible' : 'opacity-0 translate-y-4 invisible pointer-events-none'
         }`}
         title="Scroll to Top"

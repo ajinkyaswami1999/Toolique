@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import FloatingActionMenu from './floating/FloatingActionMenu';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -33,6 +34,9 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </main>
       <Footer />
+
+      {/* Global Speed Dial Floating Action Menu */}
+      <FloatingActionMenu />
     </div>
   );
 }

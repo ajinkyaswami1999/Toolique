@@ -1,13 +1,15 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { toolsList } from '../data/tools';
 import { getToolCanonicalPath, getCategoryCanonicalPath } from '../routes/AppRoutes';
 import { additionalFaqs } from '../data/toolFaqs';
 import { categories } from '../data/categories';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { getToolWorkflows } from '../data/workflows';
+import { ArrowLeft, ArrowRight, Layers } from 'lucide-react';
 import FAQSection from '../components/FAQSection';
 import HowToUse from '../components/HowToUse';
 import RelatedTools from '../components/RelatedTools';
+import WorkflowModal from '../components/WorkflowModal';
 import SEO from '../components/SEO';
 
 // Import all 31 tools
@@ -724,6 +726,42 @@ const crossSuiteSuggestions: Record<string, { text: string; linkText: string; li
     text: 'Have a lump sum amount to lock in safe bank interest with quarterly compounding? Check returns in the',
     linkText: 'FD Calculator',
     linkUrl: '/calculators/fd-calculator'
+  },
+  'sql-formatter': {
+    label: 'SQL Practice Academy',
+    text: 'Master SQL queries, joins, and indexing with interactive coding interview challenges:',
+    linkText: 'SQL Academy Track',
+    linkUrl: '/academy/sql'
+  },
+  'sql-minifier': {
+    label: 'SQL Beautifier',
+    text: 'Need to format or read complex multiline database queries with proper indentation?',
+    linkText: 'SQL Formatter',
+    linkUrl: '/developer/sql-formatter'
+  },
+  'website-crawler': {
+    label: 'Technical SEO',
+    text: 'Auditing page meta tags, OpenGraph data, and indexing headers for this URL? Run the',
+    linkText: 'Website SEO Audit Tool',
+    linkUrl: '/developer/website-seo-audit'
+  },
+  'website-seo-audit': {
+    label: 'Robots & Crawling',
+    text: 'Need to set crawler directives or generate search engine sitemaps for your domain? Open',
+    linkText: 'Robots.txt Generator',
+    linkUrl: '/developer/robots-txt-generator'
+  },
+  'cron-generator': {
+    label: 'Timestamp Converter',
+    text: 'Working with scheduled batch jobs and UTC timestamp conversions? Open the',
+    linkText: 'Unix Timestamp Converter',
+    linkUrl: '/developer/timestamp-converter'
+  },
+  'base64-encoder-decoder': {
+    label: 'JWT Token Debugger',
+    text: 'Decoding base64url JSON Web Tokens or checking authorization claims? Inspect tokens in the',
+    linkText: 'JWT Decoder & Debugger',
+    linkUrl: '/developer/jwt-decoder'
   }
 };
 
@@ -801,6 +839,27 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
         { '@type': 'ListItem', 'position': 2, 'name': categoryName, 'item': `https://www.toolique.in${categoryPath}` },
         { '@type': 'ListItem', 'position': 3, 'name': tool.name, 'item': toolUrl },
       ];
+
+  const [isWorkflowModalOpen, setIsWorkflowModalOpen] = useState(false);
+
+  const toolWorkflows = getToolWorkflows(tool.slug);
+  const primaryWorkflow = toolWorkflows.find(w => {
+    if (tool.category === 'developer' || tool.category === 'web') {
+      return ['api-payload-inspection', 'sql-database-optimization', 'web-seo-engineering'].includes(w.id);
+    }
+    if (tool.category === 'qa') {
+      return ['manual-test-design', 'api-json-validation', 'web-automation-locators'].includes(w.id);
+    }
+    if (tool.category === 'architecture' || tool.category === 'civil') {
+      return ['plot-to-material', 'room-to-finish'].includes(w.id);
+    }
+    if (tool.category === 'finance' || (tool.category as string) === 'calculators' || tool.category === 'math-studio') {
+      return ['salary-tax-planning', 'wealth-investment-compounding', 'retirement-pension-planning', 'calculus-analysis'].includes(w.id);
+    }
+    return true;
+  }) || toolWorkflows[0];
+
+  const workflowActiveIdx = primaryWorkflow ? primaryWorkflow.steps.findIndex(s => s.slug === tool.slug) : -1;
 
   const toolSchema = {
     '@context': 'https://schema.org',
@@ -890,6 +949,27 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
         </div>
       </div>
 
+      {/* Floating Project Workflow Overview Trigger Button (Right Aligned Below Breadcrumbs) */}
+      {primaryWorkflow && workflowActiveIdx !== -1 && (
+        <div className="flex items-center justify-end -mt-3 mb-1 animate-fadeIn">
+          <button
+            type="button"
+            onClick={() => setIsWorkflowModalOpen(true)}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-indigo-50/90 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/80 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 hover:border-indigo-400/50 transition shadow-xs group cursor-pointer"
+          >
+            <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+            <span className="text-xs font-bold flex items-center gap-1.5">
+              <span className="text-zinc-500 dark:text-zinc-400 font-medium">Project Workflow:</span>
+              <strong className="font-extrabold text-indigo-950 dark:text-white">{primaryWorkflow.name}</strong>
+            </span>
+            <span className="px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase">
+              Step {workflowActiveIdx + 1} of {primaryWorkflow.steps.length}
+            </span>
+            <Layers className="w-3.5 h-3.5 text-indigo-500 group-hover:scale-110 transition-transform" />
+          </button>
+        </div>
+      )}
+
       {/* Tool Header */}
       {!tool.hideLayoutHeader && (
         <div className="space-y-3 text-left">
@@ -902,16 +982,13 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
         </div>
       )}
 
-      {/* Curated Project Workflow (Stepper Timeline) */}
-      <RelatedTools currentToolSlug={tool.slug} category={tool.category} stepperOnly={true} />
-
-      {/* Main Tool Container */}
+      {/* Main Tool Container (Immediate User Interaction) */}
       <section className="mt-6">
         {ActiveToolComponent ? (
           <Suspense fallback={
             <div className="p-12 saas-card flex flex-col items-center justify-center space-y-4">
               <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Loading calculator...</p>
+              <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Loading tool...</p>
             </div>
           }>
             <ActiveToolComponent />
@@ -984,6 +1061,16 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
 
       {/* Related Tools */}
       <RelatedTools currentToolSlug={tool.slug} category={tool.category} />
+
+      {/* Interactive Project Workflow Overview Modal */}
+      {primaryWorkflow && (
+        <WorkflowModal
+          workflow={primaryWorkflow}
+          currentToolSlug={tool.slug}
+          isOpen={isWorkflowModalOpen}
+          onClose={() => setIsWorkflowModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

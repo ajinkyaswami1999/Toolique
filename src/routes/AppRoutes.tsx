@@ -28,6 +28,7 @@ const CategoryLanding = lazy(() => import('../pages/CategoryLanding'));
 const ArchitectureHub = lazy(() => import('../pages/ArchitectureHub'));
 const QAHub = lazy(() => import('../pages/QAHub'));
 const FinanceHub = lazy(() => import('../pages/FinanceHub'));
+const DeveloperHub = lazy(() => import('../pages/DeveloperHub'));
 const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
@@ -102,8 +103,8 @@ export default function AppRoutes() {
       } />
       <Route path="/civil" element={<Navigate to="/architecture" replace />} />
       <Route path="/developer" element={
-        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Developer Tools...</div>}>
-          <CategoryLanding overrideCategory="developer" />
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Developer Suite...</div>}>
+          <DeveloperHub />
         </Suspense>
       } />
       <Route path="/qa" element={
@@ -132,6 +133,7 @@ export default function AppRoutes() {
       <Route path="/architecture-tools" element={<Navigate to="/architecture" replace />} />
       <Route path="/qa-tools" element={<Navigate to="/qa" replace />} />
       <Route path="/finance-tools" element={<Navigate to="/finance" replace />} />
+      <Route path="/developer-tools" element={<Navigate to="/developer" replace />} />
 
       <Route path="/ai" element={
         <Suspense fallback={

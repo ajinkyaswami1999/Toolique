@@ -120,6 +120,42 @@ export const workflows: Workflow[] = [
       { title: 'Gratuity Payout', description: 'Calculate statutory end-of-service gratuity entitlement.', slug: 'gratuity-calculator', id: 'GratuityCalculator' },
       { title: 'Loan EMI Payoff', description: 'Model loan amortizations to achieve debt-free retirement.', slug: 'emi-calculator', id: 'EMICalculator' }
     ]
+  },
+  {
+    id: 'api-payload-inspection',
+    name: 'API Development & Payload Inspection',
+    description: 'Send HTTP requests, format JSON responses, compare API schemas, decode JWT auth tokens, and encode binary headers.',
+    steps: [
+      { title: 'REST API Tester', description: 'Send GET, POST, PUT, DELETE requests with custom headers.', slug: 'api-tester', id: 'ApiTester' },
+      { title: 'JSON Formatter', description: 'Prettify, validate, and repair structured JSON responses.', slug: 'json-formatter', id: 'JSONFormatter' },
+      { title: 'JSON Compare', description: 'Find semantic differences between expected and actual payloads.', slug: 'json-compare', id: 'JSONCompare' },
+      { title: 'JWT Decoder', description: 'Inspect token headers, claims, and signature validity.', slug: 'jwt-decoder', id: 'JWTDecoder' },
+      { title: 'Base64 Encoder', description: 'Encode and decode authorization tokens and binary strings.', slug: 'base64-encoder-decoder', id: 'Base64Tool' }
+    ]
+  },
+  {
+    id: 'sql-database-optimization',
+    name: 'SQL & Database Engineering',
+    description: 'Format complex queries, minify SQL for migration scripts, generate primary key UUIDs, hash passwords, and convert Unix epoch timestamps.',
+    steps: [
+      { title: 'SQL Formatter', description: 'Beautify queries across MySQL, Postgres, SQL Server, and Oracle.', slug: 'sql-formatter', id: 'SQLFormatter' },
+      { title: 'SQL Minifier', description: 'Strip comments and whitespace for compact database migrations.', slug: 'sql-minifier', id: 'SQLMinifier' },
+      { title: 'UUID Generator', description: 'Generate RFC 4122 compliant v4 primary key identifiers.', slug: 'uuid-generator', id: 'UUIDGenerator' },
+      { title: 'Hash Generator', description: 'Compute cryptographic MD5, SHA-256, and SHA-512 hashes.', slug: 'hash-generator', id: 'HashGenerator' },
+      { title: 'Timestamp Converter', description: 'Convert Unix epoch timestamps to ISO dates and timezones.', slug: 'timestamp-converter', id: 'TimestampConverter' }
+    ]
+  },
+  {
+    id: 'web-seo-engineering',
+    name: 'Web Performance & Technical SEO',
+    description: 'Crawl site links, audit technical Core Web Vitals, generate robots.txt directives, compile sitemaps, and set canonical tags.',
+    steps: [
+      { title: 'Website Crawler', description: 'Crawl internal links, extract HTTP status codes, and find broken URLs.', slug: 'website-crawler', id: 'WebsiteCrawler' },
+      { title: 'Technical SEO Audit', description: 'Analyze meta tags, OpenGraph data, headings, and indexability.', slug: 'website-seo-audit', id: 'WebsiteSeoAudit' },
+      { title: 'Robots.txt Builder', description: 'Create search engine crawler allow/disallow directives.', slug: 'robots-txt-generator', id: 'RobotsTxtGenerator' },
+      { title: 'Sitemap Generator', description: 'Compile XML sitemaps with change frequency and priority tags.', slug: 'sitemap-generator', id: 'SitemapGenerator' },
+      { title: 'Canonical URL Tag', description: 'Generate self-referencing canonical tags to prevent duplicate content.', slug: 'canonical-url-generator', id: 'CanonicalUrlGenerator' }
+    ]
   }
 ];
 
