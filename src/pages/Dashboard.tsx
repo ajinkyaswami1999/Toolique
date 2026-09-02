@@ -18,7 +18,10 @@ import {
   Copy, 
   Check, 
   Zap,
-  Clock
+  Clock,
+  Edit3,
+  X,
+  RotateCcw
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
@@ -63,6 +66,11 @@ export default function Dashboard() {
   // Storage Stats
   const [storageSizeKB, setStorageSizeKB] = useState<number>(0);
 
+  // Custom Workspace Name
+  const [userName, setUserName] = useState<string>('Developer & Creator Workspace');
+  const [isEditingName, setIsEditingName] = useState<boolean>(false);
+  const [tempName, setTempName] = useState<string>('');
+
   // Load profile state on mount
   useEffect(() => {
     loadAllData();
@@ -88,6 +96,12 @@ export default function Dashboard() {
 
   const loadAllData = async () => {
     try {
+      // 0. Custom Workspace Name
+      const savedName = localStorage.getItem('toolique_user_name');
+      if (savedName && savedName.trim()) {
+        setUserName(savedName.trim());
+      }
+
       // 1. Academy Progress & Streaks
       const academyRaw = localStorage.getItem('toolique_academy_progress');
       if (academyRaw) {
@@ -226,7 +240,9 @@ export default function Dashboard() {
       localStorage.removeItem('toolique_favorites');
       localStorage.removeItem('toolique_note_main_scratchpad');
       localStorage.removeItem('toolique_recent_history');
+      localStorage.removeItem('toolique_user_name');
       
+      setUserName('Developer & Creator Workspace');
       setStreak(1);
       setLongestStreak(1);
       setXp(0);
@@ -239,11 +255,39 @@ export default function Dashboard() {
     }
   };
 
+  // Workspace Name Handlers
+  const handleStartEditName = () => {
+    setTempName(userName);
+    setIsEditingName(true);
+  };
+
+  const handleSaveName = () => {
+    const trimmed = tempName.trim();
+    const finalName = trimmed || 'Developer & Creator Workspace';
+    setUserName(finalName);
+    localStorage.setItem('toolique_user_name', finalName);
+    setIsEditingName(false);
+    calculateStorageUsage();
+  };
+
+  const handleCancelName = () => {
+    setIsEditingName(false);
+  };
+
+  const handleResetName = () => {
+    const defaultName = 'Developer & Creator Workspace';
+    setUserName(defaultName);
+    localStorage.removeItem('toolique_user_name');
+    setIsEditingName(false);
+    calculateStorageUsage();
+  };
+
   // Export Full Profile Backup
   const exportProfile = () => {
     const profile = {
       version: '2.0',
       exportedAt: new Date().toISOString(),
+      userName,
       streak,
       longestStreak,
       xp,
@@ -272,6 +316,10 @@ export default function Dashboard() {
     reader.onload = async (event) => {
       try {
         const data = JSON.parse(event.target?.result as string);
+        if (data.userName) {
+          localStorage.setItem('toolique_user_name', data.userName);
+          setUserName(data.userName);
+        }
         if (data.streak !== undefined) {
           localStorage.setItem('toolique_daily_streak', data.streak.toString());
           setStreak(data.streak);
@@ -371,21 +419,66 @@ export default function Dashboard() {
         {/* Glow ambient background accent */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
 
-        <div className="flex items-center gap-5 relative z-10">
+        <div className="flex items-center gap-5 relative z-10 flex-1 min-w-0">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 p-0.5 shadow-lg shadow-indigo-500/20 shrink-0">
             <div className="w-full h-full rounded-[14px] bg-zinc-950 flex items-center justify-center text-indigo-400">
               <User className="w-8 h-8" />
             </div>
           </div>
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                Developer & Creator Workspace
-              </h1>
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-[10px] font-black uppercase tracking-wider">
-                Level {level} Builder
-              </span>
-            </div>
+          <div className="space-y-1.5 flex-1 min-w-0">
+            {isEditingName ? (
+              <div className="flex items-center gap-2 flex-wrap animate-fadeIn">
+                <input
+                  type="text"
+                  value={tempName}
+                  onChange={(e) => setTempName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveName();
+                    if (e.key === 'Escape') handleCancelName();
+                  }}
+                  autoFocus
+                  placeholder="Enter workspace name..."
+                  className="px-3.5 py-1.5 rounded-xl bg-zinc-900 text-white font-black text-lg sm:text-2xl border-2 border-indigo-500 focus:outline-none shadow-inner max-w-md w-full"
+                />
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleSaveName}
+                    className="p-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition cursor-pointer shadow-xs flex items-center gap-1 text-xs font-bold"
+                    title="Save Name (Enter)"
+                  >
+                    <Check className="w-4 h-4" />
+                    <span className="hidden sm:inline">Save</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancelName}
+                    className="p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white transition cursor-pointer"
+                    title="Cancel (Esc)"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2.5 flex-wrap group">
+                <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight break-words">
+                  {userName}
+                </h1>
+                <button
+                  type="button"
+                  onClick={handleStartEditName}
+                  className="p-1.5 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800/80 border border-transparent hover:border-zinc-700/80 transition cursor-pointer flex items-center gap-1 text-xs font-bold group-hover:border-zinc-700"
+                  title="Change Workspace Name"
+                >
+                  <Edit3 className="w-3.5 h-3.5 text-indigo-400" />
+                  <span className="text-[11px] text-zinc-400 group-hover:text-zinc-200">Rename</span>
+                </button>
+                <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-[10px] font-black uppercase tracking-wider">
+                  Level {level} Builder
+                </span>
+              </div>
+            )}
             <p className="text-xs text-zinc-400 font-medium leading-relaxed max-w-2xl flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>100% Client-Side Sandbox. All calculations, notes, history, and progress are stored locally on your device.</span>
@@ -1081,6 +1174,62 @@ export default function Dashboard() {
                 <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400">Export Ready</span>
                 <div className="text-xl font-black text-zinc-900 dark:text-white">JSON Backup</div>
                 <p className="text-[10px] text-zinc-500 font-medium">1-Click portable workspace file</p>
+              </div>
+            </div>
+
+            {/* Workspace Customization Card */}
+            <div className="saas-card p-6 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 space-y-4">
+              <div className="flex items-center justify-between gap-4 flex-wrap pb-3 border-b border-zinc-100 dark:border-zinc-850">
+                <div className="space-y-0.5">
+                  <h4 className="text-sm font-black text-zinc-900 dark:text-white flex items-center gap-2">
+                    <Edit3 className="w-4 h-4 text-indigo-500" />
+                    <span>Workspace Customization</span>
+                  </h4>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                    Set a custom name or alias for your personal dashboard and browser workspace.
+                  </p>
+                </div>
+                {userName !== 'Developer & Creator Workspace' && (
+                  <button
+                    type="button"
+                    onClick={handleResetName}
+                    className="text-xs font-bold text-zinc-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 cursor-pointer transition"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Reset to Default</span>
+                  </button>
+                )}
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={(e) => {
+                    const newName = e.target.value;
+                    setUserName(newName);
+                    if (newName.trim()) {
+                      localStorage.setItem('toolique_user_name', newName.trim());
+                    } else {
+                      localStorage.removeItem('toolique_user_name');
+                    }
+                  }}
+                  placeholder="e.g. Alex's Workspace, Command Center..."
+                  className="saas-input flex-1 font-bold text-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const finalName = userName.trim() || 'Developer & Creator Workspace';
+                    setUserName(finalName);
+                    localStorage.setItem('toolique_user_name', finalName);
+                    alert(`Workspace name updated to "${finalName}"!`);
+                  }}
+                  className="saas-button-primary px-5 py-2.5 text-xs font-bold shrink-0 flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>Save Name</span>
+                </button>
               </div>
             </div>
 
