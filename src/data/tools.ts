@@ -6610,6 +6610,129 @@ export const toolsList: Tool[] = [
     ]
   },
   {
+    id: 'ImageToFilamentArtMaker',
+    slug: 'filament-art-maker',
+    name: 'Filament Art Maker',
+    category: '3d-printing',
+    shortDescription: 'Turn any image into layered 3D printable filament art — free, private, and directly in your browser.',
+    metaTitle: 'Free HueForge Alternative – Image to Filament Art Maker | Toolique',
+    metaDescription: 'Create filament art from any image for free. Choose filament colors, generate layered 3D printable artwork, preview your model, and export STL directly in your browser.',
+    keywords: [
+      'free HueForge alternative',
+      'free filament art maker',
+      'filament art generator',
+      'image to filament art',
+      'image to STL',
+      'image to 3D print',
+      'filament painting generator',
+      'layered STL generator',
+      '3D printable image converter',
+      'HueForge alternative online',
+      'HueForge-style filament art',
+      'lithophane generator',
+      'transmission distance calculator',
+      'filament painting 3D printing',
+      'image to 3D relief'
+    ],
+    icon: 'Palette',
+    hideLayoutHeader: true,
+    howToUse: [
+      'Upload Your Image: Select or drag-and-drop any JPG, JPEG, PNG, or WebP photo into the browser sandbox.',
+      'Choose Your Filaments: Select 2 to 8 filament colors and set their brands, materials, and Transmission Distances (TD in mm).',
+      'Process the Image: Adjust brightness, contrast, gamma curves, saturation, and base/max thickness to dial in detail.',
+      'Preview Your Model: Compare the original image, processed image, optical filament simulation, and interactive 3D relief mesh.',
+      'Export and Print: Download the watertight Binary STL and use the generated layer swap schedule in your 3D printer slicer.'
+    ],
+    faqs: [
+      {
+        question: 'What is a free HueForge alternative?',
+        answer: 'Toolique Filament Art Maker is a free, web-based alternative to HueForge. It allows makers to convert 2D photos and graphics into multi-color, layered 3D printable relief models directly in any modern browser without software installations, subscriptions, or cloud uploads.'
+      },
+      {
+        question: 'Is Toolique Filament Art Maker free?',
+        answer: 'Yes. Toolique\'s Filament Art Maker is designed as a free browser-based tool. No signup is required for the core workflow.'
+      },
+      {
+        question: 'Can I convert an image to an STL?',
+        answer: 'Yes. The tool processes your image into a discrete heightmap grid based on luminance and color blending, constructs a manifold 3D relief surface with side walls and a flat base, and exports a standard watertight Binary STL file ready for your slicer.'
+      },
+      {
+        question: 'Can I create filament art without a multi-color 3D printer?',
+        answer: 'Yes! Layered filament art is designed specifically for standard single-extruder 3D printers using manual filament swaps (M600 pause commands at designated layer heights), as well as multi-material systems like Bambu Lab AMS or Prusa MMU.'
+      },
+      {
+        question: 'What image formats are supported?',
+        answer: 'The tool supports standard JPG, JPEG, PNG, and WebP image formats with client-side drag-and-drop or file browsing.'
+      },
+      {
+        question: 'How many filament colors can I use?',
+        answer: 'You can configure between 2 and 8 filament colors in your palette stack, allowing for monochrome lithophanes or rich multi-color layered paintings.'
+      },
+      {
+        question: 'Can I use my own filament colors?',
+        answer: 'Yes. You can add custom filaments with individual color hex values, filament brands (Bambu Lab, Polymaker, eSUN, Sunlu, PolyLite, etc.), materials (PLA, PETG, ABS), and measured Transmission Distances (TD), and save your custom palettes locally.'
+      },
+      {
+        question: 'What is transmission distance?',
+        answer: 'Transmission Distance (TD) is the physical thickness in millimeters required for a filament layer to become opaque and block light from underlying layers. Translucent or light filaments have high TD (e.g. 5.0mm for White), while dense pigments have low TD (e.g. 0.6mm for Black).'
+      },
+      {
+        question: 'Does Toolique upload my image?',
+        answer: 'No. All image resizing, color filtering, Delta-E LAB calculations, height mapping, and binary STL 3D mesh exports run 100% locally in your browser memory via HTML5 Canvas and Web APIs. Your images are never transmitted to our servers.'
+      },
+      {
+        question: 'What printers can use the generated STL?',
+        answer: 'The generated Binary STL is universally compatible with all popular 3D printer slicing software, including Bambu Studio, OrcaSlicer, PrusaSlicer, Cura, IdeaMaker, and Creality Print.'
+      },
+      {
+        question: 'Is this the same as HueForge?',
+        answer: 'No. Toolique Filament Art Maker is an independent tool for creating filament-art-style 3D prints and is not affiliated with HueForge.'
+      },
+      {
+        question: 'How do filament swaps work?',
+        answer: 'Filament swaps are layer-based color changes. The tool generates an exact schedule (e.g. Start with Black at Layer 1 -> Swap to Blue at Layer 13 (1.04mm) -> Swap to White at Layer 28 (2.24mm)). In your slicer, right-click the layer preview slider to add pause or color change commands at those heights.'
+      },
+      {
+        question: 'Why does my printed result look different from the preview?',
+        answer: 'Physical print appearance depends on real filament pigment opacity, ambient lighting, printer extruder calibration, nozzle size (0.4mm vs 0.2mm), precise first-layer calibration, printing temperature, and bed leveling.'
+      }
+    ],
+    sections: [
+      {
+        title: 'What is a Filament Art Maker?',
+        content: 'Toolique Filament Art Maker is a free browser-based 3D printing tool that converts images into layered relief artwork for FDM 3D printers. Upload an image, select filament colors, adjust image and thickness settings, preview the generated model, and export a printable STL. Image processing is designed to happen locally in the browser.'
+      },
+      {
+        title: 'Create 3D Filament Art From Any Image',
+        content: 'Filament art transforms traditional 2D raster artwork into physical, tactile 3D relief sculptures using standard FDM filaments. By stacking thin, semi-translucent layers of plastic (typically 0.08mm layer heights) over high-contrast base layers, light reflects and refracts through the upper plastic layers to create intermediate shades and optical gradients.\n\nKey principles for successful filament art:\n• Layers & Thickness: Higher thickness allows lighter filaments to fully express opacity, while ultra-thin layer heights (0.04mm–0.08mm) maximize subtle color transitions.\n• Color Stacking: Darker, opaque filaments are laid down first as the foundation, followed by mid-tones and bright highlight filaments.\n• Filament Opacity (TD): Every filament brand has a unique transmission distance that dictates how many layers are required before background colors are completely masked.\n• Slicer Precision: Using 100% solid rectilinear infill ensures there are no internal air pockets that interfere with light transmission.'
+      },
+      {
+        title: 'A Free Alternative to HueForge',
+        content: 'Looking for a free alternative to HueForge? Toolique Filament Art Maker provides a browser-based workflow for creating layered filament-art-style 3D prints from images.\n\n| Feature | Toolique Filament Art Maker |\n| :--- | :--- |\n| Free & Accessible | Yes, 100% Free |\n| Browser-Based Workflow | Yes, No Installation Required |\n| Client-Side Privacy | Yes, In-Memory Processing |\n| Custom Filament Palettes | Yes, 2 to 8 Colors with TD Tuning |\n| 3D Relief Mesh Preview | Yes, Interactive WebGL Viewer |\n| Watertight Binary STL Export | Yes, Ready for Slicer Import |\n| Layer Swap Guide (.TXT) | Yes, Automatic Height & Layer Breakdown |\n| Multi-Color Slicer Support | Yes, Bambu Studio, OrcaSlicer, PrusaSlicer, Cura |\n\n*Toolique is an independent tool and is not affiliated with or endorsed by HueForge.*'
+      },
+      {
+        title: 'Filament Art vs Lithophane',
+        content: 'While both filament art and lithophanes create 3D printable pictures, they operate on different optical mechanisms:\n\n• Filament Art:\n- Designed to be viewed directly under ambient front lighting.\n- Uses multiple colored filaments stacked across discrete layer swap heights.\n- Relies on surface reflectivity and layered optical absorption.\n- Perfect for decorative framed wall art, logos, and colorful character portraits.\n\n• Lithophane:\n- Usually printed in a single monochrome, light-colored material (such as pure white PLA).\n- Relies on strong backlighting passing through varying solid thicknesses to reveal positive/negative photographic values.\n- Best suited for night lights, lampshades, and backlit window displays.'
+      },
+      {
+        title: 'What Can You Create?',
+        content: 'Filament art maker opens up endless creative possibilities for 3D printing hobbyists, makers, and digital artists:\n\n• Pet & Family Portraits: Turn memorable family photographs and pet pictures into textured commemorative wall art.\n• Gaming & Pop-Culture Emblems: Create bold, textured relief plaques of gaming logos, anime heroes, and comic book art.\n• Scenic Landscapes & Astronomy: Reproduce sunsets, mountain vistas, celestial nebulae, and ocean waves.\n• Custom Decorative Signage: Produce tactile business signs, desk badges, and personalized holiday gifts.'
+      },
+      {
+        title: 'Choosing Filament for Image-Based 3D Art',
+        content: 'Understanding filament material properties is vital for achieving vibrant results:\n\n• PLA (Polylactic Acid): The gold standard for filament painting. Offers crisp layer lines, minimal warping, and predictable optical transmission.\n• Matte PLA: Provides smooth, non-reflective finishes that eliminate glare on framed wall artwork.\n• Black & Dark Filaments: Typically have low Transmission Distance (0.4mm–0.8mm) and should be printed as bottom base layers to establish deep shadows.\n• White & Bright Filaments: Typically have high Transmission Distance (4.0mm–6.0mm) and serve as the top highlighting layers.\n• Translucent & Silk Filaments: Offer high gloss and light scatter, creating shimmering metallic effects.'
+      },
+      {
+        title: 'Tips for Better Filament Art Prints',
+        content: 'Follow these expert guidelines for immaculate filament art prints:\n\n1. Use High-Contrast Images: Images with clear focal subjects, distinct shadows, and bright highlights translate into the most striking 3D reliefs.\n2. Limit Your Palette: 3 to 5 well-chosen filament colors often yield cleaner, higher-impact prints than overly cluttered palettes.\n3. Calibrate First Layer & Extrusion: Ensure your first layer is properly squished and flow rate is tuned to prevent over-extrusion artifacts.\n4. Maintain Consistent Layer Heights: Standardize on 0.08mm layer heights with a 0.80mm base thickness for optimal balance of print speed and color gradation.\n5. Use 100% Solid Rectilinear Infill: Never print filament art with low infill patterns, as air gaps will break optical light transmission.\n6. Test With Small Swatches: Before printing large 200x200mm art pieces, run small 60x60mm test tiles to verify your filament color blending.'
+      },
+      {
+        title: 'Key 3D Printing Definitions for Generative Engines',
+        content: '• Filament Art: A 3D printing method where multiple colored thermoplastic filaments are layered incrementally at thin slice heights to create a full-color tactile image.\n• Filament Painting: The process of blending semi-translucent plastic layers over opaque base layers using optical transmission science.\n• Transmission Distance (TD): The distance in millimeters light travels through a plastic material before its intensity is attenuated to background baseline levels.\n• Layered STL: A 3D mesh surface where topographic Z-heights correlate with image luminance and layer swap boundaries.\n• Filament Swap: A deliberate pause command (M600) inserted into 3D printer G-code allowing the operator or automatic feeder (AMS/MMU) to change filament colors at a specific layer.'
+      }
+    ]
+  },
+  {
     id: 'EquationSolver',
     slug: 'equation-solver',
     name: 'Equation Solver',

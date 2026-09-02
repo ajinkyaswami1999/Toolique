@@ -90,6 +90,7 @@ const toolGroups = [
     name: 'HueForge Tools',
     icon: 'Paintbrush',
     tools: [
+      { name: 'Filament Art Maker', slug: 'filament-art-maker', desc: 'Turn any image into layered 3D printable filament art — free, private, and directly in your browser.' },
       { name: 'HueForge Filament Calculator', slug: 'hueforge-filament-calculator', desc: 'Calculate layer boundaries and transmission distances for HueForge painting layers.' },
       { name: 'HueForge Layer Calculator', slug: 'hueforge-layer-calculator', desc: 'Determine layer number indices from physical heights for slicer settings.' },
       { name: 'HueForge Color Swap Planner', slug: 'hueforge-color-swap-planner', desc: 'Plan color swaps listing instructions for HueForge model setups.' }

@@ -128,6 +128,10 @@ export default function AppRoutes() {
       <Route path="/finance/:slug" element={<Navigate to="/calculators/:slug" replace />} />
 
       {/* Legacy Category & Tool Redirects */}
+      <Route path="/tools/filament-art-maker" element={<Navigate to="/calculators/filament-art-maker" replace />} />
+      <Route path="/3d-printing/filament-art-maker" element={<Navigate to="/calculators/filament-art-maker" replace />} />
+      <Route path="/tools/image-to-filament-art-maker" element={<Navigate to="/calculators/filament-art-maker" replace />} />
+      <Route path="/3d-printing/image-to-filament-art-maker" element={<Navigate to="/calculators/filament-art-maker" replace />} />
       <Route path="/tools/:categoryName" element={<LegacyCategoryRedirect />} />
       <Route path="/tool/:slug" element={<LegacyToolRedirect />} />
       <Route path="/tools/advanced-boq-calculator-india" element={<Navigate to="/civil/advanced-boq-calculator-india" replace />} />

@@ -434,7 +434,7 @@ function getCategoryCanonicalPath(category: string): string {
 toolsList.forEach((tool) => {
   const routePath = getToolCanonicalPath(tool.category, tool.slug);
 
-  const title = `${tool.name} | Toolique`;
+  const title = tool.metaTitle || `${tool.name} | Toolique`;
   const description = tool.metaDescription || tool.shortDescription;
   const toolUrl = `https://www.toolique.in/${routePath}`;
 
@@ -482,8 +482,10 @@ toolsList.forEach((tool) => {
           ? 'FinanceApplication'
           : tool.category === 'developer'
           ? 'DeveloperApplication'
+          : tool.category === '3d-printing'
+          ? 'DesignApplication'
           : 'UtilityApplication',
-        'operatingSystem': 'All',
+        'operatingSystem': 'Web Browser',
         'browserRequirements': 'Requires JavaScript. Requires HTML5.',
         'softwareVersion': '2.0.0',
         'isAccessibleForFree': true,
@@ -664,10 +666,8 @@ function generateXmlSitemap() {
 
   // 3. Add dynamic tools
   toolsList.forEach(t => {
-    const path = t.slug === 'advanced-boq-calculator-india'
-      ? 'tools/advanced-boq-calculator-india'
-      : `tool/${t.slug}`;
-    urls.push({ loc: `https://www.toolique.in/${path}`, changefreq: 'weekly', priority: '0.8' });
+    const canonicalPath = getToolCanonicalPath(t.category, t.slug).replace(/^\/+/, '');
+    urls.push({ loc: `https://www.toolique.in/${canonicalPath}`, changefreq: 'weekly', priority: '0.8' });
   });
 
   // 4. Add academy categories

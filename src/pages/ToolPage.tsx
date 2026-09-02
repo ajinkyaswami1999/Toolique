@@ -280,6 +280,7 @@ const PurgeWasteCalculator = lazy(() => import('../tools/PurgeWasteCalculator'))
 const FlushVolumeCalculator = lazy(() => import('../tools/FlushVolumeCalculator'));
 const AMSSlotPlanner = lazy(() => import('../tools/AMSSlotPlanner'));
 const BuildPlateUtilizationCalculator = lazy(() => import('../tools/BuildPlateUtilizationCalculator'));
+const ImageToFilamentArtMaker = lazy(() => import('../tools/ImageToFilamentArtMaker'));
 
 // Advanced Math Studio Tools
 const EquationSolver = lazy(() => import('../tools/EquationSolver'));
@@ -592,6 +593,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   FlushVolumeCalculator,
   AMSSlotPlanner,
   BuildPlateUtilizationCalculator,
+  ImageToFilamentArtMaker,
   EquationSolver,
   MatrixCalculator,
   StatisticsCalculator,
