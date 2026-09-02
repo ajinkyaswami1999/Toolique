@@ -5,16 +5,18 @@ import {
   Star, 
   X, 
   Layers,
-  Languages
+  Languages,
+  Clock
 } from 'lucide-react';
 import CalculatorPanel from './CalculatorPanel';
 import NotepadPanel from './NotepadPanel';
 import FavoritesPanel from './FavoritesPanel';
+import RecentToolsPanel from './RecentToolsPanel';
 import LanguagePanel, { initGoogleTranslate, getActiveLanguage } from './LanguagePanel';
 
 export default function FloatingActionMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [activePanel, setActivePanel] = useState<'calculator' | 'notepad' | 'favorites' | 'language' | null>(null);
+  const [activePanel, setActivePanel] = useState<'calculator' | 'notepad' | 'favorites' | 'recent' | 'language' | null>(null);
   const [currentLang, setCurrentLang] = useState<string>('en');
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -43,6 +45,7 @@ export default function FloatingActionMenu() {
         !(e.target as HTMLElement).closest('.toolique-calculator-panel') &&
         !(e.target as HTMLElement).closest('.toolique-notepad-panel') &&
         !(e.target as HTMLElement).closest('.toolique-favorites-panel') &&
+        !(e.target as HTMLElement).closest('.toolique-recent-panel') &&
         !(e.target as HTMLElement).closest('.toolique-language-panel')
       ) {
         setIsMenuOpen(false);
@@ -67,7 +70,7 @@ export default function FloatingActionMenu() {
     }
   };
 
-  const handleActionClick = (panelType: 'calculator' | 'notepad' | 'favorites' | 'language') => {
+  const handleActionClick = (panelType: 'calculator' | 'notepad' | 'favorites' | 'recent' | 'language') => {
     setActivePanel(panelType);
     setIsMenuOpen(false);
   };
@@ -94,11 +97,11 @@ export default function FloatingActionMenu() {
             : 'opacity-0 pointer-events-none translate-y-4'
         }`}
       >
-        {/* Action 4: Language (Top of stack) */}
+        {/* Action 5: Language (Top of stack) */}
         <div 
-          className="flex items-center gap-3 group transition-all duration-300 delay-120"
+          className="flex items-center gap-3 group transition-all duration-300 delay-150"
           style={{
-            transform: isMenuOpen ? 'translateY(0)' : 'translateY(16px)',
+            transform: isMenuOpen ? 'translateY(0)' : 'translateY(20px)',
             opacity: isMenuOpen ? 1 : 0
           }}
         >
@@ -110,12 +113,33 @@ export default function FloatingActionMenu() {
             type="button"
             onClick={() => handleActionClick('language')}
             aria-label="Change Website Language"
-            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-blue-500/30 dark:border-blue-500/30 text-blue-600 dark:text-blue-400 shadow-xl hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center relative"
+            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-blue-500/30 dark:border-blue-500/30 text-blue-600 dark:text-blue-400 shadow-xl hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center relative cursor-pointer"
           >
             <Languages className="w-5 h-5" />
             {currentLang !== 'en' && (
               <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-zinc-900" />
             )}
+          </button>
+        </div>
+
+        {/* Action 4: Recently Used Tools */}
+        <div 
+          className="flex items-center gap-3 group transition-all duration-300 delay-120"
+          style={{
+            transform: isMenuOpen ? 'translateY(0)' : 'translateY(16px)',
+            opacity: isMenuOpen ? 1 : 0
+          }}
+        >
+          <span className="px-3 py-1.5 rounded-xl bg-white/95 dark:bg-zinc-900/95 text-xs font-black text-zinc-800 dark:text-zinc-200 shadow-xl border border-zinc-200/80 dark:border-zinc-800/80 backdrop-blur-md whitespace-nowrap group-hover:scale-105 transition-transform">
+            Recently Used
+          </span>
+          <button
+            type="button"
+            onClick={() => handleActionClick('recent')}
+            aria-label="Open Recently Used Tools"
+            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-purple-500/30 dark:border-purple-500/30 text-purple-600 dark:text-purple-400 shadow-xl hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
+          >
+            <Clock className="w-5 h-5" />
           </button>
         </div>
 
@@ -134,7 +158,7 @@ export default function FloatingActionMenu() {
             type="button"
             onClick={() => handleActionClick('favorites')}
             aria-label="Open Favorites"
-            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-amber-500/30 dark:border-amber-500/30 text-amber-500 shadow-xl hover:bg-amber-500 hover:text-white dark:hover:bg-amber-500 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center"
+            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-amber-500/30 dark:border-amber-500/30 text-amber-500 shadow-xl hover:bg-amber-500 hover:text-white dark:hover:bg-amber-500 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
           >
             <Star className="w-5 h-5 fill-current" />
           </button>
@@ -155,7 +179,7 @@ export default function FloatingActionMenu() {
             type="button"
             onClick={() => handleActionClick('notepad')}
             aria-label="Open Notepad"
-            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-emerald-500/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-xl hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center"
+            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-emerald-500/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shadow-xl hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
           >
             <FileText className="w-5 h-5" />
           </button>
@@ -176,7 +200,7 @@ export default function FloatingActionMenu() {
             type="button"
             onClick={() => handleActionClick('calculator')}
             aria-label="Open Calculator"
-            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-indigo-500/30 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 shadow-xl hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center"
+            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-indigo-500/30 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 shadow-xl hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
           >
             <Calculator className="w-5 h-5" />
           </button>
@@ -189,7 +213,7 @@ export default function FloatingActionMenu() {
         onClick={handleMainFabClick}
         aria-expanded={isOpen}
         aria-label={isOpen ? 'Close Quick Tools Menu' : 'Open Quick Tools Menu'}
-        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-500/30 active:scale-95 ${
+        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-500/30 active:scale-95 cursor-pointer ${
           isOpen
             ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rotate-90 shadow-zinc-900/40'
             : 'bg-gradient-to-tr from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white shadow-indigo-500/30 dark:shadow-indigo-950/60 hover:scale-105'
@@ -220,6 +244,10 @@ export default function FloatingActionMenu() {
 
       {activePanel === 'favorites' && (
         <FavoritesPanel onClose={() => setActivePanel(null)} />
+      )}
+
+      {activePanel === 'recent' && (
+        <RecentToolsPanel onClose={() => setActivePanel(null)} />
       )}
 
       {activePanel === 'language' && (
