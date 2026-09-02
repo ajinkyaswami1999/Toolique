@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import Home from '../pages/Home';
 import ToolPage from '../pages/ToolPage';
 import About from '../pages/About';
+import WhyToolique from '../pages/WhyToolique';
 import Contact from '../pages/Contact';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsConditions from '../pages/TermsConditions';
@@ -175,6 +176,7 @@ export default function AppRoutes() {
       <Route path="/3d-print-studio" element={<ThreeDPrintStudio />} />
       <Route path="/math-studio" element={<MathStudio />} />
       <Route path="/about" element={<About />} />
+      <Route path="/why-toolique" element={<WhyToolique />} />
       <Route path="/about-founder" element={
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
