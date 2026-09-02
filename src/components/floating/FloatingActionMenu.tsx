@@ -4,16 +4,25 @@ import {
   FileText, 
   Star, 
   X, 
-  Layers
+  Layers,
+  Languages
 } from 'lucide-react';
 import CalculatorPanel from './CalculatorPanel';
 import NotepadPanel from './NotepadPanel';
 import FavoritesPanel from './FavoritesPanel';
+import LanguagePanel, { initGoogleTranslate, getActiveLanguage } from './LanguagePanel';
 
 export default function FloatingActionMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [activePanel, setActivePanel] = useState<'calculator' | 'notepad' | 'favorites' | null>(null);
+  const [activePanel, setActivePanel] = useState<'calculator' | 'notepad' | 'favorites' | 'language' | null>(null);
+  const [currentLang, setCurrentLang] = useState<string>('en');
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Initialize translator on load
+  useEffect(() => {
+    initGoogleTranslate();
+    setCurrentLang(getActiveLanguage());
+  }, []);
 
   // Close on Escape or click outside
   useEffect(() => {
@@ -33,7 +42,8 @@ export default function FloatingActionMenu() {
         !menuRef.current.contains(e.target as Node) &&
         !(e.target as HTMLElement).closest('.toolique-calculator-panel') &&
         !(e.target as HTMLElement).closest('.toolique-notepad-panel') &&
-        !(e.target as HTMLElement).closest('.toolique-favorites-panel')
+        !(e.target as HTMLElement).closest('.toolique-favorites-panel') &&
+        !(e.target as HTMLElement).closest('.toolique-language-panel')
       ) {
         setIsMenuOpen(false);
       }
@@ -57,7 +67,7 @@ export default function FloatingActionMenu() {
     }
   };
 
-  const handleActionClick = (panelType: 'calculator' | 'notepad' | 'favorites') => {
+  const handleActionClick = (panelType: 'calculator' | 'notepad' | 'favorites' | 'language') => {
     setActivePanel(panelType);
     setIsMenuOpen(false);
   };
@@ -84,9 +94,34 @@ export default function FloatingActionMenu() {
             : 'opacity-0 pointer-events-none translate-y-4'
         }`}
       >
-        {/* Action 3: Favorites (Top of stack) */}
+        {/* Action 4: Language (Top of stack) */}
         <div 
-          className="flex items-center gap-3 group transition-all duration-300 delay-100"
+          className="flex items-center gap-3 group transition-all duration-300 delay-120"
+          style={{
+            transform: isMenuOpen ? 'translateY(0)' : 'translateY(16px)',
+            opacity: isMenuOpen ? 1 : 0
+          }}
+        >
+          <span className="px-3 py-1.5 rounded-xl bg-white/95 dark:bg-zinc-900/95 text-xs font-black text-zinc-800 dark:text-zinc-200 shadow-xl border border-zinc-200/80 dark:border-zinc-800/80 backdrop-blur-md whitespace-nowrap group-hover:scale-105 transition-transform flex items-center gap-1.5">
+            <span>Language</span>
+            <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold">({currentLang.toUpperCase()})</span>
+          </span>
+          <button
+            type="button"
+            onClick={() => handleActionClick('language')}
+            aria-label="Change Website Language"
+            className="w-12 h-12 rounded-full bg-white dark:bg-zinc-900 border border-blue-500/30 dark:border-blue-500/30 text-blue-600 dark:text-blue-400 shadow-xl hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center relative"
+          >
+            <Languages className="w-5 h-5" />
+            {currentLang !== 'en' && (
+              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-zinc-900" />
+            )}
+          </button>
+        </div>
+
+        {/* Action 3: Favorites */}
+        <div 
+          className="flex items-center gap-3 group transition-all duration-300 delay-90"
           style={{
             transform: isMenuOpen ? 'translateY(0)' : 'translateY(12px)',
             opacity: isMenuOpen ? 1 : 0
@@ -105,9 +140,9 @@ export default function FloatingActionMenu() {
           </button>
         </div>
 
-        {/* Action 2: Notepad (Middle of stack) */}
+        {/* Action 2: Notepad */}
         <div 
-          className="flex items-center gap-3 group transition-all duration-300 delay-75"
+          className="flex items-center gap-3 group transition-all duration-300 delay-60"
           style={{
             transform: isMenuOpen ? 'translateY(0)' : 'translateY(8px)',
             opacity: isMenuOpen ? 1 : 0
@@ -126,7 +161,7 @@ export default function FloatingActionMenu() {
           </button>
         </div>
 
-        {/* Action 1: Calculator (Bottom of stack, above FAB) */}
+        {/* Action 1: Calculator */}
         <div 
           className="flex items-center gap-3 group transition-all duration-300 delay-0"
           style={{
@@ -185,6 +220,10 @@ export default function FloatingActionMenu() {
 
       {activePanel === 'favorites' && (
         <FavoritesPanel onClose={() => setActivePanel(null)} />
+      )}
+
+      {activePanel === 'language' && (
+        <LanguagePanel onClose={() => setActivePanel(null)} />
       )}
     </div>
   );
