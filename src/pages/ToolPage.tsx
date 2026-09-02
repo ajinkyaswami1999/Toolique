@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { toolsList } from '../data/tools';
 import { getToolCanonicalPath, getCategoryCanonicalPath } from '../routes/AppRoutes';
@@ -11,6 +11,7 @@ import HowToUse from '../components/HowToUse';
 import RelatedTools from '../components/RelatedTools';
 import WorkflowModal from '../components/WorkflowModal';
 import SEO from '../components/SEO';
+import { saveRecentlyUsedTool } from '../utils/indexedDB';
 
 // Import all 31 tools
 const GSTCalculator = lazy(() => import('../tools/GSTCalculator'));
@@ -841,6 +842,20 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       ];
 
   const [isWorkflowModalOpen, setIsWorkflowModalOpen] = useState(false);
+
+  // Automatically record this tool in Recently Used history (IndexedDB & LocalStorage)
+  useEffect(() => {
+    if (tool && tool.id) {
+      saveRecentlyUsedTool({
+        id: tool.id,
+        name: tool.name,
+        category: tool.category,
+        slug: tool.slug,
+        icon: tool.icon,
+        shortDescription: tool.shortDescription
+      });
+    }
+  }, [tool]);
 
   const toolWorkflows = getToolWorkflows(tool.slug);
   const primaryWorkflow = toolWorkflows.find(w => {
