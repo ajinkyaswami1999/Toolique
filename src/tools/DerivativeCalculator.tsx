@@ -590,77 +590,77 @@ export default function DerivativeCalculator() {
 
           {/* Results Summary Box */}
           {calculation && !error && (
-            <div className="saas-card p-6 space-y-4 border border-zinc-200/60 dark:border-zinc-800/80 bg-zinc-900 dark:bg-zinc-950 text-white shadow-lg">
-              <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
-                <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400">
+            <div className="saas-card p-6 space-y-4 border border-zinc-200 dark:border-zinc-800 shadow-lg">
+              <div className="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800 pb-3">
+                <span className="text-[10px] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Symbolic Derivative Output
                 </span>
                 <button
                   onClick={handleCopyText}
-                  className="text-xs text-indigo-400 hover:text-indigo-300 font-bold inline-flex items-center gap-1"
+                  className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-bold inline-flex items-center gap-1 cursor-pointer"
                 >
-                  {copiedType === 'text' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  {copiedType === 'text' ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
                   <span>{copiedType === 'text' ? 'Copied!' : 'Copy'}</span>
                 </button>
               </div>
 
               {/* Main Result */}
               <div className="space-y-1">
-                <span className="text-[10px] font-mono text-zinc-400 uppercase block">
+                <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase block">
                   d^{order}/d{variable}^{order} [ {expression} ] =
                 </span>
-                <div className="text-xl md:text-2xl font-black font-mono text-emerald-400 break-all select-all">
+                <div className="text-xl md:text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400 break-all select-all">
                   {calculation.targetDeriv}
                 </div>
               </div>
 
               {/* Evaluated Point & Tangent Specs */}
               {calculation.firstDerivValAtX !== null && (
-                <div className="pt-3 border-t border-zinc-800/80 space-y-3">
+                <div className="pt-3 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
                   <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-zinc-850/60 border border-zinc-800">
-                      <span className="text-[9px] font-mono text-zinc-400 uppercase block mb-1">
+                    <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
+                      <span className="text-[9px] font-mono text-zinc-500 dark:text-zinc-400 uppercase block mb-1">
                         Tangent Slope m = f'({evalX})
                       </span>
-                      <span className="font-mono text-base font-extrabold text-white">
+                      <span className="font-mono text-base font-extrabold text-zinc-900 dark:text-white">
                         {calculation.firstDerivValAtX.toFixed(6)}
                       </span>
                     </div>
-                    <div className="p-3 rounded-xl bg-zinc-850/60 border border-zinc-800">
-                      <span className="text-[9px] font-mono text-zinc-400 uppercase block mb-1">
+                    <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
+                      <span className="text-[9px] font-mono text-zinc-500 dark:text-zinc-400 uppercase block mb-1">
                         Point of Tangency
                       </span>
-                      <span className="font-mono text-xs font-extrabold text-indigo-400 truncate block">
+                      <span className="font-mono text-xs font-extrabold text-indigo-600 dark:text-indigo-400 truncate block">
                         ({evalX}, {calculation.originalValAtX?.toFixed(4)})
                       </span>
                     </div>
                   </div>
 
                   {calculation.tangentEquation && (
-                    <div className="p-3 rounded-xl bg-zinc-850/40 border border-zinc-800 space-y-1">
-                      <span className="text-[9px] font-mono text-amber-400 uppercase block font-bold">
+                    <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-1">
+                      <span className="text-[9px] font-mono text-amber-700 dark:text-amber-400 uppercase block font-bold">
                         Tangent Line Equation
                       </span>
-                      <div className="font-mono text-xs font-bold text-zinc-200 select-all">
+                      <div className="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100 select-all">
                         {calculation.tangentEquation}
                       </div>
                     </div>
                   )}
 
                   {calculation.normalEquation && (
-                    <div className="p-3 rounded-xl bg-zinc-850/40 border border-zinc-800 space-y-1">
-                      <span className="text-[9px] font-mono text-purple-400 uppercase block font-bold">
+                    <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 space-y-1">
+                      <span className="text-[9px] font-mono text-purple-700 dark:text-purple-400 uppercase block font-bold">
                         Normal Line Equation (Perpendicular)
                       </span>
-                      <div className="font-mono text-xs font-bold text-zinc-200 select-all">
+                      <div className="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100 select-all">
                         {calculation.normalEquation}
                       </div>
                     </div>
                   )}
 
                   {/* Concavity */}
-                  <div className="p-3 rounded-xl bg-zinc-850/40 border border-zinc-800 text-[11px] font-semibold text-zinc-300 flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-semibold text-emerald-800 dark:text-emerald-300 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span>{calculation.concavityText}</span>
                   </div>
                 </div>
@@ -834,29 +834,35 @@ export default function DerivativeCalculator() {
                 {calculation.steps.map((step) => (
                   <div
                     key={step.stepNumber}
-                    className="p-4 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 space-y-2"
+                    className="p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-2 shadow-xs"
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="w-5 h-5 rounded-full bg-indigo-500/10 text-indigo-650 dark:text-indigo-400 text-[10px] font-black flex items-center justify-center shrink-0">
+                        <span className="w-5 h-5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 text-[10px] font-black flex items-center justify-center shrink-0">
                           {step.stepNumber}
                         </span>
                         <h4 className="text-xs font-extrabold text-zinc-900 dark:text-white">
                           {step.title}
                         </h4>
                       </div>
-                      <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-850 text-zinc-600 dark:text-zinc-400 text-[9px] font-black uppercase tracking-wider">
+                      <span className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-850 text-zinc-700 dark:text-zinc-300 text-[9px] font-black uppercase tracking-wider">
                         {step.rule}
                       </span>
                     </div>
 
-                    <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed">
+                    <p className="text-xs text-zinc-700 dark:text-zinc-300 font-medium leading-relaxed">
                       {step.explanation}
                     </p>
 
-                    <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-850/80 font-mono text-[11px] text-indigo-650 dark:text-indigo-400 font-bold">
+                    <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 font-mono text-[11px] text-zinc-900 dark:text-indigo-300 font-bold select-all">
                       {step.latexFormula}
                     </div>
+
+                    {step.intermediateExpr && (
+                      <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 font-mono text-[11px] text-indigo-700 dark:text-emerald-400 font-black select-all">
+                        {step.intermediateExpr}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -869,22 +875,22 @@ export default function DerivativeCalculator() {
               <HelpCircle className="w-4 h-4 text-indigo-500" />
               <span>Calculus Rules Reference</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono text-zinc-650 dark:text-zinc-350">
-              <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-850">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono">
+              <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
                 <span className="font-bold text-zinc-900 dark:text-white block text-[10px] uppercase font-sans">Power Rule</span>
-                d/dx [xⁿ] = n · xⁿ⁻¹
+                <span className="text-zinc-800 dark:text-zinc-300 font-mono text-xs">d/dx [xⁿ] = n · xⁿ⁻¹</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-850">
+              <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
                 <span className="font-bold text-zinc-900 dark:text-white block text-[10px] uppercase font-sans">Product Rule</span>
-                d/dx [u · v] = u'v + uv'
+                <span className="text-zinc-800 dark:text-zinc-300 font-mono text-xs">d/dx [u · v] = u'v + uv'</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-850">
+              <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
                 <span className="font-bold text-zinc-900 dark:text-white block text-[10px] uppercase font-sans">Quotient Rule</span>
-                d/dx [u / v] = (u'v - uv') / v²
+                <span className="text-zinc-800 dark:text-zinc-300 font-mono text-xs">d/dx [u / v] = (u'v - uv') / v²</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-850">
+              <div className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
                 <span className="font-bold text-zinc-900 dark:text-white block text-[10px] uppercase font-sans">Chain Rule</span>
-                d/dx [f(g(x))] = f'(g(x)) · g'(x)
+                <span className="text-zinc-800 dark:text-zinc-300 font-mono text-xs">d/dx [f(g(x))] = f'(g(x)) · g'(x)</span>
               </div>
             </div>
           </div>

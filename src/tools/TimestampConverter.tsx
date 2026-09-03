@@ -103,18 +103,18 @@ export default function TimestampConverter() {
   return (
     <div className="grid grid-cols-1 gap-6 text-left">
       {/* Live Clock Card */}
-      <div className="saas-card p-6 bg-zinc-900 border border-zinc-800 text-white relative overflow-hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="saas-card p-6 border border-zinc-200/80 dark:border-zinc-800/80 relative overflow-hidden flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm">
         <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="space-y-1">
-          <div className="flex items-center gap-1.5 text-zinc-450">
-            <Clock className="w-4 h-4 text-indigo-400" />
+          <div className="flex items-center gap-1.5 text-zinc-500 dark:text-zinc-400">
+            <Clock className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
             <span className="text-[10px] font-bold uppercase tracking-wider">Current Unix Epoch Time</span>
           </div>
-          <span className="text-3xl font-black font-mono tracking-tight text-white">{currentEpoch}</span>
+          <span className="text-3xl font-black font-mono tracking-tight text-zinc-900 dark:text-white">{currentEpoch}</span>
         </div>
         <button
           onClick={handleCopyClock}
-          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow"
+          className="saas-button-primary px-4 py-2 text-xs font-bold"
         >
           <Copy className="w-3.5 h-3.5" />
           <span>{copiedClock ? 'Copied!' : 'Copy Current Epoch'}</span>

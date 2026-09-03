@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Landmark, Copy, Check, AlertTriangle } from 'lucide-react';
 
 export default function GratuityCalculator() {
@@ -131,10 +131,10 @@ EST. GRATUITY PAYOUT        : ₹${gratuityAmount.toLocaleString('en-IN')}
           </div>
 
           {yearsOfService < 5 && (
-            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-start gap-2.5 text-xs font-semibold leading-normal">
-              <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
+            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 flex items-start gap-2.5 text-xs font-semibold leading-normal">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
               <div>
-                <div className="font-bold text-amber-500 uppercase tracking-wide">Eligibility Warning</div>
+                <div className="font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wide">Eligibility Warning</div>
                 <div className="mt-0.5">
                   Under the Payment of Gratuity Act, a minimum of 5 years of continuous service is mandatory for gratuity entitlement (except in cases of death or disablement). Since the tenure is {yearsOfService} year(s), you may not be legally eligible for this payout.
                 </div>

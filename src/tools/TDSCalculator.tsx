@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Calculator, Copy, Check, AlertTriangle } from 'lucide-react';
 
 interface SectionDetail {
@@ -211,10 +211,10 @@ Net Payable      : ₹${results.netPayable.toLocaleString('en-IN')}
 
           {/* Threshold alert */}
           {results.isBelowThreshold && (
-            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-start gap-2.5 text-xs font-semibold leading-normal">
-              <AlertTriangle className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
+            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 flex items-start gap-2.5 text-xs font-semibold leading-normal">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
               <div>
-                <div className="font-bold text-amber-500 uppercase tracking-wide">Below Mandatory Threshold</div>
+                <div className="font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wide">Below Mandatory Threshold</div>
                 <div className="mt-0.5">
                   The invoice value ₹{grossAmount.toLocaleString('en-IN')} is below the mandatory TDS threshold (Sec {sections[section]?.code} limit: ₹{sections[section]?.threshold.toLocaleString('en-IN')}). TDS is not required to be deducted under tax laws unless cumulative annual payments exceed thresholds.
                 </div>
