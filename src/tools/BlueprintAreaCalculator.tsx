@@ -430,7 +430,7 @@ Grand Total Traced Footprint: ${grandTotal.toFixed(1)} sq ${unit}`;
                   type="number"
                   value={calibRealLength}
                   onChange={(e) => setCalibRealLength(parseFloat(e.target.value) || 10)}
-                  className="w-16 saas-input py-1 text-center font-bold text-zinc-950"
+                  className="w-16 saas-input py-1 text-center font-bold text-zinc-950 dark:text-zinc-100"
                 />
               </div>
             </div>
