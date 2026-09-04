@@ -2852,47 +2852,79 @@ export const toolsList: Tool[] = [
   ]
 },
   {
-  "id": "ModularKitchenCostCalculator",
-  "slug": "modular-kitchen-cost-calculator",
-  "name": "Modular Kitchen Cost Calculator",
-  "category": "interior",
-  "shortDescription": "Estimate modular kitchen prices based on layouts, finishes, countertops, and lofts.",
-  "metaDescription": "Free online Modular Kitchen Cost Calculator. Estimate costs for Straight, L-shape, U-shape, or Parallel kitchens in Laminate, Acrylic, or PU.",
-  "keywords": [
-    "Modular Kitchen Cost Calculator",
-    "L shape kitchen cost",
-    "acrylic kitchen price per foot",
-    "modular kitchen cost estimator",
-    "kitchen design budget"
-  ],
-  "icon": "Palette",
-  "howToUse": [
-    "Select kitchen shape: Straight, Parallel, L-Shape, or U-Shape.",
-    "Enter counter length, loft length, and tall unit counts.",
-    "Select cabinet finish (Laminate, Acrylic, PU Paint).",
-    "Select hardware quality and countertop slabs to view the final quote."
-  ],
-  "faqs": [
-    {
-      "question": "What is the running foot rate of a modular kitchen?",
-      "answer": "Rates vary by finish. Laminate kitchen packages range from ₹1,400 to ₹1,800 per running foot, while acrylic ranges from ₹2,000 to ₹2,500."
-    },
-    {
-      "question": "Does modular kitchen cost include chimney and hob?",
-      "answer": "No, modular kitchen quotes cover woodwork cabinet boxes, shutters, countertop, and hardware channels. Electrical appliances are extra."
-    }
-  ],
-  "sections": [
-    {
-      "title": "Modular Kitchen layout shapes",
-      "content": "- **Straight**: Single wall counter, best for studio flats.\n- **L-Shape**: Most popular layout, utilizes corner areas efficiently.\n- **U-Shape**: Covers three walls, providing maximum counter workspace.\n- **Parallel**: Double counters running opposite, ideal for narrow corridor kitchens."
-    },
-    {
-      "title": "Finish options (Acrylic vs Laminate)",
-      "content": "- **Laminate**: Matte/gloss, highly durable, scratch-resistant, budget-friendly.\n- **Acrylic**: Ultra-high gloss, premium mirror finish, prone to finger smudges.\n- **PU Paint/Duco**: Seamless luxury spray-paint, rich colors, expensive."
-    }
-  ]
-},
+    "id": "ModularKitchenCostCalculator",
+    "slug": "modular-kitchen-cost-calculator",
+    "name": "Modular Kitchen Cost Calculator",
+    "category": "interior",
+    "shortDescription": "Estimate modular kitchen prices based on layouts, finishes, countertops, and lofts.",
+    "metaDescription": "Calculate modular kitchen costs in India (2026). Estimate budgets for L-Shape, Parallel, Straight, U-Shape, and Island layouts with BWP Marine Ply, High-Gloss Acrylic, Quartz Countertops, Hettich/Blum Tandem hardware, smart organizers, and 2D architectural elevation studio.",
+    "keywords": [
+      "Modular Kitchen Cost Calculator",
+      "L shape kitchen cost per sq ft india",
+      "acrylic modular kitchen price per running foot",
+      "parallel kitchen design cost estimator",
+      "BWP marine ply kitchen carcass price",
+      "hettich tandem box drawer cost",
+      "blum aventos lift up price india",
+      "quartz countertop price per sq ft",
+      "modular kitchen boq quotation",
+      "island kitchen cost calculator india",
+      "modular kitchen budget planner"
+    ],
+    "icon": "Utensils",
+    "howToUse": [
+      "Select your measurement unit: Feet (ft) or Meters (m).",
+      "Choose a quick preset or select your kitchen layout shape: Straight Line, L-Shaped, Parallel (Galley), U-Shaped, or Island Kitchen.",
+      "Enter exact counter wall lengths, island dimensions, overhead loft height, and tall pantry tower count (2ft × 7ft).",
+      "Choose your Carcass Core Board: BWP Marine Ply (IS:710 100% Waterproof), HDHMR (Action TESA 850+ kg/m³), BWR Ply (IS:303), or SS 304 Stainless Steel.",
+      "Select Shutter Facade Finish: Matte Laminate, High-Gloss Acrylic, Anti-Fingerprint Super Matte (FENIX), Seamless Membrane, Natural Veneer + PU, PU Duco Paint, Tinted Fluted Glass, or Sintered Porcelain.",
+      "Pick your Countertop Slab: Jet Black Granite, Engineered Quartz (KalingaStone), Nano White G5, Sintered Porcelain Stone (Dekton), or Corian Solid Surface.",
+      "Select Motion Hardware Brand: Standard Soft-Close (Ebco/Godrej), Premium German Tandem Box (Hettich InnoTech/Hafele), or Luxury Austrian Motion (Blum LEGRABOX/Aventos).",
+      "Configure Smart Internal Organizers: Tandem drawers, bottle spice pullouts, blind corner solutions (LeMans/Magic Corner), tall larder swing-outs, under-sink organizers, and under-cabinet warm LED task lighting.",
+      "Add optional Built-in Appliances & Sanitary fixtures (Auto-clean Chimney, Brass Hob, Quartz/SS Sink, Built-in Oven, Dishwasher).",
+      "Inspect the live 2D Architectural Elevation Studio with theme customization and LED warm glow simulation, then download your itemized PDF Quote or 1-Click WhatsApp BOQ summary."
+    ],
+    "faqs": [
+      {
+        "question": "How is modular kitchen cost calculated per running foot vs square foot in India?",
+        "answer": "In India, modular kitchens are quoted either per Running Foot (Rft) or per Square Foot of woodwork surface area:\n• **Running Foot (Rft)**: Measures linear length along the kitchen counter (combining base cabinets, countertop, and standard overhead wall cabinets). Standard laminate packages average ₹1,800 to ₹2,400/Rft, while premium acrylic/quartz packages range from ₹3,200 to ₹5,000/Rft.\n• **Square Foot (Sq Ft)**: Measures actual facade area of carcass boxes (Base Cabinets ~34\" ht + Wall Units ~30\" ht + Lofts ~24\" ht + Tall Towers ~84\" ht). Rates range from ₹1,400 to ₹3,500/sq ft depending on core board and shutter finish."
+      },
+      {
+        "question": "Which carcass plywood is best for modular kitchens: BWP Marine Ply or HDHMR?",
+        "answer": "• **BWP Marine Ply (IS:710)**: The ultimate gold standard for Indian wet cooking and washing zones. It is 100% boiling waterproof, chemically treated against borers/termites, and highly recommended for the sink base unit, under-counter drawer boxes, and dishwasher housing.\n• **HDHMR (High-Density High Moisture Resistance)**: Exceptional uniform density (850+ kg/m³), zero core gaps, superior screw holding, and 100% termite proof. It is ideal for dry cooking counters, wall units, and overhead lofts at ~10% to 15% lower cost than BWP ply."
+      },
+      {
+        "question": "What is the difference between Acrylic, High-Pressure Laminate, and PU Duco Paint finishes?",
+        "answer": "• **Laminate (1.0mm)**: Highly cost-effective, scratch resistant, heat resistant, and easy to clean. Available in matte, textured, and high-gloss.\n• **High-Gloss Acrylic (1.5mm–2.0mm)**: Ultra-smooth mirror-like reflective finish, UV-stable (never yellows), and provides a high-end European aesthetic.\n• **PU Duco Paint**: 7-layer Italian spray finish with seamless edge-less monolithic beauty in high gloss or satin matte, representing luxury bespoke cabinetry."
+      },
+      {
+        "question": "Which kitchen countertop is best: Granite, Engineered Quartz, or Sintered Porcelain Stone?",
+        "answer": "• **Jet Black Granite (18-20mm)**: Indian kitchen workhorse (₹180–₹350/sq ft). Impervious to direct hot kadai flames, lemon/turmeric stains, and harsh scouring.\n• **Engineered Quartz (KalingaStone / Caesarstone)**: Non-porous, antibacterial, uniform luxury veining (₹450–₹850/sq ft). Requires trivets for hot cookware above 150°C.\n• **Sintered Porcelain Stone (Dekton / Neolith)**: Ultra-compact, zero porosity, 100% scratchproof, UV resistant, and can withstand direct blowtorch heat without cracking."
+      },
+      {
+        "question": "Why are Tandem Box drawers better than traditional SS wire baskets?",
+        "answer": "Traditional stainless steel wire baskets use basic side-mounted channels that gather dust, accumulate grease in wire corners, and rattle when pushed. Modern Tandem Drawers (Hettich InnoTech / Blum LEGRABOX) feature double-walled sealed metal sides, integrated silent soft-closing runners, dynamic 30kg–65kg load capacity, full extension, and customizable magnetic cutlery/thali dividers."
+      },
+      {
+        "question": "How do corner solutions (LeMans Trays vs Magic Corner) work in L and U-shape kitchens?",
+        "answer": "Blind corner cabinets (typically 3ft × 3ft) create inaccessible dead space. Specialized corner mechanisms utilize 100% of this depth:\n• **LeMans S-Corner Pull-Out**: Kidney-shaped dual trays that glide completely out of the cabinet with independent height adjustment.\n• **Universal Magic Corner**: 4 interconnected heavy-duty baskets where opening the front door swings the rear baskets forward into direct reach.\n• **Lazy Susan 360°**: Circular rotating carousels for lightweight spices and dry provisions."
+      },
+      {
+        "question": "What are the standard ergonomic dimensions for an Indian modular kitchen?",
+        "answer": "• **Base Cabinet Height**: 32 to 34 inches (81 to 86 cm) including countertop slab & 4-inch water-resistant PVC skirting.\n• **Base Counter Depth**: 24 to 26 inches (60 to 65 cm).\n• **Backsplash Tile Gap**: 20 to 24 inches (50 to 60 cm) between counter and wall units.\n• **Wall Cabinet Depth**: 12 to 14 inches (30 to 35 cm) to avoid bumping your forehead while cooking.\n• **Overhead Loft Depth**: 24 inches (flushed with base counter) or 14 inches (flushed with wall units)."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Modular Kitchen Carcass & Shutter Material Specifications",
+        "content": "| Component | Material Option | IS Standard / Spec | Cost Range (₹/sq ft) | Key Features |\n| :--- | :--- | :--- | :--- | :--- |\n| **Carcass Body** | BWP Marine Plywood | IS:710 Grade | ₹1,450 – ₹1,750 | 100% Boiling Waterproof, 15-Yr Warranty |\n| **Carcass Body** | HDHMR Green Board | 850+ kg/m³ | ₹1,300 – ₹1,550 | Termite proof, zero core voids, high screw holding |\n| **Carcass Body** | SS 304 Stainless Steel | 1.0mm 304 Grade | ₹2,600 – ₹3,200 | Commercial hygiene, fireproof, zero moisture damage |\n| **Shutters** | High-Gloss Acrylic | 1.5mm–2.0mm PMMA | +₹300 – ₹450 | Mirror reflection, non-toxic, UV stable |\n| **Shutters** | Anti-Fingerprint Matte | FENIX NTM / SuperMatte | +₹500 – ₹700 | Soft touch, thermal micro-scratch healing |\n| **Shutters** | PU Duco Italian Paint | 7-Coat Polyurethane | +₹1,100 – ₹1,500 | Seamless jointless bespoke finish |\n| **Shutters** | Fluted Glass Profile | 4mm Toughened in Black Alum | +₹1,200 – ₹1,600 | Contemporary luxury showcase display |"
+      },
+      {
+        "title": "Kitchen Golden Triangle & Layout Optimization",
+        "content": "The **Kitchen Work Triangle** connects the three core functional zones: **Hob (Cooking)**, **Sink (Cleaning)**, and **Refrigerator (Storage)**. For optimal ergonomics:\n- The sum of the three triangle sides should be between **13 and 26 feet (4.0m to 7.9m)**.\n- No primary kitchen traffic pathway should cross directly through the work triangle.\n- **L-Shape & U-Shape**: Ideal for triangular workflow with corner pull-out mechanisms.\n- **Parallel / Galley**: Offers the most efficient chef workflow with minimum steps between sink and cooking counter (recommended walkway clearance: 3.5 to 4.5 feet).\n- **Island Layout**: Allows social cooking and breakfast counter seating while maintaining an isolated prep zone."
+      }
+    ]
+  },
   {
     "id": "WardrobeCostCalculator",
     "slug": "wardrobe-cost-calculator",
