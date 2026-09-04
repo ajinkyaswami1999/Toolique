@@ -147,10 +147,26 @@ const DEFAULT_CATEGORIES: WorkCategory[] = [
 
 const PRESET_RATES: RateItem[] = [
   {
+    id: 'r_stp1',
+    code: 'STP-01',
+    categoryId: '1',
+    description: 'Clearing jungle including uprooting of rank vegetation, grass, and removal up to 50m lead',
+    unit: 'Sq m',
+    rateMaterial: 0,
+    rateLabour: 18,
+    rateEquipment: 4,
+    rateTransport: 2,
+    rateOther: 1,
+    wastagePercent: 0,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Site clearance and surface leveling prior to layout marking.'
+  },
+  {
     id: 'r1',
     code: 'EXC-01',
     categoryId: '2',
-    description: 'Excavation in foundation trenches in all kinds of soil',
+    description: 'Earthwork excavation in foundation trenches and footings in ordinary soil up to 1.5m depth',
     unit: 'cft',
     rateMaterial: 0,
     rateLabour: 12,
@@ -160,13 +176,29 @@ const PRESET_RATES: RateItem[] = [
     wastagePercent: 0,
     gstPercent: 18,
     contractorMarginPercent: 10,
-    notes: 'Excavation up to 1.5m depth.'
+    notes: 'Includes dressing of sides and ramming of bottoms.'
+  },
+  {
+    id: 'r_flg1',
+    code: 'FLG-01',
+    categoryId: '3',
+    description: 'Filling available excavated earth or quarry sand in plinth in layers not exceeding 20cm with watering and ramming',
+    unit: 'cft',
+    rateMaterial: 18,
+    rateLabour: 6,
+    rateEquipment: 2,
+    rateTransport: 4,
+    rateOther: 1,
+    wastagePercent: 5,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Plinth backfilling with sand/earth.'
   },
   {
     id: 'r2',
     code: 'PCC-01',
     categoryId: '4',
-    description: 'Providing and laying cement concrete 1:4:8 base course',
+    description: 'Providing and laying Plain Cement Concrete 1:4:8 (1 cement : 4 coarse sand : 8 graded stone aggregate 40mm)',
     unit: 'cum',
     rateMaterial: 3600,
     rateLabour: 650,
@@ -176,13 +208,13 @@ const PRESET_RATES: RateItem[] = [
     wastagePercent: 3,
     gstPercent: 18,
     contractorMarginPercent: 10,
-    notes: 'PCC bedding for footings.'
+    notes: 'PCC bedding for column footings and grade slabs.'
   },
   {
     id: 'r3',
     code: 'RCC-01',
     categoryId: '5',
-    description: 'Providing and laying reinforced cement concrete M20 grade',
+    description: 'Providing and laying Reinforced Cement Concrete M20 grade (1:1.5:3 nominal mix) for columns, plinth beams, and lintels',
     unit: 'cum',
     rateMaterial: 4800,
     rateLabour: 950,
@@ -192,13 +224,29 @@ const PRESET_RATES: RateItem[] = [
     wastagePercent: 2,
     gstPercent: 18,
     contractorMarginPercent: 12,
-    notes: 'Excluding reinforcement steel.'
+    notes: 'Excluding reinforcement steel and formwork.'
+  },
+  {
+    id: 'r_rcc2',
+    code: 'RCC-02',
+    categoryId: '5',
+    description: 'Providing and laying design mix concrete M25 grade with superplasticizer for suspended slabs, beams, and staircases',
+    unit: 'cum',
+    rateMaterial: 5400,
+    rateLabour: 1100,
+    rateEquipment: 300,
+    rateTransport: 150,
+    rateOther: 100,
+    wastagePercent: 2,
+    gstPercent: 18,
+    contractorMarginPercent: 12,
+    notes: 'High-strength structural concrete for suspended slabs.'
   },
   {
     id: 'r4',
     code: 'STL-01',
     categoryId: '6',
-    description: 'Providing and bending Fe500 TMT reinforcement bars',
+    description: 'Providing, straightening, cutting, bending, and placing in position Thermo-Mechanically Treated (TMT) Fe500 / Fe550D rebar',
     unit: 'kg',
     rateMaterial: 54,
     rateLabour: 7,
@@ -208,13 +256,29 @@ const PRESET_RATES: RateItem[] = [
     wastagePercent: 5,
     gstPercent: 18,
     contractorMarginPercent: 10,
-    notes: 'Standard rebar supply & bind.'
+    notes: 'Includes 18-gauge GI binding wire.'
+  },
+  {
+    id: 'r_sht1',
+    code: 'SHT-01',
+    categoryId: '7',
+    description: 'Centering, shuttering, propping, and staging using waterproof shuttering plywood (12mm) and adjustable steel props',
+    unit: 'Sq m',
+    rateMaterial: 180,
+    rateLabour: 220,
+    rateEquipment: 40,
+    rateTransport: 15,
+    rateOther: 15,
+    wastagePercent: 5,
+    gstPercent: 18,
+    contractorMarginPercent: 12,
+    notes: 'For columns, beams, suspended slabs, and staircase soffits.'
   },
   {
     id: 'r5',
     code: 'BRK-01',
     categoryId: '8',
-    description: 'Brickwork in 230mm walls with modular bricks in 1:6 mortar',
+    description: 'Brickwork with common burnt clay / modular bricks of class 7.5 in foundation and superstructure in cement mortar 1:6 (230mm thick)',
     unit: 'cum',
     rateMaterial: 2800,
     rateLabour: 850,
@@ -224,13 +288,45 @@ const PRESET_RATES: RateItem[] = [
     wastagePercent: 5,
     gstPercent: 18,
     contractorMarginPercent: 10,
-    notes: 'Outer masonry perimeter.'
+    notes: '9-inch thick outer load-bearing and perimeter masonry walls.'
+  },
+  {
+    id: 'r_brk2',
+    code: 'BRK-02',
+    categoryId: '8',
+    description: 'Half brick thick (115mm) masonry partition wall with modular bricks in cement mortar 1:4 with 2 Nos 6mm MS bars at every 3rd course',
+    unit: 'Sq m',
+    rateMaterial: 320,
+    rateLabour: 160,
+    rateEquipment: 10,
+    rateTransport: 15,
+    rateOther: 10,
+    wastagePercent: 5,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: '4.5-inch interior partition walls.'
+  },
+  {
+    id: 'r_blk1',
+    code: 'BLK-01',
+    categoryId: '9',
+    description: 'Autoclaved Aerated Concrete (AAC) block masonry in 150mm/200mm thickness using thin-bed jointing polymer adhesive',
+    unit: 'cum',
+    rateMaterial: 3400,
+    rateLabour: 700,
+    rateEquipment: 40,
+    rateTransport: 120,
+    rateOther: 40,
+    wastagePercent: 4,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Lightweight thermal and acoustic insulation masonry.'
   },
   {
     id: 'r6',
     code: 'PLS-01',
     categoryId: '10',
-    description: 'Internal wall cement plastering 12mm thick in 1:4 mortar',
+    description: '12mm thick internal cement plaster in cement mortar 1:4 on rough masonry walls finished smooth with neat trowel',
     unit: 'sqm',
     rateMaterial: 85,
     rateLabour: 120,
@@ -240,13 +336,61 @@ const PRESET_RATES: RateItem[] = [
     wastagePercent: 10,
     gstPercent: 18,
     contractorMarginPercent: 10,
-    notes: 'Single coat plastering.'
+    notes: 'Internal single-coat wall plastering.'
+  },
+  {
+    id: 'r_pls2',
+    code: 'PLS-02',
+    categoryId: '10',
+    description: '20mm thick external double-coat sand-face waterproof cement plaster in 1:4 mortar with sponge finish',
+    unit: 'sqm',
+    rateMaterial: 140,
+    rateLabour: 180,
+    rateEquipment: 15,
+    rateTransport: 10,
+    rateOther: 10,
+    wastagePercent: 10,
+    gstPercent: 18,
+    contractorMarginPercent: 12,
+    notes: 'External weatherproof facade plastering with waterproofing compound.'
+  },
+  {
+    id: 'r_pls3',
+    code: 'PLS-03',
+    categoryId: '10',
+    description: '6mm thick cement plaster in 1:3 mortar on RCC ceiling and beam soffits finished smooth',
+    unit: 'sqm',
+    rateMaterial: 55,
+    rateLabour: 90,
+    rateEquipment: 10,
+    rateTransport: 5,
+    rateOther: 5,
+    wastagePercent: 8,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Ceiling plaster under slab soffit.'
+  },
+  {
+    id: 'r_wpf1',
+    code: 'WPF-01',
+    categoryId: '11',
+    description: 'Terrace waterproofing with brick bat coba and integral waterproofing compound finished with slope and china mosaic chips',
+    unit: 'Sq ft',
+    rateMaterial: 45,
+    rateLabour: 20,
+    rateEquipment: 3,
+    rateTransport: 2,
+    rateOther: 2,
+    wastagePercent: 5,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Comprehensive roof terrace leakage protection.'
   },
   {
     id: 'r7',
     code: 'FLR-01',
     categoryId: '12',
-    description: 'Vitrified floor tiles size 600x600 mm laid over mortar base',
+    description: 'Providing and laying double-charged vitrified floor tiles size 600x600 mm over 20mm cement mortar 1:4 bedding with epoxy grout',
     unit: 'sqft',
     rateMaterial: 55,
     rateLabour: 25,
@@ -256,23 +400,151 @@ const PRESET_RATES: RateItem[] = [
     wastagePercent: 8,
     gstPercent: 18,
     contractorMarginPercent: 10,
-    notes: 'Tile bedding included.'
+    notes: 'Living room, bedrooms, and dining flooring.'
+  },
+  {
+    id: 'r_flr2',
+    code: 'FLR-02',
+    categoryId: '12',
+    description: 'Anti-skid matte ceramic floor tiles size 300x300 mm in toilet and balcony floors over mortar base',
+    unit: 'sqft',
+    rateMaterial: 42,
+    rateLabour: 22,
+    rateEquipment: 3,
+    rateTransport: 3,
+    rateOther: 2,
+    wastagePercent: 8,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Wet area non-slip flooring.'
+  },
+  {
+    id: 'r_til1',
+    code: 'TIL-01',
+    categoryId: '13',
+    description: 'Glazed ceramic wall dado tiles (300x450 mm or 300x600 mm) in kitchen and bathrooms up to 7ft height with polymer adhesive',
+    unit: 'sqft',
+    rateMaterial: 48,
+    rateLabour: 26,
+    rateEquipment: 4,
+    rateTransport: 3,
+    rateOther: 2,
+    wastagePercent: 8,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Bathroom and kitchen wall dado tiling.'
   },
   {
     id: 'r8',
     code: 'PNT-01',
     categoryId: '14',
-    description: 'Wall painting with 2 coats acrylic emulsion over primer and putty',
+    description: 'Internal wall painting with 2 coats premium acrylic emulsion paint over 2 coats acrylic wall putty and 1 coat water-thinnable primer',
     unit: 'sqft',
-    rateMaterial: 12,
-    rateLabour: 14,
+    rateMaterial: 14,
+    rateLabour: 16,
     rateEquipment: 2,
     rateTransport: 1,
     rateOther: 1,
     wastagePercent: 5,
     gstPercent: 18,
     contractorMarginPercent: 10,
-    notes: 'Premium plastic emulsion finish.'
+    notes: 'Interior premium wall finish (Asian Paints / Berger / Nerolac).'
+  },
+  {
+    id: 'r_pnt2',
+    code: 'PNT-02',
+    categoryId: '14',
+    description: 'Exterior 100% acrylic weather-shield anti-fungal paint (2 coats) over 1 coat exterior wall primer on plastered surface',
+    unit: 'sqft',
+    rateMaterial: 16,
+    rateLabour: 14,
+    rateEquipment: 3,
+    rateTransport: 1,
+    rateOther: 1,
+    wastagePercent: 5,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Exterior weather protection emulsion (Apex / WeatherCoat).'
+  },
+  {
+    id: 'r_dor1',
+    code: 'DOR-01',
+    categoryId: '15',
+    description: 'Supplying and fixing 35mm thick BWP factory-pressed flush door shutter with laminate facing, red meranti chowkhat, and SS hardware',
+    unit: 'Sq ft',
+    rateMaterial: 190,
+    rateLabour: 45,
+    rateEquipment: 10,
+    rateTransport: 10,
+    rateOther: 5,
+    wastagePercent: 2,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Main and bedroom door leaves with locks and hinges.'
+  },
+  {
+    id: 'r_win1',
+    code: 'WIN-01',
+    categoryId: '16',
+    description: 'Providing and fixing 3-track UPVC sliding windows with 5mm toughened float glass panels and SS mosquito net mesh',
+    unit: 'Sq ft',
+    rateMaterial: 360,
+    rateLabour: 60,
+    rateEquipment: 15,
+    rateTransport: 15,
+    rateOther: 10,
+    wastagePercent: 0,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Weatherproof soundproof UPVC window system.'
+  },
+  {
+    id: 'r_elc1',
+    code: 'ELC-01',
+    categoryId: '17',
+    description: 'Concealed electrical point wiring with FRLS copper wires in heavy duty PVC conduits with modular switches, sockets, and metal boxes',
+    unit: 'Nos',
+    rateMaterial: 480,
+    rateLabour: 260,
+    rateEquipment: 20,
+    rateTransport: 15,
+    rateOther: 10,
+    wastagePercent: 0,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Light/fan/plug power points.'
+  },
+  {
+    id: 'r_plb1',
+    code: 'PLB-01',
+    categoryId: '18',
+    description: 'Providing and fixing CPVC concealed water supply piping (SDR 11) with brass fittings, valves, clamps, and hydrostatic testing',
+    unit: 'Rmt',
+    rateMaterial: 140,
+    rateLabour: 80,
+    rateEquipment: 10,
+    rateTransport: 10,
+    rateOther: 5,
+    wastagePercent: 5,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Internal hot and cold water distribution.'
+  },
+  {
+    id: 'r_cel1',
+    code: 'CEL-01',
+    categoryId: '20',
+    description: 'Providing and fixing Gypsum board false ceiling (12.5mm) on GI perimeter channels and intermediate suspended hangers with cove lighting trough',
+    unit: 'sqft',
+    rateMaterial: 65,
+    rateLabour: 35,
+    rateEquipment: 5,
+    rateTransport: 5,
+    rateOther: 5,
+    wastagePercent: 5,
+    gstPercent: 18,
+    contractorMarginPercent: 10,
+    notes: 'Saint-Gobain / Gyproc gypsum false ceiling system.'
   }
 ];
 
@@ -304,6 +576,8 @@ export default function AdvancedBOQCalculator() {
 
   // Rate Library modal and fields
   const [showRateLibrary, setShowRateLibrary] = useState<boolean>(false);
+  const [librarySearchQuery, setLibrarySearchQuery] = useState<string>('');
+  const [libraryCategoryFilter, setLibraryCategoryFilter] = useState<string>('all');
 
   // Active BOQ Item Rate Analysis Modal
   const [activeRateAnalysisItemId, setActiveRateAnalysisItemId] = useState<string | null>(null);
@@ -1193,6 +1467,85 @@ export default function AdvancedBOQCalculator() {
     updateActiveProject({ ...activeProject, items: updatedItems });
   };
 
+  const handleAddFromLibrary = (rate: RateItem) => {
+    if (!activeProject) return;
+
+    let formulaType: BOQItem['formulaType'] = 'count';
+    const u = rate.unit.toLowerCase();
+    if (u.includes('cum') || u.includes('cft')) {
+      formulaType = 'volume';
+    } else if (u.includes('sqft') || u.includes('sqm') || u.includes('sq m') || u.includes('sq ft')) {
+      formulaType = 'area';
+    } else if (u.includes('rmt') || u.includes('m') || u.includes('ft')) {
+      formulaType = 'length';
+    } else if (u.includes('nos') || u.includes('bag') || u.includes('set') || u.includes('ton') || u.includes('kg')) {
+      formulaType = 'count';
+    }
+
+    const newItem: BOQItem = {
+      id: 'item_' + Date.now() + Math.random().toString(36).substr(2, 4),
+      code: rate.code || `ITEM-${activeProject.items.length + 1}`,
+      categoryId: rate.categoryId || DEFAULT_CATEGORIES[0].id,
+      floorId: activeProject.floors[0]?.id || 'all',
+      roomId: 'all',
+      description: rate.description,
+      specification: rate.notes || '',
+      unit: rate.unit,
+      length: formulaType === 'area' || formulaType === 'volume' || formulaType === 'length' ? 10 : 0,
+      width: formulaType === 'area' || formulaType === 'volume' ? 10 : 0,
+      height: formulaType === 'volume' ? 1 : 0,
+      count: 1,
+      formulaType,
+      manualQty: 0,
+      manualAmount: 0,
+      calculatedQty: 1,
+      wastagePercent: rate.wastagePercent !== undefined ? rate.wastagePercent : activeProject.defaultWastagePercent,
+      netQty: 1,
+      rateMaterial: rate.rateMaterial,
+      rateLabour: rate.rateLabour,
+      rateEquipment: rate.rateEquipment,
+      rateTransport: rate.rateTransport,
+      rateOther: rate.rateOther,
+      contractorMarginPercent: rate.contractorMarginPercent !== undefined ? rate.contractorMarginPercent : activeProject.contractorMarginPercent,
+      gstPercent: rate.gstPercent !== undefined ? rate.gstPercent : activeProject.gstPercent,
+      finalRate: 0,
+      totalAmount: 0,
+      remarks: rate.notes || ''
+    };
+
+    if (rate.categoryId === '4' || rate.categoryId === '5') {
+      newItem.concreteMix = rate.code.includes('RCC') ? 'm20' : 'pcc_1_4_8';
+      newItem.includeSteel = rate.code.includes('RCC');
+      newItem.steelRatio = 80;
+    } else if (rate.categoryId === '8' || rate.categoryId === '9') {
+      newItem.brickType = rate.code.includes('BLK') ? 'aac_block' : 'standard';
+      newItem.mortarRatio = '1_6';
+    } else if (rate.categoryId === '10') {
+      newItem.plasterThickness = 12;
+      newItem.mortarRatio = '1_4';
+    } else if (rate.categoryId === '12' || rate.categoryId === '13') {
+      newItem.tileLength = 2;
+      newItem.tileWidth = 2;
+    }
+
+    const calculated = calculateItemAmount(newItem, activeProject.gstPercent, activeProject.contractorMarginPercent);
+    const updatedItems = [...activeProject.items, calculated];
+    updateActiveProject({ ...activeProject, items: updatedItems });
+    setShowRateLibrary(false);
+  };
+
+  const filteredRateLibrary = useMemo(() => {
+    return rateLibrary.filter(rate => {
+      const matchCat = libraryCategoryFilter === 'all' || rate.categoryId === libraryCategoryFilter;
+      const matchSearch =
+        !librarySearchQuery.trim() ||
+        rate.code.toLowerCase().includes(librarySearchQuery.toLowerCase()) ||
+        rate.description.toLowerCase().includes(librarySearchQuery.toLowerCase()) ||
+        (rate.notes && rate.notes.toLowerCase().includes(librarySearchQuery.toLowerCase()));
+      return matchCat && matchSearch;
+    });
+  }, [rateLibrary, libraryCategoryFilter, librarySearchQuery]);
+
   // -------------------------------------------------------------
   // Calculations Engine (Totals, GST, Scenarios)
   // -------------------------------------------------------------
@@ -1934,21 +2287,28 @@ export default function AdvancedBOQCalculator() {
                 <div className="flex items-center gap-2 w-full lg:w-auto justify-end">
                   <button
                     onClick={() => setShowRateLibrary(true)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold border border-zinc-200 dark:border-zinc-750 rounded-xl bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-750 dark:text-zinc-350 transition"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold border border-zinc-200 dark:border-zinc-750 rounded-xl bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition shadow-sm"
                   >
                     <Coins className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                    Rate Library
+                    Rate Library ({rateLibrary.length})
+                  </button>
+                  <button
+                    onClick={() => setShowRateLibrary(true)}
+                    className="inline-flex items-center gap-1 px-3.5 py-2 text-xs bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl transition shadow-lg shadow-amber-500/20"
+                    title="Pick an item from the CPWD/DSR rate library"
+                  >
+                    + From Library
                   </button>
                   <button
                     onClick={handleAddItem}
-                    className="inline-flex items-center gap-1 px-4 py-2 text-xs bg-indigo-650 hover:bg-indigo-600 text-white font-bold rounded-xl transition shadow-lg shadow-indigo-650/20"
+                    className="inline-flex items-center gap-1 px-4 py-2 text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition shadow-lg shadow-indigo-600/20"
                   >
                     + Add Item
                   </button>
                   {selectedItemIds.length > 0 && (
                     <button
                       onClick={handleBulkDelete}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-650 dark:text-red-400 border border-red-500/25 font-bold rounded-xl transition"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/25 font-bold rounded-xl transition"
                     >
                       <Trash2 className="w-3.5 h-3.5 shrink-0" />
                       Delete ({selectedItemIds.length})
@@ -2594,72 +2954,154 @@ export default function AdvancedBOQCalculator() {
         {/* 8. Rate Library Modal */}
         {showRateLibrary && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-3xl p-6 max-w-3xl w-full max-h-[85vh] overflow-y-auto space-y-4 shadow-2xl">
-              <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-850 pb-3">
-                <h4 className="text-xs font-black text-zinc-400 uppercase tracking-wider flex items-center gap-2">
-                  <Coins className="w-4 h-4 text-indigo-500" />
-                  <span>Interactive Local Rate Template Library</span>
-                </h4>
+            <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 max-w-4xl w-full max-h-[90vh] flex flex-col space-y-4 shadow-2xl">
+              <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-800 pb-3 shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-amber-500/15 flex items-center justify-center">
+                    <Coins className="w-4 h-4 text-amber-500" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-zinc-900 dark:text-white">
+                      CPWD &amp; DSR Rate Analysis Library
+                    </h4>
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                      Standard Indian construction unit rates with full material &amp; labor wage breakdown
+                    </p>
+                  </div>
+                </div>
                 <button
                   onClick={() => setShowRateLibrary(false)}
-                  className="text-zinc-450 hover:text-zinc-650 text-sm font-bold"
+                  className="px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition"
                 >
                   ✕ Close
                 </button>
               </div>
 
-              {/* Rate items list with Cost Breakdown mini-bars */}
-              <div className="space-y-3">
-                {rateLibrary.map(rate => {
-                  const baseSum = (rate.rateMaterial || 0) + (rate.rateLabour || 0) + (rate.rateEquipment || 0) + (rate.rateTransport || 0) + (rate.rateOther || 0);
-                  const matPct = baseSum > 0 ? ((rate.rateMaterial || 0) / baseSum) * 100 : 0;
-                  const labPct = baseSum > 0 ? ((rate.rateLabour || 0) / baseSum) * 100 : 0;
-                  const eqPct = baseSum > 0 ? ((rate.rateEquipment || 0) / baseSum) * 100 : 0;
-                  const transPct = baseSum > 0 ? ((rate.rateTransport || 0) / baseSum) * 100 : 0;
-                  const othPct = baseSum > 0 ? ((rate.rateOther || 0) / baseSum) * 100 : 0;
+              {/* Filters in Rate Library Modal */}
+              <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+                <div className="relative flex-1 w-full">
+                  <Search className="absolute left-3 top-2.5 w-4 h-4 text-zinc-400" />
+                  <input
+                    type="text"
+                    placeholder="Search rates by code, title, or specification..."
+                    value={librarySearchQuery}
+                    onChange={(e) => setLibrarySearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2 text-xs border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                  />
+                </div>
+                <select
+                  value={libraryCategoryFilter}
+                  onChange={(e) => setLibraryCategoryFilter(e.target.value)}
+                  className="w-full sm:w-56 px-3 py-2 text-xs border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/30 cursor-pointer"
+                >
+                  <option value="all">All Categories ({rateLibrary.length})</option>
+                  {DEFAULT_CATEGORIES.map(c => {
+                    const cnt = rateLibrary.filter(r => r.categoryId === c.id).length;
+                    return (
+                      <option key={c.id} value={c.id}>
+                        {c.name} {cnt > 0 ? `(${cnt})` : ''}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
 
-                  return (
-                    <div key={rate.id} className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-850 rounded-2xl text-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="space-y-1.5 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase rounded font-mono">{rate.code}</span>
-                          <strong className="text-zinc-900 dark:text-white font-bold block">{rate.description}</strong>
+              {/* Rate items scrollable list */}
+              <div className="space-y-3 overflow-y-auto flex-1 pr-1">
+                {filteredRateLibrary.length === 0 ? (
+                  <div className="py-12 text-center text-zinc-400 font-medium space-y-2">
+                    <span className="text-2xl">🔍</span>
+                    <p className="text-xs font-bold text-zinc-600 dark:text-zinc-300">No rate library items match your search.</p>
+                  </div>
+                ) : (
+                  filteredRateLibrary.map(rate => {
+                    const categoryName = DEFAULT_CATEGORIES.find(c => c.id === rate.categoryId)?.name || 'General';
+                    const baseSum = (rate.rateMaterial || 0) + (rate.rateLabour || 0) + (rate.rateEquipment || 0) + (rate.rateTransport || 0) + (rate.rateOther || 0);
+                    const matPct = baseSum > 0 ? ((rate.rateMaterial || 0) / baseSum) * 100 : 0;
+                    const labPct = baseSum > 0 ? ((rate.rateLabour || 0) / baseSum) * 100 : 0;
+                    const eqPct = baseSum > 0 ? ((rate.rateEquipment || 0) / baseSum) * 100 : 0;
+                    const transPct = baseSum > 0 ? ((rate.rateTransport || 0) / baseSum) * 100 : 0;
+                    const othPct = baseSum > 0 ? ((rate.rateOther || 0) / baseSum) * 100 : 0;
+
+                    return (
+                      <div key={rate.id} className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-xs flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-amber-400/40 transition">
+                        <div className="space-y-1.5 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="px-2 py-0.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[9px] font-black uppercase rounded font-mono">
+                              {rate.code}
+                            </span>
+                            <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[9px] font-bold rounded">
+                              {categoryName}
+                            </span>
+                            <span className="text-[10px] text-zinc-400 font-mono">
+                              Unit: <strong className="text-zinc-700 dark:text-zinc-300">{rate.unit}</strong>
+                            </span>
+                          </div>
+                          <strong className="text-zinc-900 dark:text-white font-bold block text-sm leading-snug">
+                            {rate.description}
+                          </strong>
+                          {rate.notes && (
+                            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                              {rate.notes}
+                            </p>
+                          )}
+                          
+                          {/* Cost Breakdown mini progress bar */}
+                          <div className="w-full space-y-1 max-w-lg pt-1">
+                            <div className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden flex">
+                              <div style={{ width: `${matPct}%` }} className="bg-indigo-500 h-full" title={`Material: ₹${rate.rateMaterial}`} />
+                              <div style={{ width: `${labPct}%` }} className="bg-amber-500 h-full" title={`Labour: ₹${rate.rateLabour}`} />
+                              <div style={{ width: `${eqPct}%` }} className="bg-emerald-500 h-full" title={`Equipment: ₹${rate.rateEquipment}`} />
+                              <div style={{ width: `${transPct}%` }} className="bg-blue-500 h-full" title={`Transport: ₹${rate.rateTransport}`} />
+                              <div style={{ width: `${othPct}%` }} className="bg-zinc-400 h-full" title={`Other: ₹${rate.rateOther}`} />
+                            </div>
+                            <div className="text-[9px] text-zinc-500 dark:text-zinc-400 flex flex-wrap gap-x-2.5 gap-y-0.5 font-mono">
+                              <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500" /> Mat: ₹{rate.rateMaterial}</span>
+                              <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Lab: ₹{rate.rateLabour}</span>
+                              {rate.rateEquipment > 0 && <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Eq: ₹{rate.rateEquipment}</span>}
+                              {rate.rateTransport > 0 && <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Trans: ₹{rate.rateTransport}</span>}
+                              {rate.rateOther > 0 && <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-zinc-400" /> Oth: ₹{rate.rateOther}</span>}
+                              <span className="font-bold text-zinc-800 dark:text-zinc-200 ml-auto">Base: ₹{baseSum.toLocaleString('en-IN')}</span>
+                            </div>
+                          </div>
                         </div>
-                        <span className="text-[10px] text-zinc-400 dark:text-zinc-500 block">Unit: {rate.unit} | Base cost sum: ₹{baseSum.toLocaleString('en-IN')}</span>
-                        
-                        {/* Cost Breakdown mini progress bar */}
-                        <div className="w-full space-y-1 max-w-lg">
-                          <div className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden flex">
-                            <div style={{ width: `${matPct}%` }} className="bg-indigo-500 h-full" title={`Material: ₹${rate.rateMaterial}`} />
-                            <div style={{ width: `${labPct}%` }} className="bg-amber-500 h-full" title={`Labour: ₹${rate.rateLabour}`} />
-                            <div style={{ width: `${eqPct}%` }} className="bg-emerald-500 h-full" title={`Equipment: ₹${rate.rateEquipment}`} />
-                            <div style={{ width: `${transPct}%` }} className="bg-blue-500 h-full" title={`Transport: ₹${rate.rateTransport}`} />
-                            <div style={{ width: `${othPct}%` }} className="bg-zinc-400 h-full" title={`Other: ₹${rate.rateOther}`} />
-                          </div>
-                          <div className="text-[9px] text-zinc-450 dark:text-zinc-500 flex flex-wrap gap-x-2.5 gap-y-0.5 font-mono">
-                            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-indigo-500" /> Mat: ₹{rate.rateMaterial}</span>
-                            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Lab: ₹{rate.rateLabour}</span>
-                            {rate.rateEquipment > 0 && <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Eq: ₹{rate.rateEquipment}</span>}
-                            {rate.rateTransport > 0 && <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Trans: ₹{rate.rateTransport}</span>}
-                            {rate.rateOther > 0 && <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-zinc-400" /> Oth: ₹{rate.rateOther}</span>}
-                          </div>
+
+                        <div className="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0 md:items-end justify-center">
+                          {activeProject && (
+                            <button
+                              onClick={() => handleAddFromLibrary(rate)}
+                              className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition shadow-md shadow-amber-500/20 text-center"
+                            >
+                              + Add as New Item
+                            </button>
+                          )}
+                          {activeProject && activeProject.items.length > 0 && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-[9px] text-zinc-400 font-bold uppercase">Apply:</span>
+                              <select
+                                onChange={(e) => {
+                                  if (e.target.value) {
+                                    handleApplyRate(rate, e.target.value);
+                                    e.target.value = '';
+                                  }
+                                }}
+                                defaultValue=""
+                                className="px-2 py-1 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white text-[10px] font-bold rounded-lg cursor-pointer max-w-[150px]"
+                              >
+                                <option value="">Select BOQ Row</option>
+                                {activeProject.items.map(item => (
+                                  <option key={item.id} value={item.id}>
+                                    {item.code}: {item.description.substring(0, 20)}...
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          )}
                         </div>
                       </div>
-
-                      <div className="flex flex-wrap gap-1.5 md:justify-end items-center shrink-0">
-                        {activeProject && activeProject.items.map(item => (
-                          <button
-                            key={item.id}
-                            onClick={() => handleApplyRate(rate, item.id)}
-                            className="px-2.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 font-bold uppercase text-[9px] rounded-lg transition"
-                          >
-                            Apply to {item.code}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
           </div>

@@ -7637,32 +7637,83 @@ export const toolsList: Tool[] = [
     slug: 'advanced-boq-calculator-india',
     name: 'Advanced BOQ Calculator India',
     category: 'civil',
+    subcategory: 'Quantity Takeoff & Cost Estimation',
     hideLayoutHeader: true,
     shortDescription: 'Create detailed construction BOQs with quantities, material estimates, floor-wise costing, and Excel/PDF export.',
-    metaDescription: 'Free online construction BOQ calculator. Estimate material and labor costs, generate rate analysis, and export professional reports.',
-    keywords: ['boq calculator', 'construction estimation', 'bill of quantities india', 'building material estimator', 'rate analysis calculator'],
+    metaTitle: 'Advanced BOQ Calculator India | CPWD Rate Analysis & Construction Estimator',
+    metaDescription: 'Free online Indian construction BOQ calculator. Estimate concrete, steel, brickwork, plaster, tiles, and paint quantities with multi-floor takeoff, CPWD DSR rate analysis, and Excel/PDF export.',
+    keywords: [
+      'boq calculator india',
+      'bill of quantities calculator',
+      'construction estimation india',
+      'cpwd rate analysis calculator',
+      'building material estimator',
+      'civil quantity takeoff',
+      'delhi schedule of rates dsr calculator',
+      'rcc concrete steel estimator',
+      'multi floor construction cost calculator',
+      'boq excel export tool'
+    ],
     icon: 'Calculator',
     howToUse: [
-      'Set up your project details, location, built-up area, tax/margin rates.',
-      'Configure floors and rooms to structure the work layout.',
-      'Add items to the spreadsheet-style table, entering dimensions and selecting work categories.',
-      'Choose formula presets or input rates for materials, labor, and transport.',
-      'Review material estimations, run inflation scenario simulators, and export a professional multi-sheet Excel or styled PDF report.'
+      'Initialize Project: Select a pre-configured template (G+0 House, Modular Kitchen) or create a blank project with custom GST, margin, and contingency rates.',
+      'Configure Building Floors & Rooms: Add multiple floor levels (Ground, First, Terrace) with floor areas to auto-calculate built-up area and scale standard items.',
+      'Enter Quantity Takeoff Dimensions: Add BOQ line items using volume (L × W × H), area (L × W), length (Rmt), or unit count formulas aligned with IS 1200 measurement standards.',
+      'Apply CPWD Rate Analysis: Choose from 25+ standard CPWD DSR rate presets or specify material, labor, machinery, transit, wastage %, and contractor margins.',
+      'Inspect Rule-of-Thumb Material Quantities: View automated totals for cement bags, sand cft, coarse aggregate cft, TMT rebar kg, brick/block count, tiles, adhesive, and paint volume.',
+      'Simulate Market Price Fluctuation: Adjust interactive price deviation sliders for cement, steel, labor wages, or general inflation to stress-test your budget.',
+      'Export Professional Deliverables: Download a multi-sheet Microsoft Excel (.xlsx) workbook or a formatted PDF estimation report with line item schedules.'
     ],
     faqs: [
       {
-        question: 'What is a Bill of Quantities (BOQ)?',
-        answer: 'A Bill of Quantities (BOQ) is a document prepared by a quantity surveyor or engineer that details the quantities of materials, labor, and equipment needed for a construction project, allowing contractors to quote prices.'
+        question: 'What is a Bill of Quantities (BOQ) in Indian civil engineering?',
+        answer: 'A Bill of Quantities (BOQ) is a comprehensive engineering schedule that itemizes every individual item of work required for a construction project—including item code, standardized description matching CPWD or State DSR specifications, unit of measurement, net quantity, unit rate, and total amount. It forms the legal and financial backbone for contractor tendering, milestone billing, and material procurement.'
       },
       {
-        question: 'How is the final rate for each item calculated?',
-        answer: 'The final rate is the sum of base material, labor, equipment, transport, and other costs, adjusted for wastage percentage, contractor margin, and GST.'
+        question: 'How is unit rate analysis calculated in accordance with CPWD DSR?',
+        answer: 'In Indian civil estimation, the unit rate of an item is derived from the sum of five base cost components: (1) Primary Materials Cost (including wastage), (2) Skilled & Unskilled Labor Wages (masons, bar benders, carpenters, helpers), (3) Equipment & Shuttering depreciation, (4) Freight & Transit handling, and (5) Other sundries. Contractor profit margin (typically 10% to 15%) and GST (typically 18% on works contracts) are compounded on this base sum.'
+      },
+      {
+        question: 'What are the standard material wastage allowances applied in India?',
+        answer: 'Standard civil engineering wastage allowances in India are: Reinforcement TMT Steel: 3%–5% (cutting and laps); Bricks & AAC blocks: 5% (breakage and half-bats); Vitrified & Ceramic floor tiles: 8%–10% (perimeter cutting and layout alignment); Cement & Sand plaster: 8%–10% (rebound and joint filling); Wall Putty & Emulsion Paint: 5% (application and roller absorption).'
+      },
+      {
+        question: 'Which Indian Standard (IS) codes govern construction measurements?',
+        answer: 'Civil construction measurements in India follow IS 1200 (Parts 1 to 28), "Method of Measurement of Building and Civil Engineering Works." Key parts include Part 1 (Earthwork in excavation/filling), Part 2 (Concrete works), Part 3 (Brickwork masonry), Part 4 (Stone masonry), Part 5 (Formwork), Part 8 (Steelwork), Part 11 (Plastering & Pointing), Part 12 (Flooring), and Part 13 (Painting & Polishing).'
+      },
+      {
+        question: 'How are dry volume conversion factors applied for concrete and mortar?',
+        answer: 'Freshly mixed wet concrete shrinks during compaction and hydration. To calculate raw material quantities (cement, sand, aggregate), a dry volume multiplier of 1.54 is applied to wet concrete volume. For cement-sand plaster and brick mortar, a dry volume factor of 1.33 to 1.35 is used to account for void filling between aggregate particles and drying shrinkage.'
+      },
+      {
+        question: 'How does multi-floor quantity scaling work in this calculator?',
+        answer: 'When you add a new floor (e.g. First Floor) to your project, the tool automatically clones typical structural and architectural finishing items from the Ground Floor (excluding foundation-specific items like excavation and PCC) and scales dimensions proportionally based on the new floor area.'
+      },
+      {
+        question: 'What is the difference between Carpet Area, Built-up Area, and Super Built-up Area in BOQ takeoff?',
+        answer: 'Carpet Area is the net usable internal floor area excluding wall thickness. Built-up Area is the gross floor plate area including internal/external walls and private balconies. Super Built-up Area (Saleable Area) includes the built-up area plus proportionate common spaces such as lobbies, staircases, lift shafts, and clubhouse facilities.'
+      },
+      {
+        question: 'How can I export and share the final BOQ with clients and contractors?',
+        answer: 'Click the "Excel" button to export a complete 3-sheet workbook containing: (1) Project Executive Summary & Cost/Sqft index, (2) Itemized BOQ Schedule with dimensions and rates, and (3) Indian Construction Material Takeoff (cement bags, sand cft, steel kg, bricks, paint). Click the "PDF" button to generate a clean, client-facing PDF quote.'
       }
     ],
     sections: [
       {
-        title: 'Preparing a BOQ for Construction in India',
-        content: 'Preparation of a detailed BOQ involves structural measurement takes, choosing appropriate work item descriptions matching CPWD or State DSR (Delhi Schedule of Rates) specifications, estimating wastage coefficients, and applying current local labor and material market rates.'
+        title: 'Method of Measurement according to IS 1200',
+        content: 'Indian Standard IS 1200 defines the universal guidelines for measuring civil engineering items. Lengths and breadths are measured to the nearest 0.01 meter (or 0.5 inch), areas to the nearest 0.01 square meter (or 0.1 sq ft), and cubical contents (volumes) to the nearest 0.01 cubic meter (or 0.1 cu ft). Openings in walls smaller than 0.1 sqm for plaster and 0.1 cum for brickwork are not deducted from gross measurements.'
+      },
+      {
+        title: 'Rate Analysis Components & CPWD DSR Structure',
+        content: 'The Central Public Works Department (CPWD) Delhi Schedule of Rates (DSR) establishes standardized unit rates for public and private infrastructure across India. Rate analysis combines basic material indices (cement, fine aggregate, coarse aggregate, TMT bars), labor day rates based on Minimum Wages Acts, water/electricity overheads (1%), contractor profit (10%), and GST (18%).'
+      },
+      {
+        title: 'Material Estimation Dry Volume Coefficients',
+        content: 'Civil estimation relies on empirical dry volume multipliers. For nominal concrete mixes (M15, M20, M25), dry volume is calculated as Dry Volume = 1.54 × Wet Volume. For masonry and plaster mortars (1:3, 1:4, 1:6), dry volume is Dry Volume = 1.33 × Wet Mortar Volume. 1 standard bag of cement equals 50 kg (0.0347 cubic meters or 1.226 cubic feet).'
+      },
+      {
+        title: 'Best Practices for Civil Tender Preparation & Contractor Quotations',
+        content: 'To prevent contractual disputes and scope creep during construction: (1) Clearly demarcate inclusion and exclusion of rebar steel, formwork, and curing in concrete line items, (2) Specify tile brands, grade (double charged vitrified vs ceramic), and tile format dimensions, (3) Fix standard wastage ceilings in contractor agreements, and (4) Maintain a separate contingency reserve (typically 3% to 5%) for unforeseen foundation soil conditions or structural revision notices.'
       }
     ]
   }
