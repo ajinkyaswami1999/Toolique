@@ -9924,24 +9924,79 @@ export const toolsList: Tool[] = [
     "name": "Plot Area Calculator",
     "category": "architecture",
     "shortDescription": "Calculate area of rectangular, triangular or irregular 4-sided plots and convert to land units.",
-    "metaDescription": "Calculate land area for rectangular and irregular plots. Converts results to Sq. Ft, Sq. M, Acres, Hectares, Guntha, and Bigha.",
-    "keywords": ["plot area calculator", "land area calculator", "calculate plot size", "bigha calculator", "guntha calculator"],
+    "metaDescription": "Calculate land area for rectangular, triangular, trapezoidal, and irregular 4-sided or multi-point plots. Converts directly to Sq. Ft, Sq. M, Gaj (Sq. Yd), Acres, Hectares, Guntha, Cent, Ground, Bigha, Biswa, Kanal, and Marla with stamp duty and fencing estimators.",
+    "keywords": [
+      "plot area calculator",
+      "land area calculator",
+      "calculate plot size",
+      "irregular plot area calculator",
+      "4 sided plot area calculator",
+      "bigha calculator",
+      "guntha calculator",
+      "cent to sq ft calculator",
+      "gaj to sq ft",
+      "acre to sq ft",
+      "land measurement calculator india",
+      "plot valuation calculator",
+      "heron formula plot area"
+    ],
     "icon": "Ruler",
     "howToUse": [
-      "Select the shape of your plot (Rectangle, Triangle, or 4-Side Irregular).",
-      "Enter the measured side dimensions.",
-      "Review the total plot area converted into standard regional units."
+      "Select your plot shape: Rectangle/Square, Triangle (Heron's / Base-Height), Trapezoid (Tapered), 4-Side Irregular (Surveyor Triangulation), Multi-Point Polygon (GPS Coordinates), or Curved/Sector.",
+      "Choose your input measurement unit: Feet (ft), Meters (m), or Yards (Gaj).",
+      "Select your Indian State reference from the dropdown to automatically apply your local state revenue standard for Bigha, Kattha, and Biswa conversions.",
+      "Enter your measured boundary side lengths. For irregular 4-sided plots, enter all 4 perimeter sides plus the corner-to-corner diagonal (AC).",
+      "Inspect the live 2D proportional SVG blueprint to visually verify plot geometry, side callouts, and North orientation.",
+      "Review the comprehensive Pan-India and Global conversion matrix (Sq. Ft, Sq. M, Gaj, Acres, Hectares, Guntha, Cent, Ground, Bigha, Kanal, Marla).",
+      "Optionally enter your local land rate, stamp duty %, and fencing parameters to instantly calculate total market land valuation, acquisition cost, and boundary fencing requirements.",
+      "Click 'Copy Report' for text documentation or 'PDF Survey' to download a clean, formatted engineering survey sheet."
     ],
     "faqs": [
       {
-        "question": "How are irregular quadrilateral plot areas calculated?",
-        "answer": "The plot is partitioned into two triangles using a diagonal measurement, and the area of both triangles is calculated using Heron's formula."
+        "question": "How do you calculate the area of an irregular 4-sided plot accurately?",
+        "answer": "To calculate the area of an irregular 4-sided plot, measure all 4 outer boundary sides (AB, BC, CD, DA) and measure one cross diagonal between opposite corners (AC). The diagonal divides the irregular quadrilateral into two separate triangles (Triangle ABC and Triangle ADC). Heron's Formula is then applied to both triangles individually (Area = √[s(s-a)(s-b)(s-c)], where s is the semi-perimeter). Adding the areas of both triangles gives the exact, mathematically proven plot area."
+      },
+      {
+        "question": "Why is the common method of averaging opposite sides wrong for irregular plots?",
+        "answer": "Many people attempt to estimate irregular land by multiplying average length by average width ([AB + CD]/2 × [BC + DA]/2). This formula is mathematically invalid for non-rectangular plots and almost always overestimates the true land area by 5% to 25%. A 4-sided quadrilateral without a fixed diagonal is geometrically flexible (infinite shapes can have the exact same 4 side lengths). Only measuring the diagonal (triangulation) fixes the angles and yields the true area."
+      },
+      {
+        "question": "How many Square Feet are in 1 Guntha, 1 Cent, 1 Ground, and 1 Gaj?",
+        "answer": "Standard conversions across Indian land revenue records: 1 Gaj (Square Yard) = 9 Sq. Ft (0.8361 m²); 1 Guntha (Maharashtra, Karnataka, Gujarat) = 1,089 Sq. Ft (33 ft × 33 ft / 121 sq yd); 1 Cent (Tamil Nadu, Kerala, AP) = 435.6 Sq. Ft (1/100th of an Acre); 1 Ground (Tamil Nadu / Chennai) = 2,400 Sq. Ft; 1 Acre = 43,560 Sq. Ft (40 Gunthas / 100 Cents / 4,840 sq yd); 1 Hectare = 107,639 Sq. Ft (2.471 Acres / 10,000 m²)."
+      },
+      {
+        "question": "Why does 1 Bigha have different values in different states of India?",
+        "answer": "Bigha is a traditional land measurement unit that was defined by local customary chains (guntas/jars) before national metric standardization. For example: In Uttar Pradesh, Delhi, and Rajasthan, 1 Pucca Bigha = 27,000 to 27,225 Sq. Ft (20 Biswa), while 1 Kachha Bigha = 9,075 Sq. Ft. In West Bengal and Assam, 1 Bigha = 14,400 Sq. Ft (20 Katha). In Gujarat, 1 Vigha = 17,424 Sq. Ft (16 Guntha). In Madhya Pradesh, 1 Bigha = 13,340 Sq. Ft. In Himachal Pradesh, 1 Bigha = 8,712 Sq. Ft. This calculator dynamically updates the Bigha value based on your selected state."
+      },
+      {
+        "question": "What are Kanal and Marla, and where are they used?",
+        "answer": "Kanal and Marla are standard land measurement units commonly used in Punjab, Haryana, Himachal Pradesh, Jammu & Kashmir, and parts of Rajasthan. 1 Marla = 272.25 Sq. Ft (9 Sq. Karam / 30.25 sq yd). 1 Kanal = 20 Marlas = 5,445 Sq. Ft (605 sq yd). 8 Kanals make exactly 1 Acre (43,560 Sq. Ft)."
+      },
+      {
+        "question": "How is the total land valuation and acquisition cost calculated?",
+        "answer": "Total land value is calculated by multiplying the plot area in your chosen rate unit (per sq ft, per Gaj/sq yd, per Acre, per Guntha, or per Bigha) by the prevailing market or circle rate. Total acquisition cost includes the base land value plus state Stamp Duty (typically 5% to 7% depending on the state and buyer gender) and government Registration Charges (standard 1%)."
+      },
+      {
+        "question": "How does the Boundary Fencing Estimator calculate posts and wire requirements?",
+        "answer": "The calculator determines the total perimeter length around all boundary sides. Fence support posts are calculated with standard 8-foot (2.44m) spacing with a corner anchor reinforcement. Total barbed wire length is computed by multiplying the boundary perimeter by the number of wire strands (typically 3, 4, or 5 strands)."
+      },
+      {
+        "question": "How does plot area relate to building construction footprint and FAR/FSI?",
+        "answer": "Permissible Ground Coverage % (typically 50% to 65% under municipal bye-laws) dictates the maximum ground-floor footprint of your building. Floor Area Ratio (FAR) or Floor Space Index (FSI) determines the total maximum built-up floor area across all levels (Total Built-Up = Plot Area × FAR). For example, a 2,000 sq ft plot with FAR 2.0 allows up to 4,000 sq ft of total construction."
       }
     ],
     "sections": [
       {
-        "title": "Land Units Variation in India",
-        "content": "Land units vary regionally. Standard units like Acres and Hectares are uniform, but units like Bigha and Guntha depend on local state land records."
+        "title": "Surveyor's Triangulation: Why Measuring the Diagonal is Essential for 4-Sided Plots",
+        "content": "Unlike a triangle, which is a rigid geometric polygon (3 fixed sides uniquely define exactly one triangle and one area), a 4-sided quadrilateral is non-rigid. If you have four side lengths of 40 ft, 30 ft, 45 ft, and 35 ft, the plot can be sheared into thousands of different parallelogram or rhomboid angles with widely differing areas. Measuring one internal diagonal (AC) splits the quadrilateral into two rigid triangles. Using Heron's formula on each triangle guarantees 100% mathematical precision and prevents disputes during land registration, property boundary demarcation, and architectural planning."
+      },
+      {
+        "title": "Standard Pan-India Land Measurement Conversion Quick Reference",
+        "content": "Use this benchmark guide when converting between national, regional, and international land records:\n\n• **1 Square Yard (Gaj)** = 9 Sq. Ft = 0.8361 Sq. Meters\n• **1 Guntha (Maharashtra / Karnataka / Gujarat)** = 1,089 Sq. Ft = 121 Gaj\n• **1 Cent (Tamil Nadu / Kerala / Andhra Pradesh)** = 435.6 Sq. Ft = 48.4 Gaj\n• **1 Ground (Chennai / Tamil Nadu)** = 2,400 Sq. Ft = 266.67 Gaj = 5.51 Cents\n• **1 Decimal / Dismil (Eastern India)** = 435.6 Sq. Ft = 1 Cent\n• **1 Marla (Punjab / Haryana)** = 272.25 Sq. Ft = 30.25 Gaj\n• **1 Kanal (Punjab / Haryana / J&K)** = 5,445 Sq. Ft = 20 Marlas = 605 Gaj\n• **1 Acre** = 43,560 Sq. Ft = 4,840 Gaj = 40 Gunthas = 100 Cents = 8 Kanals\n• **1 Hectare** = 107,639 Sq. Ft = 2.471 Acres = 10,000 Sq. Meters"
+      },
+      {
+        "title": "How to Use Plot Area for Real Estate Valuation and Construction Approvals",
+        "content": "When evaluating land for acquisition or development:\n1. **Verify Official Revenue Records (7/12, Khata, Patta):** Cross-check on-site physical tape measurements against revenue survey maps (Naksha / FMB).\n2. **Calculate Net Buildable Area:** Deduct municipal road-widening setbacks, front/rear clearances, and open green space buffers from the gross plot area.\n3. **Calculate Permissible FSI:** Multiply the net plot area by the zonal Floor Space Index (FSI) to assess development feasibility and project ROI.\n4. **Factor Stamp Duty & Government Charges:** Always allocate 6% to 8% above the transaction value for stamp duty, registration fees, and legal documentation."
       }
     ]
   },
