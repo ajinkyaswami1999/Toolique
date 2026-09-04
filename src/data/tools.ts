@@ -2454,51 +2454,75 @@ export const toolsList: Tool[] = [
   ]
 },
   {
-  "id": "RoomAreaCalculator",
-  "slug": "room-area-calculator",
-  "name": "Room Area Calculator",
-  "category": "architecture",
-  "subcategory": "Area & Space Planning",
-  "shortDescription": "Add multiple rooms to build a layout and calculate usable Carpet Area, Built-up Area, and Super Built-up Area with costs.",
-  "metaTitle": "Room Area Calculator | Carpet, Built-up & Super Built-up",
-  "metaDescription": "Free online Room Area Calculator. Calculate total carpet area, built-up area, and super built-up area of multiple rooms with wall thickness and loading factors.",
-  "keywords": [
-    "room area calculator",
-    "calculate room area square feet",
-    "room square footage calculator",
-    "carpet area vs built up area calculator",
-    "super built up area calculator",
-    "RERA carpet area calculator",
-    "square feet room calculator"
-  ],
-  "icon": "Compass",
-  "howToUse": [
-    "Select unit system (Feet or Meters).",
-    "Add rooms to the list, inputting length and width for each.",
-    "Check or uncheck \"RERA Carpet\" to toggle RERA classifications.",
-    "Input wall thickness, loading factor, and cost rates to view property metrics."
-  ],
-  "faqs": [
-    {
-      "question": "What is RERA Carpet Area?",
-      "answer": "RERA Carpet Area includes usable floor area of rooms + internal partition walls, but excludes external walls, service shafts, and private balconies."
-    },
-    {
-      "question": "How is wall area estimated here?",
-      "answer": "It estimates wall area by calculating room perimeters and multiplying by the specified wall thickness."
-    }
-  ],
-  "sections": [
-    {
-      "title": "Carpet vs Built-up Area explained",
-      "content": "Carpet area represents net usable floor area inside structural walls. Built-up area includes carpet area, thickness of all internal and external walls, and private balconies."
-    },
-    {
-      "title": "Super Built-up Area & Loading factor",
-      "content": "Super Built-up Area is the built-up area plus a proportionate share of common lobbies, staircase wells, lifts, and security cabins. Loading factor represents this markup (typically 25-35%)."
-    }
-  ]
-},
+    "id": "RoomAreaCalculator",
+    "slug": "room-area-calculator",
+    "name": "Room Area Calculator",
+    "category": "architecture",
+    "subcategory": "Area & Space Planning",
+    "shortDescription": "Add multiple rooms to build a layout and calculate usable Carpet Area, Built-up Area, and Super Built-up Area with costs.",
+    "metaTitle": "Room Area Calculator | RERA Carpet, Built-up & Super Built-up Studio",
+    "metaDescription": "Calculate RERA Net Carpet Area, Built-Up Plinth Area, and Super Built-Up Saleable Area across multi-room apartment layouts. Computes property cost, usable carpet efficiency %, stamp duty, and interior fit-out budgets.",
+    "keywords": [
+      "room area calculator",
+      "calculate room area square feet",
+      "RERA carpet area calculator",
+      "carpet area vs built up area",
+      "super built up area calculator",
+      "flat carpet area calculator",
+      "2 bhk carpet area calculator",
+      "3 bhk floor plan calculator",
+      "builder loading percentage calculator",
+      "property valuation by carpet area",
+      "home interior fit out cost calculator"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your unit system: Feet (ft) or Meters (m).",
+      "Choose a standard floor plan preset (1 BHK, 2 BHK, 3 BHK, 4 BHK, Villa) or click 'Add Room' to build a custom room layout.",
+      "Assign each room its appropriate architectural classification: Living/Bed/Kitchen (Carpet), Bathroom/Toilet (Carpet), Balcony/Terrace (Built-up), Dry Utility (Built-up), or Passage/Foyer (Carpet).",
+      "Enter the length and width dimensions for each room.",
+      "Specify external wall thickness (4.5\", 6\", 9\", or 11\") and builder Common Loading Factor (typically 25% to 35%).",
+      "Enter prevailing property rate per sq ft, interior fit-out rate, and stamp duty percentage.",
+      "Inspect the live 2D Layout Schematic Plan and review the RERA Net Carpet, Plinth Built-Up, and Super Built-Up breakdown.",
+      "Click 'Copy' or 'PDF Report' to export a formatted architectural area certificate."
+    ],
+    "faqs": [
+      {
+        "question": "What is the exact definition of RERA Carpet Area in India?",
+        "answer": "Under the Real Estate (Regulation and Development) Act (RERA) 2016, 'Carpet Area' is defined as the net usable floor area of an apartment, excluding external walls, service shafts, private balconies, and exclusive open terraces, but INCLUDING internal partition walls. Builders in India are legally mandated to quote property prices based on RERA Carpet Area rather than ambiguous Super Built-Up areas."
+      },
+      {
+        "question": "What is the difference between Carpet Area, Built-Up Area, and Super Built-Up Area?",
+        "answer": "• Carpet Area: Usable floor space where you can spread a carpet (Bedrooms + Living + Kitchen + Bathrooms + Internal Walls).\n• Built-Up Area (Plinth Area): Carpet Area + External Wall Thickness (9\") + Attached Balconies & Verandahs (typically 10% to 15% larger than carpet area).\n• Super Built-Up Area (Saleable Area): Built-Up Area + Proportionate share of common building amenities (Lobbies, Lift Wells, Staircases, Clubhouse, Corridors, Security Room) via the loading factor (typically 25% to 35% larger than built-up area)."
+      },
+      {
+        "question": "What is the Builder Loading Factor and how is it calculated?",
+        "answer": "Loading factor represents the percentage markup added by developers to the built-up area to account for shared common spaces. Formula: Super Built-up Area = Built-up Area × (1 + Loading%/100). For example, if a 2 BHK has a built-up area of 800 sq ft and loading is 30%, the Super Built-Up Area is 800 × 1.30 = 1,040 sq ft."
+      },
+      {
+        "question": "What is Carpet Space Efficiency and what is considered a healthy ratio?",
+        "answer": "Carpet Space Efficiency is the ratio of Net Usable Carpet Area to Super Built-Up Area: Efficiency % = (Carpet Area / Super Built-Up Area) × 100. In high-rise residential towers: • 70% to 75% is considered Excellent efficiency. • 65% to 70% is Normal/Average. • Below 60% indicates excessive common loading and wasted saleable cost."
+      },
+      {
+        "question": "Why does Effective Carpet Rate differ from the Builder Quoted Rate?",
+        "answer": "Builders quote property prices on Super Built-Up Area (e.g., ₹6,000/sq ft on 1,000 sq ft Super = ₹60 Lakhs). However, if the actual usable carpet area is only 700 sq ft, the true Effective Carpet Rate paid per usable square foot is ₹60 Lakhs / 700 sq ft = ₹8,571/sq ft."
+      },
+      {
+        "question": "Are private balconies and utility areas included in RERA Carpet Area?",
+        "answer": "No. Under RERA guidelines, external open balconies, verandahs, dry utility wash yards, and private open terraces are strictly excluded from the Carpet Area calculation and must be disclosed separately under Built-Up / Balcony area in official builder agreement floor plans."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Architectural Formula Guide: RERA Area Standards & NBC 2016",
+        "content": "When auditing real estate floor plans:\n\n• **RERA Net Carpet:** $\\sum (\\text{Length} \\times \\text{Width})_\\text{Habitable} + \\sum (\\text{Length} \\times \\text{Width})_\\text{Toilets} + \\text{Internal Partitions}$\n• **Wall Area Factor:** $(\\text{Perimeter} / 2) \\times \\text{Wall Thickness}$\n• **Built-Up Area:** $\\text{Carpet Area} + \\text{Balconies} + \\text{Utilities} + \\text{Wall Area}$\n• **Super Built-Up Area:** $\\text{Built-Up Area} \\times (1 + \\text{Loading \\%})$\n• **Space Efficiency Index:** $(\\text{Carpet Area} / \\text{Super Built-Up Area}) \\times 100$"
+      },
+      {
+        "title": "Turnkey Interior Fit-out Budgeting Benchmarks",
+        "content": "Interior fit-out budgets are always calculated on the Net Usable Carpet Area:\n\n• **Essential / Rental Fit-Out (₹800 - ₹1,000/sq ft):** Basic modular kitchen, laminate wardrobes in bedrooms, basic LED electricals, and paint.\n• **Premium Residential Fit-Out (₹1,300 - ₹1,800/sq ft):** Acrylic/PU modular kitchen, sliding wardrobes with lofts, false ceilings with cove lights, and wallpaper/texture accents.\n• **Luxury Architectural Fit-Out (₹2,200 - ₹3,500/sq ft):** Veneer/Duco carpentry, Italian marble flooring, automated smart home lighting, designer bathrooms, and custom acoustic paneling."
+      }
+    ]
+  },
   {
   "id": "CarpetAreaCalculator",
   "slug": "carpet-area-calculator",
@@ -2591,43 +2615,65 @@ export const toolsList: Tool[] = [
   {
   "id": "PaintCalculator",
   "slug": "paint-calculator",
-  "name": "Paint Calculator",
+  "name": "Paint Calculator & Indian Brand Price Trends",
   "category": "architecture",
   "subcategory": "Estimation",
-  "shortDescription": "Calculate wall and ceiling paint volumes in liters, subtracting window/door areas.",
-  "metaDescription": "Free online Paint Calculator. Estimate total paint liters required for rooms based on surface area, coats, and paint quality.",
+  "shortDescription": "Calculate wall and ceiling paint volumes in liters, undercoats BOQ, and track 5-year historical price trends for Asian Paints, Berger, Nerolac, Dulux & Indigo.",
+  "metaDescription": "Free Indian Paint Calculator & Material Price Trends Studio. Calculate paint liters, wall putty, primer, can splits, and compare 5-year historical rates across top Indian paint brands.",
   "keywords": [
     "Paint Calculator",
-    "room paint estimator",
-    "how many liters of paint",
-    "wall surface paint calculator",
-    "house painting budget"
+    "Asian Paints price per liter",
+    "Berger Paints cost estimator",
+    "Nerolac Impressions HD cost",
+    "Dulux Velvet Touch calculator",
+    "Birla Opus paint price",
+    "wall paint liters calculator India",
+    "painting contractor BOQ rate",
+    "acrylic putty primer calculator",
+    "house painting cost per sq ft"
   ],
   "icon": "Compass",
   "howToUse": [
-    "Enter room Length, Width, and Height dimensions.",
-    "Check whether to include the ceiling area.",
-    "Input door and window counts to subtract their area.",
-    "Select paint quality and coats to view the total liters and material cost."
+    "Choose your preferred Indian Paint Brand (Asian Paints, Berger, Kansai Nerolac, Dulux, Indigo Paints, Birla Opus) and product tier (Luxury, Mid-Range, Economy, Exterior).",
+    "Select the surface preparation process: Fresh Plaster (2 Putty + 1 Primer + 2 Topcoat), Standard Repainting, or Heavy Damp Renovation.",
+    "Add multiple rooms (Living Room, Master Bed, Kitchen, etc.) or set custom dimensions with door/window and wardrobe deductions.",
+    "Inspect the Packaging Optimizer for exact 20L drum, 10L bucket, 4L can, 1L tin, and putty bag procurement combinations.",
+    "Switch tabs to view 2D Room Elevation color swatches, 5-Year Historical Material Price Trends (2022–2026), or download the complete itemized Contractor BOQ PDF."
   ],
   "faqs": [
     {
-      "question": "How many square feet does a liter of paint cover?",
-      "answer": "A standard liter of plastic emulsion covers approximately 100 to 120 sq ft for two coats (or 200-240 sq ft for a single coat)."
+      "question": "How much wall area does 1 liter of emulsion paint cover in India?",
+      "answer": "For 2 coats of application on a primed surface: Luxury Emulsions (Royale, Silk Glamor, Velvet Touch) cover 130 to 140 sq ft/L. Standard/Mid-Range Emulsions (Apcolite, Easy Clean, Beauty Gold) cover 110 to 120 sq ft/L. Economy Distempers/Emulsions (Tractor, Bison, Promise) cover 85 to 95 sq ft/L."
     },
     {
-      "question": "Do I need 2 coats of paint?",
-      "answer": "Yes, 2 coats are recommended to hide plaster imperfections, achieve rich color depth, and ensure durability."
+      "question": "How much Wall Putty and Primer is required per square foot?",
+      "answer": "For fresh unpainted plaster walls: 1 kg of Acrylic / White Cement Wall Putty covers approximately 12 to 14 sq ft for 2 full coats. 1 liter of Water-Thinnable Wall Primer covers approximately 130 to 145 sq ft for 1 sealing coat."
+    },
+    {
+      "question": "What is the standard water dilution percentage for interior emulsion paints?",
+      "answer": "Most standard acrylic and luxury emulsions require dilution of 35% to 40% clean potable water by volume (e.g. 350ml to 400ml water per 1 Liter of paint). Excessive dilution reduces film opacity and scrub resistance."
+    },
+    {
+      "question": "How have Indian paint prices changed over the last 5 years (2022 to 2026)?",
+      "answer": "Indian paint prices grew at a 5-year CAGR of 6.4% to 7.2% due to spikes in Titanium Dioxide (TiO₂) and crude-oil-derived monomer feedstock, before stabilizing in 2025–2026 with increased competitive capacity from new entrants like Birla Opus."
+    },
+    {
+      "question": "What is the average painting labor rate per sq ft in Indian metro and Tier-2 cities?",
+      "answer": "In 2026, complete fresh painting labor (scraping, 2 coats putty with machine sanding, 1 coat primer, and 2 finish coats) ranges from ₹12 to ₹16 per sq ft. Simple 2-coat repainting labor ranges from ₹8 to ₹11 per sq ft."
     }
   ],
   "sections": [
     {
-      "title": "Wall surface area calculations",
-      "content": "Gross wall surface area is calculated as:\nWall Area = 2 × (Length + Width) × Height\nWe then add the ceiling area (Length × Width) and subtract openings (Standard Door: 21 sq ft, Window: 16 sq ft)."
+      "title": "Architectural Paint Surface Area & Deduction Formula",
+      "content": "Gross wall surface area for a room is calculated as:\n\n$$\\text{Wall Area} = 2 \\times (\\text{Length} + \\text{Width}) \\times \\text{Height}$$\n\nIf the ceiling is included, add $\\text{Ceiling Area} = \\text{Length} \\times \\text{Width}$. Standard Indian deductions applied:\n- **Standard Door (3 ft × 7 ft)**: $21\\text{ sq ft}$ ($1.95\\text{ m}^2$)\n- **Standard Window (4 ft × 4 ft)**: $16\\text{ sq ft}$ ($1.48\\text{ m}^2$)\n- **Net Paint Area** = $\\text{Gross Area} - \\sum \\text{Deductions}$."
     },
     {
-      "title": "Paint coverage per liter standards",
-      "content": "- **Economy Distemper**: 80 sq ft / liter (2 coats)\n- **Standard Acrylic Emulsion**: 100 sq ft / liter (2 coats)\n- **Premium/Luxury Emulsion**: 140 sq ft / liter (2 coats)"
+      "title": "Top Indian Paint Brands Benchmark (2026 Rates)",
+      "content": "- **Asian Paints**: Royale Luxury (₹630/L), Apcolite Premium (₹375/L), Tractor Emulsion (₹195/L), Apex Ultima (₹480/L)\n- **Berger Paints**: Silk Glamor (₹610/L), Easy Clean (₹365/L), Bison Emulsion (₹188/L), WeatherCoat (₹470/L)\n- **Kansai Nerolac**: Impressions HD (₹595/L), Beauty Gold (₹355/L), Beauty Smooth (₹180/L), Excel Mica (₹460/L)\n- **Dulux (AkzoNobel)**: Velvet Touch (₹620/L), SuperClean 3-in-1 (₹360/L), Promise (₹182/L), Weathershield (₹490/L)\n- **Indigo Paints**: Dirtproof & Waterproof (₹545/L), Bright Ceiling Coat (₹270/L), Acrylic Emulsion (₹190/L)\n- **Birla Opus**: Prime Luxury (₹580/L), One Interior (₹345/L), Style Emulsion (₹175/L)"
+    },
+    {
+      "title": "Can Packaging Split & Procurement Optimization",
+      "content": "Paints in India are packaged in 20L drums, 10L buckets, 4L cans, and 1L tins. Buying 20L master containers delivers a 14% to 18% savings compared to purchasing individual 1L or 4L tins. Our calculator automatically solves the most cost-effective packaging combination with a configurable 10% spill and touch-up margin."
     }
   ]
 },
