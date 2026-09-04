@@ -2675,47 +2675,73 @@ export const toolsList: Tool[] = [
   ]
 },
   {
-  "id": "FlooringCostCalculator",
-  "slug": "flooring-cost-calculator",
-  "name": "Flooring Cost Calculator",
-  "category": "interior",
-  "shortDescription": "Estimate material and labor costs for tiles, Indian marble, Italian marble, and wooden flooring.",
-  "metaDescription": "Free online Flooring Cost Calculator. Compare vitrified tiles, marble, granite, and hardwood installation budgets per square foot.",
-  "keywords": [
-    "Flooring Cost Calculator",
-    "marble flooring installation cost",
-    "vitrified tile flooring price",
-    "wooden flooring cost India",
-    "granite flooring cost"
-  ],
-  "icon": "Palette",
-  "howToUse": [
-    "Enter the flooring area in square feet or square meters.",
-    "Select a material preset (Vitrified, Indian Marble, Italian Marble, Wood).",
-    "Adjust wastage buffer percentage.",
-    "Review material cost, labor cost, and total flooring project budget."
-  ],
-  "faqs": [
-    {
-      "question": "What is the cost of vitrified tile flooring in India?",
-      "answer": "Materials cost between ₹60 to ₹100 per sq ft, and labor installation costs are about ₹20 to ₹30 per sq ft."
-    },
-    {
-      "question": "Why is Italian marble flooring labor so expensive?",
-      "answer": "Italian marble is soft and prone to cracking, requiring specialized backing mesh, epoxy adhesives, and multi-stage diamond polishing labor (₹120-200/sq ft)."
-    }
-  ],
-  "sections": [
-    {
-      "title": "Tile vs Marble flooring cost comparisons",
-      "content": "Vitrified tiles are pre-polished and laid quickly, keeping labor costs low. Marble is laid as raw slabs, requiring mortar backing, joint grouting, and post-installation diamond polishing."
-    },
-    {
-      "title": "Labor installation charges guidelines",
-      "content": "- **Vitrified Tiles**: ₹25 per sq ft\n- **Indian Marble**: ₹60 - ₹80 per sq ft (including polishing)\n- **Italian Marble**: ₹120 - ₹180 per sq ft (including polishing)\n- **Wooden Flooring**: ₹30 per sq ft"
-    }
-  ]
-},
+    "id": "FlooringCostCalculator",
+    "slug": "flooring-cost-calculator",
+    "name": "Flooring Cost Calculator",
+    "category": "interior",
+    "shortDescription": "Estimate material and labor costs for tiles, Indian marble, Italian marble, and wooden flooring.",
+    "metaDescription": "Calculate flooring and tiling project costs in India. Estimate budgets for Vitrified tiles, GVT/PGVT, Indian marble, Italian marble, Granite, Hardwood, and SPC vinyl with tile box count, cement mortar, diamond polish, and labor BOQ.",
+    "keywords": [
+      "Flooring Cost Calculator",
+      "flooring cost calculator india",
+      "tile flooring cost per sq ft",
+      "marble flooring installation cost",
+      "italian marble cost per sq ft",
+      "vitrified tile price calculator",
+      "granite flooring cost",
+      "wooden flooring cost india",
+      "tile box calculator",
+      "marble diamond polishing cost",
+      "floor tiling labor rate"
+    ],
+    "icon": "Palette",
+    "howToUse": [
+      "Select your measurement unit: Sq. Feet or Sq. Meters.",
+      "Choose your input mode: Enter Total Floor Carpet Area directly or use the Room-by-Room breakdown (Living Room, Master Bedroom, Kitchen, etc.).",
+      "Pick your Flooring Material: Double-Charged Vitrified (2×2 ft), Large GVT/PGVT (4×2 ft), Ceramic Anti-Skid, Indian Marble, Italian Marble, Granite, Kota Stone, Laminate Wood, Engineered Hardwood, or SPC Vinyl.",
+      "Select your Laying Pattern: Straight Grid (7% buffer), Brick Bond (10%), Diagonal 45° Diamond (14%), Herringbone/Chevron (16%), or Bookmatched Vein Slabs (18%).",
+      "Toggle Wall Skirting (3 to 6 inches) and optional Old Floor Demolition & Debris Disposal.",
+      "Inspect the live 2D Floor Pattern & Texture Visualizer.",
+      "Review the Itemized Contractor Bill of Quantities (BOQ): Tile boxes to order, cement bags, adhesive, epoxy grout, laying labor, diamond polishing, and 18% GST.",
+      "Click 'Copy' or 'PDF BOQ' to export a formatted project estimate."
+    ],
+    "faqs": [
+      {
+        "question": "How many tile boxes do I need to order for my flooring project?",
+        "answer": "To calculate tile boxes: 1) Multiply room length by width to get Net Area. 2) Add wall skirting area (Perimeter × Skirting height in feet). 3) Add a cutting wastage buffer (7% to 10% for straight grid, 14% to 16% for diagonal/herringbone). 4) Divide Total Gross Area by the coverage per box (standard 2×2 ft vitrified tile box has 4 tiles = 16 sq ft). Always round up to the nearest whole box to avoid batch shade variations."
+      },
+      {
+        "question": "What is the average flooring cost per square foot in India (Material + Labor)?",
+        "answer": "Current 2026 market benchmarks:\n• Ceramic Floor Tiles: ₹70 to ₹90/sq ft\n• Double-Charged Vitrified Tiles (2×2 ft): ₹110 to ₹140/sq ft\n• Large Format Glazed Vitrified Tiles (4×2 ft GVT): ₹160 to ₹220/sq ft\n• Indian Marble (Makrana/Morwad + Polish): ₹220 to ₹320/sq ft\n• Italian Marble (Statuario/Dyna + 8-Stage Diamond Polish): ₹650 to ₹1,200/sq ft\n• Granite Flooring (Flamed/Polished): ₹240 to ₹320/sq ft\n• Laminate Wooden Flooring: ₹130 to ₹170/sq ft\n• Engineered Hardwood / Solid Oak: ₹380 to ₹550/sq ft"
+      },
+      {
+        "question": "Why is Italian marble significantly more expensive to install than Indian marble or tiles?",
+        "answer": "Italian marble is a delicate, calcium-rich natural stone prone to micro-fissures. It requires: 1) Reinforcement nylon mesh backing with epoxy resin. 2) Specialized high-grade white cement/mortar bedding to prevent yellowish discoloration. 3) Multi-stage diamond abrasive pad polishing (from 50 grit up to 3000 grit) followed by tin oxide crystallization for high mirror reflection. The specialized labor and polish alone cost ₹140 to ₹200/sq ft."
+      },
+      {
+        "question": "What is the difference between Tile Adhesive and Cement Mortar bedding?",
+        "answer": "Cement mortar (1:4 cement:sand mix, 1.5 to 2.0 inches thick) is traditionally used for thick natural stones (marble, granite, kota) to level uneven subfloors. Modern thin-set Tile Adhesive (polymer-modified cement glue, 3mm to 6mm thick) is used for vitrified and ceramic tiles because vitrified tiles have nearly zero porosity (<0.05% water absorption) and will not bond reliably with pure cement slurry."
+      },
+      {
+        "question": "How much wastage should I account for different tile laying patterns?",
+        "answer": "• Straight Parallel Grid: 5% to 8% (lowest cutting waste).\n• Brick-Bond / Staggered (Subway): 8% to 10%.\n• Diagonal 45-Degree Diamond Pattern: 12% to 15% (perimeter triangular cuts).\n• Herringbone / Chevron: 15% to 18% (45° mitred corner cuts).\n• Bookmatched Marble Slabs: 15% to 20% (aligning natural geological veins creates discarded slab borders)."
+      },
+      {
+        "question": "How is wall skirting calculated for flooring projects?",
+        "answer": "Wall skirting protects plaster walls from mop water and foot scuffs. It is calculated by measuring the total room perimeter in linear feet and multiplying by the skirting height (standard 4 inches = 0.33 ft). Skirting typically adds 10% to 15% extra tile material."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Comprehensive Material Selection & Durability Benchmark Guide",
+        "content": "• **Vitrified Tiles (Double Charged / GVT):** Best choice for high-traffic living rooms and bedrooms. Stain-proof, scratch-resistant, and requires zero post-installation polishing.\n• **Anti-Skid Ceramic Tiles:** Mandatory for bathrooms, shower enclosures, and outdoor balconies (R10 to R11 slip rating).\n• **Indian Natural Marble:** Timeless natural stone that ages gracefully and stays naturally cool in tropical climates. Can be re-polished every 5 to 7 years.\n• **SPC (Stone Plastic Composite) Vinyl:** 100% waterproof rigid flooring with natural wood look, ideal for quick zero-mess renovation over existing old tiles."
+      },
+      {
+        "title": "Civil Construction Consumables & Mortar Quantity Estimation",
+        "content": "When planning raw materials for flooring laying:\n\n• **Tile Adhesive:** 1 bag of 20kg polymer adhesive covers approximately 40 to 50 sq ft with a 6mm notched trowel.\n• **Cement Mortar Bed:** For natural stone slabs, approximately 1 bag (50kg) of cement is required for every 35 to 40 sq ft of flooring at 1.5-inch bed depth.\n• **Epoxy Joint Grout:** 1 kg of dual-component epoxy grout fills approximately 80 to 120 sq ft of 2mm to 3mm tile joints."
+      }
+    ]
+  },
   {
   "id": "FalseCeilingCalculator",
   "slug": "false-ceiling-calculator",
@@ -2801,47 +2827,79 @@ export const toolsList: Tool[] = [
   ]
 },
   {
-  "id": "WardrobeCostCalculator",
-  "slug": "wardrobe-cost-calculator",
-  "name": "Wardrobe Cost Calculator",
-  "category": "interior",
-  "shortDescription": "Calculate wardrobe cabinet cost based on sliding or hinged doors, finishes, and loft options.",
-  "metaDescription": "Online Wardrobe Cost Calculator. Estimate hinged or sliding wardrobe budgets, premium fittings, and overhead storage loft costs.",
-  "keywords": [
-    "Wardrobe Cost Calculator",
-    "sliding wardrobe cost estimator",
-    "wardrobe cost per sq ft",
-    "hinged wardrobe price",
-    "bedroom wardrobe planner"
-  ],
-  "icon": "Palette",
-  "howToUse": [
-    "Select unit and enter wardrobe width and height.",
-    "Select door type: Hinged (swing) or Sliding.",
-    "Toggle overhead lofts and specify loft height.",
-    "Select exterior finish and interior accessory levels."
-  ],
-  "faqs": [
-    {
-      "question": "Which is cheaper: sliding or hinged wardrobes?",
-      "answer": "Hinged wardrobes are cheaper (₹1,300 - ₹1,500/sq ft). Sliding wardrobes cost ₹1,800 - ₹2,200/sq ft because they require specialized sliding track mechanisms."
-    },
-    {
-      "question": "How is wardrobe area calculated for billing?",
-      "answer": "Wardrobes are billed based on facade square feet (Width × Height of the wardrobe front)."
-    }
-  ],
-  "sections": [
-    {
-      "title": "Wardrobe sq ft calculation guides",
-      "content": "Measure the width and height of the wall niche where the wardrobe will sit. Multiply Width × Height to find the front face area. Example: A 6ft width × 7ft height wardrobe equals 42 square feet."
-    },
-    {
-      "title": "Sliding vs Hinged door mechanisms",
-      "content": "- **Hinged**: Classic doors swinging outwards, requiring front floor clearance but exposing the entire wardrobe interior when opened.\n- **Sliding**: Modern doors sliding sideways on tracks, saving floor space in compact rooms but exposing only half of the wardrobe at a time."
-    }
-  ]
-},
+    "id": "WardrobeCostCalculator",
+    "slug": "wardrobe-cost-calculator",
+    "name": "Wardrobe Cost Calculator",
+    "category": "interior",
+    "shortDescription": "Calculate wardrobe cabinet cost based on sliding or hinged doors, finishes, and loft options.",
+    "metaDescription": "Calculate modular wardrobe costs in India. Estimate budgets for sliding (2-track / 3-track) and hinged wardrobes with BWP Marine Ply, Acrylic, Veneer, Fluted Glass, soft-close drawers, and overhead lofts.",
+    "keywords": [
+      "Wardrobe Cost Calculator",
+      "sliding wardrobe cost calculator",
+      "wardrobe cost per sq ft india",
+      "hinged wardrobe price estimator",
+      "modular wardrobe cost calculator",
+      "acrylic wardrobe cost per sq ft",
+      "veneer wardrobe cost",
+      "fluted glass wardrobe cost",
+      "bwp marine ply wardrobe cost",
+      "hettich wardrobe fittings cost",
+      "bedroom wardrobe budget planner"
+    ],
+    "icon": "Palette",
+    "howToUse": [
+      "Select your measurement unit: Feet (ft) or Meters (m).",
+      "Choose a standard bedroom layout preset or enter custom wardrobe width, height, and depth (inches).",
+      "Toggle Overhead Storage Loft if your wardrobe reaches the ceiling, and specify the loft height (standard 2.0 to 2.5 ft).",
+      "Select your Core Carcass Board: BWP Marine Ply (IS:710), Commercial MR Ply (IS:303), HDHMR, or Solid Teak Wood.",
+      "Pick your Door Mechanism: Standard Hinged, 2-Track Sliding (Space Saver), 3-Track Sliding (Wide Span), Bi-Fold, or Open Walk-In.",
+      "Choose your Shutter Finish: Matte Laminate, High-Gloss Acrylic Laminate, 2.0mm Solid Acrylic, Natural Veneer + PU Polish, Tinted Fluted Glass, or PU Duco Paint.",
+      "Select your preferred Hardware Fitting Brand: Hettich (German Soft-Close), Hafele/Blum (Luxury Austrian), or Ebco/Ozone.",
+      "Customize internal organizer modules: Soft-close drawers, pull-out trouser/saree rack, velvet jewelry tray, hydraulic pull-down lift, and motion-sensor profile LED lights.",
+      "Inspect the live 2D Architectural Elevation Preview and review the Itemized Contractor Bill of Quantities (BOQ).",
+      "Click 'Copy Quote' or 'PDF Quote' to download an itemized interior estimate."
+    ],
+    "faqs": [
+      {
+        "question": "How is wardrobe cost calculated per square foot in India?",
+        "answer": "Wardrobes are billed based on front facade area (Width × Height of the carcass in square feet). Total price = (Main Cabinet Area × Main Rate/sq ft) + (Overhead Loft Area × Loft Rate/sq ft) + Internal Hardware & Smart Accessories + 12% Assembly/Installation Charges + 18% GST. Average basic hinged wardrobes start at ₹1,400 to ₹1,700/sq ft, while premium acrylic sliding wardrobes range between ₹2,200 and ₹3,500/sq ft."
+      },
+      {
+        "question": "Which is better and more cost-effective: Sliding or Hinged Wardrobe doors?",
+        "answer": "Hinged doors are 20% to 30% more economical because they utilize standard concealed soft-close hinges. However, they require 2 to 3 feet of clear walking space in front of the wardrobe to open. Sliding doors cost more due to heavy-duty top-hung tracks, bottom rollers, and aluminum profile framing (adds ₹400 to ₹700/sq ft), but they require zero front clearance, making them ideal for compact and modern master bedrooms."
+      },
+      {
+        "question": "What is the best plywood/board material for wardrobe construction?",
+        "answer": "BWP Marine Ply (IS:710) is the highest recommended material for long-lasting durability, 100% boiling waterproof protection, and termite resistance. For dry bedrooms on a budget, Commercial MR Grade Plywood (IS:303) or HDHMR (High-Density High Moisture Resistance) boards are excellent alternatives. MDF and particle boards should only be used for low-load decorative paneling."
+      },
+      {
+        "question": "What is the standard depth for hinged and sliding wardrobes?",
+        "answer": "Hinged wardrobes require a minimum depth of 21 to 24 inches (53 to 60 cm) to accommodate standard coat and blazer hangers on a central rod. Sliding wardrobes require a minimum depth of 24 to 26 inches (60 to 66 cm) because the sliding channel mechanism occupies 2 to 3 inches of internal depth."
+      },
+      {
+        "question": "How much extra does an Overhead Storage Loft cost?",
+        "answer": "Overhead lofts generally cost ~70% to 75% of the base wardrobe rate per square foot because they feature simpler single-shelf box cabinetry without complex internal drawers or pull-out fittings. A typical 6ft × 2ft loft adds approximately ₹15,000 to ₹25,000 to the overall wardrobe cost depending on the selected shutter finish."
+      },
+      {
+        "question": "What is the difference between Laminate, Acrylic, Veneer, and Fluted Glass finishes?",
+        "answer": "• Matte/Suede Laminate (1.0mm): Budget-friendly, scratch-resistant, and low maintenance.\n• High-Gloss Acrylic (1.5mm–2.0mm): Ultra-reflective mirror finish, seamless modern aesthetics, non-toxic, and UV resistant.\n• Natural Wood Veneer: Thin slices of real timber (Teak, Walnut, Oak) coated with PU melamine polish for a warm, luxury natural wood grain feel.\n• Tinted Fluted Glass: Ultra-modern contemporary luxury shutter with slim aluminum profiles and built-in vertical warm LED profile lighting."
+      },
+      {
+        "question": "Why are soft-close drawers and pull-outs priced separately in modular quotes?",
+        "answer": "Standard wardrobe quotes usually include 2 basic drawers with regular telescopic channels and open shelf partitions. Upgrades like soft-close undermount runners, pull-out trouser racks, velvet-lined jewelry trays, and hydraulic pull-down wardrobe lifts use specialized precision hardware mechanisms that are billed as modular add-on accessories."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Comprehensive Wardrobe Material & Finish Comparison Guide",
+        "content": "When designing custom modular wardrobes, selecting the right carcass core and exterior shutter finish is the single biggest factor determining project longevity and cost:\n\n• **Core Carcass Plywood:** Always specify 18mm thickness for vertical gables and horizontal shelves, and at least 8mm to 12mm for the back panel to prevent sagging.\n• **Internal Laminate (Liner):** 0.7mm to 0.8mm off-white or fabric-texture laminate inside the carcass protects clothes from wood splinters and resists moisture.\n• **Shutter Edge Banding:** Machine-pressed 2.0mm PVC edge banding with PUR waterproof glue prevents peeling and gives a seamless factory finish."
+      },
+      {
+        "title": "Standard Ergonomic Dimensions for Bedroom Wardrobe Planning",
+        "content": "• **Full Height Wardrobes:** 7.0 ft (84 inches) for main carcass + 2.0 to 3.0 ft for overhead loft.\n• **Long Hanging Section:** 48 to 54 inches vertical height for full-length coats, sarees, and dresses.\n• **Short Hanging Section:** 36 to 40 inches vertical height for shirts, jackets, and folded trousers.\n• **Drawer Depths:** 6 to 8 inches for watches/accessories, 8 to 12 inches for daily clothes and knitwear.\n• **Shoe Rack Bottom Shelf:** 12 to 14 inches with inclined ventilation."
+      }
+    ]
+  },
   {
     "id": "ImageCropper",
     "slug": "image-cropper",
