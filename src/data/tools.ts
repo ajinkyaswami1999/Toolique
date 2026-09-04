@@ -7973,30 +7973,71 @@ export const toolsList: Tool[] = [
     "category": "architecture",
     "subcategory": "Building Design",
     "shortDescription": "Determine standard door clearances and dimensions based on occupant load.",
-    "metaDescription": "Free online Door Size Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "metaDescription": "Calculate architectural door dimensions, clear walkthrough openings, rough masonry framing, and occupant egress capacity per NBC 2016, IBC, NFPA 101, and ADA standards with interactive 2D CAD elevation studio.",
     "keywords": [
       "Door Size Calculator",
-      "Door Size Calculator calculator",
-      "architectural planning",
-      "building design"
+      "standard door size india",
+      "door clear opening calculator",
+      "rough opening door calculator",
+      "NBC 2016 egress door width",
+      "occupant load exit door capacity",
+      "ADA door width requirement",
+      "double door dimensions architecture",
+      "door frame chowkhat size calculation",
+      "architectural door schedule generator",
+      "fire exit door size calculator"
     ],
-    "icon": "Compass",
+    "icon": "DoorClosed",
     "howToUse": [
-      "Select your units (Metric or Imperial).",
-      "Enter the required spatial and design parameters.",
-      "Review the compliance guidelines and results.",
-      "Export or copy the calculated parameters for blueprints."
+      "Select your preferred measurement unit: Millimeters (mm), Centimeters (cm), Inches (in), or Feet (ft).",
+      "Choose a standard architectural door preset (e.g. D1-Main Entrance, D2-Bedrooms, D3-Bathrooms, D4-Classroom, D5-Hospital Stretcher) or enter custom dimensions.",
+      "Input Clear Usable Opening Width and Height (unobstructed walkthrough dimensions at 90° open position).",
+      "Configure Frame (Chowkhat) thickness (50mm–100mm), Shutter stop rebate depth (10mm–15mm), and Masonry shim grout gap (10mm).",
+      "Select your Building Occupancy Class per NBC 2016 / IBC (Residential Group A, Educational Group B, Institutional Group C, Assembly Group D, Business Group E, Mercantile Group F, Industrial Group G, Storage Group H).",
+      "Enter Design Occupant Load (number of persons) and toggle automatic fire sprinkler coverage to verify life safety egress width.",
+      "Choose Door Leaf Style: Single Swing, Double Equal Leaf, 1.5 Unequal Leaf, or Grand Pivot Door.",
+      "Select Door Core Material (Solid Teak, Flush Door, Hollow Pressed Metal, Fire-Rated Insulated Steel) to calculate estimated leaf weight and hinge specifications.",
+      "Inspect the live 2D Architectural CAD Studio (Elevation View and Floor Plan Swing Clearance with wheelchair turning radius).",
+      "Click '+ Add Current Door' to build your multi-door Project Door Schedule and download your certified PDF Schedule Certificate or copy the WhatsApp audit summary."
     ],
     "faqs": [
       {
-        "question": "What is the purpose of the Door Size Calculator?",
-        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+        "question": "What is the difference between Clear Opening, Shutter Size, Frame Outer, and Rough Masonry Opening?",
+        "answer": "• **Clear Opening (Passage Width)**: The net unobstructed walkthrough dimension between frame jambs with the door open at 90°.\n• **Shutter / Leaf Size**: The physical door panel that fits into the frame rebate. (Shutter Width = Clear Width + 2 × Rebate Depth).\n• **Frame Outer Size (Chowkhat Outer)**: The total outer dimension of the door frame box. (Frame Outer Width = Clear Width + 2 × Frame Thickness).\n• **Rough Masonry Opening**: The structural opening constructed by masons from lintel to finished floor. (Rough Width = Frame Outer Width + 2 × Shim Gap [typically 10mm to 15mm for expanding foam/grout alignment])."
+      },
+      {
+        "question": "What are the standard door sizes in Indian residential architecture (NBC 2016)?",
+        "answer": "• **Main Entrance Door (D1)**: 1000mm × 2100mm (3'3\" × 7'0\") or 1200mm × 2400mm (4'0\" × 8'0\") for grand villa pivot doors.\n• **Internal Bedroom Doors (D2)**: 900mm × 2100mm (3'0\" × 7'0\") for smooth furniture and mattress transit.\n• **Bathrooms / Toilets / Utility (D3)**: 750mm × 2100mm (2'6\" × 7'0\") or 800mm × 2100mm (2'8\" × 7'0\").\n• **Balcony / French Doors**: 1500mm to 2400mm (5'0\" to 8'0\") 2-track or 3-track sliding UPVC/Aluminium doors."
+      },
+      {
+        "question": "How is required exit door width calculated based on occupant load (NBC 2016 & NFPA 101)?",
+        "answer": "Egress width is calculated by multiplying the occupant load by the egress factor:\n• **Non-Sprinklered Buildings**: 5.08 mm (0.2 inches) per occupant. For example, an assembly room with 300 occupants requires $300 \\times 5.08 = 1,524\\text{ mm}$ (1.52m) of aggregate exit width.\n• **Sprinklered Buildings (NFPA 13 / NBC)**: 3.81 mm (0.15 inches) per occupant ($300 \\times 3.81 = 1,143\\text{ mm}$).\nAdditionally, NBC requires minimum doorway units: 1 exit door for $\\le 50$ persons, min 2 separate exit doors for 51–500 persons, 3 exits for 501–1000 persons, and 4 exits for $>1000$ persons."
+      },
+      {
+        "question": "What is the ADA minimum clear door width requirement for wheelchair accessibility?",
+        "answer": "Under ADA Standards Section 404 and CPWD Harmonized Guidelines for Barrier-Free Environment, doorways must provide a minimum **Clear Opening Width of 32 inches (813 mm)** measured between the face of the door and the stop with the door leaf open at 90 degrees. Doors on an accessible route should also provide a level threshold ($\le 1/2\"$ / 12.7mm with 1:2 bevel) and minimum 18\" (457mm) latch-side pull clearance."
+      },
+      {
+        "question": "When is a double-leaf door required instead of a single-leaf door?",
+        "answer": "A single door leaf should generally not exceed **1050mm to 1100mm (3'6\" to 3'8\")** in width because oversized single leaves put excessive torque on hinges, cause sagging over time, and require excessive swing space. Any opening between **1200mm and 2400mm (4'0\" to 8'0\")** should utilize double equal leaves or a 1.5 unequal leaf (active leaf 800–900mm + passive slave leaf 350–450mm)."
+      },
+      {
+        "question": "When are panic exit hardware (crash bars) mandatory on doors?",
+        "answer": "Per NBC 2016 Part 4 and NFPA 101 Life Safety Code, panic exit hardware (crossbar or touchpad crash bar) is mandatory on all exit doors serving **Assembly occupancies (Group D)**, **Educational spaces (Group B)**, and any room or space with an occupant load of **50 persons or more**. Panic doors must unlatch with no more than 67 N (15 lbf) of push force and must swing outward in the direction of escape travel."
+      },
+      {
+        "question": "How many hinges are required based on door leaf height and weight?",
+        "answer": "• **3 Hinges (Standard)**: For door leaves up to 2100mm (7'0\") in height and weight up to 45 kg (standard flush and light wood doors).\n• **4 Hinges (Heavy Duty)**: For door leaves exceeding 2100mm (e.g. 2400mm / 8'0\" doors) or heavy solid teak/fire-rated metal leaves weighing 45 kg to 100 kg. Hinges should be Grade 304 Stainless Steel Ball Bearing type (minimum 4\" × 3\" × 3mm or 5\" × 3.5\" × 3.5mm)."
       }
     ],
     "sections": [
       {
-        "title": "Architectural Guidelines for Door Size Calculator",
-        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+        "title": "NBC 2016 Minimum Doorway Width Standards by Occupancy Group",
+        "content": "| Occupancy Group | NBC 2016 Classification | Minimum Clear Width | Typical Door Type | Key Mandatory Requirements |\n| :--- | :--- | :--- | :--- | :--- |\n| **Residential** | Group A (Flats, Dwellings) | 900 mm (Main: 1000 mm) | Single Swing Leaf | Bathrooms allow 750 mm; min height 2000 mm |\n| **Educational** | Group B (Schools, Colleges) | 1,200 mm | 1.5 Leaf or Double Leaf | Swing in exit direction; unhindered student flow |\n| **Institutional** | Group C (Hospitals, Clinics) | 2,000 mm | Double Equal Leaf | Sized for unhindered rolling bed & stretcher passage |\n| **Assembly** | Group D (Auditoriums, Theatres) | 1,500 mm | Double Outward Leaf | Mandatory UL panic crash bars; zero threshold step |\n| **Business** | Group E (Offices, IT Parks) | 1,000 mm | Single / Double Leaf | Standard commercial egress corridors |\n| **Mercantile** | Group F (Shopping Malls, Retail) | 1,200 – 2,000 mm | Double Panic Exit | High traffic customer outward escape flow |\n| **Industrial** | Group G (Factories, Workshops) | 1,500 mm | Heavy Metal Double | Chemical & fire-resistant outward emergency escape |"
+      },
+      {
+        "title": "Door Framing Tolerance & Rough Opening Formula",
+        "content": "To calculate the masonry opening for structural lintel casting:\n$$\\text{Rough Opening Width} = \\text{Clear Width} + 2 \\times \\text{Frame Thickness} + 2 \\times \\text{Shim Gap (10mm)}$$\n$$\\text{Rough Opening Height} = \\text{Clear Height} + \\text{Frame Thickness} + \\text{Shim Gap (10mm)}$$\n*Note: Modern interior door frames omit the bottom sill frame to ensure zero trip hazard and ADA wheelchair accessibility.*"
       }
     ]
   },
