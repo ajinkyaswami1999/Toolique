@@ -5,6 +5,19 @@
 
 @theme {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --color-indigo-455: #818cf8;
+  --color-indigo-550: #6366f1;
+  --color-indigo-650: #4338ca;
+  --color-zinc-150: #ebecee;
+  --color-zinc-250: #e0e2eb;
+  --color-zinc-350: #b8bac7;
+  --color-zinc-450: #888d9d;
+  --color-zinc-455: #888d9d;
+  --color-zinc-550: #646877;
+  --color-zinc-555: #646877;
+  --color-zinc-650: #474b57;
+  --color-zinc-750: #30333d;
+  --color-zinc-850: #1c1f26;
 }
 
 @layer base {

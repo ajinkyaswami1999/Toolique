@@ -4,6 +4,7 @@ import {
   Printer, Download, Sparkles, Sliders, ArrowRightLeft
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import { INDIAN_STATES_FSI_DATA, type CityZoneRegulation } from '../data/indiaFsiRegulations';
 
 // --- Interfaces ---
 type UnitType = 'sqft' | 'sqm' | 'sqyd' | 'acre' | 'hectare' | 'cent' | 'guntha' | 'bigha';
@@ -25,38 +26,6 @@ interface HistoryItem {
   floorsCount: number;
   timestamp: string;
 }
-
-// --- Location Presets Matrix ---
-const locationPresets: Record<string, Record<string, Record<string, {
-  fsi: number;
-  authority: string;
-  doc: string;
-  verified: string;
-  notes: string;
-}>>> = {
-  maharashtra: {
-    mumbai: {
-      residential: { fsi: 2.50, authority: "MCGM", doc: "DCPR 2034", verified: "10 Mar 2026", notes: "Suburbs base FSI, premium FSI up to 0.50 can be purchased." },
-      commercial: { fsi: 3.00, authority: "MCGM", doc: "DCPR 2034", verified: "10 Mar 2026", notes: "Zonal commercial base indexes. Excludes staircase and lifts." }
-    },
-    pune: {
-      residential: { fsi: 1.10, authority: "PMC", doc: "Pune UDCPR", verified: "14 Jan 2026", notes: "Pune Municipal Corporation base suburban FSI limit." },
-      commercial: { fsi: 2.50, authority: "PMC", doc: "Pune UDCPR", verified: "14 Jan 2026", notes: "Subject to front road width and premium loading." }
-    }
-  },
-  delhi: {
-    delhi: {
-      residential: { fsi: 2.00, authority: "DDA", doc: "Delhi MPD 2021", verified: "05 Feb 2026", notes: "Delhi Development Authority standard plotted residential index." },
-      commercial: { fsi: 3.50, authority: "DDA", doc: "Delhi MPD 2021", verified: "05 Feb 2026", notes: "Core commercial nodes and high-density zones." }
-    }
-  },
-  karnataka: {
-    bengaluru: {
-      residential: { fsi: 1.75, authority: "BBMP", doc: "BBMP Building Bye-Laws", verified: "20 Feb 2026", notes: "Applicable for plots fronting roads wider than 9 meters." },
-      commercial: { fsi: 3.25, authority: "BBMP", doc: "BBMP Building Bye-Laws", verified: "20 Feb 2026", notes: "Excludes specific services ducts and parking basements." }
-    }
-  }
-};
 
 export default function FARFSICalculator() {
   // 1. Calculator Modes Toggles
@@ -110,6 +79,30 @@ export default function FARFSICalculator() {
   const [cityPreset, setCityPreset] = useState<string>('mumbai');
   const [zonePreset, setZonePreset] = useState<string>('residential');
 
+  const selectedState = useMemo(() => {
+    return INDIAN_STATES_FSI_DATA.find(s => s.id === statePreset) || INDIAN_STATES_FSI_DATA[0];
+  }, [statePreset]);
+
+  const selectedCity = useMemo(() => {
+    return selectedState.cities.find(c => c.id === cityPreset) || selectedState.cities[0];
+  }, [selectedState, cityPreset]);
+
+  const activePreset: CityZoneRegulation | null = useMemo(() => {
+    if (!selectedCity || !selectedCity.zones) return null;
+    const z = selectedCity.zones as Record<string, CityZoneRegulation | undefined>;
+    return z[zonePreset] || z['residential'] || null;
+  }, [selectedCity, zonePreset]);
+
+  const availableZones = useMemo(() => {
+    if (!selectedCity || !selectedCity.zones) return [{ id: 'residential', label: 'Residential' }, { id: 'commercial', label: 'Commercial' }];
+    const zonesList: { id: string; label: string }[] = [];
+    if (selectedCity.zones.residential) zonesList.push({ id: 'residential', label: 'Residential' });
+    if (selectedCity.zones.commercial) zonesList.push({ id: 'commercial', label: 'Commercial' });
+    if (selectedCity.zones.mixed_use) zonesList.push({ id: 'mixed_use', label: 'Mixed Use / High-Density' });
+    if (selectedCity.zones.industrial) zonesList.push({ id: 'industrial', label: 'Industrial / Tech Park' });
+    return zonesList;
+  }, [selectedCity]);
+
   // Utility states
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [copiedReport, setCopiedReport] = useState<boolean>(false);
@@ -118,12 +111,7 @@ export default function FARFSICalculator() {
 
   // --- Area Unit Conversion Factor (Relative to sq ft) ---
   const conversionFactors = useMemo((): Record<UnitType, number> => {
-    let bighaFactor = 27000.0; // Default UP/Delhi
-    if (statePreset === 'maharashtra') {
-      bighaFactor = 22500.0; // Maharashtra standard
-    } else if (statePreset === 'karnataka') {
-      bighaFactor = 27225.0; // Karnataka standard
-    }
+    const bighaFactor = selectedState.bighaFactor || 27225.0;
     return {
       sqft: 1.0,
       sqm: 10.7639,
@@ -134,7 +122,7 @@ export default function FARFSICalculator() {
       guntha: 1089.0,
       bigha: bighaFactor
     };
-  }, [statePreset]);
+  }, [selectedState]);
 
   // Convert current plot area when changing units
   const handleUnitSwitch = (newUnit: UnitType) => {
@@ -165,14 +153,6 @@ export default function FARFSICalculator() {
     if (urlMode === 'forward' || urlMode === 'reverse') setCalcMode(urlMode as 'forward' | 'reverse');
     if (urlUnit) setUnit(urlUnit as UnitType);
   }, []);
-
-  const activePreset = useMemo(() => {
-    try {
-      return locationPresets[statePreset]?.[cityPreset]?.[zonePreset] || null;
-    } catch {
-      return null;
-    }
-  }, [statePreset, cityPreset, zonePreset]);
 
   // Load FSI preset into the calculator
   const applyPreset = () => {
@@ -588,7 +568,7 @@ Status Audit         : ${calculations.statusLabel}`;
                 />
                 {unit === 'bigha' && (
                   <p className="text-[9px] text-zinc-500 dark:text-zinc-400 font-medium italic mt-1 leading-normal">
-                    ℹ️ Bigha conversion standard is set to {(conversionFactors.bigha).toLocaleString()} sq ft based on the {statePreset.charAt(0).toUpperCase() + statePreset.slice(1)} preset.
+                    ℹ️ Bigha conversion standard is set to {(conversionFactors.bigha).toLocaleString()} sq ft based on the {selectedState.name} preset.
                   </p>
                 )}
               </div>
@@ -1068,76 +1048,112 @@ Status Audit         : ${calculations.statusLabel}`;
       </div>
 
       {/* LOCATION PRESETS MANAGER */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
-        <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b border-zinc-150 dark:border-zinc-850 pb-2">Local Regulation Presets</h3>
+      <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-5">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-zinc-150 dark:border-zinc-850 pb-3">
+          <div>
+            <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block">
+              Pan-India Master Plan & Bye-Laws FSI Presets
+            </h3>
+            <p className="text-[11px] text-zinc-450 dark:text-zinc-500 font-medium mt-0.5">
+              Instant regulatory indexes covering all 28 Indian States & Union Territories
+            </p>
+          </div>
+          <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-650 dark:text-indigo-400 border border-indigo-500/20">
+            {INDIAN_STATES_FSI_DATA.length} States & UTs • {INDIAN_STATES_FSI_DATA.reduce((acc, s) => acc + s.cities.length, 0)} Cities
+          </span>
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="space-y-1">
-            <label className="text-[9px] font-black uppercase text-zinc-400">Select State</label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-black uppercase text-zinc-400">Select State / UT</label>
             <select
               value={statePreset}
-              onChange={(e) => { setStatePreset(e.target.value); setCityPreset(e.target.value === 'maharashtra' ? 'mumbai' : e.target.value); }}
-              className="w-full p-2 border border-zinc-200 dark:border-zinc-800 rounded bg-transparent text-xs font-bold focus:outline-none"
+              onChange={(e) => {
+                const newStateId = e.target.value;
+                setStatePreset(newStateId);
+                const sObj = INDIAN_STATES_FSI_DATA.find(s => s.id === newStateId);
+                if (sObj && sObj.cities.length > 0) {
+                  setCityPreset(sObj.cities[0].id);
+                }
+              }}
+              className="w-full p-2.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             >
-              <option value="maharashtra">Maharashtra</option>
-              <option value="delhi">Delhi</option>
-              <option value="karnataka">Karnataka</option>
+              {INDIAN_STATES_FSI_DATA.map((s) => (
+                <option key={s.id} value={s.id} className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">
+                  {s.name} ({s.cities.length} {s.cities.length === 1 ? 'city' : 'cities'})
+                </option>
+              ))}
             </select>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[9px] font-black uppercase text-zinc-400">Select City</label>
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-black uppercase text-zinc-400">Select City / Region</label>
             <select
               value={cityPreset}
               onChange={(e) => setCityPreset(e.target.value)}
-              className="w-full p-2 border border-zinc-200 dark:border-zinc-800 rounded bg-transparent text-xs font-bold focus:outline-none"
+              className="w-full p-2.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             >
-              {statePreset === 'maharashtra' ? (
-                <>
-                  <option value="mumbai">Mumbai</option>
-                  <option value="pune">Pune</option>
-                </>
-              ) : statePreset === 'delhi' ? (
-                <option value="delhi">Delhi</option>
-              ) : (
-                <option value="bengaluru">Bengaluru</option>
-              )}
+              {selectedState.cities.map((c) => (
+                <option key={c.id} value={c.id} className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">
+                  {c.name}
+                </option>
+              ))}
             </select>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[9px] font-black uppercase text-zinc-400">Select Land Use Zone</label>
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-black uppercase text-zinc-400">Select Land Use Zone</label>
             <select
               value={zonePreset}
               onChange={(e) => setZonePreset(e.target.value)}
-              className="w-full p-2 border border-zinc-200 dark:border-zinc-800 rounded bg-transparent text-xs font-bold focus:outline-none"
+              className="w-full p-2.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
             >
-              <option value="residential">Residential</option>
-              <option value="commercial">Commercial</option>
+              {availableZones.map((z) => (
+                <option key={z.id} value={z.id} className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">
+                  {z.label}
+                </option>
+              ))}
             </select>
           </div>
 
           <div className="self-end">
             <button
+              type="button"
               onClick={applyPreset}
-              className="w-full py-2 bg-indigo-650 text-white text-xs font-extrabold rounded-lg"
+              className="w-full py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs rounded-xl shadow-md shadow-indigo-600/20 transition active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              Apply Regulation FSI ({activePreset?.fsi})
+              <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300 shrink-0" />
+              <span className="truncate">Apply Regulation FSI ({activePreset?.fsi || '—'})</span>
             </button>
           </div>
         </div>
 
         {activePreset && (
-          <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-150 dark:border-zinc-850 text-xs text-zinc-600 space-y-2">
-            <div className="flex justify-between">
-              <span>Municipal Authority: <strong>{activePreset.authority}</strong></span>
-              <span>Codebook: <strong>{activePreset.doc}</strong></span>
+          <div className="p-4 rounded-2xl bg-zinc-50/80 dark:bg-zinc-950/40 border border-zinc-200/80 dark:border-zinc-800/80 text-xs text-zinc-700 dark:text-zinc-300 space-y-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="bg-white dark:bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
+                <span className="text-[9px] font-extrabold text-zinc-400 uppercase block">Municipal Authority</span>
+                <span className="font-bold text-xs text-zinc-900 dark:text-white mt-0.5 block">{activePreset.authority}</span>
+              </div>
+              <div className="bg-white dark:bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
+                <span className="text-[9px] font-extrabold text-zinc-400 uppercase block">Governing Codebook</span>
+                <span className="font-bold text-xs text-indigo-650 dark:text-indigo-400 mt-0.5 block">{activePreset.doc}</span>
+              </div>
+              <div className="bg-white dark:bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
+                <span className="text-[9px] font-extrabold text-zinc-400 uppercase block">Prescribed Baseline FSI</span>
+                <span className="font-mono font-black text-sm text-emerald-600 dark:text-emerald-400 mt-0.5 block">{activePreset.fsi}</span>
+              </div>
+              <div className="bg-white dark:bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
+                <span className="text-[9px] font-extrabold text-zinc-400 uppercase block">Verification Date</span>
+                <span className="font-bold text-xs text-zinc-600 dark:text-zinc-400 mt-0.5 block">{activePreset.verified}</span>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span>Last verified: <strong>{activePreset.verified}</strong></span>
-              <span>Prescribed FSI: <strong className="text-indigo-650">{activePreset.fsi}</strong></span>
-            </div>
-            <p className="text-[10px] text-zinc-450 dark:text-zinc-500 italic mt-1">Note: {activePreset.notes}</p>
+            {activePreset.notes && (
+              <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 text-[11px] leading-relaxed flex items-start gap-2">
+                <Info className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+                <span><strong>Special Regulatory Note:</strong> {activePreset.notes}</span>
+              </div>
+            )}
           </div>
         )}
       </div>
