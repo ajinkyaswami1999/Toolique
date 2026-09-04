@@ -2791,42 +2791,63 @@ export const toolsList: Tool[] = [
   {
   "id": "FalseCeilingCalculator",
   "slug": "false-ceiling-calculator",
-  "name": "False Ceiling Calculator",
+  "name": "False Ceiling Calculator & Lighting Studio",
   "category": "interior",
-  "shortDescription": "Calculate POP, Gypsum board, and PVC false ceiling sheet costs, cove lights, and labor.",
-  "metaDescription": "Online False Ceiling Calculator. Estimate material and labor prices for Gypsum, POP, or PVC ceilings including cove lightings.",
+  "shortDescription": "Calculate POP, Gyproc Gypsum board, PVC panels, and WPC wooden louvers costs, cove lights, and labor.",
+  "metaDescription": "Free Indian False Ceiling Calculator & Lighting Design Studio. Estimate material, GI steel framing BOQ, LED cove strips, downlights, and labor costs for Gypsum, POP, PVC, and Wooden ceilings.",
   "keywords": [
     "False Ceiling Calculator",
-    "POP ceiling cost calculator",
-    "gypsum ceiling rate per sq ft",
+    "POP ceiling cost per sq ft",
+    "Gyproc gypsum ceiling price India",
+    "PVC ceiling panel calculator",
+    "WPC wooden louver ceiling cost",
     "cove lighting cost estimator",
-    "renovation ceiling cost"
+    "false ceiling contractor BOQ rate",
+    "Armstrong 2x2 grid ceiling cost",
+    "LED downlights false ceiling calculator"
   ],
   "icon": "Palette",
   "howToUse": [
-    "Enter ceiling Length and Width.",
-    "Select ceiling material (Gypsum, POP, PVC, Wood).",
-    "Select design complexity (Flat, Step, or Designer).",
-    "Toggle cove lighting and specify wastage buffers."
+    "Enter ceiling Length and Width dimensions for each room in Feet or Meters.",
+    "Select your ceiling system: Saint-Gobain Gyproc Gypsum (12.5mm), Hand-Plastered POP, Waterproof PVC Panels, WPC Wooden Louvers, or Armstrong Grid Tiles.",
+    "Choose design complexity: Minimalist Flat, Single Cove Tray (4–6\" drop), Double Floating Island, or Designer CNC Curves.",
+    "Configure lighting requirements: LED Cove Strips (Rft), Recessed Downlights, COB Focus Spots, and Magnetic Profile Tracks.",
+    "Inspect the 2D Ceiling Blueprint with live lighting simulation, review the Structural GI Hardware BOQ, or export a branded PDF Quote."
   ],
   "faqs": [
     {
-      "question": "Which is better: Gypsum or POP?",
-      "answer": "Gypsum board is lightweight, fast to install, and has seamless joints. POP (Plaster of Paris) is highly customizable for designer curves but takes longer and is messy to apply."
+      "question": "What is the price per square foot for false ceiling installation in India?",
+      "answer": "In 2026, standard rates across Indian metros are: Gyproc Gypsum: ₹95 to ₹135/sq ft; Hand-Plastered POP: ₹115 to ₹165/sq ft; Waterproof PVC Panels: ₹75 to ₹105/sq ft; WPC / Wooden Louvers: ₹240 to ₹340/sq ft; Armstrong Grid: ₹65 to ₹90/sq ft. Step coves and multi-tier floating islands add 15% to 35% in vertical drop fascia."
     },
     {
-      "question": "How is cove lighting estimated?",
-      "answer": "Cove lighting is calculated per running foot (Rft) of the perimeter ceiling drop where LED strip slots are made."
+      "question": "Which is better for home interiors: Gyproc Gypsum or Plaster of Paris (POP)?",
+      "answer": "Gyproc Gypsum board (12.5mm) is the industry standard for fast, clean, and lightweight installation with precision seamless joints. POP (Plaster of Paris) is preferred when creating organic 3D curves, circular domes, intricate cornices, or heavy decorative floral moldings."
+    },
+    {
+      "question": "How is LED cove lighting length and driver wattage calculated?",
+      "answer": "Cove lighting is measured in Running Feet (Rft) along the perimeter of the dropped ceiling tray. For high-density 240 LED/m strips (~12W/m), a 150W constant-voltage SMPS power driver is required for every 45 to 55 running feet to prevent voltage drop and dimming."
+    },
+    {
+      "question": "What structural GI channels are required for a standard Gypsum false ceiling?",
+      "answer": "According to IS 2095 standards, a durable false ceiling requires 0.5mm Perimeter Channels fixed to side walls, 0.5mm Ceiling Sections spaced at 457mm (1.5 ft) center-to-center, 0.9mm Intermediate Channels at 1220mm (4 ft) c/c, and Ceiling Angles suspended from the concrete slab with 8mm metal rawl plugs."
+    },
+    {
+      "question": "How many downlights are recommended for a room?",
+      "answer": "A standard ambient illumination density requires 1 recessed LED downlight (9W to 12W) for every 20 to 25 square feet of ceiling area, supplemented by COB spotlights for wall grazing or art highlighting."
     }
   ],
   "sections": [
     {
-      "title": "POP vs Gypsum ceilings comparison",
-      "content": "Gypsum boards are factory-made panels screwed to steel ceiling channel frameworks. POP is plaster powder mixed with water and applied over metal meshes onsite, allowing high artistic freedom."
+      "title": "Architectural False Ceiling Dimension & Fascia Area Formulas",
+      "content": "For a ceiling with room dimensions $\\text{Length} \\times \\text{Width}$:\n\n$$\\text{Flat Carpet Area} = \\text{Length} \\times \\text{Width}$$\n\n$$\\text{Perimeter} = 2 \\times (\\text{Length} + \\text{Width})$$\n\nVertical drop fascia additions:\n- **Flat Single Level**: $\\text{Effective Area} = \\text{Flat Area} \\times 1.0$\n- **Single Cove Tray (4\"–6\" drop)**: $\\text{Effective Area} = \\text{Flat Area} \\times 1.20$\n- **Floating Island Double Tier**: $\\text{Effective Area} = \\text{Flat Area} \\times 1.35$\n- **Designer CNC / Curves**: $\\text{Effective Area} = \\text{Flat Area} \\times 1.60$"
     },
     {
-      "title": "Complexity markups and cove light pricing",
-      "content": "- **Step Ceiling**: Adds ~15% material/labor charges for vertical drop bands.\n- **Designer CNC/Curves**: Adds ~35% markup.\n- **LED Cove Strip**: Estimated at ₹120 to ₹180 per running foot for strips + driver wiring."
+      "title": "Ceiling Material Systems Comparison (2026 Benchmarks)",
+      "content": "- **Gyproc Gypsum Board (12.5mm)**: ₹105/sq ft | 10-Yr Warranty | Smooth seamless joint paste & paper tape\n- **POP Hand-Troweled Plaster**: ₹130/sq ft | 15-Yr Warranty | Chicken mesh & 3-stage hand plaster\n- **Waterproof PVC Panels**: ₹85/sq ft | 10-Yr Warranty | Tongue & groove waterproof planks (Zero paint)\n- **WPC Wooden Louvers**: ₹260/sq ft | 15-Yr Warranty | High-density acoustic luxury woodgrain flutes\n- **Armstrong 2×2 Grid**: ₹75/sq ft | 8-Yr Warranty | T-grid suspension for commercial spaces\n- **Aluminium Linear Baffle**: ₹380/sq ft | 20-Yr Warranty | Powder-coated linear architectural baffles"
+    },
+    {
+      "title": "Structural GI Framing & Suspension Rules (IS 2095 / IS 2542)",
+      "content": "To prevent sagging and hairline joint cracks:\n- **Perimeter Channels (0.5mm)** fixed with rawl plugs at 610mm intervals along walls.\n- **Ceiling Sections (0.5mm)** spaced at 457mm c/c.\n- **Intermediate Channels (0.9mm)** spaced at 1220mm c/c.\n- **Connecting Clips & Drywall Screws (25mm/35mm)** spaced at 200mm along board edges.\n- **Joint Compound**: Applied in 3 expanding coats with 50mm fiber/paper joint tape."
     }
   ]
 },
