@@ -1319,69 +1319,86 @@ export const toolsList: Tool[] = [
     slug: 'unit-converter',
     name: 'Unit Converter',
     category: 'unit',
-    shortDescription: 'Convert standard, professional, and regional units of Length, Weight, Area, Temperature, and more.',
-    metaTitle: 'Unit Converter – Convert Length, Weight, Area & Temperature',
-    metaDescription: 'Free online Unit Converter. Convert between metric, imperial and regional Indian units for length, weight, area, volume, temperature, and more instantly.',
+    shortDescription: 'Advanced Multi-Domain Unit Converter for Architecture, Civil, Electrical, Electronics, Metallurgy, and Indian Regional Land units.',
+    metaTitle: 'Advanced Unit Converter – Engineering, Architecture, Civil, Electrical & Regional Units',
+    metaDescription: 'Free online multi-domain Unit Converter. High-precision conversions for civil stress (MPa/psi), hydraulic cusec, lux lighting, U/R-values, AWG wire sizes, dBm, ASTM E140 hardness (HRC/HV), and Indian revenue land units.',
     keywords: [
       'Unit Converter',
-      'Unit converter India',
-      'metric conversion calculator',
-      'convert length',
-      'convert weight',
-      'area converter',
-      'temperature converter',
-      'inches to cm',
-      'kg to lbs'
+      'Advanced Unit Converter',
+      'Engineering unit converter',
+      'Civil engineering unit converter',
+      'Architecture scale converter',
+      'Electrical unit converter',
+      'Electronics unit converter',
+      'Metallurgy hardness converter',
+      'MPa to psi converter',
+      'cusec to liters per second',
+      'lux to foot candles',
+      'AWG to mm2 converter',
+      'HRC to HV hardness converter',
+      'Bigha to acre converter',
+      'Guntha to sq ft converter',
+      'U-value to R-value converter',
+      'dBm to Watts converter'
     ],
     icon: 'Ruler',
     howToUse: [
-      'Select a unit category (e.g. Length, Weight, Area) or search for units.',
-      'Enter the value to convert in the input field.',
-      'Choose the "From" and "To" units from searchable dropdowns.',
-      'Review the conversion result, calculation steps, and all equivalent values below.'
+      'Select your Engineering Domain (General & Regional, Architecture, Civil, Electrical, Electronics, or Metallurgy).',
+      'Choose the measurement dimension or use the smart AI search bar (e.g. "100 psi to mpa", "12 awg to mm2").',
+      'Enter the numerical value and select the "From" and "To" units.',
+      'Review the instant high-precision result, step-by-step formula derivation, and the complete live comparative matrix of all equivalent units below.',
+      'Bookmark frequently used pairs or copy the full equivalent table with one click.'
     ],
     faqs: [
       {
-        question: 'How many feet are in a meter?',
-        answer: 'There are exactly 3.28084 feet in a meter. To convert meters to feet, multiply the value by 3.28084.'
+        question: 'How do you convert MPa (Megapascal) to psi in structural engineering?',
+        answer: '1 Megapascal (MPa) equals exactly 1 N/mm² or 145.038 pounds per square inch (psi). For example, standard M25 grade concrete with a characteristic compressive strength of 25 MPa equals approximately 3,625.95 psi (or 3.63 ksi).'
       },
       {
-        question: 'How many centimeters are in an inch?',
-        answer: 'There are exactly 2.54 centimeters in an inch. To convert inches to centimeters, multiply the value by 2.54.'
+        question: 'What is a Cusec and how many Liters per second is 1 Cusec?',
+        answer: 'A Cusec (cubic foot per second) is the standard irrigation and canal discharge unit in India. 1 Cusec = 28.3168 Liters/second = 101.94 m³/hour. A discharge of 100 cusecs equals 2,831.68 L/s.'
       },
       {
-        question: 'How many pounds are in a kilogram?',
-        answer: 'There are approximately 2.20462 pounds in a kilogram. To convert kilograms to pounds, multiply by 2.20462.'
+        question: 'How do you convert Lux to Foot-Candles for architectural lighting?',
+        answer: '1 Foot-candle (fc) equals 10.7639 Lux (lx). To convert Lux to Foot-candles, divide the lux value by 10.764. For example, the NBC recommended office desk illuminance of 500 Lux corresponds to approximately 46.45 Foot-candles.'
       },
       {
-        question: 'How do you convert Celsius to Fahrenheit?',
-        answer: 'To convert Celsius to Fahrenheit, use the formula: F = (C × 9/5) + 32. For example, 25°C is (25 × 1.8) + 32 = 77°F.'
+        question: 'How does American Wire Gauge (AWG) relate to Metric mm² cross-sectional area?',
+        answer: 'AWG is logarithmic: as the gauge number increases, the wire diameter and cross-sectional area decrease. For example, 16 AWG corresponds to ~1.31 mm², 14 AWG to ~2.08 mm², 12 AWG to ~3.31 mm², and 10 AWG to ~5.26 mm². In Indian domestic wiring (IS 694), standard 1.5 mm² wire falls between 16 AWG and 15 AWG.'
       },
       {
-        question: 'How many square feet are in a square meter?',
-        answer: 'There are approximately 10.7639 square feet in a square meter. To convert square meters to square feet, multiply by 10.7639.'
+        question: 'How is Rockwell Hardness (HRC) converted to Vickers (HV) and Tensile Strength?',
+        answer: 'Hardness conversions are empirical relationships standardized under ASTM E140 and ISO 18265 for non-austenitic steels. For example, 60 HRC corresponds to approximately 697 HV (Vickers) and ~2,000 MPa Ultimate Tensile Strength (UTS).'
       },
       {
-        question: 'What are regional Indian land measurement units?',
-        answer: 'India uses local land measurement units like Bigha, Biswa, Kanal, Marla, and Gaj. Since their values vary geographically (e.g. Bigha in Rajasthan differs from Bigha in Punjab), our regional calculator provides state-wise conventions.'
+        question: 'What is the difference between U-Value and R-Value in building envelope insulation?',
+        answer: 'U-Value measures thermal transmittance (rate of heat transfer), while R-Value measures thermal resistance (insulating power). They are reciprocal: R = 1 / U. In SI units, an RSI of 1 m²·K/W equals a U-value of 1 W/m²·K. In Imperial units, R-10 equals an RSI of ~1.76 m²·K/W.'
+      },
+      {
+        question: 'Why do Indian land measurement units like Bigha and Guntha vary by state?',
+        answer: 'Land revenue records in India evolved under regional historical administrations. A standard Pucca Bigha in UP, Punjab, and Haryana equals 27,225 sq ft (3,025 sq yd = 20 Biswa), whereas a Bengal Bigha is 14,400 sq ft (20 Katha), and in Rajasthan it is typically 17,424 sq ft. In Maharashtra and Karnataka, 1 Guntha equals 1,089 sq ft (1/40th of an Acre).'
       }
     ],
     sections: [
       {
-        title: 'What is a Unit Converter?',
-        content: 'A unit converter is a tool that computes the equivalent value of a quantity in a different unit of measure. It translates values between different systems of measurement, such as the Metric system (International System of Units - SI) and the Imperial system, allowing professionals and students to communicate physical values without manual calculation errors.'
+        title: 'Multi-Domain Engineering Unit Conversion Architecture',
+        content: 'Modern engineering workflows demand precision cross-disciplinary calculations. Civil engineers frequently translate between SI megapascals (MPa) and imperial pounds per square inch (psi) when reviewing international design codes (IS 456 vs ACI 318). Electrical and MEP designers must calculate current carrying capacities across AWG and Metric mm² standards, while architects coordinate illuminance lux levels with HVAC envelope U-values and acoustic sound pressure decibels.'
       },
       {
-        title: 'How to Convert Units',
-        content: 'To convert units, you multiply or divide the value by a standardized conversion factor. For example, since 1 kilometer equals 0.621371 miles, converting 10 kilometers to miles is calculated as: 10 × 0.621371 = 6.21371 miles. For offset-based scales like Temperature, you apply linear equations like F = C × 1.8 + 32.'
+        title: 'Civil & Structural Engineering Dimensions',
+        content: 'Civil engineering modules support concrete compressive strength (M15 to M80 grades), structural loads (kN, kip, MN), distributed uniform line loads (kN/m, klf), bending moments (kN·m, kip·ft), bulk material unit weights (IS 875 Part 1), and hydraulic discharge rates (Cumec, Cusec, MLD, MGD) for water treatment plants and canal networks.'
       },
       {
-        title: 'Metric vs Imperial Units',
-        content: 'The Metric system (meters, kilograms, liters) is decimal-based and used globally as the scientific standard. The Imperial system (feet, pounds, gallons) is primarily used in the United States and the United Kingdom. Knowing how to translate between these systems is crucial in international trade, design blueprints, travel, and culinary arts.'
+        title: 'Architecture, Interior & Building Physics',
+        content: 'Architectural tools include standard drafting scale multipliers (1:1 to 1:2500 and imperial scales like 1/4"=1\'), illuminance standards compliant with NBC 2016 and IS 3646, thermal insulation parameters (U-value, RSI, R-value, Tog, Clo for green building envelopes), acoustic sound pressure levels (dB SPL ref 20 µPa), and ramp slope gradients (1:12 universal access norms).'
       },
       {
-        title: 'Regional Indian Land Units Variation',
-        content: 'Land measurement in India often relies on regional terms rather than uniform metric sizes. Units like Bigha, Biswa, Kanal, and Marla are widely used in agricultural and real estate deals. However, a Bigha in Bengal is 1,600 square yards, while a Bigha in Uttar Pradesh can be 3,025 square yards. It is essential to double-check local bylaws and state land revenue guidelines when utilizing these conversions.'
+        title: 'Electrical, Electronics & Metallurgy Standards',
+        content: 'Specialized scientific dimensions cover real/apparent/reactive power (kW, kVA, kVAR), battery storage equivalents (Ah to Wh @ 3.7V/12V/48V), RF signal power (dBm, dBW, dBµV), RF frequency-to-wavelength (λ = c/f), ASTM E140 metal hardness scales (HRC, HRB, HV, HBW, UTS), linear thermal expansion (CTE), and sheet metal gauges (CRCA steel, GI, SS, and aluminium).'
+      },
+      {
+        title: 'Indian Land Revenue & Regional Real Estate Units',
+        content: 'Our land revenue engine incorporates state-specific variations for Bigha, Biswa, Biswansi, Kanal, Marla, Guntha, Ground, Cent, Ankanam, Katha, and Gaj, ensuring accurate legal property documentation and land area translation across Northern, Southern, Eastern, and Western Indian states.'
       }
     ]
   },
