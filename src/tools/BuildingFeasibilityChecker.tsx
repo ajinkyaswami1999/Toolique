@@ -106,6 +106,7 @@ export default function BuildingFeasibilityChecker() {
   const [plotInfo, setPlotInfo] = useState<PlotInfoInput>({
     plotArea: 250,
     areaUnit: 'sq_m',
+    dimensionUnit: 'm',
     frontageWidth: 12.5,
     plotDepth: 20.0,
     isCornerPlot: false,
@@ -317,6 +318,65 @@ export default function BuildingFeasibilityChecker() {
   const normalizedArea = useMemo(() => {
     return normalizePlotArea(plotInfo.plotArea, plotInfo.areaUnit, siteLocation.state);
   }, [plotInfo.plotArea, plotInfo.areaUnit, siteLocation.state]);
+
+  // Dimension Unit Helpers (Meters <-> Feet)
+  const isDimInFt = plotInfo.dimensionUnit === 'ft';
+
+  const handleDimensionUnitChange = (newUnit: 'm' | 'ft') => {
+    if (plotInfo.dimensionUnit === newUnit) return;
+    if (newUnit === 'ft') {
+      const ftFrontage = Math.round((plotInfo.frontageWidth * 3.28084) * 10) / 10;
+      const ftDepth = Math.round((plotInfo.plotDepth * 3.28084) * 10) / 10;
+      setPlotInfo(prev => ({
+        ...prev,
+        dimensionUnit: 'ft',
+        frontageWidth: ftFrontage,
+        plotDepth: ftDepth
+      }));
+    } else {
+      const mFrontage = Math.round((plotInfo.frontageWidth * 0.3048) * 10) / 10;
+      const mDepth = Math.round((plotInfo.plotDepth * 0.3048) * 10) / 10;
+      setPlotInfo(prev => ({
+        ...prev,
+        dimensionUnit: 'm',
+        frontageWidth: mFrontage,
+        plotDepth: mDepth
+      }));
+    }
+  };
+
+  // Real-time calculated area from frontage & depth
+  const computedAreaFromDimensions = useMemo(() => {
+    const w = plotInfo.frontageWidth || 0;
+    const d = plotInfo.plotDepth || 0;
+    if (w <= 0 || d <= 0) return null;
+    if (isDimInFt) {
+      const sqFt = Math.round(w * d * 100) / 100;
+      const sqM = Math.round(sqFt * 0.09290304 * 100) / 100;
+      return { sqFt, sqM, product: sqFt, unitLabel: 'ft²' };
+    } else {
+      const sqM = Math.round(w * d * 100) / 100;
+      const sqFt = Math.round(sqM * 10.7639104 * 100) / 100;
+      return { sqFt, sqM, product: sqM, unitLabel: 'm²' };
+    }
+  }, [plotInfo.frontageWidth, plotInfo.plotDepth, isDimInFt]);
+
+  const handleApplyDimensionArea = () => {
+    if (!computedAreaFromDimensions) return;
+    if (plotInfo.areaUnit === 'sq_ft') {
+      setPlotInfo(prev => ({ ...prev, plotArea: computedAreaFromDimensions.sqFt }));
+    } else if (plotInfo.areaUnit === 'sq_m') {
+      setPlotInfo(prev => ({ ...prev, plotArea: computedAreaFromDimensions.sqM }));
+    } else if (plotInfo.areaUnit === 'sq_yd') {
+      setPlotInfo(prev => ({ ...prev, plotArea: Math.round((computedAreaFromDimensions.sqFt / 9) * 100) / 100 }));
+    } else {
+      setPlotInfo(prev => ({
+        ...prev,
+        plotArea: isDimInFt ? computedAreaFromDimensions.sqFt : computedAreaFromDimensions.sqM,
+        areaUnit: isDimInFt ? 'sq_ft' : 'sq_m'
+      }));
+    }
+  };
 
   // Handle AI Question
   const handleSendAiQuestion = (qText: string) => {
@@ -893,33 +953,103 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        Frontage Width (m)
+                  {/* Linear Dimension Unit Selector & Dimension Inputs */}
+                  <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                        Plot Dimensions Unit
                       </label>
-                      <input
-                        type="number"
-                        min="1"
-                        step="0.1"
-                        value={plotInfo.frontageWidth}
-                        onChange={(e) => setPlotInfo({ ...plotInfo, frontageWidth: parseFloat(e.target.value) || 1 })}
-                        className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 font-medium"
-                      />
+                      <div className="inline-flex p-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        <button
+                          type="button"
+                          onClick={() => handleDimensionUnitChange('m')}
+                          className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition ${
+                            !isDimInFt
+                              ? 'bg-indigo-600 text-white shadow-xs'
+                              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                          }`}
+                        >
+                          Meters (m)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDimensionUnitChange('ft')}
+                          className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition ${
+                            isDimInFt
+                              ? 'bg-indigo-600 text-white shadow-xs'
+                              : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                          }`}
+                        >
+                          Feet (ft)
+                        </button>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        Plot Depth (m)
-                      </label>
-                      <input
-                        type="number"
-                        min="1"
-                        step="0.1"
-                        value={plotInfo.plotDepth}
-                        onChange={(e) => setPlotInfo({ ...plotInfo, plotDepth: parseFloat(e.target.value) || 1 })}
-                        className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 font-medium"
-                      />
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Frontage Width ({isDimInFt ? 'ft' : 'm'})
+                          </label>
+                          <span className="text-[10px] font-mono text-slate-400">
+                            ≈ {(isDimInFt ? plotInfo.frontageWidth * 0.3048 : plotInfo.frontageWidth * 3.28084).toFixed(1)} {isDimInFt ? 'm' : 'ft'}
+                          </span>
+                        </div>
+                        <input
+                          type="number"
+                          min="0.1"
+                          step="0.1"
+                          value={plotInfo.frontageWidth}
+                          onChange={(e) => setPlotInfo({ ...plotInfo, frontageWidth: parseFloat(e.target.value) || 0 })}
+                          className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Plot Depth ({isDimInFt ? 'ft' : 'm'})
+                          </label>
+                          <span className="text-[10px] font-mono text-slate-400">
+                            ≈ {(isDimInFt ? plotInfo.plotDepth * 0.3048 : plotInfo.plotDepth * 3.28084).toFixed(1)} {isDimInFt ? 'm' : 'ft'}
+                          </span>
+                        </div>
+                        <input
+                          type="number"
+                          min="0.1"
+                          step="0.1"
+                          value={plotInfo.plotDepth}
+                          onChange={(e) => setPlotInfo({ ...plotInfo, plotDepth: parseFloat(e.target.value) || 0 })}
+                          className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
                     </div>
+
+                    {/* Calculated Footprint from Dimensions with 1-Click Sync */}
+                    {computedAreaFromDimensions && (
+                      <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                        <div className="space-y-0.5">
+                          <span className="text-slate-500 dark:text-slate-400 text-[11px] block">
+                            Area from Dimensions ({plotInfo.frontageWidth} {isDimInFt ? 'ft' : 'm'} × {plotInfo.plotDepth} {isDimInFt ? 'ft' : 'm'}):
+                          </span>
+                          <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
+                            {computedAreaFromDimensions.sqFt.toLocaleString('en-IN')} ft² ({computedAreaFromDimensions.sqM.toFixed(1)} m²)
+                          </span>
+                        </div>
+                        {Math.abs(normalizedArea.sqFt - computedAreaFromDimensions.sqFt) > 1 ? (
+                          <button
+                            type="button"
+                            onClick={handleApplyDimensionArea}
+                            className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900 transition flex items-center gap-1 shrink-0"
+                          >
+                            <Sparkles className="w-3 h-3" /> Sync as Plot Area
+                          </button>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 shrink-0">
+                            <Check className="w-3.5 h-3.5" /> Matches Plot Area
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Plot Geometry Checkboxes */}
@@ -1134,7 +1264,9 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
                   2D Plot & Buildable Envelope Diagram
                 </span>
                 <span className="text-[11px] font-mono text-slate-500">
-                  {plotInfo.frontageWidth}m x {plotInfo.plotDepth}m
+                  {isDimInFt
+                    ? `${plotInfo.frontageWidth} ft × ${plotInfo.plotDepth} ft (${(plotInfo.frontageWidth * 0.3048).toFixed(1)}m × ${(plotInfo.plotDepth * 0.3048).toFixed(1)}m)`
+                    : `${plotInfo.frontageWidth}m × ${plotInfo.plotDepth}m (${(plotInfo.frontageWidth * 3.28084).toFixed(1)} ft × ${(plotInfo.plotDepth * 3.28084).toFixed(1)} ft)`}
                 </span>
               </div>
 
@@ -1149,62 +1281,117 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
                   </p>
                 </div>
               ) : (
-                <div className="relative bg-slate-950 rounded-xl p-4 flex items-center justify-center">
-                  <svg className="w-full h-48 max-h-48" viewBox="0 0 300 200">
-                    {/* Plot Background (Total Plot) */}
-                    <rect
-                      x="30"
-                      y="20"
-                      width="240"
-                      height="150"
-                      fill="#1e293b"
-                      stroke="#475569"
-                      strokeWidth="2"
-                      rx="4"
-                    />
+                <div className="space-y-3">
+                  <div className="relative bg-slate-950 rounded-xl p-3 flex items-center justify-center">
+                    <svg className="w-full h-52 max-h-52" viewBox="0 0 300 200">
+                      {/* Plot Background (Total Plot) */}
+                      <rect
+                        x="30"
+                        y="18"
+                        width="240"
+                        height="152"
+                        fill="#1e293b"
+                        stroke="#475569"
+                        strokeWidth="2"
+                        rx="4"
+                      />
 
-                    {/* Setback Shading Bands */}
-                    <rect x="30" y="145" width="240" height="25" fill="#ef4444" fillOpacity="0.15" />
-                    <rect x="30" y="20" width="240" height="25" fill="#ef4444" fillOpacity="0.15" />
-                    <rect x="30" y="45" width="25" height="100" fill="#ef4444" fillOpacity="0.15" />
-                    <rect x="245" y="45" width="25" height="100" fill="#ef4444" fillOpacity="0.15" />
+                      {/* Setback Shading Bands */}
+                      <rect x="30" y="142" width="240" height="28" fill="#ef4444" fillOpacity="0.15" />
+                      <rect x="30" y="18" width="240" height="26" fill="#ef4444" fillOpacity="0.15" />
+                      <rect x="30" y="44" width="25" height="98" fill="#ef4444" fillOpacity="0.15" />
+                      <rect x="245" y="44" width="25" height="98" fill="#ef4444" fillOpacity="0.15" />
 
-                    {/* Net Buildable Envelope (Green) */}
-                    <rect
-                      x="55"
-                      y="45"
-                      width="190"
-                      height="100"
-                      fill="#10b981"
-                      fillOpacity="0.3"
-                      stroke="#10b981"
-                      strokeWidth="2"
-                      strokeDasharray="4 2"
-                      rx="2"
-                    />
+                      {/* Net Buildable Envelope (Green Box) */}
+                      <rect
+                        x="55"
+                        y="44"
+                        width="190"
+                        height="98"
+                        fill="#10b981"
+                        fillOpacity="0.3"
+                        stroke="#10b981"
+                        strokeWidth="2"
+                        strokeDasharray="4 2"
+                        rx="2"
+                      />
 
-                    {/* Labels */}
-                    <text x="150" y="100" fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle">
-                      BUILDABLE FOOTPRINT
-                    </text>
-                    <text x="150" y="115" fill="#a7f3d0" fontSize="9" textAnchor="middle">
-                      {report.developmentControls.envelope.buildableFootprintSqM} sq.m ({report.developmentControls.envelope.envelopeEfficiencyPct}%)
-                    </text>
+                      {/* Side Setback Mini Labels */}
+                      <text x="42" y="93" fill="#f87171" fontSize="7" fontWeight="bold" textAnchor="middle">
+                        {report.developmentControls.setbacks.leftM}m
+                      </text>
+                      <text x="258" y="93" fill="#f87171" fontSize="7" fontWeight="bold" textAnchor="middle">
+                        {report.developmentControls.setbacks.rightM}m
+                      </text>
 
-                    {/* Setback Text Annotations */}
-                    <text x="150" y="162" fill="#f87171" fontSize="8" textAnchor="middle">
-                      Front: {report.developmentControls.setbacks.frontM}m
-                    </text>
-                    <text x="150" y="36" fill="#f87171" fontSize="8" textAnchor="middle">
-                      Rear: {report.developmentControls.setbacks.rearM}m
-                    </text>
+                      {/* Inside Buildable Envelope: Titles, Width, Depth & Footprint Area */}
+                      <text x="150" y="66" fill="#34d399" fontSize="9.5" fontWeight="bold" textAnchor="middle" letterSpacing="0.5">
+                        BUILDABLE FOOTPRINT
+                      </text>
+                      <text x="150" y="83" fill="#ffffff" fontSize="9" fontWeight="bold" textAnchor="middle">
+                        Width: {report.developmentControls.envelope.buildableWidthM} m ({(report.developmentControls.envelope.buildableWidthM * 3.28084).toFixed(1)} ft)
+                      </text>
+                      <text x="150" y="99" fill="#ffffff" fontSize="9" fontWeight="bold" textAnchor="middle">
+                        Depth: {report.developmentControls.envelope.buildableDepthM} m ({(report.developmentControls.envelope.buildableDepthM * 3.28084).toFixed(1)} ft)
+                      </text>
+                      <text x="150" y="115" fill="#a7f3d0" fontSize="8.5" textAnchor="middle">
+                        Area: {report.developmentControls.envelope.buildableFootprintSqM} m² / {(report.developmentControls.envelope.buildableFootprintSqM * 10.7639).toFixed(0)} ft² ({report.developmentControls.envelope.envelopeEfficiencyPct}%)
+                      </text>
 
-                    {/* Road Indication */}
-                    <rect x="10" y="178" width="280" height="18" fill="#0f172a" stroke="#334155" />
-                    <text x="150" y="190" fill="#94a3b8" fontSize="8" fontWeight="bold" textAnchor="middle">
-                      ▼ ROAD FRONTAGE ({siteLocation.roadWidth}m WIDE) ▼
-                    </text>
-                  </svg>
+                      {/* Front and Rear Setback Annotations */}
+                      <text x="150" y="159" fill="#f87171" fontSize="8" fontWeight="medium" textAnchor="middle">
+                        Front Setback: {report.developmentControls.setbacks.frontM}m ({(report.developmentControls.setbacks.frontM * 3.28084).toFixed(1)} ft)
+                      </text>
+                      <text x="150" y="33" fill="#f87171" fontSize="8" fontWeight="medium" textAnchor="middle">
+                        Rear Setback: {report.developmentControls.setbacks.rearM}m ({(report.developmentControls.setbacks.rearM * 3.28084).toFixed(1)} ft)
+                      </text>
+
+                      {/* Road Indication */}
+                      <rect x="10" y="176" width="280" height="18" fill="#0f172a" stroke="#334155" rx="2" />
+                      <text x="150" y="188" fill="#94a3b8" fontSize="8" fontWeight="bold" textAnchor="middle">
+                        ▼ ROAD FRONTAGE ({siteLocation.roadWidth}m / {(siteLocation.roadWidth * 3.28084).toFixed(1)}ft WIDE) ▼
+                      </text>
+                    </svg>
+                  </div>
+
+                  {/* 3-Column Buildable Footprint Dimension Pills */}
+                  <div className="grid grid-cols-3 gap-2 pt-1 text-center">
+                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 space-y-0.5">
+                      <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 block">
+                        Buildable Width
+                      </span>
+                      <div className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100">
+                        {report.developmentControls.envelope.buildableWidthM} m
+                      </div>
+                      <span className="text-[10px] font-mono font-semibold text-indigo-600 dark:text-indigo-400 block">
+                        {(report.developmentControls.envelope.buildableWidthM * 3.28084).toFixed(1)} ft
+                      </span>
+                    </div>
+
+                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 space-y-0.5">
+                      <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 block">
+                        Buildable Depth
+                      </span>
+                      <div className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100">
+                        {report.developmentControls.envelope.buildableDepthM} m
+                      </div>
+                      <span className="text-[10px] font-mono font-semibold text-indigo-600 dark:text-indigo-400 block">
+                        {(report.developmentControls.envelope.buildableDepthM * 3.28084).toFixed(1)} ft
+                      </span>
+                    </div>
+
+                    <div className="p-2 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/50 space-y-0.5">
+                      <span className="text-[10px] font-medium text-emerald-700 dark:text-emerald-300 block">
+                        Net Footprint Area
+                      </span>
+                      <div className="text-xs font-mono font-bold text-emerald-800 dark:text-emerald-200">
+                        {report.developmentControls.envelope.buildableFootprintSqM} m²
+                      </div>
+                      <span className="text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400 block">
+                        {(report.developmentControls.envelope.buildableFootprintSqM * 10.7639).toFixed(0)} ft²
+                      </span>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -1272,7 +1459,7 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
                 <div className="text-base font-bold font-mono text-slate-900 dark:text-white">
                   {report.developmentControls.far.baseFar} <span className="text-xs text-indigo-500">/ {report.developmentControls.far.effectiveMaxFar}</span>
                 </div>
-                <span className="text-[10px] text-slate-500">Max BUA: {report.developmentControls.far.permittedMaxBuaSqM.toFixed(0)} m²</span>
+                <span className="text-[10px] text-slate-500">Max BUA: {report.developmentControls.far.permittedMaxBuaSqM.toFixed(0)} m² ({(report.developmentControls.far.permittedMaxBuaSqM * 10.7639).toFixed(0)} ft²)</span>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
@@ -1280,13 +1467,13 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
                 <div className="text-base font-bold font-mono text-slate-900 dark:text-white">
                   {report.developmentControls.groundCoverage.permittedMaxPct}%
                 </div>
-                <span className="text-[10px] text-slate-500">{report.developmentControls.groundCoverage.permittedMaxSqM.toFixed(1)} sq.m max</span>
+                <span className="text-[10px] text-slate-500">{report.developmentControls.groundCoverage.permittedMaxSqM.toFixed(1)} m² ({(report.developmentControls.groundCoverage.permittedMaxSqM * 10.7639).toFixed(0)} ft²)</span>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-1">
                 <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block">Max Height / Floors</span>
                 <div className="text-base font-bold font-mono text-slate-900 dark:text-white">
-                  {report.developmentControls.heightFloors.maxPermissibleHeightM}m
+                  {report.developmentControls.heightFloors.maxPermissibleHeightM}m <span className="text-xs font-normal text-slate-400">({(report.developmentControls.heightFloors.maxPermissibleHeightM * 3.28084).toFixed(1)} ft)</span>
                 </div>
                 <span className="text-[10px] text-slate-500">{report.developmentControls.heightFloors.maxPermissibleFloors} Permitted Floors</span>
               </div>
@@ -1318,13 +1505,13 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
                   <div className="space-y-0.5">
                     <span className="font-bold text-slate-800 dark:text-slate-200 block">Ground Coverage</span>
                     <span className="text-slate-500 text-[11px]">
-                      Permitted: Max {report.developmentControls.groundCoverage.permittedMaxPct}% ({report.developmentControls.groundCoverage.permittedMaxSqM.toFixed(1)} m²)
+                      Permitted: Max {report.developmentControls.groundCoverage.permittedMaxPct}% ({report.developmentControls.groundCoverage.permittedMaxSqM.toFixed(1)} m² / {(report.developmentControls.groundCoverage.permittedMaxSqM * 10.7639).toFixed(0)} ft²)
                       {viewMode === 'technical' && ` • Clause: ${report.developmentControls.groundCoverage.clause}`}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
-                      {report.developmentControls.groundCoverage.proposedPct}% ({report.developmentControls.groundCoverage.proposedSqM.toFixed(1)} m²)
+                      {report.developmentControls.groundCoverage.proposedPct}% ({report.developmentControls.groundCoverage.proposedSqM.toFixed(1)} m² / {(report.developmentControls.groundCoverage.proposedSqM * 10.7639).toFixed(0)} ft²)
                     </span>
                     {getComplianceStatusBadge(report.developmentControls.groundCoverage.status)}
                   </div>
@@ -1341,7 +1528,7 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
-                      FAR {report.developmentControls.far.proposedFar} ({report.developmentControls.far.proposedBuaSqM.toFixed(0)} m² BUA)
+                      FAR {report.developmentControls.far.proposedFar} ({report.developmentControls.far.proposedBuaSqM.toFixed(0)} m² / {(report.developmentControls.far.proposedBuaSqM * 10.7639).toFixed(0)} ft² BUA)
                     </span>
                     {getComplianceStatusBadge(report.developmentControls.far.status)}
                   </div>
@@ -1352,7 +1539,7 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
                   <div className="space-y-0.5">
                     <span className="font-bold text-slate-800 dark:text-slate-200 block">Mandatory Setbacks</span>
                     <span className="text-slate-500 text-[11px]">
-                      Front: {report.developmentControls.setbacks.frontM}m | Rear: {report.developmentControls.setbacks.rearM}m | Sides: {report.developmentControls.setbacks.leftM}m
+                      Front: {report.developmentControls.setbacks.frontM}m ({(report.developmentControls.setbacks.frontM * 3.28084).toFixed(1)}ft) • Rear: {report.developmentControls.setbacks.rearM}m ({(report.developmentControls.setbacks.rearM * 3.28084).toFixed(1)}ft) • Sides: {report.developmentControls.setbacks.leftM}m ({(report.developmentControls.setbacks.leftM * 3.28084).toFixed(1)}ft)
                       {viewMode === 'technical' && ` • Clause: ${report.developmentControls.setbacks.clause}`}
                     </span>
                   </div>
@@ -1369,13 +1556,13 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
                   <div className="space-y-0.5">
                     <span className="font-bold text-slate-800 dark:text-slate-200 block">Building Height & Floors</span>
                     <span className="text-slate-500 text-[11px]">
-                      Permitted: Max {report.developmentControls.heightFloors.maxPermissibleHeightM}m ({report.developmentControls.heightFloors.maxPermissibleFloors} Floors)
+                      Permitted: Max {report.developmentControls.heightFloors.maxPermissibleHeightM}m ({(report.developmentControls.heightFloors.maxPermissibleHeightM * 3.28084).toFixed(1)} ft) ({report.developmentControls.heightFloors.maxPermissibleFloors} Floors)
                       {viewMode === 'technical' && ` • ${report.developmentControls.heightFloors.roadWidthFormula}`}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
-                      {report.developmentControls.heightFloors.proposedHeightM.toFixed(1)}m ({report.developmentControls.heightFloors.proposedFloors} Fl)
+                      {report.developmentControls.heightFloors.proposedHeightM.toFixed(1)}m ({(report.developmentControls.heightFloors.proposedHeightM * 3.28084).toFixed(1)} ft) ({report.developmentControls.heightFloors.proposedFloors} Fl)
                     </span>
                     {getComplianceStatusBadge(report.developmentControls.heightFloors.status)}
                   </div>

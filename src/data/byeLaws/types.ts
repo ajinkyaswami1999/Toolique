@@ -1,5 +1,11 @@
 
-export type JurisdictionTier = 'national' | 'state' | 'city_authority' | 'special_authority';
+export type JurisdictionTier = 
+  | 'national' 
+  | 'state' 
+  | 'state_code' 
+  | 'city_authority' 
+  | 'authority_local' 
+  | 'special_authority';
 
 export type RuleCategory = 
   | 'far_fsi'
@@ -34,6 +40,9 @@ export type RuleCategory =
   | 'approvals_sanctions'
   | 'completion_occupancy_certificate'
   | 'special_restriction'
+  | 'special_restrictions'
+  | 'environmental_clearances'
+  | 'fire_life_safety'
   | 'approval'
   | 'environment';
 
@@ -54,6 +63,7 @@ export type DocumentType =
   | 'government_order' 
   | 'special_overlay' 
   | 'guideline' 
+  | 'manual'
   | 'standard';
 
 export type ComplianceStatus = 'compliant' | 'conditional' | 'non_compliant' | 'not_determined';
@@ -101,8 +111,9 @@ export interface SiteLocationInput {
 export interface PlotInfoInput {
   plotArea: number; // in areaUnit
   areaUnit: AreaUnit;
-  frontageWidth: number; // in meters
-  plotDepth: number; // in meters
+  dimensionUnit?: DimensionUnit; // 'm' | 'ft'
+  frontageWidth: number; // in dimensionUnit (or meters)
+  plotDepth: number; // in dimensionUnit (or meters)
   isCornerPlot: boolean;
   isIrregularPlot: boolean;
   hasExistingStructure: boolean;
@@ -140,7 +151,7 @@ export interface DocumentSource {
   authority: string;
   officialUrl: string;
   documentUrl?: string;
-  documentType?: 'PDF' | 'Gazette' | 'Portal' | 'Standard';
+  documentType?: 'PDF' | 'Gazette' | 'Portal' | 'Standard' | 'Manual' | 'Guideline' | 'Act' | 'Code' | 'Notification';
   publishedDate?: string;
   lastVerified: string;
 }
@@ -331,7 +342,12 @@ export interface FeasibilityReport {
       rearM: number;
       leftM: number;
       rightM: number;
+      frontFt?: number;
+      rearFt?: number;
+      leftFt?: number;
+      rightFt?: number;
       totalSetbacksM: { width: number; depth: number };
+      totalSetbacksFt?: { width: number; depth: number };
       proposedFrontM: number;
       proposedRearM: number;
       proposedSidesM: number;
@@ -344,6 +360,9 @@ export interface FeasibilityReport {
       buildableWidthM: number;
       buildableDepthM: number;
       buildableFootprintSqM: number;
+      buildableWidthFt?: number;
+      buildableDepthFt?: number;
+      buildableFootprintSqFt?: number;
       envelopeEfficiencyPct: number;
       isIrregularNotice: boolean;
     };

@@ -60,9 +60,15 @@ export function calculateBuildingFeasibility(
   const { state, authority, primaryCode, tierHierarchy } = resolveJurisdiction(site.state, site.cityAuthority);
   const { sqM: plotAreaSqM, sqFt: plotAreaSqFt } = normalizePlotArea(plot.plotArea, plot.areaUnit, site.state);
 
+  const isFt = plot.dimensionUnit === 'ft';
+  const rawFrontage = Math.max(0.1, plot.frontageWidth || (isFt ? Math.sqrt(plotAreaSqFt * 0.6) : Math.sqrt(plotAreaSqM * 0.6)));
+  const rawDepth = Math.max(0.1, plot.plotDepth || (plotAreaSqM > 0 && rawFrontage > 0 ? (isFt ? plotAreaSqFt / rawFrontage : plotAreaSqM / rawFrontage) : (isFt ? 65.6 : 20.0)));
+
+  // Standardize to meters for all statutory bye-laws and setback rules
+  const frontage = isFt ? Math.round((rawFrontage * 0.3048) * 100) / 100 : rawFrontage;
+  const depth = isFt ? Math.round((rawDepth * 0.3048) * 100) / 100 : rawDepth;
+
   const roadWidth = Math.max(3.0, site.roadWidth || authority.defaultRoadWidthM || 12.0);
-  const frontage = Math.max(1.0, plot.frontageWidth || Math.sqrt(plotAreaSqM * 0.6));
-  const depth = Math.max(1.0, plot.plotDepth || (plotAreaSqM > 0 && frontage > 0 ? plotAreaSqM / frontage : 20.0));
 
   // 1. Resolve Ground Coverage & FAR Rules
   let permittedMaxCoveragePct = 65;
@@ -650,9 +656,17 @@ export function calculateBuildingFeasibility(
         rearM: rearSetbackM,
         leftM: leftSetbackM,
         rightM: rightSetbackM,
+        frontFt: Math.round((frontSetbackM * 3.28084) * 10) / 10,
+        rearFt: Math.round((rearSetbackM * 3.28084) * 10) / 10,
+        leftFt: Math.round((leftSetbackM * 3.28084) * 10) / 10,
+        rightFt: Math.round((rightSetbackM * 3.28084) * 10) / 10,
         totalSetbacksM: {
           width: leftSetbackM + rightSetbackM,
           depth: frontSetbackM + rearSetbackM
+        },
+        totalSetbacksFt: {
+          width: Math.round(((leftSetbackM + rightSetbackM) * 3.28084) * 10) / 10,
+          depth: Math.round(((frontSetbackM + rearSetbackM) * 3.28084) * 10) / 10
         },
         proposedFrontM: frontSetbackM,
         proposedRearM: rearSetbackM,
@@ -666,6 +680,9 @@ export function calculateBuildingFeasibility(
         buildableWidthM,
         buildableDepthM,
         buildableFootprintSqM,
+        buildableWidthFt: Math.round((buildableWidthM * 3.28084) * 10) / 10,
+        buildableDepthFt: Math.round((buildableDepthM * 3.28084) * 10) / 10,
+        buildableFootprintSqFt: Math.round((buildableFootprintSqM * 10.7639104) * 10) / 10,
         envelopeEfficiencyPct,
         isIrregularNotice: plot.isIrregularPlot
       },
