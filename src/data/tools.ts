@@ -10409,72 +10409,113 @@ export const toolsList: Tool[] = [
     "name": "Building Feasibility & Bye-Law Checker",
     "category": "architecture",
     "subcategory": "Statutory Bye-Laws & Planning",
-    "shortDescription": "Location-aware architectural and construction feasibility tool. Checks FAR/FSI, setbacks, massing, parking ECS, fire safety, and statutory clearances across Indian state bye-laws.",
-    "metaTitle": "Building Feasibility & Bye-Law Checker – NBC 2016 & State Bye-Laws",
-    "metaDescription": "Instant preliminary architectural feasibility assessment. Calculate permissible FAR, ground coverage, setbacks, permissible height, parking ECS, fire NOC, and approvals for Delhi, Haryana, Maharashtra, Karnataka, and other Indian states.",
+    "shortDescription": "Location-aware architectural and construction feasibility tool. Checks FAR/FSI, setbacks, massing, parking ECS, fire safety, and statutory clearances across 172+ Indian bye-law documents.",
+    "metaTitle": "Building Feasibility & Bye-Law Checker – NBC 2016, FAR, Setbacks & State Rules",
+    "metaDescription": "Instant architectural feasibility report. Calculate permissible FAR/FSI, ground coverage, setbacks, max height, parking ECS, fire NOC, and approvals for all Indian states.",
     "keywords": [
       "Building Feasibility Checker",
-      "Building Bye-Law Checker",
+      "Building Bye-Law Checker India",
       "NBC 2016 Building Bye Laws",
+      "FAR Calculator India",
+      "FSI Calculator India",
+      "Setback Calculator India",
       "Haryana Building Code 2017",
+      "Haryana Building Code 2023",
       "Delhi UBBL 2016 Calculator",
       "Maharashtra UDCPR 2020 FSI",
       "BBMP Building Bye Laws Bangalore",
       "TNCDBR Tamil Nadu Building Rules",
       "Telangana GO 168 Building Rules",
+      "KMBR Kerala Municipal Building Rules",
+      "WBBMBL West Bengal Municipal Rules",
+      "Gujarat GDCR 2017 Calculator",
+      "Rajasthan Building Bye Laws 2020",
+      "UP Building Bye Laws 2008",
       "Architectural Feasibility Report",
-      "Setback Calculator India",
-      "Permissible FAR Calculator",
-      "Stilt plus 4 floors rules",
-      "Fire NOC height threshold India",
-      "Parking ECS calculator"
+      "Stilt plus 4 floors rules India",
+      "Fire NOC height threshold NBC 2016",
+      "Parking ECS calculator",
+      "Airport Funnel AAI NOCAS check",
+      "Plot buildable envelope calculator",
+      "Ground Coverage Calculator"
     ],
     "icon": "Building2",
     "howToUse": [
-      "Step 1 (Site Location): Select your State/UT, Planning Authority (e.g. GMDA, DDA, BMC, BBMP, CMDA, GHMC), Master Plan Zone, and fronting road width.",
-      "Step 2 (Plot Dimensions): Enter plot area in your preferred unit (sq.m, sq.ft, Gaj, Guntha, Bigha, Acre). Provide frontage width and depth.",
-      "Step 3 (Proposed Development): Select building occupancy (Residential Plotted, Commercial, Group Housing, etc.), proposed floors, stilt, and basement.",
-      "Step 4 (Site Conditions): Toggle proximity overlays such as Airport funnel (AAI), Highway (NHAI), Railway track (30m), Heritage zone (ASI), or Nallah/Lake buffer.",
-      "Review Feasibility Report: Analyze the executive traffic light status, development controls comparison table, buildable envelope diagram, and fire/accessibility checklist.",
-      "Export & AI Assistant: Ask questions to the Grounded AI Assistant or download a branded architectural feasibility PDF report."
+      "Step 1 (Site Location): Select your State/UT, Planning Authority (e.g. GMDA, DDA, MCGM, BBMP, CMDA, GHMC), Master Plan Zone, and fronting road width.",
+      "Step 2 (Plot Dimensions): Enter plot area in your preferred unit (sq.m, sq.ft, Gaj, Guntha, Bigha, Acre). Provide frontage width and depth in Meters or Feet.",
+      "Step 3 (Proposed Development): Select building occupancy (Residential Plotted, Commercial, Group Housing, Industrial), proposed floors, stilt, and basement.",
+      "Step 4 (Site Conditions & Overlays): Toggle proximity overlays such as Airport funnel (AAI NOCAS), Highway (NHAI), Railway track (30m), Heritage zone (ASI), or Nallah/Lake buffer.",
+      "Review Feasibility Report: Analyze the executive traffic light status, development controls comparison table (FAR, coverage, setbacks, height), and 2D buildable envelope diagram.",
+      "Export & Grounded AI Assistant: Query statutory clauses using the AI assistant or download a branded architectural feasibility PDF report."
     ],
     "faqs": [
       {
         "question": "What is the Building Feasibility & Bye-Law Checker?",
-        "answer": "It is an automated architectural feasibility engine that checks your plot parameters against the National Building Code of India (NBC 2016) and State/Municipal Building Bye-Laws (such as Haryana Building Code 2017/2023, Delhi UBBL 2016, Maharashtra UDCPR 2020, BBMP Bengaluru, and TNCDBR 2019) to determine permissible FAR, ground coverage, setbacks, height, parking, and statutory approvals."
+        "answer": "It is an automated architectural feasibility engine that checks your plot parameters against the National Building Code of India (NBC 2016) and 172+ State/Municipal Building Bye-Laws (such as Haryana Building Code 2017/2023, Delhi UBBL 2016, Maharashtra UDCPR 2020, BBMP Bengaluru, TNCDBR Tamil Nadu, and GHMC Telangana) to determine permissible FAR/FSI, ground coverage, mandatory setbacks, maximum building height, parking ECS, and statutory approvals."
       },
       {
-        "question": "Does this report constitute a legal building sanction or permit?",
-        "answer": "No. This tool generates a preliminary architectural feasibility and conceptual planning assessment for advisory purposes only. Formal sanctions require structural stability drawings prepared and submitted by a licensed Architect registered with the Council of Architecture (COA) to the competent local municipal authority."
+        "question": "How are building setbacks (Front, Rear, Side) determined in India?",
+        "answer": "Setbacks are mandatory open spaces surrounding a building determined by the plot area, frontage width, abutting road width, and building height. Front setbacks ensure safe sightlines and future road widening, rear setbacks provide light and ventilation, and side setbacks allow emergency fire access and separation from adjacent plots."
       },
       {
-        "question": "How is Base FAR distinguished from Purchasable / Premium FAR?",
-        "answer": "Base FAR is the standard floor space automatically permitted by right on the plot without additional government charges. Purchasable FAR (or Premium FSI / TDR) allows builders to construct additional built-up area up to a statutory ceiling upon payment of prescribed government betterment charges."
+        "question": "How is Permissible Built-Up Area (BUA) calculated from FAR/FSI?",
+        "answer": "Permissible Built-Up Area (BUA) is calculated as: Gross BUA = Plot Area × Permissible FAR (or FSI). For example, on a 300 sq.m plot with a permissible FAR of 2.0, the total gross constructed area across all habitable floors cannot exceed 600 sq.m (excluding exempt areas like stilt parking and basement)."
+      },
+      {
+        "question": "What is the difference between Base FAR and Purchasable / Premium FAR?",
+        "answer": "Base FAR is the standard floor area ratio permitted by right on the plot without extra government levies. Purchasable FAR (or Premium FSI / TDR) allows developers to construct additional floor area up to a statutory ceiling upon paying prescribed government betterment charges to the municipal planning authority."
+      },
+      {
+        "question": "What are the rules for Stilt + 4 Floors in residential plots?",
+        "answer": "Under Haryana Building Code (2024 revised norms) and Delhi UBBL 2016, residential plots fronting roads of 9m/12m or wider may construct stilt parking plus 4 upper floors, provided the stilt floor height (minimum 2.4m clear) is dedicated exclusively to non-habitable vehicular parking, and structural safety certificates from certified structural engineers are submitted."
       },
       {
         "question": "What triggers mandatory Fire NOC in Indian building bye-laws?",
-        "answer": "Under NBC 2016 Part 4 and State Fire Safety Acts, any building with a height of 15.0 meters or above is classified as a High-Rise structure, which mandates provisional and final Fire NOC, dual emergency fire staircases, and minimum 6m to 12m perimeter fire tender access roads."
+        "answer": "Under NBC 2016 Part 4 and State Fire Prevention Acts, any building with a height of 15.0 meters or above is classified as a High-Rise structure. This mandates provisional and final Fire NOC from the State Fire Services, dual fire-rated escape staircases (minimum 1.5m to 2.0m width), pressurized fire lifts, wet risers, automatic sprinklers, and minimum 6.0m clear perimeter fire tender access roads."
       },
       {
-        "question": "Is Rainwater Harvesting (RWH) mandatory for residential plots?",
-        "answer": "Yes, under Central Ground Water Authority (CGWA) norms and municipal bye-laws across most Indian states, all plots with an area of 100 sq. meters or greater must provide on-site rainwater harvesting recharge pits or collection tanks."
+        "question": "How is Parking Equivalent Car Space (ECS) calculated?",
+        "answer": "Parking requirements are measured in Equivalent Car Spaces (ECS), where 1 ECS = 23 sq.m for open surface parking, 28 sq.m for ground covered/stilt parking, and 32 sq.m for basement parking. Bye-laws prescribe 1.0 to 2.0 ECS per 100 sq.m of built-up area or per residential dwelling unit depending on plot classification."
+      },
+      {
+        "question": "What are the statutory buffer zones for Highways, Railways, and Water Bodies?",
+        "answer": "Statutory overlays enforce no-construction buffers: 1) National Highways (NHAI): 30m to 75m building line; 2) Indian Railways: 30m buffer from railway boundary requiring Railway NOC; 3) Lakes/Nallahs (NGT norms): 30m to 50m green buffer from the defined high flood line (HFL); 4) Heritage Monuments (ASI): 100m prohibited zone and 200m regulated zone."
+      },
+      {
+        "question": "Is Rainwater Harvesting (RWH) mandatory for residential plots in India?",
+        "answer": "Yes. Under Central Ground Water Authority (CGWA) guidelines and state municipal bye-laws across India, all plots with an area of 100 sq. meters or greater must incorporate on-site rainwater harvesting recharge structures or storage collection sumps to obtain an Occupancy Certificate (OC)."
+      },
+      {
+        "question": "Does this report constitute a legal building sanction or permit?",
+        "answer": "No. This tool generates a preliminary architectural feasibility and conceptual planning assessment for advisory and design purposes. Formal municipal sanctions require structural stability drawings prepared and submitted by a licensed Architect registered with the Council of Architecture (COA) to the competent local municipal authority."
       }
     ],
     "sections": [
       {
         "title": "Hierarchy of Indian Building Regulations",
-        "content": "Building development in India is governed by a hierarchical multi-tier regulatory framework:\n\n" +
-          "1. **National Standard (NBC 2016)**: National Building Code of India published by the Bureau of Indian Standards (SP 7: 2016), setting baseline life safety, structural, accessibility, and environmental standards.\n" +
-          "2. **State Acts & Unified Bye-Laws**: Enactments such as the Maharashtra UDCPR 2020, Haryana Building Code 2017, Delhi UBBL 2016, and Tamil Nadu Combined Development and Building Rules 2019.\n" +
-          "3. **City Master Plans & Development Authorities**: Local zoning regulations issued by bodies like DDA, GMDA, BBMP, CMDA, HMDA, and NOIDA.\n" +
-          "4. **Special Statutory Overlays**: Directives from Airports Authority of India (AAI NOCAS), NHAI, Indian Railways, Archaeological Survey of India (ASI), and National Green Tribunal (NGT)."
+        "content": "Building development in India is governed by a hierarchical four-tier regulatory framework:\n\n" +
+          "1. **Level 1 – National Standards (NBC 2016 & Model Bye-Laws)**: Published by the Bureau of Indian Standards (SP 7: 2016), setting national baseline life safety, structural engineering, accessibility, and environmental norms.\n" +
+          "2. **Level 2 – State Acts & Unified Regulations**: Enactments covering all 28 States & 8 UTs (such as Maharashtra UDCPR 2020, Haryana Building Code 2017/2023, Tamil Nadu TNCDBR 2019, Kerala KMBR 2019, Gujarat GDCR 2017).\n" +
+          "3. **Level 3 – City Master Plans & Development Authorities**: Comprehensive Development Plans (CDP) and zoning codes issued by regional authorities (e.g., DDA Master Plan 2041, GMDA Gurugram, BBMP Bengaluru, MCGM Mumbai DP 2034, HMDA Hyderabad, CMDA Chennai).\n" +
+          "4. **Level 4 – Local Municipal Authorities & Statutory Overlays**: Micro-level bye-laws of municipal corporations combined with Pan-India statutory overlays from AAI (NOCAS airport funnel), NHAI highways, Indian Railways (30m buffer), ASI protected monuments, and NGT environmental buffer zones."
       },
       {
-        "title": "Core Architectural Development Controls Explained",
-        "content": "• **Ground Coverage (%)**: The maximum percentage of the plot footprint that may be covered by the building structure at ground level.\n" +
-          "• **Floor Area Ratio (FAR / FSI)**: The ratio of total gross built-up area across all floors to the total site plot area.\n" +
-          "• **Statutory Setbacks**: Mandatory open spaces that must be left clear around the front, rear, and sides of the building for natural ventilation, day-lighting, and emergency fire rescue.\n" +
-          "• **Equivalent Car Space (ECS)**: Standard metric for mandatory vehicular parking provisions based on built-up area or dwelling unit counts."
+        "title": "Core Architectural Development Controls & Mathematical Formulas",
+        "content": "• **Floor Area Ratio (FAR / FSI)**: Ratio of total gross built-up area across all habitable floors to the net plot area:\n" +
+          "  $$\\text{FAR} = \\frac{\\text{Gross Built-Up Area (sq.m)}}{\\text{Plot Area (sq.m)}}$$\n\n" +
+          "• **Ground Coverage (%)**: Maximum percentage of plot footprint covered by the building structure at ground level:\n" +
+          "  $$\\text{Max Ground Footprint} = \\text{Plot Area} \\times \\left(\\frac{\\text{Ground Coverage \\%}}{100}\\right)$$\n\n" +
+          "• **Mandatory Setbacks**: Net buildable width and depth after deducting front, rear, left, and right open spaces:\n" +
+          "  $$\\text{Buildable Width} = \\text{Frontage Width} - (\\text{Left Setback} + \\text{Right Setback})$$\n" +
+          "  $$\\text{Buildable Depth} = \\text{Plot Depth} - (\\text{Front Setback} + \\text{Rear Setback})$$\n\n" +
+          "• **Equivalent Car Space (ECS)**: Standard metric for mandatory vehicular parking provisions based on built-up area (1 ECS = 23m² open, 28m² stilt, 32m² basement)."
+      },
+      {
+        "title": "High-Rise Fire Safety Thresholds (NBC 2016 Part 4)",
+        "content": "Under NBC 2016 Part 4 and State Fire Safety Rules:\n" +
+          "• Buildings **< 15.0 meters**: Low-rise structures requiring standard emergency egress, fire extinguishers, and single staircase (subject to travel distance ≤ 22.5m).\n" +
+          "• Buildings **≥ 15.0 meters**: High-rise classification mandating dual fire-rated escape staircases (enclosed with 2-hour fire doors), pressurized fire lifts, wet risers, yard hydrants, automatic sprinkler networks, and minimum 6.0m clear perimeter driveway for emergency fire tender maneuvering.\n" +
+          "• Buildings **≥ 24.0 meters**: Extended life safety controls including mandatory refuge areas every 7 floors above 24m, dedicated fire command center, and smoke evacuation shafts."
       }
     ]
   }

@@ -767,6 +767,24 @@ const crossSuiteSuggestions: Record<string, { text: string; linkText: string; li
     text: 'Decoding base64url JSON Web Tokens or checking authorization claims? Inspect tokens in the',
     linkText: 'JWT Decoder & Debugger',
     linkUrl: '/developer/jwt-decoder'
+  },
+  'building-feasibility-checker': {
+    label: 'Plot Area Dimensions',
+    text: 'Need to calculate irregular polygon plots or convert Guntha/Bigha/Gaj to sq. meters first? Open',
+    linkText: 'Plot Area Calculator',
+    linkUrl: '/architecture/plot-area-calculator'
+  },
+  'plot-area-calculator': {
+    label: 'Statutory Feasibility & Bye-Laws',
+    text: 'Want to check permissible FAR, setbacks, and NBC 2016 building clearances for this plot? Run the',
+    linkText: 'Building Feasibility & Bye-Law Checker',
+    linkUrl: '/architecture/building-feasibility-checker'
+  },
+  'far-fsi-calculator': {
+    label: 'Complete Site Feasibility Report',
+    text: 'Looking for multi-tier state bye-law checks, 2D buildable envelope, and fire clearances? Check',
+    linkText: 'Building Feasibility & Bye-Law Checker',
+    linkUrl: '/architecture/building-feasibility-checker'
   }
 };
 
@@ -870,7 +888,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       return ['manual-test-design', 'api-json-validation', 'web-automation-locators'].includes(w.id);
     }
     if (tool.category === 'architecture' || tool.category === 'civil') {
-      return ['plot-to-material', 'room-to-finish'].includes(w.id);
+      return ['statutory-zoning-feasibility', 'plot-to-material', 'room-to-finish'].includes(w.id);
     }
     if (tool.category === 'finance' || (tool.category as string) === 'calculators' || tool.category === 'math-studio') {
       return ['salary-tax-planning', 'wealth-investment-compounding', 'retirement-pension-planning', 'calculus-analysis'].includes(w.id);

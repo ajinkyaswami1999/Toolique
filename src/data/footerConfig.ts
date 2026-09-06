@@ -12,8 +12,8 @@ export const footerConfig = {
     logoText: "Toolique",
     description: "Toolique is a modern browser-based productivity platform offering free online tools, interactive learning, developer playgrounds, AI utilities, engineering calculators, image & PDF tools, finance calculators, and 3D printing solutions.",
     highlights: [
-      "✔ 200+ Free Tools",
-      "✔ 25+ Categories",
+      "✔ 270+ Free Tools",
+      "✔ 20+ Categories",
       "✔ Privacy First",
       "✔ 100% Browser Processing",
       "✔ No Login Required",
@@ -86,8 +86,8 @@ export const footerConfig = {
     buttonText: "Notify Me"
   },
   stats: [
-    { value: "200+", label: "Online Tools" },
-    { value: "25+", label: "Categories" },
+    { value: "270+", label: "Online Tools" },
+    { value: "20+", label: "Categories" },
     { value: "100%", label: "Browser-Based" },
     { value: "0 MB", label: "Downloads Required" }
   ],

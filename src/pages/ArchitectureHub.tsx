@@ -163,6 +163,36 @@ export default function ArchitectureHub() {
         </div>
       </div>
 
+      {/* Flagship Hero Spotlight: Building Feasibility & Bye-Law Checker */}
+      <div className="p-6 md:p-8 rounded-3xl bg-linear-to-r from-emerald-500/10 via-teal-500/5 to-indigo-500/10 border border-emerald-500/20 dark:border-emerald-500/30 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative overflow-hidden">
+        <div className="space-y-3 max-w-3xl relative z-10">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-black text-[10px] uppercase tracking-wider">
+              ⭐ Flagship Indian Statutory Engine
+            </span>
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-bold text-[10px]">
+              172 Verified Bye-Law Documents
+            </span>
+            <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 font-bold text-[10px]">
+              NBC 2016 • 36 States • 50 Master Plans
+            </span>
+          </div>
+          <h2 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
+            Building Feasibility & Bye-Law Assessment Tool
+          </h2>
+          <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            Location-aware zoning and construction feasibility calculator. Instantly computes permissible FAR/FSI, ground coverage, mandatory front/rear/side setbacks, permissible height, stilt+4 floor rules, and 2D buildable envelope diagrams with dual units (m & ft).
+          </p>
+        </div>
+        <Link
+          to="/architecture/building-feasibility-checker"
+          className="shrink-0 px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs inline-flex items-center gap-2 transition shadow-md shadow-emerald-600/20 group cursor-pointer"
+        >
+          <span>Launch Feasibility Checker</span>
+          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </div>
+
       {/* Search Bar */}
       <div className="relative w-full max-w-md">
         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-550 w-4 h-4" />
@@ -184,8 +214,8 @@ export default function ArchitectureHub() {
               Curated Project Journeys
             </h2>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {workflows.filter(w => ['plot-to-material', 'room-to-finish'].includes(w.id)).map((wf) => (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {workflows.filter(w => ['statutory-zoning-feasibility', 'plot-to-material', 'room-to-finish'].includes(w.id)).map((wf) => (
               <div 
                 key={wf.id}
                 className="p-6 rounded-3xl border border-zinc-200/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition space-y-4 flex flex-col justify-between"

@@ -14,10 +14,24 @@ export interface Workflow {
 
 export const workflows: Workflow[] = [
   {
+    id: 'statutory-zoning-feasibility',
+    name: 'Statutory Bye-Laws & Site Feasibility',
+    description: 'Verify FAR, setbacks, high-rise fire norms, and municipal clearances from plot purchase to architectural approval.',
+    steps: [
+      { title: 'Site Feasibility & Bye-Laws', description: 'Check FAR, setbacks, and statutory approvals across NBC 2016 and 172+ state codes.', slug: 'building-feasibility-checker', id: 'BuildingFeasibilityChecker' },
+      { title: 'Plot Area Converter', description: 'Estimate precise plot dimensions and unit conversions.', slug: 'plot-area-calculator', id: 'PlotAreaCalculator' },
+      { title: 'FAR & FSI Index', description: 'Calculate permissible built-up areas and road width limits.', slug: 'far-fsi-calculator', id: 'FARFSICalculator' },
+      { title: 'Setback Clearances', description: 'Calculate front, rear, and side setback buffers.', slug: 'setback-calculator', id: 'SetbackCalculator' },
+      { title: 'Ground Coverage', description: 'Plan ground footprint and open space percentages.', slug: 'plot-coverage-calculator', id: 'PlotCoverageCalculator' },
+      { title: 'Building Height & Road Width', description: 'Verify max permissible height and fire access clearances.', slug: 'building-height-calculator', id: 'BuildingHeightCalculator' }
+    ]
+  },
+  {
     id: 'plot-to-material',
     name: 'Plot Development & Material Estimator',
     description: 'Track your project from buying a plot of land to buying building materials.',
     steps: [
+      { title: 'Site Feasibility & Bye-Laws', description: 'Check FAR, setbacks, and statutory approvals across NBC 2016 and state codes.', slug: 'building-feasibility-checker', id: 'BuildingFeasibilityChecker' },
       { title: 'Plot Area', description: 'Estimate your plot dimensions and total land area.', slug: 'plot-area-calculator', id: 'PlotAreaCalculator' },
       { title: 'FSI & Clearance', description: 'Check municipal clearances and permissible built-up areas.', slug: 'far-fsi-calculator', id: 'FARFSICalculator' },
       { title: 'Built-up Area', description: 'Plan individual floor sizes and ground coverage.', slug: 'built-up-area-calculator', id: 'BuiltUpAreaCalculator' },

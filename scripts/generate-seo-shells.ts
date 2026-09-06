@@ -104,7 +104,7 @@ const staticPages = [
   {
     path: '404',
     title: '404 - Page Not Found | Toolique',
-    description: 'The requested page could not be found on Toolique. Search our 100+ free online calculators and developer tools.',
+    description: 'The requested page could not be found on Toolique. Search our 270+ free online calculators and developer tools.',
     keywords: ['404', 'page not found', 'toolique']
   },
   {
@@ -323,7 +323,8 @@ function generateShell(
   title: string,
   description: string,
   keywords: string[],
-  schemaMarkup?: object
+  schemaMarkup?: object,
+  bodyContentOverride?: string
 ) {
   const cleanPath = routePath.replace(/^\/+|\/+$/g, '');
   const fullUrl = cleanPath === '' ? 'https://www.toolique.in/' : `https://www.toolique.in/${cleanPath}`;
@@ -377,7 +378,7 @@ function generateShell(
   html = html.replace('</head>', schemaScript);
 
   // 5. Populate body loading state with indexable HTML content
-  const rootContent = `
+  const rootContent = bodyContentOverride || `
     <div id="root">
       <div style="padding: 40px; max-width: 800px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #333;">
         <h1 style="font-size: 2.5rem; margin-bottom: 10px; color: #111;">${title.split(' | ')[0]}</h1>
@@ -388,7 +389,7 @@ function generateShell(
         </div>
       </div>
     </div>`;
-  html = html.replace('<div id="root"></div>', rootContent);
+  html = html.replace(/<div id="root">[\s\S]*?<\/div>/i, rootContent);
 
   // Write file
   const targetDir = path.join(DIST_DIR, routePath);
@@ -526,7 +527,60 @@ toolsList.forEach((tool) => {
     ]
   };
 
-  generateShell(routePath, title, description, tool.keywords || [], toolSchema);
+  // Rich indexable HTML content for Search Engines (SEO), Answer Engines (AEO) & LLM Crawlers (GEO)
+  const howToHtml = (tool.howToUse && tool.howToUse.length > 0)
+    ? `<section style="margin-top: 30px;">
+        <h2 style="font-size: 1.5rem; color: #1e293b; margin-bottom: 14px; font-weight: 700;">How to Use ${tool.name}</h2>
+        <ol style="padding-left: 22px; line-height: 1.8; color: #334155;">
+          ${tool.howToUse.map(step => `<li style="margin-bottom: 8px;">${step}</li>`).join('')}
+        </ol>
+      </section>`
+    : '';
+
+  const faqsHtml = (tool.faqs && tool.faqs.length > 0)
+    ? `<section style="margin-top: 35px;">
+        <h2 style="font-size: 1.5rem; color: #1e293b; margin-bottom: 14px; font-weight: 700;">Frequently Asked Questions</h2>
+        <dl style="line-height: 1.8;">
+          ${tool.faqs.map(faq => `
+            <dt style="font-weight: 700; color: #0f172a; margin-top: 16px; font-size: 1.05rem;">${faq.question}</dt>
+            <dd style="margin-left: 0; color: #475569; margin-top: 4px; font-size: 0.95rem;">${faq.answer}</dd>
+          `).join('')}
+        </dl>
+      </section>`
+    : '';
+
+  const sectionsHtml = (tool.sections && tool.sections.length > 0)
+    ? `<section style="margin-top: 35px;">
+        ${tool.sections.map(sec => `
+          <article style="margin-bottom: 24px;">
+            <h2 style="font-size: 1.4rem; color: #1e293b; margin-bottom: 10px; font-weight: 700;">${sec.title}</h2>
+            <div style="color: #475569; line-height: 1.7; font-size: 0.95rem; white-space: pre-line;">${sec.content}</div>
+          </article>
+        `).join('')}
+      </section>`
+    : '';
+
+  const toolBodyHtml = `
+    <div id="root">
+      <div style="padding: 40px 20px; max-width: 900px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #333;">
+        <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+          <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+          <a href="/${getCategoryCanonicalPath(tool.category)}" style="color: #4f46e5; text-decoration: none; font-weight: 600;">${catName}</a> &gt; 
+          <span>${tool.name}</span>
+        </nav>
+        <h1 style="font-size: 2.4rem; margin-bottom: 12px; color: #0f172a; font-weight: 800; line-height: 1.25;">${title.split(' – ')[0].split(' | ')[0]}</h1>
+        <p style="font-size: 1.125rem; color: #475569; margin-bottom: 24px; line-height: 1.6;">${description}</p>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 24px; border-radius: 12px; margin-bottom: 28px;">
+          <p style="margin: 0; font-weight: 700; color: #0f172a; font-size: 1.05rem;">⚡ Interactive Calculation Engine Active</p>
+          <p style="margin: 6px 0 0 0; color: #64748b; font-size: 0.925rem;">Please enable JavaScript in your browser to run live computations, 2D envelope diagrams, and export PDF reports.</p>
+        </div>
+        ${howToHtml}
+        ${sectionsHtml}
+        ${faqsHtml}
+      </div>
+    </div>`;
+
+  generateShell(routePath, title, description, tool.keywords || [], toolSchema, toolBodyHtml);
 });
 
 // Generate Category pages

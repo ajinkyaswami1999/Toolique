@@ -5,25 +5,41 @@ Toolique (https://www.toolique.in) is a free, privacy-focused online suite of in
 
 ## Categories & Tools
 
+### Architecture & Statutory Bye-Laws (Flagship Indian Feasibility Engine)
+- Building Feasibility & Bye-Law Checker: https://www.toolique.in/architecture/building-feasibility-checker
+  - Description: Location-aware preliminary architectural feasibility assessment tool evaluating 172+ verified Indian statutory bye-law documents.
+  - Multi-Tier Legal Hierarchy: NBC 2016 (National), 36 States/UTs Unified Building Codes, 50 City Master Plans, and 66 Local Municipal Authorities & Statutory Overlays.
+  - Development Controls: Permissible FAR/FSI, Base vs Purchasable FAR, Ground Coverage (%), Maximum Height (m/ft), Stilt + 4 Floors rules, Mandatory Setbacks (Front, Rear, Left, Right), Parking ECS, and High-Rise Fire NOC clearance threshold.
+  - Visual Envelope: 2D plot & buildable footprint SVG diagram with dual-unit dimension conversions (m/ft and sq.m/sq.ft).
+- FAR & FSI Calculator: https://www.toolique.in/architecture/far-fsi-calculator
+- Plot Area & Irregular Land Calculator: https://www.toolique.in/architecture/plot-area-calculator
+- Setback Calculator: https://www.toolique.in/architecture/setback-calculator
+- Building Height & Clearance Calculator: https://www.toolique.in/architecture/building-height-calculator
+- Plot Coverage Calculator: https://www.toolique.in/architecture/plot-coverage-calculator
+- Carpet Area & RERA Calculator: https://www.toolique.in/architecture/carpet-area-calculator
+- Staircase Dimension Calculator: https://www.toolique.in/architecture/staircase-calculator
+- Room Area Calculator: https://www.toolique.in/architecture/room-area-calculator
+- Space Planning Calculator: https://www.toolique.in/architecture/space-planning-calculator
+
 ### 3D Printing & Fabrication
-- Filament Cost Calculator: https://www.toolique.in/tool/filament-cost-calculator
-- 3D Printing Cost Calculator: https://www.toolique.in/tool/3d-printing-cost-calculator
-- Print Profit Calculator: https://www.toolique.in/tool/print-profit-calculator
-- Print Farm Revenue Calculator: https://www.toolique.in/tool/print-farm-revenue-calculator
-- Filament Weight Calculator: https://www.toolique.in/tool/filament-weight-calculator
-- STL Volume Calculator: https://www.toolique.in/tool/stl-volume-calculator
-- Resin Cost & Volume Calculator: https://www.toolique.in/tool/resin-cost-calculator
-- AMS Slot Planner: https://www.toolique.in/tool/ams-slot-planner
-- HueForge Layer Calculator: https://www.toolique.in/tool/hueforge-layer-calculator
+- Filament Cost Calculator: https://www.toolique.in/3d-printing/filament-cost-calculator
+- 3D Printing Cost Calculator: https://www.toolique.in/3d-printing/3d-printing-cost-calculator
+- Print Profit Calculator: https://www.toolique.in/3d-printing/print-profit-calculator
+- Print Farm Revenue Calculator: https://www.toolique.in/3d-printing/print-farm-revenue-calculator
+- Filament Weight Calculator: https://www.toolique.in/3d-printing/filament-weight-calculator
+- STL Volume Calculator: https://www.toolique.in/3d-printing/stl-volume-calculator
+- Resin Cost & Volume Calculator: https://www.toolique.in/3d-printing/resin-cost-calculator
+- AMS Slot Planner: https://www.toolique.in/3d-printing/ams-slot-planner
+- HueForge Layer Calculator: https://www.toolique.in/3d-printing/hueforge-layer-calculator
 
 ### Finance & Tax (Optimized for India & Global Standards)
-- Advanced BOQ Calculator India: https://www.toolique.in/tools/advanced-boq-calculator-india
-- GST Calculator India: https://www.toolique.in/tool/gst-calculator
-- Income Tax Calculator India: https://www.toolique.in/tool/income-tax-calculator
-- SIP & Mutual Fund Calculator: https://www.toolique.in/tool/sip-calculator
-- EMI Calculator: https://www.toolique.in/tool/emi-calculator
-- HRA Calculator: https://www.toolique.in/tool/hra-calculator
-- Inflation & FD Calculator: https://www.toolique.in/tool/fd-calculator
+- Advanced BOQ Calculator India: https://www.toolique.in/civil/advanced-boq-calculator-india
+- GST Calculator India: https://www.toolique.in/calculators/gst-calculator
+- Income Tax Calculator India: https://www.toolique.in/calculators/income-tax-calculator
+- SIP & Mutual Fund Calculator: https://www.toolique.in/calculators/sip-calculator
+- EMI Calculator: https://www.toolique.in/calculators/emi-calculator
+- HRA Calculator: https://www.toolique.in/calculators/hra-calculator
+- Inflation & FD Calculator: https://www.toolique.in/calculators/fd-calculator
 
 ### Developer & Technical Utilities
 - JSON Formatter & Validator: https://www.toolique.in/tool/json-formatter

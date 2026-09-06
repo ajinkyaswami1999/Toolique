@@ -1,4 +1,4 @@
-﻿import SEO from '../components/SEO';
+import SEO from '../components/SEO';
 import { Layers, CheckCircle2, ShieldAlert, Heart } from 'lucide-react';
 
 export default function About() {
@@ -44,7 +44,7 @@ export default function About() {
             <div>
               <h4 className="font-bold text-slate-800 dark:text-white text-sm">No Accounts or Payments</h4>
               <p className="text-xs text-slate-500 dark:text-slate-450 mt-1 leading-relaxed">
-                There are no subscriptions, registration walls, or credits. Enjoy unrestricted access to all 31 tools instantly.
+                There are no subscriptions, registration walls, or credits. Enjoy unrestricted access to all 270+ tools instantly.
               </p>
             </div>
           </div>
