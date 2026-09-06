@@ -514,29 +514,29 @@ export default function ToolsDirectory() {
 
           {/* Featured Tool Card */}
           {!searchQuery && activeCategory === 'all' && activeCollection === 'all' && (
-            <div className="p-6 rounded-3xl bg-gradient-to-r from-indigo-500/[0.03] to-violet-500/[0.03] border border-indigo-500/10 dark:border-indigo-500/10 space-y-4 text-left animate-fadeIn">
-              <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-                <span className="text-sm">⭐</span> Tool of the Week
+            <div className="p-6 rounded-3xl bg-gradient-to-r from-indigo-500/[0.08] via-purple-500/[0.05] to-teal-500/[0.05] border border-indigo-500/20 dark:border-indigo-500/20 space-y-4 text-left animate-fadeIn">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                <span className="text-sm">🌟</span> Flagship Hero Tool of Toolique
               </div>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1.5 max-w-xl">
                   <h3 className="text-base font-extrabold text-zinc-900 dark:text-white tracking-tight">
-                    SQL Minifier
+                    Building Feasibility & Bye-Law Checker
                   </h3>
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                    Minify and compress SQL queries by removing comments and unnecessary spaces. Ideal for optimizing database payloads and embedding scripts.
+                    Location-aware architectural feasibility assessment. Calculate permissible FAR, ground coverage, setbacks, permissible height, parking ECS, fire NOC, and statutory approvals across 36 States & UTs and 60+ authorities.
                   </p>
                 </div>
                 <div className="shrink-0 flex items-center gap-2">
                   <Link
-                    to="/tool/sql-minifier"
+                    to="/architecture/building-feasibility-checker"
                     onClick={() => {
-                      const sqlTool = toolsList.find(t => t.slug === 'sql-minifier');
-                      if (sqlTool) addToHistory(sqlTool);
+                      const bfcTool = toolsList.find(t => t.slug === 'building-feasibility-checker');
+                      if (bfcTool) addToHistory(bfcTool);
                     }}
                     className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-bold text-xs shadow-sm hover:shadow-indigo-500/10 active:scale-95 transition-all duration-200 cursor-pointer"
                   >
-                    Try SQL Minifier →
+                    Launch Feasibility Engine →
                   </Link>
                 </div>
               </div>

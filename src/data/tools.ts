@@ -10402,4 +10402,81 @@ export const toolsList: Tool[] = [
       }
     ]
   }
+  ,
+  {
+    "id": "BuildingFeasibilityChecker",
+    "slug": "building-feasibility-checker",
+    "name": "Building Feasibility & Bye-Law Checker",
+    "category": "architecture",
+    "subcategory": "Statutory Bye-Laws & Planning",
+    "shortDescription": "Location-aware architectural and construction feasibility tool. Checks FAR/FSI, setbacks, massing, parking ECS, fire safety, and statutory clearances across Indian state bye-laws.",
+    "metaTitle": "Building Feasibility & Bye-Law Checker – NBC 2016 & State Bye-Laws",
+    "metaDescription": "Instant preliminary architectural feasibility assessment. Calculate permissible FAR, ground coverage, setbacks, permissible height, parking ECS, fire NOC, and approvals for Delhi, Haryana, Maharashtra, Karnataka, and other Indian states.",
+    "keywords": [
+      "Building Feasibility Checker",
+      "Building Bye-Law Checker",
+      "NBC 2016 Building Bye Laws",
+      "Haryana Building Code 2017",
+      "Delhi UBBL 2016 Calculator",
+      "Maharashtra UDCPR 2020 FSI",
+      "BBMP Building Bye Laws Bangalore",
+      "TNCDBR Tamil Nadu Building Rules",
+      "Telangana GO 168 Building Rules",
+      "Architectural Feasibility Report",
+      "Setback Calculator India",
+      "Permissible FAR Calculator",
+      "Stilt plus 4 floors rules",
+      "Fire NOC height threshold India",
+      "Parking ECS calculator"
+    ],
+    "icon": "Building2",
+    "howToUse": [
+      "Step 1 (Site Location): Select your State/UT, Planning Authority (e.g. GMDA, DDA, BMC, BBMP, CMDA, GHMC), Master Plan Zone, and fronting road width.",
+      "Step 2 (Plot Dimensions): Enter plot area in your preferred unit (sq.m, sq.ft, Gaj, Guntha, Bigha, Acre). Provide frontage width and depth.",
+      "Step 3 (Proposed Development): Select building occupancy (Residential Plotted, Commercial, Group Housing, etc.), proposed floors, stilt, and basement.",
+      "Step 4 (Site Conditions): Toggle proximity overlays such as Airport funnel (AAI), Highway (NHAI), Railway track (30m), Heritage zone (ASI), or Nallah/Lake buffer.",
+      "Review Feasibility Report: Analyze the executive traffic light status, development controls comparison table, buildable envelope diagram, and fire/accessibility checklist.",
+      "Export & AI Assistant: Ask questions to the Grounded AI Assistant or download a branded architectural feasibility PDF report."
+    ],
+    "faqs": [
+      {
+        "question": "What is the Building Feasibility & Bye-Law Checker?",
+        "answer": "It is an automated architectural feasibility engine that checks your plot parameters against the National Building Code of India (NBC 2016) and State/Municipal Building Bye-Laws (such as Haryana Building Code 2017/2023, Delhi UBBL 2016, Maharashtra UDCPR 2020, BBMP Bengaluru, and TNCDBR 2019) to determine permissible FAR, ground coverage, setbacks, height, parking, and statutory approvals."
+      },
+      {
+        "question": "Does this report constitute a legal building sanction or permit?",
+        "answer": "No. This tool generates a preliminary architectural feasibility and conceptual planning assessment for advisory purposes only. Formal sanctions require structural stability drawings prepared and submitted by a licensed Architect registered with the Council of Architecture (COA) to the competent local municipal authority."
+      },
+      {
+        "question": "How is Base FAR distinguished from Purchasable / Premium FAR?",
+        "answer": "Base FAR is the standard floor space automatically permitted by right on the plot without additional government charges. Purchasable FAR (or Premium FSI / TDR) allows builders to construct additional built-up area up to a statutory ceiling upon payment of prescribed government betterment charges."
+      },
+      {
+        "question": "What triggers mandatory Fire NOC in Indian building bye-laws?",
+        "answer": "Under NBC 2016 Part 4 and State Fire Safety Acts, any building with a height of 15.0 meters or above is classified as a High-Rise structure, which mandates provisional and final Fire NOC, dual emergency fire staircases, and minimum 6m to 12m perimeter fire tender access roads."
+      },
+      {
+        "question": "Is Rainwater Harvesting (RWH) mandatory for residential plots?",
+        "answer": "Yes, under Central Ground Water Authority (CGWA) norms and municipal bye-laws across most Indian states, all plots with an area of 100 sq. meters or greater must provide on-site rainwater harvesting recharge pits or collection tanks."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Hierarchy of Indian Building Regulations",
+        "content": "Building development in India is governed by a hierarchical multi-tier regulatory framework:\n\n" +
+          "1. **National Standard (NBC 2016)**: National Building Code of India published by the Bureau of Indian Standards (SP 7: 2016), setting baseline life safety, structural, accessibility, and environmental standards.\n" +
+          "2. **State Acts & Unified Bye-Laws**: Enactments such as the Maharashtra UDCPR 2020, Haryana Building Code 2017, Delhi UBBL 2016, and Tamil Nadu Combined Development and Building Rules 2019.\n" +
+          "3. **City Master Plans & Development Authorities**: Local zoning regulations issued by bodies like DDA, GMDA, BBMP, CMDA, HMDA, and NOIDA.\n" +
+          "4. **Special Statutory Overlays**: Directives from Airports Authority of India (AAI NOCAS), NHAI, Indian Railways, Archaeological Survey of India (ASI), and National Green Tribunal (NGT)."
+      },
+      {
+        "title": "Core Architectural Development Controls Explained",
+        "content": "• **Ground Coverage (%)**: The maximum percentage of the plot footprint that may be covered by the building structure at ground level.\n" +
+          "• **Floor Area Ratio (FAR / FSI)**: The ratio of total gross built-up area across all floors to the total site plot area.\n" +
+          "• **Statutory Setbacks**: Mandatory open spaces that must be left clear around the front, rear, and sides of the building for natural ventilation, day-lighting, and emergency fire rescue.\n" +
+          "• **Equivalent Car Space (ECS)**: Standard metric for mandatory vehicular parking provisions based on built-up area or dwelling unit counts."
+      }
+    ]
+  }
+
 ];

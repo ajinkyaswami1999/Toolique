@@ -31,7 +31,8 @@ export default function ArchitectureHub() {
 
   // Unified Architecture Ecosystem grouping
   const groupZoning = [
-    ...allArchTools.filter(t => t.subcategory === 'Site Planning' || t.slug === 'plot-area-calculator')
+    ...allArchTools.filter(t => t.id === 'BuildingFeasibilityChecker'),
+    ...allArchTools.filter(t => (t.subcategory === 'Site Planning' || t.subcategory === 'Statutory Bye-Laws & Planning' || t.slug === 'plot-area-calculator') && t.id !== 'BuildingFeasibilityChecker')
   ];
 
   const groupDesign = [

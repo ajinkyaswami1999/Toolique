@@ -66,6 +66,7 @@ const SlabCalculator = lazy(() => import('../tools/SlabCalculator'));
 const FoundationCalculator = lazy(() => import('../tools/FoundationCalculator'));
 
 // Phase 3 - Architecture (7 tools)
+const BuildingFeasibilityChecker = lazy(() => import('../tools/BuildingFeasibilityChecker'));
 const FARFSICalculator = lazy(() => import('../tools/FARFSICalculator'));
 const StaircaseCalculator = lazy(() => import('../tools/StaircaseCalculator'));
 const RoomAreaCalculator = lazy(() => import('../tools/RoomAreaCalculator'));
@@ -631,6 +632,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   PlotAreaCalculator,
   CompoundInterestCalculator,
   IncomeTaxCalculator,
+  BuildingFeasibilityChecker,
 };
 
 const crossSuiteSuggestions: Record<string, { text: string; linkText: string; linkUrl: string; label: string }> = {

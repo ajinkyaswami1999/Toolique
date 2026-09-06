@@ -42,10 +42,16 @@ export default function ToolCard({ tool }: ToolCardProps) {
     } catch (e) {}
   };
 
+  const isHeroTool = tool.id === 'BuildingFeasibilityChecker';
+
   return (
     <Link
       to={getToolCanonicalPath(tool.category, tool.slug)}
-      className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-zinc-900/40 border border-zinc-200/70 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-indigo-500/40 dark:hover:border-indigo-500/40 hover:shadow-[0_8px_30px_rgb(99,102,241,0.03)] dark:hover:shadow-[0_8px_30px_rgb(99,102,241,0.015)] transition-all duration-300 transform hover:-translate-y-0.5"
+      className={`group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-zinc-900/40 border transition-all duration-300 transform hover:-translate-y-0.5 ${
+        isHeroTool
+          ? 'border-indigo-500/50 dark:border-indigo-500/40 shadow-[0_2px_12px_rgba(99,102,241,0.06)] ring-1 ring-indigo-500/20 bg-gradient-to-b from-indigo-500/[0.03] to-transparent'
+          : 'border-zinc-200/70 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-indigo-500/40 dark:hover:border-indigo-500/40'
+      } hover:shadow-[0_8px_30px_rgb(99,102,241,0.03)] dark:hover:shadow-[0_8px_30px_rgb(99,102,241,0.015)]`}
     >
       <div>
         <div className="flex justify-between items-start mb-4">
@@ -53,6 +59,11 @@ export default function ToolCard({ tool }: ToolCardProps) {
             <LucideIcon name={tool.icon} className="w-5 h-5" />
           </div>
           <div className="flex items-center gap-1.5">
+            {isHeroTool && (
+              <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                ★ Hero
+              </span>
+            )}
             {categoryInfo && (
               <span className={`text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md border bg-gradient-to-r ${categoryInfo.colorClass}`}>
                 {categoryInfo.name}

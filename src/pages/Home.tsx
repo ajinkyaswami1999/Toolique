@@ -77,21 +77,61 @@ export default function Home() {
     }
   };
 
-  // Filtered tools for Featured Section
+  // Filtered tools for Featured Section (Ordered by priority)
+  const getOrderedTools = (ids: string[]) => {
+    return ids.map(id => toolsList.find(t => t.id === id)).filter((t): t is typeof toolsList[0] => Boolean(t));
+  };
+
   const trendingTools = useMemo(() => {
-    return toolsList.filter(t => ['GSTCalculator', 'SIPCalculator', 'SQLFormatter', 'JSONFormatter', 'ApiTester', 'ConstructionCostCalculator', 'DerivativeCalculator', 'ImageCompressor'].includes(t.id));
+    return getOrderedTools([
+      'BuildingFeasibilityChecker',
+      'GSTCalculator',
+      'SIPCalculator',
+      'SQLFormatter',
+      'JSONFormatter',
+      'ApiTester',
+      'ConstructionCostCalculator',
+      'DerivativeCalculator'
+    ]);
   }, []);
 
   const devTools = useMemo(() => {
-    return toolsList.filter(t => ['SQLFormatter', 'JSONFormatter', 'JSONCompare', 'JWTDecoder', 'SQLMinifier', 'TimestampConverter', 'CronGenerator', 'HashGenerator'].includes(t.id));
+    return getOrderedTools([
+      'SQLFormatter',
+      'JSONFormatter',
+      'JSONCompare',
+      'JWTDecoder',
+      'SQLMinifier',
+      'TimestampConverter',
+      'CronGenerator',
+      'HashGenerator'
+    ]);
   }, []);
 
   const financeTools = useMemo(() => {
-    return toolsList.filter(t => ['SIPCalculator', 'GSTCalculator', 'IncomeTaxCalculator', 'InHandSalaryCalculator', 'EMICalculator', 'PPFCalculator', 'FDCalculator', 'TDSCalculator'].includes(t.id));
+    return getOrderedTools([
+      'SIPCalculator',
+      'GSTCalculator',
+      'IncomeTaxCalculator',
+      'InHandSalaryCalculator',
+      'EMICalculator',
+      'PPFCalculator',
+      'FDCalculator',
+      'TDSCalculator'
+    ]);
   }, []);
 
   const civilTools = useMemo(() => {
-    return toolsList.filter(t => ['ConstructionCostCalculator', 'ConcreteCalculator', 'PlotAreaCalculator', 'FARFSICalculator', 'CarpetAreaCalculator', 'CementCalculator', 'PlasterCalculator', 'PaintCalculator'].includes(t.id));
+    return getOrderedTools([
+      'BuildingFeasibilityChecker',
+      'ConstructionCostCalculator',
+      'ConcreteCalculator',
+      'PlotAreaCalculator',
+      'FARFSICalculator',
+      'CarpetAreaCalculator',
+      'CementCalculator',
+      'PlasterCalculator'
+    ]);
   }, []);
 
   const getActiveTabTools = () => {
@@ -268,7 +308,7 @@ export default function Home() {
           {/* Popular Search Chips (Single-line) */}
           <div className="flex flex-wrap items-center justify-center gap-1.5 text-[10px] font-bold pt-2 text-zinc-400">
             <span className="uppercase text-[9px] tracking-wider text-zinc-500">Popular:</span>
-            {['GST Invoice', 'SQL Formatter', 'SIP Planner', 'JSON Validator', 'Concrete Mix', 'JWT Decoder', 'Derivative Steps'].map((s, idx) => (
+            {['Building Feasibility', 'GST Invoice', 'SQL Formatter', 'SIP Planner', 'JSON Validator', 'Concrete Mix', 'JWT Decoder'].map((s, idx) => (
               <button
                 key={idx}
                 type="button"
@@ -502,7 +542,7 @@ export default function Home() {
                 featuredTab === 'civil' ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
               }`}
             >
-              🏗️ Civil
+              🏗️ Civil & Architecture
             </button>
           </div>
         </div>
