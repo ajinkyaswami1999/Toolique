@@ -80,18 +80,19 @@ export default function Header() {
     }
   };
 
-  // Initialize theme
+  // Initialize theme (default: light)
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (savedTheme === 'dark' || (!savedTheme && systemTheme) || !savedTheme) {
+    if (savedTheme === 'dark') {
       document.documentElement.classList.add('dark');
       setIsDarkMode(true);
-      if (!savedTheme) localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
       setIsDarkMode(false);
+      if (!savedTheme) {
+        localStorage.setItem('theme', 'light');
+      }
     }
   }, []);
 
