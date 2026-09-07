@@ -290,7 +290,14 @@ export default function BuildingFeasibilityChecker() {
       },
       (err) => {
         setIsDetectingLocation(false);
-        setLocationError(err.message || 'Unable to retrieve your location. Please select manually.');
+        const msg = err.message ? err.message.toLowerCase() : '';
+        if (err.code === 1 || msg.includes('denied') || msg.includes('permissions policy') || msg.includes('disabled')) {
+          setLocationError('Location access was denied or blocked by browser policy. Please allow location access in your browser or select your State, City, and Authority manually below.');
+        } else if (err.code === 3 || msg.includes('timeout')) {
+          setLocationError('Location request timed out. Please select your State, City, and Authority manually below.');
+        } else {
+          setLocationError(err.message || 'Unable to retrieve your location. Please select manually below.');
+        }
       },
       { timeout: 10000, enableHighAccuracy: false }
     );

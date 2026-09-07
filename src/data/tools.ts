@@ -9886,28 +9886,56 @@ export const toolsList: Tool[] = [
   {
     "id": "TestCaseGenerator",
     "slug": "test-case-generator",
-    "name": "Test Case Generator",
+    "name": "Test Case Generator & QA Studio",
     "category": "qa",
-    "shortDescription": "Generate professional QA test cases from feature criteria or customized scenarios.",
-    "metaDescription": "Free online QA Test Case Generator. Create structured test suites with pre-conditions, steps, priorities, and expected outcomes instantly.",
-    "keywords": ["test case generator", "qa test cases", "software testing tools", "jira test cases", "test scenario builder"],
+    "shortDescription": "Enterprise QA Test Case & Execution Studio. Synthesize multi-dimension test suites across 8 QA vectors, track live test runs (Pass/Fail/Blocked), and export to Playwright, Cypress, Gherkin, Postman, Jira CSV, and offline HTML reports.",
+    "metaDescription": "Free online Enterprise QA Test Case Generator & Execution Studio. Create structured test suites with BDD Gherkin, Playwright/Cypress automation scripts, live Pass/Fail test run tracker, Postman collections, and Jira/Zephyr CSV exports.",
+    "keywords": [
+      "test case generator",
+      "qa test cases",
+      "qa test execution tracker",
+      "software testing tools",
+      "jira test cases",
+      "test scenario builder",
+      "gherkin test case generator",
+      "cucumber feature generator",
+      "playwright test generator",
+      "cypress test generator",
+      "postman collection generator",
+      "istqb test case template",
+      "zephyr xray test cases",
+      "qa execution matrix"
+    ],
     "icon": "ShieldCheck",
     "howToUse": [
-      "Choose a standard template (e.g. Login, Payment) or enter a custom feature name.",
-      "Specify optional feature descriptions to customize generated test parameters.",
-      "Review the generated test cases including steps, priority, and expected results.",
-      "Copy the output as Markdown or export it directly to a CSV sheet."
+      "Select an enterprise preset (e.g. E-Commerce Checkout, Aadhaar/PAN KYC, MFA OTP, RBAC Permissions, REST API CRUD, File Upload, Real-Time Chat) or enter custom feature criteria.",
+      "Use the AI Scenario Synthesizer to automatically generate test cases across 8 QA testing dimensions (Happy Path, Negative Validation, Boundary Limits, Security, Network Resilience, Accessibility WCAG, and Concurrency).",
+      "Track live test runs by marking execution status (Untested, Pass, Fail, Blocked) and logging inline defect notes to watch real-time pass-rate metrics.",
+      "Switch between Studio Cards, High-Density Execution Matrix, BDD Gherkin (.feature), and Automation Specs (Playwright TS, Cypress JS, Postman JSON).",
+      "Export ready-to-run test artifacts as Jira/Zephyr/Xray CSV, Cucumber .feature files, or download self-contained offline Interactive HTML test run reports."
     ],
     "faqs": [
       {
-        "question": "Does this tool send my feature details to a server?",
-        "answer": "No. All calculations and test case generation occur entirely in your local browser sandbox. No data is transmitted to our servers."
+        "question": "What testing dimensions are covered in generated test suites?",
+        "answer": "Every generated test suite covers up to 8 core QA dimensions: Functional Happy Paths, Negative Validation, Boundary Value Analysis (BVA), Security & Access Control (RBAC/XSS/SQLi), Network Timeout & 500 Error Recovery, Accessibility (WCAG 2.1 AA keyboard/screen-reader), and Concurrency / Idempotency."
+      },
+      {
+        "question": "Can I track test execution directly inside the browser?",
+        "answer": "Yes! The tool includes a live QA Test Execution tracker. You can toggle test case statuses (Pass, Fail, Blocked, Untested), log defect ticket links, and monitor real-time execution progress and pass-rate percentages."
+      },
+      {
+        "question": "What export formats are supported?",
+        "answer": "You can export suites as Jira / Zephyr / Xray compliant CSV sheets, Cucumber BDD .feature specifications, TypeScript Playwright E2E test specs, JavaScript Cypress test specs, Postman Collection JSON (v2.1), formatted Markdown test plans, and standalone offline Interactive HTML run reports."
+      },
+      {
+        "question": "Does this tool send my proprietary user stories or test data to a server?",
+        "answer": "No. 100% of test case synthesis, heuristic analysis, BDD conversions, and script generation execute strictly within your local browser sandbox in memory. No proprietary requirement data is ever transmitted externally."
       }
     ],
     "sections": [
       {
-        "title": "Structured QA Test Writing",
-        "content": "Writing structured test cases is crucial for QA automation and manual verification. Standard test cases contain title, preconditions, clear steps, and expected results to remove ambiguity during release verification."
+        "title": "Why Standardized Multi-Dimension Test Case Design Matters",
+        "content": "Modern software quality assurance requires testing beyond simple happy-path user flows. Enterprise quality engineering demands systematic verification of validation constraints, security boundary rules, network dropoffs, accessibility standards, and idempotent payment/API interactions. Standardized BDD Gherkin specifications and automated test exports bridge the gap between QA, developers, and business analysts."
       }
     ]
   },
@@ -9916,26 +9944,39 @@ export const toolsList: Tool[] = [
     "slug": "bug-report-generator",
     "name": "Bug Report Generator",
     "category": "qa",
-    "shortDescription": "Create clean, detailed markdown bug reports to submit to Jira, GitHub, or development boards.",
-    "metaDescription": "Generate professional markdown-formatted bug reports with steps, environment configurations, and severity markers instantly.",
-    "keywords": ["bug report generator", "qa bug report", "markdown bug template", "jira bug writer", "qa template"],
+    "shortDescription": "Create single or multi-defect test suites (10-20+ bugs) and batch export to Jira/Excel CSV, unified Markdown, Linear, or JSON in one click.",
+    "metaDescription": "Advanced Bug Report Generator & QA Defect Suite Studio. Generate individual bug tickets or batch test runs (10+ defects), auto-detect client hardware diagnostics, and export all-in-one to Jira CSV, Excel, GitHub GFM, Linear, and Slack.",
+    "keywords": ["bug report generator", "qa bug report", "batch bug report csv", "jira csv bug import", "multi defect suite generator", "markdown bug template", "jira bug ticket generator", "linear bug report", "github issue generator", "defect tracking template", "software testing bug suite"],
     "icon": "ShieldAlert",
     "howToUse": [
-      "Input the bug title, component, severity level, and testing environment details.",
-      "Detail the step-by-step instructions to reproduce the issue.",
-      "State the expected vs actual behaviors, and document any temporary workaround.",
-      "Copy the generated Markdown report or reset the form to start over."
+      "Manage single defect tickets or generate an entire 10-defect QA regression test suite in one click.",
+      "Switch between active bugs in the suite queue to customize titles, steps, severity, and network telemetry.",
+      "Click '1-Click Auto-Detect System' to extract client OS, browser engine, viewport resolution, CPU cores, RAM, and timezone.",
+      "Detail ordered reproduction steps, Expected vs. Actual divergence, workarounds, API request cURL payloads, and stack traces.",
+      "Download all 10-20+ defects in a single consolidated CSV for Jira/Excel, or export as unified Markdown, JSON suite, or HTML report."
     ],
     "faqs": [
       {
-        "question": "Why use a structured bug report generator?",
-        "answer": "Standardizing reports helps engineers identify, isolate, and debug software defects quickly without constant back-and-forth communication."
+        "question": "Can I generate and download 10 to 12 bugs at once without downloading one by one?",
+        "answer": "Yes! Use the 'Generate 10 Sample QA Bugs Suite' or add multiple tickets to your suite queue, then click 'Batch Download Suite' to download all defects in a single consolidated CSV (for Jira/Excel), unified Markdown document, or JSON suite."
+      },
+      {
+        "question": "Is the generated CSV file compatible with Jira Bulk Issue Importer?",
+        "answer": "Yes. The CSV exporter adheres to standard RFC 4180 CSV specifications with dedicated columns for Issue Key, Summary, Issue Type, Severity, Priority, Component, Environment, Steps, Expected vs Actual, and Labels."
+      },
+      {
+        "question": "Is my defect data private?",
+        "answer": "Yes. 100% of defect suite editing, diagnostic telemetry extraction, and file compilation happens locally inside your browser memory. Zero records or credentials are sent to servers."
       }
     ],
     "sections": [
       {
-        "title": "Best Practices in Bug Reporting",
-        "content": "A perfect bug report contains three core pillars: 1. Clean reproducible steps, 2. The exact delta between expected and actual behaviour, 3. Complete system environment variables (browser version, OS, API status)."
+        "title": "Batch Bug Reporting & Test Run Management",
+        "content": "During major release cycles and regression test runs, QA teams log dozens of defects simultaneously. Grouping defects into a unified suite allows QA leads to export all issues in a single Jira-compatible CSV or Markdown digest, drastically cutting triage overhead."
+      },
+      {
+        "title": "Core Pillars of High-Impact Defect Triage",
+        "content": "A high-impact bug report contains three core pillars: 1. Clean, isolated, step-by-step reproduction steps, 2. The exact observable delta between expected and actual behavior, 3. Complete client and system environment telemetry (browser engine, viewport, OS, and network response payloads)."
       }
     ]
   },
@@ -9944,26 +9985,35 @@ export const toolsList: Tool[] = [
     "slug": "test-data-generator",
     "name": "Test Data Generator",
     "category": "qa",
-    "shortDescription": "Generate local mock data records (UUIDs, names, emails, phones, countries) in JSON, CSV, or SQL.",
-    "metaDescription": "Free online Test Data Generator. Create dummy datasets instantly for API testing, database initialization, and UI mock validation.",
-    "keywords": ["mock data generator", "test data generator", "dummy json data", "csv dataset builder", "sql insert generator"],
-    "icon": "FileSpreadsheet",
+    "shortDescription": "Generate high-entropy mock datasets (UUIDs, Indian PAN, Aadhaar, GSTIN, names, emails, telemetry) in JSON, CSV, SQL, or TypeScript.",
+    "metaDescription": "Advanced Mock & Test Data Generator Studio. Generate synthetic datasets with 45+ Indian and global field types, deterministic seed PRNG, and instant JSON, CSV, SQL DDL, NDJSON, and TypeScript exports.",
+    "keywords": ["test data generator", "mock data generator", "dummy json generator", "fake data generator india", "indian test data generator", "sql insert generator", "synthetic test data", "qa mock data studio", "fake user data", "ndjson generator"],
+    "icon": "Database",
     "howToUse": [
-      "Select the data columns/keys you want to include in your dataset.",
-      "Choose the target output format (JSON Array, CSV Sheet, or SQL Inserts).",
-      "Specify the number of rows (up to 1,000 records) to generate.",
-      "Click Generate, then copy or download the output file."
+      "Select an industry template (User Auth, E-Commerce, Indian KYC, API Logs) or build a custom schema in the Schema Builder.",
+      "Choose from 45+ field types including Indian PAN, Aadhaar, GSTIN, IFSC, UPI, UUIDs, IP addresses, and custom picklists.",
+      "Configure target output format (JSON, NDJSON, CSV, SQL multi-row batch, TypeScript, Markdown, XML, or YAML).",
+      "Set deterministic seed for reproducible integration test runs and adjust record volume up to 2,500+ rows.",
+      "Explore records in the Live Interactive Data Grid, copy formatted output, or download dataset files instantly."
     ],
     "faqs": [
       {
-        "question": "Is my mock data private?",
-        "answer": "Yes. This tool operates 100% locally in your browser. Mock datasets are constructed in-memory and never sent to external servers."
+        "question": "Is my mock data private and compliant?",
+        "answer": "Yes. The Test Data Generator executes 100% locally in your browser memory using Web APIs and deterministic PRNG algorithms. Zero records or schemas are transmitted to external servers."
+      },
+      {
+        "question": "What is Deterministic Seed generation?",
+        "answer": "By locking a seed string (e.g. 'release-v2.4'), the generator produces the exact same randomized records every run. This is essential for reproducible unit tests, regression suites, and CI/CD pipelines."
+      },
+      {
+        "question": "Can I generate SQL table schemas (DDL)?",
+        "answer": "Yes. The studio automatically infers PostgreSQL, MySQL, SQLite, and MS SQL Server CREATE TABLE statements matching your exact column data types and constraints."
       }
     ],
     "sections": [
       {
-        "title": "Role of Mock Datasets in Testing",
-        "content": "Developing with rich mock data prevents database pollution and allows QA teams to run automated integration scripts against stable, randomized data profiles."
+        "title": "Why High-Fidelity Mock Data Matters in QA & Development",
+        "content": "Realistic synthetic test data prevents staging database pollution, protects sensitive customer PII under DPDP/GDPR regulations, and allows QA engineers to test edge cases, localized Indian formats (PAN, GSTIN, UPI), and high-concurrency API workloads safely."
       }
     ]
   },
@@ -9972,25 +10022,50 @@ export const toolsList: Tool[] = [
     "slug": "boundary-value-analysis",
     "name": "Boundary Value Analysis (BVA)",
     "category": "qa",
-    "shortDescription": "Identify inputs at boundaries of range rules using standard 3-value boundary test design.",
-    "metaDescription": "Determine range testing boundaries mathematically. Calculate Min-1, Min, Min+1, Max-1, Max, and Max+1 values instantly.",
-    "keywords": ["boundary value analysis", "bva calculator", "qa test design", "black box testing", "range testing boundaries"],
+    "shortDescription": "Enterprise BVA & EP test design studio with multi-variable combinatorial matrices, visual number-line diagrams, and auto-generated unit/E2E test suites in Vitest, Pytest, JUnit, and Playwright.",
+    "metaDescription": "Generate ISTQB 2-Value, 3-Value, and Robust 7/9-Point Boundary Value Analysis (BVA) test suites. Features multi-variable matrices, visual partition line, integer/decimal/date/string/file sizing, and auto unit test code generation.",
+    "keywords": [
+      "boundary value analysis",
+      "bva calculator",
+      "qa test design",
+      "black box testing",
+      "range testing boundaries",
+      "istqb boundary value analysis",
+      "equivalence partitioning calculator",
+      "robust boundary value testing",
+      "combinatorial test matrix",
+      "edge case test generator",
+      "pytest bva generator",
+      "junit boundary testing",
+      "vitest boundary test cases",
+      "playwright boundary testing"
+    ],
     "icon": "Ruler",
     "howToUse": [
-      "Enter the minimum and maximum allowed range numbers on the left control panel.",
-      "Review the dynamic 3-value boundary table displaying computed results.",
-      "Copy the boundary data as a CSV table for test planning."
+      "Select a variable data type (Integer, Decimal/Currency, String Length, Date Range, or File Size) and customize your boundary limits.",
+      "Choose a testing methodology: 2-Value ISTQB Basic, 3-Value Standard/Robust, 9-Point Extreme Outliers, or Equivalence Partitioning.",
+      "Add multiple variables to automatically compute combinatorial test matrices using Single Fault Assumption.",
+      "Inspect the interactive visual number-line partition diagram and real-time generated test values.",
+      "Export ready-to-run automation code in Vitest, Python Pytest, Java JUnit 5, Playwright, or download formatted CSV/JSON/Markdown test suites."
     ],
     "faqs": [
       {
-        "question": "What is Boundary Value Analysis?",
-        "answer": "BVA is a black-box testing technique based on the observation that errors occur most frequently at the extreme limits of input ranges."
+        "question": "What is the difference between 2-value, 3-value, and Robust BVA?",
+        "answer": "2-Value BVA (ISTQB Foundation) tests the exact boundary and the immediate invalid value outside the boundary (2 points per boundary). 3-Value BVA tests just-below, on-boundary, and just-above (Min-1, Min, Min+1 and Max-1, Max, Max+1). Robust BVA includes extreme lower/upper bounds, and Combinatorial BVA tests interactions across multiple input variables."
+      },
+      {
+        "question": "How does BVA handle strings, dates, and file sizes?",
+        "answer": "For strings, BVA calculates exact boundary character lengths and generates real mock string fixtures. For dates, it accounts for exact leap-day (Feb 29), month-end transitions, and time offsets. For file sizes, it computes exact binary byte boundaries (e.g., 5 MB - 1 byte, 5 MB, 5 MB + 1 byte)."
+      },
+      {
+        "question": "Can I export these boundary test cases directly into test frameworks?",
+        "answer": "Yes! The tool automatically synthesizes parameterized unit and E2E test suites in TypeScript (Vitest/Jest), Python (Pytest with @pytest.mark.parametrize), Java (JUnit 5 with @ParameterizedTest), Playwright E2E UI assertions, as well as CSV, JSON, and Markdown tables."
       }
     ],
     "sections": [
       {
-        "title": "Why test boundaries?",
-        "content": "Conditional rules (like '<' vs '<=') are common sources of developer oversights. Testing the exact boundaries checks off both positive limits and invalid edge cases."
+        "title": "Why Boundary Value Analysis Is Critical in Software QA",
+        "content": "Statistical research across software defect databases shows that a disproportionate majority of production bugs occur at boundary conditions and inequality operators ('<' vs '<=', off-by-one errors). BVA provides rigorous mathematical rigor to guarantee that edge conditions, transition thresholds, and extreme inputs are validated before production release."
       }
     ]
   },
