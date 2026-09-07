@@ -36,7 +36,7 @@ export const footerConfig = {
       ]
     },
     categories: {
-      title: "Popular Categories",
+      title: "Suites & Studios",
       links: [
         { label: "Developer Tools", link: "/tools/developer" },
         { label: "Image Tools", link: "/tools/image" },

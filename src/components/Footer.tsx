@@ -260,7 +260,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 3: Popular Categories */}
+        {/* Column 3: Suites & Studios */}
         <div className="lg:col-span-2 space-y-4">
           <h4 className="text-[10px] font-black text-zinc-900 dark:text-zinc-300 tracking-wider uppercase">
             {footerConfig.columns.categories.title}
