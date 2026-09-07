@@ -705,14 +705,17 @@ function generateXmlSitemap() {
   staticPages.forEach(p => {
     let priority = '0.5';
     let freq = 'monthly';
-    if (p.path === 'academy') {
-      priority = '0.9';
+    if (p.path === 'academy' || p.path === 'architecture' || p.path === 'tools') {
+      priority = '0.95';
       freq = 'daily';
     } else if (p.path === 'about-founder') {
       priority = '0.7';
       freq = 'monthly';
     } else if (p.path.startsWith('academy/')) {
       priority = '0.8';
+      freq = 'weekly';
+    } else if (['calculators', 'civil', 'developer', 'qa', '3d-printing', 'math-studio'].includes(p.path)) {
+      priority = '0.9';
       freq = 'weekly';
     }
     urls.push({ loc: `https://www.toolique.in/${p.path}`, changefreq: freq, priority });
@@ -721,7 +724,15 @@ function generateXmlSitemap() {
   // 3. Add dynamic tools
   toolsList.forEach(t => {
     const canonicalPath = getToolCanonicalPath(t.category, t.slug).replace(/^\/+/, '');
-    urls.push({ loc: `https://www.toolique.in/${canonicalPath}`, changefreq: 'weekly', priority: '0.8' });
+    let priority = '0.8';
+    let freq = 'weekly';
+
+    // Flagship Hero Tool: Building Feasibility Checker gets maximum 1.0 priority and daily crawling
+    if (t.id === 'BuildingFeasibilityChecker' || t.slug === 'building-feasibility-checker') {
+      priority = '1.0';
+      freq = 'daily';
+    }
+    urls.push({ loc: `https://www.toolique.in/${canonicalPath}`, changefreq: freq, priority });
   });
 
   // 4. Add academy categories
