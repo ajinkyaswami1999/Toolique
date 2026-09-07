@@ -268,9 +268,9 @@ export default function Footer() {
           <ul className="space-y-2.5 text-xs font-semibold">
             {footerConfig.columns.categories.links.map((link, idx) => (
               <li key={idx}>
-                <a href={link.link} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:translate-x-0.5 duration-200">
+                <Link to={link.link} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:translate-x-0.5 duration-200">
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

@@ -38,16 +38,15 @@ export const footerConfig = {
     categories: {
       title: "Suites & Studios",
       links: [
-        { label: "Developer Tools", link: "/tools/developer" },
-        { label: "Image Tools", link: "/tools/image" },
-        { label: "PDF Tools", link: "/tools/pdf" },
-        { label: "Finance Calculators", link: "/tools/finance" },
+        { label: "Developer Hub", link: "/developer" },
+        { label: "Finance & Tax Hub", link: "/finance" },
         { label: "Architecture & Civil", link: "/architecture" },
-        { label: "Math Studio", link: "/math-studio" },
-        { label: "Color Tools", link: "/tools/color" },
-        { label: "Converters", link: "/tools/unit" },
-        { label: "3D Printing", link: "/tools/3d-printing" },
-        { label: "View All Categories", link: "/tools" }
+        { label: "QA Engineering", link: "/qa" },
+        { label: "Learning Academy", link: "/academy" },
+        { label: "Symbolic Math Studio", link: "/math-studio" },
+        { label: "3D Maker Studio", link: "/3d-print-studio" },
+        { label: "AI Studio", link: "/ai" },
+        { label: "Code Playground", link: "/playground" }
       ]
     },
     company: {
