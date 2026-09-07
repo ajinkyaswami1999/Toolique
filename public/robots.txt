@@ -4,6 +4,7 @@ Allow: /
 # Prevent indexing of duplicate query-parameter URLs
 # (search results and filtered views are handled by canonical tags)
 Disallow: /*?q=
+Disallow: /*?search=
 Disallow: /*?category=
 Disallow: /*?view=
 

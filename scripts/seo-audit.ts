@@ -113,6 +113,10 @@ function runAudit() {
     const content = fs.readFileSync(filePath, 'utf8');
     const relativePath = path.relative(DIST_DIR, filePath);
 
+    // Check if this is a static redirect shell
+    const isRedirect = content.includes('http-equiv="refresh"');
+    const is404 = relativePath.includes('404');
+
     // Verify Title
     const titleMatch = content.match(/<title>([^<]*)<\/title>/i);
     if (!titleMatch || !titleMatch[1].trim()) {
@@ -156,8 +160,8 @@ function runAudit() {
         });
       }
       
-      // Verify Sitemap alignment
-      if (sitemapUrls.length > 0 && !sitemapUrls.includes(canonicalUrl)) {
+      // Verify Sitemap alignment (only for non-redirect, non-404 canonical indexable pages)
+      if (!isRedirect && !is404 && sitemapUrls.length > 0 && !sitemapUrls.includes(canonicalUrl)) {
         issuesList.push({
           file: relativePath,
           type: 'Sitemap Coverage',
@@ -183,6 +187,11 @@ function runAudit() {
         severity: 'medium',
         message: `Multiple H1 headers detected (${h1Count} found). Expected exactly one H1 header.`
       });
+    }
+
+    // If it's a static redirect shell, it has passed all redirect checks
+    if (isRedirect) {
+      return;
     }
 
     // Pre-rendering verification: check if body contains HTML in root

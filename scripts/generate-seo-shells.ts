@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { toolsList } from '../src/data/tools';
+import { toolsList, Tool } from '../src/data/tools';
 import { categories } from '../src/data/categories';
 import { academyCategories } from '../src/features/academy/data/categories';
 import { sqlQuestions } from '../src/features/academy/data/questions/sql';
@@ -82,7 +82,7 @@ const websiteSchema = {
   },
   'potentialAction': {
     '@type': 'SearchAction',
-    'target': 'https://www.toolique.in/?search={search_term_string}',
+    'target': 'https://www.toolique.in/tools?q={search_term_string}',
     'query-input': 'required name=search_term_string'
   }
 };
@@ -100,6 +100,577 @@ if (!fs.existsSync(TEMPLATE_PATH)) {
 
 const template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
 
+export function getToolCanonicalPath(category: string, slug: string): string {
+  if (category === 'civil') {
+    return `civil/${slug}`;
+  } else if (category === 'architecture') {
+    return `architecture/${slug}`;
+  } else if (['developer', 'web'].includes(category)) {
+    return `developer/${slug}`;
+  } else if (category === 'qa') {
+    return `qa/${slug}`;
+  } else {
+    return `calculators/${slug}`;
+  }
+}
+
+export function getCategoryCanonicalPath(category: string): string {
+  if (category === 'civil') {
+    return `civil`;
+  } else if (category === 'architecture') {
+    return `architecture`;
+  } else if (['developer', 'web'].includes(category)) {
+    return `developer`;
+  } else if (category === 'qa') {
+    return `qa`;
+  } else {
+    return `calculators`;
+  }
+}
+
+// Helper to write static pre-rendered shell
+function generateShell(
+  routePath: string,
+  title: string,
+  description: string,
+  keywords: string[],
+  schemaMarkup?: object,
+  bodyContentOverride?: string
+) {
+  const cleanPath = routePath.replace(/^\/+|\/+$/g, '');
+  const fullUrl = cleanPath === '' ? 'https://www.toolique.in/' : `https://www.toolique.in/${cleanPath}`;
+  let html = template.replace(/<script\s+type="application\/ld\+json">[\s\S]*?<\/script>/gi, '');
+
+  // 1. Replace metadata
+  html = html.replace(/<title>[^<]*<\/title>/i, `<title>${title}</title>`);
+  html = html.replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${description}" />`);
+
+  // Replace canonical link tag with page-specific URL
+  html = html.replace(/<link rel="canonical"[^>]*\/?>/i, `<link rel="canonical" href="${fullUrl}" />`);
+
+  if (keywords.length > 0) {
+    const keywordsMeta = `<meta name="keywords" content="${keywords.join(', ')}" />`;
+    html = html.replace('</head>', `    ${keywordsMeta}\n  </head>`);
+  }
+
+  // 2. Replace Open Graph tags
+  html = html.replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${title}" />`);
+  html = html.replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${description}" />`);
+  html = html.replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${fullUrl}" />`);
+
+  // 3. Replace Twitter tags (upgrade card type to summary_large_image)
+  html = html.replace(/<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:card" content="summary_large_image" />`);
+  html = html.replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${title}" />`);
+  html = html.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${description}" />`);
+  html = html.replace(/<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:url" content="${fullUrl}" />`);
+
+  // 4. Inject JSON-LD Schema
+  const targetSchema: any = schemaMarkup 
+    ? JSON.parse(JSON.stringify(schemaMarkup)) 
+    : { '@context': 'https://schema.org', '@graph': [] };
+
+  if (!targetSchema['@graph']) {
+    targetSchema['@graph'] = [];
+  }
+
+  // Merge global entity templates avoiding duplicated @id references
+  globalEntities.forEach(entity => {
+    if (!targetSchema['@graph'].some((existing: any) => existing['@id'] === entity['@id'])) {
+      targetSchema['@graph'].push(entity);
+    }
+  });
+
+  const schemaScript = `
+    <!-- JSON-LD Structured Data for this specific page -->
+    <script type="application/ld+json">
+    ${JSON.stringify(targetSchema, null, 2)}
+    </script>
+  </head>`;
+  html = html.replace('</head>', schemaScript);
+
+  // 5. Populate body loading state with indexable HTML content
+  const rootContent = bodyContentOverride || `
+    <div id="root">
+      <div style="padding: 40px; max-width: 800px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #333;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px; color: #111;">${title.split(' | ')[0]}</h1>
+        <p style="font-size: 1.2rem; color: #666; margin-bottom: 20px;">${description}</p>
+        <div style="background: #f9f9f9; border: 1px solid #eee; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+          <p style="margin: 0; font-weight: bold; color: #555;">Loading interactive calculator...</p>
+          <p style="margin: 5px 0 0 0; color: #888; font-size: 0.9rem;">Please enable JavaScript if it is disabled in your browser.</p>
+        </div>
+      </div>
+    </div>`;
+  html = html.replace(/<div id="root">[\s\S]*?<\/div>/i, rootContent);
+
+  // Write file
+  const targetDir = path.join(DIST_DIR, cleanPath);
+  fs.mkdirSync(targetDir, { recursive: true });
+  fs.writeFileSync(path.join(targetDir, 'index.html'), html, 'utf8');
+}
+
+// Helper to write static redirect shell for legacy URLs
+function generateRedirectShell(fromPath: string, canonicalPath: string, name?: string) {
+  const cleanFrom = fromPath.replace(/^\/+|\/+$/g, '');
+  const cleanTo = canonicalPath.replace(/^\/+|\/+$/g, '');
+  const toUrl = `https://www.toolique.in/${cleanTo}`;
+  const label = name || 'Resource';
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting to ${label} | Toolique</title>
+  <meta name="description" content="Redirecting to ${label} on Toolique. Explore 270+ free privacy-focused calculators and developer tools." />
+  <link rel="canonical" href="${toUrl}" />
+  <meta http-equiv="refresh" content="0; url=${toUrl}" />
+  <meta name="robots" content="noindex, follow" />
+  <meta property="og:title" content="Redirecting to ${label} | Toolique" />
+  <meta property="og:description" content="Redirecting to ${label} on Toolique." />
+  <meta property="og:url" content="${toUrl}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Redirecting to ${label} | Toolique" />
+  <script>
+    window.location.replace("${toUrl}");
+  </script>
+</head>
+<body style="font-family: system-ui, -apple-system, sans-serif; padding: 40px 20px; text-align: center; color: #334155; background: #f8fafc;">
+  <div id="root">
+    <h1 style="font-size: 1.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 700;">Redirecting to ${label}...</h1>
+    <p style="color: #475569; font-size: 1rem; margin-bottom: 16px;">This resource has permanently moved to <a href="${toUrl}" style="color: #4f46e5; text-decoration: underline; font-weight: 600;">${toUrl}</a>.</p>
+    <p style="color: #94a3b8; font-size: 0.875rem;">If you are not redirected automatically, click the link above.</p>
+  </div>
+</body>
+</html>`;
+
+  const targetDir = path.join(DIST_DIR, cleanFrom);
+  fs.mkdirSync(targetDir, { recursive: true });
+  fs.writeFileSync(path.join(targetDir, 'index.html'), html, 'utf8');
+}
+
+// Render tool grid item
+function renderToolCardHtml(tool: Tool): string {
+  const canonicalPath = getToolCanonicalPath(tool.category, tool.slug);
+  return `
+    <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s ease;">
+      <div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 0; margin-bottom: 8px;">
+          <a href="/${canonicalPath}" style="color: #0f172a; text-decoration: none;">${tool.name}</a>
+        </h3>
+        <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 16px; line-height: 1.5;">${tool.shortDescription}</p>
+      </div>
+      <a href="/${canonicalPath}" style="color: #4f46e5; font-size: 0.875rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+        Open Calculator &rarr;
+      </a>
+    </article>`;
+}
+
+// Render FAQs section
+function renderFaqsHtml(faqs: { question: string; answer: string }[]): string {
+  if (!faqs || faqs.length === 0) return '';
+  return `
+    <section style="margin-top: 48px; border-top: 1px solid #e2e8f0; padding-top: 36px;">
+      <h2 style="font-size: 1.6rem; color: #0f172a; margin-bottom: 20px; font-weight: 800;">Frequently Asked Questions</h2>
+      <dl style="line-height: 1.8;">
+        ${faqs.map(faq => `
+          <div style="margin-bottom: 20px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px 22px; border-radius: 10px;">
+            <dt style="font-weight: 700; color: #0f172a; font-size: 1.05rem;">${faq.question}</dt>
+            <dd style="margin-left: 0; color: #475569; margin-top: 6px; font-size: 0.95rem;">${faq.answer}</dd>
+          </div>
+        `).join('')}
+      </dl>
+    </section>`;
+}
+
+// ------------------------------------------------------------------------------------------------
+// 1. Static Hub Pages with Rich Content
+// ------------------------------------------------------------------------------------------------
+
+// QA Hub Page
+const qaTargetSlugs = [
+  'test-case-generator', 'bug-report-generator', 'boundary-value-analysis',
+  'equivalence-partitioning', 'test-data-generator', 'xpath-tester',
+  'api-tester', 'json-formatter', 'json-validator', 'json-compare',
+  'jwt-decoder', 'regex-tester', 'test-scenario-generator', 'api-response-comparator'
+];
+const qaTools = toolsList.filter(t => qaTargetSlugs.includes(t.slug) || t.category === 'qa');
+
+const qaFaqs = [
+  {
+    question: 'What is the difference between Boundary Value Analysis (BVA) and Equivalence Partitioning (EP)?',
+    answer: 'Equivalence Partitioning divides input data range classes into valid and invalid groups, assuming all values in a group behave similarly. Boundary Value Analysis focuses on testing the edges (boundaries) of these groups (e.g. min, min-1, max, max+1), as programming errors typically occur at the boundaries.'
+  },
+  {
+    question: 'How do I evaluate XPath and CSS selectors for test automation?',
+    answer: 'Use the XPath Tester to write and evaluate element selectors against your HTML layouts. This helps you verify that your Selenium or Playwright locators are unique and target the correct node before writing your test automation scripts.'
+  },
+  {
+    question: 'Why should I perform JSON schema validation locally?',
+    answer: 'Validating and formatting JSON schemas client-side prevents sensitive API requests and responses from being sent over the network to external formatting servers, maintaining data privacy in a secure browser sandbox.'
+  },
+  {
+    question: 'How do I decode and verify JWT authorization tokens?',
+    answer: 'Use the JWT Decoder to inspect the header and payload signature sections of your bearer authorization tokens. This allows you to verify token expiration timestamps, permissions scopes, and user details in local environments.'
+  }
+];
+
+const qaBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>QA Workspace</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">QA Testing Case & Mock Data Generators</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Professional browser-based QA automation and manual testing tools. Generate detailed test cases, mock datasets, bug reports, calculate boundary limits, and evaluate XPath selectors securely client-side.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${qaTools.map(renderToolCardHtml).join('')}
+      </div>
+
+      ${renderFaqsHtml(qaFaqs)}
+    </div>
+  </div>`;
+
+const qaSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/qa#collection',
+      'name': 'QA Testing Case & Mock Data Generators',
+      'description': 'QA automation and manual testing tools. Generate test cases, mock datasets, bug reports, boundary limits, and evaluate XPath selectors.',
+      'url': 'https://www.toolique.in/qa',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': 'QA Testing Suite Directory',
+        'numberOfItems': qaTools.length,
+        'itemListElement': qaTools.map((t, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': t.name,
+          'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/qa#faq',
+      'mainEntity': qaFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': faq.answer
+        }
+      }))
+    }
+  ]
+};
+
+// Architecture Hub Page
+const archTools = toolsList.filter(t => t.category === 'architecture' || t.category === 'civil' || t.category === 'interior');
+const archFaqs = [
+  {
+    question: 'What is Floor Space Index (FSI) & Floor Area Ratio (FAR)?',
+    answer: 'FSI (used in South/West India) and FAR (used in North India) represent the ratio of the total built-up area of a building to the total plot area. Formula: FSI = Total Built-up Area / Plot Area. Permissible FSI depends on local municipal regulations and access road width.'
+  },
+  {
+    question: 'How are building setbacks calculated under NBC India & Unified DCR?',
+    answer: 'Building setbacks specify the mandatory open spaces required at the front, rear, and sides of a plot. Under NBC 2016 and state DCR guidelines, front setbacks are determined primarily by the abutting road width, while side and rear setbacks increase with the proposed building height.'
+  },
+  {
+    question: 'How do I calculate concrete, cement, sand, and steel quantities for construction?',
+    answer: 'Concrete mix quantities are derived using nominal volume ratios (e.g. M20 1:1.5:3). Multiply the wet concrete volume by 1.54 to convert to dry volume, then divide by the sum of parts to determine cement bags, sand cubic feet/meters, and aggregate requirements.'
+  }
+];
+
+const archBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Architecture & Civil Suite</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Architecture Calculators & Space Planners</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Comprehensive architecture and civil engineering calculation suite. Estimate floor area ratios (FAR/FSI), setback distances, plot coverage, staircase dimensions, civil quantities, and structural material budgets.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${archTools.map(renderToolCardHtml).join('')}
+      </div>
+
+      ${renderFaqsHtml(archFaqs)}
+    </div>
+  </div>`;
+
+const archSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/architecture#collection',
+      'name': 'Architecture Calculators & Space Planners',
+      'description': 'Estimate floor area ratios (FAR/FSI), setback distances, carpet area, plot area, room sizes, and building clearance codes.',
+      'url': 'https://www.toolique.in/architecture',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': 'Architecture & Civil Tools Directory',
+        'numberOfItems': archTools.length,
+        'itemListElement': archTools.map((t, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': t.name,
+          'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/architecture#faq',
+      'mainEntity': archFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': faq.answer
+        }
+      }))
+    }
+  ]
+};
+
+// Developer Hub Page
+const devTools = toolsList.filter(t => t.category === 'developer' || t.category === 'web' || t.category === 'security');
+const devFaqs = [
+  {
+    question: 'Are code formatting and token decoding operations secure?',
+    answer: 'Yes. All developer formatters, JWT decoders, SQL utilities, and cryptographic hash generators operate 100% client-side in your browser. No source code, payload data, or secret keys are transmitted to any server.'
+  },
+  {
+    question: 'How do I test and debug regular expressions?',
+    answer: 'The Regex Tester provides real-time pattern matching with syntax highlighting, group capture extractions, flag toggles (g, i, m, s), and explanation guides for complex expressions.'
+  },
+  {
+    question: 'Can I format and minify SQL queries for production?',
+    answer: 'Yes. The SQL Formatter indents complex JOINs, CTEs, subqueries, and window functions for readability, while the SQL Minifier strips unnecessary whitespace and comments for lightweight query payloads.'
+  }
+];
+
+const devBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Developer Suite</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Developer Utilities & Code Formatters</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        High-performance developer tools running locally in your browser. Format SQL, beautify JSON, validate XML and YAML, decode JWT signatures, test regex patterns, and encode or decode URL and Base64 strings.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${devTools.map(renderToolCardHtml).join('')}
+      </div>
+
+      ${renderFaqsHtml(devFaqs)}
+    </div>
+  </div>`;
+
+const devSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/developer#collection',
+      'name': 'Developer Utilities & Code Formatters',
+      'description': 'Online developer utilities. Format SQL, beautify JSON, validate XML/YAML, decode JWT, test regex, and encode/decode URL/base64.',
+      'url': 'https://www.toolique.in/developer',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': 'Developer Utilities Directory',
+        'numberOfItems': devTools.length,
+        'itemListElement': devTools.map((t, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': t.name,
+          'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/developer#faq',
+      'mainEntity': devFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': faq.answer
+        }
+      }))
+    }
+  ]
+};
+
+// Calculators Hub Page
+const generalCalcTools = toolsList.filter(t => t.category === 'finance' || t.category === 'health' || t.category === 'datetime' || t.category === 'unit' || t.category === 'business');
+const calcFaqs = [
+  {
+    question: 'How does the Indian GST Calculator work?',
+    answer: 'The GST Calculator allows you to add or remove GST from any transaction amount across 5%, 12%, 18%, and 28% tax slabs. It automatically breaks down CGST and SGST for intra-state sales or IGST for inter-state transactions.'
+  },
+  {
+    question: 'How is compound interest and SIP returns calculated?',
+    answer: 'SIP returns are calculated using the Future Value of an Annuity formula: FV = P × [((1 + i)^n - 1) / i] × (1 + i), where P is monthly investment, i is monthly return rate, and n is total months.'
+  }
+];
+
+const calcBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Calculators Hub</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Free Online Calculators - Finance, Tax, Health & Units</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Explore free online calculators for GST, SIP, EMI, compound interest, income tax, date differences, age, BMI, and general unit conversions. Fast, private, and ad-free.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${generalCalcTools.map(renderToolCardHtml).join('')}
+      </div>
+
+      ${renderFaqsHtml(calcFaqs)}
+    </div>
+  </div>`;
+
+const calcSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/calculators#collection',
+      'name': 'Free Online Calculators - Finance, Tax, Health & Units',
+      'description': 'Free online calculators for GST, SIP, EMI, compound interest, income tax, date differences, age, BMI, and general calculations.',
+      'url': 'https://www.toolique.in/calculators',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': 'Calculators Directory',
+        'numberOfItems': generalCalcTools.length,
+        'itemListElement': generalCalcTools.map((t, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': t.name,
+          'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/calculators#faq',
+      'mainEntity': calcFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': faq.answer
+        }
+      }))
+    }
+  ]
+};
+
+// 3D Printing Studio Hub Page
+const threeDTools = toolsList.filter(t => t.category === '3d-printing');
+const threeDFaqs = [
+  {
+    question: 'How do I calculate 3D printing filament cost and selling price?',
+    answer: 'Filament cost is calculated by dividing spool price by total spool weight and multiplying by model weight in grams. The selling price adds electricity cost, machine depreciation, labor time, and desired profit markup.'
+  },
+  {
+    question: 'How does STL Volume and Resin Weight estimation work?',
+    answer: 'The STL Volume Calculator parses binary and ASCII STL mesh files in your browser using signed tetrahedron volumes to calculate exact displacement in cubic centimeters (cm³) and grams based on material density.'
+  }
+];
+
+const threeDBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>3D Print Studio</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">3D Printing Cost & Filament Calculators</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Dedicated 3D printing calculator suite for makers and print farms. Calculate filament costs, print pricing, resin volume, Bambu Lab multi-color flush waste, and HueForge layer heights.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${threeDTools.map(renderToolCardHtml).join('')}
+      </div>
+
+      ${renderFaqsHtml(threeDFaqs)}
+    </div>
+  </div>`;
+
+// Math Studio Hub Page
+const mathTools = toolsList.filter(t => t.category === 'math-studio');
+const mathFaqs = [
+  {
+    question: 'What math calculators are available in Math Studio?',
+    answer: 'Math Studio provides matrix arithmetic solvers, polynomial root finders, derivative and integral calculators, 2D and 3D geometry solvers, descriptive statistics, and probability distribution curves.'
+  },
+  {
+    question: 'Are matrix calculations performed locally in the browser?',
+    answer: 'Yes. All matrix determinants, inversions, eigenvalues, and system of linear equations are computed instantly on your device without server latency.'
+  }
+];
+
+const mathBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Math Studio</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Advanced Math Studio & Geometry Solvers</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Explore 22 premium, browser-based calculators covering equation solving, matrix arithmetic, descriptive statistics, 2D/3D geometry, coordinate grids, and probability curves.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${mathTools.map(renderToolCardHtml).join('')}
+      </div>
+
+      ${renderFaqsHtml(mathFaqs)}
+    </div>
+  </div>`;
+
+// Tools Directory Page
+const toolsDirectoryBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Tools Directory</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Free Online Tools & Professional Calculators</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Find the right tool instantly. Browse our complete directory of 270+ free online developer tools, financial calculators, unit converters, civil estimators, and text utilities.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${toolsList.map(renderToolCardHtml).join('')}
+      </div>
+    </div>
+  </div>`;
+
+// Static Pages Map
 const staticPages = [
   {
     path: '404',
@@ -141,13 +712,54 @@ const staticPages = [
     path: 'math-studio',
     title: 'Advanced Math Studio | Toolique',
     description: 'Explore 22 premium, browser-based calculators covering equation solving, matrix arithmetic, descriptive statistics, 2D/3D geometry, coordinate grids, and probability curves.',
-    keywords: ['math studio', 'matrix solver', 'calculus calculator']
+    keywords: ['math studio', 'matrix solver', 'calculus calculator'],
+    bodyHtml: mathBodyHtml
   },
   {
     path: '3d-print-studio',
     title: '3D Print Studio | Toolique',
     description: 'Free 3D printing calculators for filament cost, print pricing, resin, print farms, Bambu Lab, HueForge, STL volume, electricity cost, and print profit.',
-    keywords: ['3d printing calculator', 'filament cost', 'maker tools']
+    keywords: ['3d printing calculator', 'filament cost', 'maker tools'],
+    bodyHtml: threeDBodyHtml
+  },
+  {
+    path: '3d-printing',
+    title: '3D Printing cost & filament calculators | Toolique',
+    description: 'Dedicated 3D printing calculator tools for cost calculations, filament weight estimation, AMS slot planning, and resin volumes.',
+    keywords: ['3d printing cost', 'filament calculator', 'maker settings'],
+    bodyHtml: threeDBodyHtml
+  },
+  {
+    path: 'calculators',
+    title: 'Free Online Calculators - Finance, Age, Tax, BMI | Toolique',
+    description: 'Free online calculators for GST, SIP, EMI, compound interest, income tax, date differences, age, BMI, and general calculations.',
+    keywords: ['calculators', 'free calculators', 'gst calculator', 'sip calculator', 'emi calculator', 'age calculator'],
+    schemaMarkup: calcSchema,
+    bodyHtml: calcBodyHtml
+  },
+  {
+    path: 'architecture',
+    title: 'Architecture Calculators & Space Planners | Toolique',
+    description: 'Estimate floor area ratios (FAR/FSI), setback distances, carpet area, plot area, room sizes, and building clearance codes.',
+    keywords: ['architecture calculators', 'far calculator', 'setback calculator', 'carpet area calculator'],
+    schemaMarkup: archSchema,
+    bodyHtml: archBodyHtml
+  },
+  {
+    path: 'developer',
+    title: 'Developer Utilities & Code Formatters | Toolique',
+    description: 'Online developer utilities. Format SQL, beautify JSON, validate XML/YAML, decode JWT, test regex, and encode/decode URL/base64.',
+    keywords: ['developer tools', 'json formatter', 'sql formatter', 'jwt decoder', 'uuid generator'],
+    schemaMarkup: devSchema,
+    bodyHtml: devBodyHtml
+  },
+  {
+    path: 'qa',
+    title: 'QA Testing Case & Mock Data Generators | Toolique',
+    description: 'QA automation and manual testing tools. Generate test cases, mock datasets, bug reports, boundary limits, and evaluate XPath selectors.',
+    keywords: ['qa tools', 'test case generator', 'bug report generator', 'test data generator', 'xpath tester'],
+    schemaMarkup: qaSchema,
+    bodyHtml: qaBodyHtml
   },
   {
     path: 'about-founder',
@@ -176,9 +788,8 @@ const staticPages = [
             'https://github.com/ajinkyaswami1999',
             'https://www.linkedin.com/in/ajinkya-swami-82751b191/',
             'https://www.instagram.com/ajinkyaswami.in/',
-            'https://www.instagram.com/voxelique/',
-            'https://www.toolique.in',
-            'https://voxelique.com'
+            'https://voxelique.com',
+            'https://www.instagram.com/voxelique/'
           ],
           'worksFor': [
             { '@type': 'Organization', 'name': 'Toolique', 'url': 'https://www.toolique.in' },
@@ -256,6 +867,7 @@ const staticPages = [
     title: 'Free Online Tools & Professional Calculators | Toolique',
     description: 'Find the right tool instantly. Browse our complete directory of free online developer tools, financial calculators, unit converters, civil estimators, and text utilities.',
     keywords: ['online tools', 'free calculators', 'developer tools', 'utility directory'],
+    bodyHtml: toolsDirectoryBodyHtml,
     schemaMarkup: {
       '@context': 'https://schema.org',
       '@graph': [
@@ -268,170 +880,27 @@ const staticPages = [
           'about': {
             '@type': 'ItemList',
             'name': 'Toolique Product Catalog',
-            'itemListElement': toolsList.slice(0, 15).map((t, idx) => ({
+            'itemListElement': toolsList.slice(0, 25).map((t, idx) => ({
               '@type': 'ListItem',
               'position': idx + 1,
-              'url': `https://www.toolique.in/tool/${t.slug}`,
+              'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`,
               'name': t.name
             }))
           }
         }
       ]
     }
-  },
-  {
-    path: '3d-printing',
-    title: '3D Printing cost & filament calculators | Toolique',
-    description: 'Dedicated 3D printing calculator tools for cost calculations, filament weight estimation, AMS slot planning, and resin volumes.',
-    keywords: ['3d printing cost', 'filament calculator', 'maker settings']
-  },
-  {
-    path: 'calculators',
-    title: 'Free Online Calculators - Finance, Age, Tax, BMI | Toolique',
-    description: 'Free online calculators for GST, SIP, EMI, compound interest, income tax, date differences, age, BMI, and general calculations.',
-    keywords: ['calculators', 'free calculators', 'gst calculator', 'sip calculator', 'emi calculator', 'age calculator']
-  },
-  {
-    path: 'architecture',
-    title: 'Architecture Calculators & Space Planners | Toolique',
-    description: 'Estimate floor area ratios (FAR/FSI), setback distances, carpet area, plot area, room sizes, and building clearance codes.',
-    keywords: ['architecture calculators', 'far calculator', 'setback calculator', 'carpet area calculator']
-  },
-  {
-    path: 'civil',
-    title: 'Civil Engineering & Construction Material Calculators | Toolique',
-    description: 'Estimate concrete mixes, cement bags, sand volumes, bricks, steel weights, plastering materials, and construction costs online.',
-    keywords: ['civil calculators', 'concrete calculator', 'cement bags estimator', 'construction cost calculator']
-  },
-  {
-    path: 'developer',
-    title: 'Developer Utilities & Code Formatters | Toolique',
-    description: 'Online developer utilities. Format SQL, beautify JSON, validate XML/YAML, decode JWT, test regex, and encode/decode URL/base64.',
-    keywords: ['developer tools', 'json formatter', 'sql formatter', 'jwt decoder', 'uuid generator']
-  },
-  {
-    path: 'qa',
-    title: 'QA Testing Case & Mock Data Generators | Toolique',
-    description: 'QA automation and manual testing tools. Generate test cases, mock datasets, bug reports, boundary limits, and evaluate XPath selectors.',
-    keywords: ['qa tools', 'test case generator', 'bug report generator', 'test data generator', 'xpath tester']
   }
 ];
 
-// Helper to write static pre-rendered shell
-function generateShell(
-  routePath: string,
-  title: string,
-  description: string,
-  keywords: string[],
-  schemaMarkup?: object,
-  bodyContentOverride?: string
-) {
-  const cleanPath = routePath.replace(/^\/+|\/+$/g, '');
-  const fullUrl = cleanPath === '' ? 'https://www.toolique.in/' : `https://www.toolique.in/${cleanPath}`;
-  let html = template.replace(/<script\s+type="application\/ld\+json">[\s\S]*?<\/script>/gi, '');
-
-  // 1. Replace metadata
-  html = html.replace(/<title>[^<]*<\/title>/i, `<title>${title}</title>`);
-  html = html.replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${description}" />`);
-
-  // Replace canonical link tag with page-specific URL
-  html = html.replace(/<link rel="canonical"[^>]*\/?>/i, `<link rel="canonical" href="${fullUrl}" />`);
-
-  if (keywords.length > 0) {
-    const keywordsMeta = `<meta name="keywords" content="${keywords.join(', ')}" />`;
-    html = html.replace('</head>', `    ${keywordsMeta}\n  </head>`);
-  }
-
-  // 2. Replace Open Graph tags
-  html = html.replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${title}" />`);
-  html = html.replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${description}" />`);
-  html = html.replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${fullUrl}" />`);
-
-  // 3. Replace Twitter tags (upgrade card type to summary_large_image)
-  html = html.replace(/<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:card" content="summary_large_image" />`);
-  html = html.replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${title}" />`);
-  html = html.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${description}" />`);
-  html = html.replace(/<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:url" content="${fullUrl}" />`);
-
-  // 4. Inject JSON-LD Schema
-  const targetSchema: any = schemaMarkup 
-    ? JSON.parse(JSON.stringify(schemaMarkup)) 
-    : { '@context': 'https://schema.org', '@graph': [] };
-
-  if (!targetSchema['@graph']) {
-    targetSchema['@graph'] = [];
-  }
-
-  // Merge global entity templates avoiding duplicated @id references
-  globalEntities.forEach(entity => {
-    if (!targetSchema['@graph'].some((existing: any) => existing['@id'] === entity['@id'])) {
-      targetSchema['@graph'].push(entity);
-    }
-  });
-
-  const schemaScript = `
-    <!-- JSON-LD Structured Data for this specific page -->
-    <script type="application/ld+json">
-    ${JSON.stringify(targetSchema, null, 2)}
-    </script>
-  </head>`;
-  html = html.replace('</head>', schemaScript);
-
-  // 5. Populate body loading state with indexable HTML content
-  const rootContent = bodyContentOverride || `
-    <div id="root">
-      <div style="padding: 40px; max-width: 800px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #333;">
-        <h1 style="font-size: 2.5rem; margin-bottom: 10px; color: #111;">${title.split(' | ')[0]}</h1>
-        <p style="font-size: 1.2rem; color: #666; margin-bottom: 20px;">${description}</p>
-        <div style="background: #f9f9f9; border: 1px solid #eee; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-          <p style="margin: 0; font-weight: bold; color: #555;">Loading interactive calculator...</p>
-          <p style="margin: 5px 0 0 0; color: #888; font-size: 0.9rem;">Please enable JavaScript if it is disabled in your browser.</p>
-        </div>
-      </div>
-    </div>`;
-  html = html.replace(/<div id="root">[\s\S]*?<\/div>/i, rootContent);
-
-  // Write file
-  const targetDir = path.join(DIST_DIR, routePath);
-  fs.mkdirSync(targetDir, { recursive: true });
-  fs.writeFileSync(path.join(targetDir, 'index.html'), html, 'utf8');
-  console.log(`Generated SEO shell: ${routePath}/index.html`);
-}
-
 // Generate static pages
 staticPages.forEach((page) => {
-  generateShell(page.path, page.title, page.description, page.keywords, (page as any).schemaMarkup);
+  generateShell(page.path, page.title, page.description, page.keywords, (page as any).schemaMarkup, (page as any).bodyHtml);
 });
 
-function getToolCanonicalPath(category: string, slug: string): string {
-  if (category === 'civil') {
-    return `civil/${slug}`;
-  } else if (category === 'architecture') {
-    return `architecture/${slug}`;
-  } else if (['developer', 'web'].includes(category)) {
-    return `developer/${slug}`;
-  } else if (category === 'qa') {
-    return `qa/${slug}`;
-  } else {
-    return `calculators/${slug}`;
-  }
-}
-
-function getCategoryCanonicalPath(category: string): string {
-  if (category === 'civil') {
-    return `civil`;
-  } else if (category === 'architecture') {
-    return `architecture`;
-  } else if (['developer', 'web'].includes(category)) {
-    return `developer`;
-  } else if (category === 'qa') {
-    return `qa`;
-  } else {
-    return `calculators`;
-  }
-}
-
-// Generate dynamic tool pages
+// ------------------------------------------------------------------------------------------------
+// 2. Generate Individual Tool Pages
+// ------------------------------------------------------------------------------------------------
 toolsList.forEach((tool) => {
   const routePath = getToolCanonicalPath(tool.category, tool.slug);
 
@@ -583,13 +1052,34 @@ toolsList.forEach((tool) => {
   generateShell(routePath, title, description, tool.keywords || [], toolSchema, toolBodyHtml);
 });
 
-// Generate Category pages
+// ------------------------------------------------------------------------------------------------
+// 3. Generate Category Landing Pages (tools/:category)
+// ------------------------------------------------------------------------------------------------
 categories.forEach((cat) => {
   const routePath = `tools/${cat.id}`;
   const title = `${cat.name} Tools & Free Online Calculators | Toolique`;
   const description = cat.description;
   const keywords = [cat.name, `${cat.name.toLowerCase()} calculators`, 'online tools'];
   
+  const categoryTools = toolsList.filter(t => t.category === cat.id);
+
+  const catBodyHtml = `
+    <div id="root">
+      <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+        <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+          <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+          <a href="/tools" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Tools Directory</a> &gt; 
+          <span>${cat.name}</span>
+        </nav>
+        <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">${cat.name} Calculators & Tools</h1>
+        <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">${cat.description}</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+          ${categoryTools.map(renderToolCardHtml).join('')}
+        </div>
+      </div>
+    </div>`;
+
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -598,15 +1088,28 @@ categories.forEach((cat) => {
         '@id': `https://www.toolique.in/${routePath}#collection`,
         'name': `${cat.name} Calculators & Tools`,
         'description': cat.description,
-        'url': `https://www.toolique.in/${routePath}`
+        'url': `https://www.toolique.in/${routePath}`,
+        'mainEntity': {
+          '@type': 'ItemList',
+          'name': `${cat.name} Tools`,
+          'numberOfItems': categoryTools.length,
+          'itemListElement': categoryTools.map((t, idx) => ({
+            '@type': 'ListItem',
+            'position': idx + 1,
+            'name': t.name,
+            'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+          }))
+        }
       }
     ]
   };
 
-  generateShell(routePath, title, description, keywords, schema);
+  generateShell(routePath, title, description, keywords, schema, catBodyHtml);
 });
 
-// Generate Academy Category pages
+// ------------------------------------------------------------------------------------------------
+// 4. Generate Academy Pages
+// ------------------------------------------------------------------------------------------------
 academyCategories.forEach((cat) => {
   const routePath = `academy/${cat.id}`;
   const title = `${cat.name} | Toolique Academy`;
@@ -639,7 +1142,6 @@ const academyQuestions = [
   ...qaQuestions
 ];
 
-// Generate Academy Question pages
 academyQuestions.forEach((q) => {
   const categoryId = q.id.startsWith('sql') ? 'sql' : q.id.startsWith('py') ? 'python' : q.id.startsWith('js') ? 'javascript' : q.id.startsWith('react') ? 'react' : 'qa';
   const category = academyCategories.find(c => c.id === categoryId);
@@ -689,9 +1191,51 @@ academyQuestions.forEach((q) => {
   generateShell(routePath, title, description, keywords, schema);
 });
 
+// ------------------------------------------------------------------------------------------------
+// 5. Generate Static Redirect Shells for Legacy URLs (/tool/:slug, /tools/:slug, aliases)
+// ------------------------------------------------------------------------------------------------
+console.log('Generating static redirect shells for legacy URLs...');
+const categoryIdsSet = new Set(categories.map(c => c.id));
+
+toolsList.forEach((tool) => {
+  const canonicalPath = getToolCanonicalPath(tool.category, tool.slug);
+
+  // 1. /tool/:slug -> canonical
+  generateRedirectShell(`tool/${tool.slug}`, canonicalPath, tool.name);
+
+  // 2. /tools/:slug -> canonical (if not a category slug)
+  if (!categoryIdsSet.has(tool.slug)) {
+    generateRedirectShell(`tools/${tool.slug}`, canonicalPath, tool.name);
+  }
+
+  // 3. /3d-printing/:slug -> /calculators/:slug (if category is 3d-printing)
+  if (tool.category === '3d-printing' && canonicalPath.startsWith('calculators/')) {
+    generateRedirectShell(`3d-printing/${tool.slug}`, canonicalPath, tool.name);
+  }
+
+  // 4. /math-studio/:slug -> /calculators/:slug (if category is math-studio)
+  if (tool.category === 'math-studio' && canonicalPath.startsWith('calculators/')) {
+    generateRedirectShell(`math-studio/${tool.slug}`, canonicalPath, tool.name);
+  }
+});
+
+// Standalone Legacy Aliases Redirects
+generateRedirectShell('civil', 'architecture', 'Architecture & Civil Suite');
+generateRedirectShell('architecture-tools', 'architecture', 'Architecture Suite');
+generateRedirectShell('qa-tools', 'qa', 'QA Workspace');
+generateRedirectShell('finance-tools', 'calculators', 'Finance Calculators');
+generateRedirectShell('developer-tools', 'developer', 'Developer Suite');
+generateRedirectShell('tools/filament-art-maker', 'calculators/filament-art-maker', 'Filament Art Maker');
+generateRedirectShell('3d-printing/filament-art-maker', 'calculators/filament-art-maker', 'Filament Art Maker');
+generateRedirectShell('tools/image-to-filament-art-maker', 'calculators/filament-art-maker', 'Image to Filament Art Maker');
+generateRedirectShell('3d-printing/image-to-filament-art-maker', 'calculators/filament-art-maker', 'Image to Filament Art Maker');
+generateRedirectShell('tools/advanced-boq-calculator-india', 'civil/advanced-boq-calculator-india', 'Advanced BOQ Calculator India');
+
 console.log('SEO pre-rendering shells generation complete!');
 
-// Programmatic XML Sitemap Generator
+// ------------------------------------------------------------------------------------------------
+// 6. Programmatic XML Sitemap Generator
+// ------------------------------------------------------------------------------------------------
 function generateXmlSitemap() {
   console.log('Compiling programmatic sitemap.xml...');
   const todayStr = new Date().toISOString().split('T')[0];
@@ -701,20 +1245,20 @@ function generateXmlSitemap() {
   // 1. Add Homepage
   urls.push({ loc: 'https://www.toolique.in/', changefreq: 'daily', priority: '1.0' });
 
-  // 2. Add static pages
-  staticPages.forEach(p => {
+  // 2. Add static pages (excluding 404)
+  staticPages.filter(p => p.path !== '404').forEach(p => {
     let priority = '0.5';
     let freq = 'monthly';
-    if (p.path === 'academy' || p.path === 'architecture' || p.path === 'tools') {
+    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy'].includes(p.path)) {
       priority = '0.95';
       freq = 'daily';
-    } else if (p.path === 'about-founder') {
-      priority = '0.7';
-      freq = 'monthly';
+    } else if (p.path === 'about-founder' || p.path === '3d-print-studio' || p.path === 'math-studio') {
+      priority = '0.85';
+      freq = 'weekly';
     } else if (p.path.startsWith('academy/')) {
       priority = '0.8';
       freq = 'weekly';
-    } else if (['calculators', 'civil', 'developer', 'qa', '3d-printing', 'math-studio'].includes(p.path)) {
+    } else if (['3d-printing'].includes(p.path)) {
       priority = '0.9';
       freq = 'weekly';
     }
@@ -785,5 +1329,3 @@ if (fs.existsSync(shell404)) {
   fs.copyFileSync(shell404, path.join(DIST_DIR, '404.html'));
   console.log('Synced 404.html to dist/ root');
 }
-
-
