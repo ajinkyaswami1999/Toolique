@@ -35,13 +35,13 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
 
 const getToolBadge = (toolId: string) => {
   if (['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator'].includes(toolId)) {
-    return { text: 'Popular', className: 'bg-emerald-500/10 dark:bg-emerald-500/5 text-emerald-700 dark:text-emerald-400 border-emerald-500/20' };
+    return { text: 'Popular', className: 'bg-pastel-mint/30 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-pastel-mint/60 dark:border-emerald-800/60' };
   }
   if (['FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor'].includes(toolId)) {
-    return { text: 'Trending', className: 'bg-amber-500/10 dark:bg-amber-500/5 text-amber-700 dark:text-amber-400 border-amber-500/20' };
+    return { text: 'Trending', className: 'bg-pastel-peach/30 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-pastel-peach/60 dark:border-amber-800/60' };
   }
   if (['WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator'].includes(toolId)) {
-    return { text: 'New', className: 'bg-indigo-500/10 dark:bg-indigo-500/5 text-indigo-700 dark:text-indigo-400 border-indigo-500/20' };
+    return { text: 'New', className: 'bg-pastel-lavender/30 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border-pastel-lavender/60 dark:border-indigo-800/60' };
   }
   return null;
 };
@@ -447,12 +447,12 @@ export default function ToolsDirectory() {
               <button
                 onClick={() => selectCategory('all')}
                 className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer border ${activeCategory === 'all'
-                    ? 'bg-indigo-500/5 text-indigo-700 dark:text-indigo-400 border-indigo-500/10'
+                    ? 'bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border-pastel-indigo/45 dark:bg-indigo-950/40 dark:border-indigo-800/60 shadow-2xs'
                     : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
                   }`}
               >
                 <span>All Categories</span>
-                {activeCategory === 'all' && <Check className="w-3.5 h-3.5 text-indigo-500" />}
+                {activeCategory === 'all' && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />}
               </button>
 
               {visibleCategories.map((cat) => {
@@ -463,7 +463,7 @@ export default function ToolsDirectory() {
                     key={cat.id}
                     onClick={() => selectCategory(cat.id)}
                     className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer border ${isActive
-                        ? 'bg-indigo-500/5 text-indigo-700 dark:text-indigo-400 border-indigo-500/10'
+                        ? 'bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border-pastel-indigo/45 dark:bg-indigo-950/40 dark:border-indigo-800/60 shadow-2xs'
                         : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
                       }`}
                   >
@@ -471,7 +471,7 @@ export default function ToolsDirectory() {
                       <Icon className="w-3.5 h-3.5" />
                       <span>{cat.name}</span>
                     </div>
-                    {isActive && <Check className="w-3.5 h-3.5 text-indigo-500" />}
+                    {isActive && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />}
                   </button>
                 );
               })}
@@ -479,7 +479,7 @@ export default function ToolsDirectory() {
               {categories.length > 8 && (
                 <button
                   onClick={() => setShowAllCategories(!showAllCategories)}
-                  className="w-full text-left px-3 py-2 rounded-xl text-[11px] font-extrabold text-indigo-650 dark:text-indigo-400 hover:bg-indigo-500/5 dark:hover:bg-indigo-950/20 transition cursor-pointer"
+                  className="w-full text-left px-3 py-2 rounded-xl text-[11px] font-extrabold text-indigo-700 dark:text-indigo-400 hover:bg-pastel-indigo/20 dark:hover:bg-indigo-950/20 transition cursor-pointer"
                 >
                   {showAllCategories ? 'Show less categories ↑' : 'View all categories →'}
                 </button>
@@ -492,9 +492,9 @@ export default function ToolsDirectory() {
         <div className="flex-grow space-y-6">
           {/* Recently Visited Quick row */}
           {recentViews.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 text-left bg-zinc-50 dark:bg-zinc-900/20 p-3.5 rounded-2xl border border-zinc-200/50 dark:border-zinc-850/60">
+            <div className="flex flex-wrap items-center gap-2 text-left bg-zinc-50/80 dark:bg-zinc-900/20 p-3.5 rounded-2xl border border-zinc-200/60 dark:border-zinc-850/60 backdrop-blur-xs">
               <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-550 pl-1 flex items-center gap-1.5 shrink-0">
-                <Clock className="w-3.5 h-3.5" />
+                <Clock className="w-3.5 h-3.5 text-indigo-500" />
                 <span>Recently Visited:</span>
               </span>
               <div className="flex flex-wrap items-center gap-1.5">
@@ -503,7 +503,7 @@ export default function ToolsDirectory() {
                     key={tool.id}
                     to={tool.slug === 'advanced-boq-calculator-india' ? '/tools/advanced-boq-calculator-india' : `/tool/${tool.slug}`}
                     onClick={() => addToHistory(tool)}
-                    className="px-2.5 py-1 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/80 hover:border-indigo-500/30 text-[11px] font-bold text-zinc-650 dark:text-zinc-350 hover:text-indigo-650 dark:hover:text-indigo-455 transition"
+                    className="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/70 dark:border-zinc-800/80 hover:border-pastel-indigo/50 text-[11px] font-bold text-zinc-650 dark:text-zinc-350 hover:text-indigo-700 dark:hover:text-indigo-300 transition shadow-2xs"
                   >
                     {tool.name}
                   </Link>
@@ -514,8 +514,8 @@ export default function ToolsDirectory() {
 
           {/* Featured Tool Card */}
           {!searchQuery && activeCategory === 'all' && activeCollection === 'all' && (
-            <div className="p-6 rounded-3xl bg-gradient-to-r from-indigo-500/[0.08] via-purple-500/[0.05] to-teal-500/[0.05] border border-indigo-500/20 dark:border-indigo-500/20 space-y-4 text-left animate-fadeIn">
-              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            <div className="p-6 rounded-3xl bg-gradient-to-r from-pastel-indigo/20 via-pastel-lavender/15 to-pastel-mint/15 border border-pastel-indigo/40 dark:border-indigo-500/20 space-y-4 text-left animate-fadeIn">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300">
                 <span className="text-sm">🌟</span> Flagship Hero Tool of Toolique
               </div>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -523,7 +523,7 @@ export default function ToolsDirectory() {
                   <h3 className="text-base font-extrabold text-zinc-900 dark:text-white tracking-tight">
                     Building Feasibility & Bye-Law Checker
                   </h3>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                  <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
                     Location-aware architectural feasibility assessment. Calculate permissible FAR, ground coverage, setbacks, permissible height, parking ECS, fire NOC, and statutory approvals across 36 States & UTs and 60+ authorities.
                   </p>
                 </div>
@@ -534,7 +534,7 @@ export default function ToolsDirectory() {
                       const bfcTool = toolsList.find(t => t.slug === 'building-feasibility-checker');
                       if (bfcTool) addToHistory(bfcTool);
                     }}
-                    className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-bold text-xs shadow-sm hover:shadow-indigo-500/10 active:scale-95 transition-all duration-200 cursor-pointer"
+                    className="px-4 py-2.5 rounded-2xl bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-extrabold text-xs shadow-md hover:scale-[1.02] active:scale-98 transition-all duration-200 cursor-pointer"
                   >
                     Launch Feasibility Engine →
                   </Link>

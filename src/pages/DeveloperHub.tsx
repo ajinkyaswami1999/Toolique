@@ -171,22 +171,22 @@ export default function DeveloperHub() {
       />
 
       {/* Hero Panel */}
-      <div className="p-8 md:p-12 rounded-3xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-800/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div className="p-8 md:p-12 rounded-3xl bg-gradient-to-r from-pastel-indigo/20 via-white/50 to-pastel-lavender/15 dark:from-zinc-900/60 dark:via-zinc-900/40 dark:to-zinc-900/60 border border-pastel-indigo/40 dark:border-zinc-800/80 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-xs">
         <div className="space-y-4 max-w-2xl">
           <div className="flex items-center gap-3">
-            <span className="px-3 py-1 rounded-lg bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-extrabold text-[10px] uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-xl bg-pastel-indigo/30 text-indigo-800 dark:text-indigo-300 font-extrabold text-[10px] uppercase tracking-wider border border-pastel-indigo/50 shadow-2xs">
               Developer & Web Suite
             </span>
-            <span className="text-[10px] text-zinc-450 font-bold">34 Browser-Sandboxed Tools</span>
+            <span className="text-[10px] text-zinc-500 font-bold">34 Browser-Sandboxed Tools</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-zinc-905 dark:text-white tracking-tight leading-none">
             Developer Utilities Hub
           </h1>
-          <p className="text-sm text-zinc-505 dark:text-zinc-400 leading-relaxed font-medium">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
             Format SQL, beautify and validate JSON, decode JWTs, test regular expressions, inspect REST API endpoints, and audit technical SEO. 100% private, client-side computation with zero telemetry.
           </p>
         </div>
-        <div className="p-5 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shrink-0 hidden sm:block">
+        <div className="p-5 rounded-3xl bg-pastel-indigo/30 text-indigo-700 dark:text-indigo-300 border border-pastel-indigo/60 dark:border-indigo-800/60 shrink-0 hidden sm:block shadow-2xs">
           <ShieldCheck className="w-10 h-10 animate-pulse" />
         </div>
       </div>
@@ -199,7 +199,7 @@ export default function DeveloperHub() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search developer tools (e.g. SQL, JSON, JWT, Regex, API)..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-255 dark:border-zinc-850 bg-zinc-100/50 dark:bg-zinc-900/40 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-500 font-semibold placeholder-zinc-400 dark:placeholder-zinc-650"
+          className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-zinc-200/80 dark:border-zinc-850 bg-white/80 dark:bg-zinc-900/40 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-pastel-indigo/30 font-semibold placeholder-zinc-400 dark:placeholder-zinc-650 shadow-2xs"
         />
       </div>
 
@@ -207,8 +207,10 @@ export default function DeveloperHub() {
       {!searchQuery && (
         <section className="space-y-6">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-indigo-500" />
-            <h2 className="text-xs font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <div className="p-1 rounded-lg bg-pastel-indigo/30 text-indigo-600 dark:text-indigo-400 border border-pastel-indigo/50">
+              <Layers className="w-4 h-4" />
+            </div>
+            <h2 className="text-xs font-black uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
               Curated Developer Workflows
             </h2>
           </div>
@@ -216,7 +218,7 @@ export default function DeveloperHub() {
             {workflows.filter(w => ['api-payload-inspection', 'sql-database-optimization', 'web-seo-engineering'].includes(w.id)).map((wf) => (
               <div 
                 key={wf.id}
-                className="p-5 rounded-3xl border border-zinc-200/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition space-y-4 flex flex-col justify-between"
+                className="p-5 rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 hover:border-pastel-indigo/50 dark:hover:border-zinc-700 transition space-y-4 flex flex-col justify-between saas-card"
               >
                 <div className="space-y-2">
                   <h3 className="text-xs font-black uppercase text-zinc-500 tracking-wider">
@@ -312,23 +314,25 @@ export default function DeveloperHub() {
 
       {/* Learning Academy & Coding Interview Practice Section */}
       {!searchQuery && (
-        <section className="p-6 md:p-8 rounded-3xl border border-indigo-500/20 bg-indigo-500/[0.03] dark:bg-indigo-500/[0.02] text-left space-y-5">
+        <section className="p-6 md:p-8 rounded-3xl border border-pastel-indigo/40 bg-gradient-to-br from-pastel-indigo/15 via-white/50 dark:via-zinc-900/50 to-pastel-lavender/10 text-left space-y-5 shadow-xs">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <GraduationCap className="w-4 h-4 text-indigo-500" />
+              <div className="p-1 rounded-lg bg-pastel-indigo/30 text-indigo-600 dark:text-indigo-400 border border-pastel-indigo/50">
+                <GraduationCap className="w-4 h-4" />
+              </div>
               <h2 className="text-xs font-black uppercase tracking-wider text-zinc-900 dark:text-white">
                 Developer Academy & Coding Interview Practice
               </h2>
             </div>
             <Link
               to="/academy"
-              className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400 flex items-center gap-1 hover:gap-1.5 transition-all"
+              className="text-[10px] font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300 flex items-center gap-1 hover:gap-1.5 transition-all"
             >
               <span>Explore All Tracks</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium max-w-2xl">
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium max-w-2xl leading-relaxed">
             Sharpen your backend, database, and system engineering skills with real interview code challenges, automated tests, and syntax reference guides.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-1">
@@ -336,10 +340,10 @@ export default function DeveloperHub() {
               <Link
                 key={track.path}
                 to={track.path}
-                className="p-4 rounded-2xl bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 hover:border-indigo-500/40 transition group space-y-1"
+                className="p-4 rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200/70 dark:border-zinc-800/80 hover:border-pastel-indigo/50 transition group space-y-1 shadow-2xs"
               >
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-extrabold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h4 className="text-xs font-extrabold text-zinc-900 dark:text-white group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors">
                     {track.name}
                   </h4>
                   <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:translate-x-0.5 group-hover:text-indigo-500 transition-all" />

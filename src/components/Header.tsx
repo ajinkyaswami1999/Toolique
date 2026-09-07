@@ -138,15 +138,15 @@ export default function Header() {
 
   // Product Suites & Hubs in Dropdown
   const productSuites = [
-    { name: 'Developer Hub', path: '/developer', icon: Code, desc: 'SQL, JSON, JWT & Web SEO Utilities', color: 'text-indigo-500' },
-    { name: 'Finance & Tax Hub', path: '/finance', icon: IndianRupee, desc: 'Income Tax, SIP, Salary & Loans', color: 'text-emerald-500' },
-    { name: 'Architecture & Civil', path: '/architecture', icon: Compass, desc: 'Plot Area, FSI, Concrete & BOQ', color: 'text-violet-500' },
-    { name: 'QA Engineering', path: '/qa', icon: ShieldCheck, desc: 'Test Cases, BVA & XPath Locators', color: 'text-rose-500' },
-    { name: 'Learning Academy', path: '/academy', icon: GraduationCap, desc: '15+ Coding Tracks & Daily Challenges', color: 'text-teal-500' },
-    { name: 'Symbolic Math Studio', path: '/math-studio', icon: Scale, desc: 'Derivatives with Steps & Plots', color: 'text-amber-500' },
-    { name: '3D Maker Studio', path: '/3d-print-studio', icon: Printer, desc: 'Filament Cost, AMS & Print Time', color: 'text-cyan-500' },
-    { name: 'AI Studio', path: '/ai', icon: Sparkles, desc: 'Sandboxed AI Coding Assistants', color: 'text-purple-500' },
-    { name: 'Code Playground', path: '/playground', icon: Terminal, desc: 'Client-side Scratchpad & Sandbox', color: 'text-blue-500' }
+    { name: 'Developer Hub', path: '/developer', icon: Code, desc: 'SQL, JSON, JWT & Web SEO Utilities', color: 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50' },
+    { name: 'Finance & Tax Hub', path: '/finance', icon: IndianRupee, desc: 'Income Tax, SIP, Salary & Loans', color: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50' },
+    { name: 'Architecture & Civil', path: '/architecture', icon: Compass, desc: 'Plot Area, FSI, Concrete & BOQ', color: 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/50' },
+    { name: 'QA Engineering', path: '/qa', icon: ShieldCheck, desc: 'Test Cases, BVA & XPath Locators', color: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50' },
+    { name: 'Learning Academy', path: '/academy', icon: GraduationCap, desc: '15+ Coding Tracks & Daily Challenges', color: 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/50' },
+    { name: 'Symbolic Math Studio', path: '/math-studio', icon: Scale, desc: 'Derivatives with Steps & Plots', color: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50' },
+    { name: '3D Maker Studio', path: '/3d-print-studio', icon: Printer, desc: 'Filament Cost, AMS & Print Time', color: 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/50' },
+    { name: 'AI Studio', path: '/ai', icon: Sparkles, desc: 'Sandboxed AI Coding Assistants', color: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/50' },
+    { name: 'Code Playground', path: '/playground', icon: Terminal, desc: 'Client-side Scratchpad & Sandbox', color: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50' }
   ];
 
   const isActive = (path: string) => {
@@ -157,7 +157,7 @@ export default function Header() {
   const isSuiteActive = productSuites.some(s => isActive(s.path));
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-zinc-200/60 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md transition-all">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-indigo-200/50 dark:border-zinc-800/80 bg-gradient-to-r from-indigo-100/70 via-purple-50/75 to-rose-100/60 dark:from-[#0b0f19]/90 dark:via-[#131726]/90 dark:to-[#0b0f19]/90 backdrop-blur-xl shadow-[0_4px_25px_-5px_rgba(129,140,248,0.08)] transition-all">
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-15 flex items-center justify-between">
         
         {/* Left: Brand Logo & Main Nav */}
@@ -172,40 +172,40 @@ export default function Header() {
             {/* 1. Home */}
             <Link
               to="/"
-              className={`text-xs font-bold relative py-1 transition-colors duration-150 hover:text-indigo-600 dark:hover:text-indigo-400 ${
+              className={`text-xs font-bold relative py-1 transition-colors duration-150 hover:text-indigo-650 dark:hover:text-indigo-400 ${
                 location.pathname === '/'
-                  ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
-                  : 'text-zinc-600 dark:text-zinc-400'
+                  ? 'text-indigo-700 dark:text-indigo-400 font-extrabold'
+                  : 'text-zinc-650 dark:text-zinc-400'
               }`}
             >
               Home
               {location.pathname === '/' && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500" />
               )}
             </Link>
 
             {/* 2. All Tools */}
             <Link
               to="/tools"
-              className={`text-xs font-bold relative py-1 transition-colors duration-150 hover:text-indigo-600 dark:hover:text-indigo-400 ${
+              className={`text-xs font-bold relative py-1 transition-colors duration-150 hover:text-indigo-650 dark:hover:text-indigo-400 ${
                 isActive('/tools')
-                  ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
-                  : 'text-zinc-600 dark:text-zinc-400'
+                  ? 'text-indigo-700 dark:text-indigo-400 font-extrabold'
+                  : 'text-zinc-650 dark:text-zinc-400'
               }`}
             >
               All Tools
               {isActive('/tools') && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500" />
               )}
             </Link>
 
             {/* 3. Product Suites & Studios Dropdown */}
             <div className="relative group/suites py-1">
               <button
-                className={`flex items-center gap-1 text-xs font-bold hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-150 ${
+                className={`flex items-center gap-1 text-xs font-bold hover:text-indigo-650 dark:hover:text-indigo-400 cursor-pointer transition-colors duration-150 ${
                   isSuiteActive
-                    ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
-                    : 'text-zinc-600 dark:text-zinc-400'
+                    ? 'text-indigo-700 dark:text-indigo-400 font-extrabold'
+                    : 'text-zinc-650 dark:text-zinc-400'
                 }`}
               >
                 <span>Suites & Studios</span>
@@ -213,7 +213,7 @@ export default function Header() {
               </button>
 
               {/* Mega Dropdown Menu */}
-              <div className="absolute left-0 mt-2 w-80 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800/80 shadow-2xl overflow-hidden p-2 opacity-0 invisible group-hover/suites:opacity-100 group-hover/suites:visible transition-all duration-200 translate-y-1 group-hover/suites:translate-y-0 z-50">
+              <div className="absolute left-0 mt-2 w-80 rounded-2xl bg-white/95 dark:bg-zinc-950/95 border border-indigo-200/70 dark:border-zinc-800/80 bg-gradient-to-b from-white via-indigo-50/20 to-white dark:from-zinc-950 dark:via-zinc-900/50 dark:to-zinc-950 shadow-[0_12px_40px_rgba(99,102,241,0.12)] backdrop-blur-lg overflow-hidden p-2 opacity-0 invisible group-hover/suites:opacity-100 group-hover/suites:visible transition-all duration-200 translate-y-1 group-hover/suites:translate-y-0 z-50">
                 <div className="grid grid-cols-1 gap-1">
                   {productSuites.map((suite) => {
                     const Icon = suite.icon;
@@ -223,11 +223,11 @@ export default function Header() {
                         to={suite.path}
                         className={`flex items-start gap-3 p-2.5 rounded-xl transition ${
                           isActive(suite.path)
-                            ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300'
-                            : 'hover:bg-zinc-50 dark:hover:bg-zinc-900/60 text-zinc-700 dark:text-zinc-300'
+                            ? 'bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/45 dark:bg-indigo-950/50 dark:border-indigo-800/40'
+                            : 'hover:bg-pastel-indigo/15 dark:hover:bg-zinc-900/60 text-zinc-750 dark:text-zinc-300'
                         }`}
                       >
-                        <div className={`p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 ${suite.color} shrink-0 mt-0.5`}>
+                        <div className={`p-2 rounded-xl ${suite.color} shrink-0 mt-0.5 shadow-2xs`}>
                           <Icon className="w-4 h-4" />
                         </div>
                         <div className="truncate">
@@ -248,10 +248,10 @@ export default function Header() {
             {/* 4. About Toolique */}
             <Link
               to="/about"
-              className={`text-xs font-bold relative py-1 transition-colors duration-150 hover:text-indigo-600 dark:hover:text-indigo-400 ${
+              className={`text-xs font-bold relative py-1 transition-colors duration-150 hover:text-indigo-650 dark:hover:text-indigo-400 ${
                 isActive('/about') && !isActive('/about-founder')
-                  ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
-                  : 'text-zinc-600 dark:text-zinc-400'
+                  ? 'text-indigo-700 dark:text-indigo-400 font-extrabold'
+                  : 'text-zinc-650 dark:text-zinc-400'
               }`}
             >
               About Toolique
@@ -263,10 +263,10 @@ export default function Header() {
             {/* 5. Why Toolique */}
             <Link
               to="/why-toolique"
-              className={`text-xs font-bold relative py-1 transition-colors duration-150 hover:text-indigo-600 dark:hover:text-indigo-400 ${
+              className={`text-xs font-bold relative py-1 transition-colors duration-150 hover:text-indigo-650 dark:hover:text-indigo-400 ${
                 isActive('/why-toolique')
-                  ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
-                  : 'text-zinc-600 dark:text-zinc-400'
+                  ? 'text-indigo-700 dark:text-indigo-400 font-extrabold'
+                  : 'text-zinc-650 dark:text-zinc-400'
               }`}
             >
               Why Toolique
@@ -283,11 +283,11 @@ export default function Header() {
           {/* Command Palette Search Trigger Button */}
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-xs text-zinc-400 dark:text-zinc-500 hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-600 dark:hover:text-zinc-300 transition-all cursor-pointer text-left w-36 sm:w-48"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-indigo-200/50 dark:border-zinc-800 bg-white/75 dark:bg-zinc-900/60 text-xs text-zinc-500 dark:text-zinc-400 hover:border-indigo-400/60 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-white transition-all cursor-pointer text-left w-36 sm:w-48 shadow-2xs"
           >
-            <Search className="w-3.5 h-3.5 shrink-0" />
+            <Search className="w-3.5 h-3.5 shrink-0 text-indigo-500" />
             <span className="text-[11px] font-semibold flex-grow truncate">Search 270+ tools...</span>
-            <kbd className="hidden sm:inline-flex items-center h-4.5 select-none px-1 font-mono text-[9px] font-bold bg-zinc-200/60 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200/40 dark:border-zinc-700 rounded">
+            <kbd className="hidden sm:inline-flex items-center h-4.5 select-none px-1 font-mono text-[9px] font-bold bg-pastel-indigo/25 dark:bg-zinc-800 text-indigo-700 dark:text-zinc-400 border border-pastel-indigo/40 dark:border-zinc-700 rounded">
               ⌘K
             </kbd>
           </button>
@@ -297,29 +297,29 @@ export default function Header() {
             to="/dashboard"
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer ${
               isActive('/dashboard')
-                ? 'bg-indigo-50 dark:bg-indigo-950/50 border-indigo-300 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 font-extrabold shadow-xs'
-                : 'border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-50 dark:bg-zinc-900/40 hover:bg-zinc-100 dark:hover:bg-zinc-900'
+                ? 'bg-pastel-indigo/35 text-indigo-800 dark:text-indigo-300 border-pastel-indigo/55 dark:border-indigo-800 font-extrabold shadow-2xs'
+                : 'border-indigo-200/50 dark:border-zinc-800 text-indigo-800 dark:text-zinc-300 hover:text-indigo-900 dark:hover:text-white bg-white/70 dark:bg-zinc-900/50 hover:bg-pastel-indigo/20 dark:hover:bg-zinc-900 shadow-2xs'
             }`}
             title="My Workspace & Dashboard"
           >
-            <User className="w-3.5 h-3.5" />
+            <User className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
             <span className="text-xs font-bold hidden sm:inline">Workspace</span>
           </Link>
 
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition cursor-pointer"
+            className="p-2 rounded-xl border border-indigo-200/50 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 hover:bg-pastel-indigo/20 dark:hover:bg-zinc-900 text-zinc-650 dark:text-zinc-400 hover:text-indigo-700 dark:hover:text-white transition cursor-pointer shadow-2xs"
             title={isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
             aria-label="Toggle Theme"
           >
-            {isDarkMode ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-zinc-600" />}
+            {isDarkMode ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-indigo-600" />}
           </button>
 
           {/* Mobile Menu Hamburger Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition"
+            className="lg:hidden p-2 rounded-xl border border-indigo-200/50 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 text-zinc-650 dark:text-zinc-300 hover:bg-pastel-indigo/20 dark:hover:bg-zinc-900 transition"
             aria-label="Toggle navigation menu"
           >
             {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}

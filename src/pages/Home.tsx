@@ -150,7 +150,7 @@ export default function Home() {
       desc: 'Old vs. New Income tax slabs, in-hand salary from CTC, mutual fund SIPs, PPF, and loan EMIs.', 
       link: '/finance', 
       icon: IndianRupee, 
-      color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20' 
+      color: 'text-emerald-700 dark:text-emerald-300 bg-pastel-emerald/30 border-pastel-emerald/60 dark:bg-emerald-950/40 dark:border-emerald-800/60' 
     },
     { 
       id: 'developer', 
@@ -159,7 +159,7 @@ export default function Home() {
       desc: 'SQL formatting, JSON diffing/validation, JWT debugging, Regex testers, and Unix timestamp converters.', 
       link: '/developer', 
       icon: Code, 
-      color: 'text-indigo-500 bg-indigo-500/10 border-indigo-500/20' 
+      color: 'text-indigo-700 dark:text-indigo-300 bg-pastel-indigo/30 border-pastel-indigo/60 dark:bg-indigo-950/40 dark:border-indigo-800/60' 
     },
     { 
       id: 'architecture', 
@@ -168,7 +168,7 @@ export default function Home() {
       desc: 'Plot area, setbacks, RERA carpet, construction costs, concrete mixes, and BOQ material quantities.', 
       link: '/architecture', 
       icon: Compass, 
-      color: 'text-violet-500 bg-violet-500/10 border-violet-500/20' 
+      color: 'text-violet-700 dark:text-violet-300 bg-pastel-lavender/30 border-pastel-lavender/60 dark:bg-violet-950/40 dark:border-violet-800/60' 
     },
     { 
       id: 'qa', 
@@ -177,7 +177,7 @@ export default function Home() {
       desc: 'Generate test cases, mock datasets, bug report templates, BVA bounds, and XPath selectors.', 
       link: '/qa', 
       icon: ShieldCheck, 
-      color: 'text-rose-500 bg-rose-500/10 border-rose-500/20' 
+      color: 'text-rose-700 dark:text-rose-300 bg-pastel-rose/30 border-pastel-rose/60 dark:bg-rose-950/40 dark:border-rose-800/60' 
     },
     { 
       id: 'math-studio', 
@@ -186,7 +186,7 @@ export default function Home() {
       desc: 'Derivative solver with step-by-step solutions, matrix algebra, and graphical evaluation.', 
       link: '/math-studio', 
       icon: Scale, 
-      color: 'text-amber-500 bg-amber-500/10 border-amber-500/20' 
+      color: 'text-amber-700 dark:text-amber-300 bg-pastel-peach/30 border-pastel-peach/60 dark:bg-amber-950/40 dark:border-amber-800/60' 
     },
     { 
       id: '3d-printing', 
@@ -195,7 +195,7 @@ export default function Home() {
       desc: 'Calculate filament consumption, multi-color AMS slot budgeting, and electricity costs.', 
       link: '/3d-print-studio', 
       icon: Printer, 
-      color: 'text-cyan-500 bg-cyan-500/10 border-cyan-500/20' 
+      color: 'text-cyan-700 dark:text-cyan-300 bg-pastel-cyan/30 border-pastel-cyan/60 dark:bg-cyan-950/40 dark:border-cyan-800/60' 
     },
     { 
       id: 'academy', 
@@ -204,7 +204,7 @@ export default function Home() {
       desc: 'Master coding, SQL queries, Python, React, and QA automation interviews with daily challenges.', 
       link: '/academy', 
       icon: GraduationCap, 
-      color: 'text-teal-500 bg-teal-500/10 border-teal-500/20' 
+      color: 'text-teal-700 dark:text-teal-300 bg-pastel-mint/30 border-pastel-mint/60 dark:bg-teal-950/40 dark:border-teal-800/60' 
     },
     { 
       id: 'ai', 
@@ -213,7 +213,7 @@ export default function Home() {
       desc: 'AI-assisted QA test cases, SQL generators, regex creators, and code analyzers without credentials.', 
       link: '/ai', 
       icon: Sparkles, 
-      color: 'text-purple-500 bg-purple-500/10 border-purple-500/20' 
+      color: 'text-purple-700 dark:text-purple-300 bg-pastel-purple/30 border-pastel-purple/60 dark:bg-purple-950/40 dark:border-purple-800/60' 
     }
   ];
 
@@ -270,7 +270,7 @@ export default function Home() {
         
         {/* Top Trust Pill */}
         <div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20 shadow-xs">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/45 shadow-xs">
             <Sparkles className="w-3 h-3 text-indigo-500 animate-pulse" />
             <span>✦ 270+ TOOLS • 100% FREE • ZERO SIGN-UP REQUIRED • LOCAL SANDBOX</span>
           </span>
@@ -278,7 +278,7 @@ export default function Home() {
         
         {/* Main Heading */}
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-black tracking-tight text-zinc-900 dark:text-white leading-[1.18]">
-          Free Calculators & <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">Professional Online Tools</span>
+          Free Calculators & <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">Professional Online Tools</span>
         </h1>
         
         {/* Subtitle */}
@@ -296,7 +296,7 @@ export default function Home() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search 270+ tools (e.g. GST, SQL Formatter, SIP, JSON, Concrete, JWT...)"
-              className="w-full pl-10 pr-16 py-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 shadow-xs transition"
+              className="w-full pl-10 pr-16 py-2.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-pastel-indigo/30 shadow-xs transition"
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
               <kbd className="hidden sm:inline-flex items-center h-5 select-none px-1.5 font-mono text-[9px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded">
@@ -316,7 +316,7 @@ export default function Home() {
                   setSearchQuery(s);
                   navigate(`/tools?q=${encodeURIComponent(s)}`);
                 }}
-                className="px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 text-[10px] transition cursor-pointer"
+                className="px-2.5 py-0.5 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-indigo-700 hover:bg-pastel-indigo/20 dark:hover:text-indigo-300 text-[10px] transition cursor-pointer shadow-2xs"
               >
                 {s}
               </button>
@@ -328,21 +328,21 @@ export default function Home() {
         <div className="flex flex-wrap justify-center gap-2.5 pt-1">
           <Link
             to="/tools"
-            className="px-4 py-2 rounded-xl bg-zinc-950 hover:bg-zinc-850 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-xs shadow-md transition-all duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
+            className="px-4 py-2 rounded-2xl bg-zinc-950 hover:bg-zinc-850 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-xs shadow-md transition-all duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
           >
             <span>Explore All 270+ Tools</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
           <Link
             to="/developer"
-            className="px-3.5 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20 font-extrabold text-xs transition duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-2xl bg-pastel-indigo/25 hover:bg-pastel-indigo/40 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/45 font-extrabold text-xs transition duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
           >
             <Code className="w-3.5 h-3.5" />
             <span>Developer Hub</span>
           </Link>
           <Link
             to="/finance"
-            className="px-3.5 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 font-extrabold text-xs transition duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-2xl bg-pastel-emerald/25 hover:bg-pastel-emerald/40 text-emerald-800 dark:text-emerald-300 border border-pastel-emerald/45 font-extrabold text-xs transition duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
           >
             <IndianRupee className="w-3.5 h-3.5" />
             <span>Finance Hub</span>
@@ -351,20 +351,20 @@ export default function Home() {
 
         {/* Compact Stats Row */}
         <div className="pt-2 max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
-          <div className="py-2 px-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30">
+          <div className="py-2 px-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/30 backdrop-blur-xs">
             <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-white tracking-tight">270+</div>
             <div className="text-[9px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">Online Tools</div>
           </div>
-          <div className="py-2 px-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30">
+          <div className="py-2 px-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/30 backdrop-blur-xs">
             <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-white tracking-tight">19</div>
             <div className="text-[9px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">Specialized Suites</div>
           </div>
-          <div className="py-2 px-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30">
-            <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight">100%</div>
+          <div className="py-2 px-3 rounded-2xl border border-pastel-emerald/40 dark:border-zinc-800/80 bg-pastel-emerald/10 dark:bg-zinc-900/30 backdrop-blur-xs">
+            <div className="text-base sm:text-lg font-black text-emerald-700 dark:text-emerald-400 tracking-tight">100%</div>
             <div className="text-[9px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">Private Sandbox</div>
           </div>
-          <div className="py-2 px-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30">
-            <div className="text-base sm:text-lg font-black text-indigo-600 dark:text-indigo-400 tracking-tight">0</div>
+          <div className="py-2 px-3 rounded-2xl border border-pastel-indigo/40 dark:border-zinc-800/80 bg-pastel-indigo/10 dark:bg-zinc-900/30 backdrop-blur-xs">
+            <div className="text-base sm:text-lg font-black text-indigo-700 dark:text-indigo-400 tracking-tight">0</div>
             <div className="text-[9px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">Accounts Needed</div>
           </div>
         </div>
@@ -501,7 +501,7 @@ export default function Home() {
       <section className="space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
           <div className="space-y-1">
-            <span className="text-[10px] font-black uppercase tracking-wider text-teal-500">Popular Tools</span>
+            <span className="text-[10px] font-black uppercase tracking-wider text-teal-700 dark:text-teal-400 bg-pastel-mint/30 px-2.5 py-0.5 rounded-full border border-pastel-mint/50">Popular Tools</span>
             <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
               Featured Platform Tools
             </h2>
@@ -511,11 +511,11 @@ export default function Home() {
           </div>
 
           {/* Featured Filter Tabs */}
-          <div className="flex items-center p-1 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800">
+          <div className="flex items-center p-1 rounded-2xl bg-white/70 dark:bg-zinc-900/70 border border-zinc-200/80 dark:border-zinc-800 shadow-2xs backdrop-blur-xs">
             <button
               onClick={() => setFeaturedTab('trending')}
               className={`px-3 py-1.5 rounded-xl text-xs font-black transition cursor-pointer ${
-                featuredTab === 'trending' ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
+                featuredTab === 'trending' ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
               }`}
             >
               🔥 Trending
@@ -523,7 +523,7 @@ export default function Home() {
             <button
               onClick={() => setFeaturedTab('dev')}
               className={`px-3 py-1.5 rounded-xl text-xs font-black transition cursor-pointer ${
-                featuredTab === 'dev' ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
+                featuredTab === 'dev' ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
               }`}
             >
               💻 Developer
@@ -531,7 +531,7 @@ export default function Home() {
             <button
               onClick={() => setFeaturedTab('finance')}
               className={`px-3 py-1.5 rounded-xl text-xs font-black transition cursor-pointer ${
-                featuredTab === 'finance' ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
+                featuredTab === 'finance' ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
               }`}
             >
               💰 Finance
@@ -539,7 +539,7 @@ export default function Home() {
             <button
               onClick={() => setFeaturedTab('civil')}
               className={`px-3 py-1.5 rounded-xl text-xs font-black transition cursor-pointer ${
-                featuredTab === 'civil' ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
+                featuredTab === 'civil' ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-xs' : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
               }`}
             >
               🏗️ Civil & Architecture
@@ -557,7 +557,7 @@ export default function Home() {
       {/* SECTION 6: Explore All Categories Strip */}
       <section className="space-y-6">
         <div className="space-y-1">
-          <span className="text-[10px] font-black uppercase tracking-wider text-purple-500">Categories</span>
+          <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-400 bg-pastel-purple/30 px-2.5 py-0.5 rounded-full border border-pastel-purple/50">Categories</span>
           <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
             Explore by Category
           </h2>
@@ -573,7 +573,7 @@ export default function Home() {
               <Link
                 key={cat.id}
                 to={`/tools?category=${cat.id}`}
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/40 hover:bg-white dark:hover:bg-zinc-900 hover:border-indigo-500/40 hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer shadow-xs"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/40 hover:bg-white dark:hover:bg-zinc-900 hover:border-pastel-indigo/60 hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer shadow-xs"
               >
                 <div className="text-zinc-500 dark:text-zinc-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   <Icon className="w-3.5 h-3.5" />
@@ -590,7 +590,7 @@ export default function Home() {
       {/* SECTION 7: Learning Academy & Daily Challenge */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
         <div className="lg:col-span-6 space-y-4">
-          <div className="p-3 rounded-2xl bg-teal-500/10 text-teal-500 border border-teal-500/20 w-fit">
+          <div className="p-3 rounded-2xl bg-pastel-mint/30 text-teal-700 dark:text-teal-300 border border-pastel-mint/60 w-fit">
             <GraduationCap className="w-6 h-6" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
@@ -602,7 +602,7 @@ export default function Home() {
 
           <div className="flex flex-wrap gap-2 pt-1">
             {['SQL Queries', 'Python Core', 'JavaScript DSA', 'React Hooks', 'QA Selenium', 'Docker DevOps'].map((track, i) => (
-              <span key={i} className="px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800/80 text-[10px] font-black text-zinc-600 dark:text-zinc-400 uppercase tracking-wider">
+              <span key={i} className="px-2.5 py-1 rounded-xl bg-pastel-mint/20 text-[10px] font-black text-teal-800 dark:text-teal-300 border border-pastel-mint/40 uppercase tracking-wider">
                 {track}
               </span>
             ))}
@@ -620,13 +620,13 @@ export default function Home() {
         </div>
 
         {/* Daily Challenge Interactive Card */}
-        <div className="lg:col-span-6 saas-card p-6 rounded-3xl border border-teal-500/30 bg-teal-500/[0.02] space-y-4">
+        <div className="lg:col-span-6 saas-card p-6 rounded-3xl border border-pastel-mint/50 bg-gradient-to-br from-pastel-mint/15 via-white/50 dark:via-zinc-900/50 to-pastel-cyan/10 space-y-4">
           <div className="flex justify-between items-center pb-3 border-b border-zinc-100 dark:border-zinc-800">
-            <span className="text-xs font-black text-teal-600 dark:text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
-              <Flame className="w-4 h-4 fill-current animate-bounce" />
+            <span className="text-xs font-black text-teal-700 dark:text-teal-300 uppercase tracking-wider flex items-center gap-1.5">
+              <Flame className="w-4 h-4 fill-current text-rose-500 animate-bounce" />
               <span>Today's Daily Coding Challenge</span>
             </span>
-            <span className="text-[10px] text-teal-700 dark:text-teal-300 font-bold bg-teal-500/10 px-2.5 py-0.5 rounded-full border border-teal-500/20">
+            <span className="text-[10px] text-teal-800 dark:text-teal-200 font-bold bg-pastel-mint/40 px-2.5 py-0.5 rounded-full border border-pastel-mint/60">
               15 XP
             </span>
           </div>
@@ -653,14 +653,14 @@ export default function Home() {
       {/* SECTION 8: Authority FAQ Section (AEO / Search Engines) */}
       <section className="saas-card p-8 md:p-10 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 space-y-6">
         <div className="space-y-1">
-          <span className="text-[10px] font-black uppercase tracking-wider text-indigo-500">Frequently Asked Questions</span>
+          <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-400 bg-pastel-indigo/30 px-2.5 py-0.5 rounded-full border border-pastel-indigo/50">Frequently Asked Questions</span>
           <h2 className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
             Why Professionals Choose Toolique
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed">
-          <div className="space-y-2 p-4 rounded-2xl bg-zinc-50/60 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60">
+          <div className="space-y-2 p-4 rounded-2xl bg-pastel-indigo/10 dark:bg-zinc-950/40 border border-pastel-indigo/30 dark:border-zinc-800/60">
             <h4 className="font-extrabold text-zinc-900 dark:text-white text-sm">
               🔒 Are my calculations and developer inputs kept private?
             </h4>
@@ -669,7 +669,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="space-y-2 p-4 rounded-2xl bg-zinc-50/60 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60">
+          <div className="space-y-2 p-4 rounded-2xl bg-pastel-emerald/10 dark:bg-zinc-950/40 border border-pastel-emerald/30 dark:border-zinc-800/60">
             <h4 className="font-extrabold text-zinc-900 dark:text-white text-sm">
               ⚡ Do I need to create an account or pay a fee?
             </h4>
@@ -678,7 +678,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="space-y-2 p-4 rounded-2xl bg-zinc-50/60 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60">
+          <div className="space-y-2 p-4 rounded-2xl bg-pastel-lavender/10 dark:bg-zinc-950/40 border border-pastel-lavender/30 dark:border-zinc-800/60">
             <h4 className="font-extrabold text-zinc-900 dark:text-white text-sm">
               📁 Can I export my calculation reports and notes?
             </h4>
@@ -687,7 +687,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="space-y-2 p-4 rounded-2xl bg-zinc-50/60 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60">
+          <div className="space-y-2 p-4 rounded-2xl bg-pastel-rose/10 dark:bg-zinc-950/40 border border-pastel-rose/30 dark:border-zinc-800/60">
             <h4 className="font-extrabold text-zinc-900 dark:text-white text-sm">
               🧰 How do Interactive Project Workflows work?
             </h4>
@@ -699,14 +699,16 @@ export default function Home() {
       </section>
 
       {/* SECTION 9: Ready to Explore CTA */}
-      <section className="text-center p-10 md:p-14 rounded-3xl bg-gradient-to-br from-indigo-950 via-zinc-950 to-indigo-950 text-white border border-zinc-800 shadow-2xl space-y-5">
-        <h2 className="text-2xl md:text-4xl font-black tracking-tight">
+      <section className="text-center p-10 md:p-14 rounded-3xl bg-gradient-to-br from-indigo-950 via-zinc-950 to-purple-950 text-white border border-indigo-900/60 shadow-2xl space-y-5 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-pastel-indigo/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-pastel-rose/10 rounded-full blur-3xl pointer-events-none" />
+        <h2 className="text-2xl md:text-4xl font-black tracking-tight relative z-10">
           Ready to supercharge your workflow?
         </h2>
-        <p className="text-xs md:text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed font-medium">
+        <p className="text-xs md:text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed font-medium relative z-10">
           Access 270+ fast, client-side tools designed for builders, engineers, and analysts. No subscriptions, zero limits.
         </p>
-        <div className="flex flex-wrap justify-center gap-3 pt-2">
+        <div className="flex flex-wrap justify-center gap-3 pt-2 relative z-10">
           <Link
             to="/tools"
             className="px-6 py-3 rounded-2xl bg-white hover:bg-zinc-100 text-zinc-950 font-black text-xs shadow-lg transition active:scale-98 cursor-pointer"

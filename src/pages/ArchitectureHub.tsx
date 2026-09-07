@@ -143,50 +143,50 @@ export default function ArchitectureHub() {
       />
 
       {/* Hero Panel */}
-      <div className="p-8 md:p-12 rounded-3xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-800/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+      <div className="p-8 md:p-12 rounded-3xl bg-gradient-to-r from-pastel-lavender/20 via-white/50 to-pastel-indigo/15 dark:from-zinc-900/60 dark:via-zinc-900/40 dark:to-zinc-900/60 border border-pastel-lavender/40 dark:border-zinc-800/80 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-xs">
         <div className="space-y-4 max-w-2xl">
           <div className="flex items-center gap-3">
-            <span className="px-3 py-1 rounded-lg bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-extrabold text-[10px] uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-xl bg-pastel-lavender/30 text-indigo-800 dark:text-indigo-300 font-extrabold text-[10px] uppercase tracking-wider border border-pastel-lavender/50 shadow-2xs">
               Bylaw & Planning Suite
             </span>
-            <span className="text-[10px] text-zinc-450 font-bold">86 Interactive Tools</span>
+            <span className="text-[10px] text-zinc-500 font-bold">86 Interactive Tools</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-zinc-905 dark:text-white tracking-tight leading-none">
             Architecture & Building Calculators
           </h1>
-          <p className="text-sm text-zinc-505 dark:text-zinc-400 leading-relaxed font-medium">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
             Plan setbacks, calculate permissible FSI, convert RERA carpet areas, estimate material quantities, and draft renovation budgets directly in your browser. All computations are run locally in private sandboxes.
           </p>
         </div>
-        <div className="p-5 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shrink-0 hidden sm:block">
+        <div className="p-5 rounded-3xl bg-pastel-lavender/30 text-indigo-700 dark:text-indigo-300 border border-pastel-lavender/60 dark:border-indigo-800/60 shrink-0 hidden sm:block shadow-2xs">
           <Compass className="w-10 h-10 animate-spin" style={{ animationDuration: '20s' }} />
         </div>
       </div>
 
       {/* Flagship Hero Spotlight: Building Feasibility & Bye-Law Checker */}
-      <div className="p-6 md:p-8 rounded-3xl bg-linear-to-r from-emerald-500/10 via-teal-500/5 to-indigo-500/10 border border-emerald-500/20 dark:border-emerald-500/30 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative overflow-hidden">
+      <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-r from-pastel-mint/25 via-pastel-cyan/15 to-pastel-indigo/15 border border-pastel-mint/50 dark:border-emerald-500/30 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 relative overflow-hidden shadow-xs">
         <div className="space-y-3 max-w-3xl relative z-10">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-black text-[10px] uppercase tracking-wider">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-black text-[10px] uppercase tracking-wider shadow-2xs">
               ⭐ Flagship Indian Statutory Engine
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-bold text-[10px]">
+            <span className="px-2.5 py-0.5 rounded-full bg-pastel-mint/40 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] border border-pastel-mint/60">
               172 Verified Bye-Law Documents
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-400 font-bold text-[10px]">
+            <span className="px-2.5 py-0.5 rounded-full bg-pastel-indigo/35 text-indigo-800 dark:text-indigo-300 font-bold text-[10px] border border-pastel-indigo/50">
               NBC 2016 • 36 States • 50 Master Plans
             </span>
           </div>
           <h2 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
             Building Feasibility & Bye-Law Assessment Tool
           </h2>
-          <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
+          <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium">
             Location-aware zoning and construction feasibility calculator. Instantly computes permissible FAR/FSI, ground coverage, mandatory front/rear/side setbacks, permissible height, stilt+4 floor rules, and 2D buildable envelope diagrams with dual units (m & ft).
           </p>
         </div>
         <Link
           to="/architecture/building-feasibility-checker"
-          className="shrink-0 px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs inline-flex items-center gap-2 transition shadow-md shadow-emerald-600/20 group cursor-pointer"
+          className="shrink-0 px-5 py-3 rounded-2xl bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-800 dark:hover:bg-zinc-100 font-extrabold text-xs inline-flex items-center gap-2 transition shadow-md group cursor-pointer"
         >
           <span>Launch Feasibility Checker</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -201,7 +201,7 @@ export default function ArchitectureHub() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search 86 architecture tools..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-255 dark:border-zinc-850 bg-zinc-100/50 dark:bg-zinc-900/40 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-500 font-semibold placeholder-zinc-400 dark:placeholder-zinc-650"
+          className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-zinc-200/80 dark:border-zinc-850 bg-white/80 dark:bg-zinc-900/40 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-pastel-indigo/30 font-semibold placeholder-zinc-400 dark:placeholder-zinc-650 shadow-2xs"
         />
       </div>
 
@@ -209,8 +209,10 @@ export default function ArchitectureHub() {
       {!searchQuery && (
         <section className="space-y-6">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-indigo-500" />
-            <h2 className="text-xs font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <div className="p-1 rounded-lg bg-pastel-lavender/30 text-indigo-600 dark:text-indigo-400 border border-pastel-lavender/50">
+              <Layers className="w-4 h-4" />
+            </div>
+            <h2 className="text-xs font-black uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
               Curated Project Journeys
             </h2>
           </div>
@@ -218,7 +220,7 @@ export default function ArchitectureHub() {
             {workflows.filter(w => ['statutory-zoning-feasibility', 'plot-to-material', 'room-to-finish'].includes(w.id)).map((wf) => (
               <div 
                 key={wf.id}
-                className="p-6 rounded-3xl border border-zinc-200/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 hover:border-zinc-300 dark:hover:border-zinc-700 transition space-y-4 flex flex-col justify-between"
+                className="p-5 rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 hover:border-pastel-lavender/50 dark:hover:border-zinc-700 transition space-y-4 flex flex-col justify-between saas-card"
               >
                 <div className="space-y-2">
                   <h3 className="text-base font-extrabold text-zinc-900 dark:text-white flex items-center gap-2">

@@ -992,14 +992,14 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
           <button
             type="button"
             onClick={() => setIsWorkflowModalOpen(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-indigo-50/90 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/80 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 hover:border-indigo-400/50 transition shadow-xs group cursor-pointer"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-pastel-lavender/25 dark:bg-indigo-950/40 border border-pastel-lavender/50 dark:border-indigo-800/80 text-indigo-800 dark:text-indigo-300 hover:bg-pastel-lavender/40 dark:hover:bg-indigo-900/60 hover:border-indigo-400/50 transition shadow-xs group cursor-pointer"
           >
             <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
             <span className="text-xs font-bold flex items-center gap-1.5">
               <span className="text-zinc-500 dark:text-zinc-400 font-medium">Project Workflow:</span>
               <strong className="font-extrabold text-indigo-950 dark:text-white">{primaryWorkflow.name}</strong>
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase">
+            <span className="px-2 py-0.5 rounded-full bg-pastel-indigo/35 text-indigo-700 dark:text-indigo-300 text-[10px] font-black uppercase">
               Step {workflowActiveIdx + 1} of {primaryWorkflow.steps.length}
             </span>
             <Layers className="w-3.5 h-3.5 text-indigo-500 group-hover:scale-110 transition-transform" />
@@ -1039,9 +1039,9 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
 
       {/* Contextual Cross-Suite integration suggestions (Developer <-> QA) */}
       {suggestion && (
-        <div className="p-5 rounded-2xl border border-indigo-500/10 dark:border-indigo-500/20 bg-indigo-500/5 text-left flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-indigo-500/20 transition">
+        <div className="p-5 rounded-3xl border border-pastel-indigo/40 dark:border-indigo-500/20 bg-pastel-indigo/15 dark:bg-indigo-500/5 text-left flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-pastel-indigo/60 transition">
           <div className="space-y-1">
-            <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 text-[9px] font-black uppercase tracking-wider">
+            <span className="px-2 py-0.5 rounded-lg bg-pastel-indigo/35 text-indigo-800 dark:text-indigo-300 text-[9px] font-black uppercase tracking-wider">
               {suggestion.label}
             </span>
             <p className="text-xs text-zinc-655 dark:text-zinc-400 font-semibold leading-relaxed">
@@ -1063,13 +1063,13 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
 
       {/* Dynamic Security & Local computation disclaimers */}
       {(tool.category === 'developer' || tool.category === 'security' || tool.category === 'qa' || tool.category === 'web') && (
-        <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-xs text-indigo-850 dark:text-indigo-400 font-semibold leading-relaxed">
+        <div className="p-4 rounded-2xl border border-pastel-indigo/40 dark:border-indigo-500/20 bg-pastel-indigo/15 dark:bg-indigo-500/5 text-xs text-indigo-900 dark:text-indigo-300 font-semibold leading-relaxed">
           🔒 <strong>Privacy Sandbox:</strong> Calculations occur locally in your browser. Your inputs and tokens are never transmitted to our servers.
         </div>
       )}
 
       {(tool.category === 'architecture' || tool.category === 'civil') && (
-        <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-amber-800 dark:text-amber-400 font-semibold leading-relaxed">
+        <div className="p-4 rounded-2xl border border-pastel-peach/50 dark:border-amber-500/20 bg-pastel-peach/20 dark:bg-amber-500/5 text-xs text-amber-900 dark:text-amber-300 font-semibold leading-relaxed">
           ⚠️ <strong>Regulations Note:</strong> Regulations vary by location and authority. Verify applicable local building regulations before using these results for approvals or construction.
         </div>
       )}

@@ -17,29 +17,31 @@ export default function FAQSection({ faqs, title = 'Frequently Asked Questions' 
   if (!faqs || faqs.length === 0) return null;
 
   return (
-    <section className="mt-12 p-6 md:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm">
-      <h2 className="flex items-center gap-2.5 text-xl md:text-2xl font-bold text-slate-800 dark:text-white mb-6">
-        <HelpCircle className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+    <section className="mt-8 p-6 md:p-8 rounded-3xl saas-card border border-zinc-200/70 dark:border-zinc-800/70 shadow-xs">
+      <h2 className="flex items-center gap-2.5 text-lg md:text-xl font-black text-zinc-900 dark:text-white mb-6">
+        <div className="p-1.5 rounded-xl bg-pastel-lavender/30 text-indigo-600 dark:text-indigo-400 border border-pastel-lavender/50">
+          <HelpCircle className="w-5 h-5" />
+        </div>
         {title}
       </h2>
-      <div className="space-y-4">
+      <div className="space-y-3">
         {faqs.map((faq, index) => {
           const isOpen = activeIndex === index;
           return (
             <div 
               key={index} 
-              className="border-b border-slate-100 dark:border-slate-800/60 pb-4 last:border-none last:pb-0"
+              className="border-b border-zinc-100 dark:border-zinc-800/60 pb-3.5 last:border-none last:pb-0"
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="flex justify-between items-center w-full text-left font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 py-2 transition"
+                className="flex justify-between items-center w-full text-left font-bold text-zinc-800 dark:text-zinc-200 hover:text-indigo-600 dark:hover:text-indigo-400 py-1.5 transition cursor-pointer"
                 aria-expanded={isOpen}
               >
-                <span className="pr-4 text-base md:text-lg">{faq.question}</span>
+                <span className="pr-4 text-sm md:text-base">{faq.question}</span>
                 {isOpen ? (
-                  <ChevronUp className="w-5 h-5 text-slate-400 shrink-0" />
+                  <ChevronUp className="w-4 h-4 text-zinc-400 shrink-0" />
                 ) : (
-                  <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
+                  <ChevronDown className="w-4 h-4 text-zinc-400 shrink-0" />
                 )}
               </button>
               <div 
@@ -47,7 +49,7 @@ export default function FAQSection({ faqs, title = 'Frequently Asked Questions' 
                   isOpen ? 'max-h-[500px] mt-2 opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >
-                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed whitespace-pre-line pl-1 pb-2">
+                <p className="text-zinc-600 dark:text-zinc-400 text-xs md:text-sm leading-relaxed whitespace-pre-line pl-1 pb-1">
                   {faq.answer}
                 </p>
               </div>
@@ -58,3 +60,4 @@ export default function FAQSection({ faqs, title = 'Frequently Asked Questions' 
     </section>
   );
 }
+

@@ -5,15 +5,33 @@
 
 @theme {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  
+  /* Brand Pastel Accents */
+  --color-pastel-indigo: #818cf8;
+  --color-pastel-lavender: #e0e7ff;
+  --color-pastel-violet: #ddd6fe;
+  --color-pastel-purple: #e9d5ff;
+  --color-pastel-mint: #a7f3d0;
+  --color-pastel-emerald: #bbf7d0;
+  --color-pastel-teal: #99f6e4;
+  --color-pastel-sky: #bae6fd;
+  --color-pastel-blue: #bfdbfe;
+  --color-pastel-cyan: #a5f3fc;
+  --color-pastel-rose: #fecdd3;
+  --color-pastel-pink: #fbcfe8;
+  --color-pastel-fuchsia: #f5d0fe;
+  --color-pastel-peach: #fed7aa;
+  --color-pastel-amber: #fde68a;
+  --color-pastel-yellow: #fef08a;
+  --color-pastel-lime: #d9f99d;
+
   --color-indigo-455: #818cf8;
   --color-indigo-550: #6366f1;
   --color-indigo-650: #4338ca;
   --color-zinc-150: #ebecee;
   --color-zinc-250: #e0e2eb;
   --color-zinc-350: #b8bac7;
-  --color-zinc-450: #888d9d;
   --color-zinc-455: #888d9d;
-  --color-zinc-550: #646877;
   --color-zinc-555: #646877;
   --color-zinc-650: #474b57;
   --color-zinc-750: #30333d;
@@ -22,8 +40,56 @@
 
 @layer base {
   body {
-    @apply font-sans bg-zinc-50 text-zinc-900 antialiased selection:bg-indigo-500 selection:text-white dark:bg-zinc-950 dark:text-zinc-100 transition-colors duration-300;
+    @apply font-sans text-zinc-900 antialiased selection:bg-indigo-400 selection:text-white dark:text-zinc-100 transition-colors duration-300;
+    background-color: #fafbfe;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(224, 231, 255, 0.8) 0px, transparent 55%),
+      radial-gradient(at 100% 0%, rgba(254, 205, 211, 0.6) 0px, transparent 50%),
+      radial-gradient(at 50% 35%, rgba(207, 250, 254, 0.5) 0px, transparent 55%),
+      radial-gradient(at 0% 80%, rgba(209, 250, 229, 0.6) 0px, transparent 55%),
+      radial-gradient(at 100% 80%, rgba(254, 215, 170, 0.5) 0px, transparent 55%),
+      radial-gradient(at 50% 100%, rgba(221, 214, 254, 0.6) 0px, transparent 55%);
+    background-attachment: fixed;
   }
+
+  :root.dark body,
+  .dark body {
+    background-color: #0b0f19;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 55%),
+      radial-gradient(at 100% 0%, rgba(244, 63, 94, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 35%, rgba(6, 182, 212, 0.06) 0px, transparent 55%),
+      radial-gradient(at 0% 80%, rgba(16, 185, 129, 0.08) 0px, transparent 55%),
+      radial-gradient(at 100% 80%, rgba(168, 85, 247, 0.09) 0px, transparent 55%),
+      radial-gradient(at 50% 100%, rgba(129, 140, 248, 0.08) 0px, transparent 55%);
+    background-attachment: fixed;
+  }
+}
+
+/* Multi-layer Pastel Aurora Canvas Gradient Helper */
+.pastel-canvas-bg {
+  background-color: #fafbfe;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(224, 231, 255, 0.8) 0px, transparent 55%),
+    radial-gradient(at 100% 0%, rgba(254, 205, 211, 0.6) 0px, transparent 50%),
+    radial-gradient(at 50% 35%, rgba(207, 250, 254, 0.5) 0px, transparent 55%),
+    radial-gradient(at 0% 80%, rgba(209, 250, 229, 0.6) 0px, transparent 55%),
+    radial-gradient(at 100% 80%, rgba(254, 215, 170, 0.5) 0px, transparent 55%),
+    radial-gradient(at 50% 100%, rgba(221, 214, 254, 0.6) 0px, transparent 55%);
+  background-attachment: fixed;
+}
+
+:root.dark .pastel-canvas-bg,
+.dark .pastel-canvas-bg {
+  background-color: #0b0f19;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 55%),
+    radial-gradient(at 100% 0%, rgba(244, 63, 94, 0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 35%, rgba(6, 182, 212, 0.06) 0px, transparent 55%),
+    radial-gradient(at 0% 80%, rgba(16, 185, 129, 0.08) 0px, transparent 55%),
+    radial-gradient(at 100% 80%, rgba(168, 85, 247, 0.09) 0px, transparent 55%),
+    radial-gradient(at 50% 100%, rgba(129, 140, 248, 0.08) 0px, transparent 55%);
+  background-attachment: fixed;
 }
 
 /* Custom Scrollbar */
@@ -35,20 +101,20 @@
   @apply bg-transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-zinc-200 dark:bg-zinc-800 rounded-full hover:bg-zinc-300 dark:hover:bg-zinc-700 transition;
+  @apply bg-indigo-200/60 dark:bg-zinc-800 rounded-full hover:bg-indigo-300/80 dark:hover:bg-zinc-700 transition;
 }
 
-/* Premium SaaS Card layouts */
+/* Premium Pastel SaaS Card layouts */
 .saas-card {
-  @apply rounded-2xl bg-white/70 dark:bg-zinc-900/50 border border-zinc-200/80 dark:border-zinc-800/80 shadow-sm backdrop-blur-md transition-all duration-300;
+  @apply rounded-2xl bg-white/85 dark:bg-zinc-900/60 border border-indigo-100/70 dark:border-zinc-800/80 shadow-[0_4px_20px_-4px_rgba(99,102,241,0.04)] dark:shadow-none backdrop-blur-md transition-all duration-300;
 }
 .saas-card-hover {
-  @apply hover:border-indigo-500/30 dark:hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/[0.02] hover:-translate-y-0.5;
+  @apply hover:border-indigo-300 dark:hover:border-indigo-400/40 hover:shadow-xl hover:shadow-indigo-500/[0.04] hover:-translate-y-0.5;
 }
 
-/* Premium Inputs */
+/* Premium Pastel Inputs */
 .saas-input {
-  @apply w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/40 text-sm text-zinc-900 dark:text-zinc-100 font-medium placeholder-zinc-400 dark:placeholder-zinc-600 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 focus:outline-none transition;
+  @apply w-full px-3.5 py-2.5 rounded-xl border border-zinc-200/90 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 text-sm text-zinc-900 dark:text-zinc-100 font-medium placeholder-zinc-400 dark:placeholder-zinc-600 focus:border-indigo-400 focus:ring-3 focus:ring-indigo-300/25 focus:outline-none transition;
 }
 .saas-input-with-prefix {
   padding-left: 2.25rem !important;
@@ -58,7 +124,7 @@
 }
 
 .saas-select {
-  @apply w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/40 text-sm text-zinc-900 dark:text-zinc-100 font-medium focus:border-indigo-500 focus:outline-none transition;
+  @apply w-full px-3.5 py-2.5 rounded-xl border border-zinc-200/90 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 text-sm text-zinc-900 dark:text-zinc-100 font-medium focus:border-indigo-400 focus:ring-3 focus:ring-indigo-300/25 focus:outline-none transition;
 }
 
 select option {
@@ -66,24 +132,24 @@ select option {
 }
 
 .saas-badge {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-xs;
 }
 
 .saas-button-primary {
-  @apply flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-bold text-sm shadow-sm hover:shadow-indigo-500/10 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none;
+  @apply flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-bold text-sm shadow-sm shadow-indigo-500/20 hover:shadow-indigo-500/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none;
 }
 
 .saas-button-secondary {
-  @apply flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 font-bold text-sm hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200;
+  @apply flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-indigo-100 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-200 hover:bg-indigo-50/50 dark:hover:bg-zinc-800 hover:border-indigo-200 font-bold text-sm hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200;
 }
 
 /* Subtle dot-grid texture for premium section backgrounds */
 .bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(99, 102, 241, 0.08) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 .dark .bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
 }
 
 /* Google Translate Global Theme Integration */

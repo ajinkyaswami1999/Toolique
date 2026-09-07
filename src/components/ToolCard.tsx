@@ -47,35 +47,35 @@ export default function ToolCard({ tool }: ToolCardProps) {
   return (
     <Link
       to={getToolCanonicalPath(tool.category, tool.slug)}
-      className={`group relative flex flex-col justify-between p-6 rounded-2xl bg-white dark:bg-zinc-900/40 border transition-all duration-300 transform hover:-translate-y-0.5 ${
+      className={`group relative flex flex-col justify-between p-6 rounded-2xl bg-white/90 dark:bg-zinc-900/50 border transition-all duration-300 transform hover:-translate-y-0.5 ${
         isHeroTool
-          ? 'border-indigo-500/50 dark:border-indigo-500/40 shadow-[0_2px_12px_rgba(99,102,241,0.06)] ring-1 ring-indigo-500/20 bg-gradient-to-b from-indigo-500/[0.03] to-transparent'
-          : 'border-zinc-200/70 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:border-indigo-500/40 dark:hover:border-indigo-500/40'
-      } hover:shadow-[0_8px_30px_rgb(99,102,241,0.03)] dark:hover:shadow-[0_8px_30px_rgb(99,102,241,0.015)]`}
+          ? 'border-amber-300/70 dark:border-amber-500/40 shadow-[0_4px_20px_rgba(245,158,11,0.06)] ring-1 ring-amber-400/25 bg-gradient-to-b from-amber-500/[0.04] to-transparent'
+          : 'border-indigo-100/70 dark:border-zinc-800/70 shadow-[0_2px_12px_rgba(99,102,241,0.03)] hover:border-indigo-300 dark:hover:border-indigo-400/40'
+      } hover:shadow-[0_12px_32px_rgba(99,102,241,0.07)] dark:hover:shadow-[0_12px_32px_rgba(99,102,241,0.03)]`}
     >
       <div>
         <div className="flex justify-between items-start mb-4">
-          <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800/60 text-zinc-700 dark:text-zinc-300 group-hover:bg-indigo-500/10 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors duration-300">
+          <div className="p-2.5 rounded-xl bg-indigo-50/80 dark:bg-zinc-800/70 text-indigo-700 dark:text-indigo-300 group-hover:bg-gradient-to-br group-hover:from-indigo-100 group-hover:to-violet-100 dark:group-hover:from-indigo-950 dark:group-hover:to-violet-950 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-all duration-300 shadow-2xs">
             <LucideIcon name={tool.icon} className="w-5 h-5" />
           </div>
           <div className="flex items-center gap-1.5">
             {isHeroTool && (
-              <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+              <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-800 dark:text-amber-300 border border-amber-300/50 shadow-2xs">
                 ★ Hero
               </span>
             )}
             {categoryInfo && (
-              <span className={`text-[9.5px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md border bg-gradient-to-r ${categoryInfo.colorClass}`}>
+              <span className={`text-[9.5px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full border bg-gradient-to-r ${categoryInfo.colorClass}`}>
                 {categoryInfo.name}
               </span>
             )}
             <button
               type="button"
               onClick={toggleFavorite}
-              className={`p-1.5 rounded-lg border hover:bg-zinc-50 dark:hover:bg-zinc-900 transition duration-300 cursor-pointer ${
+              className={`p-1.5 rounded-lg border hover:bg-rose-50/50 dark:hover:bg-zinc-900 transition duration-300 cursor-pointer ${
                 isFavorite
-                  ? 'bg-rose-500/5 border-rose-500/10 text-rose-500'
-                  : 'bg-white/40 dark:bg-zinc-900/30 border-zinc-200/60 dark:border-zinc-800/60 text-zinc-400 hover:text-rose-500'
+                  ? 'bg-rose-100/70 dark:bg-rose-950/40 border-rose-300/60 text-rose-600 dark:text-rose-400'
+                  : 'bg-white/60 dark:bg-zinc-900/40 border-indigo-100/60 dark:border-zinc-800/60 text-zinc-400 hover:text-rose-500'
               }`}
               title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             >
@@ -96,7 +96,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
             {tool.keywords.slice(0, 2).map((kw, idx) => (
               <span
                 key={idx}
-                className="text-[9px] font-bold text-zinc-450 dark:text-zinc-500 bg-zinc-100/50 dark:bg-zinc-900/40 px-2 py-0.5 rounded border border-zinc-200/10 dark:border-zinc-800/10 animate-fadeIn"
+                className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 bg-indigo-50/40 dark:bg-zinc-900/50 px-2 py-0.5 rounded-full border border-indigo-100/40 dark:border-zinc-800/40 animate-fadeIn"
               >
                 #{kw.split(' ')[0]}
               </span>
@@ -104,7 +104,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
           </div>
         )}
       </div>
-      <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+      <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-indigo-400 dark:text-zinc-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
         <span>Open Utility</span>
         <ArrowUpRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
       </div>

@@ -156,17 +156,17 @@ export default function CategoryLanding({ overrideCategory }: CategoryLandingPro
       />
 
       {/* Header section */}
-      <div className="p-8 md:p-12 rounded-3xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-800/50 space-y-4">
+      <div className="p-8 md:p-12 rounded-3xl bg-gradient-to-r from-pastel-indigo/20 via-white/50 to-pastel-lavender/15 dark:from-zinc-900/60 dark:via-zinc-900/40 dark:to-zinc-900/60 border border-pastel-indigo/40 dark:border-zinc-800/80 space-y-4 shadow-xs">
         <div className="flex items-center gap-3">
-          <span className="px-3 py-1 rounded-lg bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-extrabold text-[10px] uppercase tracking-wider">
+          <span className="px-3 py-1 rounded-xl bg-pastel-indigo/30 text-indigo-800 dark:text-indigo-300 font-extrabold text-[10px] uppercase tracking-wider border border-pastel-indigo/50 shadow-2xs">
             Ecosystem Suite
           </span>
-          <span className="text-[10px] text-zinc-450 font-bold">{categoryTools.length} Utilities Available</span>
+          <span className="text-[10px] text-zinc-500 font-bold">{categoryTools.length} Utilities Available</span>
         </div>
         <h1 className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
           {category.name} Utilities Hub
         </h1>
-        <p className="text-sm text-zinc-505 dark:text-zinc-400 max-w-2xl leading-relaxed">
+        <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed font-medium">
           {category.description} Clean, fast, 100% browser-based tools executing inside private client sandboxes.
         </p>
       </div>

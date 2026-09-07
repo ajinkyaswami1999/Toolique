@@ -160,22 +160,22 @@ export default function Footer() {
   const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   return (
-    <footer className="relative border-t border-zinc-200/80 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 transition-colors duration-300 overflow-hidden text-left" aria-label="Toolique Platform Footer">
+    <footer className="relative border-t border-indigo-100/70 dark:border-zinc-900 bg-[#fafbfe]/90 dark:bg-[#0b0f19] text-zinc-500 dark:text-zinc-400 transition-colors duration-300 overflow-hidden text-left" aria-label="Toolique Platform Footer">
       
-      {/* Decorative ambient background glows */}
-      <div className="absolute top-0 left-1/4 w-[300px] h-[300px] bg-indigo-500/5 dark:bg-indigo-500/[0.015] rounded-full blur-[80px] pointer-events-none -z-10" />
-      <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-teal-500/5 dark:bg-teal-500/[0.01] rounded-full blur-[80px] pointer-events-none -z-10" />
+      {/* Decorative ambient pastel background glows */}
+      <div className="absolute top-0 left-1/4 w-[350px] h-[350px] bg-indigo-300/10 dark:bg-indigo-500/[0.02] rounded-full blur-[90px] pointer-events-none -z-10" />
+      <div className="absolute bottom-0 right-1/4 w-[350px] h-[350px] bg-teal-300/10 dark:bg-teal-500/[0.015] rounded-full blur-[90px] pointer-events-none -z-10" />
 
       {/* -------------------- TOP CTA BANNER -------------------- */}
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-16">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-white/60 via-zinc-50/40 to-white/40 dark:from-zinc-900/60 dark:via-zinc-950/40 dark:to-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/80 p-8 md:p-12 text-center space-y-6 shadow-xl backdrop-blur-md">
-          <div className="absolute -top-[50%] -left-[20%] w-[60%] h-[150%] bg-indigo-500/10 dark:bg-indigo-500/[0.03] rounded-full blur-[100px] pointer-events-none" />
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-50/70 via-purple-50/40 to-teal-50/40 dark:from-zinc-900/70 dark:via-zinc-950/50 dark:to-zinc-900/70 border border-indigo-100/80 dark:border-zinc-800/80 p-8 md:p-12 text-center space-y-6 shadow-xl shadow-indigo-500/[0.03] backdrop-blur-md">
+          <div className="absolute -top-[50%] -left-[20%] w-[60%] h-[150%] bg-indigo-300/15 dark:bg-indigo-500/[0.03] rounded-full blur-[100px] pointer-events-none" />
           
           <div className="max-w-2xl mx-auto space-y-4 relative z-10">
             <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight">
               {footerConfig.cta.title}
             </h3>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed">
               {footerConfig.cta.subtitle}
             </p>
           </div>
@@ -187,10 +187,10 @@ export default function Footer() {
                 to={btn.link}
                 className={`px-5 py-2.5 rounded-xl font-black text-xs transition duration-300 hover:scale-[1.03] shadow-sm flex items-center gap-1.5 ${
                   btn.variant === 'primary' 
-                    ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-900'
+                    ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 text-white shadow-indigo-500/20'
                     : btn.variant === 'glow'
-                    ? 'bg-indigo-500 text-white shadow-indigo-500/20'
-                    : 'bg-zinc-100 hover:bg-zinc-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200/50 dark:border-zinc-800/50'
+                    ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-purple-500/20'
+                    : 'bg-white/90 hover:bg-white dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-indigo-100 dark:border-zinc-800'
                 }`}
               >
                 {btn.label}
@@ -205,11 +205,11 @@ export default function Footer() {
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {footerConfig.stats.map((stat, idx) => (
-            <div key={idx} className="saas-card p-5 text-center bg-white/30 dark:bg-zinc-900/20 backdrop-blur-sm border border-zinc-200/50 dark:border-zinc-800/40 rounded-2xl flex flex-col justify-center space-y-1">
+            <div key={idx} className="saas-card p-5 text-center bg-white/75 dark:bg-zinc-900/40 backdrop-blur-sm border border-indigo-100/70 dark:border-zinc-800/50 rounded-2xl flex flex-col justify-center space-y-1 shadow-xs">
               <span className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">
                 <CountUp end={stat.value} />
               </span>
-              <span className="text-[10px] font-bold text-zinc-450 dark:text-zinc-555 uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-zinc-455 dark:text-zinc-500 uppercase tracking-wider">
                 {stat.label}
               </span>
             </div>
