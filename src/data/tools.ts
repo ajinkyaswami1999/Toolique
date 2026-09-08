@@ -2139,41 +2139,75 @@ export const toolsList: Tool[] = [
   {
   "id": "RCCCalculator",
   "slug": "rcc-calculator",
-  "name": "RCC Calculator",
+  "name": "RCC Calculator & Reinforcement BOQ",
   "category": "civil",
-  "shortDescription": "Calculate reinforced cement concrete quantities including steel and shuttering.",
-  "metaDescription": "Free online RCC Calculator. Calculate total concrete volume, steel reinforcement weight, and shuttering board area for building structures.",
+  "shortDescription": "Calculate reinforced cement concrete quantities including mix design (M20/M25), TMT steel rebar (BBS), and shuttering formwork per IS 456.",
+  "metaDescription": "Free Online RCC Calculator for civil engineers & builders. Calculate concrete volume, cement bags, sand brass, aggregate, TMT steel rebar weight, shuttering area & BOQ per IS 456:2000.",
   "keywords": [
     "RCC Calculator",
-    "reinforced concrete calculator",
-    "steel weight in concrete",
-    "shuttering area calculator",
-    "IS 456 concrete steel ratios"
+    "reinforced cement concrete calculator",
+    "steel reinforcement calculator in RCC",
+    "IS 456 concrete steel ratios",
+    "shuttering area calculator for slab",
+    "RCC slab steel calculation",
+    "column steel rebar weight calculator",
+    "RCC beam concrete and steel quantity",
+    "footing RCC calculation formula",
+    "bar bending schedule BBS calculator",
+    "cement sand aggregate ratio in RCC",
+    "RCC construction cost calculator India"
   ],
   "icon": "Hammer",
   "howToUse": [
-    "Input structural dimensions: Length, Width, and Thickness/Depth.",
-    "Select steel density ratio (e.g. 1.0% for slabs, 2.0% for columns).",
-    "Enter unit rates to generate detailed material cost splits."
+    "Select your RCC structural member: Roof/Floor Slab, Beam, Rectangular/Circular Column, Isolated Footing, Retaining Wall, Staircase, Lintel & Chajja, or Direct Volume.",
+    "Pick your concrete grade (M15, M20, M25, M30) and TMT steel grade (Fe 500D, Fe 550D, Fe 600).",
+    "Input member dimensions in Metric (meters/mm) or Imperial (feet/inches) and number of units.",
+    "Adjust steel reinforcement percentage (e.g. 1.0% for slabs, 1.8% for beams, 2.5% for columns) or use IS 456 standards.",
+    "Review the complete material indent: Cement bags, Sand brass, Coarse aggregate tons, TMT rebar by diameter, and Shuttering plywood sheets.",
+    "Click 'Add to BOQ Schedule' to build a multi-element project takeoff, download a PDF Requisition, or share directly to WhatsApp."
   ],
   "faqs": [
     {
-      "question": "What is RCC?",
-      "answer": "RCC stands for Reinforced Cement Concrete, which combines the high compressive strength of concrete with the high tensile strength of steel rebars."
+      "question": "What is Reinforced Cement Concrete (RCC) and why is steel needed?",
+      "answer": "RCC is a composite building material combining plain cement concrete (which is very strong in compression but weak in tension) with steel reinforcement bars (TMT rebars, which offer immense tensile strength). Steel rebars absorb bending, shear, and tensile stresses, preventing catastrophic brittle failure."
     },
     {
-      "question": "How is steel weight estimated in concrete?",
-      "answer": "Steel is calculated as a volume ratio percentage of the total concrete mass, multiplying the volume of steel by the density of steel (7,850 kg/m³)."
+      "question": "What are the standard steel reinforcement percentages for different RCC structural members under IS 456?",
+      "answer": "Under Indian Standard IS 456:2000 rules of thumb: Slabs require 0.7% to 1.2% steel (approx. 55 to 80 kg/m\u00b3), Beams require 1.0% to 2.5% steel (approx. 80 to 160 kg/m\u00b3), Columns require 1.5% to 4.0% steel (approx. 120 to 275 kg/m\u00b3), and Isolated Footings require 0.5% to 1.0% steel (approx. 40 to 65 kg/m\u00b3)."
+    },
+    {
+      "question": "What is the minimum concrete grade for RCC structural work as per IS 456:2000?",
+      "answer": "As per IS 456:2000 Clause 6.1.2, the minimum grade of concrete for plain reinforced concrete (RCC) is M20 (nominal mix 1:1.5:3, compressive strength 20 N/mm\u00b2 at 28 days). For post-tensioned pre-stressed concrete, minimum M30 is required; for pre-tensioned, minimum M40 is specified."
+    },
+    {
+      "question": "What is the dry volume conversion factor for concrete batching?",
+      "answer": "Dry ingredients shrink by approximately 54% when mixed with water due to the elimination of air voids between aggregate and sand particles. Therefore, a dry volume conversion multiplier of 1.54 is multiplied by wet concrete volume before calculating cement, sand, and aggregate."
+    },
+    {
+      "question": "What are the minimum clear cover requirements for RCC elements as per IS 456?",
+      "answer": "Clear cover protects reinforcement from corrosion and fire: Slabs require 20 mm, Beams require 25 mm, Columns require 40 mm (or bar diameter, whichever is greater), Footings touching earth require 50 mm, and Water retaining structures require 25 to 30 mm."
+    },
+    {
+      "question": "How do you calculate the shuttering (formwork) contact area for beams, columns, and slabs?",
+      "answer": "Shuttering contact area is the exposed surface area of wet concrete supported by formwork: Slabs = (Length \u00d7 Width) + 2 \u00d7 (Length + Width) \u00d7 Thickness; Beams = (2 \u00d7 Depth + Width) \u00d7 Length; Columns = 2 \u00d7 (Width + Depth) \u00d7 Height. Standard 8ft \u00d7 4ft plywood sheets cover 32 sq.ft."
     }
   ],
   "sections": [
     {
-      "title": "RCC Volume & Steel Weight calculations",
-      "content": "The weight of reinforcement steel is calculated by taking a percentage of the total concrete volume. A standard rule of thumb is:\nSteel Weight (kg) = Concrete Volume (m³) × Steel Ratio (%) × 7850 kg/m³"
+      "title": "IS 456:2000 Standard RCC Steel Reinforcement Ratios",
+      "content": "Reinforcement steel weight in structural concrete is governed by volumetric density (\u03c1 = 7,850 kg/m\u00b3):\n- **Roof & Floor Slabs**: 0.7% to 1.2% of concrete volume (55 \u2013 95 kg/m\u00b3)\n- **Plinth & Floor Beams**: 1.0% to 2.5% of concrete volume (80 \u2013 195 kg/m\u00b3)\n- **Columns & Pedestals**: 1.5% to 4.0% of concrete volume (120 \u2013 314 kg/m\u00b3, max 6% at lap zones)\n- **Foundation Footings & Rafts**: 0.5% to 1.0% of concrete volume (40 \u2013 80 kg/m\u00b3)\n- **Retaining & Shear Walls**: 0.8% to 1.8% of concrete volume (65 \u2013 140 kg/m\u00b3)\n- **RCC Staircases**: 0.9% to 1.5% of concrete volume (70 \u2013 120 kg/m\u00b3)"
     },
     {
-      "title": "Standard Steel Ratios u/s IS 456 Guidelines",
-      "content": "- **Slabs**: 0.7% to 1.0% of concrete volume\n- **Beams**: 1.0% to 2.0% of concrete volume\n- **Columns**: 1.5% to 3.0% of concrete volume\n- **Footings**: 0.5% to 0.8% of concrete volume"
+      "title": "Concrete Mix Proportions & Dry Compaction Math",
+      "content": "To calculate constituent materials for concrete batching:\n1. **Wet to Dry Volume**: `Dry Volume (m\u00b3) = Wet Volume (m\u00b3) \u00d7 1.54`\n2. **Cement Weight**: `Cement (kg) = (Cement Ratio / Total Parts) \u00d7 Dry Volume \u00d7 1440 kg/m\u00b3`\n3. **Cement 50kg Bags**: `Cement Bags = Cement Weight (kg) / 50`\n4. **Fine Sand**: `Sand (cu.ft) = (Sand Ratio / Total Parts) \u00d7 Dry Volume \u00d7 35.3147` (1 Brass = 100 cu.ft)\n5. **Coarse Aggregate**: `Aggregate (cu.ft) = (Aggregate Ratio / Total Parts) \u00d7 Dry Volume \u00d7 35.3147` (Standard split: 60% 20mm + 40% 10mm)\n6. **Water Requirement**: `Water (Liters) = Cement Weight (kg) \u00d7 Water-Cement Ratio (0.45 \u2013 0.55)`"
+    },
+    {
+      "title": "Formwork Striking & De-Shuttering Schedule (IS 456: Clause 11.3)",
+      "content": "Striking time for formwork under normal Indian temperature conditions (>16\u00b0C):\n- **Vertical sides of beams, columns, and walls**: 16 to 24 hours\n- **Soffits to slabs (props left under)**: 3 days\n- **Soffits to beams (props left under)**: 7 days\n- **Props to slabs spanning up to 4.5m**: 7 days\n- **Props to slabs spanning over 4.5m**: 14 days\n- **Props to beams & arches spanning up to 6m**: 14 days\n- **Props to beams & arches spanning over 6m**: 21 days"
+    },
+    {
+      "title": "Bar Bending Schedule (BBS) Allowances & Clear Cover",
+      "content": "- **Lap Length ($L_d$)**: Typically $50d$ to $60d$ (where $d$ is bar diameter in mm) for tension lap.\n- **Bend Deduction**: Deduct $2d$ for each 90\u00b0 bend, $3d$ for 135\u00b0 bends, and $4d$ for 180\u00b0 hooks.\n- **GI Binding Wire**: 7 to 10 kg of 18-gauge annealed binding wire per 1000 kg of TMT steel rebar.\n- **Cover Blocks**: PVC or concrete cover blocks spaced at approx. 1 meter grid (15 to 20 blocks per m\u00b3 of concrete)."
     }
   ]
 },
