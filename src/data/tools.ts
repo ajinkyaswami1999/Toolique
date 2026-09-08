@@ -5552,1359 +5552,2198 @@ export const toolsList: Tool[] = [
       }
     ]
   },
-  {
+    {
     id: 'FilamentCostCalculator',
     slug: 'filament-cost-calculator',
     name: 'Filament Cost Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate the exact filament cost of 3D prints based on weight, price, and spool specifications.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate the exact filament cost of 3d prints based on weight, price, and spool specifications.',
-    keywords: ["filament cost","3d print price","filament weight cost","slicing calculator"],
+    shortDescription: "Calculate the exact filament cost of 3D prints based on weight, price, and spool specifications.",
+    metaTitle: "3D Printer Filament Cost Calculator | Free Filament Tool",
+    metaDescription: "Calculate 3D printer filament usage, weight, length and estimated printing cost. Free online PLA, PETG and ABS filament calculator with spool pricing.",
+    keywords: [
+      "filament cost calculator",
+      "3d printer filament calculator",
+      "filament price calculator",
+      "calculate filament cost",
+      "pla filament cost calculator",
+      "petg print cost",
+      "how much does filament cost per print",
+      "3d printing material cost",
+      "filament weight to cost",
+      "filament spool pricing calculator",
+      "free 3d printing calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter your filament spool purchase price (e.g., $20.00 or ₹1,500.00) and spool net weight (e.g., 1000g).",
+      "Select your filament material type (PLA, PETG, ABS, TPU, ASA, Nylon, or PC).",
+      "Enter the estimated filament weight used by your sliced model (in grams).",
+      "Optionally add a wastage/support margin percentage (e.g., 5% to 10%).",
+      "Instantly view the raw filament cost, cost per gram, cost per meter, and remaining spool budget."
+],
     faqs: [
       {
-        question: 'Is the Filament Cost Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "What is a Filament Cost Calculator?",
+            "answer": "A Filament Cost Calculator is a free online tool that computes the exact raw material expense for a 3D print based on spool price, net spool weight, material density, and sliced model grams."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How is 3D printer filament cost calculated?",
+            "answer": "Filament cost is calculated using the formula: Cost = (Model Weight in Grams / Net Spool Weight in Grams) × Total Spool Price. An optional support/purge waste multiplier can be applied for higher precision."
+      },
+      {
+            "question": "Does this calculator support PLA, PETG, ABS, and TPU?",
+            "answer": "Yes, it supports all standard FDM thermoplastics including PLA (1.24 g/cm³), PETG (1.27 g/cm³), ABS (1.04 g/cm³), TPU (1.21 g/cm³), ASA, Nylon (PA), and Polycarbonate (PC)."
+      },
+      {
+            "question": "How accurate is the filament cost calculation?",
+            "answer": "Calculations are mathematically exact based on entered gram weights. Real-world consumption may vary slightly (±2-5%) due to support structures, purge tower waste, and brim/skirt extrusion."
+      },
+      {
+            "question": "What information do I need to calculate filament cost?",
+            "answer": "You only need two numbers: the price you paid for your spool and the filament weight (in grams) reported by your slicing software (such as Bambu Studio, OrcaSlicer, Cura, or PrusaSlicer)."
+      },
+      {
+            "question": "Is this 3D printing calculator completely free?",
+            "answer": "Yes, Toolique's Filament Cost Calculator is 100% free with no registration, no daily calculation limits, and zero server data tracking."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Filament Cost Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is a 3D Printer Filament Cost Calculator?",
+            "content": "A Filament Cost Calculator is an essential maker utility that calculates the exact monetary cost of 3D printing filament consumed during a print job. By analyzing your spool purchase price and model weight in grams, it provides an instant breakdown of material expense, cost per gram, and cost per meter."
+      },
+      {
+            "title": "How Does the Filament Cost Calculator Work?",
+            "content": "The calculator first determines your baseline material rate: Cost Per Gram = Total Spool Price / Net Spool Weight. It then multiplies this rate by the model weight (including support structures and brim). If a wastage buffer is selected, it compounds the material overhead to prevent underpricing."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Cost Per Gram ($/g) = Spool Price / Spool Net Weight (g)\n• Raw Material Cost ($) = Model Weight (g) × Cost Per Gram\n• Total Filament Cost ($) = Raw Material Cost × (1 + Wastage % / 100)\n• Filament Length Used (m) = Model Weight (g) / (Density (g/cm³) × π × (Filament Diameter / 2)²)"
+      },
+      {
+            "title": "Step-by-Step Real-World Example",
+            "content": "Suppose you purchased a 1 kg (1,000g) spool of Polymaker PLA for $22.00 (or ₹1,650) and your sliced bust model consumes 145 grams with a 5% support waste buffer:\n1. Cost per gram = $22.00 / 1,000g = $0.022 per gram\n2. Base material cost = 145g × $0.022 = $3.19\n3. With 5% waste buffer = $3.19 × 1.05 = $3.35 total filament cost."
+      },
+      {
+            "title": "Accuracy, Slicing Factors & Physical Limitations",
+            "content": "While mathematical calculations are exact, actual filament usage depends on slicer infill density, wall line counts, tree supports, filament diameter tolerances (1.75mm ± 0.03mm), and printer purge volumes during color changes."
+      },
+      {
+            "title": "Who It Is For & Recommended Use Cases",
+            "content": "Ideal for 3D printing hobbyists managing personal budgets, Etsy sellers pricing custom props, engineering prototyping labs, and print farm operators auditing raw inventory consumption."
       }
-    ]
+]
   },
-  {
+    {
     id: 'ThreeDPrintingCostCalculator',
     slug: '3d-printing-cost-calculator',
     name: '3D Printing Cost Calculator',
     category: '3d-printing',
-    shortDescription: 'Estimate overall cost including filament, electricity, machine wear, and labor markup.',
-    metaDescription: 'Free online 3D printing pricing calculator. Estimate materials cost, slicing/operations labor, power, packaging box cost, platform commissions, and taxes.',
-    keywords: ["3d printing cost","print price estimator","electricity cost print","labor markup print", "3d printing cost calculator", "filament pricing"],
+    shortDescription: "Estimate overall cost including filament, electricity, machine wear, and labor markup.",
+    metaTitle: "3D Printing Cost Calculator | Estimate Total Print Price",
+    metaDescription: "Calculate total 3D printing cost including filament, electricity, printer depreciation, labor, packaging, and profit margins. Free print pricing estimator.",
+    keywords: [
+      "3d printing cost calculator",
+      "calculate 3d print cost",
+      "how much does a 3d print cost",
+      "3d print pricing calculator",
+      "print farm cost estimator",
+      "3d printing electricity cost",
+      "cost of 3d printing per hour",
+      "3d print labor cost",
+      "commercial 3d printing calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter your product details (name, category, and optional notes).',
-      'Provide your filament specifications (price per spool, weight used, wastage margin, and failed prints).',
-      'Input machine run time, electricity rate, depreciation wear, and operational labour hours.',
-      'Specify standard packaging, shipping, dynamic custom accessories, commission rates, and tax parameters.',
-      'Review suggestions in the sticky panel, load defaults, manage history records, or print a professional PDF invoice quote.'
-    ],
+      "Enter your filament spool cost, spool weight, and estimated print grams.",
+      "Input print duration (hours and minutes) and machine electrical wattage (e.g. 150W for bed + hotend).",
+      "Add electricity kilowatt-hour (kWh) utility rate for your location.",
+      "Specify machine hourly depreciation wear rate (e.g. $0.50/hr or ₹20/hr).",
+      "Include optional design/slicing labor, packaging box, shipping, and target profit margin %.",
+      "Review the comprehensive cost breakdown and download or copy a quote summary."
+],
     faqs: [
       {
-        question: 'What is a 3D Printing Cost Calculator?',
-        answer: 'A 3D Printing Cost Calculator is a specialized tool that helps makers, print farms, and Etsy sellers calculate the exact production cost and optimal retail selling price of their 3D printed objects. It aggregates raw materials, power consumption, machine wear, operations labor, shipping packaging, custom items, overhead commissions, and GST taxes.'
+            "question": "What is a 3D Printing Cost Calculator?",
+            "answer": "A 3D Printing Cost Calculator aggregates all direct and indirect expenses required to manufacture a 3D printed object—including filament, power, hardware depreciation, labor, packaging, and target profit margins."
       },
       {
-        question: 'How do you calculate 3D printing price?',
-        answer: 'To calculate the price, start by finding the raw filament cost (weight * price per gram). Add electricity cost (print duration * wattage * utility rate). Add machine depreciation and operational labor (slicing, design, packaging, post-processing). Add shipping packaging, bubble wraps, and custom inserts. Finally, factor in platform commissions, gateway fees, GST taxes, and your target profit margin percentage to arrive at the final retail selling price.'
+            "question": "How do you calculate the commercial price of a 3D print?",
+            "answer": "Total Price = (Material Cost + Electricity Cost + Machine Wear + Labor Cost + Packaging & Shipping) × (1 + Profit Margin % / 100) + Applicable Taxes."
       },
       {
-        question: 'What is a typical machine depreciation wear rate?',
-        answer: 'For standard hobbyist desktop printers (like Bambu Lab or Creality), a typical depreciation wear rate ranges from ₹5.00 to ₹15.00 per print hour. This covers nozzle wear, belt stretching, fan life cycles, and eventually amortizing the initial printer purchase price over its expected lifespan.'
+            "question": "How much electricity does a typical 3D printer consume?",
+            "answer": "A modern desktop 3D printer (like Bambu Lab P1S or Creality Ender 3 V3) consumes between 100W and 250W on average. At $0.15/kWh, a 10-hour print costs approximately $0.15 to $0.30 in electricity."
       },
       {
-        question: 'How do platform commissions affect pricing?',
-        answer: 'Platforms like Etsy or Shopify take commission fees (ranging from 5% to 15%) and payment gateway fees (around 2% to 3%) on the final sale value. Failing to incorporate these overheads in your pricing will directly erode your profit margins. The 3D Printing Cost Calculator automates these business calculations.'
+            "question": "What is machine depreciation wear?",
+            "answer": "Depreciation accounts for hardware wear on nozzles, belts, stepper motors, bearings, and amortizes the initial purchase cost of the printer over its estimated operating lifespan (usually 2,000–5,000 hours)."
       },
       {
-        question: 'Should I charge for slicing and setup times?',
-        answer: 'Yes! Slicing, print bed preparation, model cleaning, post-curing, support removal, and packaging are active labour tasks. Neglecting labour costs is the most common mistake made by new print farm operators. Always factor in an hourly rate for operations labor.'
+            "question": "Can print farm operators use this calculator for bulk order quotations?",
+            "answer": "Yes, you can configure batch multipliers, failure contingency margins, packaging overheads, and merchant transaction fees for wholesale and retail quotes."
       }
-    ],
+],
     sections: [
       {
-        title: 'What is a 3D Printing Cost Calculator?',
-        content: 'A 3D Printing Cost Calculator is a specialized tool designed to solve the pricing problem for makers, hobbyists, Etsy merchants, and professional print farm operators. Setting prices based on guesswork often leads to losses or overpricing. This calculator aggregates raw material costs, printer power draw, machine depreciation wear, post-processing labor, third-party sales overheads, and taxes into a unified formula.'
+            "title": "What is a 3D Printing Cost Calculator?",
+            "content": "A 3D Printing Cost Calculator is a full commercial pricing engine that determines the true economic cost of producing physical 3D prints. It combines raw thermoplastic usage with electricity, hardware wear, hands-on labor, post-processing, and packaging."
       },
       {
-        title: 'How to Calculate 3D Printing Cost?',
-        content: 'To calculate the price of a 3D printed object, you must account for all stages of production:\n\n1. Material cost: weight in grams multiplied by the cost per gram of the filament spool (including failed prints and support structure waste).\n2. Electricity: machine wattage multiplied by the printing duration in hours, converted to kWh and multiplied by the utility rate.\n3. Depreciation: wear and tear per hour to cover nozzle wear, belt replacements, and eventual printer replacements.\n4. Labour: design, slicing, post-processing, and packaging hours multiplied by your hourly rate.\n5. Overheads: platform commissions, payment gateways, marketing costs, shipping, and taxes (GST).'
+            "title": "How Does It Work?",
+            "content": "The calculator isolates four primary cost centers: 1) Material Costs (weight × price/g), 2) Energy Costs (hours × kW × electricity rate), 3) Hardware Wear (hours × hourly depreciation), and 4) Operational Overhead (setup, cleanup, packaging, platform fees, and target profit margin)."
       },
       {
-        title: 'Formula Explanation',
-        content: 'The calculator uses a dual-tier calculation cascade:\n\nProduction Cost = Filament Cost + Electricity Cost + Machine Cost + Labour Cost + Extra Material Cost + Custom Cost + Miscellaneous Cost\n\nSelling Price = Production Cost + Business Overheads + Profit Margin + GST\n\nFinal Selling Price = Selling Price - Discount\n\nWhere Business Overheads includes platform commission, payment gateway fees, and marketing cost margins. Rounding is optionally applied to the final suggested selling price to provide attractive rounded options (nearest ₹49 or ₹99).'
+            "title": "Formula Used",
+            "content": "• Total Production Cost = Filament Cost + Energy Cost + Machine Wear + Labor Cost + Packaging Cost\n• Retail Selling Price = (Total Production Cost / (1 - Platform Fee % / 100)) × (1 + Margin % / 100)\n• Energy Cost = (Printer Watts / 1000) × Print Hours × Utility Rate ($/kWh)\n• Machine Wear = Print Hours × Hourly Depreciation Rate"
+      },
+      {
+            "title": "Step-by-Step Real-World Example",
+            "content": "For a custom headphone stand requiring 200g of PETG ($24/kg spool) with an 8-hour print time at 150W power, $0.14/kWh electricity, $0.50/hr machine wear, 15 min labor at $20/hr, and a 40% margin:\n1. Filament = 200g × $0.024 = $4.80\n2. Electricity = 0.15 kW × 8 hrs × $0.14 = $0.17\n3. Machine wear = 8 hrs × $0.50 = $4.00\n4. Labor = 0.25 hrs × $20.00 = $5.00\n5. Base Cost = $4.80 + $0.17 + $4.00 + $5.00 = $13.97\n6. Retail Price (40% margin) = $13.97 × 1.40 = $19.56."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Estimates assume consistent heated bed temperatures and steady room ambient conditions. Failed print contingency rates should be added for complex overhangs or high-speed printing."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Essential for 3D printing freelancers, Etsy craft sellers, commercial print farms, makerspaces, and product development studios needing transparent, repeatable quote generation."
       }
-    ]
+]
   },
-  {
+    {
     id: 'PrintProfitCalculator',
     slug: 'print-profit-calculator',
     name: 'Print Profit Calculator',
     category: '3d-printing',
-    shortDescription: 'Determine net earnings, margins, and platform transaction fees for 3D printed sales.',
-    metaDescription: 'Free online 3D printing calculator. calculate determine net earnings, margins, and platform transaction fees for 3d printed sales.',
-    keywords: ["print profit","selling 3d prints","etsy print profit","margin calculator"],
+    shortDescription: "Determine net earnings, margins, and platform transaction fees for 3D printed sales.",
+    metaTitle: "3D Print Profit Calculator | Net Margin & Etsy Fee Tool",
+    metaDescription: "Calculate net profit, gross margins, return on investment (ROI), and platform commission fees (Etsy, Shopify) for commercial 3D printing sales.",
+    keywords: [
+      "3d print profit calculator",
+      "3d printing profit margin",
+      "etsy 3d print profit",
+      "calculate 3d printing margin",
+      "print farm profit calculator",
+      "selling 3d prints profit",
+      "3d printing revenue calculator",
+      "how to price 3d prints for profit"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter your total production cost per unit (materials, power, machine wear, labor).",
+      "Input your proposed retail selling price.",
+      "Enter platform transaction fees (e.g. 6.5% Etsy transaction + 3% payment gateway).",
+      "Add fixed listing fees and packaging/shipping costs.",
+      "View your net profit, profit margin percentage, markup multiplier, and breakeven sales volume."
+],
     faqs: [
       {
-        question: 'Is the Print Profit Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "What is a 3D Print Profit Calculator?",
+            "answer": "A 3D Print Profit Calculator evaluates the profitability of selling 3D printed products by subtracting total manufacturing costs, packaging, shipping, and e-commerce platform fees from gross revenue."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is a healthy profit margin for 3D printing businesses?",
+            "answer": "Most successful 3D printing businesses target gross profit margins between 40% and 70% to account for machine maintenance, prototyping iterations, failed prints, and marketing overhead."
+      },
+      {
+            "question": "How do platform fees affect profit on Etsy or Shopify?",
+            "answer": "Platforms charge listing fees ($0.20 on Etsy), transaction fees (6.5%), and payment processing fees (3% + $0.25). On a $20 print, platform fees alone can total $2.15 (over 10% of gross revenue)."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Print Profit Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Print Profit Calculator?",
+            "content": "The Print Profit Calculator is a financial tool designed for makers and print entrepreneurs to measure exact profit margins, net revenue after marketplace deductions, and investment payback periods."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Net Profit ($) = Selling Price - Manufacturing Cost - Platform Fees - Shipping & Packaging\n• Net Profit Margin (%) = (Net Profit / Selling Price) × 100\n• Markup Percentage (%) = (Net Profit / Manufacturing Cost) × 100"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "If a 3D printed mechanical planter costs $4.50 to produce and sells for $25.00 with $2.50 in Etsy fees and $4.00 shipping paid by customer:\n• Net Profit = $25.00 - $4.50 - $2.50 = $18.00\n• Profit Margin = ($18.00 / $25.00) × 100 = 72.0%."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Does not include income tax or business accounting overhead unless entered manually in the custom expense field."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Commercial makers, e-commerce shop owners, crowdfunding creators, and print farm managers."
       }
-    ]
+]
   },
-  {
+    {
     id: 'PrintFarmRevenueCalculator',
     slug: 'print-farm-revenue-calculator',
     name: 'Print Farm Revenue Calculator',
     category: '3d-printing',
-    shortDescription: 'Project daily, monthly, and yearly revenue forecasts for multiple 3D printers.',
-    metaDescription: 'Free online 3D printing calculator. calculate project daily, monthly, and yearly revenue forecasts for multiple 3d printers.',
-    keywords: ["print farm","3d printer revenue","farm profitability","capacity yield"],
+    shortDescription: "Project daily, monthly, and yearly revenue forecasts for multiple 3D printers.",
+    metaTitle: "Print Farm Revenue Calculator | Multi-Printer Capacity Tool",
+    metaDescription: "Forecast daily, monthly, and annual revenue for 3D print farms. Calculate machine capacity, utilization rates, and batch production revenue.",
+    keywords: [
+      "print farm revenue calculator",
+      "3d print farm capacity",
+      "multi printer revenue",
+      "print farm profit forecast",
+      "3d printing business calculator",
+      "print farm scaling calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter the total number of active 3D printers in your farm.",
+      "Input the average daily operating hours per machine (e.g. 16 to 20 hours).",
+      "Specify your average job duration and average revenue generated per print job.",
+      "Set your printer uptime utilization percentage (e.g. 80% to 90%).",
+      "Analyze projected daily, monthly, and yearly gross revenue and output capacity."
+],
     faqs: [
       {
-        question: 'Is the Print Farm Revenue Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "What is a Print Farm Revenue Calculator?",
+            "answer": "A Print Farm Revenue Calculator estimates the total production volume and financial earnings of a multi-printer manufacturing facility over daily, monthly, and annual operating cycles."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is realistic machine utilization for a print farm?",
+            "answer": "A realistic machine utilization rate for a desktop 3D print farm is between 70% and 85%, allowing time for bed clearing, filament swaps, maintenance, and job queue scheduling."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Print Farm Revenue Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Print Farm Revenue Calculator?",
+            "content": "A capacity planning and financial forecasting calculator for businesses operating multiple 3D printers simultaneously. It projects total throughput capacity, job completion volume, and revenue scaling."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Daily Completed Jobs = (Total Printers × Operating Hours/Day × (Utilization % / 100)) / Average Job Duration (hrs)\n• Monthly Revenue ($) = Daily Completed Jobs × Revenue Per Job × 30 Days\n• Annual Revenue ($) = Monthly Revenue × 12 Months"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A farm with 10 Bambu Lab X1C printers running 18 hrs/day at 80% utilization with 3-hour print jobs generating $15 revenue each:\n• Daily Jobs = (10 × 18 × 0.80) / 3 = 48 prints/day\n• Monthly Revenue = 48 × $15 × 30 = $21,600/month."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Assumes consistent order backlog. Fluctuations in seasonal demand or unexpected hardware downtime can impact realized output."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Print farm founders, manufacturing scale-ups, and entrepreneurs pitching investors on 3D printing micro-factories."
       }
-    ]
+]
   },
-  {
+    {
     id: 'FilamentWeightCalculator',
     slug: 'filament-weight-calculator',
     name: 'Filament Weight Calculator',
     category: '3d-printing',
-    shortDescription: 'Convert filament roll length directly to weight based on material densities.',
-    metaDescription: 'Free online 3D printing calculator. calculate convert filament roll length directly to weight based on material densities.',
-    keywords: ["filament weight","length to weight","pla density","abs weight calculator"],
+    shortDescription: "Convert filament roll length directly to weight based on material densities.",
+    metaTitle: "Filament Weight to Length Calculator | PLA, PETG & ABS",
+    metaDescription: "Convert 3D printer filament weight (grams) to length (meters) and vice versa. Free precision tool supporting 1.75mm and 2.85mm filament diameters.",
+    keywords: [
+      "filament weight calculator",
+      "filament length to weight",
+      "calculate filament length",
+      "pla filament weight to length",
+      "1.75mm filament calculator",
+      "meters of filament per spool",
+      "3d printing filament conversion",
+      "filament density calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Select your filament diameter (standard 1.75mm or 2.85mm / 3.00mm).",
+      "Choose your filament material type (PLA, PETG, ABS, TPU, Nylon, PC, ASA).",
+      "Enter either weight in grams to find length in meters, or enter length in meters to find weight.",
+      "Review the exact volumetric conversion results instantly."
+],
     faqs: [
       {
-        question: 'Is the Filament Weight Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "How many meters of 1.75mm filament are in a 1kg spool?",
+            "answer": "A standard 1kg (1,000g) spool of 1.75mm PLA filament contains approximately 335 meters (1,100 feet). A 1kg spool of PETG contains ~327 meters, and lighter ABS contains ~400 meters."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Why does filament length vary between materials of the same weight?",
+            "answer": "Because different thermoplastics have different physical densities. For example, ABS has a density of ~1.04 g/cm³, while PLA is denser at ~1.24 g/cm³ and PETG is ~1.27 g/cm³."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Filament Weight Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Filament Weight Calculator?",
+            "content": "The Filament Weight Calculator is a precision conversion tool that translates between filament mass (grams/kilograms) and physical spool length (meters/feet) using cross-sectional geometry and material densities."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Cross-Sectional Area (mm²) = π × (Diameter / 2)²\n• Volume per Meter (cm³/m) = Area (mm²) × 1,000 / 1,000 = Area / 100\n• Weight per Meter (g/m) = Volume per Meter × Material Density (g/cm³)\n• Total Length (m) = Total Weight (g) / Weight per Meter (g/m)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "For 1.75mm PLA (Density = 1.24 g/cm³):\n• Radius = 0.875 mm -> Area = π × (0.875)² = 2.405 mm²\n• Weight per meter = 2.405 × 1.24 / 100 = 2.982 g/m\n• In 1,000g spool: Length = 1,000 / 2.982 = 335.3 meters."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Calculations assume standard nominal 1.75mm diameter. Specialized filaments with carbon fiber or wood infills may have slightly modified density profiles."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makers checking if leftover spool length is sufficient for their next sliced print job."
       }
-    ]
+]
   },
-  {
+    {
     id: 'FilamentUsageCalculator',
     slug: 'filament-usage-calculator',
     name: 'Filament Usage Calculator',
     category: '3d-printing',
-    shortDescription: 'Project total rolls required and cost splits for large multi-part batch orders.',
-    metaDescription: 'Free online 3D printing calculator. calculate project total rolls required and cost splits for large multi-part batch orders.',
-    keywords: ["filament usage","batch printing","spool requirements","material planner"],
+    shortDescription: "Project total rolls required and cost splits for large multi-part batch orders.",
+    metaTitle: "3D Print Filament Usage Calculator | Batch Spool Estimator",
+    metaDescription: "Calculate total filament spools needed for single models or multi-part production batches. Prevents mid-print runouts and optimizes inventory purchasing.",
+    keywords: [
+      "filament usage calculator",
+      "how much filament do i need",
+      "calculate spools for batch print",
+      "3d printing material estimator",
+      "filament spool requirement",
+      "batch print filament calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter single model filament weight (in grams).",
+      "Specify total quantity of units to produce.",
+      "Add support structures, purge tower, and failed print buffer percentage (e.g. 8%).",
+      "Select standard spool size (e.g. 1kg, 2.5kg, or 5kg).",
+      "View exact total weight required, total spools to purchase, and remaining leftover grams."
+],
     faqs: [
       {
-        question: 'Is the Filament Usage Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "How do I calculate how much filament I need for a batch of prints?",
+            "answer": "Multiply the grams per part by total quantity, add your expected support and failure contingency percentage, then divide by your spool size (typically 1,000g) to determine total spools required."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How much extra filament buffer should I order?",
+            "answer": "A safety buffer of 5% to 10% is recommended for single-color prints, and 15% to 25% for multi-color AMS prints with frequent purge cycles."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Filament Usage Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Filament Usage Calculator?",
+            "content": "The Filament Usage Calculator helps makers and production teams calculate the total mass of filament required for bulk print runs, preventing unexpected spool exhaustion during long jobs."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Net Batch Weight = Part Weight (g) × Quantity\n• Gross Required Weight = Net Batch Weight × (1 + Waste % / 100)\n• Spools Required = CEIL(Gross Required Weight / Spool Capacity)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "To print 35 tabletop miniatures using 28g of PLA each with a 10% waste buffer:\n• Net Weight = 35 × 28g = 980g\n• Gross Weight = 980g × 1.10 = 1,078g\n• Total 1kg spools needed = 2 spools (1,078g / 1,000g = 1.08 -> 2 spools)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "High-infill parts or models requiring dense organic tree supports may consume more material than estimated."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Kickstarter fulfillment managers, cosplay armor builders, and makers preparing for bulk batch manufacturing."
       }
-    ]
+]
   },
-  {
+    {
     id: 'RemainingFilamentCalculator',
     slug: 'remaining-filament-calculator',
     name: 'Remaining Filament Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate the leftover filament on a spool using tare spool weights.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate the leftover filament on a spool using tare spool weights.',
-    keywords: ["remaining filament","spool tare weight","leftover filament","empty spool weight"],
+    shortDescription: "Calculate the leftover filament on a spool using tare spool weights.",
+    metaTitle: "Remaining Filament Calculator | Weigh Leftover Spool Tool",
+    metaDescription: "Calculate how much filament is left on a used spool by weighing it on a kitchen scale. Includes empty spool tare weights for Bambu, Hatchbox, Sunlu, and Overture.",
+    keywords: [
+      "remaining filament calculator",
+      "how much filament is left on my spool",
+      "spool tare weight calculator",
+      "weigh filament spool",
+      "leftover filament calculator",
+      "will my print finish on this spool"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Place your used filament spool on a standard digital kitchen scale and note total weight in grams.",
+      "Select your spool brand preset to auto-fill the empty spool tare weight (or enter custom tare weight e.g. 210g for plastic, 140g for cardboard).",
+      "Enter your sliced model's required filament weight.",
+      "Instantly discover exact remaining grams, remaining length in meters, and whether your print will complete safely without running out."
+],
     faqs: [
       {
-        question: 'Is the Remaining Filament Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "How do I know if I have enough filament left on my spool?",
+            "answer": "Weigh the spool on a scale and subtract the empty plastic or cardboard spool tare weight (typically 180g–250g). The remaining number is your available filament weight."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is the tare weight of a standard empty filament spool?",
+            "answer": "Bambu Lab reusable plastic spools weigh ~210g–230g, cardboard spools (Overture/Polymaker) weigh ~130g–170g, and standard injection-molded spools weigh ~220g–250g."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Remaining Filament Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Remaining Filament Calculator?",
+            "content": "A safety tool that calculates exact leftover filament mass on partially used spools by subtracting known empty spool tare weights from measured gross scale weight."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Remaining Filament Weight (g) = Measured Scale Weight (g) - Empty Spool Tare Weight (g)\n• Remaining Length (m) = Remaining Weight / Linear Grams Per Meter\n• Safety Margin (g) = Remaining Weight - Job Required Weight"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A partially used Bambu Lab PLA spool weighs 460g on your scale. The reusable spool tare weight is 215g, and your sliced vase requires 210g:\n• Remaining Filament = 460g - 215g = 245g\n• Safety Margin = 245g - 210g = +35g (Safe to start print!)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Accuracy depends on kitchen scale calibration (recommended ±1g resolution) and desiccant weight if stored inside the spool core."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makers wanting 100% confidence before kicking off overnight prints with low filament spools."
       }
-    ]
+]
   },
-  {
+    {
     id: 'MaterialCostComparison',
     slug: 'material-cost-comparison',
     name: 'Material Cost Comparison',
     category: '3d-printing',
-    shortDescription: 'Compare running costs per gram across PLA, PETG, ABS, and Nylon.',
-    metaDescription: 'Free online 3D printing calculator. calculate compare running costs per gram across pla, petg, abs, and nylon.',
-    keywords: ["filament comparison","pla vs petg cost","best cheap filament","resin cost comparison"],
+    shortDescription: "Compare running costs per gram across PLA, PETG, ABS, and Nylon.",
+    metaTitle: "3D Printer Material Cost Comparison | PLA vs PETG vs ABS vs Resin",
+    metaDescription: "Compare running costs, density, price per gram, and material properties across PLA, PETG, ABS, TPU, ASA, Nylon, and UV Resin for 3D printing.",
+    keywords: [
+      "material cost comparison 3d printing",
+      "pla vs petg cost",
+      "cheapest 3d printing filament",
+      "resin vs filament cost",
+      "3d printer material price per gram",
+      "nylon vs abs printing cost"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter typical market spool prices for PLA, PETG, ABS, TPU, and Resin.",
+      "Enter a benchmark model cubic volume (cm³) or baseline weight (grams).",
+      "View side-by-side cost per gram, cost per print, tensile strength index, and heat deflection metrics."
+],
     faqs: [
       {
-        question: 'Is the Material Cost Comparison accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "Which 3D printing filament is the most cost effective?",
+            "answer": "Standard PLA and ABS are generally the most affordable thermoplastics ($14–$18/kg), followed closely by PETG ($16–$22/kg). Engineering filaments like Nylon and Polycarbonate cost significantly more ($45–$80/kg)."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Is resin 3D printing more expensive than filament FDM?",
+            "answer": "Yes, standard photopolymer resin ($22–$35/kg) costs roughly 30% to 50% more than basic PLA, plus additional costs for isopropyl alcohol (IPA) washing and UV curing stations."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Material Cost Comparison',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Material Cost Comparison Tool?",
+            "content": "An engineering decision matrix that compares the financial and physical tradeoffs between FDM filaments (PLA, PETG, ABS, TPU, PA) and SLA/MSLA photopolymer resins."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Normalized Part Cost ($) = Model Volume (cm³) × Material Density (g/cm³) × Price Per Gram ($/g)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A 100 cm³ gear printed in PLA (1.24 g/cm³ @ $20/kg) costs $2.48. In lightweight ABS (1.04 g/cm³ @ $20/kg), it costs $2.08. In UV Resin (1.12 g/cm³ @ $30/L), it costs $3.36."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Prices vary by geographic region, brand tier (budget vs high-speed), and local tax tariffs."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Product designers choosing the optimal material balance between mechanical strength, thermal resistance, and manufacturing budget."
       }
-    ]
+]
   },
-  {
+    {
     id: 'PrintTimeEstimator',
     slug: 'print-time-estimator',
     name: 'Print Time Estimator',
     category: '3d-printing',
-    shortDescription: 'Estimate 3D print durations based on print speeds, layer counts, and height.',
-    metaDescription: 'Free online 3D printing calculator. calculate estimate 3d print durations based on print speeds, layer counts, and height.',
-    keywords: ["print time","time estimator 3d","slicing runtime","bambu print time"],
+    shortDescription: "Estimate 3D print durations based on print speeds, layer counts, and height.",
+    metaTitle: "3D Print Time Estimator | Calculate Print Duration & Speeds",
+    metaDescription: "Estimate 3D print duration based on layer height, total height, print speed, acceleration, and slicer travel parameters. Fast and accurate online tool.",
+    keywords: [
+      "3d print time estimator",
+      "calculate print time",
+      "estimate 3d printing duration",
+      "how long will my 3d print take",
+      "layer height to print time",
+      "print speed duration calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter model height (Z axis in mm) and chosen layer height (e.g. 0.20mm, 0.12mm).",
+      "Enter average perimeter and infill printing speeds (mm/s).",
+      "Select printer acceleration profile (Standard 500 mm/s² vs High-Speed CoreXY 10,000 mm/s²).",
+      "View estimated print duration in hours, minutes, and layer cycle breakdown."
+],
     faqs: [
       {
-        question: 'Is the Print Time Estimator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "How do you calculate 3D print time?",
+            "answer": "Print time is estimated by dividing total model height by layer height to find total layers, then computing the cumulative extrusion and travel distance divided by effective acceleration-limited speeds."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Why do high-speed printers finish prints much faster?",
+            "answer": "Modern CoreXY printers feature high acceleration (10,000–20,000 mm/s²) and high-flow hotends, allowing the toolhead to reach target speeds (300–500 mm/s) on short line segments."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Print Time Estimator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the 3D Print Time Estimator?",
+            "content": "An analytical tool that models 3D printer kinematics to estimate total print duration from layer heights, Z dimensions, infill velocities, and acceleration limits."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Total Layers = Model Height (mm) / Layer Height (mm)\n• Effective Velocity = Speed / Acceleration Penalty Factor\n• Estimated Duration = (Total Extrusion Path / Effective Velocity) + (Total Layers × Layer Change Overhead)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A 100mm vase printed at 0.20mm layer height requires 500 layers. At an average layer time of 25 seconds, the total print time is 500 × 25s = 12,500s (~3 hours 28 minutes)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Slicers with exact G-code preview integration provide exact seconds; this analytical tool provides rapid pre-slicing estimates."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Engineers planning project delivery timelines and print farm schedule managers."
       }
-    ]
+]
   },
-  {
+    {
     id: 'LayerHeightCalculator',
     slug: 'layer-height-calculator',
     name: 'Layer Height Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate optimal layer heights for vertical detail quality.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate optimal layer heights for vertical detail quality.',
-    keywords: ["layer height","optimal details 3d","magic layer heights","nozzle height limits"],
+    shortDescription: "Calculate optimal layer heights for vertical detail quality.",
+    metaTitle: "3D Printer Layer Height Calculator | Optimal Quality & Speeds",
+    metaDescription: "Calculate optimal 3D printing layer heights, vertical resolution, magic steps, and nozzle compatibility ratios. Free quality optimization calculator.",
+    keywords: [
+      "layer height calculator",
+      "optimal layer height 3d printer",
+      "magic numbers layer height",
+      "nozzle size to layer height",
+      "0.4mm nozzle layer height",
+      "3d printing vertical resolution"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Select your nozzle diameter (0.2mm, 0.4mm, 0.6mm, 0.8mm, or 1.0mm).",
+      "Select printer Z-leadscrew pitch or step resolution (e.g. 0.04mm magic step for Ender 3, or arbitrary for CoreXY linear motors).",
+      "Choose desired quality tier (Ultra Detail, Standard, Draft, or Speed).",
+      "View recommended minimum, optimal, and maximum layer height bounds."
+],
     faqs: [
       {
-        question: 'Is the Layer Height Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "What is the rule of thumb for layer height vs nozzle size?",
+            "answer": "Layer height should generally be between 25% (minimum detail limit) and 75%–80% (maximum structural limit) of your nozzle diameter. For a standard 0.4mm nozzle, optimal layer heights range from 0.08mm to 0.32mm."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What are 3D printer magic numbers for layer heights?",
+            "answer": "On leadscrew-driven Z-axis printers with 1.8° stepper motors (like Creality Ender series), full stepper motor steps occur in 0.04mm increments. Using exact multiples of 0.04mm (0.12, 0.16, 0.20, 0.24, 0.28) prevents microstepping rounding errors and Z-banding."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Layer Height Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Layer Height Calculator?",
+            "content": "A slicing optimization utility that determines the perfect layer thickness for your printer nozzle geometry and Z-axis mechanical pitch."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Min Layer Height = Nozzle Diameter × 0.20\n• Recommended Optimal = Nozzle Diameter × 0.50\n• Max Layer Height = Nozzle Diameter × 0.80\n• Magic Step = Z-lead pitch / (360° / Step Angle × Microsteps)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "For a 0.6mm hardened steel nozzle:\n• Min Detail = 0.6 × 0.20 = 0.12mm\n• Optimal Balance = 0.6 × 0.50 = 0.30mm\n• Max Speed Draft = 0.6 × 0.80 = 0.48mm."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Printing at layer heights above 80% of nozzle diameter causes poor inter-layer adhesion due to insufficient squish."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makers balancing visual surface finish with print speed."
       }
-    ]
+]
   },
-  {
+    {
     id: 'PrintSpeedCalculator',
     slug: 'print-speed-calculator',
     name: 'Print Speed Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate the actual print travel speed based on segment lengths and times.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate the actual print travel speed based on segment lengths and times.',
-    keywords: ["print speed","travel speed 3d","feedrate calculator","actual print speed"],
+    shortDescription: "Calculate the actual print travel speed based on segment lengths and times.",
+    metaTitle: "3D Print Speed Calculator | Feedrate, Flow & Travel Velocity",
+    metaDescription: "Calculate linear print speeds, feedrates, and nozzle travel velocity limits based on hotend melt zone capacity and extruder stepper torque.",
+    keywords: [
+      "print speed calculator",
+      "3d printing speed calculator",
+      "mm/s to feedrate calculator",
+      "calculate print speed",
+      "hotend speed limits",
+      "3d printer feedrate calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter your hotend maximum volumetric flow rate (e.g. 15 mm³/s for standard, 32 mm³/s for high-flow Bambu/Volcano).",
+      "Enter target layer height (mm) and line width (mm).",
+      "Calculate the absolute maximum safe printing speed (mm/s) before under-extrusion occurs."
+],
     faqs: [
       {
-        question: 'Is the Print Speed Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is the maximum speed I can print at?",
+            "answer": "Maximum speed is limited by hotend volumetric flow: Max Speed (mm/s) = Volumetric Flow Limit (mm³/s) / (Layer Height × Line Width). On a 0.4mm nozzle at 0.2mm layer height with a 24 mm³/s hotend, max speed is ~270 mm/s."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Print Speed Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Print Speed Calculator?",
+            "content": "Calculates the maximum achievable linear printing velocity without exceeding the thermal melting limits of your hotend."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Max Speed (mm/s) = Max Volumetric Flow (mm³/s) / (Layer Height (mm) × Line Width (mm))"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "With a standard hotend (12 mm³/s flow limit) at 0.20mm layer height and 0.45mm line width:\n• Max Speed = 12 / (0.20 × 0.45) = 12 / 0.09 = 133.3 mm/s."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Assumes adequate cooling fan capacity and proper nozzle temperature."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "High-speed 3D printer tuners configuring Klipper, RepRap, and Marlin firmwares."
       }
-    ]
+]
   },
-  {
+    {
     id: 'NozzleFlowCalculator',
     slug: 'nozzle-flow-calculator',
     name: 'Nozzle Flow Calculator',
     category: '3d-printing',
-    shortDescription: 'Determine output extrusion volume rates based on printing speed.',
-    metaDescription: 'Free online 3D printing calculator. calculate determine output extrusion volume rates based on printing speed.',
-    keywords: ["nozzle flow rate","extrusion rate","mm3/s flow","flow limits print"],
+    shortDescription: "Determine output extrusion volume rates based on printing speed.",
+    metaTitle: "Nozzle Flow Calculator | 3D Printing Extrusion Rate Tool",
+    metaDescription: "Calculate nozzle volumetric extrusion rates in cubic millimeters per second (mm\u00b3/s). Optimize slicer speed settings to prevent clicking extruders.",
+    keywords: [
+      "nozzle flow calculator",
+      "extrusion flow rate calculator",
+      "calculate nozzle flow 3d print",
+      "mm3/s flow calculator",
+      "3d printer extrusion rate",
+      "hotend flow calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter your layer height, extrusion line width, and printing speed (mm/s).",
+      "Instantly calculate required volumetric flow rate in mm³/s.",
+      "Compare with your hotend hardware specifications to verify safety headroom."
+],
     faqs: [
       {
-        question: 'Is the Nozzle Flow Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What happens if nozzle flow exceeds hotend capacity?",
+            "answer": "When required flow exceeds thermal melt capacity, the extruder gear skips and clicks against the filament, resulting in under-extrusion, weak layer bonding, and spongy infill."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Nozzle Flow Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Nozzle Flow Calculator?",
+            "content": "Determines the instantaneous volumetric output of molten plastic required by your toolhead at any given velocity."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Volumetric Flow (mm³/s) = Layer Height (mm) × Extrusion Width (mm) × Linear Speed (mm/s)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Printing at 0.28mm layer height, 0.60mm line width, and 120 mm/s speed:\n• Flow Rate = 0.28 × 0.60 × 120 = 20.16 mm³/s (requires high-flow hotend)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Actual melt rates are influenced by nozzle material (brass vs hardened steel vs tungsten carbide)."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makers upgrading to 0.6mm/0.8mm nozzles or tuning high-speed slicer profiles."
       }
-    ]
+]
   },
-  {
+    {
     id: 'VolumetricFlowCalculator',
     slug: 'volumetric-flow-calculator',
     name: 'Volumetric Flow Calculator',
     category: '3d-printing',
-    shortDescription: 'Determine your hotend volumetric flow limit (mm³/s) based on max feedrate.',
-    metaDescription: 'Free online 3D printing calculator. calculate determine your hotend volumetric flow limit (mm³/s) based on max feedrate.',
-    keywords: ["max volumetric flow","volumetric speed limit","extruder maximum flow","hotend limit"],
+    shortDescription: "Determine your hotend volumetric flow limit (mm\u00b3/s) based on max feedrate.",
+    metaTitle: "Volumetric Flow Rate Calculator | 3D Hotend Melt Zone Benchmark",
+    metaDescription: "Calculate maximum volumetric flow rate (mm\u00b3/s) for Bambu Lab, E3D V6, Volcano, Revo, and Dragon hotends. Prevent under-extrusion at high speeds.",
+    keywords: [
+      "volumetric flow calculator",
+      "3d printer max volumetric speed",
+      "hotend flow test calculator",
+      "bambu lab max volumetric flow",
+      "volcano flow rate",
+      "e3d v6 volumetric limit"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Select your hotend model preset (Standard V6 ~12 mm³/s, Bambu Stock ~22–28 mm³/s, Volcano ~30 mm³/s, CHT ~35 mm³/s).",
+      "Enter your filament extrusion temperature and material type.",
+      "Input your target layer height and line width to obtain the maximum safe speed threshold."
+],
     faqs: [
       {
-        question: 'Is the Volumetric Flow Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is the maximum volumetric speed in OrcaSlicer / Bambu Studio?",
+            "answer": "Maximum volumetric speed is a slicer safety cap that automatically limits toolhead velocity so the required flow rate never exceeds the hotend's thermal melt capacity."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Volumetric Flow Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Volumetric Flow Calculator?",
+            "content": "A diagnostic calculator that maps hotend thermal wattage and melt zone volume to maximum safe printing velocities."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Volumetric Limit = Melt Chamber Volume × Thermal Transfer Factor\n• Max Safe Speed = Volumetric Limit / (Layer Height × Line Width)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "With a 30 mm³/s Volcano hotend at 0.20mm layer height and 0.50mm line width:\n• Max Safe Speed = 30 / (0.20 × 0.50) = 300 mm/s."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Higher nozzle temperatures and CHT (Core Heating Technology) nozzles increase maximum volumetric throughput."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Speed boat race competitors, Klipper tuners, and high-productivity print farm operators."
       }
-    ]
+]
   },
-  {
+    {
     id: 'CoolingFanRecommendation',
     slug: 'cooling-fan-recommendation',
     name: 'Cooling Fan Recommendation',
     category: '3d-printing',
-    shortDescription: 'Calculate optimal fan percentages for layer adhesion and overhang bridges.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate optimal fan percentages for layer adhesion and overhang bridges.',
-    keywords: ["cooling fan percentage","filament fan requirements","overhang cooling 3d","fan speeds"],
+    shortDescription: "Calculate optimal fan percentages for layer adhesion and overhang bridges.",
+    metaTitle: "3D Printer Part Cooling Fan Calculator | PLA, PETG, ABS & TPU",
+    metaDescription: "Calculate optimal part cooling fan speeds and layer time cooling thresholds across PLA, PETG, ABS, ASA, TPU, and Nylon 3D printing materials.",
+    keywords: [
+      "3d printer cooling fan calculator",
+      "part cooling fan speed",
+      "pla cooling fan percent",
+      "petg fan speed setting",
+      "abs part cooling calculator",
+      "overhang cooling calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Select your filament material (PLA, PETG, ABS, ASA, TPU, Nylon, PC).",
+      "Enter your printer fan setup (single 4010, dual 5015, or auxiliary chamber blower).",
+      "Input layer print duration and bridge overhang angle.",
+      "View recommended min/max fan speed percentages and layer time slowdown thresholds."
+],
     faqs: [
       {
-        question: 'Is the Cooling Fan Recommendation accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "Should I use part cooling fan for ABS or ASA?",
+            "answer": "ABS and ASA require zero or very low fan speed (0%–20%) inside an enclosed chamber. Excessive cooling causes severe layer delamination and warping."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Why does PLA need 100% cooling fan?",
+            "answer": "PLA has a low glass transition temperature (~60°C). High cooling ensures crisp overhangs, sharp details, and prevents heat creep and curling on small layers."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Cooling Fan Recommendation',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Cooling Fan Recommendation Tool?",
+            "content": "A thermal guidance calculator that prescribes optimal part cooling fan percentages based on polymer crystallization dynamics and overhang geometry."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Base Fan Speed = Material Baseline Cooling Factor\n• Overhang Modifier = Base Fan + ((Overhang Angle - 45) / 45) × Boost %\n• Short Layer Adjustment = IF(Layer Time < Min Threshold, Increase Fan %, Maintain Base %)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Printing PLA on small miniature layers (< 8 seconds duration): Recommended fan is 100% with minimum layer speed reduced to allow plastic to solidify."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Enclosed printer ambient temperatures and duct efficiency significantly influence cooling performance."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makers troubleshooting stringing, bridging sag, and layer adhesion weakness."
       }
-    ]
+]
   },
-  {
+    {
     id: 'NozzleSizeComparison',
     slug: 'nozzle-size-comparison',
     name: 'Nozzle Size Comparison',
     category: '3d-printing',
-    shortDescription: 'Compare print speeds, structural strengths, and resolution details across nozzles.',
-    metaDescription: 'Free online 3D printing calculator. calculate compare print speeds, structural strengths, and resolution details across nozzles.',
-    keywords: ["nozzle size comparison","0.4mm vs 0.6mm nozzle","thick nozzles details","best nozzle size"],
+    shortDescription: "Compare print speeds, structural strengths, and resolution details across nozzles.",
+    metaTitle: "3D Printer Nozzle Size Comparison | 0.2mm vs 0.4mm vs 0.6mm vs 0.8mm",
+    metaDescription: "Compare print speed, mechanical strength, layer resolution, and material output across 0.2mm, 0.4mm, 0.6mm, 0.8mm, and 1.0mm 3D printer nozzles.",
+    keywords: [
+      "nozzle size comparison 3d printing",
+      "0.4mm vs 0.6mm nozzle",
+      "0.2mm nozzle detail",
+      "best nozzle size 3d printer",
+      "0.8mm nozzle print time",
+      "nozzle diameter comparison"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Select two or more nozzle sizes to compare (0.2mm, 0.4mm, 0.6mm, 0.8mm, 1.0mm).",
+      "Enter a benchmark print model volume or surface area.",
+      "Compare estimated print times, perimeter wall strengths, and detail resolutions."
+],
     faqs: [
       {
-        question: 'Is the Nozzle Size Comparison accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "Is a 0.6mm nozzle faster than a 0.4mm nozzle?",
+            "answer": "Yes! A 0.6mm nozzle can extrude thicker layers and wider lines, cutting print times by 30% to 50% for functional parts while maintaining strong layer bonding."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "When should I use a 0.2mm nozzle?",
+            "answer": "A 0.2mm nozzle is best for miniature figurines, jewelry, crisp text engraving, and intricate small-scale models where visual surface resolution is paramount."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Nozzle Size Comparison',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Nozzle Size Comparison Tool?",
+            "content": "A comparative benchmarking tool that evaluates the tradeoffs between fine aesthetic resolution and volumetric extrusion speed across nozzle diameters."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Volume Output Multiplier = (Target Nozzle / 0.4)² × Layer Height Ratio\n• Wall Count for 1.2mm Shell = CEIL(1.2 / Nozzle Width)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A 1.2mm wall requires 3 passes with a 0.4mm nozzle, but only 2 passes with a 0.6mm nozzle, saving 33% toolhead travel distance."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Larger nozzles require higher hotend heater wattage to sustain volumetric flow."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makers optimizing print settings for functional brackets, cosplay armor, or tabletop miniatures."
       }
-    ]
+]
   },
-  {
+    {
     id: 'LineWidthCalculator',
     slug: 'line-width-calculator',
     name: 'Line Width Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate optimal extrusion line widths for solid layer bonding.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate optimal extrusion line widths for solid layer bonding.',
-    keywords: ["line width","extrusion width","nozzle width setup","slicer line width"],
+    shortDescription: "Calculate optimal extrusion line widths for solid layer bonding.",
+    metaTitle: "3D Print Line Width Calculator | Optimal Extrusion Width Tool",
+    metaDescription: "Calculate optimal extrusion line widths for perimeters, infill, and solid top layers. Improves layer squish, surface finish, and part strength.",
+    keywords: [
+      "line width calculator",
+      "3d printing extrusion width",
+      "optimal line width 0.4mm nozzle",
+      "perimeter line width calculator",
+      "slicer line width settings",
+      "first layer line width"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter your nozzle diameter (e.g. 0.4mm).",
+      "Specify layer height and target application (Standard, First Layer Adhesion, Overhangs, or Max Strength).",
+      "View calculated ideal extrusion line widths (typically 110% to 125% of nozzle diameter)."
+],
     faqs: [
       {
-        question: 'Is the Line Width Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Why should line width be larger than nozzle diameter?",
+            "answer": "Setting line width slightly larger than nozzle diameter (e.g., 0.45mm–0.48mm on a 0.4mm nozzle) creates a slight back-pressure that squishes molten plastic into previous layers, eliminating micro-gaps."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Line Width Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Line Width Calculator?",
+            "content": "A slicer calibration tool that calculates optimal extrusion bead geometries to maximize inter-line cohesion."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Recommended Default Line Width = Nozzle Diameter × 1.125\n• First Layer Line Width = Nozzle Diameter × 1.20\n• Top Solid Surface Line Width = Nozzle Diameter × 1.00"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "For a 0.40mm nozzle:\n• Default Perimeters = 0.40 × 1.125 = 0.45mm\n• First Layer Squish = 0.40 × 1.20 = 0.48mm\n• Top Surface Detail = 0.40 × 1.00 = 0.40mm."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Extruder calibration (E-steps and flow ratio) must be calibrated for accurate physical widths."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Slicer tuners seeking water-tight prints and glass-smooth top surfaces."
       }
-    ]
+]
   },
-  {
+    {
     id: 'LayerWidthCalculator',
     slug: 'layer-width-calculator',
     name: 'Layer Width Calculator',
     category: '3d-printing',
-    shortDescription: 'Determine overlapping paths widths for perimeter walls and shell count values.',
-    metaDescription: 'Free online 3D printing calculator. calculate determine overlapping paths widths for perimeter walls and shell count values.',
-    keywords: ["layer width","shell overlaps","wall thicknesses 3d","perimeter overlap"],
+    shortDescription: "Determine overlapping paths widths for perimeter walls and shell count values.",
+    metaTitle: "Layer Width & Wall Thickness Calculator | 3D Shell Geometry",
+    metaDescription: "Calculate total perimeter wall thickness, shell counts, and structural rigidity for 3D printed mechanical models.",
+    keywords: [
+      "layer width calculator",
+      "wall thickness calculator 3d print",
+      "perimeter count calculator",
+      "3d printing shell thickness",
+      "solid wall thickness 3d print"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter your extrusion line width (e.g. 0.45mm).",
+      "Input your desired total wall thickness (e.g. 1.8mm for load-bearing brackets).",
+      "Calculate exact required perimeter loop counts."
+],
     faqs: [
       {
-        question: 'Is the Layer Width Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How many perimeter walls should I use for strong 3D prints?",
+            "answer": "For non-structural decorative items, 2–3 perimeters (0.8mm–1.2mm) are sufficient. For functional structural parts, 4–6 perimeters (1.6mm–2.4mm) provide maximum rigidity."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Layer Width Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Layer Width Calculator?",
+            "content": "Calculates the relationship between extrusion perimeters and total physical wall shell thickness."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Total Wall Thickness (mm) = Perimeter Count × Line Width (mm) - ((Perimeter Count - 1) × Overlap Factor)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "To achieve a 2.0mm solid wall with 0.45mm extrusion width: Perimeter Loops = CEIL(2.0 / 0.45) = 5 perimeters (2.25mm total solid thickness)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Slicer perimeter overlap settings (typically 15%–25%) slightly compress combined outer dimensions."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Mechanical engineers designing functional press-fit enclosures and load-bearing fixtures."
       }
-    ]
+]
   },
-  {
+    {
     id: 'STLVolumeCalculator',
     slug: 'stl-volume-calculator',
     name: 'STL Volume Calculator',
     category: '3d-printing',
-    shortDescription: 'Parse STL files locally in your browser to calculate exact cubic volume and mass weight.',
-    metaDescription: 'Free online 3D printing calculator. calculate parse stl files locally in your browser to calculate exact cubic volume and mass weight.',
-    keywords: ["stl volume parser","measure stl mesh volume","stl file mass weight","stl cost calculator"],
+    shortDescription: "Parse STL files locally in your browser to calculate exact cubic volume and mass weight.",
+    metaTitle: "STL Volume Calculator | Free 3D Model Volume & Mass Tool",
+    metaDescription: "Calculate exact cubic volume (cm\u00b3), surface area, and mass weight (grams) of STL 3D models locally in your browser. 100% private STL file analyzer.",
+    keywords: [
+      "stl volume calculator",
+      "calculate stl volume online",
+      "stl file weight calculator",
+      "3d model volume calculator",
+      "stl mesh volume analyzer",
+      "free stl volume tool",
+      "stl mass calculator",
+      "3d file volume calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Drag and drop or select your 3D STL model (.stl binary or ASCII).",
+      "File parses 100% locally in browser memory using HTML5 ArrayBuffers (no files uploaded).",
+      "Select your target material (PLA, PETG, ABS, Resin, Aluminum, Steel).",
+      "Instantly view total volume in cm³ and mm³, surface area, triangle count, and solid mass in grams."
+],
     faqs: [
       {
-        question: 'Is the STL Volume Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "What is an STL Volume Calculator?",
+            "answer": "An STL Volume Calculator is a browser-based 3D mesh analyzer that reads triangular facet coordinates in an STL file to calculate its exact cubic volume (cm³) and projected weight."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Are my proprietary STL 3D models uploaded to your server?",
+            "answer": "No! Toolique processes 100% of STL files locally in your browser's WebAssembly and JavaScript sandbox. Your CAD designs never leave your device."
+      },
+      {
+            "question": "How is 3D mesh volume calculated from triangles?",
+            "answer": "Volume is computed using the Divergence Theorem (Signed Tetrahedral Volume Method) by summing the signed volume of tetrahedrons formed by each triangle and the coordinate origin."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding STL Volume Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the STL Volume Calculator?",
+            "content": "A high-performance in-browser 3D file analyzer that calculates the exact cubic volume (cm³ and mm³), surface area, triangle count, and mass of 3D models without server uploads."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Signed Tetrahedron Volume = (v1 · (v2 × v3)) / 6\n• Total Mesh Volume = Sum of all signed tetrahedron volumes for all mesh facets\n• Mass (grams) = Mesh Volume (cm³) × Infill % × Material Density (g/cm³)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "An STL model of a custom drone arm has a calculated solid mesh volume of 42.5 cm³:\n• 100% Solid PLA (1.24 g/cm³) = 42.5 × 1.24 = 52.7 grams\n• 20% Infill Estimate = 52.7 × 0.20 + Shell Perimeter Weight (~8g) = ~18.5 grams."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Calculates 100% solid watertight manifold volume. For sliced hollow prints, combine with infill percentage estimators."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Designers estimating raw production cost directly from exported CAD STLs before opening slicers."
       }
-    ]
+]
   },
-  {
+    {
     id: 'STLBoundingBoxCalculator',
     slug: 'stl-bounding-box-calculator',
     name: 'STL Bounding Box Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate the maximum X, Y, Z boundary dimensions of STL models.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate the maximum x, y, z boundary dimensions of stl models.',
-    keywords: ["stl bounds size","stl bounding box","stl dimensions meter","check stl plate fit"],
+    shortDescription: "Calculate the maximum X, Y, Z boundary dimensions of STL models.",
+    metaTitle: "STL Bounding Box Calculator | Check Max X, Y, Z Dimensions",
+    metaDescription: "Calculate maximum X, Y, Z boundary dimensions of STL 3D models locally in browser. Verify build plate fit for Bambu, Ender, Prusa, and resin printers.",
+    keywords: [
+      "stl bounding box calculator",
+      "stl dimensions calculator",
+      "check stl dimensions online",
+      "3d model bounding box",
+      "will stl fit build plate",
+      "stl size checker"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Upload your 3D STL file directly in browser.",
+      "The tool analyzes vertex coordinates (Min/Max X, Y, Z).",
+      "Select your printer build volume preset (e.g. 256×256×256mm for Bambu, 220×220×250mm for Ender 3).",
+      "Verify whether the model fits your build volume or requires diagonal reorientation/scaling."
+],
     faqs: [
       {
-        question: 'Is the STL Bounding Box Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is an STL bounding box?",
+            "answer": "A bounding box represents the smallest rectangular cuboid (Length, Width, Height) that completely encloses all vertices of a 3D model in space."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding STL Bounding Box Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the STL Bounding Box Calculator?",
+            "content": "A 3D model spatial analyzer that computes exact outer physical dimensions (Length × Width × Height in mm) from raw vertex extremes."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Length (X) = Max(X_vertices) - Min(X_vertices)\n• Width (Y) = Max(Y_vertices) - Min(Y_vertices)\n• Height (Z) = Max(Z_vertices) - Min(Z_vertices)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "An STL helmet scan measures X: 215mm, Y: 240mm, Z: 260mm. It exceeds a 220×220×250mm build volume but fits a 256×256×256mm volume if rotated 45° on the Z-axis."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Assumes default model orientation in CAD coordinate space. Rotating the model alters orthogonal bounding dimensions."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Cosplayers, prop makers, and print service bureaus verifying customer CAD files against machine constraints."
       }
-    ]
+]
   },
-  {
+    {
     id: 'ScaleCalculator',
     slug: 'scale-calculator',
     name: 'Scale Calculator',
     category: '3d-printing',
-    shortDescription: 'Convert model dimensions to different percentages and aspect ratios.',
-    metaDescription: 'Free online 3D printing calculator. calculate convert model dimensions to different percentages and aspect ratios.',
-    keywords: ["model scale convert","upscale downscale 3d","dimensions ratio planner","percent scale mm"],
+    shortDescription: "Convert model dimensions to different percentages and aspect ratios.",
+    metaTitle: "3D Model Scale Calculator | Convert Dimensions & Percentages",
+    metaDescription: "Calculate 3D model scaling percentages, aspect ratio conversions, and miniature scale ratios (1:12, 1:24, 1:48, 1:64) for 3D printing.",
+    keywords: [
+      "3d model scale calculator",
+      "scale stl calculator",
+      "miniature scale converter",
+      "3d printing scale percentage",
+      "tabletop scale calculator",
+      "stl resize calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter original model dimension (X, Y, or Z in mm).",
+      "Enter target desired dimension or select standard scale preset (e.g. 28mm heroic, 1:100 architectural, 1:12 dollhouse).",
+      "Instantly obtain exact scaling percentage to enter into your 3D slicing software."
+],
     faqs: [
       {
-        question: 'Is the Scale Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How do you calculate 3D model scale percentage?",
+            "answer": "Scale Percentage = (Target Dimension in mm / Original Dimension in mm) × 100. For example, scaling a 150mm model to 90mm requires entering 60% in your slicer."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Scale Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the 3D Model Scale Calculator?",
+            "content": "A proportional dimension converter that translates between real-world architectural/miniature scales and slicer percentage multipliers."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Slicer Scale (%) = (Target Size (mm) / Original Size (mm)) × 100\n• Volume Scale Multiplier = (Scale % / 100)³"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Scaling a 1:1 life-size sword (1,000mm) down to 1:6 action figure scale (166.6mm):\n• Scale % = (166.6 / 1000) × 100 = 16.66%\n• Material mass drops to (0.1666)³ = 0.46% of original life-size weight."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Be mindful that scaling down models by large factors reduces thin wall features below printable nozzle limits."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Miniature wargaming hobbyists (Warhammer, D&D), architectural model makers, and action figure customizers."
       }
-    ]
+]
   },
-  {
+    {
     id: 'ModelWeightCalculator',
     slug: 'model-weight-calculator',
     name: 'Model Weight Calculator',
     category: '3d-printing',
-    shortDescription: 'Find model weights using cubic volumes and material densities.',
-    metaDescription: 'Free online 3D printing calculator. calculate find model weights using cubic volumes and material densities.',
-    keywords: ["model weight calculator","pla prints weight","3d mesh mass weight","filament weight gram"],
+    shortDescription: "Find model weights using cubic volumes and material densities.",
+    metaTitle: "3D Model Weight Calculator | Convert Volume to Grams",
+    metaDescription: "Calculate 3D model weight in grams from cubic volume (cm\u00b3) and infill percentage across PLA, PETG, ABS, TPU, Carbon Fiber, and Resin.",
+    keywords: [
+      "3d model weight calculator",
+      "calculate 3d print weight from volume",
+      "volume to weight 3d print",
+      "pla weight from cm3",
+      "stl weight estimator",
+      "3d print mass calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter total model cubic volume (cm³ or mm³).",
+      "Select material density (PLA 1.24, PETG 1.27, ABS 1.04, TPU 1.21, Resin 1.12 g/cm³).",
+      "Enter target infill percentage (e.g. 15% gyroid or grid infill).",
+      "View estimated print weight in grams and cost per unit."
+],
     faqs: [
       {
-        question: 'Is the Model Weight Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How do you calculate 3D print weight from volume?",
+            "answer": "Weight (grams) = Volume (cm³) × Density (g/cm³). For infill models: Effective Weight = (Shell Volume + Infill Volume × Infill %) × Density."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Model Weight Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Model Weight Calculator?",
+            "content": "Converts geometric 3D volume into physical weight in grams across various thermoplastic and photopolymer densities."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Solid Mass (g) = Volume (cm³) × Density (g/cm³)\n• Infilled Mass (g) ≈ Volume (cm³) × Density × (0.25 + 0.75 × (Infill % / 100))"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A 80 cm³ robotic enclosure printed in PETG (1.27 g/cm³) with 20% infill weighs approximately: 80 × 1.27 × (0.25 + 0.75 × 0.20) = 40.6 grams."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Wall perimeter count and top/bottom solid layers contribute a baseline solid volume before infill calculation."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Drone builders minimizing payload weight and inventory managers forecasting material needs."
       }
-    ]
+]
   },
-  {
+    {
     id: 'ResinCostCalculator',
     slug: 'resin-cost-calculator',
     name: 'Resin Cost Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate the liquid UV resin cost for SLA/MSLA 3D prints.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate the liquid uv resin cost for sla/msla 3d prints.',
-    keywords: ["resin cost print","liquid resin price","sla print cost calculator","uv resin cost"],
+    shortDescription: "Calculate the liquid UV resin cost for SLA/MSLA 3D prints.",
+    metaTitle: "Resin 3D Printing Cost Calculator | SLA & MSLA Resin Tool",
+    metaDescription: "Calculate liquid UV resin 3D print costs based on bottle price per liter, model volume (ml), IPA wash solvent, and UV curing consumables.",
+    keywords: [
+      "resin 3d printing cost calculator",
+      "calculate resin print cost",
+      "sla resin cost calculator",
+      "msla print cost estimator",
+      "cost per ml resin 3d printing",
+      "photopolymer resin calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter resin bottle purchase price (e.g. $30.00 / 1000ml) and net volume (ml).",
+      "Input model volume in milliliters (ml) as reported by Chitubox, Lychee, or PrusaSlicer.",
+      "Include optional support waste % and IPA washing solvent/glove consumable allowances.",
+      "View the exact resin print cost, cost per milliliter, and batch quote price."
+],
     faqs: [
       {
-        question: 'Is the Resin Cost Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "How do you calculate resin 3D printing cost?",
+            "answer": "Cost = (Model Volume in ml / Bottle Volume in ml) × Bottle Price + Support Waste + Post-Processing Solvents (IPA/gloves)."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How much does 1ml of 3D printer resin cost?",
+            "answer": "Standard UV photopolymer resin priced at $30/liter costs exactly $0.03 per milliliter (3 cents/ml). Premium engineering resins ($80/L) cost ~8 cents/ml."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Resin Cost Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Resin Cost Calculator?",
+            "content": "A specialized pricing tool for SLA, MSLA, and DLP resin 3D printers that accounts for photopolymer resin consumption and post-processing consumables."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Cost per ml ($/ml) = Bottle Price ($) / Bottle Volume (ml)\n• Net Resin Cost ($) = Model Volume (ml) × Cost per ml × (1 + Support Waste % / 100)\n• Total Part Cost ($) = Net Resin Cost + IPA Wash Allowance ($0.50) + FEP Film Wear ($0.20)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A hollowed miniature requiring 24ml of standard grey resin ($28/1000ml bottle) with 15% support waste:\n• Cost per ml = $0.028\n• Resin Cost = 24ml × $0.028 × 1.15 = $0.77 + $0.50 IPA consumables = $1.27 total cost."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Remember to hollow large models with drainage holes in your slicer to avoid wasting expensive liquid resin in solid cores."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Tabletop miniature painters, jewelry designers, dental labs, and resin print commission artists."
       }
-    ]
+]
   },
-  {
+    {
     id: 'ResinVolumeCalculator',
     slug: 'resin-volume-calculator',
     name: 'Resin Volume Calculator',
     category: '3d-printing',
-    shortDescription: 'Convert resin volume (ml) to mass weight based on liquid densities.',
-    metaDescription: 'Free online 3D printing calculator. calculate convert resin volume (ml) to mass weight based on liquid densities.',
-    keywords: ["resin volume weight","ml to grams resin","sla resin density","resin weight g"],
+    shortDescription: "Convert resin volume (ml) to mass weight based on liquid densities.",
+    metaTitle: "Resin Volume to Weight Calculator | Milliliters to Grams Tool",
+    metaDescription: "Convert UV photopolymer resin volume (ml) directly to weight (grams) and vice versa using liquid resin density formulas.",
+    keywords: [
+      "resin volume calculator",
+      "resin ml to grams",
+      "calculate 3d resin volume",
+      "photopolymer resin density calculator",
+      "sla resin weight calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter liquid resin volume (ml) or measured weight (grams).",
+      "Select resin type (Standard 1.12 g/ml, Tough 1.15 g/ml, Castable 1.08 g/ml).",
+      "Instantly view corresponding mass or liquid capacity."
+],
     faqs: [
       {
-        question: 'Is the Resin Volume Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is the density of 3D printing resin?",
+            "answer": "Standard 405nm UV resin has a liquid density between 1.10 g/ml and 1.18 g/ml (average ~1.12 g/cm³), making it slightly heavier than water."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Resin Volume Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Resin Volume Calculator?",
+            "content": "A conversion tool linking liquid vat volume (ml) and scale mass (grams) for resin 3D printing vats."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Weight (grams) = Volume (ml) × Liquid Density (g/ml)\n• Volume (ml) = Weight (grams) / Liquid Density (g/ml)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A 500ml resin bottle with 1.13 g/ml density weighs: 500 × 1.13 = 565 grams of liquid resin (excluding bottle tare weight)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Temperature variations (cold vs heated vat) can slightly alter liquid viscosity and volumetric expansion."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Resin print operators checking resin vat levels before initiating long overnight print jobs."
       }
-    ]
+]
   },
-  {
+    {
     id: 'ExposureTimeHelper',
     slug: 'exposure-time-helper',
     name: 'Exposure Time Helper',
     category: '3d-printing',
-    shortDescription: 'Provides recommended UV exposure times based on printer screen light intensity.',
-    metaDescription: 'Free online 3D printing calculator. calculate provides recommended uv exposure times based on printer screen light intensity.',
-    keywords: ["exposure times SLA","resin light cure times","mono screen exposure","cure layers helper"],
+    shortDescription: "Provides recommended UV exposure times based on printer screen light intensity.",
+    metaTitle: "Resin Exposure Time Helper | Calibration & Layer Cure Tool",
+    metaDescription: "Find recommended normal exposure and bottom layer cure times for Mono LCD, 8K, and DLP 3D resin printers across standard and plant-based resins.",
+    keywords: [
+      "resin exposure time helper",
+      "resin exposure calculator",
+      "3d printer exposure time settings",
+      "bottom layer exposure time",
+      "mono lcd resin exposure",
+      "lychee exposure settings"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Select your printer LCD screen type (Mono LCD 4K/8K/12K vs Legacy RGB LCD).",
+      "Select resin brand and resin color (Clear, Grey, White, Black, Tough).",
+      "View recommended base exposure (seconds), bottom exposure (seconds), and lift speed settings."
+],
     faqs: [
       {
-        question: 'Is the Exposure Time Helper accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is normal exposure time for modern Mono LCD resin printers?",
+            "answer": "Modern Monochrome LCD printers typically require 1.8 to 2.8 seconds per normal layer (at 0.05mm layer height), and 25 to 35 seconds for bottom adhesion layers."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Exposure Time Helper',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Exposure Time Helper?",
+            "content": "A calibration guide that suggests starting UV cure times based on screen UV power output, resin pigmentation, and layer thickness."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Estimated Normal Exposure = Base Resin Factor × Color Pigment Multiplier × (Layer Height / 0.05)\n• Bottom Exposure = Normal Exposure × 8 to 12"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Standard grey resin on an 8K Mono printer at 0.05mm height: 2.2s normal exposure, 28s bottom layer (6 layers), 60 mm/min lift speed."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Ambient temperature below 20°C (68°F) requires increasing exposure times by 10%–20%. Always run a Cones of Calibration test."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Beginner and advanced resin 3D printer users dialing in new resin bottles."
       }
-    ]
+]
   },
-  {
+    {
     id: 'ElectricityCostCalculator',
     slug: 'electricity-cost-calculator',
     name: 'Electricity Cost Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate operational power consumption utility costs for your printers.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate operational power consumption utility costs for your printers.',
-    keywords: ["printer power cost","electricity draw 3d","power bill print","calculator printing power"],
+    shortDescription: "Calculate operational power consumption utility costs for your printers.",
+    metaTitle: "3D Printer Electricity Cost Calculator | Energy Consumption Tool",
+    metaDescription: "Calculate 3D printer electricity power consumption in kilowatt-hours (kWh) and utility costs. Compare heated bed and hotend energy usage.",
+    keywords: [
+      "3d printer electricity cost calculator",
+      "how much power does a 3d printer use",
+      "3d printing energy cost",
+      "calculate 3d printer power consumption",
+      "kwh 3d print calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter average running wattage (e.g. 80W–150W for PLA bed at 60°C; 200W–350W for ABS bed at 100°C).",
+      "Input total print duration in hours.",
+      "Enter your local electricity utility rate ($/kWh or ₹/kWh).",
+      "View total kilowatt-hours consumed and total electricity cost."
+],
     faqs: [
       {
-        question: 'Is the Electricity Cost Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How much electricity does a 3D printer use per hour?",
+            "answer": "Once heated, a standard desktop 3D printer consumes between 0.08 kWh and 0.18 kWh per hour (averaging 80W–180W), costing approximately 1 to 3 cents per hour."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Electricity Cost Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the 3D Printer Electricity Cost Calculator?",
+            "content": "Computes exact electrical utility expenses incurred by 3D printer heating elements, stepper motors, mainboards, and fans during operation."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Energy Consumed (kWh) = (Average Running Watts / 1000) × Operating Hours\n• Total Electricity Cost ($) = Energy Consumed (kWh) × Rate per kWh ($/kWh)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A 16-hour print running on a Bambu P1S averaging 120 Watts at $0.15/kWh:\n• kWh = (120 / 1000) × 16 = 1.92 kWh\n• Electricity Cost = 1.92 × $0.15 = $0.29 (29 cents)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Initial bed heating draws peak power for the first 5 minutes; average duty-cycle wattage stabilizes once at target temperature."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Print farm managers budgeting utility bills and makers pricing commercial print jobs accurately."
       }
-    ]
+]
   },
-  {
+    {
     id: 'PackagingCostCalculator',
     slug: 'packaging-cost-calculator',
     name: 'Packaging Cost Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate boxes, bubble wraps, and logo labels packaging material costs.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate boxes, bubble wraps, and logo labels packaging material costs.',
-    keywords: ["packaging cost print","shipping packaging material","box bubble wrap cost","3d print business packing"],
+    shortDescription: "Calculate boxes, bubble wraps, and logo labels packaging material costs.",
+    metaTitle: "3D Print Packaging Cost Calculator | Boxes, Bubble Wrap & Inserts",
+    metaDescription: "Calculate packaging costs for shipping 3D prints. Add corrugated boxes, bubble wrap, custom stickers, thank you cards, and desiccants.",
+    keywords: [
+      "packaging cost calculator 3d print",
+      "3d printing shipping box cost",
+      "e-commerce packaging calculator",
+      "bubble wrap cost calculator",
+      "etsy product packaging cost"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter box dimensions and unit box purchase price.",
+      "Add meters of bubble wrap, tissue paper, or packing peanuts used.",
+      "Include custom branding items (logo stickers, thank you cards, business cards).",
+      "Instantly calculate total packaging overhead per shipped order."
+],
     faqs: [
       {
-        question: 'Is the Packaging Cost Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Why should I calculate packaging costs separately?",
+            "answer": "Packaging materials (boxes, bubble mailers, custom tape) typically add $1.00–$3.50 per order. Neglecting them directly cuts into product profit margins."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Packaging Cost Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Packaging Cost Calculator?",
+            "content": "A fulfillment budget calculator that computes the cost of protective materials and branding inserts for shipping delicate 3D prints."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Total Packaging Cost = Box Price + (Bubble Wrap Meters × Price/m) + Custom Inserts + Tape Allowance"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Box ($0.85) + 1.5m bubble wrap ($0.45) + Logo sticker ($0.15) + Thank you card ($0.10) = $1.55 packaging cost per order."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Buying packaging materials in bulk quantities (500+ packs) reduces per-unit costs by up to 40%."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Etsy store owners, Amazon Handmade merchants, and direct-to-consumer 3D printing brands."
       }
-    ]
+]
   },
-  {
+    {
     id: 'ShippingCostCalculator',
     slug: 'shipping-cost-calculator',
     name: 'Shipping Cost Calculator',
     category: '3d-printing',
-    shortDescription: 'Estimate shipping margins and final delivery pricing splits.',
-    metaDescription: 'Free online 3D printing calculator. calculate estimate shipping margins and final delivery pricing splits.',
-    keywords: ["shipping cost print","courier weight delivery","etsy shipping price","3d print shipment cost"],
+    shortDescription: "Estimate shipping margins and final delivery pricing splits.",
+    metaTitle: "3D Print Shipping Cost Calculator | Weight, Zones & Courier Rates",
+    metaDescription: "Estimate courier shipping rates, dimensional weight, and carrier delivery margins for domestic and international 3D print customer orders.",
+    keywords: [
+      "3d print shipping cost calculator",
+      "calculate shipping for 3d prints",
+      "dimensional weight calculator",
+      "courier shipping estimator",
+      "etsy shipping cost 3d print"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter packaged parcel weight (in grams/kg or ounces/lbs).",
+      "Enter package dimensions (Length × Width × Height) to calculate dimensional weight.",
+      "Select delivery zone (Local, National, or International).",
+      "View estimated carrier cost and recommended customer shipping charge."
+],
     faqs: [
       {
-        question: 'Is the Shipping Cost Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is dimensional weight in shipping?",
+            "answer": "Carriers charge whichever is higher: actual physical weight or dimensional weight (Length × Width × Height / 5000). Large hollow 3D prints often trigger dimensional weight pricing."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Shipping Cost Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Shipping Cost Calculator?",
+            "content": "Calculates shipping freight charges based on actual parcel scale weight and carrier volumetric dimensional weight."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Dimensional Weight (kg) = (Length × Width × Height in cm) / 5000\n• Billable Weight = MAX(Actual Weight, Dimensional Weight)\n• Total Shipping Charge = Base Zone Fee + (Billable Weight × Rate per kg)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A 300g hollow prop sword in a 60×15×10cm box has a dimensional weight of (60×15×10)/5000 = 1.80 kg. Carrier bills for 1.80 kg ($9.50) rather than 300g."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Fuel surcharges and residential delivery surcharges vary by carrier (USPS, FedEx, DHL, BlueDart, Delhivery)."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "E-commerce sellers preventing shipping undercharging on large lightweight prints."
       }
-    ]
+]
   },
-  {
+    {
     id: 'MachineUtilizationCalculator',
     slug: 'machine-utilization-calculator',
     name: 'Machine Utilization Calculator',
     category: '3d-printing',
-    shortDescription: 'Track active machine setups and calculate farm uptime percentages.',
-    metaDescription: 'Free online 3D printing calculator. calculate track active machine setups and calculate farm uptime percentages.',
-    keywords: ["machine utilization","printer farm efficiency","uptime calculation 3d","farm yield metrics"],
+    shortDescription: "Track active machine setups and calculate farm uptime percentages.",
+    metaTitle: "3D Printer Machine Utilization Calculator | OEE & Uptime Tool",
+    metaDescription: "Calculate 3D printer overall equipment effectiveness (OEE), uptime percentage, and idle downtime across single machines or commercial print farms.",
+    keywords: [
+      "machine utilization calculator",
+      "3d printer uptime calculator",
+      "print farm oee calculator",
+      "3d printing machine efficiency",
+      "printer idle time calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter total available calendar hours in the period (e.g. 720 hours for 30 days).",
+      "Input active printing hours recorded.",
+      "Input maintenance, calibration, and idle queue waiting hours.",
+      "Calculate your farm uptime percentage and capacity utilization efficiency."
+],
     faqs: [
       {
-        question: 'Is the Machine Utilization Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is a good machine utilization rate for 3D printers?",
+            "answer": "A target utilization rate of 75%–85% is considered industry best-practice for desktop print farms, balancing continuous revenue with preventive maintenance."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Machine Utilization Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Machine Utilization Calculator?",
+            "content": "An industrial engineering metric tool that calculates the operational productivity and idle loss of 3D printing equipment."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Utilization Rate (%) = (Actual Operating Hours / Total Available Hours) × 100\n• Idle Capacity (%) = 100% - Utilization Rate (%)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A printer active for 540 hours in a 30-day month (720 total hours): Utilization = (540 / 720) × 100 = 75.0%."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Does not account for job failure rates unless tracked under scrap downtime."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Operations directors and print farm managers auditing fleet efficiency."
       }
-    ]
+]
   },
-  {
+    {
     id: 'MonthlyProductionCalculator',
     slug: 'monthly-production-calculator',
     name: 'Monthly Production Calculator',
     category: '3d-printing',
-    shortDescription: 'Estimate total monthly unit production capacities and yield values.',
-    metaDescription: 'Free online 3D printing calculator. calculate estimate total monthly unit production capacities and yield values.',
-    keywords: ["monthly production print","farm scale prints quantity","max production capacity","3d prints monthly output"],
+    shortDescription: "Estimate total monthly unit production capacities and yield values.",
+    metaTitle: "Monthly 3D Print Production Calculator | Output & Yield Estimator",
+    metaDescription: "Estimate total monthly unit production capacities, filament throughput, and yield numbers for single printers or scaling fleets.",
+    keywords: [
+      "monthly production calculator",
+      "3d printing output calculator",
+      "print farm monthly capacity",
+      "units per month 3d printer",
+      "production yield calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter average print cycle time per unit (including turnaround bed clearing).",
+      "Specify number of operating printers and daily working shifts.",
+      "Set scrap/failure rate percentage (e.g. 5%).",
+      "View monthly finished parts capacity and monthly spool requirement."
+],
     faqs: [
       {
-        question: 'Is the Monthly Production Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How many parts can a single 3D printer produce per month?",
+            "answer": "At 2 hours per part running 18 hours/day, a single machine can produce ~9 parts/day or ~270 parts per month."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Monthly Production Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Monthly Production Calculator?",
+            "content": "Calculates the maximum monthly finished good output of your 3D printing setup after deducting expected scrap and maintenance."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Gross Monthly Units = (Monthly Working Hours × Number of Printers) / Cycle Time Per Unit\n• Net Finished Units = Gross Monthly Units × (1 - Failure Rate % / 100)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "4 printers running 500 hrs/month producing 2.5-hour parts with 4% failure rate:\n• Gross = (500 × 4) / 2.5 = 800 units\n• Net Yield = 800 × 0.96 = 768 finished units/month."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Assumes operator availability for continuous bed clearing and queue loading."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Production planners committing to supply agreements and retail order deliveries."
       }
-    ]
+]
   },
-  {
+    {
     id: 'PrintQueueTimeCalculator',
     slug: 'print-queue-time-calculator',
     name: 'Print Queue Time Calculator',
     category: '3d-printing',
-    shortDescription: 'Determine job queue wait times based on farm workloads.',
-    metaDescription: 'Free online 3D printing calculator. calculate determine job queue wait times based on farm workloads.',
-    keywords: ["print queue backlog","farm workload wait times","queue time planner","delivery delay estimates"],
+    shortDescription: "Determine job queue wait times based on farm workloads.",
+    metaTitle: "3D Print Queue Time Calculator | Schedule Backlog Estimator",
+    metaDescription: "Calculate print job queue wait times, order completion deadlines, and backlog schedules across available 3D printers.",
+    keywords: [
+      "print queue time calculator",
+      "3d print queue estimator",
+      "order backlog calculator",
+      "3d printing scheduling tool",
+      "when will my print finish"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter total cumulative hours of queued print jobs.",
+      "Enter number of active printers assigned to the queue.",
+      "Set working shift hours per day (e.g. 16 hours or 24/7 automated).",
+      "Calculate estimated completion date, delivery ETA, and queue backlog load."
+],
     faqs: [
       {
-        question: 'Is the Print Queue Time Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How do you calculate queue completion time across multiple printers?",
+            "answer": "Total Queue Time = (Cumulative Job Hours) / (Number of Active Printers × Daily Operating Hours)."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Print Queue Time Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Print Queue Time Calculator?",
+            "content": "A scheduling workflow calculator that projects customer order dispatch dates from current machine workload backlogs."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Days to Complete Queue = Total Queued Hours / (Active Printers × Daily Operating Hours)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A backlog of 120 print hours distributed across 3 printers running 16 hrs/day:\n• Days needed = 120 / (3 × 16) = 120 / 48 = 2.5 days."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Uneven job durations (e.g. a single 18-hour print blocking one machine) may cause slight scheduling variance."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makerspaces, university labs, and on-demand 3D printing service providers."
       }
-    ]
+]
   },
-  {
+    {
     id: 'HueForgeFilamentCalculator',
     slug: 'hueforge-filament-calculator',
     name: 'HueForge Filament Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate layer boundaries and transmission distances for HueForge painting layers.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate layer boundaries and transmission distances for hueforge painting layers.',
-    keywords: ["hueforge filament","transmission distance td","color swap layer height","hueforge swap planner"],
+    shortDescription: "Calculate layer boundaries and transmission distances for HueForge painting layers.",
+    metaTitle: "HueForge Filament Calculator | Layer Height & Transmission Distance",
+    metaDescription: "Calculate HueForge filament layer blending, transmission distance (TD), color luminance transitions, and material thicknesses for 3D filament art.",
+    keywords: [
+      "hueforge filament calculator",
+      "hueforge transmission distance calculator",
+      "hueforge layer calculator",
+      "calculate td hueforge",
+      "3d filament painting calculator",
+      "hueforge color blending tool"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter your base layer height (e.g. 0.16mm or 0.20mm) and detail layer height (e.g. 0.08mm or 0.04mm).",
+      "Select your 4 filament colors in sequence (e.g. Black -> Blue -> Red -> White).",
+      "Input known Transmission Distance (TD in mm) for each filament spool.",
+      "Calculate exact slicer layer swap heights and optical color blending depths."
+],
     faqs: [
       {
-        question: 'Is the HueForge Filament Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
+            "question": "What is Transmission Distance (TD) in HueForge?",
+            "answer": "Transmission Distance (TD) is the thickness in millimeters required for a filament color to become completely opaque. Low TD filaments (e.g., Black TD ~0.5) block light quickly, while high TD filaments (e.g., White TD ~5.0) allow underlying colors to blend through."
       },
       {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How do you calculate HueForge color swap heights?",
+            "answer": "Color swap height is determined by adding base layer height to the cumulative count of thin layers (0.08mm) designated for that specific filament tone."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding HueForge Filament Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the HueForge Filament Calculator?",
+            "content": "A specialized optical calculator for multi-color filament painting (HueForge) that calculates layer step heights and filament opacity transitions."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Layer Z Height (mm) = Base Layer (mm) + (Layer Index × Step Height (mm))\n• Color Opacity Factor = Layer Thickness (mm) / Transmission Distance (TD mm)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Base layer = 0.16mm, step = 0.08mm. Color 2 starts at layer 8: Swap Z height = 0.16 + (7 × 0.08) = 0.72mm."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Accurate results require knowing the true TD of your filament spool brand (calibrated via a step test)."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "HueForge artists, Bambu Lab AMS creators, and multi-color 3D printing enthusiasts."
       }
-    ]
+]
   },
-  {
+    {
     id: 'HueForgeLayerCalculator',
     slug: 'hueforge-layer-calculator',
     name: 'HueForge Layer Calculator',
     category: '3d-printing',
-    shortDescription: 'Determine layer number indices from physical heights for slicer settings.',
-    metaDescription: 'Free online 3D printing calculator. calculate determine layer number indices from physical heights for slicer settings.',
-    keywords: ["hueforge layer parser","mm to layer index","slicer color swap step","hueforge details height"],
+    shortDescription: "Determine layer number indices from physical heights for slicer settings.",
+    metaTitle: "HueForge Layer Calculator | Height to Slicer Layer Number",
+    metaDescription: "Convert physical millimeter heights directly into exact slicer layer numbers for HueForge color changes in Bambu Studio, OrcaSlicer, and PrusaSlicer.",
+    keywords: [
+      "hueforge layer calculator",
+      "layer height to layer number",
+      "hueforge pause at layer",
+      "bambu studio color change layer",
+      "hueforge slicer layer calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter first layer height (e.g. 0.16mm) and subsequent layer height (e.g. 0.08mm).",
+      "Enter target physical color change height in millimeters (from HueForge preview).",
+      "View exact integer layer number to insert the color swap/pause command in your slicer."
+],
     faqs: [
       {
-        question: 'Is the HueForge Layer Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How do I find which layer to change filament for HueForge?",
+            "answer": "Layer Number = 1 + ROUND((Target Swap Height in mm - First Layer Height in mm) / Subsequent Layer Height in mm)."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding HueForge Layer Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the HueForge Layer Calculator?",
+            "content": "A bridge calculator that converts HueForge continuous millimeter dimensions into discrete G-code layer indices for slicer pauses."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Slicer Layer Index = 1 + ((Z_Height - First_Layer_Height) / Layer_Height)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "With 0.16mm base and 0.08mm steps, a color swap at Z = 1.04mm corresponds to: 1 + ((1.04 - 0.16) / 0.08) = 1 + (0.88 / 0.08) = Layer 12."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Ensure your slicer's first layer height setting matches the value entered in the calculator."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Anyone printing HueForge art on single-extruder or multi-material printers."
       }
-    ]
+]
   },
-  {
+    {
     id: 'HueForgeColorSwapPlanner',
     slug: 'hueforge-color-swap-planner',
     name: 'HueForge Color Swap Planner',
     category: '3d-printing',
-    shortDescription: 'Plan color swaps listing instructions for HueForge model setups.',
-    metaDescription: 'Free online 3D printing calculator. calculate plan color swaps listing instructions for hueforge model setups.',
-    keywords: ["color swap instructions","hueforge swap steps","filament layer change planner","color change checklist"],
+    shortDescription: "Plan color swaps listing instructions for HueForge model setups.",
+    metaTitle: "HueForge Color Swap Planner | Manual & AMS Filament Changes",
+    metaDescription: "Plan manual filament pauses or AMS multi-material color swaps for HueForge art. Generates copy-paste slicer pause instructions.",
+    keywords: [
+      "hueforge color swap planner",
+      "hueforge filament change guide",
+      "manual color swap hueforge",
+      "bambu ams hueforge planner",
+      "hueforge color order"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Define your palette of 4 to 6 filaments with names and colors.",
+      "Enter the layer change boundaries for each transition.",
+      "Generate an ordered swap schedule with visual color swatches and G-code pause cues."
+],
     faqs: [
       {
-        question: 'Is the HueForge Color Swap Planner accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Can I print HueForge art without a Bambu AMS or multi-material unit?",
+            "answer": "Yes! Because HueForge swaps colors across entire horizontal Z layers (only 3–5 swaps per print), you can simply add M600 filament change pauses in your slicer and swap spools manually."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding HueForge Color Swap Planner',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the HueForge Color Swap Planner?",
+            "content": "A workflow planner that organizes filament transition layers into a clear checklist for manual or automated multi-color prints."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Swap Checklist = Array of { Layer_Index, Z_Height_mm, Color_Name, Hex_Code }"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Start with Black (L1–L7, 0.00–0.64mm) -> Swap to Navy Blue at L8 (0.72mm) -> Swap to Crimson Red at L14 (1.20mm) -> Swap to White at L19 (1.60mm)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Always purge thoroughly during manual swaps to ensure clean color transitions without bleeding."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makers creating multi-tonal lithophanes, portraits, and decorative wall art."
       }
-    ]
+]
   },
-  {
+    {
     id: 'AMSFilamentPlanner',
     slug: 'ams-filament-planner',
     name: 'AMS Filament Planner',
     category: '3d-printing',
-    shortDescription: 'Organize slot colors and filament rolls assignments for multi-color AMS assemblies.',
-    metaDescription: 'Free online 3D printing calculator. calculate organize slot colors and filament rolls assignments for multi-color ams assemblies.',
-    keywords: ["bambu ams slots","ams color planning","multi color ams mapping","bambu lab filament mapping"],
+    shortDescription: "Organize slot colors and filament rolls assignments for multi-color AMS assemblies.",
+    metaTitle: "Bambu AMS Filament Planner | Multi-Color Slot Optimization",
+    metaDescription: "Optimize Bambu Lab AMS 4-slot and 8-slot multi-material setups. Minimize purge waste and map filament colors efficiently.",
+    keywords: [
+      "bambu ams filament planner",
+      "ams slot optimizer",
+      "bambu lab multi color planner",
+      "ams purge reduction",
+      "ams 4 slot filament setup",
+      "bambu studio ams mapping"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Select number of AMS units (1 AMS = 4 slots, 2 AMS = 8 slots).",
+      "Assign filament materials (PLA Basic, PLA Matte, PETG, Support W) and colors to each slot.",
+      "Map your model's color requirements to available slots to optimize auto-refill and purge efficiency."
+],
     faqs: [
       {
-        question: 'Is the AMS Filament Planner accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is the Bambu AMS Filament Planner?",
+            "answer": "A slot assignment organizer that optimizes AMS filament loading, auto-refill spool pairing, and color swap ordering to reduce print times."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding AMS Filament Planner',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the AMS Filament Planner?",
+            "content": "A multi-material management utility for Bambu Lab X1C, P1S, A1, and A1 Mini printers using Automatic Material Systems (AMS)."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Slot Allocation = Map(Color_ID -> AMS_Slot_Index[1..16])\n• Auto-Refill Redundancy = Group(Material_Type + Color_Hex)"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Slot 1: Matte Black (Base), Slot 2: Jade White (Highlight), Slot 3: Red (Accent), Slot 4: PLA Support (Interfaces)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Ensure spool dimensions fit AMS feeder rollers (standard 200mm diameter spools)."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Bambu Lab owners managing complex multi-color and multi-material prints."
       }
-    ]
+]
   },
-  {
+    {
     id: 'FilamentChangeEstimator',
     slug: 'filament-change-estimator',
     name: 'Filament Change Estimator',
     category: '3d-printing',
-    shortDescription: 'Estimate time added to print runs by AMS filament retracting changes.',
-    metaDescription: 'Free online 3D printing calculator. calculate estimate time added to print runs by ams filament retracting changes.',
-    keywords: ["filament change times","bambu ams changes duration","multi color time increase","retracting AMS cycles"],
+    shortDescription: "Estimate time added to print runs by AMS filament retracting changes.",
+    metaTitle: "Filament Change Estimator | Multi-Color Toolhead Swaps",
+    metaDescription: "Calculate total toolhead filament swaps, purge volume overhead, and time delays in multi-color 3D prints. Optimize slicer color changes.",
+    keywords: [
+      "filament change estimator",
+      "3d print color changes calculator",
+      "multi color print time overhead",
+      "bambu ams swap count",
+      "filament change time calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter the total number of filament toolhead swaps reported by your slicer.",
+      "Enter average purge and retraction duration per swap (e.g. 45 to 65 seconds on Bambu AMS).",
+      "Enter average purge poop weight per swap (e.g. 0.4g–0.8g).",
+      "Calculate total time added solely by color changes and total purge waste mass."
+],
     faqs: [
       {
-        question: 'Is the Filament Change Estimator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How much time does each AMS filament change add to a print?",
+            "answer": "Each filament change takes approximately 50 to 80 seconds (cutting filament, retracting to AMS, feeding new filament, purging, and wiping nozzle). A print with 500 color swaps adds ~8 hours to print time."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Filament Change Estimator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Filament Change Estimator?",
+            "content": "Quantifies the exact time overhead and material waste generated by repeated toolhead filament retraction and purging cycles."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Total Swap Overhead Time = Swap Count × Time Per Swap (seconds)\n• Total Purge Poop Mass = Swap Count × Average Purge Grams"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A multi-color dragon with 320 filament changes at 60s per change:\n• Added Time = 320 × 60s = 19,200s (5 hours 20 minutes added)\n• Purge Waste (0.6g/swap) = 320 × 0.6g = 192 grams of purge waste."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Purge volumes depend on transition contrast (dark to light requires more flush than light to dark)."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makers deciding whether to print models vertically or align colors to reduce total layer swaps."
       }
-    ]
+]
   },
-  {
+    {
     id: 'PurgeWasteCalculator',
     slug: 'purge-waste-calculator',
     name: 'Purge Waste Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate plastic mass waste in purge towers and poop shoots.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate plastic mass waste in purge towers and poop shoots.',
-    keywords: ["purge waste bambu","ams flush poop weight","waste cost calculator","flush volume plastic"],
+    shortDescription: "Calculate plastic mass waste in purge towers and poop shoots.",
+    metaTitle: "3D Print Purge Waste Calculator | Poop & Prime Tower Cost",
+    metaDescription: "Calculate the mass, volume, and cost of purge waste (poop) and prime towers in multi-color 3D printing. Free waste reduction estimator.",
+    keywords: [
+      "purge waste calculator",
+      "3d print poop calculator",
+      "bambu purge waste cost",
+      "prime tower volume calculator",
+      "reduce 3d print waste",
+      "multi color waste calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Enter your filament cost per kilogram (e.g. $20/kg).",
+      "Input total purge waste mass reported by slicer (in grams).",
+      "Include prime tower mass (in grams).",
+      "Instantly calculate the exact monetary cost of purged waste and total waste percentage."
+],
     faqs: [
       {
-        question: 'Is the Purge Waste Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "What is purge waste in multi-color 3D printing?",
+            "answer": "Purge waste (often called 'filament poop') is the extruded material ejected during nozzle cleaning between color changes to prevent the previous color from bleeding into the new color."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Purge Waste Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Purge Waste Calculator?",
+            "content": "Calculates the financial expense and material waste percentage of sacrificial prime towers and purge wiper discharge."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Total Waste (g) = Purge Poop Mass (g) + Prime Tower Mass (g)\n• Waste Cost ($) = Total Waste (g) × (Spool Price / 1000)\n• Waste Ratio (%) = (Total Waste / (Model Mass + Total Waste)) × 100"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "A 50g figurine generates 150g of purge waste with $20/kg filament:\n• Total Waste = 150g (75% of all extruded filament is waste!)\n• Waste Cost = 150g × $0.02 = $3.00 wasted."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Tuning flush multipliers down (e.g. from 1.0 to 0.6) significantly decreases waste without color bleeding."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Print farm operators auditing scrap costs and makers tuning flush volumes."
       }
-    ]
+]
   },
-  {
+    {
     id: 'FlushVolumeCalculator',
     slug: 'flush-volume-calculator',
     name: 'Flush Volume Calculator',
     category: '3d-printing',
-    shortDescription: 'Calculate optimized purge flushes for dark-to-light filament changes.',
-    metaDescription: 'Free online 3D printing calculator. calculate calculate optimized purge flushes for dark-to-light filament changes.',
-    keywords: ["bambu lab flush settings","poop volume light dark","flush matrix ams","color purge values"],
+    shortDescription: "Calculate optimized purge flushes for dark-to-light filament changes.",
+    metaTitle: "Flush Volume Calculator | Auto-Calculate Purge Multipliers",
+    metaDescription: "Calculate optimal flush volume matrix (mm\u00b3) for multi-color filament transitions. Prevent color bleeding from black to white with minimal waste.",
+    keywords: [
+      "flush volume calculator",
+      "bambu flush volume tuning",
+      "purge multiplier calculator",
+      "color transition flush volume",
+      "black to white purge volume"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Select 'From Color' (outgoing filament, e.g. Deep Black).",
+      "Select 'To Color' (incoming filament, e.g. Pure White).",
+      "View calculated safe flush volume in mm³ (e.g. 280 mm³ for black->white; 80 mm³ for white->black).",
+      "Enter calculated values into your slicer's Flush Volume Matrix."
+],
     faqs: [
       {
-        question: 'Is the Flush Volume Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Why does transitioning from black to white require more flush volume?",
+            "answer": "Dark pigments (carbon black) have high optical tinting strength. Even a tiny trace left in the nozzle hotend will tint incoming white filament grey. Transitioning from white to black requires much less flush."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Flush Volume Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Flush Volume Calculator?",
+            "content": "An optical color transition matrix that calculates the exact volumetric flush (mm³) required between any two filament hues."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Recommended Flush (mm³) = Base Flush Volume (150 mm³) × (Source Tint Strength / Target Tint Strength) × Slicer Flush Multiplier"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "• Black -> White = 280 mm³ (High flush required)\n• White -> Black = 80 mm³ (Low flush required, saves 200 mm³ per swap!)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Certain high-pigment silk filaments require slightly higher flush volumes than standard matte PLA."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Makers optimizing Bambu Studio and OrcaSlicer flush matrices to slash print times and purge waste."
       }
-    ]
+]
   },
-  {
+    {
     id: 'AMSSlotPlanner',
     slug: 'ams-slot-planner',
     name: 'AMS Slot Planner',
     category: '3d-printing',
-    shortDescription: 'Map color and support interface slots for Bambu Lab X1C, P1S, or A1 setups.',
-    metaDescription: 'Free online 3D printing calculator. calculate map color and support interface slots for bambu lab x1c, p1s, or a1 setups.',
-    keywords: ["ams slots mapper","bambu colors order","support interface slot","bambu multicolor checklist"],
+    shortDescription: "Map color and support interface slots for Bambu Lab X1C, P1S, or A1 setups.",
+    metaTitle: "AMS Slot Allocation Planner | Multi-Material Tray Mapping",
+    metaDescription: "Plan filament spool assignments across 4-slot AMS trays. Optimize color change paths and support interface pairing for clean 3D prints.",
+    keywords: [
+      "ams slot planner",
+      "bambu lab ams tray setup",
+      "ams color allocation",
+      "support filament slot planner",
+      "bambu studio ams setup"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Assign filaments to AMS Slots 1, 2, 3, and 4.",
+      "Designate primary body colors, accent details, and support interface materials.",
+      "Review the generated visual slot map and print preparation guide."
+],
     faqs: [
       {
-        question: 'Is the AMS Slot Planner accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "Can I use PETG as a support interface for PLA in the AMS?",
+            "answer": "Yes! PETG and PLA do not adhere to each other. Using PETG in one AMS slot for the support interface layer allows supports to detach cleanly with zero scarring."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding AMS Slot Planner',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the AMS Slot Planner?",
+            "content": "A pre-print configuration tool that maps filament rolls to AMS hardware slots for multi-color models and dedicated zero-gap support materials."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Slot Mapping = Match(Model_Color_Hierarchy, AMS_Slots[1..4])"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Slot 1: PLA Matte Black (Main Case), Slot 2: PLA Orange (Text), Slot 3: PLA White (Icons), Slot 4: PETG Clear (Zero-gap Support Interface)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Do not load abrasive filaments (glow-in-the-dark, carbon fiber) into standard AMS units without hardened funnel wear protectors."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Multi-material 3D print designers and functional prototype engineers."
       }
-    ]
+]
   },
-  {
+    {
     id: 'BuildPlateUtilizationCalculator',
     slug: 'build-plate-utilization-calculator',
     name: 'Build Plate Utilization Calculator',
     category: '3d-printing',
-    shortDescription: 'Check nesting limits for model sizes relative to Bambu 256x256mm build plates.',
-    metaDescription: 'Free online 3D printing calculator. calculate check nesting limits for model sizes relative to bambu 256x256mm build plates.',
-    keywords: ["nesting build plate","bambu build plate size","256x256 build plate fit","nesting parts quantity"],
+    shortDescription: "Check nesting limits for model sizes relative to Bambu 256x256mm build plates.",
+    metaTitle: "Build Plate Utilization Calculator | 3D Bed Packing & Nesting",
+    metaDescription: "Calculate 3D printer build plate surface coverage (%), part nesting density, and spacing margins to maximize batch print bed capacity.",
+    keywords: [
+      "build plate utilization calculator",
+      "3d print bed nesting",
+      "build plate coverage calculator",
+      "how many parts fit on 3d print bed",
+      "bambu build plate capacity",
+      "print bed packing calculator"
+],
     icon: 'Printer',
     howToUse: [
-      'Enter the print configuration values in the inputs panel.',
-      'View the calculated results automatically in the outputs card.',
-      'Copy the calculated specifications to your clipboard.'
-    ],
+      "Select your printer build plate dimensions (e.g. 256×256mm for Bambu, 220×220mm for Ender 3, 300×300mm for CR-10).",
+      "Enter single part footprint (X and Y dimensions in mm).",
+      "Specify safety clearance margin between parts (e.g. 5mm–10mm for auto-brim clearance).",
+      "Calculate maximum parts that fit in a 2D grid and total bed surface utilization percentage."
+],
     faqs: [
       {
-        question: 'Is the Build Plate Utilization Calculator accurate?',
-        answer: 'Yes, it uses standard slicing math formulas and density reference charts to project outcomes.'
-      },
-      {
-        question: 'Are my STL files uploaded to any servers?',
-        answer: 'No, all STL parsing and measurements run 100% locally in your browser memory via HTML5 FileReaders.'
+            "question": "How do you calculate build plate utilization?",
+            "answer": "Utilization (%) = (Total Part Footprint Area / Total Usable Bed Area) × 100. The tool arranges parts in orthogonal rows and columns taking spacing margins into account."
       }
-    ],
+],
     sections: [
       {
-        title: 'Understanding Build Plate Utilization Calculator',
-        content: 'Estimating details before starting prints prevents spool exhaustion, print farm backlogs, and reduces waste pooped filament costs.'
+            "title": "What is the Build Plate Utilization Calculator?",
+            "content": "A bed packing and nesting optimizer that calculates the maximum number of parts that can be printed simultaneously on a single build plate."
+      },
+      {
+            "title": "Formula Used",
+            "content": "• Grid Columns = FLOOR((Bed Width - 2 × Edge Margin) / (Part Width + Part Spacing))\n• Grid Rows = FLOOR((Bed Length - 2 × Edge Margin) / (Part Length + Part Spacing))\n• Max Parts = Grid Columns × Grid Rows\n• Bed Utilization (%) = (Max Parts × Part Area / Bed Total Area) × 100"
+      },
+      {
+            "title": "Real-World Example",
+            "content": "Printing 40×40mm keychains on a 256×256mm bed with 6mm spacing and 10mm edge margin:\n• Usable space = 236×236mm\n• Parts per axis = FLOOR(236 / 46) = 5\n• Total Parts = 5 × 5 = 25 keychains on one plate (42.5% bed surface coverage)."
+      },
+      {
+            "title": "Accuracy and Limitations",
+            "content": "Assumes rectangular bounding geometry. Irregular organic shapes can be nested more tightly using manual interlocking in slicers."
+      },
+      {
+            "title": "Who It Is For",
+            "content": "Batch manufacturers, event favor creators, and print farms maximizing unattended overnight runs."
       }
-    ]
+]
   },
-  {
+    {
     id: 'ImageToFilamentArtMaker',
     slug: 'filament-art-maker',
     name: 'Filament Art Maker',
     category: '3d-printing',
-    shortDescription: 'Turn any image into layered 3D printable filament art — free, private, and directly in your browser.',
-    metaTitle: 'Free HueForge Alternative – Image to Filament Art Maker | Toolique',
-    metaDescription: 'Create filament art from any image for free. Choose filament colors, generate layered 3D printable artwork, preview your model, and export STL directly in your browser.',
+    shortDescription: "Turn any image into layered 3D printable filament art \u2014 free, private, and directly in your browser.",
+    metaTitle: "Filament Art Maker | Turn Images to 3D Print HueForge STL",
+    metaDescription: "Free in-browser tool to convert photos into 3D printable layered filament art (HueForge style). 100% private, instant STL export, zero upload required.",
     keywords: [
-      'free HueForge alternative',
-      'free filament art maker',
-      'filament art generator',
-      'image to filament art',
-      'image to STL',
-      'image to 3D print',
-      'filament painting generator',
-      'layered STL generator',
-      '3D printable image converter',
-      'HueForge alternative online',
-      'HueForge-style filament art',
-      'lithophane generator',
-      'transmission distance calculator',
-      'filament painting 3D printing',
-      'image to 3D relief'
-    ],
+      "filament art maker",
+      "image to 3d print",
+      "hueforge online alternative",
+      "photo to stl converter",
+      "image to filament art",
+      "3d print photo generator",
+      "lithophane vs filament art",
+      "free hueforge online"
+],
     icon: 'Palette',
     hideLayoutHeader: true,
     howToUse: [
-      'Upload Your Image: Select or drag-and-drop any JPG, JPEG, PNG, or WebP photo into the browser sandbox.',
-      'Choose Your Filaments: Select 2 to 8 filament colors and set their brands, materials, and Transmission Distances (TD in mm).',
-      'Process the Image: Adjust brightness, contrast, gamma curves, saturation, and base/max thickness to dial in detail.',
-      'Preview Your Model: Compare the original image, processed image, optical filament simulation, and interactive 3D relief mesh.',
-      'Export and Print: Download the watertight Binary STL and use the generated layer swap schedule in your 3D printer slicer.'
-    ],
+      "Upload or drop any image (PNG, JPEG, WebP) directly in your browser.",
+      "The tool analyzes luminance gradients and color depths 100% locally.",
+      "Customize target dimensions (width, height), base thickness (mm), and detail layer steps.",
+      "Configure your filament color palette and preview real-time 3D topographical relief.",
+      "Download ready-to-slice 3D STL file and copy slicer color pause instructions."
+],
     faqs: [
       {
-        question: 'What is a free HueForge alternative?',
-        answer: 'Toolique Filament Art Maker is a free, web-based alternative to HueForge. It allows makers to convert 2D photos and graphics into multi-color, layered 3D printable relief models directly in any modern browser without software installations, subscriptions, or cloud uploads.'
+            "question": "What is the Filament Art Maker?",
+            "answer": "The Filament Art Maker is a browser-based creator tool that transforms 2D photographs and digital art into textured, layered 3D models designed for multi-color filament painting."
       },
       {
-        question: 'Is Toolique Filament Art Maker free?',
-        answer: 'Yes. Toolique\'s Filament Art Maker is designed as a free browser-based tool. No signup is required for the core workflow.'
+            "question": "Are my uploaded photos sent to any server?",
+            "answer": "No! Image processing, heightmap synthesis, and STL binary generation run 100% locally inside your browser memory using HTML5 Canvas and WebAssembly. Your personal photos are never transmitted anywhere."
       },
       {
-        question: 'Can I convert an image to an STL?',
-        answer: 'Yes. The tool processes your image into a discrete heightmap grid based on luminance and color blending, constructs a manifold 3D relief surface with side walls and a flat base, and exports a standard watertight Binary STL file ready for your slicer.'
-      },
-      {
-        question: 'Can I create filament art without a multi-color 3D printer?',
-        answer: 'Yes! Layered filament art is designed specifically for standard single-extruder 3D printers using manual filament swaps (M600 pause commands at designated layer heights), as well as multi-material systems like Bambu Lab AMS or Prusa MMU.'
-      },
-      {
-        question: 'What image formats are supported?',
-        answer: 'The tool supports standard JPG, JPEG, PNG, and WebP image formats with client-side drag-and-drop or file browsing.'
-      },
-      {
-        question: 'How many filament colors can I use?',
-        answer: 'You can configure between 2 and 8 filament colors in your palette stack, allowing for monochrome lithophanes or rich multi-color layered paintings.'
-      },
-      {
-        question: 'Can I use my own filament colors?',
-        answer: 'Yes. You can add custom filaments with individual color hex values, filament brands (Bambu Lab, Polymaker, eSUN, Sunlu, PolyLite, etc.), materials (PLA, PETG, ABS), and measured Transmission Distances (TD), and save your custom palettes locally.'
-      },
-      {
-        question: 'What is transmission distance?',
-        answer: 'Transmission Distance (TD) is the physical thickness in millimeters required for a filament layer to become opaque and block light from underlying layers. Translucent or light filaments have high TD (e.g. 5.0mm for White), while dense pigments have low TD (e.g. 0.6mm for Black).'
-      },
-      {
-        question: 'Does Toolique upload my image?',
-        answer: 'No. All image resizing, color filtering, Delta-E LAB calculations, height mapping, and binary STL 3D mesh exports run 100% locally in your browser memory via HTML5 Canvas and Web APIs. Your images are never transmitted to our servers.'
-      },
-      {
-        question: 'What printers can use the generated STL?',
-        answer: 'The generated Binary STL is universally compatible with all popular 3D printer slicing software, including Bambu Studio, OrcaSlicer, PrusaSlicer, Cura, IdeaMaker, and Creality Print.'
-      },
-      {
-        question: 'Is this the same as HueForge?',
-        answer: 'No. Toolique Filament Art Maker is an independent tool for creating filament-art-style 3D prints and is not affiliated with HueForge.'
-      },
-      {
-        question: 'How do filament swaps work?',
-        answer: 'Filament swaps are layer-based color changes. The tool generates an exact schedule (e.g. Start with Black at Layer 1 -> Swap to Blue at Layer 13 (1.04mm) -> Swap to White at Layer 28 (2.24mm)). In your slicer, right-click the layer preview slider to add pause or color change commands at those heights.'
-      },
-      {
-        question: 'Why does my printed result look different from the preview?',
-        answer: 'Physical print appearance depends on real filament pigment opacity, ambient lighting, printer extruder calibration, nozzle size (0.4mm vs 0.2mm), precise first-layer calibration, printing temperature, and bed leveling.'
+            "question": "Do I need a multi-color printer (like Bambu AMS) to print filament art?",
+            "answer": "No, because color transitions occur sequentially at specific layer heights, you can print filament art on any standard single-extruder 3D printer by simply inserting manual filament change pauses."
       }
-    ],
+],
     sections: [
       {
-        title: 'What is a Filament Art Maker?',
-        content: 'Toolique Filament Art Maker is a free browser-based 3D printing tool that converts images into layered relief artwork for FDM 3D printers. Upload an image, select filament colors, adjust image and thickness settings, preview the generated model, and export a printable STL. Image processing is designed to happen locally in the browser.'
+            "title": "What is the Filament Art Maker?",
+            "content": "An innovative client-side tool that converts standard 2D digital images into layered 3D relief heightmaps for multi-tonal filament art printing."
       },
       {
-        title: 'Create 3D Filament Art From Any Image',
-        content: 'Filament art transforms traditional 2D raster artwork into physical, tactile 3D relief sculptures using standard FDM filaments. By stacking thin, semi-translucent layers of plastic (typically 0.08mm layer heights) over high-contrast base layers, light reflects and refracts through the upper plastic layers to create intermediate shades and optical gradients.\n\nKey principles for successful filament art:\n• Layers & Thickness: Higher thickness allows lighter filaments to fully express opacity, while ultra-thin layer heights (0.04mm–0.08mm) maximize subtle color transitions.\n• Color Stacking: Darker, opaque filaments are laid down first as the foundation, followed by mid-tones and bright highlight filaments.\n• Filament Opacity (TD): Every filament brand has a unique transmission distance that dictates how many layers are required before background colors are completely masked.\n• Slicer Precision: Using 100% solid rectilinear infill ensures there are no internal air pockets that interfere with light transmission.'
+            "title": "How Does It Work?",
+            "content": "The tool computes per-pixel grayscale luminance values and converts them into physical Z-axis heights. Slicers then print thin translucent layers that blend colors optically through transmission distance (TD)."
       },
       {
-        title: 'A Free Alternative to HueForge',
-        content: 'Looking for a free alternative to HueForge? Toolique Filament Art Maker provides a browser-based workflow for creating layered filament-art-style 3D prints from images.\n\n| Feature | Toolique Filament Art Maker |\n| :--- | :--- |\n| Free & Accessible | Yes, 100% Free |\n| Browser-Based Workflow | Yes, No Installation Required |\n| Client-Side Privacy | Yes, In-Memory Processing |\n| Custom Filament Palettes | Yes, 2 to 8 Colors with TD Tuning |\n| 3D Relief Mesh Preview | Yes, Interactive WebGL Viewer |\n| Watertight Binary STL Export | Yes, Ready for Slicer Import |\n| Layer Swap Guide (.TXT) | Yes, Automatic Height & Layer Breakdown |\n| Multi-Color Slicer Support | Yes, Bambu Studio, OrcaSlicer, PrusaSlicer, Cura |\n\n*Toolique is an independent tool and is not affiliated with or endorsed by HueForge.*'
+            "title": "Formula Used",
+            "content": "• Luminance (Y) = 0.299R + 0.587G + 0.114B\n• Physical Z (mm) = Base Height + (Luminance / 255) × Max Relief Height"
       },
       {
-        title: 'Filament Art vs Lithophane',
-        content: 'While both filament art and lithophanes create 3D printable pictures, they operate on different optical mechanisms:\n\n• Filament Art:\n- Designed to be viewed directly under ambient front lighting.\n- Uses multiple colored filaments stacked across discrete layer swap heights.\n- Relies on surface reflectivity and layered optical absorption.\n- Perfect for decorative framed wall art, logos, and colorful character portraits.\n\n• Lithophane:\n- Usually printed in a single monochrome, light-colored material (such as pure white PLA).\n- Relies on strong backlighting passing through varying solid thicknesses to reveal positive/negative photographic values.\n- Best suited for night lights, lampshades, and backlit window displays.'
+            "title": "Step-by-Step Example",
+            "content": "Upload a 1000×1000px portrait -> Set 150×150mm size, 0.48mm base, 1.80mm max height -> Select Black, Blue, Gold, White palette -> Export 3D STL -> Slice in Bambu Studio with 0.08mm layer height -> Enjoy stunning 3D wall art."
       },
       {
-        title: 'What Can You Create?',
-        content: 'Filament art maker opens up endless creative possibilities for 3D printing hobbyists, makers, and digital artists:\n\n• Pet & Family Portraits: Turn memorable family photographs and pet pictures into textured commemorative wall art.\n• Gaming & Pop-Culture Emblems: Create bold, textured relief plaques of gaming logos, anime heroes, and comic book art.\n• Scenic Landscapes & Astronomy: Reproduce sunsets, mountain vistas, celestial nebulae, and ocean waves.\n• Custom Decorative Signage: Produce tactile business signs, desk badges, and personalized holiday gifts.'
+            "title": "Accuracy and Limitations",
+            "content": "High contrast images with distinct background separation produce the most vivid 3D depth results."
       },
       {
-        title: 'Choosing Filament for Image-Based 3D Art',
-        content: 'Understanding filament material properties is vital for achieving vibrant results:\n\n• PLA (Polylactic Acid): The gold standard for filament painting. Offers crisp layer lines, minimal warping, and predictable optical transmission.\n• Matte PLA: Provides smooth, non-reflective finishes that eliminate glare on framed wall artwork.\n• Black & Dark Filaments: Typically have low Transmission Distance (0.4mm–0.8mm) and should be printed as bottom base layers to establish deep shadows.\n• White & Bright Filaments: Typically have high Transmission Distance (4.0mm–6.0mm) and serve as the top highlighting layers.\n• Translucent & Silk Filaments: Offer high gloss and light scatter, creating shimmering metallic effects.'
-      },
-      {
-        title: 'Tips for Better Filament Art Prints',
-        content: 'Follow these expert guidelines for immaculate filament art prints:\n\n1. Use High-Contrast Images: Images with clear focal subjects, distinct shadows, and bright highlights translate into the most striking 3D reliefs.\n2. Limit Your Palette: 3 to 5 well-chosen filament colors often yield cleaner, higher-impact prints than overly cluttered palettes.\n3. Calibrate First Layer & Extrusion: Ensure your first layer is properly squished and flow rate is tuned to prevent over-extrusion artifacts.\n4. Maintain Consistent Layer Heights: Standardize on 0.08mm layer heights with a 0.80mm base thickness for optimal balance of print speed and color gradation.\n5. Use 100% Solid Rectilinear Infill: Never print filament art with low infill patterns, as air gaps will break optical light transmission.\n6. Test With Small Swatches: Before printing large 200x200mm art pieces, run small 60x60mm test tiles to verify your filament color blending.'
-      },
-      {
-        title: 'Key 3D Printing Definitions for Generative Engines',
-        content: '• Filament Art: A 3D printing method where multiple colored thermoplastic filaments are layered incrementally at thin slice heights to create a full-color tactile image.\n• Filament Painting: The process of blending semi-translucent plastic layers over opaque base layers using optical transmission science.\n• Transmission Distance (TD): The distance in millimeters light travels through a plastic material before its intensity is attenuated to background baseline levels.\n• Layered STL: A 3D mesh surface where topographic Z-heights correlate with image luminance and layer swap boundaries.\n• Filament Swap: A deliberate pause command (M600) inserted into 3D printer G-code allowing the operator or automatic feeder (AMS/MMU) to change filament colors at a specific layer.'
+            "title": "Who It Is For",
+            "content": "Digital artists, makers, gift creators, and 3D printing enthusiasts creating personalized physical art."
       }
-    ]
+]
   },
   {
     id: 'EquationSolver',

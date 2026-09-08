@@ -42,6 +42,8 @@ export function getToolCanonicalPath(category: string, slug: string): string {
     return `/developer/${slug}`;
   } else if (category === 'qa') {
     return `/qa/${slug}`;
+  } else if (category === '3d-printing') {
+    return `/3d-printing-tools/${slug}`;
   } else {
     return `/calculators/${slug}`;
   }
@@ -58,6 +60,8 @@ export function getCategoryCanonicalPath(category: string): string {
     return `/qa`;
   } else if (category === 'finance') {
     return `/finance`;
+  } else if (category === '3d-printing') {
+    return `/3d-printing-tools`;
   } else {
     return `/calculators`;
   }
@@ -121,17 +125,20 @@ export default function AppRoutes() {
 
       {/* Primary Pillar Tool Detail Routes */}
       <Route path="/calculators/:slug" element={<ToolPage />} />
+      <Route path="/3d-printing-tools/:slug" element={<ToolPage />} />
       <Route path="/architecture/:slug" element={<ToolPage />} />
       <Route path="/civil/:slug" element={<ToolPage />} />
       <Route path="/developer/:slug" element={<ToolPage />} />
       <Route path="/qa/:slug" element={<ToolPage />} />
       <Route path="/finance/:slug" element={<Navigate to="/calculators/:slug" replace />} />
+      <Route path="/3d-printing/:slug" element={<LegacyToolRedirect />} />
+      <Route path="/3d-print-studio/:slug" element={<LegacyToolRedirect />} />
 
       {/* Legacy Category & Tool Redirects */}
-      <Route path="/tools/filament-art-maker" element={<Navigate to="/calculators/filament-art-maker" replace />} />
-      <Route path="/3d-printing/filament-art-maker" element={<Navigate to="/calculators/filament-art-maker" replace />} />
-      <Route path="/tools/image-to-filament-art-maker" element={<Navigate to="/calculators/filament-art-maker" replace />} />
-      <Route path="/3d-printing/image-to-filament-art-maker" element={<Navigate to="/calculators/filament-art-maker" replace />} />
+      <Route path="/tools/filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />
+      <Route path="/3d-printing/filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />
+      <Route path="/tools/image-to-filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />
+      <Route path="/3d-printing/image-to-filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />
       <Route path="/tools/:categoryName" element={<LegacyCategoryRedirect />} />
       <Route path="/tool/:slug" element={<LegacyToolRedirect />} />
       <Route path="/tools/advanced-boq-calculator-india" element={<Navigate to="/civil/advanced-boq-calculator-india" replace />} />
@@ -178,6 +185,7 @@ export default function AppRoutes() {
       } />
       <Route path="/3d-printing" element={<ThreeDPrintStudio />} />
       <Route path="/3d-print-studio" element={<ThreeDPrintStudio />} />
+      <Route path="/3d-printing-tools" element={<ThreeDPrintStudio />} />
       <Route path="/math-studio" element={<MathStudio />} />
       <Route path="/about" element={<About />} />
       <Route path="/why-toolique" element={<WhyToolique />} />

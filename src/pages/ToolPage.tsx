@@ -848,7 +848,7 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
   const breadcrumbItems = tool.category === '3d-printing'
     ? [
         { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.toolique.in/' },
-        { '@type': 'ListItem', 'position': 2, 'name': '3D Print Studio', 'item': 'https://www.toolique.in/3d-print-studio' },
+        { '@type': 'ListItem', 'position': 2, 'name': '3D Printing Tools', 'item': 'https://www.toolique.in/3d-printing-tools' },
         { '@type': 'ListItem', 'position': 3, 'name': tool.name, 'item': toolUrl },
       ]
     : tool.category === 'math-studio'
@@ -959,18 +959,18 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       {/* Breadcrumb & Navigation */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
         <a
-          href={tool.category === '3d-printing' ? "/3d-print-studio" : tool.category === 'math-studio' ? "/math-studio" : categoryPath}
+          href={tool.category === '3d-printing' ? "/3d-printing-tools" : tool.category === 'math-studio' ? "/math-studio" : categoryPath}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{tool.category === '3d-printing' ? "Back to 3D Print Studio" : tool.category === 'math-studio' ? "Back to Math Studio" : `Back to ${categoryName}`}</span>
+          <span>{tool.category === '3d-printing' ? "Back to 3D Printing Tools" : tool.category === 'math-studio' ? "Back to Math Studio" : `Back to ${categoryName}`}</span>
         </a>
         <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
           <a href="/" className="hover:text-indigo-500 transition-colors">Home</a>
           <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
           {tool.category === '3d-printing' ? (
-            <a href="/3d-print-studio" className="hover:text-indigo-500 transition-colors">
-              3D Print Studio
+            <a href="/3d-printing-tools" className="hover:text-indigo-500 transition-colors">
+              3D Printing Tools
             </a>
           ) : tool.category === 'math-studio' ? (
             <a href="/math-studio" className="hover:text-indigo-500 transition-colors">

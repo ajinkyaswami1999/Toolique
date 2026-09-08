@@ -109,6 +109,8 @@ export function getToolCanonicalPath(category: string, slug: string): string {
     return `developer/${slug}`;
   } else if (category === 'qa') {
     return `qa/${slug}`;
+  } else if (category === '3d-printing') {
+    return `3d-printing-tools/${slug}`;
   } else {
     return `calculators/${slug}`;
   }
@@ -123,6 +125,8 @@ export function getCategoryCanonicalPath(category: string): string {
     return `developer`;
   } else if (category === 'qa') {
     return `qa`;
+  } else if (category === '3d-printing') {
+    return `3d-printing-tools`;
   } else {
     return `calculators`;
   }
@@ -590,11 +594,19 @@ const threeDTools = toolsList.filter(t => t.category === '3d-printing');
 const threeDFaqs = [
   {
     question: 'How do I calculate 3D printing filament cost and selling price?',
-    answer: 'Filament cost is calculated by dividing spool price by total spool weight and multiplying by model weight in grams. The selling price adds electricity cost, machine depreciation, labor time, and desired profit markup.'
+    answer: 'Filament cost is calculated by dividing spool price by total spool weight and multiplying by model weight in grams. The selling price adds electricity cost, machine depreciation, labor time, packaging, and desired profit markup.'
   },
   {
-    question: 'How does STL Volume and Resin Weight estimation work?',
+    question: 'How does STL Volume and Model Weight estimation work?',
     answer: 'The STL Volume Calculator parses binary and ASCII STL mesh files in your browser using signed tetrahedron volumes to calculate exact displacement in cubic centimeters (cm³) and grams based on material density.'
+  },
+  {
+    question: 'What is volumetric flow rate and why does it cap print speed?',
+    answer: 'Volumetric flow rate (mm³/s) defines how fast a hotend can melt plastic. Max print speed is capped by: Max Speed = Max Volumetric Flow / (Layer Height × Line Width).'
+  },
+  {
+    question: 'How do Bambu Lab AMS tools reduce purge waste?',
+    answer: 'Our Bambu Lab flush volume and purge calculators compute exact purge tower waste and optimize dark-to-light filament transition volumes to eliminate color bleed while saving up to 50% waste plastic.'
   }
 ];
 
@@ -603,11 +615,11 @@ const threeDBodyHtml = `
     <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
       <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
         <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
-        <span>3D Print Studio</span>
+        <span>3D Printing Tools</span>
       </nav>
-      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">3D Printing Cost & Filament Calculators</h1>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">3D Printing Tools & Calculators Suite</h1>
       <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
-        Dedicated 3D printing calculator suite for makers and print farms. Calculate filament costs, print pricing, resin volume, Bambu Lab multi-color flush waste, and HueForge layer heights.
+        40+ free online 3D printing calculators for FDM filament cost, total print pricing, hotend volumetric flow rate, print farm revenue, HueForge filament painting, and Bambu Lab AMS multi-color configurations.
       </p>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
@@ -617,6 +629,42 @@ const threeDBodyHtml = `
       ${renderFaqsHtml(threeDFaqs)}
     </div>
   </div>`;
+
+const threeDSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/3d-printing-tools#collection',
+      'name': 'Free 3D Printing Calculators & Tools Suite | Toolique 3D Print Studio',
+      'description': '40+ free online 3D printing calculators for FDM filament cost, print pricing, resin volume, volumetric flow rate, print farm revenue, HueForge, and Bambu Lab AMS.',
+      'url': 'https://www.toolique.in/3d-printing-tools',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': '3D Printing Tools Directory',
+        'numberOfItems': threeDTools.length,
+        'itemListElement': threeDTools.map((t, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': t.name,
+          'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/3d-printing-tools#faq',
+      'mainEntity': threeDFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': faq.answer
+        }
+      }))
+    }
+  ]
+};
 
 // Math Studio Hub Page
 const mathTools = toolsList.filter(t => t.category === 'math-studio');
@@ -716,17 +764,11 @@ const staticPages = [
     bodyHtml: mathBodyHtml
   },
   {
-    path: '3d-print-studio',
-    title: '3D Print Studio | Toolique',
-    description: 'Free 3D printing calculators for filament cost, print pricing, resin, print farms, Bambu Lab, HueForge, STL volume, electricity cost, and print profit.',
-    keywords: ['3d printing calculator', 'filament cost', 'maker tools'],
-    bodyHtml: threeDBodyHtml
-  },
-  {
-    path: '3d-printing',
-    title: '3D Printing cost & filament calculators | Toolique',
-    description: 'Dedicated 3D printing calculator tools for cost calculations, filament weight estimation, AMS slot planning, and resin volumes.',
-    keywords: ['3d printing cost', 'filament calculator', 'maker settings'],
+    path: '3d-printing-tools',
+    title: 'Free 3D Printing Calculators & Tools Suite | Toolique 3D Print Studio',
+    description: '40+ free online 3D printing calculators for FDM filament cost, print pricing, resin volume, volumetric flow rate, print farm revenue, HueForge, and Bambu Lab AMS.',
+    keywords: ['3d printing calculator', 'filament cost calculator', '3d print pricing calculator', 'volumetric flow calculator', 'bambu lab tools', 'hueforge calculator', 'print farm calculator', 'stl volume calculator'],
+    schemaMarkup: threeDSchema,
     bodyHtml: threeDBodyHtml
   },
   {
@@ -916,7 +958,7 @@ toolsList.forEach((tool) => {
   if (tool.category === '3d-printing') {
     breadcrumbItems = [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.toolique.in/' },
-      { '@type': 'ListItem', position: 2, name: '3D Print Studio', item: 'https://www.toolique.in/3d-print-studio' },
+      { '@type': 'ListItem', position: 2, name: '3D Printing Tools', item: 'https://www.toolique.in/3d-printing-tools' },
       { '@type': 'ListItem', position: 3, name: tool.name, item: toolUrl },
     ];
   } else if (tool.category === 'math-studio') {
@@ -1208,9 +1250,11 @@ toolsList.forEach((tool) => {
     generateRedirectShell(`tools/${tool.slug}`, canonicalPath, tool.name);
   }
 
-  // 3. /3d-printing/:slug -> /calculators/:slug (if category is 3d-printing)
-  if (tool.category === '3d-printing' && canonicalPath.startsWith('calculators/')) {
+  // 3. /3d-printing/:slug, /3d-print-studio/:slug, /calculators/:slug -> /3d-printing-tools/:slug
+  if (tool.category === '3d-printing') {
     generateRedirectShell(`3d-printing/${tool.slug}`, canonicalPath, tool.name);
+    generateRedirectShell(`3d-print-studio/${tool.slug}`, canonicalPath, tool.name);
+    generateRedirectShell(`calculators/${tool.slug}`, canonicalPath, tool.name);
   }
 
   // 4. /math-studio/:slug -> /calculators/:slug (if category is math-studio)
@@ -1225,10 +1269,12 @@ generateRedirectShell('architecture-tools', 'architecture', 'Architecture Suite'
 generateRedirectShell('qa-tools', 'qa', 'QA Workspace');
 generateRedirectShell('finance-tools', 'calculators', 'Finance Calculators');
 generateRedirectShell('developer-tools', 'developer', 'Developer Suite');
-generateRedirectShell('tools/filament-art-maker', 'calculators/filament-art-maker', 'Filament Art Maker');
-generateRedirectShell('3d-printing/filament-art-maker', 'calculators/filament-art-maker', 'Filament Art Maker');
-generateRedirectShell('tools/image-to-filament-art-maker', 'calculators/filament-art-maker', 'Image to Filament Art Maker');
-generateRedirectShell('3d-printing/image-to-filament-art-maker', 'calculators/filament-art-maker', 'Image to Filament Art Maker');
+generateRedirectShell('3d-print-studio', '3d-printing-tools', '3D Printing Tools & Calculators');
+generateRedirectShell('3d-printing', '3d-printing-tools', '3D Printing Tools & Calculators');
+generateRedirectShell('tools/filament-art-maker', '3d-printing-tools/filament-art-maker', 'Filament Art Maker');
+generateRedirectShell('3d-printing/filament-art-maker', '3d-printing-tools/filament-art-maker', 'Filament Art Maker');
+generateRedirectShell('tools/image-to-filament-art-maker', '3d-printing-tools/filament-art-maker', 'Image to Filament Art Maker');
+generateRedirectShell('3d-printing/image-to-filament-art-maker', '3d-printing-tools/filament-art-maker', 'Image to Filament Art Maker');
 generateRedirectShell('tools/advanced-boq-calculator-india', 'civil/advanced-boq-calculator-india', 'Advanced BOQ Calculator India');
 
 console.log('SEO pre-rendering shells generation complete!');
@@ -1245,21 +1291,18 @@ function generateXmlSitemap() {
   // 1. Add Homepage
   urls.push({ loc: 'https://www.toolique.in/', changefreq: 'daily', priority: '1.0' });
 
-  // 2. Add static pages (excluding 404)
-  staticPages.filter(p => p.path !== '404').forEach(p => {
+  // 2. Add static pages (excluding 404 and redirect aliases)
+  staticPages.filter(p => !['404', '3d-print-studio', '3d-printing'].includes(p.path)).forEach(p => {
     let priority = '0.5';
     let freq = 'monthly';
-    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy'].includes(p.path)) {
+    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy', '3d-printing-tools'].includes(p.path)) {
       priority = '0.95';
       freq = 'daily';
-    } else if (p.path === 'about-founder' || p.path === '3d-print-studio' || p.path === 'math-studio') {
-      priority = '0.85';
+    } else if (p.path === 'about-founder' || p.path === 'math-studio') {
+      priority = '0.9';
       freq = 'weekly';
     } else if (p.path.startsWith('academy/')) {
       priority = '0.8';
-      freq = 'weekly';
-    } else if (['3d-printing'].includes(p.path)) {
-      priority = '0.9';
       freq = 'weekly';
     }
     urls.push({ loc: `https://www.toolique.in/${p.path}`, changefreq: freq, priority });
