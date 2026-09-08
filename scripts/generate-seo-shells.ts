@@ -111,6 +111,8 @@ export function getToolCanonicalPath(category: string, slug: string): string {
     return `qa/${slug}`;
   } else if (category === '3d-printing') {
     return `3d-printing-tools/${slug}`;
+  } else if (category === 'economics') {
+    return `economics/${slug}`;
   } else {
     return `calculators/${slug}`;
   }
@@ -127,6 +129,8 @@ export function getCategoryCanonicalPath(category: string): string {
     return `qa`;
   } else if (category === '3d-printing') {
     return `3d-printing-tools`;
+  } else if (category === 'economics') {
+    return `economics`;
   } else {
     return `calculators`;
   }
@@ -699,6 +703,83 @@ const mathBodyHtml = `
     </div>
   </div>`;
 
+// Economics Hub Page
+const econTools = toolsList.filter(t => t.category === 'economics');
+const econFaqs = [
+  {
+    question: 'How do you calculate the Price Elasticity of Demand (PED)?',
+    answer: 'PED measures the responsiveness of quantity demanded to a price change. Formula: PED = (% Change in Quantity Demanded) / (% Change in Price) = ((Q2 - Q1) / ((Q1 + Q2) / 2)) / ((P2 - P1) / ((P1 + P2) / 2)) using the midpoint formula.'
+  },
+  {
+    question: 'What is the difference between Microeconomics and Macroeconomics calculators?',
+    answer: 'Microeconomics calculators evaluate individual and business-level decisions such as marginal cost, profit maximization, and elasticity of demand. Macroeconomics calculators assess aggregate economy-wide metrics including Gross Domestic Product (GDP), inflation rate, Consumer Price Index (CPI), and fiscal multipliers.'
+  },
+  {
+    question: 'How is the Keynesian Spending Multiplier calculated?',
+    answer: 'The Keynesian expenditure multiplier is calculated as Multiplier = 1 / (1 - MPC) or 1 / MPS, where MPC is the Marginal Propensity to Consume and MPS is the Marginal Propensity to Save (MPS = 1 - MPC).'
+  },
+  {
+    question: 'Are all economics calculations computed client-side?',
+    answer: 'Yes. All elasticity computations, GDP aggregations, break-even analyses, and formula step-by-step proofs run 100% locally and private in your web browser with zero server latency.'
+  }
+];
+
+const econBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Economics Suite</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Economics Calculator Suite & Formula Solvers</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Solve 25+ essential microeconomics and macroeconomics formulas online. Calculate price elasticity, marginal revenue, marginal cost, GDP growth, inflation, consumer price index, fiscal multipliers, and market equilibrium.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${econTools.map(renderToolCardHtml).join('')}
+      </div>
+
+      ${renderFaqsHtml(econFaqs)}
+    </div>
+  </div>`;
+
+const econSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/economics#collection',
+      'name': 'Economics Calculator Suite & Formula Solvers',
+      'description': 'Solve 25+ essential microeconomics and macroeconomics formulas online with step-by-step mathematical proofs and graphical curves.',
+      'url': 'https://www.toolique.in/economics',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': 'Economics Calculators Directory',
+        'numberOfItems': econTools.length,
+        'itemListElement': econTools.map((t, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': t.name,
+          'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/economics#faq',
+      'mainEntity': econFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': faq.answer
+        }
+      }))
+    }
+  ]
+};
+
 // Tools Directory Page
 const toolsDirectoryBodyHtml = `
   <div id="root">
@@ -802,6 +883,14 @@ const staticPages = [
     keywords: ['qa tools', 'test case generator', 'bug report generator', 'test data generator', 'xpath tester'],
     schemaMarkup: qaSchema,
     bodyHtml: qaBodyHtml
+  },
+  {
+    path: 'economics',
+    title: 'Economics Calculator Suite – Micro & Macro Economic Formulas | Toolique',
+    description: 'Solve 25+ essential microeconomics and macroeconomics formulas online. Calculate elasticity of demand/supply, marginal cost, revenue, GDP, inflation, CPI, multiplier, and comparative advantage.',
+    keywords: ['economics calculator', 'microeconomics calculator', 'macroeconomics calculator', 'elasticity calculator', 'gdp growth calculator', 'inflation calculator', 'marginal cost calculator'],
+    schemaMarkup: econSchema,
+    bodyHtml: econBodyHtml
   },
   {
     path: 'about-founder',
@@ -1276,6 +1365,7 @@ generateRedirectShell('3d-printing/filament-art-maker', '3d-printing-tools/filam
 generateRedirectShell('tools/image-to-filament-art-maker', '3d-printing-tools/filament-art-maker', 'Image to Filament Art Maker');
 generateRedirectShell('3d-printing/image-to-filament-art-maker', '3d-printing-tools/filament-art-maker', 'Image to Filament Art Maker');
 generateRedirectShell('tools/advanced-boq-calculator-india', 'civil/advanced-boq-calculator-india', 'Advanced BOQ Calculator India');
+generateRedirectShell('economics-tools', 'economics', 'Economics Suite');
 
 console.log('SEO pre-rendering shells generation complete!');
 
@@ -1295,7 +1385,7 @@ function generateXmlSitemap() {
   staticPages.filter(p => !['404', '3d-print-studio', '3d-printing'].includes(p.path)).forEach(p => {
     let priority = '0.5';
     let freq = 'monthly';
-    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy', '3d-printing-tools'].includes(p.path)) {
+    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy', '3d-printing-tools', 'economics'].includes(p.path)) {
       priority = '0.95';
       freq = 'daily';
     } else if (p.path === 'about-founder' || p.path === 'math-studio') {

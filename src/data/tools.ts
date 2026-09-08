@@ -12,7 +12,7 @@ export interface Tool {
   id: string;
   slug: string;
   name: string;
-  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health' | '3d-printing' | 'math-studio' | 'qa';
+  category: 'finance' | 'civil' | 'architecture' | 'interior' | 'electrical' | 'pdf' | 'image' | 'developer' | 'web' | 'text' | 'social' | 'datetime' | 'unit' | 'security' | 'student' | 'automobile' | 'business' | 'health' | '3d-printing' | 'math-studio' | 'qa' | 'economics';
   subcategory?: string;
   shortDescription: string;
   metaTitle?: string;
@@ -2097,42 +2097,64 @@ export const toolsList: Tool[] = [
   {
   "id": "BrickCalculator",
   "slug": "brick-calculator",
-  "name": "Brick Calculator",
+  "name": "Brick Masonry Calculator & Quantity Estimator India",
   "category": "civil",
-  "shortDescription": "Calculate masonry material requirements for brick walls.",
-  "metaDescription": "Free online Brick Calculator. Estimate total number of bricks, cement bags, and sand required for 4.5\" partition and 9\" load-bearing brick walls.",
+  "shortDescription": "Calculate masonry material requirements, mortar ratios (1:3 to 1:8), cement bags, sand cft/brass, AAC blocks, and Laurie Baker Rat-Trap bonds per IS 1077, IS 2212 & CPWD DSR.",
+  "metaDescription": "Free online Brick Calculator India for civil engineers & builders. Calculate number of bricks, cement bags, sand brass/cft, AAC block adhesive & cost for 4.5\" partition, 9\" external & Rat-Trap bond walls per IS 1077, IS 1200 Pt-3.",
   "keywords": [
-    "Brick Calculator",
+    "brick calculator india",
     "brick masonry calculator",
-    "mortar estimation",
-    "number of bricks in wall",
-    "brick count calculator"
+    "number of bricks in 9 inch wall",
+    "cement sand mortar calculator for brickwork",
+    "aac block vs red brick calculator",
+    "rat trap bond brick calculator",
+    "cpwd brick rate analysis",
+    "is 1077 modular brick calculation",
+    "is 1200 part 3 brickwork deductions",
+    "brick wall material takeoff excel",
+    "how many bricks in 100 sq ft wall india",
+    "4.5 inch partition wall brick calculation",
+    "fly ash brick calculator",
+    "dry mortar coefficient 1.33 brickwork"
   ],
   "icon": "Hammer",
   "howToUse": [
-    "Enter the wall length and height.",
-    "Select the wall thickness (4.5 inches or 9 inches).",
-    "Choose the brick size preset (Traditional Clay or Modular Blocks).",
-    "Set mortar mix ratio and wastage allowances to view total material and cost outputs."
+    "Enter wall dimensions (Length, Height) and select wall thickness (4.5\", 6\", 9\", 13.5\", or 18\").",
+    "Choose your masonry unit preset: Modular BIS Brick (IS 1077), Traditional Red Brick, Fly Ash Lime Brick (IS 12894), AAC Blocks (4\"/6\"/8\"), Concrete Blocks, or Custom dimensions.",
+    "Select mortar ratio (1:3 to 1:8 or Thin-Bed Polymer Adhesive) and masonry bond pattern (English, Stretcher, Flemish, or Rat-Trap Cavity Bond).",
+    "Add door, window, and ventilator openings for automated deduction compliance with IS 1200 Part 3.",
+    "Switch between Single Wall, Multi-Wall Building Schedule, AAC vs Clay Benchmark, CPWD Rate Analysis, and 1-Click WhatsApp/Excel/PDF Exports."
   ],
   "faqs": [
     {
-      "question": "How many bricks are in a 9-inch thick wall?",
-      "answer": "Typically, a 9-inch wall requires approximately 10 to 12 bricks per square foot of surface area depending on brick size."
+      "question": "How many bricks are required in a 100 sq.ft 9-inch wall in India?",
+      "answer": "A 100 sq.ft 9-inch wall has a volume of 75 cubic feet (2.124 m³). Using standard country red bricks (228.6 x 114.3 x 76.2 mm) with 10mm mortar joints, it requires approximately 900 to 950 bricks, 4 to 5 bags of cement (in 1:6 ratio), and 24 to 28 cft of river/M-sand."
     },
     {
-      "question": "What mortar ratio is recommended for wall brickwork?",
-      "answer": "A 1:4 mix (1 cement, 4 sand) is recommended for half-brick partition walls (4.5\"), while a 1:6 mix is standard for full 9\" external walls."
+      "question": "What is the Laurie Baker Rat-Trap Bond and how much does it save?",
+      "answer": "Rat-Trap Bond is a cavity wall masonry technique where bricks are placed on edge instead of flat. This creates an internal modular cavity within a 9-inch wall, consuming 24% fewer bricks, 35% less cement mortar, and providing built-in thermal and acoustic insulation."
+    },
+    {
+      "question": "What are the opening deduction rules as per IS 1200 Part 3?",
+      "answer": "Under IS 1200 (Part 3), openings less than 0.1 m² (approx 1 sq.ft), ends of beams/lintels up to 500 cm², and wall plates are NOT deducted from brickwork volume. All doors, windows, and openings 0.1 m² or larger are deducted in full."
+    },
+    {
+      "question": "Why is the dry mortar multiplier 1.33 used in brick calculations?",
+      "answer": "When water is added to dry cement and sand, the fine particles fill voids in the sand, causing volume shrinkage. To achieve 1 m³ of wet mortar, approximately 1.33 m³ of dry material (cement + sand) is required."
+    },
+    {
+      "question": "How many AAC blocks replace traditional red bricks?",
+      "answer": "One standard 600x200x150 mm (6\") AAC block has the volume equivalent of approximately 6 standard red clay bricks. AAC blocks reduce wall dead load by 50% to 60% and use 3mm thin-bed polymer adhesive instead of thick cement mortar."
     }
   ],
   "sections": [
     {
-      "title": "Brick Wall Masonry Math",
-      "content": "Brick masonry calculations compute the volume of the wall, subtracts standard door/window openings, estimates the number of bricks based on volumetric size including 10mm mortar joints, and determines mortar volumes."
+      "title": "IS Code Compliant Masonry Estimation",
+      "content": "Masonry takeoff in India follows IS 1077 (Clay Bricks), IS 2212 (Code of Practice for Brickwork), and IS 1200 Part 3 (Method of Measurement). Accurate quantity estimation requires factoring brick dimensions, 10mm mortar joints, frog volume filling, 1.33 dry mortar factor, and standard openings deductions."
     },
     {
-      "title": "Standard Brick Dimensions",
-      "content": "- **Traditional Indian Brick**: 9\" × 4.5\" × 3\" (approx. 228mm x 114mm x 76mm)\n- **Modular Standard Brick**: 190mm × 90mm × 90mm (nominal 200mm x 100mm x 100mm including mortar)"
+      "title": "Masonry Bonds & Material Consumption",
+      "content": "- **English Bond**: Alternating header and stretcher courses; maximum structural load-bearing capacity for 9\" and 13.5\" external walls.\n- **Stretcher Bond**: Bricks laid lengthwise with 1/2 brick overlap; standard for 4.5\" internal partition walls (1:4 mortar).\n- **Laurie Baker Rat-Trap Bond**: Bricks laid on edge with internal air cavity; saves 24% bricks, 35% mortar, and lowers building heat gain.\n- **AAC Thin-Bed Blockwork**: 600x200mm blocks joined with 3mm polymer adhesive; eliminates sand and curing water completely."
     }
   ]
 },
@@ -10295,30 +10317,59 @@ export const toolsList: Tool[] = [
     "category": "architecture",
     "subcategory": "Building Code Helpers",
     "shortDescription": "Calculate disabled-access ramp slopes conforming to ADA/Bylaw standards.",
-    "metaDescription": "Free online Accessible Ramp Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "metaDescription": "Calculate wheelchair and disabled-access ramp slopes, runs, landing platforms, CAD blueprints, and RCC BOQ conforming to Harmonised Guidelines 2021, NBC 2016, and ADA.",
     "keywords": [
-      "Accessible Ramp Calculator",
-      "Accessible Ramp Calculator calculator",
-      "architectural planning",
-      "building design"
+      "accessible ramp calculator",
+      "wheelchair ramp slope calculator",
+      "ADA ramp calculator",
+      "disabled access ramp design",
+      "NBC India ramp slope",
+      "harmonised guidelines 2021 ramp",
+      "switchback ramp calculator",
+      "ramp gradient calculator 1:12 1:15",
+      "ramp landing platform dimensions",
+      "stretcher ramp slope",
+      "dual handrail height ramp",
+      "ramp material takeoff calculator"
     ],
     "icon": "Compass",
     "howToUse": [
-      "Select your units (Metric or Imperial).",
-      "Enter the required spatial and design parameters.",
-      "Review the compliance guidelines and results.",
-      "Export or copy the calculated parameters for blueprints."
+      "Select your accessibility code standard (Harmonised Guidelines 2021, NBC 2016 Part 3, ADA 2010, UK Part M, or Hospital Stretcher).",
+      "Choose your layout geometry: Straight Run, L-Shaped (90° Corner Turn), or Switchback (180° Dog-Leg).",
+      "Enter your total vertical rise and preferred clear passage width in mm, meters, inches, or feet.",
+      "Inspect the live 2D Elevation and Plan View CAD blueprints with wheelchair turning clearances and compliance status badges.",
+      "Review the automated RCC concrete takeoff, dual SS 304 handrail quantities, and export professional PDF compliance reports or Excel workbooks."
     ],
     "faqs": [
       {
-        "question": "What is the purpose of the Accessible Ramp Calculator?",
-        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+        "question": "What is the maximum permissible ramp slope for wheelchair access in India?",
+        "answer": "Under the CPWD / MoHUA Harmonised Guidelines 2021 and NBC 2016 Part 3, the maximum permissible slope is 1:12 (8.33%) for short vertical rises up to 150 mm. For longer runs and general building entry, a gentler slope of 1:15 (6.67%) to 1:20 (5.0%) is strongly recommended to allow unassisted wheelchair propulsion."
+      },
+      {
+        "question": "When are intermediate resting landings required on an accessible ramp?",
+        "answer": "An intermediate level resting landing (minimum 1500 mm × 1500 mm / 60\" × 60\") is mandatory whenever the vertical rise of a single flight reaches 750 mm (30 inches under ADA) or the horizontal run exceeds 9.0 meters (30 feet). Landings must also be provided at every change of direction (90° or 180° turns)."
+      },
+      {
+        "question": "What are the dual handrail height requirements for disabled-access ramps?",
+        "answer": "Harmonised Guidelines 2021 and NBC 2016 mandate continuous dual handrails on both sides of the ramp: an upper rail at 900 mm for standing persons and a lower rail at 760 mm for wheelchair users. Handrails must extend at least 300 mm (12 inches) horizontally beyond the top and bottom of the ramp with rounded downward return ends."
+      },
+      {
+        "question": "What is the minimum clear passage width for accessible ramps?",
+        "answer": "Under Harmonised Guidelines 2021, the minimum clear width between inner handrails is 1200 mm for residential/internal ramps, 1500 mm for public and commercial buildings to allow two-way passing, and 1800 mm to 2000 mm for hospital stretcher and emergency bed transfer ramps."
+      },
+      {
+        "question": "Why is a switchback (180° U-turn) ramp layout advantageous?",
+        "answer": "A switchback ramp divides a long vertical rise into two or more parallel flights connected by a 180° intermediate turning landing. This halves the linear footprint requirement, making it ideal for compact entry plinths and building verandas while maintaining compliant gentle slopes."
       }
     ],
     "sections": [
       {
-        "title": "Architectural Guidelines for Accessible Ramp Calculator",
-        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+        "title": "Harmonised Guidelines 2021 & NBC 2016 Accessibility Norms",
+        "content": "The Ministry of Housing and Urban Affairs (MoHUA) Harmonised Guidelines and Space Standards for Barrier-Free Built Environment for Persons with Disabilities (2021) specify strict geometric requirements:\n- **Maximum Gradient**: 1:12 for rise ≤150 mm, 1:15 for rise 150–500 mm, 1:20 for rise >500 mm.\n- **Clear Width**: Minimum 1500 mm for public buildings; 1800 mm for hospital stretchers.\n- **Level Landings**: Minimum 1500 × 1500 mm at top, bottom, and every 750 mm vertical rise.\n- **Edge Kerb**: Minimum 75 mm raised edge protection to prevent wheel roll-off.\n- **Tactile Warning (TGSI)**: 300 mm deep hazard warning strip with domed studs set 300 mm before landings."
+      },
+      {
+        "title": "ADA 2010 Standards vs Indian NBC Code Comparison",
+        "content": "- **ADA 2010 (Section 405)**: Max slope 1:12 (8.33%), max single rise 30\" (762 mm), min clear width 36\" (915 mm), landings 60\" × 60\" (1525 × 1525 mm), handrail height 34\"–38\" (865–965 mm).\n- **NBC 2016 / Harmonised 2021**: Max slope 1:12 (ideal 1:15–1:20), max single rise 750 mm, min clear width 1200–1500 mm, landings 1500 × 1500 mm, dual handrails at 900 mm and 760 mm."
       }
     ]
   },
@@ -11129,27 +11180,62 @@ export const toolsList: Tool[] = [
   {
     "id": "CementCalculator",
     "slug": "cement-calculator",
-    "name": "Cement Calculator",
+    "name": "Cement Calculator & Bag Estimator India (IS 456 / IS 1661)",
     "category": "civil",
-    "shortDescription": "Calculate the cement bags required for concrete slabs, brick masonry, and wall plastering.",
-    "metaDescription": "Estimate cement bag requirements for slab casting, brickwork, and plastering. Standardizes calculations to 50kg bags.",
-    "keywords": ["cement calculator", "estimate cement bags", "civil engineering calculator", "masonry cement", "plaster cement"],
+    "shortDescription": "Calculate 50kg cement bags, sand cft/brass, and aggregate required for concrete slabs, columns, beams (M5 to M30), brick masonry, and wall plastering per IS 456 & IS 1661.",
+    "metaDescription": "Free Online Cement Calculator India for civil engineers & contractors. Calculate 50kg cement bags, sand, aggregate & costs for RCC slabs, columns, brickwork & plastering per IS 456, IS 1077, IS 1661.",
+    "keywords": [
+      "cement calculator india",
+      "calculate cement bags for slab",
+      "cement required for brickwork",
+      "plaster cement calculation formula",
+      "is 456 cement bag volume",
+      "opc 53 vs ppc cement",
+      "cement sand ratio calculator",
+      "how many cement bags in 100 cu ft concrete",
+      "cement bags for 1000 sq ft house",
+      "dry volume factor 1.54 concrete",
+      "plaster dry mortar multiplier 1.6",
+      "is 4082 cement stacking guidelines"
+    ],
     "icon": "Layers",
     "howToUse": [
-      "Select your units (Feet or Meters) and choose your target application (Concrete, Masonry, Plaster).",
-      "Input structural dimensions and select mortar/concrete mix grade ratios.",
-      "Review the estimated bags required and material cost."
+      "Choose your construction discipline: Structural Concrete Elements (Slabs, Beams, Columns, Footings), Brick Masonry Mortar, or Wall/Ceiling Plastering.",
+      "Select unit mode (Imperial Feet/Cu.Ft or Metric Meters/m³) and input physical member dimensions.",
+      "Select the Concrete Mix Grade (M5 to M30 per IS 456), Brick Mortar Ratio (1:3 to 1:8), or Plastering Coating Specification (6mm, 12mm, 15mm, 20mm per IS 1661).",
+      "Review the consolidated bill of materials, including 50kg cement bags, fine sand (CFT/Brass), 20mm coarse aggregate, curing water (Litres), and site storage footprint (IS 4082).",
+      "Export estimates instantly via 1-Click WhatsApp Client Quotation, Multi-Sheet Excel (.xlsx), or high-resolution PDF report."
     ],
     "faqs": [
       {
-        "question": "What is the standard volume of a cement bag?",
-        "answer": "A standard 50kg bag of cement has a volume of approximately 34.7 liters (or 1.226 cubic feet)."
+        "question": "How many cement bags are required for 100 cu.ft of M20 concrete slab in India?",
+        "answer": "100 cu.ft of wet M20 concrete (1:1.5:3 mix) equals 2.831 m³. With the 1.54x IS 456 dry volume multiplier, dry volume is 4.36 m³. Cement volume is (1 / 5.5) * 4.36 = 0.793 m³. Dividing by 0.0347 m³ per bag yields approximately 23 bags of 50kg cement, along with 35 cft of sand and 70 cft of 20mm aggregate."
+      },
+      {
+        "question": "What is the standard volume and weight of a cement bag in India?",
+        "answer": "As per Bureau of Indian Standards (BIS), 1 standard cement bag weighs 50 kg. Given standard loose cement density of 1440 kg/m³, 1 bag occupies 0.0347 cubic meters (34.7 Litres or 1.226 cubic feet). Exactly 28.8 bags equal 1 cubic meter of solid cement."
+      },
+      {
+        "question": "Why is the dry volume multiplier 1.54 for concrete and 1.33 for mortar?",
+        "answer": "When water is added to dry materials, the smaller particles of cement and sand settle into voids between coarse aggregates, causing ~54% volumetric shrinkage in concrete (1.54x multiplier). In cement-sand mortar, void shrinkage causes ~33% reduction (1.33x multiplier), while plastering uses 1.60x to account for joint filling and surface roughness."
+      },
+      {
+        "question": "Which cement grade should be used: OPC 53 or PPC?",
+        "answer": "OPC 53 Grade (IS 12269) provides high early strength and is ideal for structural RCC slabs, columns, beams, and high-rise casting. PPC (IS 1489) generates lower heat of hydration, resists chemical attack, and is superior for plastering, brickwork, mass concrete, and marine foundations to prevent shrinkage cracks."
+      },
+      {
+        "question": "How should cement bags be stored on site per IS 4082?",
+        "answer": "Cement bags must be stacked on a raised timber platform at least 150 mm above ground, kept at least 450 mm away from exterior walls, and covered with waterproof tarpaulins. Stacks should not exceed 10 to 12 bags high to prevent warehouse setting. Cement should be used within 90 days of manufacturing."
       }
     ],
     "sections": [
       {
-        "title": "Cement Volume Computations",
-        "content": "Calculations add a standard dry volume inflation factor (1.54 for concrete, 1.33 for mortar) to account for wet shrinkage and application drops."
+        "title": "Indian Standard (IS) Concrete & Mortar Multipliers",
+        "content": "Civil engineering quantity takeoff in India relies on IS 456:2000 (Concrete), IS 1077 (Bricks), and IS 1661:1972 (Plastering). Dry volume expansion multipliers (1.54x for concrete, 1.33x for masonry, and 1.60x for plaster) ensure that material shrinkage, joint filling, and site drops are fully accounted for during procurement."
+      },
+      {
+        "title": "Cement Grades & Applications Matrix",
+        "content": "- **OPC 53 Grade (IS 12269)**: 53 MPa 28-day strength; ideal for heavy structural RCC slabs, columns, beams, and precast elements.\n- **OPC 43 Grade (IS 8112)**: 43 MPa strength; standard for plain cement concrete, pavements, and non-critical casting.\n- **PPC (IS 1489)**: Pozzolanic cement with fly ash; superior plasticity and crack resistance for internal/external wall plastering and brick masonry.\n- **PSC (IS 455)**: Portland Slag Cement; maximum sulfate resistance for coastal and aggressive soil foundations."
       }
     ]
   },
@@ -11159,24 +11245,62 @@ export const toolsList: Tool[] = [
     "name": "Sand Calculator",
     "category": "civil",
     "shortDescription": "Calculate sand volume in cubic feet (CFT), brass, and metric tons for concrete and mortar.",
-    "metaDescription": "Calculate sand requirements for civil projects in CFT, Brass, and Tons. Supports concrete grades and mortar splits.",
-    "keywords": ["sand calculator", "calculate sand volume", "sand cft calculator", "brass sand", "construction sand"],
+    "metaDescription": "Calculate fine aggregate and sand requirements in CFT, Brass, and Metric Tonnes for concrete, brick masonry, and plastering per IS 383, IS 2386, and CPWD DSR.",
+    "keywords": [
+      "sand calculator",
+      "sand volume calculator",
+      "sand cft calculator",
+      "sand brass calculator",
+      "sand in metric tonnes",
+      "river sand vs m sand",
+      "p sand for plastering",
+      "sand bulking calculator",
+      "sand required for concrete",
+      "sand required for brickwork",
+      "sand required for plastering",
+      "is 383 sand grading zones",
+      "tractor trolley brass sand",
+      "tipper sand volume",
+      "cpwd sand consumption"
+    ],
     "icon": "Ruler",
     "howToUse": [
-      "Select units and pick your construction task (Concrete, Masonry, Plaster).",
-      "Enter physical dimensions and select mix ratios.",
-      "View sand totals displayed in CFT, Brass, and Metric Tons."
+      "Select your construction module: Concrete structural elements (Slabs, Beams, Columns, Footings), Brick Masonry, or Wall Plastering.",
+      "Choose your mix design ratio (e.g., M20 1:1.5:3, M25 1:1:2, or Mortar 1:4 / 1:6) or enter custom wet batch volume.",
+      "Input structural dimensions in feet or meters with optional opening deductions (doors/windows).",
+      "Adjust sand type (River Sand, M-Sand Zone II, P-Sand Zone IV) and bulking percentage (0% to 12% moisture).",
+      "Review instant material takeoff in CFT, Brass, and Metric Tonnes with truck logistics and export BOQ to PDF or Excel."
     ],
     "faqs": [
       {
-        "question": "How much CFT is 1 Brass of sand?",
-        "answer": "In Indian civil construction, 1 Brass is equal to 100 cubic feet (CFT) of material."
+        "question": "What is 1 Brass of sand in CFT and Metric Tonnes?",
+        "answer": "In Indian civil engineering, 1 Brass is exactly 100 cubic feet (CFT) or 2.8317 cubic meters (m³). For River Sand with a dry bulk density of 1,600 kg/m³, 1 Brass weighs approximately 4.53 Metric Tonnes. For M-Sand (1,750 kg/m³), 1 Brass weighs approximately 4.95 Metric Tonnes."
+      },
+      {
+        "question": "What is the bulking of sand and how does moisture affect measurement?",
+        "answer": "Bulking of sand occurs when moisture forms a surface tension film around sand grains, pushing them apart and artificially increasing sand volume by 15% to 30% at 4% to 6% moisture content per IS 2386 (Part 3). If batching by volume on-site, the sand quantity must be increased by the bulking factor to prevent a cement-rich, under-sanded mortar or concrete."
+      },
+      {
+        "question": "What is the difference between River Sand, M-Sand, and P-Sand?",
+        "answer": "River Sand is naturally eroded quartz aggregate (IS 383 Zone II). M-Sand (Manufactured Sand) is crushed granite fine aggregate (Zone II, 0–4.75 mm) engineered for RCC casting with zero silt. P-Sand (Plastering Sand) is ultra-fine crushed sand (IS 1542 Zone IV, 0–2.36 mm) with washed micro-fines designed for crack-free wall plastering."
+      },
+      {
+        "question": "How much sand is required for 100 sq.ft of 12mm wall plastering in 1:4 mix?",
+        "answer": "For 100 sq.ft (9.29 m²) of 12mm thick internal plastering in 1:4 cement-sand mix: Wet volume = 0.111 m³. Applying the 1.60x dry volume and joint-filling multiplier yields 0.178 m³ (6.29 CFT or 0.063 Brass) of sand (~293 kg of P-Sand) and 1.27 bags of PPC cement."
+      },
+      {
+        "question": "How many Brass of sand are in a Tractor Trolley, Tipper, and Hyva truck?",
+        "answer": "Standard logistics in India: A standard Tractor Trolley carries 1 Brass (100 CFT / ~4.5 Tonnes), a 6-Wheeler Tipper truck carries 2.5 to 3 Brass (250–300 CFT / ~11–13.5 Tonnes), and a 10/12-Wheeler Hyva or Dumper carries 5 to 6 Brass (500–600 CFT / ~22.5–27 Tonnes)."
       }
     ],
     "sections": [
       {
-        "title": "Sand Dry Density & Density Weights",
-        "content": "Sand weight calculations assume a standard dry sand density of 1,600 kg per cubic meter to compute accurate tonnage totals."
+        "title": "IS 383:2016 Sand Grading Zones & Material Density",
+        "content": "Fine aggregate grading under IS 383:2016 is categorized into four zones based on sieve analysis:\n- **Zone I**: Coarse sand used for heavy foundation concrete and mass retaining walls.\n- **Zone II**: Medium-coarse sand ideal for RCC slabs, columns, beams, and structural load-bearing members (Bulk density: 1,600 kg/m³ for river sand, 1,750 kg/m³ for M-Sand).\n- **Zone III**: Medium-fine sand used for non-structural casting and brick masonry mortar (Bulk density: 1,550 kg/m³).\n- **Zone IV / IS 1542**: Fine sand with >90% passing 600-micron sieve; mandatory for internal and external wall plastering (P-Sand density: 1,650 kg/m³)."
+      },
+      {
+        "title": "Dry Volume Multipliers & Bulking Correction (CPWD / IS 456)",
+        "content": "To convert in-situ compacted volume to procurement dry loose volume:\n- **Concrete**: 1.54x factor accounts for dry void shrinkage among cement, fine, and coarse aggregate particles.\n- **Brick Masonry**: 1.33x factor accounts for mortar drying shrinkage and brick absorption.\n- **Plastering**: 1.60x factor combines 1.33x dry volume expansion plus 20% allowance for wall unevenness, masonry raking joints, and scaffolding drop wastage.\n- **Moisture Bulking**: $V_{corrected} = V_{dry} \\times (1 + \\frac{\\%\\text{Bulking}}{100})$ to guarantee accurate aggregate ratios during field batching."
       }
     ]
   },
@@ -11542,6 +11666,859 @@ export const toolsList: Tool[] = [
           "• Buildings **≥ 24.0 meters**: Extended life safety controls including mandatory refuge areas every 7 floors above 24m, dedicated fire command center, and smoke evacuation shafts."
       }
     ]
+  },
+  {
+    "id": "EconomicsCalculator",
+    "slug": "economics-calculator",
+    "name": "Economics Calculator",
+    "category": "economics",
+    "shortDescription": "Calculate economics formulas instantly, including elasticity, GDP growth, inflation, opportunity cost, marginal cost, marginal revenue, equilibrium price, and more.",
+    "metaTitle": "Economics Calculator – Solve Economic Formulas Online",
+    "metaDescription": "Calculate economics formulas instantly, including elasticity, GDP growth, inflation, opportunity cost, marginal cost, marginal revenue, equilibrium price, and more. Free Economics Calculator with formulas and step-by-step explanations.",
+    "keywords": [
+      "Economics Calculator",
+      "Economic Calculator",
+      "Economics Formula Calculator",
+      "Economics Problem Solver",
+      "Microeconomics Calculator",
+      "Macroeconomics Calculator",
+      "Elasticity Calculator",
+      "Price Elasticity of Demand Calculator",
+      "GDP Calculator",
+      "GDP Growth Rate Calculator",
+      "Inflation Calculator",
+      "Marginal Cost Calculator",
+      "Marginal Revenue Calculator",
+      "Opportunity Cost Calculator",
+      "Break-Even Calculator",
+      "Market Equilibrium Solver",
+      "Consumer Surplus Calculator"
+    ],
+    "icon": "TrendingUp",
+    "howToUse": [
+      "Select your required formula category from the top navigation (All Formulas, Microeconomics, Macroeconomics, or Popular).",
+      "Search or click on any of the 25 economic calculators (e.g. Price Elasticity, Market Equilibrium, Break-Even, GDP Growth, Inflation).",
+      "Input your data values into the labelled parameter fields (supports standard and midpoint elasticity modes).",
+      "Examine the real-time calculated result, economic classification badge, and interactive visual graph curves (Supply & Demand, Break-Even, Inflation Erosion).",
+      "Review the dynamic step-by-step mathematical proof and export your complete calculation as a PDF report or Excel workbook."
+    ],
+    "faqs": [
+      {
+        "question": "What is the formula for Price Elasticity of Demand (PED)?",
+        "answer": "Price Elasticity of Demand is calculated as PED = (% Change in Quantity Demanded) ÷ (% Change in Price). When using the midpoint (arc) formula: PED = [ (Q2 - Q1) / ((Q1 + Q2)/2) ] ÷ [ (P2 - P1) / ((P1 + P2)/2) ]. An absolute value |PED| > 1 indicates elastic demand, |PED| = 1 is unitary elastic, and |PED| < 1 is inelastic demand."
+      },
+      {
+        "question": "How do you calculate Market Equilibrium Price and Quantity?",
+        "answer": "To find market equilibrium, set the demand equation equal to the supply equation (Qd = Qs). For linear equations Qd = a - bP and Qs = c + dP: Equilibrium Price P* = (a - c) ÷ (b + d). Substitute P* back into either equation to obtain the Equilibrium Quantity Q* = a - bP*."
+      },
+      {
+        "question": "What is the difference between Nominal GDP and Real GDP?",
+        "answer": "Nominal GDP evaluates a country's economic output using current unadjusted market prices, which can be distorted by inflation. Real GDP adjusts for price level changes using a GDP Deflator price index: Real GDP = (Nominal GDP ÷ GDP Deflator) × 100, reflecting actual physical production growth."
+      },
+      {
+        "question": "How is the Break-Even Point (BEP) calculated in units and revenue?",
+        "answer": "Break-Even Quantity (Units) = Total Fixed Costs ÷ Unit Contribution Margin, where Unit Contribution Margin = Selling Price per Unit - Variable Cost per Unit. Break-Even Revenue = Break-Even Units × Selling Price."
+      },
+      {
+        "question": "What is Opportunity Cost and how is it calculated?",
+        "answer": "Opportunity Cost is the monetary and non-monetary return of the best forgone alternative choice minus the return of the chosen option: Opportunity Cost = Return of Best Alternative Option - Return of Selected Option."
+      },
+      {
+        "question": "What is the Rule of 70 in economic growth forecasting?",
+        "answer": "The Rule of 70 is a mathematical shortcut to estimate the time required for an economy, GDP, or investment to double in size: Doubling Time (Years) ≈ 70 ÷ Annual Growth Rate (%). For example, an economy growing at 7% per year will double in approximately 10 years."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Core Microeconomics Formulas Reference",
+        "content": "- **Price Elasticity of Demand (PED)**: $$\\text{PED} = \\frac{\\%\\Delta Q_d}{\\%\\Delta P}$$\n" +
+          "- **Marginal Cost (MC)**: $$\\text{MC} = \\frac{\\Delta \\text{TC}}{\\Delta Q}$$\n" +
+          "- **Marginal Revenue (MR)**: $$\\text{MR} = \\frac{\\Delta \\text{TR}}{\\Delta Q}$$\n" +
+          "- **Break-Even Point (BEP)**: $$\\text{BEP (Units)} = \\frac{\\text{Fixed Costs}}{\\text{Price} - \\text{Variable Cost}}$$\n" +
+          "- **Consumer Surplus (CS)**: $$\\text{CS} = \\frac{1}{2} \\times (P_{\\max} - P_{\\text{eq}}) \\times Q_{\\text{eq}}$$\n" +
+          "- **Producer Surplus (PS)**: $$\\text{PS} = \\frac{1}{2} \\times (P_{\\text{eq}} - P_{\\min}) \\times Q_{\\text{eq}}$$"
+      },
+      {
+        "title": "Core Macroeconomics Formulas Reference",
+        "content": "- **GDP Growth Rate**: $$\\text{Growth Rate} = \\left(\\frac{\\text{GDP}_{\\text{current}} - \\text{GDP}_{\\text{prior}}}{\\text{GDP}_{\\text{prior}}}\\right) \\times 100$$\n" +
+          "- **Real GDP**: $$\\text{Real GDP} = \\left(\\frac{\\text{Nominal GDP}}{\\text{GDP Deflator}}\\right) \\times 100$$\n" +
+          "- **Inflation Rate**: $$\\text{Inflation Rate} = \\left(\\frac{\\text{CPI}_2 - \\text{CPI}_1}{\\text{CPI}_1}\\right) \\times 100$$\n" +
+          "- **Purchasing Power (Future Real Value)**: $$\\text{Purchasing Power} = \\frac{\\text{Present Value}}{(1 + r)^t}$$\n" +
+          "- **Keynesian National Income (GDP Expenditure)**: $$Y = C + I + G + (X - M)$$"
+      }
+    ]
   }
-
+,
+  {
+      "id": "PriceElasticityDemandCalculator",
+      "slug": "price-elasticity-demand-calculator",
+      "name": "Price Elasticity of Demand Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate consumer price responsiveness using standard percentage and midpoint arc formulas.",
+      "metaTitle": "Price Elasticity of Demand (PED) Calculator \u2013 Arc & Midpoint",
+      "metaDescription": "Calculate price elasticity of demand using standard percentage and midpoint formulas. Classify elastic, inelastic, and unitary demand with revenue impact analysis.",
+      "keywords": [
+          "price elasticity of demand calculator",
+          "ped calculator",
+          "elasticity of demand formula",
+          "arc elasticity calculator",
+          "midpoint method elasticity"
+      ],
+      "icon": "TrendingDown",
+      "howToUse": [
+          "Choose between the Midpoint (Arc) Formula or Standard Percentage Change method.",
+          "Enter Initial Price (P1) and New Price (P2).",
+          "Enter Initial Quantity Demanded (Q1) and New Quantity Demanded (Q2).",
+          "View the elasticity coefficient, classification badge, and revenue impact breakdown.",
+          "Review the step-by-step mathematical proof and demand curve graph."
+      ],
+      "faqs": [
+          {
+              "question": "What is the formula for Price Elasticity of Demand?",
+              "answer": "PED = (% Change in Quantity Demanded) \u00f7 (% Change in Price). Using midpoint formula: PED = [ (Q2 - Q1) / ((Q1 + Q2)/2) ] \u00f7 [ (P2 - P1) / ((P1 + P2)/2) ]."
+          },
+          {
+              "question": "What does elastic vs inelastic demand mean?",
+              "answer": "|PED| > 1 means demand is elastic (price sensitive). |PED| < 1 means demand is inelastic (price insensitive, like medicines or basic food)."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Understanding Price Elasticity of Demand",
+              "content": "Price Elasticity of Demand (PED) measures how quantity demanded responds to price changes. If a small price rise causes a large sales drop, demand is elastic."
+          }
+      ]
+  },
+  {
+      "id": "IncomeElasticityDemandCalculator",
+      "slug": "income-elasticity-demand-calculator",
+      "name": "Income Elasticity of Demand Calculator",
+      "category": "economics",
+      "shortDescription": "Classify goods as Normal Necessities, Luxury items, or Inferior goods based on income changes.",
+      "metaTitle": "Income Elasticity of Demand (YED) Calculator \u2013 Normal vs Luxury Goods",
+      "metaDescription": "Calculate income elasticity of demand (YED). Determine if goods are normal necessities, luxuries, or inferior products as household incomes rise.",
+      "keywords": [
+          "income elasticity of demand calculator",
+          "yed calculator",
+          "normal goods vs luxury goods",
+          "inferior goods formula"
+      ],
+      "icon": "Layers",
+      "howToUse": [
+          "Enter initial household income (Y1) and new income (Y2).",
+          "Enter initial quantity consumed (Q1) and new quantity consumed (Q2).",
+          "Review the YED coefficient and goods classification."
+      ],
+      "faqs": [
+          {
+              "question": "How do you interpret YED values?",
+              "answer": "YED > 1 indicates Luxury goods; 0 < YED \u2264 1 indicates Normal Necessities; YED < 0 indicates Inferior goods."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Income Elasticity Concept",
+              "content": "YED measures consumer sensitivity to income shifts: YED = (%\u0394Q) / (%\u0394Y)."
+          }
+      ]
+  },
+  {
+      "id": "CrossElasticityDemandCalculator",
+      "slug": "cross-elasticity-demand-calculator",
+      "name": "Cross Price Elasticity of Demand Calculator",
+      "category": "economics",
+      "shortDescription": "Determine if two goods are Substitutes, Complements, or Unrelated based on cross-product price shifts.",
+      "metaTitle": "Cross Price Elasticity of Demand (XED) Calculator \u2013 Substitutes & Complements",
+      "metaDescription": "Calculate Cross Price Elasticity of Demand (XED). Identify substitute vs complementary products and cross-market price elasticity.",
+      "keywords": [
+          "cross elasticity of demand calculator",
+          "xed calculator",
+          "substitute goods formula",
+          "complementary goods elasticity"
+      ],
+      "icon": "ArrowLeftRight",
+      "howToUse": [
+          "Enter Initial and New Price for Good B (PB1, PB2).",
+          "Enter Initial and New Quantity Demanded for Good A (QA1, QA2).",
+          "View whether Goods A & B are Substitutes (XED > 0), Complements (XED < 0), or Independent (XED = 0)."
+      ],
+      "faqs": [
+          {
+              "question": "What is XED?",
+              "answer": "Cross Price Elasticity of Demand (XED) = (% Change in Q of Good A) \u00f7 (% Change in Price of Good B)."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Cross Elasticity Mechanics",
+              "content": "Positive XED means products are substitutes (like Tea and Coffee). Negative XED means products are complements (like Printers and Ink Cartridges)."
+          }
+      ]
+  },
+  {
+      "id": "PriceElasticitySupplyCalculator",
+      "slug": "price-elasticity-supply-calculator",
+      "name": "Price Elasticity of Supply Calculator",
+      "category": "economics",
+      "shortDescription": "Evaluate producer responsiveness and supply flexibility across market price changes.",
+      "metaTitle": "Price Elasticity of Supply (PES) Calculator \u2013 Supply Curve Elasticity",
+      "metaDescription": "Calculate Price Elasticity of Supply (PES) using arc and percentage formulas. Determine elastic, inelastic, and unitary supplier responses.",
+      "keywords": [
+          "price elasticity of supply calculator",
+          "pes calculator",
+          "supply elasticity formula",
+          "elastic supply"
+      ],
+      "icon": "TrendingUp",
+      "howToUse": [
+          "Enter Initial Price (P1) and New Price (P2).",
+          "Enter Initial Supply (Qs1) and New Supply (Qs2).",
+          "Examine the PES ratio and supply flexibility classification."
+      ],
+      "faqs": [
+          {
+              "question": "How is PES calculated?",
+              "answer": "PES = (% Change in Quantity Supplied) \u00f7 (% Change in Price)."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Supply Elasticity Dynamics",
+              "content": "PES measures how quickly production can expand when prices increase. Spare capacity and inventory levels increase supply elasticity."
+          }
+      ]
+  },
+  {
+      "id": "MarginalCostCalculator",
+      "slug": "marginal-cost-calculator",
+      "name": "Marginal Cost Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate incremental production costs, Average Total Cost (ATC), AVC, and AFC.",
+      "metaTitle": "Marginal Cost Calculator \u2013 MC, ATC, AVC & Cost Curves",
+      "metaDescription": "Calculate Marginal Cost (MC = \u0394TC / \u0394Q) and Average Total Cost. Optimize production batches and unit economics.",
+      "keywords": [
+          "marginal cost calculator",
+          "mc calculator",
+          "average total cost calculator",
+          "cost curves economics"
+      ],
+      "icon": "Calculator",
+      "howToUse": [
+          "Enter Initial Total Cost (TC1) and New Total Cost (TC2).",
+          "Enter Initial Output (Q1) and New Output (Q2).",
+          "Optionally enter Fixed Costs to compute Average Fixed Cost (AFC) and Average Variable Cost (AVC)."
+      ],
+      "faqs": [
+          {
+              "question": "What is Marginal Cost?",
+              "answer": "Marginal Cost is the cost added by producing one additional unit of a product: MC = \u0394TC \u00f7 \u0394Q."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Cost Curve Theory",
+              "content": "Firms maximize profits where Marginal Revenue (MR) equals Marginal Cost (MC)."
+          }
+      ]
+  },
+  {
+      "id": "MarginalRevenueCalculator",
+      "slug": "marginal-revenue-calculator",
+      "name": "Marginal Revenue Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate additional revenue per additional unit sold and Average Revenue.",
+      "metaTitle": "Marginal Revenue (MR) & Average Revenue (AR) Calculator",
+      "metaDescription": "Calculate Marginal Revenue (MR = \u0394TR / \u0394Q) and Average Revenue. Discover profit-maximizing output thresholds.",
+      "keywords": [
+          "marginal revenue calculator",
+          "mr calculator",
+          "average revenue calculator",
+          "profit maximization mr mc"
+      ],
+      "icon": "DollarSign",
+      "howToUse": [
+          "Enter Initial Total Revenue (TR1) and New Total Revenue (TR2).",
+          "Enter Initial Output (Q1) and New Output (Q2).",
+          "View the Marginal Revenue generated per additional unit."
+      ],
+      "faqs": [
+          {
+              "question": "How is Marginal Revenue calculated?",
+              "answer": "Marginal Revenue = Change in Total Revenue (\u0394TR) \u00f7 Change in Quantity Sold (\u0394Q)."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Marginal Revenue and Profit Maximization",
+              "content": "In competitive markets, MR equals price. In monopolies, MR decreases as quantity increases."
+          }
+      ]
+  },
+  {
+      "id": "EconomicProfitCalculator",
+      "slug": "economic-profit-calculator",
+      "name": "Economic Profit Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate economic profit vs accounting profit by including implicit opportunity costs.",
+      "metaTitle": "Economic Profit vs Accounting Profit Calculator",
+      "metaDescription": "Calculate Economic Profit (TR - Explicit - Implicit) and Accounting Profit. Evaluate true entrepreneurial returns.",
+      "keywords": [
+          "economic profit calculator",
+          "accounting profit vs economic profit",
+          "implicit cost calculator",
+          "normal profit"
+      ],
+      "icon": "PiggyBank",
+      "howToUse": [
+          "Enter Total Revenue (TR).",
+          "Enter Total Explicit Costs (wages, rent, raw materials).",
+          "Enter Total Implicit Costs (forgone owner salary, capital interest).",
+          "Compare Accounting Profit vs True Economic Profit."
+      ],
+      "faqs": [
+          {
+              "question": "What is the difference between accounting and economic profit?",
+              "answer": "Accounting Profit = Revenue - Explicit Costs. Economic Profit = Revenue - Explicit Costs - Implicit Opportunity Costs."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Economic Profit in Long Run",
+              "content": "Zero economic profit (Normal Profit) means the business earns just enough to cover all explicit and implicit costs, keeping capital in the firm."
+          }
+      ]
+  },
+  {
+      "id": "BreakEvenPointCalculator",
+      "slug": "break-even-point-calculator",
+      "name": "Break-Even Point (BEP) Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate sales volume in units and revenue needed to cover fixed and variable costs.",
+      "metaTitle": "Break-Even Point (BEP) Calculator \u2013 Units & Sales Revenue",
+      "metaDescription": "Calculate Break-Even Point in units and revenue. Compute Contribution Margin and sales needed for target profits.",
+      "keywords": [
+          "break even point calculator",
+          "bep calculator",
+          "cost volume profit calculator",
+          "contribution margin calculator"
+      ],
+      "icon": "Target",
+      "howToUse": [
+          "Enter Total Fixed Costs (FC).",
+          "Enter Selling Price per Unit (P) and Variable Cost per Unit (VC).",
+          "Optionally enter Target Profit.",
+          "View Break-Even units, Break-Even revenue, and Contribution Margin ratio."
+      ],
+      "faqs": [
+          {
+              "question": "How is Break-Even Point calculated?",
+              "answer": "BEP (Units) = Total Fixed Costs \u00f7 (Price per Unit - Variable Cost per Unit)."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Cost-Volume-Profit (CVP) Analysis",
+              "content": "Contribution Margin = Price - Variable Cost. The break-even point is where total revenue exactly equals total costs."
+          }
+      ]
+  },
+  {
+      "id": "OpportunityCostCalculator",
+      "slug": "opportunity-cost-calculator",
+      "name": "Opportunity Cost Calculator",
+      "category": "economics",
+      "shortDescription": "Quantify the value of forgone alternatives when choosing between investments or decisions.",
+      "metaTitle": "Opportunity Cost Calculator \u2013 Compare Investment & Career Choices",
+      "metaDescription": "Calculate Opportunity Cost. Compare returns and tradeoffs of chosen options against the best forgone alternative.",
+      "keywords": [
+          "opportunity cost calculator",
+          "economic tradeoff calculator",
+          "forgone return calculator",
+          "opportunity cost economics"
+      ],
+      "icon": "Scale",
+      "howToUse": [
+          "Enter return / benefits of Selected Option A.",
+          "Enter return / benefits of Best Forgone Alternative B.",
+          "View the net economic advantage and opportunity cost."
+      ],
+      "faqs": [
+          {
+              "question": "What is Opportunity Cost?",
+              "answer": "Opportunity Cost is the value of the next best alternative you give up when making a decision."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Decision Making & Trade-offs",
+              "content": "Every economic decision carries an opportunity cost representing the benefits that could have been received by taking an alternative action."
+          }
+      ]
+  },
+  {
+      "id": "ProductionFunctionCalculator",
+      "slug": "production-function-calculator",
+      "name": "Production Function & Diminishing Returns Calculator",
+      "category": "economics",
+      "shortDescription": "Analyze Marginal Product of Labor (MPL), Average Product (APL), and production stages.",
+      "metaTitle": "Production Function Calculator \u2013 Marginal Product of Labor (MPL)",
+      "metaDescription": "Calculate Marginal Product of Labor (MPL) and Average Product (APL). Identify stages of increasing and diminishing returns.",
+      "keywords": [
+          "production function calculator",
+          "marginal product of labor calculator",
+          "mpl calculator",
+          "diminishing returns calculator"
+      ],
+      "icon": "Factory",
+      "howToUse": [
+          "Enter Initial Labor (L1) and New Labor (L2).",
+          "Enter Initial Total Output (Q1) and New Total Output (Q2).",
+          "Review MPL (\u0394Q / \u0394L) and Average Product of Labor (APL)."
+      ],
+      "faqs": [
+          {
+              "question": "What is the Law of Diminishing Marginal Returns?",
+              "answer": "As you add more of a variable factor (e.g. labor) to fixed factors (e.g. machinery), the additional output produced per unit of labor eventually declines."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Short-Run Production Stages",
+              "content": "Stage 1: Increasing marginal returns. Stage 2: Diminishing positive returns. Stage 3: Negative marginal returns."
+          }
+      ]
+  },
+  {
+      "id": "MarketEquilibriumCalculator",
+      "slug": "market-equilibrium-calculator",
+      "name": "Supply & Demand Market Equilibrium Solver",
+      "category": "economics",
+      "shortDescription": "Solve simultaneous demand and supply linear equations for market clearing price, quantity, and social surplus.",
+      "metaTitle": "Supply & Demand Market Equilibrium Calculator \u2013 Price, Quantity & Surplus",
+      "metaDescription": "Calculate market equilibrium price (P*) and quantity (Q*). Compute Consumer Surplus, Producer Surplus, and total market welfare.",
+      "keywords": [
+          "market equilibrium calculator",
+          "supply and demand solver",
+          "consumer surplus calculator",
+          "producer surplus calculator",
+          "equilibrium price formula"
+      ],
+      "icon": "ArrowLeftRight",
+      "howToUse": [
+          "Enter Demand curve parameters: Qd = a - bP (intercept a, slope b).",
+          "Enter Supply curve parameters: Qs = c + dP (intercept c, slope d).",
+          "View Equilibrium Price (P*), Quantity (Q*), Consumer Surplus (CS), and Producer Surplus (PS)."
+      ],
+      "faqs": [
+          {
+              "question": "How is Market Equilibrium determined?",
+              "answer": "Set Qd = Qs: a - bP = c + dP => P* = (a - c) / (b + d). Substitute P* back to find Q*."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Market Welfare & Social Surplus",
+              "content": "Consumer surplus is the area below demand and above price. Producer surplus is the area above supply and below price."
+          }
+      ]
+  },
+  {
+      "id": "TotalRevenueCalculator",
+      "slug": "total-revenue-calculator",
+      "name": "Total Revenue & Elasticity Test Calculator",
+      "category": "economics",
+      "shortDescription": "Compute Total Revenue (TR = P \u00d7 Q) and evaluate total revenue test for price elasticity.",
+      "metaTitle": "Total Revenue Calculator \u2013 Price \u00d7 Quantity & Elasticity Test",
+      "metaDescription": "Calculate Total Revenue and apply the Total Revenue Test to determine whether demand is elastic or inelastic.",
+      "keywords": [
+          "total revenue calculator",
+          "total revenue test calculator",
+          "tr price quantity",
+          "revenue maximization economics"
+      ],
+      "icon": "DollarSign",
+      "howToUse": [
+          "Enter Unit Selling Price (P).",
+          "Enter Quantity of units sold (Q).",
+          "View Total Revenue and evaluate pricing sensitivity."
+      ],
+      "faqs": [
+          {
+              "question": "What is the Total Revenue Test?",
+              "answer": "If price and revenue move in opposite directions, demand is elastic. If price and revenue move in the same direction, demand is inelastic."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Revenue Maximization",
+              "content": "Total Revenue is maximized at the point where Price Elasticity of Demand is exactly Unitary (|PED| = 1) and Marginal Revenue = 0."
+          }
+      ]
+  },
+  {
+      "id": "GdpGrowthRateCalculator",
+      "slug": "gdp-growth-rate-calculator",
+      "name": "GDP Growth Rate Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate period-over-period national gross domestic product expansion or contraction percentage.",
+      "metaTitle": "GDP Growth Rate Calculator \u2013 Real & Nominal Output Expansion",
+      "metaDescription": "Calculate national GDP growth rate percentage across quarters or years. Understand economic expansion and recessionary signals.",
+      "keywords": [
+          "gdp growth rate calculator",
+          "gdp calculator",
+          "economic growth rate formula",
+          "national income growth"
+      ],
+      "icon": "Globe",
+      "howToUse": [
+          "Enter Prior Period GDP (GDP1).",
+          "Enter Current Period GDP (GDP2).",
+          "View percentage economic growth rate and economic cycle classification."
+      ],
+      "faqs": [
+          {
+              "question": "How is GDP growth calculated?",
+              "answer": "GDP Growth Rate (%) = [ (GDP_Current - GDP_Prior) / GDP_Prior ] \u00d7 100."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Economic Business Cycles",
+              "content": "Two consecutive quarters of negative real GDP growth historically define a technical economic recession."
+          }
+      ]
+  },
+  {
+      "id": "RealGdpCalculator",
+      "slug": "real-gdp-calculator",
+      "name": "Real GDP vs Nominal GDP Calculator",
+      "category": "economics",
+      "shortDescription": "Deflate nominal GDP using the GDP Deflator to determine true constant-price economic output.",
+      "metaTitle": "Real GDP Calculator \u2013 GDP Deflator & Inflation-Adjusted Output",
+      "metaDescription": "Calculate Real GDP and GDP Deflator. Adjust nominal output for inflation to uncover true purchasing power production.",
+      "keywords": [
+          "real gdp calculator",
+          "nominal gdp vs real gdp",
+          "gdp deflator calculator",
+          "inflation adjusted gdp"
+      ],
+      "icon": "Layers",
+      "howToUse": [
+          "Enter Nominal GDP at current market prices.",
+          "Enter GDP Deflator index (Base Year = 100).",
+          "View Real GDP at constant base-year prices and inflation impact."
+      ],
+      "faqs": [
+          {
+              "question": "What is the formula for Real GDP?",
+              "answer": "Real GDP = (Nominal GDP \u00f7 GDP Deflator) \u00d7 100."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Nominal vs Real GDP",
+              "content": "Nominal GDP measures output using current prices. Real GDP removes price inflation to measure actual physical production volume."
+          }
+      ]
+  },
+  {
+      "id": "InflationRateCalculator",
+      "slug": "inflation-rate-calculator",
+      "name": "Inflation Rate Calculator (CPI Based)",
+      "category": "economics",
+      "shortDescription": "Calculate price inflation rate from Consumer Price Index (CPI) changes over time.",
+      "metaTitle": "Inflation Rate Calculator \u2013 CPI Based Price Level Change",
+      "metaDescription": "Calculate annual and period inflation rates using Consumer Price Index (CPI) numbers. Measure cost-of-living increases.",
+      "keywords": [
+          "inflation rate calculator",
+          "cpi inflation calculator",
+          "consumer price index calculator",
+          "annual inflation rate formula"
+      ],
+      "icon": "Flame",
+      "howToUse": [
+          "Enter Previous Period CPI (CPI1).",
+          "Enter Current Period CPI (CPI2).",
+          "View percentage headline inflation rate and point index delta."
+      ],
+      "faqs": [
+          {
+              "question": "How is inflation rate calculated from CPI?",
+              "answer": "Inflation Rate (%) = [ (CPI2 - CPI1) / CPI1 ] \u00d7 100."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Understanding CPI Inflation",
+              "content": "The Consumer Price Index measures the average change over time in prices paid by urban consumers for a market basket of consumer goods and services."
+          }
+      ]
+  },
+  {
+      "id": "PurchasingPowerCalculator",
+      "slug": "purchasing-power-calculator",
+      "name": "Purchasing Power Loss Calculator",
+      "category": "economics",
+      "shortDescription": "Simulate purchasing power loss of cash savings over 1 to 50 years under compound inflation.",
+      "metaTitle": "Purchasing Power Loss Calculator \u2013 Inflation Decay Simulator",
+      "metaDescription": "Calculate how inflation erodes purchasing power over time. Find future value of cash and the amount needed to match today's spending power.",
+      "keywords": [
+          "purchasing power calculator",
+          "inflation decay calculator",
+          "purchasing power loss formula",
+          "future value inflation"
+      ],
+      "icon": "DollarSign",
+      "howToUse": [
+          "Enter Current Cash Principal amount.",
+          "Enter Expected Average Annual Inflation Rate (%).",
+          "Enter Time Horizon in Years.",
+          "View future real value and required replacement amount."
+      ],
+      "faqs": [
+          {
+              "question": "How does inflation erode purchasing power?",
+              "answer": "Future Real Value = Initial Amount \u00f7 (1 + r)^t, where r is annual inflation and t is years."
+          }
+      ],
+      "sections": [
+          {
+              "title": "The Silent Tax of Inflation",
+              "content": "At 6% annual inflation, money loses roughly half of its real purchasing power in less than 12 years."
+          }
+      ]
+  },
+  {
+      "id": "UnemploymentRateCalculator",
+      "slug": "unemployment-rate-calculator",
+      "name": "Unemployment Rate & Labor Force Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate official unemployment rate and Labor Force Participation Rate (LFPR).",
+      "metaTitle": "Unemployment Rate Calculator \u2013 LFPR & Labor Force Metrics",
+      "metaDescription": "Calculate national unemployment rate and labor force participation rate (LFPR). Analyze civilian labor dynamics.",
+      "keywords": [
+          "unemployment rate calculator",
+          "labor force participation rate calculator",
+          "lfpr calculator",
+          "unemployment formula"
+      ],
+      "icon": "Users",
+      "howToUse": [
+          "Enter Number of Employed workers.",
+          "Enter Number of Unemployed individuals actively seeking jobs.",
+          "Enter Total Civilian Working-Age Population.",
+          "View Unemployment Rate (%) and Labor Force Participation Rate (%)."
+      ],
+      "faqs": [
+          {
+              "question": "How is Unemployment Rate calculated?",
+              "answer": "Unemployment Rate (%) = (Unemployed \u00f7 Labor Force) \u00d7 100, where Labor Force = Employed + Unemployed."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Labor Market Indicators",
+              "content": "The headline unemployment rate only counts individuals actively looking for work. LFPR accounts for discouraged workers who left the workforce."
+          }
+      ]
+  },
+  {
+      "id": "EconomicGrowthRuleOf70Calculator",
+      "slug": "economic-growth-rule-of-70-calculator",
+      "name": "Economic Growth & Rule of 70 Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate GDP doubling time and long-term compound economic growth projections.",
+      "metaTitle": "Rule of 70 Calculator \u2013 GDP & Economic Doubling Time",
+      "metaDescription": "Calculate doubling time using the Rule of 70 and exact logarithmic compounding. Project national output over 10 to 30 years.",
+      "keywords": [
+          "rule of 70 calculator",
+          "economic doubling time",
+          "rule of 72 calculator",
+          "compound growth rate calculator"
+      ],
+      "icon": "TrendingUp",
+      "howToUse": [
+          "Enter Annual Growth Rate (g %).",
+          "Enter Baseline GDP or Income.",
+          "View exact doubling time in years and 10/20-year compound projections."
+      ],
+      "faqs": [
+          {
+              "question": "What is the Rule of 70?",
+              "answer": "Doubling Time (Years) \u2248 70 \u00f7 Annual Growth Rate (%). An economy growing at 7% doubles its output in ~10 years."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Power of Compounding in Economic Development",
+              "content": "Small differences in sustained annual economic growth rates lead to massive differences in living standards over several decades."
+          }
+      ]
+  },
+  {
+      "id": "KeynesianNationalIncomeCalculator",
+      "slug": "keynesian-national-income-calculator",
+      "name": "Keynesian National Income (Y = C + I + G + NX) Calculator",
+      "category": "economics",
+      "shortDescription": "Compute Gross Domestic Product via aggregate expenditure: Consumption, Investment, Government & Net Exports.",
+      "metaTitle": "Keynesian National Income Calculator \u2013 GDP Expenditure Approach",
+      "metaDescription": "Calculate national income using the Keynesian aggregate expenditure formula: Y = C + I + G + (X - M). Analyze component shares.",
+      "keywords": [
+          "keynesian national income calculator",
+          "y c i g nx calculator",
+          "gdp expenditure approach",
+          "aggregate demand calculator"
+      ],
+      "icon": "PieChart",
+      "howToUse": [
+          "Enter Private Consumption (C), Gross Investment (I), Government Spending (G).",
+          "Enter Total Exports (X) and Total Imports (M).",
+          "View Total National Income (GDP Y) and Net Exports (NX)."
+      ],
+      "faqs": [
+          {
+              "question": "What is the Keynesian GDP equation?",
+              "answer": "Y = C + I + G + (X - M), where Y is National Income, C is Consumption, I is Investment, G is Government Spending, and (X - M) is Net Exports."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Expenditure Approach to GDP",
+              "content": "Consumption typically represents the largest share (55-70%) of GDP in consumer-driven economies."
+          }
+      ]
+  },
+  {
+      "id": "KeynesianMultiplierCalculator",
+      "slug": "keynesian-multiplier-calculator",
+      "name": "Keynesian Multiplier Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate fiscal spending multipliers (k = 1 / (1 - MPC)) and total economic GDP expansion.",
+      "metaTitle": "Keynesian Spending Multiplier Calculator \u2013 Fiscal Stimulus Impact",
+      "metaDescription": "Calculate the Keynesian fiscal multiplier (1 / (1 - MPC)) and total economic expansion from government spending injections.",
+      "keywords": [
+          "keynesian multiplier calculator",
+          "fiscal multiplier calculator",
+          "spending multiplier formula",
+          "marginal propensity to consume"
+      ],
+      "icon": "Zap",
+      "howToUse": [
+          "Enter Marginal Propensity to Consume (MPC between 0 and 1).",
+          "Enter Government Spending Injection (\u0394G).",
+          "View the Fiscal Multiplier factor (k) and Total GDP Expansion (\u0394Y)."
+      ],
+      "faqs": [
+          {
+              "question": "How is the Keynesian Multiplier calculated?",
+              "answer": "Multiplier (k) = 1 \u00f7 (1 - MPC) = 1 \u00f7 MPS. Total GDP Expansion \u0394Y = k \u00d7 \u0394G."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Fiscal Multiplier Effect",
+              "content": "Initial government spending becomes income for recipients, who spend a fraction (MPC), creating recursive rounds of economic activity."
+          }
+      ]
+  },
+  {
+      "id": "ComparativeAdvantageCalculator",
+      "slug": "comparative-advantage-calculator",
+      "name": "Comparative Advantage & Trade Calculator",
+      "category": "economics",
+      "shortDescription": "Determine country specializations, opportunity cost ratios, and mutually beneficial terms of trade.",
+      "metaTitle": "Comparative Advantage Calculator \u2013 Opportunity Cost & Specialization",
+      "metaDescription": "Calculate Comparative Advantage and Opportunity Cost in international trade. Identify product specializations and trade gains.",
+      "keywords": [
+          "comparative advantage calculator",
+          "ricardian trade model calculator",
+          "opportunity cost trade",
+          "terms of trade calculator"
+      ],
+      "icon": "Globe2",
+      "howToUse": [
+          "Enter Country A output per hour for Good X and Good Y.",
+          "Enter Country B output per hour for Good X and Good Y.",
+          "View comparative opportunity costs and specialization recommendations."
+      ],
+      "faqs": [
+          {
+              "question": "What is Comparative Advantage?",
+              "answer": "A country has a comparative advantage if it can produce a good at a lower opportunity cost than another country."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Ricardian Theory of Comparative Advantage",
+              "content": "Even if one country has an absolute advantage in all goods, both nations gain from trade by specializing in goods where they have lowest opportunity cost."
+          }
+      ]
+  },
+  {
+      "id": "VelocityOfMoneyCalculator",
+      "slug": "velocity-of-money-calculator",
+      "name": "Velocity of Money (M \u00d7 V = P \u00d7 Y) Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate circulation turnover speed of money supply based on the Quantity Theory of Money.",
+      "metaTitle": "Velocity of Money Calculator \u2013 Quantity Theory of Money (MV = PY)",
+      "metaDescription": "Calculate the Velocity of Money using the Equation of Exchange (M \u00d7 V = P \u00d7 Y). Measure money circulation speed in the economy.",
+      "keywords": [
+          "velocity of money calculator",
+          "quantity theory of money calculator",
+          "mv py calculator",
+          "equation of exchange"
+      ],
+      "icon": "RefreshCw",
+      "howToUse": [
+          "Enter Total Money Supply (M).",
+          "Enter Average Price Level (P).",
+          "Enter Real Output / GDP (Y).",
+          "View Money Velocity of Circulation (V = PY / M)."
+      ],
+      "faqs": [
+          {
+              "question": "What is the Equation of Exchange?",
+              "answer": "M \u00d7 V = P \u00d7 Y, where M is Money Supply, V is Velocity, P is Price Level, and Y is Real GDP (P \u00d7 Y = Nominal GDP)."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Quantity Theory of Money",
+              "content": "If velocity and real output are stable in the long run, increases in money supply translate directly into proportionate price inflation."
+          }
+      ]
+  },
+  {
+      "id": "RealInterestRateCalculator",
+      "slug": "real-interest-rate-calculator",
+      "name": "Fisher Equation & Real Interest Rate Calculator",
+      "category": "economics",
+      "shortDescription": "Calculate inflation-adjusted real return on savings, bonds, and borrowing loans.",
+      "metaTitle": "Real Interest Rate Calculator \u2013 Fisher Equation & Inflation Adjustment",
+      "metaDescription": "Calculate Real Interest Rate using the exact Fisher Equation and approximation (r = i - \u03c0). Measure true investment yields.",
+      "keywords": [
+          "real interest rate calculator",
+          "fisher equation calculator",
+          "nominal vs real interest rate",
+          "inflation adjusted return"
+      ],
+      "icon": "Percent",
+      "howToUse": [
+          "Enter Nominal Interest Rate (i %).",
+          "Enter Expected / Actual Inflation Rate (\u03c0 %).",
+          "View Exact Real Interest Rate (Fisher Eq.) and Approximate Real Rate."
+      ],
+      "faqs": [
+          {
+              "question": "What is the Fisher Equation?",
+              "answer": "Exact Fisher Equation: (1 + r) = (1 + i) / (1 + \u03c0) => r = (i - \u03c0) / (1 + \u03c0). Approximate formula: r \u2248 i - \u03c0."
+          }
+      ],
+      "sections": [
+          {
+              "title": "Real vs Nominal Yield",
+              "content": "A high nominal interest rate can result in negative real wealth gains if inflation exceeds the nominal rate."
+          }
+      ]
+  }
 ];

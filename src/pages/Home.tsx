@@ -3,7 +3,7 @@ import {
   Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon,
   Hammer, Compass, Palette, ArrowRight,
   Globe, FileText, Share2, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart, Type,
-  Flame, Award, Printer, ShieldCheck, Layers
+  Flame, Award, Printer, ShieldCheck, Layers, TrendingUp
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { categories } from '../data/categories';
@@ -33,7 +33,8 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
   health: Heart,
   '3d-printing': Printer,
   'math-studio': Scale,
-  qa: ShieldCheck
+  qa: ShieldCheck,
+  economics: TrendingUp
 };
 
 export default function Home() {

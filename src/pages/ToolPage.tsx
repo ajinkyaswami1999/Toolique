@@ -329,6 +329,32 @@ const PlotAreaCalculator = lazy(() => import('../tools/PlotAreaCalculator'));
 const CompoundInterestCalculator = lazy(() => import('../tools/CompoundInterestCalculator'));
 const IncomeTaxCalculator = lazy(() => import('../tools/IncomeTaxCalculator'));
 
+// Economics Calculators
+const EconomicsCalculator = lazy(() => import('../tools/EconomicsCalculator'));
+const PriceElasticityDemandCalculator = lazy(() => import('../tools/economics/PriceElasticityDemandCalculator'));
+const IncomeElasticityDemandCalculator = lazy(() => import('../tools/economics/IncomeElasticityDemandCalculator'));
+const CrossElasticityDemandCalculator = lazy(() => import('../tools/economics/CrossElasticityDemandCalculator'));
+const PriceElasticitySupplyCalculator = lazy(() => import('../tools/economics/PriceElasticitySupplyCalculator'));
+const MarginalCostCalculator = lazy(() => import('../tools/economics/MarginalCostCalculator'));
+const MarginalRevenueCalculator = lazy(() => import('../tools/economics/MarginalRevenueCalculator'));
+const EconomicProfitCalculator = lazy(() => import('../tools/economics/EconomicProfitCalculator'));
+const BreakEvenPointCalculator = lazy(() => import('../tools/economics/BreakEvenPointCalculator'));
+const OpportunityCostCalculator = lazy(() => import('../tools/economics/OpportunityCostCalculator'));
+const ProductionFunctionCalculator = lazy(() => import('../tools/economics/ProductionFunctionCalculator'));
+const MarketEquilibriumCalculator = lazy(() => import('../tools/economics/MarketEquilibriumCalculator'));
+const TotalRevenueCalculator = lazy(() => import('../tools/economics/TotalRevenueCalculator'));
+const GdpGrowthRateCalculator = lazy(() => import('../tools/economics/GdpGrowthRateCalculator'));
+const RealGdpCalculator = lazy(() => import('../tools/economics/RealGdpCalculator'));
+const InflationRateCalculator = lazy(() => import('../tools/economics/InflationRateCalculator'));
+const PurchasingPowerCalculator = lazy(() => import('../tools/economics/PurchasingPowerCalculator'));
+const UnemploymentRateCalculator = lazy(() => import('../tools/economics/UnemploymentRateCalculator'));
+const EconomicGrowthRuleOf70Calculator = lazy(() => import('../tools/economics/EconomicGrowthRuleOf70Calculator'));
+const KeynesianNationalIncomeCalculator = lazy(() => import('../tools/economics/KeynesianNationalIncomeCalculator'));
+const KeynesianMultiplierCalculator = lazy(() => import('../tools/economics/KeynesianMultiplierCalculator'));
+const ComparativeAdvantageCalculator = lazy(() => import('../tools/economics/ComparativeAdvantageCalculator'));
+const VelocityOfMoneyCalculator = lazy(() => import('../tools/economics/VelocityOfMoneyCalculator'));
+const RealInterestRateCalculator = lazy(() => import('../tools/economics/RealInterestRateCalculator'));
+
 
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
@@ -633,6 +659,30 @@ const toolComponents: Record<string, React.ComponentType> = {
   CompoundInterestCalculator,
   IncomeTaxCalculator,
   BuildingFeasibilityChecker,
+  EconomicsCalculator,
+  PriceElasticityDemandCalculator,
+  IncomeElasticityDemandCalculator,
+  CrossElasticityDemandCalculator,
+  PriceElasticitySupplyCalculator,
+  MarginalCostCalculator,
+  MarginalRevenueCalculator,
+  EconomicProfitCalculator,
+  BreakEvenPointCalculator,
+  OpportunityCostCalculator,
+  ProductionFunctionCalculator,
+  MarketEquilibriumCalculator,
+  TotalRevenueCalculator,
+  GdpGrowthRateCalculator,
+  RealGdpCalculator,
+  InflationRateCalculator,
+  PurchasingPowerCalculator,
+  UnemploymentRateCalculator,
+  EconomicGrowthRuleOf70Calculator,
+  KeynesianNationalIncomeCalculator,
+  KeynesianMultiplierCalculator,
+  ComparativeAdvantageCalculator,
+  VelocityOfMoneyCalculator,
+  RealInterestRateCalculator,
 };
 
 const crossSuiteSuggestions: Record<string, { text: string; linkText: string; linkUrl: string; label: string }> = {

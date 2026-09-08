@@ -30,6 +30,7 @@ const ArchitectureHub = lazy(() => import('../pages/ArchitectureHub'));
 const QAHub = lazy(() => import('../pages/QAHub'));
 const FinanceHub = lazy(() => import('../pages/FinanceHub'));
 const DeveloperHub = lazy(() => import('../pages/DeveloperHub'));
+const EconomicsHub = lazy(() => import('../pages/EconomicsHub'));
 const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
@@ -44,6 +45,8 @@ export function getToolCanonicalPath(category: string, slug: string): string {
     return `/qa/${slug}`;
   } else if (category === '3d-printing') {
     return `/3d-printing-tools/${slug}`;
+  } else if (category === 'economics') {
+    return `/economics/${slug}`;
   } else {
     return `/calculators/${slug}`;
   }
@@ -60,6 +63,8 @@ export function getCategoryCanonicalPath(category: string): string {
     return `/qa`;
   } else if (category === 'finance') {
     return `/finance`;
+  } else if (category === 'economics') {
+    return `/economics`;
   } else if (category === '3d-printing') {
     return `/3d-printing-tools`;
   } else {
@@ -122,6 +127,11 @@ export default function AppRoutes() {
           <FinanceHub />
         </Suspense>
       } />
+      <Route path="/economics" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Economics Suite...</div>}>
+          <EconomicsHub />
+        </Suspense>
+      } />
 
       {/* Primary Pillar Tool Detail Routes */}
       <Route path="/calculators/:slug" element={<ToolPage />} />
@@ -130,6 +140,7 @@ export default function AppRoutes() {
       <Route path="/civil/:slug" element={<ToolPage />} />
       <Route path="/developer/:slug" element={<ToolPage />} />
       <Route path="/qa/:slug" element={<ToolPage />} />
+      <Route path="/economics/:slug" element={<ToolPage />} />
       <Route path="/finance/:slug" element={<Navigate to="/calculators/:slug" replace />} />
       <Route path="/3d-printing/:slug" element={<LegacyToolRedirect />} />
       <Route path="/3d-print-studio/:slug" element={<LegacyToolRedirect />} />

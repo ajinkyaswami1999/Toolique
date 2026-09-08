@@ -153,5 +153,12 @@ export const categories: Category[] = [
     description: 'Generate test cases, mock data, bug reports, and test parameters.',
     icon: 'ShieldAlert',
     colorClass: 'from-rose-400/20 to-pink-400/20 text-rose-800 dark:text-rose-300 border-rose-300/40 shadow-xs'
+  },
+  {
+    id: 'economics',
+    name: 'Economics Suite',
+    description: 'Solve micro and macro economics formulas, price elasticity, GDP growth, inflation rate, break-even, and market equilibrium.',
+    icon: 'TrendingUp',
+    colorClass: 'from-blue-400/20 to-indigo-400/20 text-blue-800 dark:text-blue-300 border-blue-300/40 shadow-xs'
   }
 ];

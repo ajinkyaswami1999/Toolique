@@ -8,6 +8,7 @@ import {
   X, 
   User, 
   ChevronDown,
+  TrendingUp,
   Code,
   IndianRupee,
   Compass,
@@ -137,18 +138,24 @@ export default function Header() {
     setIsMobileMenuOpen(false);
   }, [location]);
 
-  // Product Suites & Hubs in Dropdown
-  const productSuites = [
+  // Product Suites & Hubs in Dropdown organized into 2 distinct columns
+  const domainHubs = [
+    { name: 'Economics Hub', path: '/economics', icon: TrendingUp, desc: 'Micro & Macro Formulas, Elasticity & GDP', color: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50' },
     { name: 'Developer Hub', path: '/developer', icon: Code, desc: 'SQL, JSON, JWT & Web SEO Utilities', color: 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50' },
     { name: 'Finance & Tax Hub', path: '/finance', icon: IndianRupee, desc: 'Income Tax, SIP, Salary & Loans', color: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50' },
     { name: 'Architecture & Civil', path: '/architecture', icon: Compass, desc: 'Plot Area, FSI, Concrete & BOQ', color: 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/50' },
-    { name: 'QA Engineering', path: '/qa', icon: ShieldCheck, desc: 'Test Cases, BVA & XPath Locators', color: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50' },
+    { name: 'QA Engineering', path: '/qa', icon: ShieldCheck, desc: 'Test Cases, BVA & XPath Locators', color: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50' }
+  ];
+
+  const interactiveStudios = [
     { name: 'Learning Academy', path: '/academy', icon: GraduationCap, desc: '15+ Coding Tracks & Daily Challenges', color: 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/50' },
     { name: 'Symbolic Math Studio', path: '/math-studio', icon: Scale, desc: 'Derivatives with Steps & Plots', color: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50' },
     { name: '3D Maker Studio', path: '/3d-print-studio', icon: Printer, desc: 'Filament Cost, AMS & Print Time', color: 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/50' },
     { name: 'AI Studio', path: '/ai', icon: Sparkles, desc: 'Sandboxed AI Coding Assistants', color: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/50' },
     { name: 'Code Playground', path: '/playground', icon: Terminal, desc: 'Client-side Scratchpad & Sandbox', color: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50' }
   ];
+
+  const productSuites = [...domainHubs, ...interactiveStudios];
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
@@ -213,35 +220,78 @@ export default function Header() {
                 <ChevronDown className="w-3.5 h-3.5 transform group-hover/suites:rotate-180 transition-transform duration-200" />
               </button>
 
-              {/* Mega Dropdown Menu */}
-              <div className="absolute left-0 mt-2 w-80 rounded-2xl bg-white/95 dark:bg-zinc-950/95 border border-indigo-200/70 dark:border-zinc-800/80 bg-gradient-to-b from-white via-indigo-50/20 to-white dark:from-zinc-950 dark:via-zinc-900/50 dark:to-zinc-950 shadow-[0_12px_40px_rgba(99,102,241,0.12)] backdrop-blur-lg overflow-hidden p-2 opacity-0 invisible group-hover/suites:opacity-100 group-hover/suites:visible transition-all duration-200 translate-y-1 group-hover/suites:translate-y-0 z-50">
-                <div className="grid grid-cols-1 gap-1">
-                  {productSuites.map((suite) => {
-                    const Icon = suite.icon;
-                    return (
-                      <Link
-                        key={suite.name}
-                        to={suite.path}
-                        className={`flex items-start gap-3 p-2.5 rounded-xl transition ${
-                          isActive(suite.path)
-                            ? 'bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/45 dark:bg-indigo-950/50 dark:border-indigo-800/40'
-                            : 'hover:bg-pastel-indigo/15 dark:hover:bg-zinc-900/60 text-zinc-750 dark:text-zinc-300'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-xl ${suite.color} shrink-0 mt-0.5 shadow-2xs`}>
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        <div className="truncate">
-                          <div className="text-xs font-extrabold text-zinc-900 dark:text-white leading-tight truncate">
-                            {suite.name}
-                          </div>
-                          <div className="text-[10px] text-zinc-450 dark:text-zinc-500 font-medium truncate mt-0.5">
-                            {suite.desc}
-                          </div>
-                        </div>
-                      </Link>
-                    );
-                  })}
+              {/* 2-Column Mega Dropdown Menu */}
+              <div className="absolute left-0 mt-2 w-[540px] md:w-[580px] rounded-2xl bg-white/98 dark:bg-zinc-950/98 border border-indigo-200/70 dark:border-zinc-800/80 bg-gradient-to-b from-white via-indigo-50/20 to-white dark:from-zinc-950 dark:via-zinc-900/50 dark:to-zinc-950 shadow-[0_16px_50px_rgba(99,102,241,0.15)] backdrop-blur-xl p-3 opacity-0 invisible group-hover/suites:opacity-100 group-hover/suites:visible transition-all duration-200 translate-y-1 group-hover/suites:translate-y-0 z-50 max-h-[calc(100vh-80px)] overflow-y-auto">
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Column 1: Domain Calculation Hubs */}
+                  <div className="space-y-1">
+                    <div className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                      Calculation Hubs
+                    </div>
+                    <div className="space-y-1">
+                      {domainHubs.map((suite) => {
+                        const Icon = suite.icon;
+                        return (
+                          <Link
+                            key={suite.name}
+                            to={suite.path}
+                            className={`flex items-start gap-2.5 p-2 rounded-xl transition ${
+                              isActive(suite.path)
+                                ? 'bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/45 dark:bg-indigo-950/50 dark:border-indigo-800/40'
+                                : 'hover:bg-pastel-indigo/15 dark:hover:bg-zinc-900/60 text-zinc-750 dark:text-zinc-300'
+                            }`}
+                          >
+                            <div className={`p-1.5 rounded-lg ${suite.color} shrink-0 mt-0.5 shadow-2xs`}>
+                              <Icon className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-extrabold text-zinc-900 dark:text-white leading-tight truncate">
+                                {suite.name}
+                              </div>
+                              <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium truncate mt-0.5">
+                                {suite.desc}
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Column 2: Interactive Studios & Academies */}
+                  <div className="space-y-1">
+                    <div className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                      Studios & Academies
+                    </div>
+                    <div className="space-y-1">
+                      {interactiveStudios.map((suite) => {
+                        const Icon = suite.icon;
+                        return (
+                          <Link
+                            key={suite.name}
+                            to={suite.path}
+                            className={`flex items-start gap-2.5 p-2 rounded-xl transition ${
+                              isActive(suite.path)
+                                ? 'bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/45 dark:bg-indigo-950/50 dark:border-indigo-800/40'
+                                : 'hover:bg-pastel-indigo/15 dark:hover:bg-zinc-900/60 text-zinc-750 dark:text-zinc-300'
+                            }`}
+                          >
+                            <div className={`p-1.5 rounded-lg ${suite.color} shrink-0 mt-0.5 shadow-2xs`}>
+                              <Icon className="w-3.5 h-3.5" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="text-xs font-extrabold text-zinc-900 dark:text-white leading-tight truncate">
+                                {suite.name}
+                              </div>
+                              <div className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium truncate mt-0.5">
+                                {suite.desc}
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
