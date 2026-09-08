@@ -2010,48 +2010,90 @@ export const toolsList: Tool[] = [
     }
   ]
 },
-  {
-  "id": "ConcreteCalculator",
-  "slug": "concrete-calculator",
-  "name": "Concrete Calculator",
-  "category": "civil",
-  "shortDescription": "Calculate concrete volume and ingredient requirements for cement, sand, and aggregate.",
-  "metaDescription": "Online Concrete Calculator. Calculate concrete dry volumes, bags of cement, sand, and aggregate needed for rectangular slabs, beams, or columns.",
-  "keywords": [
-    "Concrete Calculator",
-    "concrete mix ratio calculator",
-    "cement sand aggregate calculator",
-    "dry volume concrete",
-    "M20 concrete mix"
-  ],
-  "icon": "Hammer",
-  "howToUse": [
-    "Enter the dimensions of your concrete structure (length, width, and thickness).",
-    "Select the concrete mix grade (M5, M10, M15, M20, M25).",
-    "Set the wastage buffer percentage (default is 5%).",
-    "View the total wet volume, dry volume, bags of cement, sand tons, and aggregate tons needed."
-  ],
-  "faqs": [
-    {
-      "question": "Why does concrete shrink during mixing?",
-      "answer": "Concrete shrinks when water fills the air voids between cement particles. To compensate, a dry volume multiplier of 1.54 is standard in civil calculations."
-    },
-    {
-      "question": "What mix ratio is M20 concrete?",
-      "answer": "M20 grade concrete has a volume ratio of 1:1.5:3 (1 part cement, 1.5 parts sand, and 3 parts aggregate)."
-    }
-  ],
-  "sections": [
-    {
-      "title": "Concrete Dry vs Wet Volume calculation",
-      "content": "The volume of wet concrete poured is always less than the dry volume of ingredients mixed. Dry Volume is computed as:\nDry Volume = Wet Volume × 1.54"
-    },
-    {
-      "title": "Concrete Grade Mix Ratios",
-      "content": "- **M10**: 1 : 3 : 6 (Cement : Sand : Aggregate) - Used for PCC foundations.\n- **M15**: 1 : 2 : 4 - Used for small pavements and yard floors.\n- **M20**: 1 : 1.5 : 3 - Standard grade for residential columns, slabs, and beams.\n- **M25**: 1 : 1 : 2 - High strength grade for heavily loaded pillars and footings."
-    }
-  ]
-},
+      {
+    "id": "ConcreteCalculator",
+    "slug": "concrete-calculator",
+    "name": "Concrete Calculator",
+    "category": "civil",
+    "shortDescription": "Calculate concrete volume and ingredient requirements for cement, sand, and aggregate.",
+    "metaTitle": "Concrete Calculator | Cement, Sand, Aggregate & Steel BOQ",
+    "metaDescription": "Calculate concrete volume, cement bags, sand brass, aggregate tons, and rebar steel for slabs, footings, columns, and beams. Free civil engineering BOQ tool.",
+    "keywords": [
+      "concrete calculator",
+      "concrete mix ratio calculator",
+      "cement sand aggregate calculator",
+      "dry volume concrete",
+      "M20 concrete mix calculator",
+      "M25 concrete mix design",
+      "concrete volume calculator in brass",
+      "concrete slab material calculator",
+      "how many cement bags in 1 m3 concrete",
+      "rcc concrete estimator",
+      "ready mix concrete rmc calculator",
+      "concrete footing calculator"
+    ],
+    "icon": "Hammer",
+    "howToUse": [
+      "Select your structural member type (Slab, Footing, Rectangular Column, Round Pier, Beam, Wall, Stairs, or Direct Volume).",
+      "Enter the dimensions in Feet/Inches or Metric (Meters/Centimeters).",
+      "Select the concrete nominal mix grade (M5, M7.5, M10, M15, M20, M25, M30) as per IS 456.",
+      "Adjust the wastage buffer percentage (5% to 10% recommended for site pouring).",
+      "Toggle Steel Reinforcement (RCC) or Integral Waterproofing Admixture if required.",
+      "Review the exact bill of quantities (BOQ) with Cement Bags, Sand Brass, Aggregate Tons, Water Liters, and download a PDF or share on WhatsApp."
+    ],
+    "faqs": [
+      {
+        "question": "Why is dry volume 1.54 times wet concrete volume?",
+        "answer": "When water is added to dry ingredients (cement, sand, and aggregate), it fills the microscopic air voids between particles, causing the mixture to shrink by approximately 30% to 35%. To produce 1 m³ of compacted wet concrete, approximately 1.52 to 1.57 m³ (standard 1.54 m³) of loose dry ingredients are required."
+      },
+      {
+        "question": "How many bags of cement are required for 1 m³ of M20 concrete?",
+        "answer": "For standard M20 concrete (1:1.5:3 ratio by volume with 1.54 dry factor), approximately 8.1 to 8.4 bags (405–420 kg) of cement are required per cubic meter of wet concrete."
+      },
+      {
+        "question": "What is the difference between M20 and M25 concrete?",
+        "answer": "M20 concrete (1:1.5:3) achieves a 28-day characteristic compressive strength of 20 N/mm² (MPa) and is the minimum standard for general RCC slabs, beams, and columns. M25 concrete (1:1:2) achieves 25 N/mm² and is required for heavy-load columns, foundations, and water-retaining structures."
+      },
+      {
+        "question": "How much sand and aggregate is needed per bag of cement?",
+        "answer": "In an M20 nominal mix (1:1.5:3), for every 1 bag of cement (1.23 cu.ft), you need 1.84 cu.ft of fine sand and 3.68 cu.ft of coarse aggregate."
+      },
+      {
+        "question": "How do you calculate concrete volume in Brass?",
+        "answer": "In Indian civil construction, 1 Brass equals 100 cubic feet (cu.ft) or approximately 2.8317 cubic meters (m³). To convert cubic feet to Brass, divide total cubic feet by 100."
+      },
+      {
+        "question": "How many transit mixer trucks are needed for a concrete pour?",
+        "answer": "Commercial Ready-Mix Concrete (RMC) transit mixer trucks typically carry 6 m³ or 7 m³ of wet concrete per load. Divide total wet volume (m³) by truck capacity to determine required dispatch trips."
+      }
+    ],
+    "sections": [
+      {
+        "title": "What is Concrete Volume & Material Estimation?",
+        "content": "Concrete material estimation is the civil engineering calculation process that translates the geometric dimensions of structural members (slabs, columns, beams, footings) into exact purchasing quantities of cement bags, fine aggregate (sand), coarse aggregate (gravel), steel rebar, and mixing water."
+      },
+      {
+        "title": "Nominal Concrete Mix Proportions (IS 456 Standards)",
+        "content": "• **M5 (1:5:10)**: Non-structural mass bed, sub-base levelling course.\n• **M7.5 (1:4:8)**: Plain mass foundation concrete, kerb backing.\n• **M10 (1:3:6)**: PCC bed under masonry and flooring sub-bases.\n• **M15 (1:2:4)**: Plain flooring, domestic driveways, light load structures.\n• **M20 (1:1.5:3)**: Standard RCC for residential slabs, beams, columns, and lintels (20 MPa).\n• **M25 (1:1:2)**: High-strength RCC for heavy columns, water tanks, and raft footings (25 MPa).\n• **M30 (1:0.75:1.5)**: High-performance structural concrete for multi-storey frames and bridges."
+      },
+      {
+        "title": "Mathematical Formulas Used",
+        "content": "• **Wet Volume ($V_{wet}$)** = Length × Width × Thickness (or $\pi r^2 h$ for cylinders)\n• **Gross Wet Volume** = $V_{wet} \times (1 + \text{Wastage } \% / 100)$\n• **Dry Shrinkage Volume ($V_{dry}$)** = Gross Wet Volume × 1.54\n• **Cement Bags** = $\frac{C}{C + S + A} \times V_{dry} \div 0.03472 \text{ m}^3$\n• **Sand Volume ($cu.ft$)** = $\frac{S}{C + S + A} \times V_{dry} \times 35.3147$\n• **Aggregate Volume ($cu.ft$)** = $\frac{A}{C + S + A} \times V_{dry} \times 35.3147$\n• **Water Required (L)** = Cement Bags × Water Ratio (22.5–25 L/bag)"
+      },
+      {
+        "title": "Step-by-Step Real-World Example (RCC Roof Slab)",
+        "content": "For a standard residential roof slab measuring 30 ft × 20 ft with a 5-inch thickness in M20 (1:1.5:3) concrete and 5% wastage:\n1. Wet Volume = 30 × 20 × (5/12) = 250 cu.ft = 7.08 m³\n2. With 5% Wastage = 7.08 × 1.05 = 7.43 m³\n3. Dry Volume = 7.43 × 1.54 = 11.44 m³\n4. Total Parts = 1 + 1.5 + 3 = 5.5\n5. Cement Volume = (1 / 5.5) × 11.44 = 2.08 m³ = 60 Bags (50kg)\n6. Sand Volume = (1.5 / 5.5) × 11.44 × 35.3147 = 110.2 cu.ft (1.10 Brass)\n7. Aggregate Volume = (3 / 5.5) × 11.44 × 35.3147 = 220.4 cu.ft (2.20 Brass)\n8. Steel Rebar (~70 kg/m³) = 7.43 × 70 = 520 kg (Fe500)\n9. Water Requirement = 60 × 24 = 1,440 Liters."
+      },
+      {
+        "title": "Practical Site Tips for Concrete Pouring",
+        "content": "• **Aggregate Grading**: Always use a blended aggregate mix (60% 20mm down-size + 40% 10mm down-size) to minimize honeycombing and voids around steel reinforcement.\n• **Water-Cement Ratio**: Keep the water-to-cement ratio between 0.45 and 0.50. Excess water reduces 28-day compressive strength and causes shrinkage cracks.\n• **Curing Period**: Maintain continuous ponding or wet burlap curing for at least 7 to 14 days to achieve maximum design strength."
+      },
+      {
+        "title": "Who It Is For",
+        "content": "Designed for civil engineers, RCC structural contractors, site supervisors, builders, quantity surveyors, and homeowners looking to audit material consumption and verify material procurement invoices."
+      }
+    ]
+  },
   {
   "id": "BrickCalculator",
   "slug": "brick-calculator",
@@ -2138,41 +2180,75 @@ export const toolsList: Tool[] = [
   {
   "id": "SteelWeightCalculator",
   "slug": "steel-weight-calculator",
-  "name": "Steel Weight Calculator",
+  "name": "Steel Weight Calculator & BBS Indent",
   "category": "civil",
-  "shortDescription": "Calculate the weight of structural steel bars, plates, flats, and profiles.",
-  "metaDescription": "Online Steel Weight Calculator. Calculate weights of TMT rebar, round bars, flat sections, angles, and channels instantly.",
+  "shortDescription": "Calculate structural steel weights and BBS procurement schedules for TMT rebars (IS 1786), MS plates, ISMC channels, ISMB beams, angles (ISA), hollow tubes (SHS/RHS), and pipes (IS 1239).",
+  "metaDescription": "Free Online Steel Weight Calculator for Indian civil engineers and fabricators. Calculate TMT rebars (Fe500D/Fe550), MS plates, ISMC channels, ISMB beams, angles, pipes, bundle counts, and live \u20b9/kg cost.",
   "keywords": [
     "Steel Weight Calculator",
-    "TMT bar weight formula",
-    "D2/162 steel weight",
-    "steel flat weight calculator",
-    "structural steel weight"
+    "TMT bar weight calculator",
+    "TMT bar weight formula D2/162",
+    "IS 1786 steel weight chart",
+    "ISMC channel weight per meter",
+    "ISMB beam weight calculator",
+    "MS plate weight calculator",
+    "steel angle weight calculator ISA",
+    "square tube SHS weight calculator",
+    "steel pipe weight calculator IS 1239",
+    "TMT bundle weight calculator",
+    "steel rate per kg India",
+    "bar bending schedule BBS weight calculator"
   ],
   "icon": "Hammer",
   "howToUse": [
-    "Select the steel profile: TMT rebar, Round bar, Flats, Angles, or Channels.",
-    "Input the dimensions (diameter, thickness, length, or width).",
-    "Input the quantity to see total weight in kilograms and tons."
+    "Select your structural steel profile: TMT rebar (IS 1786), MS plate, chequered plate, flat patti, angle (ISA), channel (ISMC), beam (ISMB), hollow section (SHS/RHS), or round pipe.",
+    "Choose the metal grade or density (TMT Fe 500D/550D, MS E250, High Tensile E350, SS 304/316, Aluminium, Brass, Copper).",
+    "Pick standard BIS presets (e.g. ISMC 100, ISMB 150, ISA 50x50x5, 12mm TMT) or enter custom dimensions.",
+    "Specify length (standard 12m TMT or 6m structural section) and piece quantity or full factory bundle count.",
+    "Click 'Add to Steel Takeoff' to compile a multi-item Bill of Materials (BOM), download a PDF Cutting Requisition, or share to WhatsApp."
   ],
   "faqs": [
     {
-      "question": "What is the D²/162 formula?",
-      "answer": "It is a shortcut to calculate the weight of a round steel bar per meter. Weight (kg/m) = Diameter(mm) × Diameter(mm) / 162.28."
+      "question": "How is TMT rebar steel weight calculated per meter using the D\u00b2/162 formula?",
+      "answer": "Weight (kg/m) = D\u00b2 / 162.2, where D is the nominal diameter in millimeters. For example, a 12mm bar weighs (12 \u00d7 12) / 162.2 = 0.888 kg/m. A standard 12-meter (40 ft) length of 12mm TMT weighs 0.888 \u00d7 12 = 10.66 kg."
     },
     {
-      "question": "What is the density of structural steel?",
-      "answer": "The density of steel is assumed to be 7,850 kg per cubic meter or 7.85 grams per cubic centimeter."
+      "question": "How many pieces of TMT steel bars are in one factory bundle?",
+      "answer": "In Indian trade practice (Tata Tiscon, Jindal Panther, SAIL, JSW): 8mm has 10 pcs/bundle (~47.4 kg), 10mm has 7 pcs/bundle (~51.8 kg), 12mm has 5 pcs/bundle (~53.3 kg), 16mm has 3 pcs/bundle (~56.8 kg), 20mm has 2 pcs/bundle (~59.2 kg), and 25mm+ bars are bundled as single pieces."
+    },
+    {
+      "question": "What is the standard density of steel and other structural metals?",
+      "answer": "Mild steel, TMT rebars, and carbon structural steel have a standardized density of 7,850 kg/m\u00b3 (0.00785 g/mm\u00b3). Stainless steel SS 304 is 7,930 kg/m\u00b3, SS 316 is 8,000 kg/m\u00b3, Aluminium is 2,700 kg/m\u00b3, Copper is 8,960 kg/m\u00b3, and Brass is 8,500 kg/m\u00b3."
+    },
+    {
+      "question": "How do you calculate the weight of Mild Steel (MS) plates and chequered plates?",
+      "answer": "Plain plate weight (kg) = Length (m) \u00d7 Width (m) \u00d7 Thickness (mm) \u00d7 7.85. For chequered plates with teardrop/diamond embossing (IS 2062), add +2.1 kg/m\u00b2 to the base plate weight for the raised pattern."
+    },
+    {
+      "question": "What is the difference between Fe 415, Fe 500, Fe 500D, and Fe 550D TMT bars?",
+      "answer": "The numbers represent minimum yield strength in MPa (N/mm\u00b2). 'D' stands for Super Ductile, offering higher elongation (\u2265 16% for Fe 500D vs \u2265 12% for Fe 500) and better seismic earthquake resistance as mandated by IS 13920 and IS 1786:2008."
+    },
+    {
+      "question": "How is hollow section (SHS / RHS) pipe weight calculated?",
+      "answer": "For Square Hollow Sections (SHS): Weight (kg/m) = 4 \u00d7 (Side - Thickness) \u00d7 Thickness \u00d7 0.00785. For Rectangular Hollow Sections (RHS): Weight (kg/m) = 2 \u00d7 (Width + Height - 2 \u00d7 Thickness) \u00d7 Thickness \u00d7 0.00785."
     }
   ],
   "sections": [
     {
-      "title": "Structural Steel Weight Formula",
-      "content": "Round steel bars are calculated using standard cylindrical volumes:\nWeight = Length × (π × Diameter² / 4) × Steel Density\nThis simplifies to the classic site formula:\nWeight per meter (kg) = Diameter (mm) × Diameter (mm) / 162.28"
+      "title": "Standard Indian Steel Profiles & IS Code Standards",
+      "content": "Indian civil and structural fabrication adheres to rigorous Bureau of Indian Standards (BIS) specifications:\n- **IS 1786**: High-strength deformed steel bars and wires for concrete reinforcement (Fe 415, Fe 500, Fe 500D, Fe 550D, Fe 600).\n- **IS 2062**: Hot rolled medium and high tensile structural steel plates, strips, and flats (MS E250 Gr. A/B/C, E350).\n- **IS 808**: Dimensions for hot rolled steel beam, column, channel (ISMC), and angle (ISA) sections.\n- **IS 4923**: Hollow steel sections for structural use (Square Hollow Sections - SHS and Rectangular Hollow Sections - RHS).\n- **IS 1239 / IS 1161**: Mild steel tubes, tubulars, and circular hollow sections across Light (Class A), Medium (Class B), and Heavy (Class C) schedules."
     },
     {
-      "title": "Standard TMT Rebar Diameter Weights",
-      "content": "- **8 mm**: 0.395 kg/m\n- **10 mm**: 0.617 kg/m\n- **12 mm**: 0.888 kg/m\n- **16 mm**: 1.580 kg/m\n- **20 mm**: 2.470 kg/m\n- **25 mm**: 3.858 kg/m"
+      "title": "Complete TMT Rebar Weight & Bundle Packaging Chart (IS 1786)",
+      "content": "| Diameter (mm) | Weight (kg/m) [D\u00b2/162.2] | Weight per 12m Bar (kg) | Standard Pieces / Bundle | Bundle Weight (kg) |\n|---|---|---|---|---|\n| **6 mm** | 0.222 kg/m | 2.66 kg | 20 pcs | 53.28 kg |\n| **8 mm** | 0.395 kg/m | 4.74 kg | 10 pcs | 47.40 kg |\n| **10 mm** | 0.617 kg/m | 7.40 kg | 7 pcs | 51.83 kg |\n| **12 mm** | 0.888 kg/m | 10.66 kg | 5 pcs | 53.28 kg |\n| **16 mm** | 1.578 kg/m | 18.94 kg | 3 pcs | 56.81 kg |\n| **20 mm** | 2.466 kg/m | 29.59 kg | 2 pcs | 59.18 kg |\n| **25 mm** | 3.853 kg/m | 46.24 kg | 1 pc | 46.24 kg |\n| **28 mm** | 4.834 kg/m | 58.01 kg | 1 pc | 58.01 kg |\n| **32 mm** | 6.313 kg/m | 75.76 kg | 1 pc | 75.76 kg |\n| **36 mm** | 7.990 kg/m | 95.88 kg | 1 pc | 95.88 kg |\n| **40 mm** | 9.865 kg/m | 118.38 kg | 1 pc | 118.38 kg |"
+    },
+    {
+      "title": "Structural Steel Mathematical Weight Formulas",
+      "content": "All structural profile weights are derived from cross-sectional area and density (\u03c1 = 7,850 kg/m\u00b3):\n- **TMT Rebars**: `W (kg/m) = D\u00b2 / 162.2` (where D is diameter in mm).\n- **Flat Bars (Patti)**: `W (kg/m) = Width (mm) \u00d7 Thickness (mm) \u00d7 0.00785`.\n- **MS Plates**: `Total Weight (kg) = Length (m) \u00d7 Width (m) \u00d7 Thickness (mm) \u00d7 7.85`.\n- **Equal Angles (ISA)**: `W (kg/m) = (2A - t) \u00d7 t \u00d7 0.00785` (where A is leg size, t is thickness).\n- **Unequal Angles**: `W (kg/m) = (A + B - t) \u00d7 t \u00d7 0.00785`.\n- **Square Hollow Section (SHS)**: `W (kg/m) = 4 \u00d7 (Side - t) \u00d7 t \u00d7 0.00785`.\n- **Rectangular Hollow Section (RHS)**: `W (kg/m) = 2 \u00d7 (Width + Height - 2t) \u00d7 t \u00d7 0.00785`.\n- **Circular Pipes**: `W (kg/m) = (OD - t) \u00d7 t \u00d7 0.02466`."
+    },
+    {
+      "title": "TMT Rebar Grades & BIS Applications",
+      "content": "- **Fe 415**: Older standard, suitable for small residential single-story homes and non-critical RCC elements.\n- **Fe 500 / Fe 500D**: The standard benchmark in modern Indian construction. 'Fe 500D' provides high ductility (min 16% elongation) engineered to absorb seismic energy during earthquakes (IS 13920 compliant).\n- **Fe 550 / Fe 550D**: High-tensile steel designed for multi-story towers, bridge piers, flyovers, and heavy industrial slabs.\n- **Fe 600**: Ultra-high-strength steel used in large dams, marine retaining walls, expressways, and mega-infrastructure.\n- **CRS (Corrosion Resistant Steel)**: Copper and chromium alloyed rebars suited for coastal areas, ports, and high-salinity groundwater zones."
     }
   ]
 },
