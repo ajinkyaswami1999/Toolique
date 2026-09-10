@@ -7,7 +7,7 @@ import {
   LineChart, Flame, Users, Building2, Zap, RefreshCw,
   Percent, Wallet, ArrowLeftRight, Heart, Bookmark,
   GraduationCap, Briefcase, ShieldCheck, Copy, Check,
-  ChevronDown, ChevronUp, SlidersHorizontal
+  ChevronDown, ChevronUp, SlidersHorizontal, X
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import SEO from '../components/SEO';
@@ -538,7 +538,7 @@ export default function EconomicsHub() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-10 text-left py-2 animate-fadeIn">
+    <div className="max-w-7xl mx-auto space-y-6 text-left py-1 animate-fadeIn">
       <SEO
         title="Economics Calculator Hub | Micro & Macroeconomics Formulas Suite"
         description="Calculate 24+ microeconomics and macroeconomics formulas online. Solve Price Elasticity (PED/YED/XED), Market Equilibrium, Break-Even, Real GDP, Inflation rate, and Keynesian national accounts with step-by-step mathematical proofs."
@@ -558,88 +558,62 @@ export default function EconomicsHub() {
         schemaMarkup={schemaMarkup}
       />
 
-      {/* 1. Hero Banner */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 border border-indigo-500/20 shadow-2xl p-6 sm:p-10 text-white">
-        {/* Background glow accents */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 -mb-20 w-80 h-80 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 space-y-6 max-w-4xl">
-          {/* Top Tag */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-500/20 border border-indigo-400/30 rounded-full text-indigo-300 text-xs font-semibold backdrop-blur-md shadow-inner">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
-            <span>Dedicated Economic Modeling & Calculation Suite</span>
-          </div>
-
-          {/* Heading */}
-          <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight bg-gradient-to-r from-white via-zinc-100 to-indigo-200 bg-clip-text text-transparent">
+      {/* 1. Compact Hero Header */}
+      <div className="rounded-3xl bg-gradient-to-r from-pastel-indigo/25 via-white/70 to-pastel-lavender/20 dark:from-zinc-900/80 dark:via-zinc-900/50 dark:to-zinc-900/80 border border-pastel-indigo/40 dark:border-zinc-800/80 p-5 sm:p-7 shadow-xs">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="space-y-1.5 max-w-2xl">
+            <div className="flex items-center gap-2.5">
+              <span className="px-2.5 py-0.5 rounded-xl bg-pastel-indigo/30 text-indigo-800 dark:text-indigo-300 font-extrabold text-[10px] uppercase tracking-wider border border-pastel-indigo/50 shadow-2xs">
+                Economics Suite
+              </span>
+              <span className="text-[11px] text-zinc-500 font-bold">24 Specialized Calculators</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight">
               Economics Calculator Hub
             </h1>
-            <p className="text-zinc-300 text-xs sm:text-sm md:text-base leading-relaxed max-w-3xl">
-              Solve 24 specialized Micro and Macro economics formulas instantly. Compute midpoint price elasticity,
-              solve linear market equilibrium systems, analyze CVP break-even curves, forecast inflation drag, and
-              verify Keynesian national accounts with 100% dynamic mathematical proofs.
+            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
+              Solve micro and macro economics formulas online with step-by-step mathematical proofs and interactive curve visualizers.
             </p>
           </div>
 
           {/* Search Box & Quick Tags */}
-          <div className="space-y-3 pt-2">
-            <div className="relative max-w-2xl">
-              <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+          <div className="w-full md:w-80 lg:w-96 shrink-0 space-y-2">
+            <div className="relative w-full">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search formulas, concepts, or equations (e.g. elasticity, break-even, GDP, multiplier)..."
-                className="w-full pl-12 pr-12 py-3.5 bg-white/10 dark:bg-black/30 border border-white/20 focus:border-indigo-400 rounded-2xl text-white placeholder-zinc-400 text-xs sm:text-sm outline-none transition backdrop-blur-md shadow-inner"
+                placeholder="Search formulas, GDP, inflation, elasticity..."
+                className="w-full pl-9 pr-8 py-2.5 rounded-2xl border border-zinc-200/90 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/60 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-pastel-indigo/30 font-semibold placeholder-zinc-400 dark:placeholder-zinc-500 shadow-2xs"
               />
               {searchQuery && (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400 hover:text-white bg-white/15 px-2.5 py-1 rounded-xl transition"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-0.5"
                 >
-                  Clear
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
 
-            {/* Quick search tags */}
-            <div className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-400 pt-1">
-              <span className="font-semibold text-zinc-500 text-[11px]">Popular:</span>
-              {quickTags.map((tag, idx) => (
+            {/* Quick Filter Tags */}
+            <div className="flex flex-wrap items-center gap-1 text-[10px] text-zinc-400">
+              <span className="font-semibold text-zinc-400">Tags:</span>
+              {quickTags.slice(0, 5).map((tag, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSearchQuery(tag)}
-                  className={`text-[11px] px-2.5 py-1 rounded-full border transition cursor-pointer ${
+                  className={`px-2 py-0.5 rounded-md border transition cursor-pointer ${
                     searchQuery.toLowerCase() === tag.toLowerCase()
-                      ? 'bg-indigo-500 text-white border-indigo-400'
-                      : 'bg-white/5 border-white/10 hover:bg-white/15 hover:text-zinc-200 text-zinc-300'
+                      ? 'bg-indigo-600 text-white border-indigo-600 font-bold'
+                      : 'bg-white/80 dark:bg-zinc-800/60 border-zinc-200/80 dark:border-zinc-700/60 text-zinc-600 dark:text-zinc-300 hover:border-indigo-300'
                   }`}
                 >
                   #{tag}
                 </button>
               ))}
-            </div>
-          </div>
-
-          {/* Metric Highlights */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/10 text-xs">
-            <div className="bg-white/5 p-3 rounded-2xl border border-white/5 backdrop-blur-xs">
-              <span className="text-zinc-400 block text-[11px]">Dedicated Solvers</span>
-              <span className="font-mono text-base sm:text-lg font-black text-white">24 Calculators</span>
-            </div>
-            <div className="bg-white/5 p-3 rounded-2xl border border-white/5 backdrop-blur-xs">
-              <span className="text-zinc-400 block text-[11px]">Core Disciplines</span>
-              <span className="font-mono text-base sm:text-lg font-black text-indigo-300">Micro & Macro</span>
-            </div>
-            <div className="bg-white/5 p-3 rounded-2xl border border-white/5 backdrop-blur-xs">
-              <span className="text-zinc-400 block text-[11px]">Math Proofs</span>
-              <span className="font-mono text-base sm:text-lg font-black text-emerald-300">100% Dynamic</span>
-            </div>
-            <div className="bg-white/5 p-3 rounded-2xl border border-white/5 backdrop-blur-xs">
-              <span className="text-zinc-400 block text-[11px]">Privacy Guarantee</span>
-              <span className="font-mono text-base sm:text-lg font-black text-amber-300">100% Private</span>
             </div>
           </div>
         </div>
