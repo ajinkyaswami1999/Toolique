@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { 
   Copy, Check, Info, Building2, Trash2, Plus, 
-  Printer, Download, Sparkles, Sliders, ArrowRightLeft
+  Printer, Download, Sparkles, Sliders, ArrowRightLeft,
+  MapPin, Loader2, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { INDIAN_STATES_FSI_DATA, type CityZoneRegulation } from '../data/indiaFsiRegulations';
+import { detectUserIndianLocation } from '../utils/indianLocationFsiResolver';
 
 // --- Interfaces ---
 type UnitType = 'sqft' | 'sqm' | 'sqyd' | 'acre' | 'hectare' | 'cent' | 'guntha' | 'bigha';
@@ -78,6 +80,50 @@ export default function FARFSICalculator() {
   const [statePreset, setStatePreset] = useState<string>('maharashtra');
   const [cityPreset, setCityPreset] = useState<string>('mumbai');
   const [zonePreset, setZonePreset] = useState<string>('residential');
+  const [isDetectingLocation, setIsDetectingLocation] = useState<boolean>(false);
+  const [locationMessage, setLocationMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+    details?: string;
+  } | null>(null);
+
+  const handleDetectLocation = async (autoApply: boolean = true) => {
+    setIsDetectingLocation(true);
+    setLocationMessage(null);
+    try {
+      const res = await detectUserIndianLocation();
+      setStatePreset(res.stateId);
+      setCityPreset(res.cityId);
+
+      const stateObj = INDIAN_STATES_FSI_DATA.find(s => s.id === res.stateId);
+      const cityObj = stateObj?.cities.find(c => c.id === res.cityId);
+      let appliedFsiText = '';
+      if (cityObj?.zones && autoApply) {
+        const z = cityObj.zones as Record<string, CityZoneRegulation | undefined>;
+        const reg = z[zonePreset] || z['residential'];
+        if (reg) {
+          setPermissibleFsi(reg.fsi);
+          appliedFsiText = ` • Auto-applied FSI: ${reg.fsi}`;
+        }
+      }
+
+      setLocationMessage({
+        type: 'success',
+        text: `Detected: ${res.cityName}, ${res.stateName}${appliedFsiText}`,
+        details: res.distanceKm > 0 
+          ? `~${res.distanceKm} km away • Coordinates (${res.latitude.toFixed(2)}°, ${res.longitude.toFixed(2)}°)` 
+          : 'Exact administrative match'
+      });
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : 'Unable to detect location. Please select manually.';
+      setLocationMessage({
+        type: 'error',
+        text: errorMsg
+      });
+    } finally {
+      setIsDetectingLocation(false);
+    }
+  };
 
   const selectedState = useMemo(() => {
     return INDIAN_STATES_FSI_DATA.find(s => s.id === statePreset) || INDIAN_STATES_FSI_DATA[0];
@@ -494,24 +540,74 @@ Status Audit         : ${calculations.statusLabel}`;
         </button>
       </div>
 
-      {/* CORE WORKSPACE TABS */}
-      <div className="flex flex-wrap gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3">
-        <button
-          onClick={() => setCalcMode('forward')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
-            calcMode === 'forward' ? 'bg-indigo-600 text-white shadow-md' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
-          }`}
-        >
-          Forward FSI Planner
-        </button>
-        <button
-          onClick={() => setCalcMode('reverse')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
-            calcMode === 'reverse' ? 'bg-indigo-600 text-white shadow-md' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
-          }`}
-        >
-          Reverse FSI Planners
-        </button>
+      {/* CORE WORKSPACE TABS & QUICK DETECT */}
+      <div className="space-y-3 border-b border-zinc-200 dark:border-zinc-800 pb-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setCalcMode('forward')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+                calcMode === 'forward' ? 'bg-indigo-600 text-white shadow-md' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
+              }`}
+            >
+              Forward FSI Planner
+            </button>
+            <button
+              onClick={() => setCalcMode('reverse')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+                calcMode === 'reverse' ? 'bg-indigo-600 text-white shadow-md' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
+              }`}
+            >
+              Reverse FSI Planners
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleDetectLocation(true)}
+            disabled={isDetectingLocation}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800 text-xs font-bold transition shadow-xs active:scale-[0.98] cursor-pointer disabled:opacity-60"
+            title="Auto-detect current city and load statutory FSI regulations"
+          >
+            {isDetectingLocation ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600 dark:text-indigo-400" />
+            ) : (
+              <MapPin className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            )}
+            <span>{isDetectingLocation ? 'Detecting Location...' : 'Detect My Location'}</span>
+          </button>
+        </div>
+
+        {locationMessage && (
+          <div className={`p-3 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs transition-all ${
+            locationMessage.type === 'success'
+              ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200'
+              : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200'
+          }`}>
+            <div className="flex items-center gap-2">
+              {locationMessage.type === 'success' ? (
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              ) : (
+                <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+              )}
+              <div>
+                <span className="font-bold">{locationMessage.text}</span>
+                {locationMessage.details && (
+                  <span className="text-[11px] opacity-85 ml-2 block sm:inline">({locationMessage.details})</span>
+                )}
+              </div>
+            </div>
+            {locationMessage.type === 'success' && activePreset && (
+              <button
+                type="button"
+                onClick={applyPreset}
+                className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-xl transition shrink-0 cursor-pointer shadow-xs self-start sm:self-auto"
+              >
+                Apply FSI ({activePreset.fsi})
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* TWO COLUMN INTERACTION LAYER */}
@@ -1049,7 +1145,7 @@ Status Audit         : ${calculations.statusLabel}`;
 
       {/* LOCATION PRESETS MANAGER */}
       <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-5">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-zinc-150 dark:border-zinc-850 pb-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-150 dark:border-zinc-850 pb-3">
           <div>
             <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block">
               Pan-India Master Plan & Bye-Laws FSI Presets
@@ -1058,10 +1154,57 @@ Status Audit         : ${calculations.statusLabel}`;
               Instant regulatory indexes covering all 28 Indian States & Union Territories
             </p>
           </div>
-          <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-650 dark:text-indigo-400 border border-indigo-500/20">
-            {INDIAN_STATES_FSI_DATA.length} States & UTs • {INDIAN_STATES_FSI_DATA.reduce((acc, s) => acc + s.cities.length, 0)} Cities
-          </span>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleDetectLocation(false)}
+              disabled={isDetectingLocation}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800 text-xs font-bold transition shadow-xs active:scale-[0.98] cursor-pointer disabled:opacity-60"
+              title="Auto-detect current city and state using GPS"
+            >
+              {isDetectingLocation ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600 dark:text-indigo-400" />
+              ) : (
+                <MapPin className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+              )}
+              <span>{isDetectingLocation ? 'Detecting Location...' : 'Detect My Location'}</span>
+            </button>
+            <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-650 dark:text-indigo-400 border border-indigo-500/20">
+              {INDIAN_STATES_FSI_DATA.length} States & UTs • {INDIAN_STATES_FSI_DATA.reduce((acc, s) => acc + s.cities.length, 0)} Cities
+            </span>
+          </div>
         </div>
+
+        {locationMessage && (
+          <div className={`p-3 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs transition-all ${
+            locationMessage.type === 'success'
+              ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200'
+              : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200'
+          }`}>
+            <div className="flex items-center gap-2">
+              {locationMessage.type === 'success' ? (
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              ) : (
+                <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+              )}
+              <div>
+                <span className="font-bold">{locationMessage.text}</span>
+                {locationMessage.details && (
+                  <span className="text-[11px] opacity-85 ml-2 block sm:inline">({locationMessage.details})</span>
+                )}
+              </div>
+            </div>
+            {locationMessage.type === 'success' && activePreset && (
+              <button
+                type="button"
+                onClick={applyPreset}
+                className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-xl transition shrink-0 cursor-pointer shadow-xs self-start sm:self-auto"
+              >
+                Apply FSI ({activePreset.fsi})
+              </button>
+            )}
+          </div>
+        )}
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-1.5">
