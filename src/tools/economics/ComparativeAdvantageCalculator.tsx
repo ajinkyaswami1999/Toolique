@@ -6,7 +6,7 @@ import {
   Calculator, Layers, Scale,
   Activity, TrendingUp,
   Globe, ShieldCheck,
-  Target, ArrowRight,
+  ArrowRight,
   Zap, ArrowLeftRight
 } from 'lucide-react';
 

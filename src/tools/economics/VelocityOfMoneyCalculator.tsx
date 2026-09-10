@@ -4,11 +4,11 @@ import {
   Copy, Check, RotateCcw,
   Sparkles, BarChart2,
   Sliders, ChevronDown, ChevronUp,
-  Calculator, Layers, Scale,
-  Activity, TrendingUp, TrendingDown,
-  Globe, ShieldCheck,
+  Calculator, Scale,
+  Activity, TrendingUp,
+  ShieldCheck,
   Target, ArrowRight,
-  Zap, RefreshCw, Clock
+  RefreshCw, Clock
 } from 'lucide-react';
 
 type VelocityMode = 'solve_velocity' | 'solve_inflation_growth' | 'solve_money_target' | 'cambridge_k_portfolio';
@@ -135,7 +135,6 @@ export default function VelocityOfMoneyCalculator() {
   // UI States
   const [copiedFormula, setCopiedFormula] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState<boolean>(true);
-  const [hoverMoney, setHoverMoney] = useState<number | null>(null);
 
   // Apply Preset
   const handleApplyPreset = (preset: PresetScenario) => {

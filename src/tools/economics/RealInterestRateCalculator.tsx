@@ -4,11 +4,11 @@ import {
   Copy, Check, RotateCcw,
   Sparkles, BarChart2,
   Sliders, ChevronDown, ChevronUp,
-  Calculator, Layers, Scale,
+  Calculator, Scale,
   Activity, TrendingUp, TrendingDown,
-  Globe, ShieldCheck,
-  Target, ArrowRight,
-  Zap, Percent, DollarSign, Clock
+  ShieldCheck,
+  ArrowRight,
+  Zap, Percent, Clock
 } from 'lucide-react';
 
 type FisherMode = 'fisher_exact_vs_approx' | 'after_tax_real_yield' | 'borrower_lender_shock' | 'multi_year_compounding';

@@ -1,14 +1,14 @@
 import { useState, useMemo } from 'react';
 import {
   Copy, Check, RotateCcw,
-  Sparkles, BarChart2,
+  Sparkles,
   Sliders, ChevronDown, ChevronUp,
-  Calculator, Layers, Scale,
+  Calculator, Layers,
   Activity, TrendingUp,
   Compass, ShieldCheck,
-  Target, ArrowRight,
-  Zap, TreePine, Building2, Droplets, CheckCircle2, AlertTriangle,
-  Plus, Trash2, Maximize2, FileText, CloudRain
+  ArrowRight,
+  Building2, Droplets, CheckCircle2, AlertTriangle,
+  Plus, Trash2, Maximize2, CloudRain
 } from 'lucide-react';
 
 type CoverageMode = 'standard_coverage' | 'zoning_compliance_by_typology' | 'permeability_stormwater' | 'multi_building_campus' | 'setbacks_envelope' | 'vertical_far_massing';
@@ -804,7 +804,7 @@ MUNICIPAL ZONING AUDIT:
                 </div>
 
                 <div className="space-y-2 max-h-[260px] overflow-y-auto pr-1">
-                  {campusBuildings.map((b, idx) => (
+                  {campusBuildings.map((b) => (
                     <div
                       key={b.id}
                       className="p-3 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-2 text-xs"

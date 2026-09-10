@@ -8,7 +8,7 @@ import {
   Activity, TrendingUp,
   Globe, ShieldCheck,
   Target, ArrowRight,
-  Zap, DollarSign
+  Zap
 } from 'lucide-react';
 
 type MultiplierMode = 'simple_fiscal' | 'tax_balanced_budget' | 'open_economy_complex' | 'target_gdp_stimulus';
@@ -116,7 +116,6 @@ export default function KeynesianMultiplierCalculator() {
   // UI States
   const [copiedFormula, setCopiedFormula] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState<boolean>(true);
-  const [hoverRound, setHoverRound] = useState<number | null>(null);
 
   // Apply Preset
   const handleApplyPreset = (preset: PresetScenario) => {
@@ -720,7 +719,6 @@ export default function KeynesianMultiplierCalculator() {
           <svg
             viewBox={`0 0 ${svgData.width} ${svgData.height}`}
             className="w-full h-auto max-h-[340px] font-sans select-none"
-            onMouseLeave={() => setHoverRound(null)}
           >
             <defs>
               <linearGradient id="cumGradient" x1="0" y1="0" x2="0" y2="1">

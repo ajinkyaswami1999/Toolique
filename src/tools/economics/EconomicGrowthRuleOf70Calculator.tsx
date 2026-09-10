@@ -377,7 +377,6 @@ export default function EconomicGrowthRuleOf70Calculator() {
   const latexExact = `T_{\\text{exact}} = \\frac{\\ln(2)}{\\ln(1 + g)} = \\frac{0.69315}{\\ln(1 + ${(growthRate/100).toFixed(3)})} = ${calc.exactDoublingYears === Infinity ? '\\infty' : calc.exactDoublingYears.toFixed(2)} \\text{ Years}`;
   const latexOutput = `Y(t) = Y_0 \\times (1 + g)^t = ${initialValue.toLocaleString()} \\times (1 + ${(growthRate/100).toFixed(3)})^{${calc.t}} = ${formatMoney(calc.futureValue, 1)}`;
   const latexConvergence = `t^* = \\frac{\\ln(Y_{B,0} / Y_{A,0})}{\\ln(1 + g_A) - \\ln(1 + g_B)} = \\frac{\\ln(${countryBInitial} / ${initialValue})}{\\ln(1 + ${(growthRate/100).toFixed(3)}) - \\ln(1 + ${(countryBGrowth/100).toFixed(3)})} = ${calc.convergenceYears === Infinity ? '\\infty' : calc.convergenceYears.toFixed(2)} \\text{ Years}`;
-  const latexRequired = `g_{\\text{req}} = \\left[\\left(\\frac{Y_{\\text{target}}}{Y_0}\\right)^{1/t} - 1\\right] \\times 100\\% = \\left[\\left(\\frac{${targetGoal}}{${initialValue}}\\right)^{1/${targetHorizon}} - 1\\right] \\times 100\\% = ${calc.requiredGrowthRate.toFixed(2)}\\%`;
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 text-left pb-12">

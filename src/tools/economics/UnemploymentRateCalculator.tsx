@@ -430,11 +430,9 @@ export default function UnemploymentRateCalculator() {
 
   // LaTeX Proofs
   const latexU3 = `u = \\frac{U}{LF} \\times 100\\% = \\frac{${unemployed.toLocaleString()}}{${calc.laborForce.toLocaleString()}} \\times 100\\% = ${calc.unempRate.toFixed(2)}\\%`;
-  const latexLFPR = `\\text{LFPR} = \\frac{LF}{P_{\\text{working}}} \\times 100\\% = \\frac{${calc.laborForce.toLocaleString()}}{${workingAge.toLocaleString()}} \\times 100\\% = ${calc.lfpr.toFixed(2)}\\%`;
   const latexEPOP = `\\text{EPOP} = \\frac{E}{P_{\\text{working}}} \\times 100\\% = \\text{LFPR} \\times (1 - u) = ${calc.lfpr.toFixed(2)}\\% \\times (1 - ${calc.unempRate.toFixed(2)}\\%) = ${calc.epop.toFixed(2)}\\%`;
   const latexU6 = `\\text{U-6} = \\frac{U + M + PT_{\\text{econ}}}{LF + M} \\times 100\\% = \\frac{${(unemployed + marginallyAttached + involuntaryPartTime).toLocaleString()}}{${(calc.laborForce + marginallyAttached).toLocaleString()}} \\times 100\\% = ${calc.u6Rate.toFixed(2)}\\%`;
   const latexOkun = `\\frac{\\Delta Y}{Y^*} = -\\beta (u - u^*) = -${okunBeta.toFixed(1)} \\times (${calc.unempRate.toFixed(2)}\\% - ${naturalRate.toFixed(1)}\\%) = ${calc.gdpOutputGapPct.toFixed(2)}\\%`;
-  const latexFlows = `u_{\\text{ss}} = \\frac{s}{s + f} \\times 100\\% = \\frac{${separationRate.toFixed(2)}\\%}{${separationRate.toFixed(2)}\\% + ${findingRate.toFixed(2)}\\%} = ${calc.steadyStateUnemp.toFixed(2)}\\%`;
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 text-left pb-12">

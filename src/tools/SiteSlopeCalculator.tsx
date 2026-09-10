@@ -1,14 +1,14 @@
 import { useState, useMemo } from 'react';
 import {
   Copy, Check, RotateCcw,
-  Sparkles, BarChart2,
+  Sparkles,
   Sliders, ChevronDown, ChevronUp,
-  Calculator, Layers, Scale,
+  Calculator, Layers,
   Activity, TrendingUp,
-  Compass, ShieldCheck,
-  Target, ArrowRight,
-  Zap, TreePine, Building2, Droplets, CheckCircle2, AlertTriangle,
-  Maximize2, Mountain, Shovel, Car, Accessibility
+  ShieldCheck,
+  ArrowRight,
+  Building2, CheckCircle2,
+  Mountain, Shovel, Car, Accessibility
 } from 'lucide-react';
 
 type SlopeMode = 'elevation_points' | 'rise_run' | 'grading_suitability' | 'earthwork_cut_fill' | 'infrastructure_compliance' | 'topo_transect';
@@ -159,7 +159,6 @@ export default function SiteSlopeCalculator() {
 
   // Unit Labels
   const linearUnit = unit === 'imperial' ? 'ft' : 'm';
-  const smallLinearUnit = unit === 'imperial' ? 'in' : 'cm';
   const volumeUnit = unit === 'imperial' ? 'cu yd' : 'm³';
 
   // Apply Preset
@@ -246,12 +245,10 @@ export default function SiteSlopeCalculator() {
     // 4. Earthwork Cut & Fill Pad Estimator (Prismoidal Approximation for Building Pad)
     // Natural ground line across pad length
     const naturalElevationMid = (elevationStart + elevationEnd) / 2;
-    const padElevationDelta = padTargetElevation - naturalElevationMid;
     const padArea = padWidth * padLength;
 
     // Wedge Cut & Fill Volume calculations
     const slopeOverPad = (slopePercentage / 100) * padLength;
-    const halfPadLength = padLength / 2;
     
     // Average cut depth and fill depth across the pad
     const naturalElevationAtStartOfPad = naturalElevationMid - (slopeOverPad / 2);
