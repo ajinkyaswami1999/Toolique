@@ -306,12 +306,12 @@ export default function Home() {
           
           {/* Main Heading */}
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-black tracking-tight text-zinc-900 dark:text-white leading-[1.18] drop-shadow-xs">
-            Free Calculators & <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">Professional Online Tools</span>
+            Free Online Tools for <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">Work, Engineering, Finance & More</span>
           </h1>
           
           {/* Subtitle */}
-          <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-2xl mx-auto font-semibold line-clamp-2 drop-shadow-xs">
-            Calculate, format, test, and design in lightning speed. 100% browser-based tools with zero data tracking for finance, software development, civil engineering, QA, and creators.
+          <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-2xl mx-auto font-semibold drop-shadow-xs">
+            270+ fast, browser-based tools for calculations, development, QA, engineering, design, and everyday tasks — free to use with no sign-up and no data tracking.
           </p>
 
           {/* Global Search Bar */}
