@@ -9,6 +9,7 @@ import { toolsList } from '../data/tools';
 import { categories } from '../data/categories';
 import { workflows } from '../data/workflows';
 import ToolCard from '../components/ToolCard';
+import HeroToolsBackground from '../components/HeroToolsBackground';
 import SEO from '../components/SEO';
 import { Link, useNavigate } from 'react-router-dom';
 import { getToolCanonicalPath } from '../routes/AppRoutes';
@@ -259,120 +260,149 @@ export default function Home() {
   };
 
   return (
-    <div className="space-y-12 pb-16 animate-fadeIn text-left max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="animate-fadeIn text-left">
       <SEO 
         title="Toolique | Free Online Professional Tools, Calculators & Developer Hub" 
         description="270+ free browser tools, financial calculators, SQL/JSON developer sandboxes, QA automation utilities, symbolic math calculators, and 3D printing studios. 100% private with no sign-up required."
         schemaMarkup={homeSchema}
       />
 
-      {/* SECTION 1: Single-Screen Compact Flagship Hero */}
-      <section className="relative pt-2 sm:pt-4 text-center max-w-4xl mx-auto space-y-3.5">
-        
-        {/* Top Trust Pill */}
-        <div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/45 shadow-xs">
-            <Sparkles className="w-3 h-3 text-indigo-500 animate-pulse" />
-            <span>✦ 270+ TOOLS • 100% FREE • ZERO SIGN-UP REQUIRED • LOCAL SANDBOX</span>
-          </span>
-        </div>
-        
-        {/* Main Heading */}
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-black tracking-tight text-zinc-900 dark:text-white leading-[1.18]">
-          Free Calculators & <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">Professional Online Tools</span>
-        </h1>
-        
-        {/* Subtitle */}
-        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto font-medium line-clamp-2">
-          Calculate, format, test, and design in lightning speed. 100% browser-based tools with zero data tracking for finance, software development, civil engineering, QA, and creators.
-        </p>
+      {/* SECTION 1: Full-Screen Viewport Flagship Hero with Live Background Tools Ticker */}
+      <section className="relative w-full min-h-[calc(100vh-3.75rem)] flex items-center justify-center overflow-hidden text-center py-8 sm:py-12 border-b border-zinc-200/50 dark:border-zinc-800/50">
+        {/* Dark Mode Ambient Pastel Glows: Left Blue, Right Pink */}
+        <div 
+          className="absolute -left-28 sm:-left-44 top-1/2 -translate-y-1/2 w-96 sm:w-[42rem] h-96 sm:h-[42rem] rounded-full pointer-events-none opacity-0 dark:opacity-100 blur-[130px] transition-opacity duration-500 z-0"
+          style={{
+            background: 'radial-gradient(circle at center, rgba(56, 189, 248, 0.35) 0%, rgba(99, 102, 241, 0.18) 45%, transparent 75%)'
+          }}
+          aria-hidden="true"
+        />
+        <div 
+          className="absolute -right-28 sm:-right-44 top-1/2 -translate-y-1/2 w-96 sm:w-[42rem] h-96 sm:h-[42rem] rounded-full pointer-events-none opacity-0 dark:opacity-100 blur-[130px] transition-opacity duration-500 z-0"
+          style={{
+            background: 'radial-gradient(circle at center, rgba(244, 114, 182, 0.35) 0%, rgba(251, 113, 133, 0.18) 45%, transparent 75%)'
+          }}
+          aria-hidden="true"
+        />
 
-        {/* Global Search Bar */}
-        <div className="max-w-2xl mx-auto pt-0.5">
-          <form onSubmit={handleSearchSubmit} className="relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-4 h-4" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search 270+ tools (e.g. GST, SQL Formatter, SIP, JSON, Concrete, JWT...)"
-              className="w-full pl-10 pr-16 py-2.5 rounded-2xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-pastel-indigo/30 shadow-xs transition"
-            />
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
-              <kbd className="hidden sm:inline-flex items-center h-5 select-none px-1.5 font-mono text-[9px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded">
-                ⌘K
-              </kbd>
+        {/* Animated Background Ticker Rows of all 270+ tools */}
+        <HeroToolsBackground rowCount={6} />
+
+        {/* Soft Radial Backing to guarantee 100% text readability over background marquee */}
+        <div 
+          className="absolute inset-0 z-5 bg-radial from-white/95 via-white/80 to-transparent dark:from-zinc-950/95 dark:via-zinc-950/80 dark:to-transparent blur-2xl pointer-events-none"
+          aria-hidden="true" 
+        />
+
+        {/* Foreground Hero Content */}
+        <div className="relative z-10 max-w-4xl mx-auto space-y-3.5 sm:space-y-4 px-4 sm:px-6 lg:px-8 my-auto">
+          {/* Top Trust Pill */}
+          <div>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-zinc-900/90 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/50 shadow-xs backdrop-blur-sm">
+              <Sparkles className="w-3 h-3 text-indigo-500 animate-pulse" />
+              <span>✦ 270+ TOOLS • 100% FREE • ZERO SIGN-UP REQUIRED • LOCAL SANDBOX</span>
+            </span>
+          </div>
+          
+          {/* Main Heading */}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-black tracking-tight text-zinc-900 dark:text-white leading-[1.18] drop-shadow-xs">
+            Free Calculators & <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">Professional Online Tools</span>
+          </h1>
+          
+          {/* Subtitle */}
+          <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-2xl mx-auto font-semibold line-clamp-2 drop-shadow-xs">
+            Calculate, format, test, and design in lightning speed. 100% browser-based tools with zero data tracking for finance, software development, civil engineering, QA, and creators.
+          </p>
+
+          {/* Global Search Bar */}
+          <div className="max-w-2xl mx-auto pt-0.5">
+            <form onSubmit={handleSearchSubmit} className="relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-4 h-4" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search 270+ tools (e.g. GST, SQL Formatter, SIP, JSON, Concrete, JWT...)"
+                className="w-full pl-10 pr-16 py-2.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-pastel-indigo/30 shadow-sm transition"
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
+                <kbd className="hidden sm:inline-flex items-center h-5 select-none px-1.5 font-mono text-[9px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded">
+                  ⌘K
+                </kbd>
+              </div>
+            </form>
+
+            {/* Popular Search Chips (Single-line) */}
+            <div className="flex flex-wrap items-center justify-center gap-1.5 text-[10px] font-bold pt-2 text-zinc-500">
+              <span className="uppercase text-[9px] tracking-wider text-zinc-500">Popular:</span>
+              {['Building Feasibility', 'GST Invoice', 'SQL Formatter', 'SIP Planner', 'JSON Validator', 'Concrete Mix', 'JWT Decoder'].map((s, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery(s);
+                    navigate(`/tools?q=${encodeURIComponent(s)}`);
+                  }}
+                  className="px-2.5 py-0.5 rounded-lg bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xs border border-zinc-200/80 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:text-indigo-700 hover:bg-pastel-indigo/20 dark:hover:text-indigo-300 text-[10px] transition cursor-pointer shadow-2xs"
+                >
+                  {s}
+                </button>
+              ))}
             </div>
-          </form>
+          </div>
 
-          {/* Popular Search Chips (Single-line) */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5 text-[10px] font-bold pt-2 text-zinc-400">
-            <span className="uppercase text-[9px] tracking-wider text-zinc-500">Popular:</span>
-            {['Building Feasibility', 'GST Invoice', 'SQL Formatter', 'SIP Planner', 'JSON Validator', 'Concrete Mix', 'JWT Decoder'].map((s, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => {
-                  setSearchQuery(s);
-                  navigate(`/tools?q=${encodeURIComponent(s)}`);
-                }}
-                className="px-2.5 py-0.5 rounded-lg bg-white/60 dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-indigo-700 hover:bg-pastel-indigo/20 dark:hover:text-indigo-300 text-[10px] transition cursor-pointer shadow-2xs"
-              >
-                {s}
-              </button>
-            ))}
+          {/* Primary Action Buttons */}
+          <div className="flex flex-wrap justify-center gap-2.5 pt-1">
+            <Link
+              to="/tools"
+              className="px-4 py-2 rounded-2xl bg-zinc-950 hover:bg-zinc-850 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-xs shadow-md transition-all duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
+            >
+              <span>Explore All 270+ Tools</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+            <Link
+              to="/developer"
+              className="px-3.5 py-2 rounded-2xl bg-white/90 dark:bg-zinc-900/90 hover:bg-pastel-indigo/20 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/50 font-extrabold text-xs transition duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5 shadow-xs"
+            >
+              <Code className="w-3.5 h-3.5" />
+              <span>Developer Hub</span>
+            </Link>
+            <Link
+              to="/finance"
+              className="px-3.5 py-2 rounded-2xl bg-white/90 dark:bg-zinc-900/90 hover:bg-pastel-emerald/20 text-emerald-800 dark:text-emerald-300 border border-pastel-emerald/50 font-extrabold text-xs transition duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5 shadow-xs"
+            >
+              <IndianRupee className="w-3.5 h-3.5" />
+              <span>Finance Hub</span>
+            </Link>
           </div>
-        </div>
 
-        {/* Primary Action Buttons */}
-        <div className="flex flex-wrap justify-center gap-2.5 pt-1">
-          <Link
-            to="/tools"
-            className="px-4 py-2 rounded-2xl bg-zinc-950 hover:bg-zinc-850 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-xs shadow-md transition-all duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
-          >
-            <span>Explore All 270+ Tools</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-          <Link
-            to="/developer"
-            className="px-3.5 py-2 rounded-2xl bg-pastel-indigo/25 hover:bg-pastel-indigo/40 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/45 font-extrabold text-xs transition duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
-          >
-            <Code className="w-3.5 h-3.5" />
-            <span>Developer Hub</span>
-          </Link>
-          <Link
-            to="/finance"
-            className="px-3.5 py-2 rounded-2xl bg-pastel-emerald/25 hover:bg-pastel-emerald/40 text-emerald-800 dark:text-emerald-300 border border-pastel-emerald/45 font-extrabold text-xs transition duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
-          >
-            <IndianRupee className="w-3.5 h-3.5" />
-            <span>Finance Hub</span>
-          </Link>
-        </div>
-
-        {/* Compact Stats Row */}
-        <div className="pt-2 max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
-          <div className="py-2 px-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/30 backdrop-blur-xs">
-            <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-white tracking-tight">270+</div>
-            <div className="text-[9px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">Online Tools</div>
-          </div>
-          <div className="py-2 px-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/30 backdrop-blur-xs">
-            <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-white tracking-tight">19</div>
-            <div className="text-[9px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">Specialized Suites</div>
-          </div>
-          <div className="py-2 px-3 rounded-2xl border border-pastel-emerald/40 dark:border-zinc-800/80 bg-pastel-emerald/10 dark:bg-zinc-900/30 backdrop-blur-xs">
-            <div className="text-base sm:text-lg font-black text-emerald-700 dark:text-emerald-400 tracking-tight">100%</div>
-            <div className="text-[9px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">Private Sandbox</div>
-          </div>
-          <div className="py-2 px-3 rounded-2xl border border-pastel-indigo/40 dark:border-zinc-800/80 bg-pastel-indigo/10 dark:bg-zinc-900/30 backdrop-blur-xs">
-            <div className="text-base sm:text-lg font-black text-indigo-700 dark:text-indigo-400 tracking-tight">0</div>
-            <div className="text-[9px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500">Accounts Needed</div>
+          {/* Compact Stats Row */}
+          <div className="pt-2 max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+            <div className="py-2 px-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-900/80 backdrop-blur-md shadow-2xs">
+              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-white tracking-tight">270+</div>
+              <div className="text-[9px] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Online Tools</div>
+            </div>
+            <div className="py-2 px-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-900/80 backdrop-blur-md shadow-2xs">
+              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-white tracking-tight">19</div>
+              <div className="text-[9px] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Specialized Suites</div>
+            </div>
+            <div className="py-2 px-3 rounded-2xl border border-pastel-emerald/50 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-900/80 backdrop-blur-md shadow-2xs">
+              <div className="text-base sm:text-lg font-black text-emerald-700 dark:text-emerald-400 tracking-tight">100%</div>
+              <div className="text-[9px] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Private Sandbox</div>
+            </div>
+            <div className="py-2 px-3 rounded-2xl border border-pastel-indigo/50 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-900/80 backdrop-blur-md shadow-2xs">
+              <div className="text-base sm:text-lg font-black text-indigo-700 dark:text-indigo-400 tracking-tight">0</div>
+              <div className="text-[9px] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Accounts Needed</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 2: Dedicated Flagship Suites */}
-      <section className="space-y-6">
+      {/* Main Content Sections Container */}
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12 pb-16 pt-8">
+        {/* SECTION 2: Dedicated Flagship Suites */}
+        <section className="space-y-6">
         <div className="space-y-1">
           <span className="text-[10px] font-black uppercase tracking-wider text-indigo-500">Specialized Hubs</span>
           <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
@@ -724,6 +754,7 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      </div>
     </div>
   );
 }

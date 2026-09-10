@@ -40,7 +40,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "Who is eligible to collect GST in India?",
-      "answer": "Any business with an annual turnover exceeding ₹40 Lakhs (₹20 Lakhs for services and special category states) must register and collect GST."
+      "answer": "Any business with an annual turnover exceeding \u20b940 Lakhs (\u20b920 Lakhs for services and special category states) must register and collect GST."
     },
     {
       "question": "What is Input Tax Credit (ITC)?",
@@ -80,7 +80,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "Do I need an e-way bill for inter-state transport?",
-      "answer": "Yes, an e-way bill is mandatory for transporting goods worth more than ₹50,000 across state borders (and within states depending on local thresholds)."
+      "answer": "Yes, an e-way bill is mandatory for transporting goods worth more than \u20b950,000 across state borders (and within states depending on local thresholds)."
     },
     {
       "question": "Is online software delivery taxable under GST?",
@@ -88,10 +88,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     }
   ],
   "SIPCalculator": [
-    {
-      "question": "What is a Systematic Investment Plan (SIP)?",
-      "answer": "A SIP is a method of investing a fixed sum of money regularly (usually monthly) in mutual funds, helping you accumulate wealth over time."
-    },
     {
       "question": "What formula is used to calculate SIP returns?",
       "answer": "The calculator uses the standard compound interest formula for periodic payments: M = P * [((1 + i)^n - 1) / i] * (1 + i), where M is maturity, P is investment, i is monthly rate, and n is total months."
@@ -114,7 +110,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How are mutual fund returns taxed in India?",
-      "answer": "Equity funds carry a 12.5% Long-Term Capital Gains (LTCG) tax on gains above ₹1.25 Lakhs, and a 20% Short-Term Capital Gains (STCG) tax if redeemed within 1 year."
+      "answer": "Equity funds carry a 12.5% Long-Term Capital Gains (LTCG) tax on gains above \u20b91.25 Lakhs, and a 20% Short-Term Capital Gains (STCG) tax if redeemed within 1 year."
     },
     {
       "question": "What is the difference between Direct and Regular mutual funds?",
@@ -138,7 +134,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is the minimum amount required to start a SIP?",
-      "answer": "Many mutual fund houses allow starting a SIP with as little as ₹100 or ₹500 per month."
+      "answer": "Many mutual fund houses allow starting a SIP with as little as \u20b9100 or \u20b9500 per month."
     },
     {
       "question": "Should I invest in Equity or Debt mutual funds?",
@@ -212,7 +208,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "Are there tax benefits on home loan EMIs?",
-      "answer": "Yes, u/s 80C you can claim deductions on principal repayment (up to ₹1.5 Lakhs), and u/s 24(b) you can claim deductions on interest paid (up to ₹2 Lakhs) for self-occupied properties."
+      "answer": "Yes, u/s 80C you can claim deductions on principal repayment (up to \u20b91.5 Lakhs), and u/s 24(b) you can claim deductions on interest paid (up to \u20b92 Lakhs) for self-occupied properties."
     },
     {
       "question": "Can I get a loan with a low credit score?",
@@ -345,10 +341,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "How does it handle current employments?",
       "answer": "You can check the 'Currently Working Here' option, which automatically uses the current date as the end date for real-time calculations."
-    },
-    {
-      "question": "How is a month defined in experience calculations?",
-      "answer": "It counts calendar intervals. For remaining days, 30 days are averaged to form a month, and 12 months are rolled over into a full year."
     },
     {
       "question": "Why do HR departments verify exact experience?",
@@ -778,7 +770,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is the transaction limit for UPI transfers?",
-      "answer": "The standard peer-to-peer (P2P) UPI limit is ₹1 Lakh per day, though it can be higher for certified merchants depending on bank policies."
+      "answer": "The standard peer-to-peer (P2P) UPI limit is \u20b91 Lakh per day, though it can be higher for certified merchants depending on bank policies."
     },
     {
       "question": "Can I add transaction remarks?",
@@ -1563,7 +1555,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "The tool is hosted publically at Toolique. For custom integrations, contact the administrator."
     }
   ],
-
   "PercentageCalculator": [
     {
       "question": "What is the main purpose of the Percentage Calculator?",
@@ -1728,7 +1719,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "The tool is hosted publically at Toolique. For custom integrations, contact the administrator."
     }
   ],
-
   "CurrencyConverter": [
     {
       "question": "What is the main purpose of the Currency Converter?",
@@ -2444,8 +2434,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "question": "Can I host this tool on my local intranet?",
       "answer": "The tool is hosted publically at Toolique. For custom integrations, contact the administrator."
     }
-  ]
-,
+  ],
   "ConstructionCostCalculator": [
     {
       "question": "What is the Construction Cost Calculator?",
@@ -2621,7 +2610,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What are M20, M25, and M15 concrete grades?",
-      "answer": "These represent compressive strength in N/mm²: M20 has a 1:1.5:3 mix ratio, while M25 has a 1:1:2 mix ratio."
+      "answer": "These represent compressive strength in N/mm\u00b2: M20 has a 1:1.5:3 mix ratio, while M25 has a 1:1:2 mix ratio."
     },
     {
       "question": "How much water is needed per bag of cement?",
@@ -2641,11 +2630,11 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How do I calculate concrete for circular pillars?",
-      "answer": "You can calculate volume as π × R² × Height and input it as a direct volume."
+      "answer": "You can calculate volume as \u03c0 \u00d7 R\u00b2 \u00d7 Height and input it as a direct volume."
     },
     {
       "question": "What is the density of concrete?",
-      "answer": "Plain concrete (PCC) is ~2400 kg/m³, while reinforced concrete (RCC) is ~2500 kg/m³."
+      "answer": "Plain concrete (PCC) is ~2400 kg/m\u00b3, while reinforced concrete (RCC) is ~2500 kg/m\u00b3."
     },
     {
       "question": "How many bags of cement are in one cubic meter of M20?",
@@ -2698,24 +2687,12 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "A tool that estimates the number of bricks and quantity of mortar needed for masonry walls."
     },
     {
-      "question": "What is the standard brick size in India?",
-      "answer": "Modular brick size is 190mm x 90mm x 90mm, while traditional bricks are 9\" x 4.5\" x 3\"."
-    },
-    {
       "question": "How does mortar thickness affect brick count?",
       "answer": "A standard mortar joint of 10mm (0.4 inches) is included, which reduces the raw number of bricks needed."
     },
     {
       "question": "What is a 9-inch wall and a 4.5-inch wall?",
       "answer": "9-inch walls are external load-bearing walls (double layer); 4.5-inch walls are partition walls (single layer)."
-    },
-    {
-      "question": "What mortar ratio is recommended for partition walls?",
-      "answer": "A 1:4 mix ratio (1 part cement to 4 parts sand) is recommended for 4.5\" partition walls."
-    },
-    {
-      "question": "What mortar ratio is recommended for load-bearing walls?",
-      "answer": "A 1:6 mix ratio is standard for 9\" thick structural external walls."
     },
     {
       "question": "How much dry volume multiplier is used for mortar?",
@@ -2863,15 +2840,15 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is the formula for TMT bar weight per meter?",
-      "answer": "The formula is Weight = D² / 162, where D is the diameter of the bar in millimeters."
+      "answer": "The formula is Weight = D\u00b2 / 162, where D is the diameter of the bar in millimeters."
     },
     {
       "question": "How is the weight of steel flats calculated?",
-      "answer": "Weight = Width (mm) × Thickness (mm) × Length (m) × 0.00785."
+      "answer": "Weight = Width (mm) \u00d7 Thickness (mm) \u00d7 Length (m) \u00d7 0.00785."
     },
     {
       "question": "What is the density of structural steel?",
-      "answer": "The density is 7.85 g/cm³ or 7850 kg/m³."
+      "answer": "The density is 7.85 g/cm\u00b3 or 7850 kg/m\u00b3."
     },
     {
       "question": "Can I calculate the weight of hollow pipes?",
@@ -2883,7 +2860,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How is the weight of steel angles calculated?",
-      "answer": "Weight = (Leg 1 + Leg 2 - Thickness) × Thickness × Length × 0.00785."
+      "answer": "Weight = (Leg 1 + Leg 2 - Thickness) \u00d7 Thickness \u00d7 Length \u00d7 0.00785."
     },
     {
       "question": "What is the standard length of a TMT bar?",
@@ -2895,7 +2872,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is the formula for weight per foot?",
-      "answer": "The weight per foot of TMT steel bars is computed as D² / 533."
+      "answer": "The weight per foot of TMT steel bars is computed as D\u00b2 / 533."
     },
     {
       "question": "What is MS Channel weight calculation?",
@@ -2903,7 +2880,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "Is there any difference between thermo-mechanically treated (TMT) and mild steel weight?",
-      "answer": "No, both have the same chemical density of 7850 kg/m³, so their weights are identical."
+      "answer": "No, both have the same chemical density of 7850 kg/m\u00b3, so their weights are identical."
     },
     {
       "question": "Who uses this steel weight tool?",
@@ -2944,12 +2921,8 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "An estimator for concrete volume, shuttering perimeter, and main steel rebar weights for vertical columns."
     },
     {
-      "question": "What size of columns is standard for G+1 houses?",
-      "answer": "A column size of 9\" x 12\" (230mm x 300mm) with 4 bars of 12mm is common in India."
-    },
-    {
       "question": "How is column concrete volume calculated?",
-      "answer": "Volume = Width × Depth × Height of the column."
+      "answer": "Volume = Width \u00d7 Depth \u00d7 Height of the column."
     },
     {
       "question": "What is the recommended concrete grade for columns?",
@@ -2957,7 +2930,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How is shuttering area computed for columns?",
-      "answer": "Shuttering Area = Perimeter of column (2 × (Width + Depth)) × Height."
+      "answer": "Shuttering Area = Perimeter of column (2 \u00d7 (Width + Depth)) \u00d7 Height."
     },
     {
       "question": "What is the role of stirrups (lateral ties)?",
@@ -3117,7 +3090,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How is soil excavation volume calculated?",
-      "answer": "Excavation Volume = Length × Width × Excavation Depth of the pit."
+      "answer": "Excavation Volume = Length \u00d7 Width \u00d7 Excavation Depth of the pit."
     },
     {
       "question": "Which concrete mix is used for footing bases?",
@@ -3281,7 +3254,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is the ideal angle of a staircase?",
-      "answer": "Stair angles should ideally be between 30° and 38°. Angles above 42° are too steep."
+      "answer": "Stair angles should ideally be between 30\u00b0 and 38\u00b0. Angles above 42\u00b0 are too steep."
     },
     {
       "question": "How is number of risers calculated?",
@@ -3293,7 +3266,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is the standard rule for stair comfort?",
-      "answer": "The standard rule of thumb is: 2 × Riser + Tread = 24 to 25 inches (60 to 64 cm)."
+      "answer": "The standard rule of thumb is: 2 \u00d7 Riser + Tread = 24 to 25 inches (60 to 64 cm)."
     },
     {
       "question": "Does this tool calculate L-shaped stairs?",
@@ -3309,7 +3282,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How is the horizontal run calculated?",
-      "answer": "Total Horizontal Run = Number of Treads × Tread Depth."
+      "answer": "Total Horizontal Run = Number of Treads \u00d7 Tread Depth."
     },
     {
       "question": "Does this tool support metric units?",
@@ -3690,10 +3663,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "If your wallpaper has a repeating pattern, you must align adjacent strips, creating cut waste."
     },
     {
-      "question": "How is wallpaper waste estimated?",
-      "answer": "Pattern repeats (e.g. 12\" or 18\" repeats) add a 10-15% wastage markup, while solid colors add only 5-8%."
-    },
-    {
       "question": "Can I calculate custom roll sizes?",
       "answer": "Yes, select 'Custom Size' and enter length and width parameters manually."
     },
@@ -3765,11 +3734,11 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How much does vitrified tile installation cost?",
-      "answer": "Vitrified tiles cost around ₹60-100/sq ft for materials, and ₹20-30/sq ft for installation labor."
+      "answer": "Vitrified tiles cost around \u20b960-100/sq ft for materials, and \u20b920-30/sq ft for installation labor."
     },
     {
       "question": "Why is Italian marble labor cost high?",
-      "answer": "Because it requires heavy backing mortar, diamond polishing, and skilled craftsmen (labor is ₹100-150/sq ft)."
+      "answer": "Because it requires heavy backing mortar, diamond polishing, and skilled craftsmen (labor is \u20b9100-150/sq ft)."
     },
     {
       "question": "What is the flooring wastage factor?",
@@ -3785,7 +3754,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is laminate wooden flooring?",
-      "answer": "Multi-layer synthetic wood tiles laminated together, costing ~₹100/sq ft for materials."
+      "answer": "Multi-layer synthetic wood tiles laminated together, costing ~\u20b9100/sq ft for materials."
     },
     {
       "question": "What is vitrified flooring?",
@@ -3825,7 +3794,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is granite flooring cost?",
-      "answer": "Granite materials cost around ₹120-250/sq ft, with labor costing ₹50-80/sq ft."
+      "answer": "Granite materials cost around \u20b9120-250/sq ft, with labor costing \u20b950-80/sq ft."
     },
     {
       "question": "Can I use this for outdoor paving?",
@@ -3847,7 +3816,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How much does a gypsum board ceiling cost?",
-      "answer": "Standard gypsum ceilings cost between ₹80 and ₹110 per square foot including labor."
+      "answer": "Standard gypsum ceilings cost between \u20b980 and \u20b9110 per square foot including labor."
     },
     {
       "question": "What is cove lighting?",
@@ -3899,7 +3868,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "Why is wooden ceiling expensive?",
-      "answer": "Wooden paneling requires MDF/veneer sheets and polishing, costing ₹200-300/sq ft."
+      "answer": "Wooden paneling requires MDF/veneer sheets and polishing, costing \u20b9200-300/sq ft."
     },
     {
       "question": "Is standard height factored in?",
@@ -3929,7 +3898,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is the standard price of a modular kitchen?",
-      "answer": "A standard L-shape acrylic kitchen costs between ₹1.5 Lakhs and ₹2.5 Lakhs depending on fittings."
+      "answer": "A standard L-shape acrylic kitchen costs between \u20b91.5 Lakhs and \u20b92.5 Lakhs depending on fittings."
     },
     {
       "question": "How are kitchen dimensions measured?",
@@ -4015,7 +3984,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How is wardrobe area calculated?",
-      "answer": "Area = Width × Height of the wardrobe facing facade."
+      "answer": "Area = Width \u00d7 Height of the wardrobe facing facade."
     },
     {
       "question": "What is standard depth of a wardrobe?",
@@ -4110,62 +4079,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
       "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Merge tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Merge processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     }
   ],
   "PDFSplit": [
@@ -4188,62 +4101,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "What formats does PDF Split support?",
       "answer": "It is optimized for standard documents, spreadsheets, slides, and images, processing files like .pdf, .docx, .xlsx, .pptx, .png, and .jpeg depending on the action."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Split tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Split processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     },
     {
       "question": "Does the PDF Split tool support batch mode operations or bulk files?",
@@ -4274,62 +4131,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
       "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Compressor tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Compressor processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     }
   ],
   "PDFPageRemover": [
@@ -4352,62 +4153,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "What formats does PDF Page Remover support?",
       "answer": "It is optimized for standard documents, spreadsheets, slides, and images, processing files like .pdf, .docx, .xlsx, .pptx, .png, and .jpeg depending on the action."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Remover processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     },
     {
       "question": "Does the PDF Page Remover tool support batch mode operations or bulk files?",
@@ -4438,62 +4183,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
       "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Reorder tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Reorder processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     }
   ],
   "PDFRotate": [
@@ -4516,62 +4205,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "What formats does PDF Rotate support?",
       "answer": "It is optimized for standard documents, spreadsheets, slides, and images, processing files like .pdf, .docx, .xlsx, .pptx, .png, and .jpeg depending on the action."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Rotate processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     },
     {
       "question": "Does the PDF Rotate tool support batch mode operations or bulk files?",
@@ -4602,62 +4235,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
       "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Password Protect tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Password Protect processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     }
   ],
   "PDFUnlock": [
@@ -4680,62 +4257,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "What formats does PDF Unlock support?",
       "answer": "It is optimized for standard documents, spreadsheets, slides, and images, processing files like .pdf, .docx, .xlsx, .pptx, .png, and .jpeg depending on the action."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Unlock processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     },
     {
       "question": "Does the PDF Unlock tool support batch mode operations or bulk files?",
@@ -4766,62 +4287,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
       "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Watermark tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Watermark processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     }
   ],
   "PDFPageNumbering": [
@@ -4844,62 +4309,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "What formats does PDF Page Numbering support?",
       "answer": "It is optimized for standard documents, spreadsheets, slides, and images, processing files like .pdf, .docx, .xlsx, .pptx, .png, and .jpeg depending on the action."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Page Numbering processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     },
     {
       "question": "Does the PDF Page Numbering tool support batch mode operations or bulk files?",
@@ -4930,62 +4339,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
       "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Extract Text From PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Extract Text From PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     }
   ],
   "PDFMetadataViewer": [
@@ -5008,62 +4361,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "What formats does PDF Metadata Viewer support?",
       "answer": "It is optimized for standard documents, spreadsheets, slides, and images, processing files like .pdf, .docx, .xlsx, .pptx, .png, and .jpeg depending on the action."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     },
     {
       "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
@@ -5094,62 +4391,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
       "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PDF to Word tool support batch mode operations or bulk files?",
-      "answer": "Currently, PDF to Word processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     }
   ],
   "WordToPDF": [
@@ -5172,62 +4413,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "What formats does Word to PDF support?",
       "answer": "It is optimized for standard documents, spreadsheets, slides, and images, processing files like .pdf, .docx, .xlsx, .pptx, .png, and .jpeg depending on the action."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Word to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     },
     {
       "question": "Does the Word to PDF tool support batch mode operations or bulk files?",
@@ -5258,62 +4443,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
       "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the Excel to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, Excel to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     }
   ],
   "PowerPointToPDF": [
@@ -5336,62 +4465,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "What formats does PowerPoint to PDF support?",
       "answer": "It is optimized for standard documents, spreadsheets, slides, and images, processing files like .pdf, .docx, .xlsx, .pptx, .png, and .jpeg depending on the action."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
-    },
-    {
-      "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
-      "answer": "Currently, PowerPoint to PDF processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
     },
     {
       "question": "Does the PowerPoint to PDF tool support batch mode operations or bulk files?",
@@ -6179,7 +5252,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What resistivity values are assumed in the calculator?",
-      "answer": "We assume standard electrical resistivity at 70°C: Copper is 0.0193 Ohm.mm²/m and Aluminum is 0.0310 Ohm.mm²/m."
+      "answer": "We assume standard electrical resistivity at 70\u00b0C: Copper is 0.0193 Ohm.mm\u00b2/m and Aluminum is 0.0310 Ohm.mm\u00b2/m."
     },
     {
       "question": "What is reactance in AC cables?",
@@ -6211,7 +5284,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "Does temperature affect voltage drop?",
-      "answer": "Yes, conductor resistance increases with temperature. This calculator uses standard resistivity constants evaluated at 70°C for safety margins."
+      "answer": "Yes, conductor resistance increases with temperature. This calculator uses standard resistivity constants evaluated at 70\u00b0C for safety margins."
     },
     {
       "question": "Is this calculator free to use?",
@@ -6221,7 +5294,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
   "CableSizeCalculator": [
     {
       "question": "What is the purpose of the Cable Size Calculator?",
-      "answer": "It determines the smallest conductor size (in mm²) required to safely carry the electrical load current while keeping voltage drop within allowable limits."
+      "answer": "It determines the smallest conductor size (in mm\u00b2) required to safely carry the electrical load current while keeping voltage drop within allowable limits."
     },
     {
       "question": "How does the calculator determine cable size?",
@@ -6237,7 +5310,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is the difference between PVC and XLPE insulation?",
-      "answer": "PVC insulation has a maximum operating temperature of 70°C. XLPE can withstand up to 90°C, which allows XLPE-insulated cables to carry higher currents."
+      "answer": "PVC insulation has a maximum operating temperature of 70\u00b0C. XLPE can withstand up to 90\u00b0C, which allows XLPE-insulated cables to carry higher currents."
     },
     {
       "question": "Does the calculator support Aluminum conductors?",
@@ -6265,7 +5338,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What are standard cable sizes available in the calculator?",
-      "answer": "The calculator references standard metric sizes: 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240, and 300 mm²."
+      "answer": "The calculator references standard metric sizes: 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240, and 300 mm\u00b2."
     },
     {
       "question": "Why does the calculator recommend a larger cable for longer runs?",
@@ -6284,7 +5357,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "It is a multiplier applied to standard ampacity to account for thermal factors, such as high ambient temperatures or crowded conduits."
     },
     {
-      "question": "What happens if the required current exceeds 300 mm²?",
+      "question": "What happens if the required current exceeds 300 mm\u00b2?",
       "answer": "The tool will display a warning warning that the load exceeds standard single-cable limits, suggesting parallel cables."
     },
     {
@@ -6397,11 +5470,11 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How is the electricity cost calculated?",
-      "answer": "Cost = Energy (kWh) * Tariff Rate (₹/kWh)."
+      "answer": "Cost = Energy (kWh) * Tariff Rate (\u20b9/kWh)."
     },
     {
       "question": "What is a standard electricity tariff rate in India?",
-      "answer": "Tariff rates vary by state and slab, typically ranging from ₹5 to ₹10 per unit (kWh). The default rate is set to ₹7."
+      "answer": "Tariff rates vary by state and slab, typically ranging from \u20b95 to \u20b910 per unit (kWh). The default rate is set to \u20b97."
     },
     {
       "question": "Can I calculate monthly electricity bills here?",
@@ -6429,7 +5502,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "Can I calculate the cost of charging my phone?",
-      "answer": "Yes, a mobile charger consumes only about 5W to 15W. Charging for 2 hours daily costs less than ₹1 per month."
+      "answer": "Yes, a mobile charger consumes only about 5W to 15W. Charging for 2 hours daily costs less than \u20b91 per month."
     },
     {
       "question": "Does it support custom wattage input?",
@@ -6461,7 +5534,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "Does it support other currencies?",
-      "answer": "The calculations are numeric, so while formatted with a Rupee symbol (₹), they apply to any currency unit."
+      "answer": "The calculations are numeric, so while formatted with a Rupee symbol (\u20b9), they apply to any currency unit."
     }
   ],
   "UPSCalculator": [
@@ -6557,7 +5630,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What are peak sun hours?",
-      "answer": "Peak sun hours represent the average daily hours where solar irradiance is equivalent to 1kW/m² (usually 4.0 to 5.5 hours in India)."
+      "answer": "Peak sun hours represent the average daily hours where solar irradiance is equivalent to 1kW/m\u00b2 (usually 4.0 to 5.5 hours in India)."
     },
     {
       "question": "How many panels are needed for a 3kW system?",
@@ -6565,7 +5638,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How much roof space is needed per kW of solar?",
-      "answer": "A standard 1kW rooftop system requires about 80 to 100 square feet (approx 8-10 m²) of unshaded space."
+      "answer": "A standard 1kW rooftop system requires about 80 to 100 square feet (approx 8-10 m\u00b2) of unshaded space."
     },
     {
       "question": "Why is system efficiency set to 75%?",
@@ -6598,30 +5671,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "What is net metering?",
       "answer": "Net metering is a billing mechanism that credits solar system owners for the electricity they feed back into the utility grid."
-    },
-    {
-      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
     },
     {
       "question": "Why is the SolarPanelCalculator important for electrical design calculations?",
@@ -6660,50 +5709,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "How do I calculate backup time for multiple batteries?",
       "answer": "For series: Voltage increases, Ah remains same (e.g. two 12V 150Ah = 24V 150Ah). For parallel: Ah increases, voltage remains same (two 12V 150Ah = 12V 300Ah). Calculate accordingly."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
     },
     {
       "question": "Why is the BatteryBackupCalculator important for electrical design calculations?",
@@ -6754,42 +5759,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Why is the kWToHPConverter important for electrical design calculations?",
       "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the kWToHPConverter important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the kWToHPConverter important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the kWToHPConverter important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the kWToHPConverter important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the kWToHPConverter important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the kWToHPConverter important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the kWToHPConverter important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the kWToHPConverter important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the kWToHPConverter important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
     }
   ],
   "TransformerCalculator": [
@@ -6828,50 +5797,6 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Why is the TransformerCalculator important for electrical design calculations?",
       "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the TransformerCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
     }
   ],
   "LEDLightingCalculator": [
@@ -6881,7 +5806,7 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "How is total lumens calculated?",
-      "answer": "Total Lumens = (Target Lux * Area in m²) / (Utilization Factor * Maintenance Factor)."
+      "answer": "Total Lumens = (Target Lux * Area in m\u00b2) / (Utilization Factor * Maintenance Factor)."
     },
     {
       "question": "What is Lux?",
@@ -6910,3249 +5835,84 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
       "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
-    },
-    {
-      "question": "Why is the LEDLightingCalculator important for electrical design calculations?",
-      "answer": "Using this calculator ensures standard electrical safety, prevents equipment failure, and optimizes costs for cable, battery, or transformer equipment."
     }
   ],
   "FilamentCostCalculator": [
-    {
-        "question": "Question 1 about Filament Cost Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Filament Cost Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Filament Cost Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Filament Cost Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Filament Cost Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Filament Cost Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Filament Cost Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Filament Cost Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Filament Cost Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Filament Cost Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Filament Cost Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Filament Cost Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Filament Cost Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Filament Cost Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Filament Cost Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Filament Cost Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Filament Cost Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Filament Cost Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Filament Cost Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Filament Cost Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Filament Cost Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Filament Cost Calculator calculations."
-    }
-],
+  ],
   "ThreeDPrintingCostCalculator": [
-    {
-        "question": "Question 1 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 2 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 3 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 4 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 5 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 6 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 7 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 8 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 9 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 10 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 11 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 12 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 13 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 14 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 15 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 16 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 17 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 18 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 19 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for 3D Printing Cost Calculator calculations."
-    },
-    {
-        "question": "Question 20 about 3D Printing Cost Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for 3D Printing Cost Calculator calculations."
-    }
-],
+  ],
   "PrintProfitCalculator": [
-    {
-        "question": "Question 1 about Print Profit Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Print Profit Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Print Profit Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Print Profit Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Print Profit Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Print Profit Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Print Profit Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Print Profit Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Print Profit Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Print Profit Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Print Profit Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Print Profit Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Print Profit Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Print Profit Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Print Profit Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Print Profit Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Print Profit Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Print Profit Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Print Profit Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Print Profit Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Print Profit Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Print Profit Calculator calculations."
-    }
-],
+  ],
   "PrintFarmRevenueCalculator": [
-    {
-        "question": "Question 1 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Print Farm Revenue Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Print Farm Revenue Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Print Farm Revenue Calculator calculations."
-    }
-],
+  ],
   "FilamentWeightCalculator": [
-    {
-        "question": "Question 1 about Filament Weight Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Filament Weight Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Filament Weight Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Filament Weight Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Filament Weight Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Filament Weight Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Filament Weight Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Filament Weight Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Filament Weight Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Filament Weight Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Filament Weight Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Filament Weight Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Filament Weight Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Filament Weight Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Filament Weight Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Filament Weight Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Filament Weight Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Filament Weight Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Filament Weight Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Filament Weight Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Filament Weight Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Filament Weight Calculator calculations."
-    }
-],
+  ],
   "FilamentUsageCalculator": [
-    {
-        "question": "Question 1 about Filament Usage Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Filament Usage Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Filament Usage Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Filament Usage Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Filament Usage Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Filament Usage Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Filament Usage Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Filament Usage Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Filament Usage Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Filament Usage Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Filament Usage Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Filament Usage Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Filament Usage Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Filament Usage Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Filament Usage Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Filament Usage Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Filament Usage Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Filament Usage Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Filament Usage Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Filament Usage Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Filament Usage Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Filament Usage Calculator calculations."
-    }
-],
+  ],
   "RemainingFilamentCalculator": [
-    {
-        "question": "Question 1 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Remaining Filament Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Remaining Filament Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Remaining Filament Calculator calculations."
-    }
-],
+  ],
   "MaterialCostComparison": [
-    {
-        "question": "Question 1 about Material Cost Comparison?",
-        "answer": "This is the answer number 1 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 2 about Material Cost Comparison?",
-        "answer": "This is the answer number 2 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 3 about Material Cost Comparison?",
-        "answer": "This is the answer number 3 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 4 about Material Cost Comparison?",
-        "answer": "This is the answer number 4 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 5 about Material Cost Comparison?",
-        "answer": "This is the answer number 5 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 6 about Material Cost Comparison?",
-        "answer": "This is the answer number 6 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 7 about Material Cost Comparison?",
-        "answer": "This is the answer number 7 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 8 about Material Cost Comparison?",
-        "answer": "This is the answer number 8 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 9 about Material Cost Comparison?",
-        "answer": "This is the answer number 9 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 10 about Material Cost Comparison?",
-        "answer": "This is the answer number 10 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 11 about Material Cost Comparison?",
-        "answer": "This is the answer number 11 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 12 about Material Cost Comparison?",
-        "answer": "This is the answer number 12 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 13 about Material Cost Comparison?",
-        "answer": "This is the answer number 13 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 14 about Material Cost Comparison?",
-        "answer": "This is the answer number 14 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 15 about Material Cost Comparison?",
-        "answer": "This is the answer number 15 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 16 about Material Cost Comparison?",
-        "answer": "This is the answer number 16 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 17 about Material Cost Comparison?",
-        "answer": "This is the answer number 17 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 18 about Material Cost Comparison?",
-        "answer": "This is the answer number 18 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 19 about Material Cost Comparison?",
-        "answer": "This is the answer number 19 clarifying specifications for Material Cost Comparison calculations."
-    },
-    {
-        "question": "Question 20 about Material Cost Comparison?",
-        "answer": "This is the answer number 20 clarifying specifications for Material Cost Comparison calculations."
-    }
-],
+  ],
   "PrintTimeEstimator": [
-    {
-        "question": "Question 1 about Print Time Estimator?",
-        "answer": "This is the answer number 1 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 2 about Print Time Estimator?",
-        "answer": "This is the answer number 2 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 3 about Print Time Estimator?",
-        "answer": "This is the answer number 3 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 4 about Print Time Estimator?",
-        "answer": "This is the answer number 4 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 5 about Print Time Estimator?",
-        "answer": "This is the answer number 5 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 6 about Print Time Estimator?",
-        "answer": "This is the answer number 6 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 7 about Print Time Estimator?",
-        "answer": "This is the answer number 7 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 8 about Print Time Estimator?",
-        "answer": "This is the answer number 8 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 9 about Print Time Estimator?",
-        "answer": "This is the answer number 9 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 10 about Print Time Estimator?",
-        "answer": "This is the answer number 10 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 11 about Print Time Estimator?",
-        "answer": "This is the answer number 11 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 12 about Print Time Estimator?",
-        "answer": "This is the answer number 12 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 13 about Print Time Estimator?",
-        "answer": "This is the answer number 13 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 14 about Print Time Estimator?",
-        "answer": "This is the answer number 14 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 15 about Print Time Estimator?",
-        "answer": "This is the answer number 15 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 16 about Print Time Estimator?",
-        "answer": "This is the answer number 16 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 17 about Print Time Estimator?",
-        "answer": "This is the answer number 17 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 18 about Print Time Estimator?",
-        "answer": "This is the answer number 18 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 19 about Print Time Estimator?",
-        "answer": "This is the answer number 19 clarifying specifications for Print Time Estimator calculations."
-    },
-    {
-        "question": "Question 20 about Print Time Estimator?",
-        "answer": "This is the answer number 20 clarifying specifications for Print Time Estimator calculations."
-    }
-],
+  ],
   "LayerHeightCalculator": [
-    {
-        "question": "Question 1 about Layer Height Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Layer Height Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Layer Height Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Layer Height Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Layer Height Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Layer Height Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Layer Height Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Layer Height Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Layer Height Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Layer Height Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Layer Height Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Layer Height Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Layer Height Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Layer Height Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Layer Height Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Layer Height Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Layer Height Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Layer Height Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Layer Height Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Layer Height Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Layer Height Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Layer Height Calculator calculations."
-    }
-],
+  ],
   "PrintSpeedCalculator": [
-    {
-        "question": "Question 1 about Print Speed Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Print Speed Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Print Speed Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Print Speed Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Print Speed Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Print Speed Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Print Speed Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Print Speed Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Print Speed Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Print Speed Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Print Speed Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Print Speed Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Print Speed Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Print Speed Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Print Speed Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Print Speed Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Print Speed Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Print Speed Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Print Speed Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Print Speed Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Print Speed Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Print Speed Calculator calculations."
-    }
-],
+  ],
   "NozzleFlowCalculator": [
-    {
-        "question": "Question 1 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Nozzle Flow Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Nozzle Flow Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Nozzle Flow Calculator calculations."
-    }
-],
+  ],
   "VolumetricFlowCalculator": [
-    {
-        "question": "Question 1 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Volumetric Flow Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Volumetric Flow Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Volumetric Flow Calculator calculations."
-    }
-],
+  ],
   "CoolingFanRecommendation": [
-    {
-        "question": "Question 1 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 1 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 2 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 2 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 3 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 3 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 4 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 4 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 5 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 5 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 6 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 6 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 7 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 7 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 8 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 8 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 9 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 9 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 10 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 10 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 11 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 11 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 12 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 12 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 13 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 13 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 14 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 14 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 15 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 15 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 16 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 16 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 17 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 17 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 18 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 18 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 19 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 19 clarifying specifications for Cooling Fan Recommendation calculations."
-    },
-    {
-        "question": "Question 20 about Cooling Fan Recommendation?",
-        "answer": "This is the answer number 20 clarifying specifications for Cooling Fan Recommendation calculations."
-    }
-],
+  ],
   "NozzleSizeComparison": [
-    {
-        "question": "Question 1 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 1 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 2 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 2 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 3 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 3 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 4 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 4 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 5 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 5 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 6 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 6 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 7 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 7 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 8 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 8 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 9 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 9 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 10 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 10 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 11 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 11 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 12 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 12 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 13 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 13 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 14 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 14 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 15 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 15 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 16 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 16 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 17 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 17 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 18 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 18 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 19 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 19 clarifying specifications for Nozzle Size Comparison calculations."
-    },
-    {
-        "question": "Question 20 about Nozzle Size Comparison?",
-        "answer": "This is the answer number 20 clarifying specifications for Nozzle Size Comparison calculations."
-    }
-],
+  ],
   "LineWidthCalculator": [
-    {
-        "question": "Question 1 about Line Width Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Line Width Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Line Width Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Line Width Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Line Width Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Line Width Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Line Width Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Line Width Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Line Width Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Line Width Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Line Width Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Line Width Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Line Width Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Line Width Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Line Width Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Line Width Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Line Width Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Line Width Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Line Width Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Line Width Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Line Width Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Line Width Calculator calculations."
-    }
-],
+  ],
   "LayerWidthCalculator": [
-    {
-        "question": "Question 1 about Layer Width Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Layer Width Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Layer Width Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Layer Width Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Layer Width Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Layer Width Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Layer Width Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Layer Width Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Layer Width Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Layer Width Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Layer Width Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Layer Width Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Layer Width Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Layer Width Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Layer Width Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Layer Width Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Layer Width Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Layer Width Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Layer Width Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Layer Width Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Layer Width Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Layer Width Calculator calculations."
-    }
-],
+  ],
   "STLVolumeCalculator": [
-    {
-        "question": "Question 1 about STL Volume Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 2 about STL Volume Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 3 about STL Volume Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 4 about STL Volume Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 5 about STL Volume Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 6 about STL Volume Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 7 about STL Volume Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 8 about STL Volume Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 9 about STL Volume Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 10 about STL Volume Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 11 about STL Volume Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 12 about STL Volume Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 13 about STL Volume Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 14 about STL Volume Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 15 about STL Volume Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 16 about STL Volume Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 17 about STL Volume Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 18 about STL Volume Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 19 about STL Volume Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for STL Volume Calculator calculations."
-    },
-    {
-        "question": "Question 20 about STL Volume Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for STL Volume Calculator calculations."
-    }
-],
+  ],
   "STLBoundingBoxCalculator": [
-    {
-        "question": "Question 1 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 2 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 3 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 4 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 5 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 6 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 7 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 8 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 9 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 10 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 11 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 12 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 13 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 14 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 15 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 16 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 17 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 18 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 19 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for STL Bounding Box Calculator calculations."
-    },
-    {
-        "question": "Question 20 about STL Bounding Box Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for STL Bounding Box Calculator calculations."
-    }
-],
+  ],
   "ScaleCalculator": [
-    {
-        "question": "Question 1 about Scale Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Scale Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Scale Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Scale Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Scale Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Scale Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Scale Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Scale Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Scale Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Scale Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Scale Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Scale Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Scale Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Scale Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Scale Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Scale Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Scale Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Scale Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Scale Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Scale Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Scale Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Scale Calculator calculations."
-    }
-],
+  ],
   "ModelWeightCalculator": [
-    {
-        "question": "Question 1 about Model Weight Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Model Weight Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Model Weight Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Model Weight Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Model Weight Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Model Weight Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Model Weight Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Model Weight Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Model Weight Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Model Weight Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Model Weight Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Model Weight Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Model Weight Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Model Weight Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Model Weight Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Model Weight Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Model Weight Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Model Weight Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Model Weight Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Model Weight Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Model Weight Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Model Weight Calculator calculations."
-    }
-],
+  ],
   "ResinCostCalculator": [
-    {
-        "question": "Question 1 about Resin Cost Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Resin Cost Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Resin Cost Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Resin Cost Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Resin Cost Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Resin Cost Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Resin Cost Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Resin Cost Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Resin Cost Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Resin Cost Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Resin Cost Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Resin Cost Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Resin Cost Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Resin Cost Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Resin Cost Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Resin Cost Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Resin Cost Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Resin Cost Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Resin Cost Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Resin Cost Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Resin Cost Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Resin Cost Calculator calculations."
-    }
-],
+  ],
   "ResinVolumeCalculator": [
-    {
-        "question": "Question 1 about Resin Volume Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Resin Volume Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Resin Volume Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Resin Volume Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Resin Volume Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Resin Volume Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Resin Volume Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Resin Volume Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Resin Volume Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Resin Volume Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Resin Volume Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Resin Volume Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Resin Volume Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Resin Volume Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Resin Volume Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Resin Volume Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Resin Volume Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Resin Volume Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Resin Volume Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Resin Volume Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Resin Volume Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Resin Volume Calculator calculations."
-    }
-],
+  ],
   "ExposureTimeHelper": [
-    {
-        "question": "Question 1 about Exposure Time Helper?",
-        "answer": "This is the answer number 1 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 2 about Exposure Time Helper?",
-        "answer": "This is the answer number 2 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 3 about Exposure Time Helper?",
-        "answer": "This is the answer number 3 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 4 about Exposure Time Helper?",
-        "answer": "This is the answer number 4 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 5 about Exposure Time Helper?",
-        "answer": "This is the answer number 5 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 6 about Exposure Time Helper?",
-        "answer": "This is the answer number 6 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 7 about Exposure Time Helper?",
-        "answer": "This is the answer number 7 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 8 about Exposure Time Helper?",
-        "answer": "This is the answer number 8 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 9 about Exposure Time Helper?",
-        "answer": "This is the answer number 9 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 10 about Exposure Time Helper?",
-        "answer": "This is the answer number 10 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 11 about Exposure Time Helper?",
-        "answer": "This is the answer number 11 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 12 about Exposure Time Helper?",
-        "answer": "This is the answer number 12 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 13 about Exposure Time Helper?",
-        "answer": "This is the answer number 13 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 14 about Exposure Time Helper?",
-        "answer": "This is the answer number 14 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 15 about Exposure Time Helper?",
-        "answer": "This is the answer number 15 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 16 about Exposure Time Helper?",
-        "answer": "This is the answer number 16 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 17 about Exposure Time Helper?",
-        "answer": "This is the answer number 17 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 18 about Exposure Time Helper?",
-        "answer": "This is the answer number 18 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 19 about Exposure Time Helper?",
-        "answer": "This is the answer number 19 clarifying specifications for Exposure Time Helper calculations."
-    },
-    {
-        "question": "Question 20 about Exposure Time Helper?",
-        "answer": "This is the answer number 20 clarifying specifications for Exposure Time Helper calculations."
-    }
-],
+  ],
   "ElectricityCostCalculator": [
-    {
-        "question": "Question 1 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Electricity Cost Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Electricity Cost Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Electricity Cost Calculator calculations."
-    }
-],
+  ],
   "PackagingCostCalculator": [
-    {
-        "question": "Question 1 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Packaging Cost Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Packaging Cost Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Packaging Cost Calculator calculations."
-    }
-],
+  ],
   "ShippingCostCalculator": [
-    {
-        "question": "Question 1 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Shipping Cost Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Shipping Cost Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Shipping Cost Calculator calculations."
-    }
-],
+  ],
   "MachineUtilizationCalculator": [
-    {
-        "question": "Question 1 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Machine Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Machine Utilization Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Machine Utilization Calculator calculations."
-    }
-],
+  ],
   "MonthlyProductionCalculator": [
-    {
-        "question": "Question 1 about Monthly Production Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Monthly Production Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Monthly Production Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Monthly Production Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Monthly Production Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Monthly Production Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Monthly Production Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Monthly Production Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Monthly Production Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Monthly Production Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Monthly Production Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Monthly Production Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Monthly Production Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Monthly Production Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Monthly Production Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Monthly Production Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Monthly Production Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Monthly Production Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Monthly Production Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Monthly Production Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Monthly Production Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Monthly Production Calculator calculations."
-    }
-],
+  ],
   "PrintQueueTimeCalculator": [
-    {
-        "question": "Question 1 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Print Queue Time Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Print Queue Time Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Print Queue Time Calculator calculations."
-    }
-],
+  ],
   "HueForgeFilamentCalculator": [
-    {
-        "question": "Question 1 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 2 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 3 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 4 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 5 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 6 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 7 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 8 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 9 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 10 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 11 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 12 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 13 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 14 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 15 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 16 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 17 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 18 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 19 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for HueForge Filament Calculator calculations."
-    },
-    {
-        "question": "Question 20 about HueForge Filament Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for HueForge Filament Calculator calculations."
-    }
-],
+  ],
   "HueForgeLayerCalculator": [
-    {
-        "question": "Question 1 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 2 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 3 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 4 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 5 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 6 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 7 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 8 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 9 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 10 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 11 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 12 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 13 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 14 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 15 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 16 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 17 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 18 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 19 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for HueForge Layer Calculator calculations."
-    },
-    {
-        "question": "Question 20 about HueForge Layer Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for HueForge Layer Calculator calculations."
-    }
-],
+  ],
   "HueForgeColorSwapPlanner": [
-    {
-        "question": "Question 1 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 1 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 2 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 2 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 3 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 3 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 4 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 4 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 5 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 5 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 6 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 6 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 7 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 7 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 8 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 8 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 9 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 9 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 10 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 10 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 11 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 11 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 12 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 12 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 13 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 13 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 14 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 14 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 15 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 15 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 16 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 16 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 17 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 17 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 18 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 18 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 19 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 19 clarifying specifications for HueForge Color Swap Planner calculations."
-    },
-    {
-        "question": "Question 20 about HueForge Color Swap Planner?",
-        "answer": "This is the answer number 20 clarifying specifications for HueForge Color Swap Planner calculations."
-    }
-],
+  ],
   "AMSFilamentPlanner": [
-    {
-        "question": "Question 1 about AMS Filament Planner?",
-        "answer": "This is the answer number 1 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 2 about AMS Filament Planner?",
-        "answer": "This is the answer number 2 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 3 about AMS Filament Planner?",
-        "answer": "This is the answer number 3 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 4 about AMS Filament Planner?",
-        "answer": "This is the answer number 4 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 5 about AMS Filament Planner?",
-        "answer": "This is the answer number 5 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 6 about AMS Filament Planner?",
-        "answer": "This is the answer number 6 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 7 about AMS Filament Planner?",
-        "answer": "This is the answer number 7 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 8 about AMS Filament Planner?",
-        "answer": "This is the answer number 8 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 9 about AMS Filament Planner?",
-        "answer": "This is the answer number 9 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 10 about AMS Filament Planner?",
-        "answer": "This is the answer number 10 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 11 about AMS Filament Planner?",
-        "answer": "This is the answer number 11 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 12 about AMS Filament Planner?",
-        "answer": "This is the answer number 12 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 13 about AMS Filament Planner?",
-        "answer": "This is the answer number 13 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 14 about AMS Filament Planner?",
-        "answer": "This is the answer number 14 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 15 about AMS Filament Planner?",
-        "answer": "This is the answer number 15 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 16 about AMS Filament Planner?",
-        "answer": "This is the answer number 16 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 17 about AMS Filament Planner?",
-        "answer": "This is the answer number 17 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 18 about AMS Filament Planner?",
-        "answer": "This is the answer number 18 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 19 about AMS Filament Planner?",
-        "answer": "This is the answer number 19 clarifying specifications for AMS Filament Planner calculations."
-    },
-    {
-        "question": "Question 20 about AMS Filament Planner?",
-        "answer": "This is the answer number 20 clarifying specifications for AMS Filament Planner calculations."
-    }
-],
+  ],
   "FilamentChangeEstimator": [
-    {
-        "question": "Question 1 about Filament Change Estimator?",
-        "answer": "This is the answer number 1 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 2 about Filament Change Estimator?",
-        "answer": "This is the answer number 2 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 3 about Filament Change Estimator?",
-        "answer": "This is the answer number 3 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 4 about Filament Change Estimator?",
-        "answer": "This is the answer number 4 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 5 about Filament Change Estimator?",
-        "answer": "This is the answer number 5 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 6 about Filament Change Estimator?",
-        "answer": "This is the answer number 6 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 7 about Filament Change Estimator?",
-        "answer": "This is the answer number 7 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 8 about Filament Change Estimator?",
-        "answer": "This is the answer number 8 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 9 about Filament Change Estimator?",
-        "answer": "This is the answer number 9 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 10 about Filament Change Estimator?",
-        "answer": "This is the answer number 10 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 11 about Filament Change Estimator?",
-        "answer": "This is the answer number 11 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 12 about Filament Change Estimator?",
-        "answer": "This is the answer number 12 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 13 about Filament Change Estimator?",
-        "answer": "This is the answer number 13 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 14 about Filament Change Estimator?",
-        "answer": "This is the answer number 14 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 15 about Filament Change Estimator?",
-        "answer": "This is the answer number 15 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 16 about Filament Change Estimator?",
-        "answer": "This is the answer number 16 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 17 about Filament Change Estimator?",
-        "answer": "This is the answer number 17 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 18 about Filament Change Estimator?",
-        "answer": "This is the answer number 18 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 19 about Filament Change Estimator?",
-        "answer": "This is the answer number 19 clarifying specifications for Filament Change Estimator calculations."
-    },
-    {
-        "question": "Question 20 about Filament Change Estimator?",
-        "answer": "This is the answer number 20 clarifying specifications for Filament Change Estimator calculations."
-    }
-],
+  ],
   "PurgeWasteCalculator": [
-    {
-        "question": "Question 1 about Purge Waste Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Purge Waste Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Purge Waste Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Purge Waste Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Purge Waste Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Purge Waste Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Purge Waste Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Purge Waste Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Purge Waste Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Purge Waste Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Purge Waste Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Purge Waste Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Purge Waste Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Purge Waste Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Purge Waste Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Purge Waste Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Purge Waste Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Purge Waste Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Purge Waste Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Purge Waste Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Purge Waste Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Purge Waste Calculator calculations."
-    }
-],
+  ],
   "FlushVolumeCalculator": [
-    {
-        "question": "Question 1 about Flush Volume Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Flush Volume Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Flush Volume Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Flush Volume Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Flush Volume Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Flush Volume Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Flush Volume Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Flush Volume Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Flush Volume Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Flush Volume Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Flush Volume Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Flush Volume Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Flush Volume Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Flush Volume Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Flush Volume Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Flush Volume Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Flush Volume Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Flush Volume Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Flush Volume Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Flush Volume Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Flush Volume Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Flush Volume Calculator calculations."
-    }
-],
+  ],
   "AMSSlotPlanner": [
-    {
-        "question": "Question 1 about AMS Slot Planner?",
-        "answer": "This is the answer number 1 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 2 about AMS Slot Planner?",
-        "answer": "This is the answer number 2 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 3 about AMS Slot Planner?",
-        "answer": "This is the answer number 3 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 4 about AMS Slot Planner?",
-        "answer": "This is the answer number 4 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 5 about AMS Slot Planner?",
-        "answer": "This is the answer number 5 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 6 about AMS Slot Planner?",
-        "answer": "This is the answer number 6 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 7 about AMS Slot Planner?",
-        "answer": "This is the answer number 7 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 8 about AMS Slot Planner?",
-        "answer": "This is the answer number 8 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 9 about AMS Slot Planner?",
-        "answer": "This is the answer number 9 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 10 about AMS Slot Planner?",
-        "answer": "This is the answer number 10 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 11 about AMS Slot Planner?",
-        "answer": "This is the answer number 11 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 12 about AMS Slot Planner?",
-        "answer": "This is the answer number 12 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 13 about AMS Slot Planner?",
-        "answer": "This is the answer number 13 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 14 about AMS Slot Planner?",
-        "answer": "This is the answer number 14 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 15 about AMS Slot Planner?",
-        "answer": "This is the answer number 15 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 16 about AMS Slot Planner?",
-        "answer": "This is the answer number 16 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 17 about AMS Slot Planner?",
-        "answer": "This is the answer number 17 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 18 about AMS Slot Planner?",
-        "answer": "This is the answer number 18 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 19 about AMS Slot Planner?",
-        "answer": "This is the answer number 19 clarifying specifications for AMS Slot Planner calculations."
-    },
-    {
-        "question": "Question 20 about AMS Slot Planner?",
-        "answer": "This is the answer number 20 clarifying specifications for AMS Slot Planner calculations."
-    }
-],
+  ],
   "BuildPlateUtilizationCalculator": [
-    {
-        "question": "Question 1 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 1 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 2 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 2 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 3 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 3 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 4 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 4 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 5 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 5 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 6 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 6 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 7 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 7 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 8 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 8 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 9 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 9 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 10 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 10 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 11 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 11 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 12 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 12 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 13 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 13 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 14 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 14 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 15 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 15 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 16 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 16 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 17 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 17 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 18 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 18 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 19 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 19 clarifying specifications for Build Plate Utilization Calculator calculations."
-    },
-    {
-        "question": "Question 20 about Build Plate Utilization Calculator?",
-        "answer": "This is the answer number 20 clarifying specifications for Build Plate Utilization Calculator calculations."
-    }
-]
+  ]
 };
-

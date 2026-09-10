@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 import type { ToolFAQ } from '../data/tools';
 
@@ -10,11 +10,24 @@ interface FAQSectionProps {
 export default function FAQSection({ faqs, title = 'Frequently Asked Questions' }: FAQSectionProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  // Guarantee 100% strict deduplication of questions
+  const uniqueFaqs = useMemo(() => {
+    if (!faqs || faqs.length === 0) return [];
+    const seen = new Set<string>();
+    return faqs.filter((faq) => {
+      if (!faq || !faq.question || !faq.answer) return false;
+      const key = faq.question.trim().toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [faqs]);
+
   const toggleFAQ = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  if (!faqs || faqs.length === 0) return null;
+  if (uniqueFaqs.length === 0) return null;
 
   return (
     <section className="mt-8 p-6 md:p-8 rounded-3xl saas-card border border-zinc-200/70 dark:border-zinc-800/70 shadow-xs">
@@ -25,7 +38,7 @@ export default function FAQSection({ faqs, title = 'Frequently Asked Questions' 
         {title}
       </h2>
       <div className="space-y-3">
-        {faqs.map((faq, index) => {
+        {uniqueFaqs.map((faq, index) => {
           const isOpen = activeIndex === index;
           return (
             <div 
