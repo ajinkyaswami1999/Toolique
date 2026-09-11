@@ -49,12 +49,18 @@ export function initGoogleTranslate() {
 
 export function getActiveLanguage(): string {
   if (typeof window === 'undefined') return 'en';
-  const saved = localStorage.getItem('toolique_selected_lang');
-  if (saved) return saved;
+  try {
+    const saved = localStorage.getItem('toolique_selected_lang');
+    if (saved) return saved;
 
-  const match = document.cookie.match(/googtrans=\/en\/([a-zA-Z_-]+)/);
-  if (match && match[1]) {
-    return match[1];
+    if (typeof document !== 'undefined' && document.cookie) {
+      const match = document.cookie.match(/googtrans=\/en\/([a-zA-Z_-]+)/);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+  } catch {
+    // Fail silently in restricted storage environments
   }
 
   return 'en';
