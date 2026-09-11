@@ -229,7 +229,7 @@ function generateRedirectShell(fromPath: string, canonicalPath: string, name?: s
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Redirecting to ${label} | Toolique</title>
-  <meta name="description" content="Redirecting to ${label} on Toolique. Explore 270+ free privacy-focused calculators and developer tools." />
+  <meta name="description" content="Redirecting to ${label} on Toolique. Explore 274+ free privacy-focused calculators and developer tools." />
   <link rel="canonical" href="${toUrl}" />
   <meta http-equiv="refresh" content="0; url=${toUrl}" />
   <meta name="robots" content="noindex, follow" />
@@ -790,7 +790,7 @@ const toolsDirectoryBodyHtml = `
       </nav>
       <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Free Online Tools & Professional Calculators</h1>
       <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
-        Find the right tool instantly. Browse our complete directory of 270+ free online developer tools, financial calculators, unit converters, civil estimators, and text utilities.
+        Find the right tool instantly. Browse our complete directory of 274+ free online developer tools, financial calculators, unit converters, civil estimators, and text utilities.
       </p>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
@@ -804,7 +804,7 @@ const staticPages = [
   {
     path: '404',
     title: '404 - Page Not Found | Toolique',
-    description: 'The requested page could not be found on Toolique. Search our 270+ free online calculators and developer tools.',
+    description: 'The requested page could not be found on Toolique. Search our 274+ free online calculators and developer tools.',
     keywords: ['404', 'page not found', 'toolique']
   },
   {

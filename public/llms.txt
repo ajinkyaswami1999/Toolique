@@ -1,5 +1,5 @@
 # Toolique - Free Online Calculators, Developer Tools & Academy
-> Toolique is a free, privacy-focused online suite of 270+ interactive calculators, developer utilities, 3D printing tools, math studio solvers, and programming academy tools operating completely in the browser without server data collection.
+> Toolique is a free, privacy-focused online suite of 274+ interactive calculators, developer utilities, 3D printing tools, math studio solvers, and programming academy tools operating completely in the browser without server data collection.
 
 ## Core Capabilities & Tool Studios
 
@@ -7,7 +7,7 @@
 - [Architecture & Planning Suite](https://www.toolique.in/architecture): Comprehensive architecture tools covering site planning, FAR/FSI, plot area conversion, staircase riser/tread geometry, carpet area, and BOQ estimators.
 - [3D Print Studio](https://www.toolique.in/3d-print-studio): Filament cost, resin volume, print pricing, Bambu Lab AMS slot planner, HueForge layer planner, and print farm revenue calculators.
 - [Math Studio](https://www.toolique.in/math-studio): 22 browser-based mathematical tools covering equation solvers, matrix arithmetic, descriptive statistics, 2D/3D geometry, calculus derivatives/integrals, and Fourier transforms.
-- [Tools Directory](https://www.toolique.in/tools): Full catalog of 270+ free calculators spanning Finance (GST, HRA, SIP, EMI), Developer (JSON, Base64, Regex, JWT), Image processing, Civil/BOQ, and Text utilities.
+- [Tools Directory](https://www.toolique.in/tools): Full catalog of 274+ free calculators spanning Finance (GST, HRA, SIP, EMI), Developer (JSON, Base64, Regex, JWT), Image processing, Civil/BOQ, and Text utilities.
 - [Developer Playground](https://www.toolique.in/playground): Client-side sandboxed environment for JavaScript execution, JSON manipulation, Python scripts, and REST API testing.
 - [AI Studio](https://www.toolique.in/ai): Browser-sandboxed AI models for instant SQL query generation, test case validation, and regex pattern synthesis.
 - [Toolique Academy](https://www.toolique.in/academy): Interactive coding challenges, technical interview prep (SQL, Python, JavaScript, React, QA Automation), visual explainers, and browser sandboxes.

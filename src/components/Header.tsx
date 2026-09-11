@@ -337,7 +337,7 @@ export default function Header() {
             className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-indigo-200/50 dark:border-zinc-800 bg-white/75 dark:bg-zinc-900/60 text-xs text-zinc-500 dark:text-zinc-400 hover:border-indigo-400/60 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-white transition-all cursor-pointer text-left w-36 sm:w-48 shadow-2xs"
           >
             <Search className="w-3.5 h-3.5 shrink-0 text-indigo-500" />
-            <span className="text-[11px] font-semibold flex-grow truncate">Search 270+ tools...</span>
+            <span className="text-[11px] font-semibold flex-grow truncate">Search 274+ tools...</span>
             <kbd className="hidden sm:inline-flex items-center h-4.5 select-none px-1 font-mono text-[9px] font-bold bg-pastel-indigo/25 dark:bg-zinc-800 text-indigo-700 dark:text-zinc-400 border border-pastel-indigo/40 dark:border-zinc-700 rounded">
               ⌘K
             </kbd>
@@ -481,7 +481,7 @@ export default function Header() {
             className="flex items-center gap-2 px-3.5 py-2.5 w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-xs text-zinc-500 text-left font-semibold cursor-pointer"
           >
             <Search className="w-4 h-4 text-zinc-400" />
-            <span>Search 270+ tools...</span>
+            <span>Search 274+ tools...</span>
           </button>
 
           {/* Mobile Main Links */}
@@ -503,7 +503,7 @@ export default function Header() {
               }`}
             >
               <LayoutGrid className="w-4 h-4" />
-              <span>All 270+ Tools</span>
+              <span>All 274+ Tools</span>
             </Link>
 
             <Link

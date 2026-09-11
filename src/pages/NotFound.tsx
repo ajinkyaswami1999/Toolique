@@ -83,7 +83,7 @@ export default function NotFound() {
     <div className="min-h-[80vh] flex flex-col items-center justify-center py-10 px-4">
       <SEO
         title="404 - Page Not Found | Toolique"
-        description="The requested page could not be found on Toolique. Browse our directory of 270+ free online calculators, developer utilities, and 3D printing tools."
+        description="The requested page could not be found on Toolique. Browse our directory of 274+ free online calculators, developer utilities, and 3D printing tools."
       />
 
       <div className="w-full max-w-3xl mx-auto space-y-8 text-center">
@@ -112,7 +112,7 @@ export default function NotFound() {
             Oops! Lost in the digital void.
           </h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-            The page you're looking for might have been moved, renamed, or doesn't exist. Search our 270+ free tools below or return to the main dashboard.
+            The page you're looking for might have been moved, renamed, or doesn't exist. Search our 274+ free tools below or return to the main dashboard.
           </p>
         </div>
 
@@ -124,7 +124,7 @@ export default function NotFound() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search 270+ tools (e.g. GST, Filament, Matrix, Base64)..."
+              placeholder="Search 274+ tools (e.g. GST, Filament, Matrix, Base64)..."
               className="w-full pl-12 pr-24 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md focus:ring-2 focus:ring-teal-500 focus:border-transparent text-slate-800 dark:text-slate-100 text-sm placeholder:text-slate-400 outline-none transition-all"
             />
             {searchQuery && (
@@ -191,7 +191,7 @@ export default function NotFound() {
             className="px-6 py-3 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800 font-bold text-sm shadow-sm transition-all flex items-center gap-2"
           >
             <Wrench className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-            <span>Browse All 270+ Tools</span>
+            <span>Browse All 274+ Tools</span>
           </Link>
         </div>
 

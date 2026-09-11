@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
 import {
   User,
   Layers,
@@ -149,7 +148,7 @@ export default function AboutFounder() {
         'name': 'Ajinkya Swami',
         'jobTitle': 'QA Automation Engineer & Full-Stack Builder',
         'url': pageUrl,
-        'image': 'https://www.toolique.in/founder.jpeg',
+        'image': 'https://www.toolique.in/favicon-512x512.png',
         'sameAs': Object.values(socialLinks).filter(link => link && link.startsWith('http')),
         'worksFor': [
           {
@@ -189,12 +188,7 @@ export default function AboutFounder() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="relative text-left max-w-6xl mx-auto py-4"
-    >
+    <div className="relative text-left max-w-6xl mx-auto py-4">
       <SEO
         title="About Ajinkya Swami | Founder of Toolique & Voxelique"
         description="Meet Ajinkya Swami, founder of Toolique and Voxelique. Learn about his experience in QA Automation, software development, engineering tools, 3D printing, and his mission to build high-quality free online tools."
@@ -208,15 +202,40 @@ export default function AboutFounder() {
       <div className="hidden sm:block absolute top-[85%] right-[5%] w-[320px] h-[320px] bg-purple-500/[0.025] dark:bg-purple-500/[0.012] rounded-full blur-[120px] pointer-events-none -z-10" />
       <div className="hidden sm:block absolute inset-0 bg-dot-grid opacity-30 pointer-events-none -z-10" />
 
-      {/* Main Grid: Left Sidebar Navigation (Desktop) & Right Content Column */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* Mobile Sticky Quick Navigation Bar (Top-16 right below navbar) */}
+      <div className="lg:hidden sticky top-16 z-30 -mx-4 px-4 py-2.5 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md border-b border-zinc-200/80 dark:border-zinc-800/80 flex items-center gap-2 overflow-x-auto no-scrollbar shadow-2xs mb-6">
+        {sections.map(section => {
+          const Icon = section.icon;
+          const isActive = activeSection === section.id;
+          return (
+            <button
+              key={section.id}
+              onClick={() => scrollToSection(section.id)}
+              className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                isActive
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+              }`}
+            >
+              <Icon className="w-3 h-3" />
+              <span>{section.name}</span>
+            </button>
+          );
+        })}
+      </div>
 
-        <Sidebar
-          sections={sections}
-          activeSection={activeSection}
-          scrollToSection={scrollToSection}
-          scrollProgress={scrollProgress}
-        />
+      {/* Main Grid: Left Sticky Sidebar (Desktop) & Right Content Column */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative">
+
+        {/* Left Sticky Desktop Sidebar Column */}
+        <aside className="hidden lg:block lg:col-span-3 sticky top-24 self-start space-y-4 text-left z-20">
+          <Sidebar
+            sections={sections}
+            activeSection={activeSection}
+            scrollToSection={scrollToSection}
+            scrollProgress={scrollProgress}
+          />
+        </aside>
 
         {/* Right Column: Content Pages */}
         <div className="col-span-1 lg:col-span-9 space-y-20">
@@ -229,86 +248,114 @@ export default function AboutFounder() {
             <Stats />
           </div>
 
-          <div id="about" ref={sectionRefs.about} className="scroll-mt-24 space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-                <User className="w-5 h-5" />
+          <div id="about" ref={sectionRefs.about} className="scroll-mt-24 space-y-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20 text-[10px] font-black uppercase tracking-wider">
+                <User className="w-3.5 h-3.5" />
+                <span>Background & Ethos</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
                 About Me
               </h2>
+              <p className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-400">
+                From Quality Assurance engineering to full-stack systems and hardware manufacturing.
+              </p>
             </div>
             <About />
           </div>
 
-          <div id="journey" ref={sectionRefs.journey} className="scroll-mt-24 space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400">
-                <Layers className="w-5 h-5" />
+          <div id="journey" ref={sectionRefs.journey} className="scroll-mt-24 space-y-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/20 text-[10px] font-black uppercase tracking-wider">
+                <Layers className="w-3.5 h-3.5" />
+                <span>Career Milestones</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white">
-                My Journey
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
+                My Journey & Growth
               </h2>
+              <p className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-400">
+                The timeline of engineering breakthroughs, automation frameworks, and product launches.
+              </p>
             </div>
             <Journey />
           </div>
 
-          <div id="brands" ref={sectionRefs.brands} className="scroll-mt-24 space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                <Award className="w-5 h-5" />
+          <div id="brands" ref={sectionRefs.brands} className="scroll-mt-24 space-y-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-400 border border-purple-500/20 text-[10px] font-black uppercase tracking-wider">
+                <Award className="w-3.5 h-3.5" />
+                <span>Ecosystem & Ventures</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
                 My Brands
               </h2>
+              <p className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-400">
+                Software utility calculations and precision additive manufacturing.
+              </p>
             </div>
             <Brands />
           </div>
 
-          <div id="what-i-build" ref={sectionRefs['what-i-build']} className="scroll-mt-24 space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-teal-400">
-                <Cpu className="w-5 h-5" />
+          <div id="what-i-build" ref={sectionRefs['what-i-build']} className="scroll-mt-24 space-y-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 text-[10px] font-black uppercase tracking-wider">
+                <Cpu className="w-3.5 h-3.5" />
+                <span>Tool Architecture</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
                 What I Build
               </h2>
+              <p className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-400">
+                High-performance categories spanning developer tools, civil estimation, finance, and QA.
+              </p>
             </div>
             <Build />
           </div>
 
-          <div id="skills" ref={sectionRefs.skills} className="scroll-mt-24 space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400">
-                <Code className="w-5 h-5" />
+          <div id="skills" ref={sectionRefs.skills} className="scroll-mt-24 space-y-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 text-orange-700 dark:text-orange-400 border border-orange-500/20 text-[10px] font-black uppercase tracking-wider">
+                <Code className="w-3.5 h-3.5" />
+                <span>Technical Stack</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white">
-                Technical Skills
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
+                Technical Skills & Tools
               </h2>
+              <p className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-400">
+                Core competencies across test automation, frontend engineering, and 3D printing.
+              </p>
             </div>
             <Skills />
           </div>
 
-          <div id="projects" ref={sectionRefs.projects} className="scroll-mt-24 space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
-                <Award className="w-5 h-5" />
+          <div id="projects" ref={sectionRefs.projects} className="scroll-mt-24 space-y-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border border-yellow-500/20 text-[10px] font-black uppercase tracking-wider">
+                <Trophy className="w-3.5 h-3.5" />
+                <span>Portfolio Highlights</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
                 Featured Projects
               </h2>
+              <p className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-400">
+                Key applications and tools engineered for performance, precision, and zero tracking.
+              </p>
             </div>
             <Projects />
           </div>
 
-          <div id="why-toolique" ref={sectionRefs['why-toolique']} className="scroll-mt-24 space-y-6">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-pink-500/10 text-pink-600 dark:text-pink-400">
-                <Target className="w-5 h-5" />
+          <div id="why-toolique" ref={sectionRefs['why-toolique']} className="scroll-mt-24 space-y-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 text-pink-700 dark:text-pink-400 border border-pink-500/20 text-[10px] font-black uppercase tracking-wider">
+                <Target className="w-3.5 h-3.5" />
+                <span>Founding Vision</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-white">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
                 Why I Built Toolique
               </h2>
+              <p className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-400">
+                The core philosophy, principles, and maker mindset behind the platform.
+              </p>
             </div>
             <Values />
           </div>
@@ -320,6 +367,6 @@ export default function AboutFounder() {
         </div>
 
       </div>
-    </motion.div>
+    </div>
   );
 }

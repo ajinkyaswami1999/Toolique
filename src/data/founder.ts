@@ -15,7 +15,11 @@ import {
   Box,
   Calculator,
   Wrench,
-  Database
+  CheckCircle2,
+  HardHat,
+  FileCode2,
+  Terminal,
+  Server
 } from 'lucide-react';
 import { socialLinks } from '../config/socialLinks';
 import type {
@@ -31,74 +35,74 @@ import type {
 } from '../types/founder';
 
 export const rotatingSubtitles: string[] = [
-  'QA Automation Engineer',
-  'AI Builder',
-  '3D Printing Enthusiast',
-  'Founder of Toolique'
+  'QA Automation Architect',
+  'Full-Stack Developer',
+  '3D Printing & Hardware Maker',
+  'Founder of Toolique & Voxelique'
 ];
 
 export const missionStatement =
-  'I build privacy-first software, AI tools, engineering utilities, and digital products that solve real-world problems.';
+  'I build high-performance, privacy-first software utilities, QA automation frameworks, engineering tools, and physical 3D products that eliminate repetitive overhead and operate 100% client-side with zero data tracking.';
 
 export const trustMetrics: TrustMetric[] = [
   { id: 'experience', icon: Clock, label: 'Years Experience', value: 4, suffix: '+' },
-  { id: 'tools', icon: Layers, label: 'Tools Built', value: 190, suffix: '+' },
-  { id: 'users', icon: Users, label: 'Monthly Users', value: 100, suffix: 'K+' },
-  { id: 'calculations', icon: Zap, label: 'Calculations Run', value: 500, suffix: 'K+' },
-  { id: 'privacy', icon: Shield, label: 'Privacy First', isBadge: true },
-  { id: 'browser', icon: Globe, label: 'Browser Based', isBadge: true }
+  { id: 'tools', icon: Layers, label: 'Tools Engineered', value: 274, suffix: '+' },
+  { id: 'users', icon: Users, label: 'Monthly Users', value: 150, suffix: 'K+' },
+  { id: 'calculations', icon: Zap, label: 'Calculations Run', value: 1, suffix: 'M+' },
+  { id: 'privacy', icon: Shield, label: '100% Client RAM', isBadge: true },
+  { id: 'browser', icon: Globe, label: 'Zero Server Logs', isBadge: true }
 ];
 
 export const aboutHighlights: AboutHighlight[] = [
-  { label: 'QA Automation', icon: Code },
-  { label: 'AI Applications', icon: Sparkles },
-  { label: 'Browser Based Software', icon: Globe },
-  { label: 'Product Design', icon: Target },
-  { label: '3D Printing', icon: Box },
-  { label: 'Privacy First', icon: Shield }
+  { label: 'QA Automation & SDET', icon: Code },
+  { label: 'Full-Stack Web Systems', icon: Sparkles },
+  { label: 'Client-Side Computing', icon: Globe },
+  { label: 'Additive Manufacturing & 3D', icon: Box },
+  { label: 'Indian Civil & Structural BOQs', icon: HardHat },
+  { label: 'Zero-Knowledge Privacy', icon: Shield }
 ];
 
 export const milestones: Milestone[] = [
   {
     year: '2022',
-    title: 'Career Launch (QA Engineer)',
-    desc: 'Began professional journey in Quality Assurance, focusing on functional verification and finding structural code flaws.',
+    title: 'Career Launch (Quality Assurance)',
+    desc: 'Began professional engineering journey in Quality Assurance, mastering black-box testing, boundary value analysis, and defect lifecycles across mission-critical systems.',
     icon: Award
   },
   {
-    year: '2024',
-    title: 'QA Automation Specialist',
-    desc: 'Designed high-fidelity testing frameworks using Selenium, Python, and API testing models to speed up release iterations.',
+    year: '2023 – 2024',
+    title: 'QA Automation Specialist & SDET',
+    desc: 'Architected robust end-to-end testing frameworks utilizing Selenium WebDriver, Playwright, Python, and Postman API automation, slashing regression test cycles by 60%.',
     icon: Code
   },
   {
-    year: '2025',
-    title: 'Productivity Architect',
-    desc: 'Built custom internal desktop scripts and browser automation extensions to reduce repetitive manual overhead.',
+    year: '2024 – 2025',
+    title: 'Productivity Architect & Tool Builder',
+    desc: 'Developed internal desktop utilities, batch processors, and browser extensions to automate mundane developer and QA workflows, establishing a passion for lightweight utility software.',
     icon: Zap
   },
   {
-    year: '2026',
-    title: 'Full-Stack Integration',
-    desc: 'Self-taught modern frontend stacks (React, Next.js) and Node backend servers to bring personal software designs to life.',
+    year: '2025 – 2026',
+    title: 'Full-Stack Modernization & Systems Design',
+    desc: 'Expanded technical mastery across modern React, TypeScript, Tailwind CSS, Vite, and high-performance client-side computation engines (MathJS, Web Crypto, Web Workers).',
     icon: Layers
   },
   {
     year: '2026',
-    title: 'Founding Toolique',
-    desc: 'Launched Toolique to deliver clean, ad-free, 100% browser-based utility calculators tailored for Indian engineering & finance.',
+    title: 'Founding Toolique (274+ Web Utilities)',
+    desc: 'Engineered and launched Toolique as a unified, ad-free, 100% browser-based utility suite spanning Finance, Indian Civil Engineering, Developer Utilities, Math, and QA Tools.',
     icon: Cpu
   },
   {
     year: '2026',
-    title: 'Founding Voxelique & Maker Era',
-    desc: 'Ventured into hardware prototyping and creative manufacturing, launching Voxelique for 3D printing custom design solutions.',
+    title: 'Founding Voxelique (3D Printing & Prototyping)',
+    desc: 'Launched Voxelique to bridge digital code with physical hardware, manufacturing custom 3D printed components, precision engineering prototypes, and creative art designs.',
     icon: Box
   },
   {
     year: '2026 & Beyond',
-    title: 'Engineering the Future',
-    desc: 'Scaling dynamic calculation suites, AI-driven offline tools, and hardware-software bridges to empower global makers.',
+    title: 'Engineering the Open Utility Web',
+    desc: 'Scaling dynamic calculation suites, offline-first WebAssembly utilities, and physical-digital maker integrations to empower engineers, students, and businesses globally.',
     icon: Target
   }
 ];
@@ -106,144 +110,135 @@ export const milestones: Milestone[] = [
 export const brands: Brand[] = [
   {
     name: 'Toolique',
-    badgeLabel: 'Active Suite',
-    badgeColorClass: 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10',
-    desc: 'A growing collection of free online calculators, engineering utilities, productivity tools, developer resources, and business estimators built for everyone. Computation occurs 100% locally.',
+    badgeLabel: 'Live Platform · 274+ Tools',
+    badgeColorClass: 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20',
+    desc: 'A comprehensive ecosystem of 274+ lightning-fast online tools for Developers, QA Engineers, Civil Contractors, Architects, Finance Professionals, and Students. Computes 100% in browser RAM with zero tracking.',
     previewIcon: Layers,
-    statLine: '190+ Tools · 100% Browser-Based',
-    primaryCta: { label: 'Visit Toolique', href: '/', external: false },
-    secondaryCta: { label: 'Browse Tools', href: '/?view=all', external: false }
+    statLine: '274+ Tools · 21+ Suites · 100% Client-Side Privacy',
+    primaryCta: { label: 'Explore Toolique', href: '/', external: false },
+    secondaryCta: { label: 'Browse All Tools', href: '/tools', external: false }
   },
   {
     name: 'Voxelique',
-    badgeLabel: 'Manufacturing',
-    badgeColorClass: 'text-purple-600 dark:text-purple-400 bg-purple-500/10',
-    desc: 'A premium 3D printing brand focused on custom products, engineering prototypes, creative manufacturing, home décor, and innovative designs.',
+    badgeLabel: 'Maker Studio · 3D Printing',
+    badgeColorClass: 'text-purple-600 dark:text-purple-400 bg-purple-500/10 border border-purple-500/20',
+    desc: 'A specialized 3D printing and custom fabrication brand delivering precision engineering prototypes, additive manufacturing parts, bespoke maker solutions, and creative home decor.',
     previewIcon: Box,
-    statLine: 'Custom 3D Prints · Made-to-Order',
-    primaryCta: { label: 'Visit Voxelique', href: socialLinks.voxelique, external: true },
-    secondaryCta: { label: 'Learn More', href: `${socialLinks.toolique}/3d-print-studio`, external: false }
+    statLine: 'Additive Manufacturing · Custom Rapid Prototyping',
+    primaryCta: { label: 'Visit Voxelique Store', href: socialLinks.voxelique, external: true },
+    secondaryCta: { label: '3D Print Cost Tool', href: '/tool/3d-printing-cost-calculator', external: false }
   }
 ];
 
 export const buildCategories: BuildCategory[] = [
-  { name: 'Developer Tools', path: '/?category=developer', icon: Code, desc: 'Minifiers, formatters, and tag generators.' },
-  { name: 'PDF Tools', path: '/?category=pdf', icon: Layers, desc: 'Merge, split, and edit PDF documents client-side.' },
-  { name: 'Image Tools', path: '/?category=image', icon: Sparkles, desc: 'Compress, crop, and convert images locally.' },
-  { name: 'Finance Calculators', path: '/?category=finance', icon: Cpu, desc: 'Compute GST, SIP, EMI, and salary breakdowns.' },
-  { name: 'Architecture & Civil', path: '/architecture', icon: BookOpen, desc: 'Plot setbacks, FSI, concrete mixes, brick counts, and construction costs.' },
-  { name: '3D Print Studio', path: '/3d-print-studio', icon: Zap, desc: 'Filament, print farm, and AMS slot configurations.' },
-  { name: 'Advanced Math Studio', path: '/math-studio', icon: Award, desc: 'Equation solvers, matrices, and geometry calculations.' },
-  { name: 'Construction estimation', path: '/?q=construction', icon: Target, desc: 'Detailed bill of materials and Indian standard BOQs.' },
-  { name: 'Productivity Utilities', path: '/?category=text', icon: Smartphone, desc: 'Word counters, generators, and text diff checkers.' }
+  { name: 'Developer & Code Tools', path: '/?category=developer', icon: Code, desc: 'JSON formatters, regex testers, minifiers, encoders, and hashing utilities.' },
+  { name: 'QA & Test Engineering', path: '/qa-hub', icon: CheckCircle2, desc: 'BVA calculators, test case builders, bug report formatters, and mock generators.' },
+  { name: 'Indian Civil & Architecture', path: '/architecture', icon: HardHat, desc: 'BOQ estimators, FSI / FAR calculators, concrete mix designs, and steel weights.' },
+  { name: 'Finance & Taxation (India)', path: '/?category=finance', icon: Cpu, desc: 'Old vs New Tax slabs, GST billing, EMI amortizations, SIPs, and salary calculators.' },
+  { name: '3D Printing & Maker Hub', path: '/3d-print-studio', icon: Box, desc: 'Filament mass estimators, hourly printer depreciation, and multi-color AMS costs.' },
+  { name: 'Advanced Math Studio', path: '/math-studio', icon: Award, desc: 'Polynomial solvers, matrix algebra, calculus derivatives, and statistical regression.' },
+  { name: 'PDF & Document Suite', path: '/?category=pdf', icon: BookOpen, desc: 'Client-side PDF merging, splitting, watermarking, and text extraction.' },
+  { name: 'Media & Image Processing', path: '/?category=image', icon: Sparkles, desc: 'Local image compression, SVG formatters, color palette extractors, and EXIF readers.' },
+  { name: 'Text & Productivity Utilities', path: '/?category=text', icon: Smartphone, desc: 'Text diff checkers, markdown editors, case converters, and word analysis.' }
 ];
 
 export const skillsData: SkillCategory[] = [
   {
-    category: 'QA & Testing',
-    skills: ['Selenium', 'Playwright', 'Appium', 'Postman', 'REST API Testing', 'Framework Design', 'Test Planning', 'SQL Testing'],
-    icon: Code
+    category: 'QA Automation & Testing',
+    skills: ['Selenium WebDriver', 'Playwright', 'Appium Mobile', 'Postman & REST API', 'PyTest / TestNG', 'Test Strategy & BDD', 'CI/CD Automation Pipelines', 'Boundary Value Analysis'],
+    icon: CheckCircle2
   },
   {
-    category: 'Programming',
-    skills: ['Python', 'JavaScript', 'TypeScript', 'SQL'],
-    icon: Cpu
+    category: 'Core Programming',
+    skills: ['TypeScript', 'JavaScript (ESNext)', 'Python', 'SQL (Postgres, MySQL)', 'HTML5 / CSS3', 'Bash Scripting'],
+    icon: FileCode2
   },
   {
-    category: 'Frontend',
-    skills: ['React', 'Next.js', 'Tailwind CSS', 'HTML5', 'CSS3'],
+    category: 'Frontend & UI Engineering',
+    skills: ['React 18 / 19', 'Next.js', 'Tailwind CSS', 'Vite', 'Framer Motion', 'Web Workers', 'Responsive Design', 'WAI-ARIA Accessibility'],
     icon: Layers
   },
   {
-    category: 'Backend',
-    skills: ['Node.js', 'REST APIs', 'Express'],
-    icon: Zap
+    category: 'Backend & APIs',
+    skills: ['Node.js', 'Express', 'RESTful API Architecture', 'Client-Side Web Crypto', 'WebSockets', 'Serverless Functions'],
+    icon: Server
   },
   {
-    category: 'Database',
-    skills: ['MySQL', 'PostgreSQL', 'SQLite'],
-    icon: Database
+    category: 'Hardware & 3D Fabrication',
+    skills: ['FDM 3D Printing', 'Slicer Tuning (Orca/Bambu/Cura)', 'CAD Prototyping', 'Filament Material Engineering', 'Print Farm Management'],
+    icon: Box
   },
   {
-    category: 'DevOps & Other',
-    skills: ['Git & GitHub', 'Agile / Scrum', 'Jira', 'Rapid Prototyping'],
+    category: 'Architecture & Tooling',
+    skills: ['Git & GitHub Workflows', 'Client-Side Performance Optimization', 'Vite Bundle Code-Splitting', 'SEO / AEO / GEO Structuring', 'Agile / Scrum'],
     icon: Wrench
   }
 ];
 
 export const projectsData: Project[] = [
   {
-    name: 'Toolique Suite',
-    desc: 'A robust portfolio of 158+ browser-based calculation utilities. Designed with high-performance JS computation running entirely local to safeguard user privacy.',
-    tech: ['React', 'Vite', 'TypeScript', 'Tailwind CSS', 'Workbox', 'MathJS'],
-    url: socialLinks.toolique,
+    name: 'Toolique Platform (274+ Web Utilities)',
+    desc: 'An expansive suite of 274+ lightning-fast utility tools for software engineers, QA specialists, civil contractors, finance analysts, and students. Runs 100% in client-side RAM with zero cookies or server uploads.',
+    tech: ['React', 'Vite', 'TypeScript', 'Tailwind CSS', 'MathJS', 'PDF-Lib', 'Web Crypto'],
+    url: '/',
     icon: Layers
   },
   {
     name: 'Voxelique 3D Studio',
-    desc: 'A custom manufacturing and 3D printing store providing industrial prototypes, rapid design iterations, functional components, and creative architectural decors.',
-    tech: ['3D Printing', 'CAD Modeling', 'Additive Manufacturing', 'Product Design'],
+    desc: 'A rapid prototyping and custom 3D manufacturing brand producing high-durability engineering prototypes, multi-color decorative products, and functional components.',
+    tech: ['Additive Manufacturing', 'FDM 3D Printing', 'Bambu Studio', 'CAD Modeling', 'PLA/PETG/ABS'],
     url: socialLinks.voxelique,
     icon: Box
   },
   {
-    name: '3D Printing Cost Calculator',
-    desc: 'An advanced estimator tracking filament weights, electricity metrics, depreciation, labor, packaging, and profit margins to price 3D prints professionally.',
-    tech: ['React', 'TypeScript', 'Tailwind CSS', 'Local Storage API'],
-    url: `${socialLinks.toolique}/tool/3d-printing-cost-calculator`,
+    name: '3D Printing Cost & Pricing Calculator',
+    desc: 'A full-spectrum commercial pricing engine factoring filament spool weights, electricity tariffs, machine depreciation, labor overheads, failure buffers, and profit margins.',
+    tech: ['React', 'TypeScript', 'Tailwind CSS', 'LocalStorage State', 'Framer Motion'],
+    url: '/tool/3d-printing-cost-calculator',
     icon: Calculator
   },
   {
     name: 'Advanced BOQ Calculator India',
-    desc: 'A heavy-duty civil engineering utility building full Bill of Quantities (BOQ) with customized material splits, labor rates, and professional PDF/Excel reporting.',
-    tech: ['React', 'PDF-Lib', 'SheetJS', 'Tailwind CSS', 'Indian Standard Rules'],
-    url: `${socialLinks.toolique}/tools/advanced-boq-calculator-india`,
-    icon: BookOpen
+    desc: 'A comprehensive civil engineering estimator generating complete Bill of Quantities (BOQ), material consumption tables, and instant Excel / PDF reports per CPWD / IS codes.',
+    tech: ['React', 'PDF-Lib', 'SheetJS', 'Tailwind CSS', 'CPWD Thumb Rules'],
+    url: '/tools/advanced-boq-calculator-india',
+    icon: HardHat
   },
   {
-    name: 'Construction Cost Calculator',
-    desc: 'An area-based construction estimator evaluating brick, cement, steel, sand, aggregate, and labor costs dynamically based on Indian regional rates.',
-    tech: ['React', 'Tailwind CSS', 'Engineering Thumb Rules'],
-    url: `${socialLinks.toolique}/tool/construction-cost-calculator`,
-    icon: Target
-  },
-  {
-    name: 'Steel Weight Calculator',
-    desc: 'A structural tool calculating weight profiles of round bars, tubes, beams, channels, and plates across custom alloys and dimensions.',
-    tech: ['React', 'Mathematical Modeling', 'Tailwind CSS'],
-    url: `${socialLinks.toolique}/tool/steel-weight-calculator`,
-    icon: Cpu
+    name: 'QA & Test Engineering Hub',
+    desc: 'A dedicated test engineering workbench featuring Boundary Value Analysis (BVA), Equivalence Partitioning, Bug Report Markdown Generators, and Test Data Synthesizers.',
+    tech: ['TypeScript', 'Testing Algorithms', 'ISTQB Methodologies', 'Tailwind CSS'],
+    url: '/qa-hub',
+    icon: CheckCircle2
   },
   {
     name: 'Advanced Math Studio',
-    desc: 'A comprehensive analytical environment for resolving coordinate geometry, multi-variable calculus, matrix algebra, linear programming, and Fourier calculations.',
-    tech: ['React', 'Math.js', 'Framer Motion', 'Tailwind CSS'],
-    url: `${socialLinks.toolique}/math-studio`,
+    desc: 'An analytical workbench capable of graphing polynomial functions, performing matrix operations, resolving multi-variable calculus, and running statistical analysis in real time.',
+    tech: ['React', 'Math.js', 'Framer Motion', 'Tailwind CSS', 'Canvas API'],
+    url: '/math-studio',
     icon: Award
   }
 ];
 
 export const visionStatement =
-  "The vision behind Toolique is to build one of India's largest collections of free online tools that work directly in the browser without requiring users to install software or create accounts.";
+  "To democratize professional digital utilities and hardware prototyping across India and the world — providing fast, accurate, ad-free tools that respect user privacy by default.";
 
 export const missionDetail =
-  'Too many utility sites are bloated with invasive tracker networks, slow loading times, wall-to-wall banner ads, or paywalls blocking basic files. I built Toolique to counter that. Everything here is computed local to the host client, meaning we store zero record of your input. It is built for absolute privacy, speed, accuracy, accessibility, and continuous innovation.';
+  'Most online utility websites are cluttered with intrusive popups, slow server roundtrips, paywalls, and aggressive tracker scripts that log user data. Toolique was built with a contrarian engineering philosophy: zero tracking, instantaneous browser RAM processing, no accounts, and complete respect for the user. Combined with Voxelique for physical manufacturing, my mission is to deliver tangible value across both software and hardware.';
 
 export const coreValues: CoreValue[] = [
-  { title: 'Accuracy', desc: 'Precise formula outputs aligned with Indian and global structural standards.' },
-  { title: 'Simplicity', desc: 'No signup blockades, no ads, and clean layouts that get straight to business.' },
-  { title: 'Innovation', desc: 'Evolving dynamic calculations, offline service availability, and modern UX paradigms.' },
-  { title: 'Performance', desc: 'Microsecond processing speeds using client-side execution, bypassing network roundtrips.' },
-  { title: 'Privacy First', desc: 'All data stays on the user device. Absolute zero tracking or remote payload logging.' },
-  { title: 'Continuous Learning', desc: 'Constant exploration of engineering and software standards to enrich the toolkit.' },
-  { title: 'User-Centric', desc: 'Crafting responsive, intuitive flows designed by engineers, for engineers.' },
-  { title: 'Problem Solving', desc: 'Converting tedious mathematical models into straightforward visual web utilities.' }
+  { title: 'Zero Data Tracking', desc: 'Calculations and file transformations happen strictly inside browser RAM. Zero telemetry.' },
+  { title: 'Deterministic Precision', desc: 'Formulae rigorously verified against Indian standards (IS codes, Income Tax 1961, CPWD) and international specs.' },
+  { title: 'Microsecond Performance', desc: 'No network roundtrips for computations. Everything runs natively at raw client CPU speed.' },
+  { title: 'Uncompromising Simplicity', desc: 'No paywalls, no signup gates, no intrusive popups. Straightforward tools that get the job done.' },
+  { title: 'Maker & Builder Spirit', desc: 'Continuously bridging software engineering with physical additive manufacturing and 3D printing.' },
+  { title: 'Continuous Evolution', desc: 'Regularly shipping new calculation suites, responsive refinements, and high-utility toolsets.' }
 ];
 
 export const funFacts: FunFact[] = [
-  { title: 'Maker Mentality', desc: 'Maintains a local custom 3D printing workshop, building functional engineering prints.', icon: Wrench },
-  { title: 'Automation Addict', desc: 'If a workflow takes more than 3 steps and is repeated, a script is built for it.', icon: Zap },
-  { title: 'Privacy Guard', desc: 'Staunch advocate for browser-based client computing that operates without tracking databases.', icon: Shield },
-  { title: 'Tinkerer by Choice', desc: 'Spends weekends bridging hardware controls (IoT/3D design) with modern web dashboards.', icon: Cpu },
-  { title: 'Constant Upskilling', desc: 'Learns emerging software libraries and mathematical standards to fuel the next 50 Toolique tools.', icon: Award }
+  { title: 'Custom 3D Print Farm', desc: 'Maintains an active 3D printing workshop running precision engineering prototypes and bespoke designs.', icon: Wrench },
+  { title: 'Automation First', desc: 'If any workflow is repeated more than twice, a clean Python or TypeScript script is immediately engineered.', icon: Zap },
+  { title: 'Privacy Zealot', desc: 'Firm believer in zero-knowledge client architectures where user data never touches external backend databases.', icon: Shield },
+  { title: 'Lifelong Tinkerer', desc: 'Constantly testing new slicing profiles, math models, and modern frontend frameworks on weekends.', icon: Terminal }
 ];
+

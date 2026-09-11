@@ -97,7 +97,7 @@ interface HeroToolsBackgroundProps {
 }
 
 export default function HeroToolsBackground({ rowCount = 6 }: HeroToolsBackgroundProps) {
-  // Partition all 270+ tools across rows
+  // Partition all 274+ tools across rows
   const rows = useMemo(() => {
     const splitRows: Tool[][] = Array.from({ length: rowCount }, () => []);
     toolsList.forEach((tool, index) => {

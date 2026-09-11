@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ArrowRight, Heart, ChevronUp, Mail, MessageSquare, Printer,
-  Zap, ShieldCheck, MonitorCheck, Smartphone
+  Zap, ShieldCheck, MonitorCheck, Smartphone, CheckCircle2,
+  Sparkles, ExternalLink
 } from 'lucide-react';
 import { footerConfig } from '../data/footerConfig';
 import { TooliqueLogo } from './Logo';
 
 // Custom Inline SVGs for brand logos to prevent compilation issues with lucide-react brand icons
-const GithubIcon = ({ className = "w-5 h-5" }) => (
+const GithubIcon = ({ className = "w-4 h-4" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -24,7 +25,7 @@ const GithubIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-const LinkedinIcon = ({ className = "w-5 h-5" }) => (
+const LinkedinIcon = ({ className = "w-4 h-4" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -41,7 +42,7 @@ const LinkedinIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-const InstagramIcon = ({ className = "w-5 h-5" }) => (
+const InstagramIcon = ({ className = "w-4 h-4" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -58,7 +59,7 @@ const InstagramIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-const YoutubeIcon = ({ className = "w-5 h-5" }) => (
+const YoutubeIcon = ({ className = "w-4 h-4" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -74,7 +75,7 @@ const YoutubeIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-const TwitterIcon = ({ className = "w-5 h-5" }) => (
+const TwitterIcon = ({ className = "w-4 h-4" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
@@ -89,7 +90,7 @@ const TwitterIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 );
 
-const iconMap: Record<string, React.ComponentType<any>> = {
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Github: GithubIcon,
   Linkedin: LinkedinIcon,
   Instagram: InstagramIcon,
@@ -154,25 +155,33 @@ export default function Footer() {
     if (!email) return;
     setNewsletterStatus('success');
     setEmail('');
-    setTimeout(() => setNewsletterStatus('idle'), 4000);
+    setTimeout(() => setNewsletterStatus('idle'), 4500);
   };
 
   const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   return (
-    <footer className="relative border-t border-indigo-100/70 dark:border-zinc-900 bg-[#fafbfe]/90 dark:bg-[#0b0f19] text-zinc-500 dark:text-zinc-400 transition-colors duration-300 overflow-hidden text-left" aria-label="Toolique Platform Footer">
+    <footer className="relative border-t border-zinc-200/70 dark:border-zinc-800/70 bg-[#fafbfe]/90 dark:bg-[#090d16] text-zinc-500 dark:text-zinc-400 transition-colors duration-300 overflow-hidden text-left" aria-label="Toolique Platform Footer">
       
       {/* Decorative ambient pastel background glows */}
-      <div className="absolute top-0 left-1/4 w-[350px] h-[350px] bg-indigo-300/10 dark:bg-indigo-500/[0.02] rounded-full blur-[90px] pointer-events-none -z-10" />
-      <div className="absolute bottom-0 right-1/4 w-[350px] h-[350px] bg-teal-300/10 dark:bg-teal-500/[0.015] rounded-full blur-[90px] pointer-events-none -z-10" />
+      <div 
+        className="absolute top-0 left-1/4 w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none -z-10 opacity-60 dark:opacity-20"
+        style={{ background: 'radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%)' }}
+      />
+      <div 
+        className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none -z-10 opacity-60 dark:opacity-20"
+        style={{ background: 'radial-gradient(circle, rgba(20, 184, 166, 0.25) 0%, transparent 70%)' }}
+      />
 
-      {/* -------------------- TOP CTA BANNER -------------------- */}
+      {/* -------------------- 1. TOP CTA BANNER -------------------- */}
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-16">
-        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-50/70 via-purple-50/40 to-teal-50/40 dark:from-zinc-900/70 dark:via-zinc-950/50 dark:to-zinc-900/70 border border-indigo-100/80 dark:border-zinc-800/80 p-8 md:p-12 text-center space-y-6 shadow-xl shadow-indigo-500/[0.03] backdrop-blur-md">
-          <div className="absolute -top-[50%] -left-[20%] w-[60%] h-[150%] bg-indigo-300/15 dark:bg-indigo-500/[0.03] rounded-full blur-[100px] pointer-events-none" />
-          
-          <div className="max-w-2xl mx-auto space-y-4 relative z-10">
-            <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight">
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-50/80 via-white/80 to-teal-50/80 dark:from-zinc-900/80 dark:via-zinc-950/70 dark:to-zinc-900/80 border border-indigo-100/80 dark:border-zinc-800/80 p-8 md:p-12 text-center space-y-6 shadow-sm backdrop-blur-md">
+          <div className="max-w-2xl mx-auto space-y-3 relative z-10">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-white/90 dark:bg-zinc-800/90 text-indigo-700 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60 shadow-2xs">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Zero Sign-Up • Zero Telemetry • Instant Client RAM Execution</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight">
               {footerConfig.cta.title}
             </h3>
             <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed">
@@ -185,15 +194,15 @@ export default function Footer() {
               <Link
                 key={idx}
                 to={btn.link}
-                className={`px-5 py-2.5 rounded-xl font-black text-xs transition duration-300 hover:scale-[1.03] shadow-sm flex items-center gap-1.5 ${
+                className={`px-5 py-3 rounded-2xl font-black text-xs transition duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm flex items-center gap-2 ${
                   btn.variant === 'primary' 
-                    ? 'bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 text-white shadow-indigo-500/20'
+                    ? 'saas-button-primary'
                     : btn.variant === 'glow'
-                    ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-purple-500/20'
-                    : 'bg-white/90 hover:bg-white dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-indigo-100 dark:border-zinc-800'
+                    ? 'saas-button-secondary border-indigo-500/30 text-indigo-700 dark:text-indigo-300'
+                    : 'saas-button-secondary'
                 }`}
               >
-                {btn.label}
+                <span>{btn.label}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             ))}
@@ -201,15 +210,15 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* -------------------- PLATFORM STATS -------------------- */}
-      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* -------------------- 2. PLATFORM LIVE METRICS -------------------- */}
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
           {footerConfig.stats.map((stat, idx) => (
-            <div key={idx} className="saas-card p-5 text-center bg-white/75 dark:bg-zinc-900/40 backdrop-blur-sm border border-indigo-100/70 dark:border-zinc-800/50 rounded-2xl flex flex-col justify-center space-y-1 shadow-xs">
-              <span className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400 tracking-tight">
+            <div key={idx} className="saas-card p-5 text-center bg-white/80 dark:bg-zinc-900/50 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800/60 rounded-2xl flex flex-col justify-center space-y-1 shadow-2xs">
+              <span className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
                 <CountUp end={stat.value} />
               </span>
-              <span className="text-[10px] font-bold text-zinc-455 dark:text-zinc-500 uppercase tracking-wider">
+              <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                 {stat.label}
               </span>
             </div>
@@ -217,30 +226,41 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* -------------------- MAIN 5-COLUMN FOOTER -------------------- */}
+      {/* -------------------- 3. MAIN 5-COLUMN FOOTER -------------------- */}
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 border-b border-zinc-200/60 dark:border-zinc-900">
         
-        {/* Column 1: Brand Info */}
+        {/* Column 1: Brand Info & Architecture */}
         <div className="lg:col-span-4 space-y-5">
           <Link to="/" className="group flex items-center w-fit" aria-label="Toolique Home">
             <TooliqueLogo iconSize="w-9 h-9" showTagline={true} />
           </Link>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-sm font-medium">
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-sm font-medium">
             {footerConfig.companyDetails.description}
           </p>
-          <div className="grid grid-cols-2 gap-2 max-w-sm pt-2">
+
+          <div className="grid grid-cols-2 gap-2 max-w-sm pt-1">
             {footerConfig.companyDetails.highlights.map((highlight, idx) => (
-              <div key={idx} className="flex items-center gap-1.5 text-[10px] font-semibold text-zinc-450 dark:text-zinc-550">
-                <span className="text-indigo-500 dark:text-indigo-400">✔</span>
+              <div key={idx} className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-700 dark:text-zinc-300">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                 <span>{highlight.replace(/^✔\s*/, '')}</span>
               </div>
             ))}
+          </div>
+
+          <div className="pt-2">
+            <Link
+              to="/about-founder"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-100/80 dark:bg-zinc-800/80 border border-zinc-200/70 dark:border-zinc-700/60 text-xs font-bold text-zinc-800 dark:text-zinc-200 hover:border-indigo-500/40 transition-colors"
+            >
+              <span>Architected by Ajinkya Swami</span>
+              <ArrowRight className="w-3 h-3 text-indigo-500" />
+            </Link>
           </div>
         </div>
 
         {/* Column 2: Platform Links */}
         <div className="lg:col-span-2 space-y-4">
-          <h4 className="text-[10px] font-black text-zinc-900 dark:text-zinc-300 tracking-wider uppercase">
+          <h4 className="text-[10px] font-black text-zinc-900 dark:text-zinc-200 tracking-wider uppercase">
             {footerConfig.columns.platform.title}
           </h4>
           <ul className="space-y-2.5 text-xs font-semibold">
@@ -262,7 +282,7 @@ export default function Footer() {
 
         {/* Column 3: Suites & Studios */}
         <div className="lg:col-span-2 space-y-4">
-          <h4 className="text-[10px] font-black text-zinc-900 dark:text-zinc-300 tracking-wider uppercase">
+          <h4 className="text-[10px] font-black text-zinc-900 dark:text-zinc-200 tracking-wider uppercase">
             {footerConfig.columns.categories.title}
           </h4>
           <ul className="space-y-2.5 text-xs font-semibold">
@@ -276,17 +296,18 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 4: Company Links */}
+        {/* Column 4: Transparency & Legal */}
         <div className="lg:col-span-2 space-y-4">
-          <h4 className="text-[10px] font-black text-zinc-900 dark:text-zinc-300 tracking-wider uppercase">
+          <h4 className="text-[10px] font-black text-zinc-900 dark:text-zinc-200 tracking-wider uppercase">
             {footerConfig.columns.company.title}
           </h4>
           <ul className="space-y-2.5 text-xs font-semibold">
             {footerConfig.columns.company.links.map((link, idx) => (
               <li key={idx}>
                 {isExternalOrStatic(link.link) ? (
-                  <a href={link.link} target={link.link.startsWith('http') ? "_blank" : undefined} rel={link.link.startsWith('http') ? "noopener noreferrer" : undefined} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:translate-x-0.5 duration-200">
-                    {link.label}
+                  <a href={link.link} target={link.link.startsWith('http') ? "_blank" : undefined} rel={link.link.startsWith('http') ? "noopener noreferrer" : undefined} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-flex items-center gap-1 hover:translate-x-0.5 duration-200">
+                    <span>{link.label}</span>
+                    {link.link.startsWith('http') && <ExternalLink className="w-2.5 h-2.5 opacity-60" />}
                   </a>
                 ) : (
                   <Link to={link.link} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors inline-block hover:translate-x-0.5 duration-200">
@@ -301,17 +322,17 @@ export default function Footer() {
         {/* Column 5: Connect & Newsletter */}
         <div className="lg:col-span-2 space-y-6">
           <div className="space-y-3">
-            <h4 className="text-[10px] font-black text-zinc-900 dark:text-zinc-300 tracking-wider uppercase">
+            <h4 className="text-[10px] font-black text-zinc-900 dark:text-zinc-200 tracking-wider uppercase">
               {footerConfig.columns.connect.title}
             </h4>
-            <div className="flex flex-wrap gap-2.5">
+            <div className="flex flex-wrap gap-2">
               {footerConfig.columns.connect.links.map((link, idx) => {
                 const IconComponent = iconMap[link.icon] || Mail;
                 if (link.future) {
                   return (
                     <button
                       key={idx}
-                      className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 text-zinc-400 dark:text-zinc-650 cursor-not-allowed transition"
+                      className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-650 cursor-not-allowed"
                       title={`${link.label} (Coming Soon)`}
                       disabled
                     >
@@ -325,8 +346,9 @@ export default function Footer() {
                     href={link.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200/50 dark:border-zinc-800/40 text-zinc-650 dark:text-zinc-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:scale-105 hover:-translate-y-0.5 transition duration-200"
+                    className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800/80 text-zinc-600 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-500/40 hover:scale-105 transition duration-200 shadow-2xs"
                     aria-label={link.label}
+                    title={link.label}
                   >
                     <IconComponent className="w-4 h-4" />
                   </a>
@@ -335,13 +357,14 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Newsletter card */}
-          <div className="saas-card p-4 bg-zinc-100/60 dark:bg-zinc-900/40 border border-zinc-200/50 dark:border-zinc-850/60 rounded-2xl space-y-3 relative overflow-hidden">
+          {/* Newsletter Card */}
+          <div className="saas-card p-4 bg-white/80 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800/80 rounded-2xl space-y-3 relative overflow-hidden shadow-2xs">
             <div className="space-y-1 text-left">
-              <h5 className="text-[10px] font-extrabold text-zinc-800 dark:text-zinc-200 uppercase tracking-wide">
-                {footerConfig.newsletter.title}
+              <h5 className="text-[10px] font-black text-zinc-900 dark:text-white uppercase tracking-wide flex items-center gap-1.5">
+                <Sparkles className="w-3 h-3 text-indigo-500" />
+                <span>{footerConfig.newsletter.title}</span>
               </h5>
-              <p className="text-[9px] text-zinc-400 dark:text-zinc-550 leading-relaxed font-medium">
+              <p className="text-[10px] text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
                 {footerConfig.newsletter.description}
               </p>
             </div>
@@ -353,19 +376,19 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-2.5 py-1.5 text-[10px] text-zinc-900 dark:text-zinc-100 font-semibold focus:outline-none focus:border-indigo-500 placeholder-zinc-450 dark:placeholder-zinc-650"
+                className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-2.5 py-2 text-[11px] text-zinc-900 dark:text-white font-semibold focus:outline-hidden focus:ring-1 focus:ring-indigo-500 placeholder-zinc-400"
               />
               <button
                 type="submit"
-                className="px-3 py-1.5 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-[9px] cursor-pointer shrink-0 transition hover:bg-zinc-800 dark:hover:bg-zinc-100"
+                className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[10px] cursor-pointer shrink-0 transition shadow-2xs"
               >
                 {footerConfig.newsletter.buttonText}
               </button>
             </form>
 
             {newsletterStatus === 'success' && (
-              <span className="block text-[8px] font-bold text-emerald-500 animate-fadeIn text-left">
-                ✔ Success! Notify Me configuration ready. (Coming Soon)
+              <span className="block text-[9px] font-bold text-emerald-600 dark:text-emerald-400 animate-fadeIn text-left">
+                ✔ Success! You are on the release notification list.
               </span>
             )}
           </div>
@@ -373,84 +396,101 @@ export default function Footer() {
 
       </div>
 
-      {/* -------------------- TRUST & FEATURES -------------------- */}
+      {/* -------------------- 4. TRUST & STATUTORY ACCREDITATIONS -------------------- */}
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 border-b border-zinc-200/60 dark:border-zinc-900">
-        <div className="flex flex-wrap items-center justify-center sm:justify-between gap-6 text-[10px] font-extrabold text-zinc-450 dark:text-zinc-550 uppercase tracking-wider">
+        <div className="flex flex-wrap items-center justify-center sm:justify-between gap-6 text-[10px] font-extrabold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
           <div className="flex flex-wrap justify-center gap-6">
             {footerConfig.trustBadges.map((badge, idx) => {
               const Icon = iconMap[badge.icon] || Zap;
               return (
                 <div key={idx} className="flex items-center gap-1.5">
-                  <Icon className="w-3.5 h-3.5 text-indigo-500" />
+                  <Icon className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
                   <span>{badge.label}</span>
                 </div>
               );
             })}
           </div>
-          <div className="flex items-center gap-1">
-            Made with <Heart className="w-3 h-3 text-red-500 fill-red-500 animate-pulse" /> in India 🇮🇳
+          <div className="flex items-center gap-1.5 font-bold text-zinc-700 dark:text-zinc-300">
+            <span>Architected with</span>
+            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500 animate-pulse" />
+            <span>in India 🇮🇳</span>
           </div>
         </div>
       </div>
 
-      {/* -------------------- SEO TEXT -------------------- */}
+      {/* -------------------- 5. TECHNICAL SEO & KNOWLEDGE SUMMARY -------------------- */}
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 border-b border-zinc-200/60 dark:border-zinc-900">
-        <p className="text-[11px] text-zinc-455 dark:text-zinc-600 leading-relaxed font-semibold max-w-5xl text-justify sm:text-left">
-          Toolique is a free online productivity platform offering browser-based tools for developers, QA engineers, architects, civil engineers, students, designers, businesses, and makers. Explore AI-powered utilities, coding playgrounds, engineering calculators, PDF and image tools, financial calculators, and interactive learning resources—all running securely in your browser without requiring downloads or registration.
-          Discover our specialized <a href="/tools/developer" className="text-zinc-650 dark:text-zinc-500 hover:text-indigo-500 hover:underline">Developer Tools</a>, sharpen coding logic in the <a href="/academy" className="text-zinc-650 dark:text-zinc-500 hover:text-indigo-500 hover:underline">Learning Academy</a>, process requests inside <a href="/ai" className="text-zinc-650 dark:text-zinc-500 hover:text-indigo-500 hover:underline">AI Studio</a>, compute parameters using the <a href="/3d-printing" className="text-zinc-650 dark:text-zinc-500 hover:text-indigo-500 hover:underline">3D Printing Studio</a>, compile scripts directly in the <a href="/playground" className="text-zinc-650 dark:text-zinc-500 hover:text-indigo-500 hover:underline">Playground</a>, or digest calculations guides in our <a href="/blog" className="text-zinc-650 dark:text-zinc-500 hover:text-indigo-500 hover:underline">Blog</a>.
+        <p className="text-[11px] text-zinc-500 dark:text-zinc-500 leading-relaxed font-medium max-w-5xl text-justify sm:text-left">
+          {footerConfig.seoText} Discover our specialized{' '}
+          <Link to="/developer" className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold hover:underline">
+            Developer Utilities
+          </Link>, compute civil calculations via the{' '}
+          <Link to="/architecture" className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold hover:underline">
+            Architecture & Civil Suite
+          </Link>, run test cases in the{' '}
+          <Link to="/qa" className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold hover:underline">
+            QA Workspace
+          </Link>, optimize taxes in the{' '}
+          <Link to="/finance" className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold hover:underline">
+            Finance & Tax Hub
+          </Link>, or slice 3D models with the{' '}
+          <Link to="/3d-printing" className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold hover:underline">
+            3D Printing Studio
+          </Link>.
         </p>
       </div>
 
-      {/* -------------------- BOTTOM FOOTER -------------------- */}
-      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-semibold text-zinc-400 dark:text-zinc-550">
+      {/* -------------------- 6. BOTTOM SUB-FOOTER -------------------- */}
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-semibold text-zinc-500 dark:text-zinc-500">
         <div className="flex flex-col items-center md:items-start gap-1">
-          <span>{footerConfig.bottom.copyright}</span>
+          <span className="font-bold text-zinc-700 dark:text-zinc-300">{footerConfig.bottom.copyright}</span>
           <span className="text-zinc-450 dark:text-zinc-600">{footerConfig.bottom.builtBy}</span>
         </div>
 
         <div className="flex items-center gap-4 text-center">
           <div>
-            <span className="font-extrabold uppercase text-[9px] text-zinc-450 dark:text-zinc-600 block sm:inline mr-1">Version:</span>
-            <span className="text-zinc-650 dark:text-zinc-400 font-bold">{footerConfig.bottom.version}</span>
+            <span className="font-extrabold uppercase text-[9px] text-zinc-400 dark:text-zinc-600 mr-1">Version:</span>
+            <span className="text-zinc-700 dark:text-zinc-300 font-bold">{footerConfig.bottom.version}</span>
           </div>
           <span className="text-zinc-300 dark:text-zinc-800">|</span>
           <div>
-            <span className="font-extrabold uppercase text-[9px] text-zinc-450 dark:text-zinc-600 block sm:inline mr-1">Last Updated:</span>
-            <span className="text-zinc-650 dark:text-zinc-400 font-bold">{buildDate}</span>
+            <span className="font-extrabold uppercase text-[9px] text-zinc-400 dark:text-zinc-600 mr-1">Last Updated:</span>
+            <span className="text-zinc-700 dark:text-zinc-300 font-bold">{buildDate}</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center justify-center gap-4">
           {footerConfig.bottom.quickLinks.map((link, idx) => (
             isExternalOrStatic(link.link) ? (
-              <a key={idx} href={link.link} className="hover:text-indigo-655 dark:hover:text-indigo-400 transition-colors">
+              <a key={idx} href={link.link} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                 {link.label}
               </a>
             ) : (
-              <Link key={idx} to={link.link} className="hover:text-indigo-655 dark:hover:text-indigo-400 transition-colors">
+              <Link key={idx} to={link.link} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                 {link.label}
               </Link>
             )
           ))}
-          <span className="flex items-center gap-1 font-bold text-emerald-500">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-            <span>All Systems Operational</span>
-          </span>
+          <Link to="/status" className="flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+            <span>Operational</span>
+          </Link>
         </div>
       </div>
 
-      {/* -------------------- BACK TO TOP FLOATING BUTTON -------------------- */}
+      {/* -------------------- 7. BACK TO TOP FLOATING BUTTON -------------------- */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-22 sm:bottom-8 sm:right-26 p-3 rounded-2xl bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800/80 text-zinc-500 dark:text-zinc-400 shadow-xl hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-500/30 hover:scale-105 active:scale-95 transition-all duration-300 z-40 cursor-pointer ${
+        className={`fixed bottom-20 right-6 sm:bottom-24 sm:right-8 p-3 rounded-2xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800/90 text-zinc-650 dark:text-zinc-350 shadow-xl hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-500/40 hover:scale-105 active:scale-95 transition-all duration-300 z-40 cursor-pointer ${
           showBackToTop ? 'opacity-100 translate-y-0 visible' : 'opacity-0 translate-y-4 invisible pointer-events-none'
         }`}
         title="Scroll to Top"
         aria-label="Back to top"
       >
-        <ChevronUp className="w-5 h-5 animate-bounce" />
+        <ChevronUp className="w-5 h-5" />
       </button>
 
     </footer>
   );
 }
+

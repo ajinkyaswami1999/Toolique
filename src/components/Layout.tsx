@@ -24,7 +24,7 @@ export default function Layout({ children }: LayoutProps) {
   }, [pathname, hash]);
 
   return (
-    <div className="flex flex-col min-h-screen pastel-canvas-bg text-zinc-900 dark:text-zinc-100 transition-colors duration-300 relative overflow-x-hidden">
+    <div className="flex flex-col min-h-screen pastel-canvas-bg text-zinc-900 dark:text-zinc-100 transition-colors duration-300 relative overflow-x-clip">
       {/* Ambient multi-point pastel aura blooms (Left Blue & Right Pink in Dark Mode) */}
       <div className="fixed -top-[10%] -left-[10%] w-[55vw] h-[55vw] max-w-[700px] bg-gradient-to-br from-indigo-300/30 via-purple-200/20 to-transparent dark:from-sky-500/[0.22] dark:via-indigo-500/[0.16] dark:to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
       <div className="fixed top-[10%] -right-[8%] w-[55vw] h-[55vw] max-w-[680px] bg-gradient-to-bl from-rose-200/30 via-pink-100/20 to-transparent dark:from-pink-500/[0.22] dark:via-rose-500/[0.16] dark:to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />

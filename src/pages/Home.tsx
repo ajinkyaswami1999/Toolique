@@ -263,7 +263,7 @@ export default function Home() {
     <div className="animate-fadeIn text-left">
       <SEO 
         title="Toolique | Free Online Professional Tools, Calculators & Developer Hub" 
-        description="270+ free browser tools, financial calculators, SQL/JSON developer sandboxes, QA automation utilities, symbolic math calculators, and 3D printing studios. 100% private with no sign-up required."
+        description="274+ free browser tools, financial calculators, SQL/JSON developer sandboxes, QA automation utilities, symbolic math calculators, and 3D printing studios. 100% private with no sign-up required."
         schemaMarkup={homeSchema}
       />
 
@@ -285,7 +285,7 @@ export default function Home() {
           aria-hidden="true"
         />
 
-        {/* Animated Background Ticker Rows of all 270+ tools */}
+        {/* Animated Background Ticker Rows of all 274+ tools */}
         <HeroToolsBackground rowCount={6} />
 
         {/* Soft Radial Backing to guarantee 100% text readability over background marquee */}
@@ -300,7 +300,7 @@ export default function Home() {
           <div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/90 dark:bg-zinc-900/90 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/50 shadow-xs backdrop-blur-sm">
               <Sparkles className="w-3 h-3 text-indigo-500 animate-pulse" />
-              <span>✦ 270+ TOOLS • 100% FREE • ZERO SIGN-UP REQUIRED • LOCAL SANDBOX</span>
+              <span>✦ 274+ TOOLS • 100% FREE • ZERO SIGN-UP REQUIRED • LOCAL SANDBOX</span>
             </span>
           </div>
           
@@ -311,7 +311,7 @@ export default function Home() {
           
           {/* Subtitle */}
           <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed max-w-2xl mx-auto font-semibold drop-shadow-xs">
-            270+ fast, browser-based tools for calculations, development, QA, engineering, design, and everyday tasks — free to use with no sign-up and no data tracking.
+            274+ fast, browser-based tools for calculations, development, QA, engineering, design, and everyday tasks — free to use with no sign-up and no data tracking.
           </p>
 
           {/* Global Search Bar */}
@@ -323,7 +323,7 @@ export default function Home() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search 270+ tools (e.g. GST, SQL Formatter, SIP, JSON, Concrete, JWT...)"
+                placeholder="Search 274+ tools (e.g. GST, SQL Formatter, SIP, JSON, Concrete, JWT...)"
                 className="w-full pl-10 pr-16 py-2.5 rounded-2xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-pastel-indigo/30 shadow-sm transition"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
@@ -358,7 +358,7 @@ export default function Home() {
               to="/tools"
               className="px-4 py-2 rounded-2xl bg-zinc-950 hover:bg-zinc-850 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-xs shadow-md transition-all duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5"
             >
-              <span>Explore All 270+ Tools</span>
+              <span>Explore All 274+ Tools</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
             <Link
@@ -380,7 +380,7 @@ export default function Home() {
           {/* Compact Stats Row */}
           <div className="pt-2 max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
             <div className="py-2 px-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-900/80 backdrop-blur-md shadow-2xs">
-              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-white tracking-tight">270+</div>
+              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-white tracking-tight">274+</div>
               <div className="text-[9px] font-black uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Online Tools</div>
             </div>
             <div className="py-2 px-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-900/80 backdrop-blur-md shadow-2xs">
@@ -705,7 +705,7 @@ export default function Home() {
               ⚡ Do I need to create an account or pay a fee?
             </h4>
             <p className="text-zinc-500 dark:text-zinc-400 font-medium">
-              No. All 270+ calculators, generators, and learning academy tracks are completely free with zero registration or paywalls.
+              No. All 274+ calculators, generators, and learning academy tracks are completely free with zero registration or paywalls.
             </p>
           </div>
 
@@ -737,7 +737,7 @@ export default function Home() {
           Ready to supercharge your workflow?
         </h2>
         <p className="text-xs md:text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed font-medium relative z-10">
-          Access 270+ fast, client-side tools designed for builders, engineers, and analysts. No subscriptions, zero limits.
+          Access 274+ fast, client-side tools designed for builders, engineers, and analysts. No subscriptions, zero limits.
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2 relative z-10">
           <Link
