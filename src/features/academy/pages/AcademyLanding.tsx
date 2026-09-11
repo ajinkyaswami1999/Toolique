@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, 
   Search, 
@@ -8,27 +9,30 @@ import {
   BookOpen, 
   ArrowRight, 
   Bookmark, 
-  SlidersHorizontal,
-  TrendingUp,
-  Brain,
-  Terminal,
-  Download,
-  Upload,
-  Layers,
-  Gift
+  SlidersHorizontal, 
+  TrendingUp, 
+  Brain, 
+  Terminal, 
+  Download, 
+  Upload, 
+  Layers, 
+  Gift, 
+  CheckCircle2, 
+  Code2, 
+  Database, 
+  Check, 
+  ChevronRight 
 } from 'lucide-react';
 import SEO from '../../../components/SEO';
 import LucideIcon from '../../../components/LucideIcon';
 import { academyCategories } from '../data/categories';
 import { allQuestions } from '../data/questions/qa';
 import { useAcademyProgress } from '../hooks/useAcademyProgress';
-
 import type { Question } from '../types';
 
 import JoinVisualizer from '../components/JoinVisualizer';
 import DataStructureVisual from '../components/DataStructureVisual';
 import FlashcardViewer from '../components/FlashcardViewer';
-
 import GamificationStudio from '../components/GamificationStudio';
 import SkillTree from '../components/SkillTree';
 import LearningInsights from '../components/LearningInsights';
@@ -37,38 +41,15 @@ export default function AcademyLanding() {
   const { progress, completeQuestion } = useAcademyProgress();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [selectedTrack, setSelectedTrack] = useState('all');
   const [selectedTopic, setSelectedTopic] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
-  const [activeStudioTab, setActiveStudioTab] = useState<'tracks' | 'gamification' | 'skilltree' | 'insights'>('tracks');
+  const [activeStudioTab, setActiveStudioTab] = useState<'tracks' | 'visualizers' | 'flashcards' | 'gamification' | 'skilltree' | 'insights'>('tracks');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Statistics configuration
-  const stats = [
-    { label: 'Learning Tracks', value: academyCategories.length, icon: BookOpen },
-    { label: 'Total Challenges', value: allQuestions.length, icon: Brain },
-    { label: 'Daily Challenges', value: 365, icon: Flame },
-    { label: 'Interview Questions', value: allQuestions.filter((q: Question) => q.difficulty === 'interview').length, icon: Award }
-  ];
-
-  // Filter questions based on query and filters
-  const filteredQuestions = allQuestions.filter((q: Question) => {
-    const matchesSearch = 
-      q.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      q.topic.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      q.tags.some((t: string) => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (q.companies && q.companies.some((c: string) => c.toLowerCase().includes(searchQuery.toLowerCase())));
-    
-    const matchesDifficulty = selectedDifficulty === 'all' || q.difficulty === selectedDifficulty;
-    const matchesTopic = selectedTopic === 'all' || q.topic === selectedTopic;
-
-    return matchesSearch && matchesDifficulty && matchesTopic;
-  });
-
-  // Extract all unique topics for filter dropdown
-  const allTopics = Array.from(new Set(allQuestions.map((q: Question) => q.topic)));
-
-  const scrollToCategories = () => {
-    const el = document.getElementById('academy-tracks');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
   };
 
   // Gamification calculations
@@ -76,11 +57,94 @@ export default function AcademyLanding() {
   const currentLevelXp = progress.xp % nextLevelXp;
   const levelProgressPct = (currentLevelXp / nextLevelXp) * 100;
 
+  // Filter questions based on query and filters
+  const filteredQuestions = useMemo(() => {
+    return allQuestions.filter((q: Question) => {
+      const qTrack = q.id.startsWith('sql') ? 'sql' : q.id.startsWith('py') ? 'python' : q.id.startsWith('js') ? 'javascript' : q.id.startsWith('react') ? 'react' : 'qa';
+      
+      if (selectedTrack !== 'all' && qTrack !== selectedTrack) {
+        return false;
+      }
+      if (selectedDifficulty !== 'all' && q.difficulty !== selectedDifficulty) {
+        return false;
+      }
+      if (selectedTopic !== 'all' && q.topic !== selectedTopic) {
+        return false;
+      }
+
+      if (searchQuery.trim() !== '') {
+        const query = searchQuery.toLowerCase();
+        const matchesTitle = q.title.toLowerCase().includes(query);
+        const matchesTopic = q.topic.toLowerCase().includes(query);
+        const matchesTag = q.tags.some((t: string) => t.toLowerCase().includes(query));
+        const matchesCompany = q.companies && q.companies.some((c: string) => c.toLowerCase().includes(query));
+        if (!matchesTitle && !matchesTopic && !matchesTag && !matchesCompany) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [searchQuery, selectedDifficulty, selectedTrack, selectedTopic]);
+
+  // Extract all unique topics for filter dropdown
+  const allTopics = useMemo(() => Array.from(new Set(allQuestions.map((q: Question) => q.topic))), []);
+
+  // Today's Daily Challenge pick (deterministic based on day of year)
+  const dailyChallenge = useMemo(() => {
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+    return allQuestions[dayOfYear % allQuestions.length] || allQuestions[0];
+  }, []);
+
+  const isDailySolved = progress.completedQuestions.includes(dailyChallenge.id);
+
+  // Track Icon & Color helpers
+  const getTrackColor = (catId: string) => {
+    switch (catId) {
+      case 'sql':
+        return {
+          gradient: 'from-blue-600 to-indigo-600',
+          badge: 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20',
+          border: 'hover:border-blue-500/40'
+        };
+      case 'python':
+        return {
+          gradient: 'from-emerald-600 to-teal-600',
+          badge: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20',
+          border: 'hover:border-emerald-500/40'
+        };
+      case 'javascript':
+        return {
+          gradient: 'from-amber-500 to-yellow-600',
+          badge: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20',
+          border: 'hover:border-amber-500/40'
+        };
+      case 'react':
+        return {
+          gradient: 'from-cyan-500 to-blue-600',
+          badge: 'bg-cyan-500/10 text-cyan-700 dark:text-cyan-400 border-cyan-500/20',
+          border: 'hover:border-cyan-500/40'
+        };
+      case 'qa':
+        return {
+          gradient: 'from-purple-600 to-pink-600',
+          badge: 'bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/20',
+          border: 'hover:border-purple-500/40'
+        };
+      default:
+        return {
+          gradient: 'from-indigo-600 to-violet-600',
+          badge: 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-500/20',
+          border: 'hover:border-indigo-500/40'
+        };
+    }
+  };
+
   // Determine badges earned based on XP/solved count
   const badges = [
     { name: 'Hello World', desc: 'Join the Academy', earned: true, icon: Sparkles },
     { name: 'Problem Solver', desc: 'Solve 1+ Questions', earned: progress.completedQuestions.length >= 1, icon: Brain },
-    { name: 'SQL Apprentice', desc: 'Solve 1 SQL Question', earned: progress.completedQuestions.some(id => id.startsWith('sql')), icon: BookOpen },
+    { name: 'SQL Apprentice', desc: 'Solve 1 SQL Question', earned: progress.completedQuestions.some(id => id.startsWith('sql')), icon: Database },
     { name: '100 XP Club', desc: 'Earn 100+ total XP', earned: progress.xp >= 100, icon: Award },
     { name: 'Code Master', desc: 'Solve 5+ Questions', earned: progress.completedQuestions.length >= 5, icon: Award }
   ];
@@ -100,6 +164,7 @@ export default function AcademyLanding() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    showToast('Progress backup exported successfully!');
   };
 
   // Restore backup data
@@ -113,194 +178,348 @@ export default function AcademyLanding() {
         const parsed = JSON.parse(e.target.result);
         if (parsed.progress) localStorage.setItem('toolique_academy_progress', parsed.progress);
         if (parsed.spacedRepetition) localStorage.setItem('toolique_spaced_repetition', parsed.spacedRepetition);
-        alert('Restore completed successfully! Reloading page...');
-        window.location.reload();
+        showToast('Restore completed successfully! Reloading...');
+        setTimeout(() => window.location.reload(), 1000);
       } catch {
-        alert('Invalid backup file formatting.');
+        showToast('Invalid backup file format.');
       }
     };
     reader.readAsText(file);
   };
 
   return (
-    <div className="space-y-12 py-4">
+    <div className="space-y-10 py-4 text-left animate-fadeIn pb-16">
       <SEO
-        title="Toolique Academy | Learn Programming & QA Interview Prep"
-        description="Practice programming, software engineering, QA automation, and technical interview questions with dynamic daily challenges and progress tracking."
+        title="Toolique Academy | Master Coding, Databases & QA Automation"
+        description="Practice programming, software engineering, SQL optimization, Python scripting, React architecture, and QA automation interview challenges in an offline-first browser sandbox."
+        canonicalUrl="https://www.toolique.in/academy"
       />
 
-      {/* Hero Section */}
-      <section className="relative p-8 sm:p-12 rounded-3xl border border-zinc-200/60 dark:border-zinc-800/60 bg-gradient-to-br from-white/70 to-white/30 dark:from-zinc-900/60 dark:to-zinc-950/30 backdrop-blur-md overflow-hidden text-center max-w-5xl mx-auto animate-fadeIn">
-        <div className="absolute top-0 right-0 w-36 h-36 bg-indigo-500/[0.04] dark:bg-indigo-500/[0.02] rounded-bl-full pointer-events-none" />
-        <div className="relative z-10 space-y-6 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-650 dark:text-indigo-400 text-[10px] font-bold uppercase tracking-wider border border-indigo-500/15">
-            <Sparkles className="w-3.5 h-3.5" /> Offline-First Platform
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="fixed top-20 right-6 z-[120] px-4 py-3 rounded-2xl bg-slate-900/95 text-white dark:bg-white dark:text-slate-900 shadow-2xl backdrop-blur-md flex items-center gap-2.5 text-xs font-bold border border-slate-700/50 dark:border-slate-200"
+          >
+            <Check className="w-4 h-4 text-emerald-400 dark:text-emerald-600" />
+            <span>{toastMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Hero Header Section */}
+      <div className="relative p-6 sm:p-10 md:p-12 rounded-3xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white border border-slate-800 shadow-2xl">
+        {/* Ambient neon aura blur */}
+        <div className="absolute top-0 right-0 -mr-24 -mt-24 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 -mb-24 w-80 h-80 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-4xl space-y-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3 text-amber-400" />
+              Toolique Interactive Academy
+            </span>
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-slate-800/80 text-slate-300 border border-slate-700">
+              100% Free • Client-Side Sandbox
+            </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-white leading-tight">
-            Learn by Solving <span className="text-indigo-600 dark:text-indigo-400">Real Problems</span>
+
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-tight">
+            Master Technical Coding &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400">Interview Prep</span>
           </h1>
-          <p className="text-sm sm:text-base text-zinc-505 dark:text-zinc-400 leading-relaxed font-medium">
-            Practice programming, QA automation, engineering, and technical interview questions with step-by-step solutions, explanations, and daily practice challenges.
+
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl font-normal">
+            Sharpen your software engineering, database query optimization, and QA automation skills with hands-on live code challenges, visual explainers, spaced repetition, and real-world company questions.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <button 
-              onClick={scrollToCategories}
-              className="saas-button-primary text-xs"
+
+          {/* Quick Action CTAs */}
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <a
+              href="#academy-tracks"
+              className="px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-indigo-600/20 flex items-center gap-2 transition"
             >
-              Start Learning <ArrowRight className="w-4 h-4" />
-            </button>
-            <Link 
+              <span>Explore 5+ Tracks</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+
+            <Link
               to="/academy/playgrounds"
-              className="saas-button-secondary text-xs flex items-center gap-2"
+              className="px-5 py-3 rounded-2xl border border-slate-700 bg-slate-800/60 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-2 transition"
             >
-              <Terminal className="w-4 h-4" /> Code Playground
+              <Terminal className="w-4 h-4 text-emerald-400" />
+              <span>SQL &amp; Code Playgrounds</span>
             </Link>
-            <Link 
+
+            <Link
               to="/academy/learn"
-              className="saas-button-secondary text-xs flex items-center gap-2"
+              className="px-5 py-3 rounded-2xl border border-slate-700 bg-slate-800/60 hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-2 transition"
             >
-              <Layers className="w-4 h-4" /> Visual Explainers
+              <Layers className="w-4 h-4 text-purple-400" />
+              <span>Visual Explainers</span>
             </Link>
+
+            <Link
+              to="/academy/bookmarks"
+              className="px-4 py-3 rounded-2xl border border-slate-700 bg-slate-800/60 hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-1.5 transition ml-auto"
+            >
+              <Bookmark className="w-4 h-4 text-amber-400" />
+              <span className="hidden sm:inline">Saved Bookmarks</span>
+            </Link>
+          </div>
+
+          {/* Platform Stat Metrics */}
+          <div className="pt-3 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 border-t border-slate-800/80 mt-6">
+            <div>
+              <div className="text-lg sm:text-xl font-black text-white">{academyCategories.length} Specialized Tracks</div>
+              <div className="text-[11px] text-slate-400 font-medium">SQL, Py, JS, React, QA</div>
+            </div>
+            <div>
+              <div className="text-lg sm:text-xl font-black text-indigo-400">{allQuestions.length}+ Live Challenges</div>
+              <div className="text-[11px] text-slate-400 font-medium">With Automated Test Runners</div>
+            </div>
+            <div>
+              <div className="text-lg sm:text-xl font-black text-emerald-400">Zero Accounts Required</div>
+              <div className="text-[11px] text-slate-400 font-medium">Local State &amp; Backups</div>
+            </div>
+            <div>
+              <div className="text-lg sm:text-xl font-black text-purple-400">365 Daily Series</div>
+              <div className="text-[11px] text-slate-400 font-medium">Spaced Practice System</div>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Gamification Dashboard & Progress Tracker */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      {/* Gamification Dashboard & Progress Tracker Grid */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* User Progress Stats Card */}
-        <div className="p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md space-y-4 text-left">
-          <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-650 uppercase tracking-wider flex items-center justify-between">
-            Your Profile
-            <Link to="/academy/bookmarks" className="text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
-              <Bookmark className="w-3.5 h-3.5" /> Bookmarks
-            </Link>
-          </h3>
+        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm space-y-4 text-left">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+              <Brain className="w-4 h-4 text-indigo-500" />
+              Mastery Profile
+            </h3>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60">
+              Rank #{progress.level}
+            </span>
+          </div>
+
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex flex-col items-center justify-center border border-indigo-500/20 shrink-0">
-              <span className="text-[10px] font-bold uppercase tracking-wider">Level</span>
-              <span className="text-xl font-black">{progress.level}</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex flex-col items-center justify-center shadow-md shadow-indigo-600/20 shrink-0">
+              <span className="text-[9px] font-black uppercase tracking-wider">Level</span>
+              <span className="text-xl font-black leading-none">{progress.level}</span>
             </div>
             <div className="flex-grow space-y-1.5">
               <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-zinc-800 dark:text-zinc-200">{progress.xp} Total XP</span>
-                <span className="text-zinc-455 dark:text-zinc-500">{currentLevelXp} / {nextLevelXp} XP</span>
+                <span className="text-slate-900 dark:text-white">{progress.xp} Total XP</span>
+                <span className="text-slate-500 dark:text-slate-400">{currentLevelXp} / {nextLevelXp} XP</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-zinc-200 dark:bg-zinc-855 overflow-hidden">
-                <div className="h-full bg-indigo-600 dark:bg-indigo-400 transition-all duration-300" style={{ width: `${levelProgressPct}%` }} />
+              <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300 rounded-full" style={{ width: `${levelProgressPct}%` }} />
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 pt-2 border-t border-zinc-200/50 dark:border-zinc-850/80 text-center">
-            <div>
-              <span className="block text-lg font-black text-zinc-900 dark:text-white flex items-center justify-center gap-1">
-                <Flame className="w-4 h-4 text-orange-500 fill-orange-500" /> {progress.streak}
+
+          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+            <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-850">
+              <span className="block text-lg font-black text-slate-900 dark:text-white flex items-center justify-center gap-1">
+                <Flame className="w-4.5 h-4.5 text-orange-500 fill-orange-500" />
+                {progress.streak}
               </span>
-              <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-550 uppercase">Active Streak</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">Day Streak</span>
             </div>
-            <div>
-              <span className="block text-lg font-black text-zinc-900 dark:text-white">
+            <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-850">
+              <span className="block text-lg font-black text-emerald-600 dark:text-emerald-400">
                 {progress.completedQuestions.length}
               </span>
-              <span className="text-[9px] font-bold text-zinc-400 dark:text-zinc-555 uppercase">Solved Challenges</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">Solved Challenges</span>
             </div>
           </div>
         </div>
 
-        {/* Badges and Milestones Card */}
-        <div className="md:col-span-2 p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md space-y-4 text-left">
+        {/* Badges & Backup Card */}
+        <div className="md:col-span-2 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm space-y-4 text-left flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold text-zinc-400 dark:text-zinc-650 uppercase tracking-wider flex items-center gap-1.5">
-              <Award className="w-4 h-4 text-yellow-500" /> Earned Badges
+            <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+              <Award className="w-4 h-4 text-amber-500" />
+              Earned Badges &amp; Milestones
             </h3>
 
             {/* Backup Import/Export buttons */}
             <div className="flex items-center gap-2">
               <button 
+                type="button"
                 onClick={handleBackup}
-                className="text-[9px] font-bold text-zinc-500 hover:text-indigo-500 flex items-center gap-1 bg-zinc-100 dark:bg-zinc-900 px-2 py-1 rounded-md cursor-pointer"
+                className="text-[10px] font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2.5 py-1.5 rounded-xl transition cursor-pointer border border-slate-200/60 dark:border-slate-700/60"
               >
-                <Download className="w-3 h-3" /> Backup
+                <Download className="w-3.5 h-3.5" />
+                <span>Backup JSON</span>
               </button>
-              <label className="text-[9px] font-bold text-zinc-500 hover:text-indigo-500 flex items-center gap-1 bg-zinc-100 dark:bg-zinc-900 px-2 py-1 rounded-md cursor-pointer">
-                <Upload className="w-3 h-3" /> Restore
+              <label className="text-[10px] font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2.5 py-1.5 rounded-xl transition cursor-pointer border border-slate-200/60 dark:border-slate-700/60">
+                <Upload className="w-3.5 h-3.5" />
+                <span>Restore JSON</span>
                 <input type="file" accept=".json" onChange={handleRestore} className="hidden" />
               </label>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 pt-1">
             {badges.map((badge, idx) => {
               const BadgeIcon = badge.icon;
               return (
                 <div 
                   key={idx}
-                  className={`p-3 rounded-xl border flex flex-col items-center justify-center text-center space-y-1.5 transition ${
+                  className={`p-3 rounded-2xl border flex flex-col items-center justify-center text-center space-y-1.5 transition ${
                     badge.earned 
-                      ? 'border-indigo-500/20 bg-indigo-500/5 text-zinc-800 dark:text-zinc-200' 
-                      : 'border-zinc-200/50 dark:border-zinc-850 bg-zinc-100/10 text-zinc-455 dark:text-zinc-600 opacity-60'
+                      ? 'border-indigo-500/30 bg-indigo-50/40 dark:bg-indigo-950/20 text-slate-900 dark:text-slate-100 shadow-xs' 
+                      : 'border-slate-200/60 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-900/30 text-slate-400 opacity-50'
                   }`}
                   title={badge.desc}
                 >
-                  <div className={`p-2 rounded-lg ${badge.earned ? 'bg-indigo-500/10 text-indigo-500' : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-600'}`}>
+                  <div className={`p-2 rounded-xl ${badge.earned ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
                     <BadgeIcon className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-bold leading-tight">{badge.name}</span>
+                  <span className="text-[10px] font-black leading-tight">{badge.name}</span>
                 </div>
               );
             })}
           </div>
+
+          <div className="text-[11px] text-slate-400 flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+            <span>Progress automatically saved in local browser storage</span>
+            <span className="font-bold text-indigo-500">Zero tracking cookies</span>
+          </div>
         </div>
       </section>
 
-      {/* Academy Feature Tabs Selector */}
-      <div className="max-w-5xl mx-auto border-b border-zinc-200 dark:border-zinc-850 pb-2 flex flex-wrap items-center justify-center sm:justify-start gap-2">
+      {/* Today's Daily Spotlight Challenge Banner */}
+      {dailyChallenge && (
+        <div className="p-6 rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-50/40 via-white to-orange-50/30 dark:from-amber-950/20 dark:via-slate-900 dark:to-orange-950/10 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="space-y-1.5 max-w-2xl">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                <Flame className="w-3 h-3 text-orange-500 fill-orange-500" />
+                Today's Daily Challenge
+              </span>
+              <span className="text-xs font-black text-amber-600 dark:text-amber-400">+50 XP Reward</span>
+              {isDailySolved && (
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/15 text-emerald-600 border border-emerald-500/30 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" /> Solved Today
+                </span>
+              )}
+            </div>
+
+            <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
+              {dailyChallenge.title}
+            </h3>
+
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Topic: <strong>{dailyChallenge.topic}</strong> • Tags: {dailyChallenge.tags.join(', ')}
+            </p>
+          </div>
+
+          <div className="shrink-0 w-full md:w-auto">
+            {(() => {
+              const track = dailyChallenge.id.startsWith('sql') ? 'sql' : dailyChallenge.id.startsWith('py') ? 'python' : dailyChallenge.id.startsWith('js') ? 'javascript' : dailyChallenge.id.startsWith('react') ? 'react' : 'qa';
+              return (
+                <Link
+                  to={`/academy/${track}/question/${dailyChallenge.slug}`}
+                  className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 transition"
+                >
+                  <span>{isDailySolved ? 'Review Solution' : 'Solve Daily Challenge'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              );
+            })()}
+          </div>
+        </div>
+      )}
+
+      {/* Academy Feature Segmented Tabs */}
+      <div className="border-b border-slate-200 dark:border-slate-800 pb-2 flex flex-wrap items-center justify-start gap-2 overflow-x-auto scrollbar-none">
         <button
+          type="button"
           onClick={() => setActiveStudioTab('tracks')}
-          className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+          className={`px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-2 border ${
             activeStudioTab === 'tracks' 
-              ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 shadow-sm' 
-              : 'text-zinc-500 hover:text-zinc-800'
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm border-slate-900 dark:border-white' 
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <BookOpen className="w-3.5 h-3.5" />
           <span>Learning Tracks</span>
         </button>
+
         <button
-          onClick={() => setActiveStudioTab('gamification')}
-          className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
-            activeStudioTab === 'gamification' 
-              ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 shadow-sm' 
-              : 'text-zinc-500 hover:text-zinc-800'
+          type="button"
+          onClick={() => setActiveStudioTab('visualizers')}
+          className={`px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-2 border ${
+            activeStudioTab === 'visualizers' 
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm border-slate-900 dark:border-white' 
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Gift className="w-3.5 h-3.5" />
+          <Layers className="w-3.5 h-3.5 text-purple-500" />
+          <span>Visualizers Sandbox</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveStudioTab('flashcards')}
+          className={`px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-2 border ${
+            activeStudioTab === 'flashcards' 
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm border-slate-900 dark:border-white' 
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Brain className="w-3.5 h-3.5 text-emerald-500" />
+          <span>Spaced Flashcards</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveStudioTab('gamification')}
+          className={`px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-2 border ${
+            activeStudioTab === 'gamification' 
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm border-slate-900 dark:border-white' 
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Gift className="w-3.5 h-3.5 text-amber-500" />
           <span>Rewards Studio</span>
         </button>
+
         <button
+          type="button"
           onClick={() => setActiveStudioTab('skilltree')}
-          className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+          className={`px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-2 border ${
             activeStudioTab === 'skilltree' 
-              ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 shadow-sm' 
-              : 'text-zinc-500 hover:text-zinc-800'
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm border-slate-900 dark:border-white' 
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Layers className="w-3.5 h-3.5" />
-          <span>Interactive Skill Tree</span>
+          <Code2 className="w-3.5 h-3.5 text-blue-500" />
+          <span>Skill Tree</span>
         </button>
+
         <button
+          type="button"
           onClick={() => setActiveStudioTab('insights')}
-          className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+          className={`px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-2 border ${
             activeStudioTab === 'insights' 
-              ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-900 shadow-sm' 
-              : 'text-zinc-500 hover:text-zinc-800'
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm border-slate-900 dark:border-white' 
+              : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Brain className="w-3.5 h-3.5" />
-          <span>Insights & Analytics</span>
+          <TrendingUp className="w-3.5 h-3.5 text-indigo-500" />
+          <span>Learning Analytics</span>
         </button>
       </div>
 
       {/* RENDER ACTIVE TAB */}
-      <div className="max-w-5xl mx-auto">
+      <div>
         {activeStudioTab === 'gamification' && (
           <GamificationStudio progress={progress} onRewardEarned={(xpReward) => completeQuestion('reward-claim-' + Math.random(), xpReward)} />
         )}
@@ -313,68 +532,75 @@ export default function AcademyLanding() {
           <LearningInsights progress={progress} />
         )}
 
-        {activeStudioTab === 'tracks' && (
-          <div className="space-y-12 text-left">
-            {/* Dynamic Statistics Grid */}
-            <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {stats.map((stat, idx) => {
-                const IconComponent = stat.icon;
-                return (
-                  <div key={idx} className="p-5 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-white/30 dark:bg-zinc-950/30 backdrop-blur-md flex items-center gap-4">
-                    <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-655 dark:text-zinc-450">
-                      <IconComponent className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="block text-xl font-black text-zinc-900 dark:text-white">{stat.value}</span>
-                      <span className="text-[10px] font-bold text-zinc-455 dark:text-zinc-555 uppercase">{stat.label}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </section>
-
-            {/* Flashcard decks inline section */}
-            <section>
-              <FlashcardViewer />
-            </section>
-
-            {/* SQL & DS Visualizers inline section */}
-            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {activeStudioTab === 'visualizers' && (
+          <div className="space-y-6">
+            <div className="p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/50 dark:border-indigo-800/40 text-xs text-indigo-900 dark:text-indigo-200 font-semibold flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-indigo-500" />
+              <span>Interactive visual sandbox engines designed to build deep mental models of query sets and memory structures.</span>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <JoinVisualizer />
               <DataStructureVisual />
-            </section>
+            </div>
+          </div>
+        )}
 
+        {activeStudioTab === 'flashcards' && (
+          <div className="space-y-4">
+            <FlashcardViewer />
+          </div>
+        )}
+
+        {activeStudioTab === 'tracks' && (
+          <div className="space-y-12 text-left">
             {/* Questions Search & Filter Section */}
             <section className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* Search Input */}
                 <div className="relative flex-grow">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-455 dark:text-zinc-550 w-4 h-4" />
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
                   <input
                     type="text"
-                    placeholder="Search challenges by title, tag, or company (e.g. JOINs, Google)..."
+                    placeholder="Search 100+ challenges by title, tag, or company (e.g. JOINs, Google, TCS)..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-xs font-semibold focus:outline-none focus:border-indigo-500 placeholder-zinc-450 dark:placeholder-zinc-650"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 text-xs font-semibold focus:outline-none focus:border-indigo-500 placeholder-slate-400 dark:placeholder-slate-500 shadow-xs"
                   />
                 </div>
                 <button
+                  type="button"
                   onClick={() => setShowFilters(!showFilters)}
-                  className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-55 dark:hover:bg-zinc-900 text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 cursor-pointer shrink-0"
+                  className="px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 cursor-pointer shrink-0 shadow-xs"
                 >
-                  <SlidersHorizontal className="w-4 h-4" /> Filters
+                  <SlidersHorizontal className="w-4 h-4" />
+                  <span>Filters</span>
                 </button>
               </div>
 
-              {/* Filter Sliders */}
+              {/* Filter Controls Bar */}
               {showFilters && (
-                <div className="p-4 rounded-xl border border-zinc-200/60 dark:border-zinc-800/80 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-md grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fadeIn">
+                <div className="p-4 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm grid grid-cols-1 sm:grid-cols-3 gap-4 animate-fadeIn">
                   <div>
-                    <label className="block text-[10px] font-bold text-zinc-450 dark:text-zinc-505 uppercase mb-1.5">Difficulty</label>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase mb-1.5">Track / Category</label>
+                    <select
+                      value={selectedTrack}
+                      onChange={(e) => setSelectedTrack(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-xs font-semibold focus:outline-none text-slate-800 dark:text-slate-200"
+                    >
+                      <option value="all">All Tracks</option>
+                      <option value="sql">SQL &amp; Databases</option>
+                      <option value="python">Python Programming</option>
+                      <option value="javascript">JavaScript Core</option>
+                      <option value="react">React &amp; Modern Frontend</option>
+                      <option value="qa">QA Automation &amp; Testing</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase mb-1.5">Difficulty</label>
                     <select
                       value={selectedDifficulty}
                       onChange={(e) => setSelectedDifficulty(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-semibold focus:outline-none text-zinc-850 dark:text-zinc-200"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-xs font-semibold focus:outline-none text-slate-800 dark:text-slate-200"
                     >
                       <option value="all">All Difficulties</option>
                       <option value="beginner">Beginner</option>
@@ -384,11 +610,11 @@ export default function AcademyLanding() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-zinc-455 dark:text-zinc-505 uppercase mb-1.5">Topics</label>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase mb-1.5">Topic</label>
                     <select
                       value={selectedTopic}
                       onChange={(e) => setSelectedTopic(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-semibold focus:outline-none text-zinc-850 dark:text-zinc-200"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-xs font-semibold focus:outline-none text-slate-800 dark:text-slate-200"
                     >
                       <option value="all">All Topics</option>
                       {allTopics.map(t => (
@@ -400,40 +626,73 @@ export default function AcademyLanding() {
               )}
 
               {/* Question search results list */}
-              {searchQuery.trim() && (
-                <div className="saas-card p-4 space-y-2 max-h-72 overflow-y-auto">
-                  <h4 className="text-[10px] font-bold text-zinc-400 dark:text-zinc-650 uppercase tracking-wider px-2">
-                    Search Results ({filteredQuestions.length})
-                  </h4>
+              {(searchQuery.trim() || selectedTrack !== 'all' || selectedDifficulty !== 'all' || selectedTopic !== 'all') && (
+                <div className="p-5 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-lg space-y-2 max-h-96 overflow-y-auto">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider">
+                      Filtered Questions ({filteredQuestions.length})
+                    </h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery('');
+                        setSelectedTrack('all');
+                        setSelectedDifficulty('all');
+                        setSelectedTopic('all');
+                      }}
+                      className="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline"
+                    >
+                      Reset filters
+                    </button>
+                  </div>
                   {filteredQuestions.length > 0 ? (
                     filteredQuestions.map(q => {
                       const track = q.id.startsWith('sql') ? 'sql' : q.id.startsWith('py') ? 'python' : q.id.startsWith('js') ? 'javascript' : q.id.startsWith('react') ? 'react' : 'qa';
+                      const isSolved = progress.completedQuestions.includes(q.id);
+
                       return (
                         <Link
                           key={q.id}
                           to={`/academy/${track}/question/${q.slug}`}
-                          className="flex items-center justify-between p-2.5 rounded-lg hover:bg-zinc-100/50 dark:hover:bg-zinc-900/40 transition group"
+                          className="flex items-center justify-between p-3 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition group border border-transparent hover:border-slate-200 dark:hover:border-slate-700"
                         >
-                          <div className="flex flex-col text-left">
-                            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition">{q.title}</span>
-                            <span className="text-[9px] text-zinc-400 mt-0.5">{q.topic} • {q.tags.join(', ')}</span>
+                          <div className="flex items-center gap-3">
+                            <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isSolved ? 'bg-emerald-500/20 text-emerald-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
+                              {isSolved ? <CheckCircle2 className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                            </div>
+                            <div className="flex flex-col text-left">
+                              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                                {q.title}
+                              </span>
+                              <span className="text-[10px] text-slate-400 mt-0.5">
+                                {q.topic} • {q.tags.join(', ')}
+                              </span>
+                            </div>
                           </div>
-                          <span className={`saas-badge text-[8px] font-bold px-2 py-0.5 rounded border capitalize ${
-                            q.difficulty === 'beginner' 
-                              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600'
-                              : q.difficulty === 'intermediate'
-                              ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-600'
-                              : q.difficulty === 'advanced'
-                              ? 'bg-rose-500/10 border-rose-500/20 text-rose-600'
-                              : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600'
-                          }`}>
-                            {q.difficulty}
-                          </span>
+
+                          <div className="flex items-center gap-2 shrink-0">
+                            {q.companies && q.companies.slice(0, 2).map((comp: string) => (
+                              <span key={comp} className="hidden sm:inline px-2 py-0.5 rounded-md text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                                {comp}
+                              </span>
+                            ))}
+                            <span className={`text-[9px] font-black px-2 py-0.5 rounded-md border uppercase tracking-wider ${
+                              q.difficulty === 'beginner' 
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600'
+                                : q.difficulty === 'intermediate'
+                                ? 'bg-amber-500/10 border-amber-500/20 text-amber-600'
+                                : q.difficulty === 'advanced'
+                                ? 'bg-rose-500/10 border-rose-500/20 text-rose-600'
+                                : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-600'
+                            }`}>
+                              {q.difficulty}
+                            </span>
+                          </div>
                         </Link>
                       );
                     })
                   ) : (
-                    <div className="py-6 text-center text-xs text-zinc-450 dark:text-zinc-600">No questions found matching your search parameters.</div>
+                    <div className="py-8 text-center text-xs text-slate-400">No questions found matching your search parameters.</div>
                   )}
                 </div>
               )}
@@ -441,64 +700,93 @@ export default function AcademyLanding() {
 
             {/* Learning Tracks Grid */}
             <section id="academy-tracks" className="scroll-mt-24 space-y-6">
-              <h2 className="text-2xl font-black text-zinc-900 dark:text-white text-center sm:text-left">
-                Select Your Learning Track
-              </h2>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Comprehensive Roadmaps</span>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+                    Select Your Learning Track
+                  </h2>
+                </div>
+                <span className="text-xs text-slate-400 font-semibold">{academyCategories.length} Curated Tracks Available</span>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {academyCategories.map((cat) => {
                   const solvedCount = progress.completedQuestions.filter(id => id.startsWith(cat.id)).length;
                   const isTrackSoon = cat.id !== 'sql' && cat.id !== 'python' && cat.id !== 'javascript' && cat.id !== 'react' && cat.id !== 'qa';
+                  const theme = getTrackColor(cat.id);
 
                   return (
                     <div
                       key={cat.id}
-                      className="p-6 rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60 bg-gradient-to-br from-white/70 to-white/30 dark:from-zinc-900/60 dark:to-zinc-950/30 shadow-sm flex flex-col justify-between group hover:border-indigo-500/30 transition-all duration-300 relative overflow-hidden"
+                      className="group relative rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm hover:shadow-xl hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300 flex flex-col justify-between overflow-hidden"
                     >
-                      <div className="space-y-4">
+                      {/* Top Accent Gradient Bar */}
+                      <div className={`h-1.5 w-full bg-gradient-to-r ${theme.gradient}`} />
+
+                      <div className="p-6 space-y-4">
                         <div className="flex items-center justify-between">
-                          <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-455 group-hover:bg-indigo-500/15 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
-                            <LucideIcon name={cat.icon} className="w-6 h-6" />
+                          <div className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-xs">
+                            <LucideIcon name={cat.icon} className="w-5 h-5" />
                           </div>
                           {isTrackSoon ? (
-                            <span className="text-[8px] font-bold text-zinc-455 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-2 py-0.5 rounded-md uppercase tracking-wider">
-                              Cheatsheet
+                            <span className="text-[9px] font-black text-slate-500 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1 rounded-xl uppercase tracking-wider">
+                              Cheat Sheet &amp; Roadmap
                             </span>
                           ) : (
-                            <span className="text-[8px] font-bold text-emerald-600 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md uppercase tracking-wider">
-                              Practice
+                            <span className="text-[9px] font-black text-emerald-600 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-xl uppercase tracking-wider flex items-center gap-1">
+                              <Sparkles className="w-3 h-3" /> Practice Ready
                             </span>
                           )}
                         </div>
 
                         <div className="space-y-1.5 text-left">
-                          <h3 className="text-base font-bold text-zinc-900 dark:text-white group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition">
+                          <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
                             {cat.name}
                           </h3>
-                          <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed min-h-[3rem]">
+                          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-normal min-h-[3rem]">
                             {cat.description}
                           </p>
                         </div>
-                      </div>
 
-                      <div className="pt-4 border-t border-zinc-200/50 dark:border-zinc-850/80 mt-4 flex items-center justify-between text-[11px] text-zinc-450 dark:text-zinc-500">
-                        <div className="flex items-center gap-1.5">
-                          <TrendingUp className="w-3.5 h-3.5" />
-                          <span>{cat.learningTime}</span>
-                        </div>
-                        {!isTrackSoon && (
-                          <span className="font-bold text-indigo-600 dark:text-indigo-400">
-                            {solvedCount} Solved
-                          </span>
+                        {/* Topics pill tags */}
+                        {cat.topics && (
+                          <div className="flex flex-wrap gap-1 pt-1">
+                            {cat.topics.slice(0, 4).map((top: string) => (
+                              <span key={top} className="px-2 py-0.5 rounded-md text-[9px] font-semibold bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400">
+                                {top}
+                              </span>
+                            ))}
+                            {cat.topics.length > 4 && (
+                              <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold text-slate-400">
+                                +{cat.topics.length - 4} more
+                              </span>
+                            )}
+                          </div>
                         )}
                       </div>
 
-                      <Link
-                        to={`/academy/${cat.id}`}
-                        className="mt-4 saas-button-secondary text-xs py-2 w-full justify-center"
-                      >
-                        {isTrackSoon ? 'View Cheat Sheet' : 'Continue Learning'}
-                      </Link>
+                      <div className="p-5 border-t border-slate-100 dark:border-slate-850 bg-slate-50/50 dark:bg-slate-900/30 space-y-3">
+                        <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
+                          <div className="flex items-center gap-1.5">
+                            <TrendingUp className="w-3.5 h-3.5 text-slate-400" />
+                            <span>{cat.learningTime}</span>
+                          </div>
+                          {!isTrackSoon && (
+                            <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                              {solvedCount} Solved
+                            </span>
+                          )}
+                        </div>
+
+                        <Link
+                          to={`/academy/${cat.id}`}
+                          className="w-full py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-indigo-600 dark:hover:bg-indigo-500 dark:hover:text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition shadow-xs"
+                        >
+                          <span>{isTrackSoon ? 'View Cheat Sheet' : 'Start Track'}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
                     </div>
                   );
                 })}

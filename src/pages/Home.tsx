@@ -262,7 +262,7 @@ export default function Home() {
   return (
     <div className="animate-fadeIn text-left">
       <SEO 
-        title="Toolique | Free Online Professional Tools, Calculators & Developer Hub" 
+        title="Toolique | Free Online Tools for Work, Engineering, Finance & More" 
         description="274+ free browser tools, financial calculators, SQL/JSON developer sandboxes, QA automation utilities, symbolic math calculators, and 3D printing studios. 100% private with no sign-up required."
         schemaMarkup={homeSchema}
       />

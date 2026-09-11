@@ -33,8 +33,8 @@ export default function Layout({ children }: LayoutProps) {
       <div className="fixed -bottom-[10%] -left-[8%] w-[45vw] h-[45vw] max-w-[580px] bg-gradient-to-tr from-indigo-200/25 via-sky-200/20 to-transparent dark:from-sky-400/[0.18] dark:via-indigo-600/[0.14] dark:to-transparent rounded-full blur-[130px] pointer-events-none -z-10" />
 
       <Header />
-      {/* Spacer for fixed top navigation bar */}
-      <div className="h-15 w-full shrink-0" aria-hidden="true" />
+      {/* Spacer for fixed floating top navigation bar */}
+      <div className="h-[4.5rem] sm:h-20 w-full shrink-0" aria-hidden="true" />
       {pathname === '/' ? (
         <main className="flex-grow w-full relative z-10">
           {children}
