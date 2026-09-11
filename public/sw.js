@@ -1,4 +1,4 @@
-const CACHE_NAME = 'toolique-static-v3';
+const CACHE_NAME = 'toolique-static-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

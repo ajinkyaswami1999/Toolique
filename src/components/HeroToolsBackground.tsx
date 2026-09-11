@@ -97,10 +97,12 @@ interface HeroToolsBackgroundProps {
 }
 
 export default function HeroToolsBackground({ rowCount = 6 }: HeroToolsBackgroundProps) {
-  // Partition all 274+ tools across rows
+  // Partition a curated, lightweight sample of tools across rows (12 items per row max)
   const rows = useMemo(() => {
     const splitRows: Tool[][] = Array.from({ length: rowCount }, () => []);
-    toolsList.forEach((tool, index) => {
+    // Pick first 72 tools for background display to keep DOM lightweight and 60fps on mobile
+    const sampleTools = toolsList.slice(0, 72);
+    sampleTools.forEach((tool, index) => {
       splitRows[index % rowCount].push(tool);
     });
     return splitRows;
@@ -111,15 +113,18 @@ export default function HeroToolsBackground({ rowCount = 6 }: HeroToolsBackgroun
 
   return (
     <div
-      className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden select-none z-0 opacity-40 dark:opacity-80 flex flex-col justify-between py-2 sm:py-4"
+      className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden select-none z-0 opacity-40 dark:opacity-75 flex flex-col justify-between py-2 sm:py-4"
       style={{
         maskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.28) 35%, rgba(0,0,0,0.95) 75%, transparent 100%)',
-        WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.28) 35%, rgba(0,0,0,0.95) 75%, transparent 100%)'
+        WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.28) 35%, rgba(0,0,0,0.95) 75%, transparent 100%)',
+        contain: 'layout paint'
       }}
       aria-hidden="true"
     >
       {rows.map((rowTools, rowIndex) => {
-        const isReverse = rowIndex % 2 === 1; // Alternating direction: Row 0 -> left, Row 1 -> right, Row 2 -> left, etc.
+        // Hide alternating rows on mobile to keep 60fps
+        const mobileHideClass = rowIndex >= 3 ? 'hidden sm:block' : 'block';
+        const isReverse = rowIndex % 2 === 1;
         const animationClass = isReverse ? 'animate-marquee-right' : 'animate-marquee-left';
         const duration = durations[rowIndex % durations.length];
 
@@ -127,19 +132,23 @@ export default function HeroToolsBackground({ rowCount = 6 }: HeroToolsBackgroun
         const displayTools = [...rowTools, ...rowTools];
 
         return (
-          <div key={rowIndex} className="overflow-hidden whitespace-nowrap py-1 sm:py-1.5 w-full">
+          <div key={rowIndex} className={`overflow-hidden whitespace-nowrap py-1 sm:py-1.5 w-full ${mobileHideClass}`}>
             <div
               className={`flex items-center gap-4 sm:gap-6 ${animationClass}`}
-              style={{ animationDuration: duration }}
+              style={{ 
+                animationDuration: duration,
+                transform: 'translate3d(0, 0, 0)',
+                willChange: 'transform'
+              }}
             >
               {displayTools.map((tool, idx) => {
                 const glow = categoryGlowStyles[tool.category] || categoryGlowStyles.developer;
                 return (
                   <div
                     key={`${tool.id}-${idx}`}
-                    className={`inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-2xl text-xs sm:text-sm font-bold tracking-tight whitespace-nowrap bg-white/70 border border-zinc-200/80 text-zinc-700 shadow-2xs backdrop-blur-xs transition-all ${glow.cardDark}`}
+                    className={`inline-flex items-center gap-2 px-3 sm:px-5 py-1.5 sm:py-2 rounded-2xl text-xs sm:text-sm font-bold tracking-tight whitespace-nowrap bg-white/70 dark:bg-slate-900/60 border border-zinc-200/80 dark:border-slate-800 text-zinc-700 shadow-2xs transition-all ${glow.cardDark}`}
                   >
-                    <span className={`w-2.5 h-2.5 rounded-full ${glow.dot} shrink-0`} />
+                    <span className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${glow.dot} shrink-0`} />
                     <span>{tool.name}</span>
                   </div>
                 );

@@ -1,21 +1,23 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Calculator, 
   FileText, 
   Star, 
   X, 
-  Languages,
-  Clock,
-  Sparkles
+  Languages, 
+  Clock, 
+  Sparkles 
 } from 'lucide-react';
 import { TooliqueIcon } from '../Logo';
-import CalculatorPanel from './CalculatorPanel';
-import NotepadPanel from './NotepadPanel';
-import FavoritesPanel from './FavoritesPanel';
-import RecentToolsPanel from './RecentToolsPanel';
-import LanguagePanel, { initGoogleTranslate, getActiveLanguage } from './LanguagePanel';
+import { initGoogleTranslate, getActiveLanguage } from '../../utils/translate';
 import { getFavoritesFromDB, getRecentlyUsedToolsFromDB } from '../../utils/indexedDB';
+
+const CalculatorPanel = lazy(() => import('./CalculatorPanel'));
+const NotepadPanel = lazy(() => import('./NotepadPanel'));
+const FavoritesPanel = lazy(() => import('./FavoritesPanel'));
+const RecentToolsPanel = lazy(() => import('./RecentToolsPanel'));
+const LanguagePanel = lazy(() => import('./LanguagePanel'));
 
 export default function FloatingActionMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -26,10 +28,13 @@ export default function FloatingActionMenu() {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Initialize translator and counts on load
+  // Initialize counts and only init translator if non-english
   useEffect(() => {
-    initGoogleTranslate();
-    setCurrentLang(getActiveLanguage());
+    const lang = getActiveLanguage();
+    setCurrentLang(lang);
+    if (lang !== 'en') {
+      initGoogleTranslate();
+    }
 
     const refreshCounts = () => {
       getFavoritesFromDB().then((favs) => setFavoritesCount(favs.length)).catch(() => {});
@@ -316,25 +321,27 @@ export default function FloatingActionMenu() {
       </div>
 
       {/* Floating Modal Panels */}
-      {activePanel === 'calculator' && (
-        <CalculatorPanel onClose={() => setActivePanel(null)} />
-      )}
+      <Suspense fallback={null}>
+        {activePanel === 'calculator' && (
+          <CalculatorPanel onClose={() => setActivePanel(null)} />
+        )}
 
-      {activePanel === 'notepad' && (
-        <NotepadPanel onClose={() => setActivePanel(null)} />
-      )}
+        {activePanel === 'notepad' && (
+          <NotepadPanel onClose={() => setActivePanel(null)} />
+        )}
 
-      {activePanel === 'favorites' && (
-        <FavoritesPanel onClose={() => setActivePanel(null)} />
-      )}
+        {activePanel === 'favorites' && (
+          <FavoritesPanel onClose={() => setActivePanel(null)} />
+        )}
 
-      {activePanel === 'recent' && (
-        <RecentToolsPanel onClose={() => setActivePanel(null)} />
-      )}
+        {activePanel === 'recent' && (
+          <RecentToolsPanel onClose={() => setActivePanel(null)} />
+        )}
 
-      {activePanel === 'language' && (
-        <LanguagePanel onClose={() => setActivePanel(null)} />
-      )}
+        {activePanel === 'language' && (
+          <LanguagePanel onClose={() => setActivePanel(null)} />
+        )}
+      </Suspense>
     </div>
   );
 }

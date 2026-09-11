@@ -1,17 +1,18 @@
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Home from '../pages/Home';
-import ToolPage from '../pages/ToolPage';
-import About from '../pages/About';
-import WhyToolique from '../pages/WhyToolique';
-import Contact from '../pages/Contact';
-import PrivacyPolicy from '../pages/PrivacyPolicy';
-import TermsConditions from '../pages/TermsConditions';
-import Disclaimer from '../pages/Disclaimer';
-import ThreeDPrintStudio from '../pages/ThreeDPrintStudio';
-import Status from '../pages/Status';
-import MathStudio from '../pages/MathStudio';
 import { toolsList } from '../data/tools';
+
+const ToolPage = lazy(() => import('../pages/ToolPage'));
+const About = lazy(() => import('../pages/About'));
+const WhyToolique = lazy(() => import('../pages/WhyToolique'));
+const Contact = lazy(() => import('../pages/Contact'));
+const PrivacyPolicy = lazy(() => import('../pages/PrivacyPolicy'));
+const TermsConditions = lazy(() => import('../pages/TermsConditions'));
+const Disclaimer = lazy(() => import('../pages/Disclaimer'));
+const ThreeDPrintStudio = lazy(() => import('../pages/ThreeDPrintStudio'));
+const Status = lazy(() => import('../pages/Status'));
+const MathStudio = lazy(() => import('../pages/MathStudio'));
 
 const AboutFounder = lazy(() => import('../pages/AboutFounder'));
 const AcademyLanding = lazy(() => import('../features/academy/pages/AcademyLanding'));
@@ -134,13 +135,41 @@ export default function AppRoutes() {
       } />
 
       {/* Primary Pillar Tool Detail Routes */}
-      <Route path="/calculators/:slug" element={<ToolPage />} />
-      <Route path="/3d-printing-tools/:slug" element={<ToolPage />} />
-      <Route path="/architecture/:slug" element={<ToolPage />} />
-      <Route path="/civil/:slug" element={<ToolPage />} />
-      <Route path="/developer/:slug" element={<ToolPage />} />
-      <Route path="/qa/:slug" element={<ToolPage />} />
-      <Route path="/economics/:slug" element={<ToolPage />} />
+      <Route path="/calculators/:slug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
+          <ToolPage />
+        </Suspense>
+      } />
+      <Route path="/3d-printing-tools/:slug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
+          <ToolPage />
+        </Suspense>
+      } />
+      <Route path="/architecture/:slug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
+          <ToolPage />
+        </Suspense>
+      } />
+      <Route path="/civil/:slug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
+          <ToolPage />
+        </Suspense>
+      } />
+      <Route path="/developer/:slug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
+          <ToolPage />
+        </Suspense>
+      } />
+      <Route path="/qa/:slug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
+          <ToolPage />
+        </Suspense>
+      } />
+      <Route path="/economics/:slug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
+          <ToolPage />
+        </Suspense>
+      } />
       <Route path="/finance/:slug" element={<Navigate to="/calculators/:slug" replace />} />
       <Route path="/3d-printing/:slug" element={<LegacyToolRedirect />} />
       <Route path="/3d-print-studio/:slug" element={<LegacyToolRedirect />} />
@@ -194,12 +223,36 @@ export default function AppRoutes() {
           <BlogResources />
         </Suspense>
       } />
-      <Route path="/3d-printing" element={<ThreeDPrintStudio />} />
-      <Route path="/3d-print-studio" element={<ThreeDPrintStudio />} />
-      <Route path="/3d-printing-tools" element={<ThreeDPrintStudio />} />
-      <Route path="/math-studio" element={<MathStudio />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/why-toolique" element={<WhyToolique />} />
+      <Route path="/3d-printing" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading 3D Print Studio...</div>}>
+          <ThreeDPrintStudio />
+        </Suspense>
+      } />
+      <Route path="/3d-print-studio" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading 3D Print Studio...</div>}>
+          <ThreeDPrintStudio />
+        </Suspense>
+      } />
+      <Route path="/3d-printing-tools" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading 3D Print Studio...</div>}>
+          <ThreeDPrintStudio />
+        </Suspense>
+      } />
+      <Route path="/math-studio" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Math Studio...</div>}>
+          <MathStudio />
+        </Suspense>
+      } />
+      <Route path="/about" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
+          <About />
+        </Suspense>
+      } />
+      <Route path="/why-toolique" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
+          <WhyToolique />
+        </Suspense>
+      } />
       <Route path="/about-founder" element={
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
@@ -239,11 +292,31 @@ export default function AppRoutes() {
           <AcademyQuestion />
         </Suspense>
       } />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      <Route path="/terms-conditions" element={<TermsConditions />} />
-      <Route path="/disclaimer" element={<Disclaimer />} />
-      <Route path="/status" element={<Status />} />
+      <Route path="/contact" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
+          <Contact />
+        </Suspense>
+      } />
+      <Route path="/privacy-policy" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
+          <PrivacyPolicy />
+        </Suspense>
+      } />
+      <Route path="/terms-conditions" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
+          <TermsConditions />
+        </Suspense>
+      } />
+      <Route path="/disclaimer" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
+          <Disclaimer />
+        </Suspense>
+      } />
+      <Route path="/status" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
+          <Status />
+        </Suspense>
+      } />
       <Route path="*" element={
         <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading...</div>}>
           <NotFound />
