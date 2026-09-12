@@ -8750,35 +8750,59 @@ export const toolsList: Tool[] = [
     "name": "Built-up Area Calculator",
     "category": "architecture",
     "subcategory": "Area & Space Planning",
-    "shortDescription": "Calculate total building built-up area incorporating carpet area, balconies, and internal/external wall widths.",
-    "metaTitle": "Built-up Area Calculator | External Walls & Balconies Estimator",
-    "metaDescription": "Free online Built-up Area Calculator. Estimate total building built-up area including usable floor carpet, internal/external wall thickness, and balcony projections.",
+    "shortDescription": "Calculate total building built-up area incorporating usable carpet space, balconies, and internal/external structural wall widths.",
+    "metaTitle": "Built-up Area Calculator – Plinth, Walls & Balconies Estimator",
+    "metaDescription": "Calculate gross built-up area (BUA) and plinth footprint from RERA net carpet area, balcony cantilevers, and exterior/interior wall thicknesses. Supports 2D blueprint schematics and PDF export.",
     "keywords": [
       "built up area calculator",
       "calculate built up area",
       "built up area formula",
-      "built up area of flat calculator",
       "carpet area to built up area",
+      "built up area of flat calculator",
       "calculate wall area of flat",
-      "bylaws built up limits"
+      "plinth area calculator",
+      "rera carpet to bua converter",
+      "wall thickness calculator civil",
+      "super built up area difference"
     ],
-    "icon": "Compass",
+    "icon": "Building2",
     "howToUse": [
-      "Select your units (Metric or Imperial).",
-      "Enter the required spatial and design parameters.",
-      "Review the compliance guidelines and results.",
-      "Export or copy the calculated parameters for blueprints."
+      "Select your preferred measurement units (Square Feet, Square Meters, or Square Yards) and pick a predefined layout (1 BHK, 2 BHK, 3 BHK, Duplex Villa) or start from scratch.",
+      "Choose a Wall Construction preset (Standard Brick, AAC Blocks, Mivan Aluform RCC, or Custom) to configure exterior perimeter and interior partition wall thicknesses.",
+      "Add or adjust rooms with custom dimensions (Width × Length) and classify them as Carpet Area, Balconies, Utility Yards, or Terraces.",
+      "Configure municipal compliance factors (100% or 50% balcony inclusion) and multi-floor multipliers for multi-storey duplexes or apartment blocks.",
+      "Review the live 2D architectural blueprint schematic, floor efficiency rating, structural material estimates (cement, steel, bricks), and export the schedule as a professional PDF certificate or CSV report."
     ],
     "faqs": [
       {
-        "question": "What is the purpose of the Built-up Area Calculator?",
-        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+        "question": "What is the difference between Carpet Area and Built-up Area (BUA)?",
+        "answer": "Carpet Area (RERA Net Usable Area) is the physical space within the inner walls of an apartment that can be covered by a carpet. Built-up Area (or Plinth Area) equals the Carpet Area PLUS the area occupied by interior partition walls, exterior perimeter envelope walls, private balconies, and utility wash yards."
+      },
+      {
+        "question": "What is the standard formula to calculate Built-up Area?",
+        "answer": "Built-up Area (BUA) = Net Carpet Area + Total Internal Partition Wall Area + Exterior Envelope Wall Area + Balconies & Verandahs + Service Shafts/Ducts within Plinth. Typically, Built-up Area is 10% to 20% larger than the net usable carpet area."
+      },
+      {
+        "question": "How do wall thicknesses affect Built-up Area?",
+        "answer": "Exterior perimeter walls are typically 9 inches (230 mm) for standard brickwork or 8 inches (200 mm) for AAC blocks, accounting for 7% to 12% of the floor footprint. Interior partition walls are usually 4.5 inches (115 mm) or 4 inches (100 mm), contributing another 3% to 6% of the carpet footprint. Modern Mivan shear walls (160mm exterior / 100mm interior) provide higher spatial efficiency."
+      },
+      {
+        "question": "Are balconies included in Built-up Area under Indian RERA and municipal bylaws?",
+        "answer": "Under RERA, private balconies and exclusive terraces are excluded from the 'Carpet Area' definition but are fully part of the 'Built-up Area'. Some municipal corporations (such as BMC Mumbai or BBMP Bengaluru) offer 50% FSI concessions on open cantilevered balconies, while others compute 100% of the covered projection."
+      },
+      {
+        "question": "What is a healthy Floor Efficiency Index (FEI)?",
+        "answer": "Floor Efficiency Index (Carpet Area ÷ Built-up Area × 100) measures how efficiently a floor plan utilizes structural space. A rating above 82% is considered excellent architectural efficiency, 78%–82% is standard for residential apartments, and below 75% indicates heavy structural or spatial loading."
       }
     ],
     "sections": [
       {
-        "title": "Architectural Guidelines for Built-up Area Calculator",
-        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+        "title": "Architectural Principles of Built-up & Plinth Area Measurement",
+        "content": "In accordance with IS 3861:2002 (Method of Measurement of Plinth, Carpet and Rentable Areas of Buildings) and the Real Estate (Regulation and Development) Act (RERA) 2016, Built-up Area represents the total covered floor area measured up to the outer finished face of exterior walls at the plinth level. Where walls are shared between adjoining tenements (party walls), half the wall thickness is apportioned to each unit.\n\nKey components of Built-up Area include:\n1. Net Usable Carpet Area across all habitable and sanitary spaces.\n2. Thickness of internal non-structural partition walls.\n3. Full thickness of external envelope and load-bearing walls.\n4. Cantilevered and recessed balconies, verandahs, and service utility yards.\n5. Air conditioning ledges, plumbing pipe ducts, and electrical shafts located within the plinth boundary."
+      },
+      {
+        "title": "Carpet vs. Built-up vs. Super Built-up Comparison Matrix",
+        "content": "• Carpet Area: 100% usable room footprint inside walls (Living, Bed, Kitchen, Bathrooms, internal passages).\n• Built-up Area: Carpet Area + 10%–18% (External & Internal Walls + Balconies + Service ducts).\n• Super Built-up Area: Built-up Area + 20%–35% Developer Common Loading (Lift shafts, grand lobbies, stairwells, security gates, transformer rooms).\n\nUnderstanding these ratios prevents real estate buyer deception and ensures precise civil quantity takeoff during structural foundation and brickwork estimation."
       }
     ]
   },
