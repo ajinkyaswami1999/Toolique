@@ -1,45 +1,61 @@
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Heart } from 'lucide-react';
 import type { Tool } from '../data/tools';
-import { categories } from '../data/categories';
+import { categories, type Category } from '../data/categories';
 import LucideIcon from './LucideIcon';
-import { useState, useEffect } from 'react';
+import { getToolCanonicalPath } from '../routes/AppRoutes';
+
+// Precomputed category map for O(1) instant lookups
+const CATEGORY_MAP: Record<string, Category> = Object.fromEntries(
+  categories.map((c) => [c.id, c])
+);
+
+// Shared cached favorites Set across all tool cards to prevent 274x redundant JSON parsing
+let cachedFavorites: Set<string> | null = null;
+
+function getFavoritesSet(): Set<string> {
+  if (cachedFavorites !== null) return cachedFavorites;
+  try {
+    const favs = localStorage.getItem('toolique_favorites');
+    cachedFavorites = new Set(favs ? JSON.parse(favs) : []);
+  } catch {
+    cachedFavorites = new Set();
+  }
+  return cachedFavorites;
+}
 
 interface ToolCardProps {
   tool: Tool;
 }
 
-import { getToolCanonicalPath } from '../routes/AppRoutes';
-
-export default function ToolCard({ tool }: ToolCardProps) {
-  const categoryInfo = categories.find((c) => c.id === tool.category);
-  const [isFavorite, setIsFavorite] = useState(false);
+function ToolCardComponent({ tool }: ToolCardProps) {
+  const categoryInfo = CATEGORY_MAP[tool.category];
+  const [isFavorite, setIsFavorite] = useState<boolean>(() => getFavoritesSet().has(tool.id));
 
   useEffect(() => {
-    try {
-      const favs = localStorage.getItem('toolique_favorites');
-      if (favs) {
-        const parsed = JSON.parse(favs);
-        setIsFavorite(parsed.includes(tool.id));
-      }
-    } catch (e) {}
+    const handleFavChange = () => {
+      setIsFavorite(getFavoritesSet().has(tool.id));
+    };
+    window.addEventListener('toolique_favorite_toggle', handleFavChange);
+    return () => window.removeEventListener('toolique_favorite_toggle', handleFavChange);
   }, [tool.id]);
 
   const toggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const favs = localStorage.getItem('toolique_favorites');
-      let parsed = favs ? JSON.parse(favs) : [];
-      if (parsed.includes(tool.id)) {
-        parsed = parsed.filter((id: string) => id !== tool.id);
+      const favSet = getFavoritesSet();
+      if (favSet.has(tool.id)) {
+        favSet.delete(tool.id);
         setIsFavorite(false);
       } else {
-        parsed.push(tool.id);
+        favSet.add(tool.id);
         setIsFavorite(true);
       }
-      localStorage.setItem('toolique_favorites', JSON.stringify(parsed));
-    } catch (e) {}
+      localStorage.setItem('toolique_favorites', JSON.stringify(Array.from(favSet)));
+      window.dispatchEvent(new CustomEvent('toolique_favorite_toggle'));
+    } catch {}
   };
 
   const isHeroTool = tool.id === 'BuildingFeasibilityChecker';
@@ -111,3 +127,6 @@ export default function ToolCard({ tool }: ToolCardProps) {
     </Link>
   );
 }
+
+const ToolCard = React.memo(ToolCardComponent);
+export default ToolCard;

@@ -65,6 +65,23 @@
       radial-gradient(at 50% 50%, rgba(129, 140, 248, 0.05) 0px, transparent 65%);
     background-attachment: fixed;
   }
+
+  @media (max-width: 768px) {
+    body,
+    :root.dark body,
+    .dark body,
+    .pastel-canvas-bg,
+    :root.dark .pastel-canvas-bg,
+    .dark .pastel-canvas-bg {
+      background-attachment: scroll !important;
+    }
+  }
+}
+
+/* Off-screen rendering optimizer for mobile & desktop */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 400px;
 }
 
 /* Multi-layer Pastel Aurora Canvas Gradient Helper */

@@ -63,10 +63,15 @@ export default function Header() {
   const modalInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
 
-  // Scroll detection for enhanced frosted header depth
+  // Scroll detection for enhanced frosted header depth (optimized for 60fps mobile scroll)
   useEffect(() => {
+    let prev = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+      const scrolled = window.scrollY > 15;
+      if (scrolled !== prev) {
+        prev = scrolled;
+        setIsScrolled(scrolled);
+      }
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);

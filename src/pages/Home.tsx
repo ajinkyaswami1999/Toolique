@@ -402,7 +402,7 @@ export default function Home() {
       {/* Main Content Sections Container */}
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12 pb-16 pt-8">
         {/* SECTION 2: Dedicated Flagship Suites */}
-        <section className="space-y-6">
+        <section className="space-y-6 content-auto">
         <div className="space-y-1">
           <span className="text-[10px] font-black uppercase tracking-wider text-indigo-500">Specialized Hubs</span>
           <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
@@ -451,7 +451,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 4: Interactive Project Workflow Pipelines (High Value Feature) */}
-      <section className="space-y-6">
+      <section className="space-y-6 content-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
@@ -529,7 +529,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 5: Featured & Trending Tools Tabs */}
-      <section className="space-y-6">
+      <section className="space-y-6 content-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
           <div className="space-y-1">
             <span className="text-[10px] font-black uppercase tracking-wider text-teal-700 dark:text-teal-400 bg-pastel-mint/30 px-2.5 py-0.5 rounded-full border border-pastel-mint/50">Popular Tools</span>
@@ -586,7 +586,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 6: Explore All Categories Strip */}
-      <section className="space-y-6">
+      <section className="space-y-6 content-auto">
         <div className="space-y-1">
           <span className="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-400 bg-pastel-purple/30 px-2.5 py-0.5 rounded-full border border-pastel-purple/50">Categories</span>
           <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white tracking-tight">
@@ -619,7 +619,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 7: Learning Academy & Daily Challenge */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center content-auto">
         <div className="lg:col-span-6 space-y-4">
           <div className="p-3 rounded-2xl bg-pastel-mint/30 text-teal-700 dark:text-teal-300 border border-pastel-mint/60 w-fit">
             <GraduationCap className="w-6 h-6" />
@@ -682,7 +682,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 8: Authority FAQ Section (AEO / Search Engines) */}
-      <section className="saas-card p-8 md:p-10 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 space-y-6">
+      <section className="saas-card p-8 md:p-10 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 space-y-6 content-auto">
         <div className="space-y-1">
           <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-400 bg-pastel-indigo/30 px-2.5 py-0.5 rounded-full border border-pastel-indigo/50">Frequently Asked Questions</span>
           <h2 className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
@@ -730,7 +730,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 9: Ready to Explore CTA */}
-      <section className="text-center p-10 md:p-14 rounded-3xl bg-gradient-to-br from-indigo-950 via-zinc-950 to-purple-950 text-white border border-indigo-900/60 shadow-2xl space-y-5 relative overflow-hidden">
+      <section className="text-center p-10 md:p-14 rounded-3xl bg-gradient-to-br from-indigo-950 via-zinc-950 to-purple-950 text-white border border-indigo-900/60 shadow-2xl space-y-5 relative overflow-hidden content-auto">
         <div className="absolute top-0 right-0 w-80 h-80 bg-pastel-indigo/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-pastel-rose/10 rounded-full blur-3xl pointer-events-none" />
         <h2 className="text-2xl md:text-4xl font-black tracking-tight relative z-10">

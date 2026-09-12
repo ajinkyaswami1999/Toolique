@@ -139,10 +139,15 @@ export default function Footer() {
   };
 
   useEffect(() => {
+    let prev = false;
     const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 400);
+      const show = window.scrollY > 400;
+      if (show !== prev) {
+        prev = show;
+        setShowBackToTop(show);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -161,7 +166,7 @@ export default function Footer() {
   const buildDate = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   return (
-    <footer className="relative border-t border-zinc-200/70 dark:border-zinc-800/70 bg-[#fafbfe]/90 dark:bg-[#090d16] text-zinc-500 dark:text-zinc-400 transition-colors duration-300 overflow-hidden text-left" aria-label="Toolique Platform Footer">
+    <footer className="relative border-t border-zinc-200/70 dark:border-zinc-800/70 bg-[#fafbfe]/90 dark:bg-[#090d16] text-zinc-500 dark:text-zinc-400 transition-colors duration-300 overflow-hidden text-left content-auto" aria-label="Toolique Platform Footer">
       
       {/* Decorative ambient pastel background glows */}
       <div 

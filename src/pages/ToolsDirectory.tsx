@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import {
   Search, Heart, Share2, Copy, Bookmark,
@@ -200,63 +200,64 @@ export default function ToolsDirectory() {
     setShowSuggestions(false);
   };
 
-  // Filter tools
-  let filtered = toolsList.filter((tool) => {
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      const match =
-        tool.name.toLowerCase().includes(q) ||
-        tool.shortDescription.toLowerCase().includes(q) ||
-        (tool.keywords || []).some(k => k.toLowerCase().includes(q)) ||
-        tool.category.toLowerCase().includes(q);
-      if (!match) return false;
-    }
+  const [displayCount, setDisplayCount] = useState<number>(32);
 
-    if (activeCategory !== 'all') {
-      if (tool.category !== activeCategory) return false;
-    }
+  // Reset display count when filter changes
+  useEffect(() => {
+    setDisplayCount(32);
+  }, [searchQuery, activeCategory, activeCollection, sortBy]);
 
-    if (activeCollection !== 'all') {
-      if (activeCollection === 'popular') {
-        return ['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator'].includes(tool.id);
+  // Filter and sort tools inside useMemo to avoid recomputations on every render
+  const filtered = useMemo(() => {
+    const result = toolsList.filter((tool) => {
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const match =
+          tool.name.toLowerCase().includes(q) ||
+          tool.shortDescription.toLowerCase().includes(q) ||
+          (tool.keywords || []).some(k => k.toLowerCase().includes(q)) ||
+          tool.category.toLowerCase().includes(q);
+        if (!match) return false;
       }
-      if (activeCollection === 'trending') {
-        return ['FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor'].includes(tool.id);
-      }
-      if (activeCollection === 'new') {
-        return ['WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator'].includes(tool.id);
-      }
-      if (activeCollection === 'dev-picks') {
-        return ['SQLMinifier', 'JSONFormatter', 'RegexTester', 'JWTDecoder'].map(id => id.toLowerCase()).includes(tool.id.toLowerCase()) || tool.category === 'developer';
-      }
-      if (activeCollection === 'engineering-picks') {
-        return tool.category === 'civil' || tool.category === 'electrical' || tool.category === 'math-studio';
-      }
-      if (activeCollection === 'favorites') {
-        return favorites.includes(tool.id);
-      }
-    }
 
-    return true;
-  });
+      if (activeCategory !== 'all') {
+        if (tool.category !== activeCategory) return false;
+      }
 
-  // Sort tools
-  filtered.sort((a, b) => {
+      if (activeCollection !== 'all') {
+        if (activeCollection === 'popular') {
+          return ['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator'].includes(tool.id);
+        }
+        if (activeCollection === 'trending') {
+          return ['FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor'].includes(tool.id);
+        }
+        if (activeCollection === 'new') {
+          return ['WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator'].includes(tool.id);
+        }
+        if (activeCollection === 'dev-picks') {
+          return ['SQLMinifier', 'JSONFormatter', 'RegexTester', 'JWTDecoder'].includes(tool.id) || tool.category === 'developer';
+        }
+        if (activeCollection === 'engineering-picks') {
+          return tool.category === 'civil' || tool.category === 'electrical' || tool.category === 'math-studio';
+        }
+        if (activeCollection === 'favorites') {
+          return favorites.includes(tool.id);
+        }
+      }
+
+      return true;
+    });
+
     if (sortBy === 'alphabetical') {
-      return a.name.localeCompare(b.name);
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'newest') {
+      result.sort((a, b) => b.id.localeCompare(a.id));
+    } else if (sortBy === 'favorites') {
+      result.sort((a, b) => (favorites.includes(b.id) ? 1 : 0) - (favorites.includes(a.id) ? 1 : 0));
     }
-    if (sortBy === 'newest') {
-      return b.id.localeCompare(a.id);
-    }
-    if (sortBy === 'favorites') {
-      const aFav = favorites.includes(a.id) ? 1 : 0;
-      const bFav = favorites.includes(b.id) ? 1 : 0;
-      return bFav - aFav;
-    }
-    const aIndex = toolsList.findIndex(t => t.id === a.id);
-    const bIndex = toolsList.findIndex(t => t.id === b.id);
-    return aIndex - bIndex;
-  });
+
+    return result;
+  }, [searchQuery, activeCategory, activeCollection, sortBy, favorites]);
 
   const collectionsList = [
     { id: 'all', name: 'All Tools' },
@@ -567,8 +568,9 @@ export default function ToolsDirectory() {
             )}
           </div>
           {filtered.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fadeIn">
-                {filtered.map((tool) => {
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fadeIn content-auto">
+                {filtered.slice(0, displayCount).map((tool) => {
                   const isFavorite = favorites.includes(tool.id);
                   const badge = getToolBadge(tool.id);
 
@@ -622,7 +624,7 @@ export default function ToolsDirectory() {
                             {tool.name}
                           </h3>
 
-                          <p className="text-[11px] text-zinc-450 dark:text-zinc-500 font-semibold leading-relaxed line-clamp-2 h-8">
+                          <p className="text-[11px] text-zinc-455 dark:text-zinc-500 font-semibold leading-relaxed line-clamp-2 h-8">
                             {tool.shortDescription}
                           </p>
                         </div>
@@ -680,7 +682,19 @@ export default function ToolsDirectory() {
                   );
                 })}
               </div>
-            ) : (
+
+              {displayCount < filtered.length && (
+                <div className="flex justify-center pt-4">
+                  <button
+                    onClick={() => setDisplayCount((prev) => prev + 32)}
+                    className="px-6 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 font-black text-xs uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer flex items-center gap-2"
+                  >
+                    <span>Load More Tools ({filtered.length - displayCount} remaining)</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
               <div className="text-center py-20 saas-card space-y-4">
                 <div className="p-4 rounded-full bg-zinc-100 dark:bg-zinc-900 w-16 h-16 flex items-center justify-center mx-auto text-zinc-400 border border-zinc-200/50 dark:border-zinc-800/50">
                   <HelpCircle className="w-8 h-8 animate-pulse" />
