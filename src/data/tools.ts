@@ -5849,8 +5849,8 @@ export const toolsList: Tool[] = [
     name: 'Print Profit Calculator',
     category: '3d-printing',
     shortDescription: "Determine net earnings, margins, and platform transaction fees for 3D printed sales.",
-    metaTitle: "3D Print Profit Calculator | Net Margin & Etsy Fee Tool",
-    metaDescription: "Calculate net profit, gross margins, return on investment (ROI), and platform commission fees (Etsy, Shopify) for commercial 3D printing sales.",
+    metaTitle: "3D Print Profit Calculator | Net Margin & Marketplace Fee Engine",
+    metaDescription: "Calculate exact net profit, profit margins, ROI, and e-commerce platform fees (Etsy, Shopify, Amazon, eBay) for commercial 3D printing and print farms.",
     keywords: [
       "3d print profit calculator",
       "3d printing profit margin",
@@ -5859,52 +5859,59 @@ export const toolsList: Tool[] = [
       "print farm profit calculator",
       "selling 3d prints profit",
       "3d printing revenue calculator",
-      "how to price 3d prints for profit"
-],
+      "how to price 3d prints for profit",
+      "3d printing cogs calculator",
+      "3d printing business pricing"
+    ],
     icon: 'Printer',
     howToUse: [
-      "Enter your total production cost per unit (materials, power, machine wear, labor).",
-      "Input your proposed retail selling price.",
-      "Enter platform transaction fees (e.g. 6.5% Etsy transaction + 3% payment gateway).",
-      "Add fixed listing fees and packaging/shipping costs.",
-      "View your net profit, profit margin percentage, markup multiplier, and breakeven sales volume."
-],
+      "Select your currency (INR, USD, EUR, GBP, CAD, AUD) and pick a part preset or enter custom filament weight and print time.",
+      "Choose your sales channel (Etsy, Shopify Direct, Amazon Handmade, eBay, B2B Invoice, or Custom Marketplace) to auto-fill commission & gateway rates.",
+      "Input manufacturing COGS components: filament spool price, machine wear/depreciation, electricity wattage, post-processing labor, and scrap buffer.",
+      "Use Forward Mode to evaluate net profit, margin %, and markup multiplier for your proposed retail price.",
+      "Switch to Target Margin Reverse Mode to compute the recommended listing price that guarantees your desired profit margin (e.g., 50% or 70%).",
+      "Explore Batch Mode for volume order forecasts, total print farm production days, filament spools needed, and export a commercial PDF quote."
+    ],
     faqs: [
       {
-            "question": "What is a 3D Print Profit Calculator?",
-            "answer": "A 3D Print Profit Calculator evaluates the profitability of selling 3D printed products by subtracting total manufacturing costs, packaging, shipping, and e-commerce platform fees from gross revenue."
+        question: "What is the true Cost of Goods Sold (COGS) for a 3D print?",
+        answer: "True COGS includes raw material (filament weight plus 5-15% AMS purge/support waste), electricity consumption (average 100-150W per FDM printer), machine depreciation & nozzle/bed wear ($0.30-$1.00/hr), hands-on labor (support removal, assembly, packing), packaging boxes, and a scrap buffer (3-10% for failed prints)."
       },
       {
-            "question": "What is a healthy profit margin for 3D printing businesses?",
-            "answer": "Most successful 3D printing businesses target gross profit margins between 40% and 70% to account for machine maintenance, prototyping iterations, failed prints, and marketing overhead."
+        question: "What is a healthy profit margin for 3D printing e-commerce?",
+        answer: "For retail consumer products (Etsy, Shopify), target a net profit margin of 50% to 75% (3.5x to 6x markup on direct COGS). For high-volume B2B contract manufacturing or functional jigs, margins typically range between 30% and 45%."
       },
       {
-            "question": "How do platform fees affect profit on Etsy or Shopify?",
-            "answer": "Platforms charge listing fees ($0.20 on Etsy), transaction fees (6.5%), and payment processing fees (3% + $0.25). On a $20 print, platform fees alone can total $2.15 (over 10% of gross revenue)."
+        question: "How do marketplace fees affect Etsy 3D print profitability?",
+        answer: "Etsy charges a 6.5% transaction fee (on item price + shipping), a 3% + $0.25 payment processing fee, a $0.20 listing fee, and optional 12-15% offsite ads. On a $25 item, platform fees can exceed $3.50 (14% of gross revenue)."
+      },
+      {
+        question: "How does Reverse Target Margin Pricing work?",
+        answer: "Instead of guessing a selling price, the reverse pricing formula calculates: Selling Price = (Total COGS + Fixed Fees) / (1 - Marketplace Fee % - Desired Net Margin %). This guarantees your target margin even after all percentage and fixed transaction deductions."
+      },
+      {
+        question: "How should machine wear and depreciation be calculated?",
+        answer: "A standard desktop printer (e.g., Bambu Lab X1C/P1S or Prusa MK4) costing $600-$1,200 with an expected operational lifespan of 2,500 to 5,000 hours depreciates at approximately $0.25 to $0.50 per hour. Adding replacement nozzles, belts, and PEI sheets brings realistic machine maintenance to $0.40-$0.80 per hour."
       }
-],
+    ],
     sections: [
       {
-            "title": "What is the Print Profit Calculator?",
-            "content": "The Print Profit Calculator is a financial tool designed for makers and print entrepreneurs to measure exact profit margins, net revenue after marketplace deductions, and investment payback periods."
+        title: "Comprehensive 3D Print Profitability Engineering",
+        content: "Pricing 3D printed parts solely based on filament weight is the most common reason print businesses struggle financially. Filament often represents less than 30% of actual manufacturing cost. Toolique's Print Profit Calculator accounts for direct materials, machine amortization, electrical power draw, assembly labor, packaging materials, failed print buffers, and complex multi-tier platform transaction fees."
       },
       {
-            "title": "Formula Used",
-            "content": "• Net Profit ($) = Selling Price - Manufacturing Cost - Platform Fees - Shipping & Packaging\n• Net Profit Margin (%) = (Net Profit / Selling Price) × 100\n• Markup Percentage (%) = (Net Profit / Manufacturing Cost) × 100"
+        title: "Mathematical Formulas & Financial Equations",
+        content: "• Effective Filament Weight (g) = Part Weight * (1 + Purge Waste % / 100)\n• Material Cost = Effective Weight * (Spool Price / Spool Weight)\n• Electricity Cost = (Power Draw in Watts / 1000) * Print Hours * Energy Rate per kWh\n• Machine Depreciation = Print Hours * Hourly Depreciation Rate\n• Direct Unit COGS = Material + Electricity + Machine Wear + Labor + Packaging + Hardware + Failure Contingency Buffer\n• Platform Deductions = (Gross Revenue * Total Fee %) + Fixed Listing & Processing Fees\n• Net Take-Home Profit = Gross Revenue - Total Platform Fees - Direct Unit COGS - Net Shipping Expense\n• Net Profit Margin (%) = (Net Profit / Gross Revenue) * 100\n• Target Listing Price = (Unit COGS + Fixed Fees + Shipping Expense) / (1 - Total Fee % - Target Margin %)"
       },
       {
-            "title": "Real-World Example",
-            "content": "If a 3D printed mechanical planter costs $4.50 to produce and sells for $25.00 with $2.50 in Etsy fees and $4.00 shipping paid by customer:\n• Net Profit = $25.00 - $4.50 - $2.50 = $18.00\n• Profit Margin = ($18.00 / $25.00) × 100 = 72.0%."
+        title: "Real-World Commercial Case Study",
+        content: "Production of an articulated sensory dragon (120g PLA, 6.5 hours print time, 8 mins labor):\n• Material (PLA @ $20/kg): $2.60 (incl. 8% waste)\n• Machine Depreciation ($0.50/hr): $3.25\n• Electricity (120W @ $0.16/kWh): $0.12\n• Labor (8 min @ $20/hr): $2.67\n• Packaging & Mailer Box: $1.50\n• 5% Failure Risk Buffer: $0.51\n• Total Unit COGS: $10.65\n• Sold on Etsy for $32.00 (Fees: $3.48)\n• Net Take-Home Profit: $17.87 | Net Margin: 55.8% | Markup: 3.0x."
       },
       {
-            "title": "Accuracy and Limitations",
-            "content": "Does not include income tax or business accounting overhead unless entered manually in the custom expense field."
-      },
-      {
-            "title": "Who It Is For",
-            "content": "Commercial makers, e-commerce shop owners, crowdfunding creators, and print farm managers."
+        title: "Who Benefits From This Tool?",
+        content: "Etsy and Shopify shop owners, 3D printing freelancers, commercial print farm operators, makerspaces, product designers, and Kickstarter creators seeking transparent, scalable unit economics."
       }
-]
+    ]
   },
     {
     id: 'PrintFarmRevenueCalculator',
@@ -5912,56 +5919,67 @@ export const toolsList: Tool[] = [
     name: 'Print Farm Revenue Calculator',
     category: '3d-printing',
     shortDescription: "Project daily, monthly, and yearly revenue forecasts for multiple 3D printers.",
-    metaTitle: "Print Farm Revenue Calculator | Multi-Printer Capacity Tool",
-    metaDescription: "Forecast daily, monthly, and annual revenue for 3D print farms. Calculate machine capacity, utilization rates, and batch production revenue.",
+    metaTitle: "3D Print Farm Revenue & Fleet Capacity Calculator",
+    metaDescription: "Forecast throughput, monthly revenue, operational expenses (OPEX), energy draw, and CAPEX payback for multi-printer 3D print farms and micro-factories.",
     keywords: [
       "print farm revenue calculator",
       "3d print farm capacity",
       "multi printer revenue",
       "print farm profit forecast",
       "3d printing business calculator",
-      "print farm scaling calculator"
-],
+      "print farm scaling calculator",
+      "print farm opex capex",
+      "3d printer fleet capacity"
+    ],
     icon: 'Printer',
     howToUse: [
-      "Enter the total number of active 3D printers in your farm.",
-      "Input the average daily operating hours per machine (e.g. 16 to 20 hours).",
-      "Specify your average job duration and average revenue generated per print job.",
-      "Set your printer uptime utilization percentage (e.g. 80% to 90%).",
-      "Analyze projected daily, monthly, and yearly gross revenue and output capacity."
-],
+      "Select your currency and pick a fleet scale preset (Starter 4-pack, Commercial 12-pack, Industrial 30-pack, or Enterprise 60-pack) or enter custom machine counts.",
+      "Choose your pricing paradigm: E-Commerce Product Sales (revenue per part) or B2B Contract Manufacturing (machine hourly billing rate).",
+      "Set operational duty cycles: planned daily hours, machine uptime / utilization percentage (OEE), and average print duration per bed.",
+      "Configure operational expenses (OPEX): filament spool price with bulk wholesale discount, technician labor wages, electrical tariff, and facility overheads.",
+      "Analyze multi-horizon financial statements (Daily, Monthly, Yearly) and inspect the fleet scaling matrix comparing 5 to 100 printers.",
+      "Export an investor-ready executive summary or download a branded commercial PDF business plan."
+    ],
     faqs: [
       {
-            "question": "What is a Print Farm Revenue Calculator?",
-            "answer": "A Print Farm Revenue Calculator estimates the total production volume and financial earnings of a multi-printer manufacturing facility over daily, monthly, and annual operating cycles."
+        question: "What is realistic machine utilization (OEE) for a 3D print farm?",
+        answer: "Industrial print farms achieve 75% to 88% overall utilization. The remaining 12% to 25% accounts for bed cooling time, manual part clearing, filament changeovers, nozzle unclogging, routine maintenance, and queue scheduling gaps between jobs."
       },
       {
-            "question": "What is realistic machine utilization for a print farm?",
-            "answer": "A realistic machine utilization rate for a desktop 3D print farm is between 70% and 85%, allowing time for bed clearing, filament swaps, maintenance, and job queue scheduling."
+        question: "What is the typical monthly revenue generated per 3D printer?",
+        answer: "Depending on part complexity and pricing model, a high-speed desktop printer (e.g. Bambu Lab X1C or Prusa MK4) operating 20 hours/day typically generates between $350 and $1,200 (₹30,000 to ₹95,000) in monthly gross revenue, with net operating profit margins ranging from 45% to 70%."
+      },
+      {
+        question: "How do electricity and power costs impact print farm economics?",
+        answer: "Modern FDM 3D printers draw an average of 100W to 150W during active printing (heated bed + hotend). Across a 12-printer farm running 20 hrs/day, daily power consumption is ~30 kWh. At standard industrial rates ($0.16/kWh or ₹8/unit), electricity represents less than 5% to 8% of total operating expenses."
+      },
+      {
+        question: "What is the payback period on 3D printer hardware (CAPEX)?",
+        answer: "Because desktop 3D printers have low capital costs relative to their output value, most commercial print farms recoup their initial machine investment (CAPEX) within 2 to 4 months of full production."
+      },
+      {
+        question: "How does batch turnover delay affect daily capacity?",
+        answer: "If prints finish while unattended overnight, machines sit idle until an operator clears the bed. Implementing automatic part ejection (pushing parts with the toolhead or belt conveyors) or running long overnight multi-part builds increases daily fleet utilization by up to 25%."
       }
-],
+    ],
     sections: [
       {
-            "title": "What is the Print Farm Revenue Calculator?",
-            "content": "A capacity planning and financial forecasting calculator for businesses operating multiple 3D printers simultaneously. It projects total throughput capacity, job completion volume, and revenue scaling."
+        title: "Print Farm Industrial Fleet Economics & Throughput Modeling",
+        content: "Scaling from a single 3D printer to a multi-machine commercial print farm introduces complex operational variables: technician labor scheduling, bulk resin/filament logistics, electrical circuit loads, and maintenance cycles. Toolique's Print Farm Revenue Engine bridges shop-floor physics with financial accounting, providing precise daily, monthly, and yearly cash-flow forecasts."
       },
       {
-            "title": "Formula Used",
-            "content": "• Daily Completed Jobs = (Total Printers × Operating Hours/Day × (Utilization % / 100)) / Average Job Duration (hrs)\n• Monthly Revenue ($) = Daily Completed Jobs × Revenue Per Job × 30 Days\n• Annual Revenue ($) = Monthly Revenue × 12 Months"
+        title: "Mathematical Formulas & Financial Equations",
+        content: "• Effective Active Fleet Hours/Day = Printer Count * Planned Daily Hours * (Utilization % / 100)\n• Daily Completed Parts = Effective Active Hours / Job Duration\n• Monthly Material Cost = Daily Completed Parts * Part Weight (g) * (1 + Purge Overhead %) * (Spool Price / Spool Weight) * 30\n• Monthly Power Cost = (Printer Count * Power Watts / 1000) * Effective Hours/Printer * Energy Rate * 30\n• Total Monthly OPEX = Materials + Power + Operator Labor + Maintenance Spares + Facility Rent + Sales Channel Fees\n• Monthly Net Operating Income = Monthly Gross Revenue - Total Monthly OPEX\n• CAPEX Payback Period (Months) = Total Fleet Hardware Investment / Monthly Net Profit"
       },
       {
-            "title": "Real-World Example",
-            "content": "A farm with 10 Bambu Lab X1C printers running 18 hrs/day at 80% utilization with 3-hour print jobs generating $15 revenue each:\n• Daily Jobs = (10 × 18 × 0.80) / 3 = 48 prints/day\n• Monthly Revenue = 48 × $15 × 30 = $21,600/month."
+        title: "Real-World Commercial Print Farm Case Study",
+        content: "A 12-printer farm running custom desktop planters (90g PLA, 4.0 hrs print time, sold at $20/unit):\n• Daily Output: 59 units/day (~1,770 units/month)\n• Monthly Gross Sales: $35,400\n• Monthly OPEX: $11,850 (Filament: $2,830, Power: $144, Labor: $2,400, Platform Fees: $2,832, Shop Overheads: $3,644)\n• Monthly Net Operating Profit: $23,550 (66.5% Net Margin)\n• Initial Hardware CAPEX ($7,800) fully recouped in 10 days of production."
       },
       {
-            "title": "Accuracy and Limitations",
-            "content": "Assumes consistent order backlog. Fluctuations in seasonal demand or unexpected hardware downtime can impact realized output."
-      },
-      {
-            "title": "Who It Is For",
-            "content": "Print farm founders, manufacturing scale-ups, and entrepreneurs pitching investors on 3D printing micro-factories."
+        title: "Who Benefits From This Fleet Modeler?",
+        content: "Print farm founders, Kickstarter hardware startups, additive manufacturing contract shops, makerspaces, and business angels modeling investment returns on automated 3D printing micro-factories."
       }
-]
+    ]
   },
     {
     id: 'FilamentWeightCalculator',
@@ -7097,50 +7115,67 @@ export const toolsList: Tool[] = [
     name: 'Packaging Cost Calculator',
     category: '3d-printing',
     shortDescription: "Calculate boxes, bubble wraps, and logo labels packaging material costs.",
-    metaTitle: "3D Print Packaging Cost Calculator | Boxes, Bubble Wrap & Inserts",
-    metaDescription: "Calculate packaging costs for shipping 3D prints. Add corrugated boxes, bubble wrap, custom stickers, thank you cards, and desiccants.",
+    metaTitle: "3D Print Packaging Cost & Fulfillment BOM Calculator",
+    metaDescription: "Calculate exact packaging material costs (corrugated boxes, bubble wrap, custom stickers, thank you cards, desiccants, packing labor) and volumetric courier weights for e-commerce.",
     keywords: [
       "packaging cost calculator 3d print",
       "3d printing shipping box cost",
       "e-commerce packaging calculator",
       "bubble wrap cost calculator",
-      "etsy product packaging cost"
-],
+      "etsy product packaging cost",
+      "packaging bill of materials",
+      "volumetric weight calculator packaging",
+      "bulk packaging procurement discount"
+    ],
     icon: 'Printer',
     howToUse: [
-      "Enter box dimensions and unit box purchase price.",
-      "Add meters of bubble wrap, tissue paper, or packing peanuts used.",
-      "Include custom branding items (logo stickers, thank you cards, business cards).",
-      "Instantly calculate total packaging overhead per shipped order."
-],
+      "Select your currency and choose a packaging template preset (Padded Mailer, Standard Box, Heavy-Duty Fragile, or Wholesale Shipper) or input custom box dimensions.",
+      "Enter outer container unit price, along with protective cushioning (meters of bubble wrap, silica gel desiccant, polybags, crinkle paper).",
+      "Add branding & marketing inserts: thermal shipping label, custom logo die-cut stickers, thank-you cards, and freebie swag.",
+      "Specify sealing tape length and packing technician labor time to calculate total landed packaging cost per order.",
+      "Evaluate packaging spend as a percentage of product retail price, and inspect the volumetric weight courier air-gap indicator.",
+      "Explore Monthly Fulfillment Forecasts and the Bulk Procurement Optimizer to model factory-direct volume savings, then export a PDF BOM report."
+    ],
     faqs: [
       {
-            "question": "Why should I calculate packaging costs separately?",
-            "answer": "Packaging materials (boxes, bubble mailers, custom tape) typically add $1.00–$3.50 per order. Neglecting them directly cuts into product profit margins."
+        question: "Why is packaging cost often underestimated in 3D printing businesses?",
+        answer: "Makers often only budget for the outer cardboard box while forgetting bubble wrap, silica gel desiccants, branded thank-you cards, logo stickers, shipping labels, sealing tape, and packing labor. In total, landed packaging easily reaches $2.50 to $4.00 per package, directly eroding net profit margins if not accounted for."
+      },
+      {
+        question: "What percentage of retail product price should packaging cost?",
+        answer: "For standard e-commerce and 3D printed utility goods, optimal packaging costs range between 4% and 8% of retail price. For luxury, bespoke, or highly fragile artistic collectibles requiring premium unboxing experiences, packaging can represent 8% to 12% of retail value."
+      },
+      {
+        question: "Why are silica gel desiccant packs necessary for 3D prints?",
+        answer: "Thermoplastics such as PLA, PETG, and Nylon (PA) are hygroscopic and can absorb moisture during humid warehouse storage or transit, leading to layer softening or surface hazing. A single 2g silica gel packet costs pennies and ensures pristine part delivery."
+      },
+      {
+        question: "What is Volumetric Weight and how does box size affect courier fees?",
+        answer: "Couriers charge based on the greater of physical weight or Volumetric Weight: (Length * Width * Height in cm) / 5000. Packing a 150g part inside an oversized 30x20x15cm box results in an 1,800g billable volumetric weight, multiplying shipping costs unnecessarily."
+      },
+      {
+        question: "How much can bulk procurement reduce packaging costs?",
+        answer: "Purchasing corrugated boxes and bubble wrap in bundle quantities (250-500 units) typically yields a 15% to 25% discount, while factory pallet orders (1,000+ units) reduce unit material costs by up to 35% to 45% compared to retail pack pricing."
       }
-],
+    ],
     sections: [
       {
-            "title": "What is the Packaging Cost Calculator?",
-            "content": "A fulfillment budget calculator that computes the cost of protective materials and branding inserts for shipping delicate 3D prints."
+        title: "E-Commerce Fulfillment Logistics & Packaging Bill of Materials (BOM)",
+        content: "Delivering delicate 3D printed models safely to end customers requires balancing structural impact protection with shipping cost efficiency. Toolique's Packaging Cost Modeler computes itemized material expenses, warehouse handling labor, courier volumetric weight penalties, and wholesale volume tier discounts in a single unified interface."
       },
       {
-            "title": "Formula Used",
-            "content": "• Total Packaging Cost = Box Price + (Bubble Wrap Meters × Price/m) + Custom Inserts + Tape Allowance"
+        title: "Mathematical Formulas & Packaging Equations",
+        content: "• Total Cushioning Cost = (Bubble Wrap Meters * Price/Meter) + Desiccant Cost + Polybag Cost + Crinkle Paper Cost\n• Total Branding Cost = Shipping Label + Logo Sticker + Thank You Card + Swag Insert\n• Total Material Packaging Cost = Outer Box Cost + Cushioning Subtotal + Branding Subtotal + (Tape Meters * Tape Price/Meter)\n• Packing Labor Cost = (Packing Time in Minutes / 60) * Warehouse Hourly Wage\n• Total Landed Packaging Cost = Total Material Cost + Packing Labor Cost\n• Packaging % of Retail Price = (Total Landed Packaging Cost / Product Retail Price) * 100\n• Volumetric Weight (kg) = (Length cm * Width cm * Height cm) / 5000"
       },
       {
-            "title": "Real-World Example",
-            "content": "Box ($0.85) + 1.5m bubble wrap ($0.45) + Logo sticker ($0.15) + Thank you card ($0.10) = $1.55 packaging cost per order."
+        title: "Real-World E-Commerce Packaging Breakdown",
+        content: "Standard shipment of a 3D printed mechanical keyboard stand ($28 retail price):\n• Outer Box (22x16x12cm 3-ply carton): $0.85\n• Cushioning (1.2m bubble wrap + 2g desiccant): $0.36\n• Branding (4x6 thermal label + logo sticker + thank-you flyer): $0.35\n• Sealing (1.0m water-activated reinforced tape): $0.05\n• Labor (3.5 mins @ $18/hr): $1.05\n• Total Landed Packaging Cost: $2.66 (9.5% of retail price)\n• Volumetric Weight: 845g vs Physical Weight: 210g."
       },
       {
-            "title": "Accuracy and Limitations",
-            "content": "Buying packaging materials in bulk quantities (500+ packs) reduces per-unit costs by up to 40%."
-      },
-      {
-            "title": "Who It Is For",
-            "content": "Etsy store owners, Amazon Handmade merchants, and direct-to-consumer 3D printing brands."
+        title: "Who Benefits From This Tool?",
+        content: "Etsy shop owners, Shopify merchants, Kickstarter creators, Amazon Handmade sellers, 3D print fulfillment hubs, and direct-to-consumer hardware entrepreneurs."
       }
-]
+    ]
   },
     {
     id: 'ShippingCostCalculator',
