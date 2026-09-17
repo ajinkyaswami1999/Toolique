@@ -1407,29 +1407,42 @@ export const toolsList: Tool[] = [
     slug: 'base64-encoder-decoder',
     name: 'Base64 Encoder/Decoder',
     category: 'developer',
-    shortDescription: 'Encode and decode strings and text files into standard Base64 format.',
-    metaDescription: 'Convert plain text to Base64 and vice-versa. Supports secure UTF-8 formatting, local file uploads, and text downloads in browser.',
-    keywords: ['Base64 Encoder', 'Base64 Decoder', 'Base64 online converter', 'UTF-8 Base64 tool', 'Developer string encoder'],
-    icon: 'Code2',
+    shortDescription: 'Encode and decode UTF-8 text, files, and hex to standard and URL-safe Base64 with bitstream inspector.',
+    metaDescription: 'Online Base64 studio: encode and decode UTF-8 strings, convert files to Data URIs, reconstruct binary files (PDF, PNG, ZIP), convert Hex, and inspect 6-bit bitstreams with 100% browser privacy.',
+    keywords: ['Base64 Encoder', 'Base64 Decoder', 'Base64 to file', 'File to Base64', 'URL-Safe Base64', 'Data URI generator', 'Base64 Hex converter', 'UTF-8 Base64 online', 'RFC 4648 Base64'],
+    icon: 'Binary',
     howToUse: [
-      'Choose the operation mode: Encode or Decode.',
-      'Paste your text into the input field or upload a file.',
-      'View the real-time Base64 result, download it as a text file, or copy it to your clipboard.'
+      'Select a tab: Text & Strings, File to Base64, Base64 to File, Hex Converter, or Bitstream Visualizer.',
+      'Enter or paste your text, upload a binary file, or paste a Base64 string / Data URI.',
+      'Customize options such as Standard vs. URL-Safe (RFC 4648), Line Wrapping (64 / 76 MIME), or UTF-8 vs. Latin-1.',
+      'Instantly copy the result, generate HTML/CSS Data URIs, or download the reconstructed binary file.'
     ],
     faqs: [
       {
         question: 'What is Base64?',
-        answer: 'Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string format. It is commonly used when transferring data over channels that only support text.'
+        answer: 'Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string format using 64 safe characters. It allows binary payloads to travel reliably across text-only protocols like HTTP, JSON, and SMTP.'
       },
       {
         question: 'Is Base64 a form of encryption?',
-        answer: 'No, Base64 is merely an encoding format and offers no security. Anyone can easily decode a Base64 string back to its original plaintext.'
+        answer: 'No, Base64 is merely an encoding format and offers no security or cryptographic confidentiality. Anyone can decode a Base64 string back to its original plaintext or binary data.'
+      },
+      {
+        question: 'What is URL-Safe Base64?',
+        answer: 'URL-Safe Base64 (RFC 4648) replaces the plus sign (+) with hyphen (-) and slash (/) with underscore (_), and omits trailing equals (=) padding so strings can be safely passed in URLs, JWT tokens, and filenames.'
       }
     ],
     sections: [
       {
-        title: 'Why use Base64 encoding?',
-        content: 'Base64 is widely used in email protocols (MIME), embedding images directly in HTML/CSS stylesheets, and sending binary attachments in JSON API payloads.'
+        title: 'How Base64 Radix-64 Encoding Works Under the Hood',
+        content: 'Base64 encoding works by taking continuous 8-bit bytes (octets) from your binary or UTF-8 text stream and regrouping them into 6-bit chunks. Because 2^6 = 64, each 6-bit chunk maps directly to one character in the Base64 alphabet (A-Z, a-z, 0-9, +, /). Three 8-bit bytes (24 bits total) produce exactly four 6-bit Base64 characters (32 bits), leading to the standard 33.33% payload expansion ratio.'
+      },
+      {
+        title: 'Handling Multi-Byte Unicode & UTF-8 Safely in JavaScript',
+        content: 'Native browser APIs like btoa() and atob() are limited to single-byte Latin-1 characters (code points 0-255). When emojis, accented characters, or non-Latin scripts are passed directly, browsers throw an InvalidCharacterError. Our Base64 studio utilizes native TextEncoder and TextDecoder to transform Unicode text into UTF-8 byte streams before Base64 serialization, guaranteeing complete cross-platform fidelity without character corruption.'
+      },
+      {
+        title: 'Data URIs and Binary File Reconstruction',
+        content: 'In modern web development, Data URIs allow images, SVGs, and fonts to be embedded directly into HTML and CSS stylesheets without making separate HTTP requests. Our studio allows bidirectional conversion: upload any local asset to obtain instant Data URIs and HTML tags, or paste raw Base64 data to reconstruct and download verified files with automatic MIME magic byte identification.'
       }
     ]
   },

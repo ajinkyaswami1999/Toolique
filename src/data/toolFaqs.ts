@@ -1885,84 +1885,44 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
   ],
   "Base64Tool": [
     {
-      "question": "What is the main purpose of the Base64 Encoder/Decoder?",
-      "answer": "The Base64 Encoder/Decoder is designed to help users compute, format, or process values relating to Base64 schemes, text file uploads, and UTF-8 encoding compliance quickly in the web browser."
+      "question": "What is Base64 encoding and how does it work?",
+      "answer": "Base64 is a binary-to-text encoding algorithm that translates 8-bit binary data (octets) into an ASCII string representation using 64 safe characters (A-Z, a-z, 0-9, +, /). Every 3 bytes (24 bits) of raw binary data are split into four 6-bit groups, where each 6-bit index maps directly to a printable character."
     },
     {
-      "question": "Does the Base64 Encoder/Decoder store any of my inputs?",
-      "answer": "No, all data inputs entered into the Base64 Encoder/Decoder are processed locally on your client machine. No data is stored, transmitted, or shared."
+      "question": "What is the difference between Standard Base64 and URL-Safe Base64 (RFC 4648)?",
+      "answer": "Standard Base64 uses '+' and '/' with '=' padding. In URLs, query parameters, and HTTP headers, '+' can be interpreted as a space and '/' as a path delimiter. URL-Safe Base64 (RFC 4648 Section 5) replaces '+' with '-' (hyphen) and '/' with '_' (underscore), and typically omits '=' padding so tokens (like JWTs) transmit safely without URL-encoding."
     },
     {
-      "question": "Is there a daily calculation limit for Base64 Encoder/Decoder?",
-      "answer": "No, you can perform unlimited operations u/s the Base64 Encoder/Decoder without registration, payments, or credit limits."
+      "question": "Why does Base64 encoded text become ~33% larger than the original payload?",
+      "answer": "Base64 represents 3 input bytes (24 bits) using 4 output ASCII characters (32 bits). Because 4 divided by 3 is 1.333, the encoded result has an inherent 33.33% size overhead (plus any MIME line breaks or padding). This trade-off guarantees data integrity across 7-bit or text-only transport channels (such as SMTP email or JSON APIs)."
     },
     {
-      "question": "Can I use the Base64 Encoder/Decoder offline?",
-      "answer": "Yes, once the website is loaded, all JavaScript computations run locally, allowing you to use the tool offline."
+      "question": "How does UTF-8 multi-byte character encoding (emojis, accents, Asian scripts) work?",
+      "answer": "Standard JavaScript native window.btoa() and atob() only handle 8-bit Latin-1 code points (0-255). Passing multi-byte UTF-8 sequences (like emojis or non-Latin text) causes an InvalidCharacterError. Toolique uses standard TextEncoder and TextDecoder APIs to safely convert UTF-8 strings to Uint8Array byte streams before Base64 conversion, ensuring 100% accurate Unicode support."
     },
     {
-      "question": "Why are the results of Base64 Encoder/Decoder computed so quickly?",
-      "answer": "Because there are no network requests or server-side scripts. Everything is calculated instantaneously on your device."
+      "question": "What do the '=' padding characters at the end of a Base64 string mean?",
+      "answer": "Base64 processes data in 24-bit (3-byte) blocks. If the input data is not an exact multiple of 3 bytes, padding is required: 1 leftover byte yields 2 Base64 characters plus '==' padding (16 bits); 2 leftover bytes yield 3 Base64 characters plus '=' padding (8 bits)."
     },
     {
-      "question": "Is the Base64 Encoder/Decoder optimized for mobile devices?",
-      "answer": "Yes, it features a responsive Tailwind CSS layout, adjusting perfectly to mobile phones, tablets, and desktop displays."
+      "question": "How can I convert images or files to Data URIs for inline HTML and CSS?",
+      "answer": "A Data URI follows the syntax data:<mime-type>;base64,<data>. In our 'File to Base64' tab, drop any image (PNG, SVG, WebP), font, or PDF to generate copy-ready HTML <img> tags, CSS background-image declarations, and raw Data URIs with automatic MIME-type detection."
     },
     {
-      "question": "How accurate are the outputs of this developer tool?",
-      "answer": "The tool uses high-precision JavaScript arithmetic conforming to standard financial and mathematical guidelines."
+      "question": "Can I decode Base64 back into downloadable binary files like PDF, ZIP, or MP3?",
+      "answer": "Yes! In our 'Base64 to File' tab, paste any raw Base64 string or Data URI. Our engine inspects magic byte headers (such as %PDF, PNG, PK for ZIP, RIFF for WebP), identifies the correct MIME type and file extension, and reconstructs the downloadable binary file instantly."
     },
     {
-      "question": "Does Base64 Encoder/Decoder comply with Indian standards?",
-      "answer": "Yes, where applicable, it complies with Indian banking, income tax, and development standards u/s local guidelines."
+      "question": "Is Base64 encoding considered encryption or secure?",
+      "answer": "No. Base64 is strictly an encoding format designed for transmission, not encryption. It provides zero secrecy or protection, as anyone can decode it in milliseconds. Never use Base64 alone to secure passwords, sensitive PII, or API secrets without cryptographic algorithms like AES-256 or RSA."
     },
     {
-      "question": "Can I download or copy the outputs from the Base64 Encoder/Decoder?",
-      "answer": "Yes, copy and download buttons are provided next to the output panels to save results directly."
+      "question": "Why do I get 'The string to be decoded is not correctly encoded' errors in JavaScript?",
+      "answer": "This common error happens when the Base64 string contains illegal characters, missing padding '=' signs in Standard mode, unstripped whitespace or line breaks, or URL-Safe characters ('-' and '_') passed to a standard decoder. Toolique automatically sanitizes whitespace and supports both standard and URL-safe variants seamlessly."
     },
     {
-      "question": "Are there any browser requirements for this tool?",
-      "answer": "It requires a modern web browser (like Chrome, Safari, Edge, or Firefox) with JavaScript enabled."
-    },
-    {
-      "question": "How can I share the results of Base64 Encoder/Decoder?",
-      "answer": "You can copy the calculated report details to your clipboard and share them via email, chat, or documents."
-    },
-    {
-      "question": "Is my corporate data safe in Base64 Encoder/Decoder?",
-      "answer": "Yes, since data never leaves your computer, the Base64 Encoder/Decoder is safe for processing confidential business calculations."
-    },
-    {
-      "question": "Does the Base64 Encoder/Decoder require custom browser extensions?",
-      "answer": "No, it runs natively on standard HTML5 and CSS3 specifications without requiring third-party plugins."
-    },
-    {
-      "question": "Why did the developer build Base64 Encoder/Decoder?",
-      "answer": "To provide a faster, ad-supported, and private alternative to server-dependent tools that log user entries."
-    },
-    {
-      "question": "Can I suggest changes or report bugs for Base64 Encoder/Decoder?",
-      "answer": "Yes! You can contact the engineering team via our Contact page to report bugs or request new features."
-    },
-    {
-      "question": "How does the theme selection affect Base64 Encoder/Decoder?",
-      "answer": "The interface adapts to your selected Light or Dark mode preference, keeping the workspace readable."
-    },
-    {
-      "question": "Does this tool contain any hidden subscription fees?",
-      "answer": "No, all capabilities of this tool are completely free and supported by standard display banner ads."
-    },
-    {
-      "question": "How does Base64 Encoder/Decoder handle invalid inputs?",
-      "answer": "It features validation checks, displaying help alerts or resetting results if input values are mathematically impossible."
-    },
-    {
-      "question": "What is the underlying technology of Base64 Encoder/Decoder?",
-      "answer": "It is built using React, TypeScript, and Tailwind CSS, compiling down to standard optimized client assets."
-    },
-    {
-      "question": "Can I host this tool on my local intranet?",
-      "answer": "The tool is hosted publically at Toolique. For custom integrations, contact the administrator."
+      "question": "Is my uploaded file or text sent to any external server?",
+      "answer": "No. 100% of encoding, decoding, file reading, and binary reconstruction happens entirely within your local browser sandbox using HTML5 Web APIs (FileReader, Uint8Array, TextEncoder, Blob). Your source code, tokens, and binary files never touch our servers."
     }
   ],
   "JWTDecoder": [
