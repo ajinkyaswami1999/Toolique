@@ -220,7 +220,7 @@ export default function Header() {
 
   // Search Palette Filtering Logic
   const categoriesList = [
-    { id: 'all', label: 'All (274+)' },
+    { id: 'all', label: 'All (250+)' },
     { id: 'finance', label: 'Finance & Tax' },
     { id: 'developer', label: 'Developer' },
     { id: 'architecture', label: 'Architecture & Civil' },
@@ -410,7 +410,7 @@ export default function Header() {
                 <LayoutGrid className="w-3.5 h-3.5" />
                 <span>All Tools</span>
                 <span className="text-[10px] font-black px-1.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60">
-                  274+
+                  250+
                 </span>
               </Link>
 
@@ -618,12 +618,12 @@ export default function Header() {
             <button
               onClick={() => setIsSearchOpen(true)}
               className="flex items-center gap-2 px-2.5 sm:px-3.5 py-2 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/80 dark:bg-zinc-900/60 text-xs text-zinc-500 dark:text-zinc-400 hover:border-indigo-400/60 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-white dark:hover:bg-zinc-850 transition-all duration-150 cursor-pointer shadow-2xs group"
-              title="Search all 274+ tools (Ctrl+K or ⌘K)"
+              title="Search all 250+ tools (Ctrl+K or ⌘K)"
               aria-label="Search tools"
             >
               <Search className="w-4 h-4 text-zinc-400 group-hover:text-indigo-500 transition-colors shrink-0" />
               <span className="hidden md:inline text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 truncate max-w-[120px] xl:max-w-[150px]">
-                Search 274+ tools...
+                Search 250+ tools...
               </span>
               <kbd className="hidden sm:inline-flex items-center h-4.5 select-none px-1.5 font-mono text-[9px] font-bold bg-white dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded-md shadow-2xs">
                 ⌘K
@@ -745,7 +745,7 @@ export default function Header() {
                   className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 text-xs text-zinc-500 dark:text-zinc-400 font-semibold cursor-pointer shadow-2xs hover:border-indigo-400 transition text-left"
                 >
                   <Search className="w-4 h-4 text-indigo-500 shrink-0" />
-                  <span className="flex-1 truncate">Search all 274+ tools...</span>
+                  <span className="flex-1 truncate">Search all 250+ tools...</span>
                   <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
                     ⌘K
                   </span>
@@ -926,9 +926,9 @@ export default function Header() {
                       <LayoutGrid className="w-4.5 h-4.5 text-indigo-500" />
                       <div className="flex-1">
                         <div className="text-xs font-bold flex items-center gap-1.5">
-                          <span>All 274+ Tools Directory</span>
+                          <span>All 250+ Tools Directory</span>
                           <span className="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300">
-                            274+
+                            250+
                           </span>
                         </div>
                         <div className="text-[10px] text-zinc-400 font-medium">Browse complete catalog with instant search</div>
@@ -1098,7 +1098,7 @@ export default function Header() {
                     setSelectedIndex(-1);
                   }}
                   onKeyDown={handleKeyDownInSearch}
-                  placeholder="Search 274+ tools, formulas, SQL, GST, 3D printing, FAR/FSI..."
+                  placeholder="Search 250+ tools, formulas, SQL, GST, 3D printing, FAR/FSI..."
                   className="flex-grow bg-transparent border-none outline-none text-sm sm:text-base font-bold text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500"
                 />
                 
@@ -1244,7 +1244,7 @@ export default function Header() {
 
                 <div className="w-full sm:w-auto flex items-center justify-between sm:justify-end gap-3 font-medium">
                   <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
-                    274+ Client-Side Tools
+                    250+ Client-Side Tools
                   </span>
                   <Link
                     to={`/tools?q=${encodeURIComponent(navQuery)}`}

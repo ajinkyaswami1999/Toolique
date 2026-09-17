@@ -41,7 +41,7 @@ const TERMS_FAQS = [
   },
   {
     q: 'Is there any subscription fee, API rate limiting, or hidden usage charge?',
-    a: 'No. Toolique is committed to radical open access. All 274+ calculators and utilities are free to use without mandatory user accounts, subscription tiers, or paywalled export features.'
+    a: 'No. Toolique is committed to radical open access. All 250+ calculators and utilities are free to use without mandatory user accounts, subscription tiers, or paywalled export features.'
   },
   {
     q: 'What law governs the terms of service for Toolique?',
@@ -123,7 +123,7 @@ export default function TermsConditions() {
       content: (
         <div className="space-y-3">
           <p>
-            Toolique provides 274+ browser-based utilities free of charge for both individual and commercial endeavors. You are explicitly authorized to:
+            Toolique provides 250+ browser-based utilities free of charge for both individual and commercial endeavors. You are explicitly authorized to:
           </p>
           <ul className="space-y-2 list-disc pl-5">
             <li>
@@ -346,7 +346,7 @@ export default function TermsConditions() {
           </div>
           <div className="text-sm font-black text-zinc-900 dark:text-white">Zero Paywalls</div>
           <div className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
-            No forced sign-ups, no monthly tiers, and no locked features across 274+ tools.
+            No forced sign-ups, no monthly tiers, and no locked features across 250+ tools.
           </div>
         </div>
 
@@ -451,7 +451,7 @@ export default function TermsConditions() {
             Built for Developers, Engineers & Creators
           </h3>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            Unrestricted access to 274+ tools with complete privacy and zero commercial royalties.
+            Unrestricted access to 250+ tools with complete privacy and zero commercial royalties.
           </p>
         </div>
 
@@ -461,7 +461,7 @@ export default function TermsConditions() {
             className="saas-button-primary py-3 px-6 text-xs font-extrabold inline-flex items-center gap-2 shadow-md cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
-            <span>Explore All 274+ Tools</span>
+            <span>Explore All 250+ Tools</span>
           </Link>
 
           <Link

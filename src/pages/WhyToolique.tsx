@@ -299,7 +299,7 @@ const FAQS = [
   },
   {
     q: 'Why is Toolique 100% free with no account, credit card, or subscription required?',
-    a: 'Because Toolique employs a decentralized, client-side compute architecture, server infrastructure costs are near zero (only delivering static WebAssembly/JS bundles over globally distributed edge CDNs). Unlike cloud-heavy services that incur costly server compute bills per user operation, our architecture allows us to provide all 274+ professional tools completely free forever without paywalls or quotas.'
+    a: 'Because Toolique employs a decentralized, client-side compute architecture, server infrastructure costs are near zero (only delivering static WebAssembly/JS bundles over globally distributed edge CDNs). Unlike cloud-heavy services that incur costly server compute bills per user operation, our architecture allows us to provide all 250+ professional tools completely free forever without paywalls or quotas.'
   },
   {
     q: 'Can Toolique be safely used in air-gapped corporate environments, defense networks, or behind strict VPNs?',
@@ -404,7 +404,7 @@ export default function WhyToolique() {
         '@id': 'https://www.toolique.in/why-toolique#webpage',
         'url': 'https://www.toolique.in/why-toolique',
         'name': 'Why Choose Toolique | Client-Side Privacy, Zero-Latency & Free Professional Tools',
-        'description': 'Discover why developers, QA test leads, architects, and finance professionals choose Toolique: 100% client-side privacy, zero server transmission, sub-millisecond execution, and 274+ free tools.',
+        'description': 'Discover why developers, QA test leads, architects, and finance professionals choose Toolique: 100% client-side privacy, zero server transmission, sub-millisecond execution, and 250+ free tools.',
         'breadcrumb': {
           '@type': 'BreadcrumbList',
           'itemListElement': [
@@ -442,7 +442,7 @@ export default function WhyToolique() {
     <div className="max-w-6xl mx-auto space-y-16 text-left py-8 px-4 sm:px-6 animate-fadeIn">
       <SEO
         title="Why Choose Toolique | Privacy-First Client-Side Developer, QA & Creator Suite"
-        description="Discover why software developers, QA test leads, architects, and finance professionals choose Toolique. 100% client-side sandbox, zero server logging, sub-millisecond execution, and 274+ free tools."
+        description="Discover why software developers, QA test leads, architects, and finance professionals choose Toolique. 100% client-side sandbox, zero server logging, sub-millisecond execution, and 250+ free tools."
         keywords={[
           'why toolique',
           'client side developer tools',
@@ -498,7 +498,7 @@ export default function WhyToolique() {
           className="text-base sm:text-lg text-zinc-650 dark:text-zinc-300 leading-relaxed max-w-3xl mx-auto font-medium"
         >
           Traditional web tools log your confidential queries, sell telemetry, and lock basic exports behind paywalls. 
-          Toolique is re-engineered from the ground up: <strong>274+ professional tools</strong> running entirely inside your local browser memory at native hardware speed.
+          Toolique is re-engineered from the ground up: <strong>250+ professional tools</strong> running entirely inside your local browser memory at native hardware speed.
         </motion.p>
 
         {/* Live Metrics Strip */}
@@ -509,7 +509,7 @@ export default function WhyToolique() {
           className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 max-w-4xl mx-auto"
         >
           <div className="saas-card p-4 text-center rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md shadow-2xs">
-            <div className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400">274+</div>
+            <div className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400">250+</div>
             <div className="text-[11px] font-extrabold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mt-0.5">
               Production Tools
             </div>
@@ -837,7 +837,7 @@ export default function WhyToolique() {
               5. No Subscriptions or Paywalls
             </h3>
             <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
-              100% free with zero registration barriers, no daily file size limits, no watermarked exports, and no forced upgrades. All 274+ tools are immediately unlocked.
+              100% free with zero registration barriers, no daily file size limits, no watermarked exports, and no forced upgrades. All 250+ tools are immediately unlocked.
             </p>
           </div>
 
@@ -1109,7 +1109,7 @@ export default function WhyToolique() {
             Ready to Experience Zero-Latency, Privacy-First Tools?
           </h3>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            Access 274+ client-side utilities, calculators, formatters, and full suites with zero sign-up and zero data tracking.
+            Access 250+ client-side utilities, calculators, formatters, and full suites with zero sign-up and zero data tracking.
           </p>
         </div>
 
@@ -1119,7 +1119,7 @@ export default function WhyToolique() {
             className="saas-button-primary py-3 px-6 text-xs font-extrabold inline-flex items-center gap-2 shadow-md cursor-pointer"
           >
             <Search className="w-4 h-4" />
-            <span>Explore All 274+ Tools</span>
+            <span>Explore All 250+ Tools</span>
           </Link>
 
           <Link

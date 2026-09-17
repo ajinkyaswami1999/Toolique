@@ -89,7 +89,7 @@ export const milestones: Milestone[] = [
   },
   {
     year: '2026',
-    title: 'Founding Toolique (274+ Web Utilities)',
+    title: 'Founding Toolique (250+ Web Utilities)',
     desc: 'Engineered and launched Toolique as a unified, ad-free, 100% browser-based utility suite spanning Finance, Indian Civil Engineering, Developer Utilities, Math, and QA Tools.',
     icon: Cpu
   },
@@ -110,11 +110,11 @@ export const milestones: Milestone[] = [
 export const brands: Brand[] = [
   {
     name: 'Toolique',
-    badgeLabel: 'Live Platform · 274+ Tools',
+    badgeLabel: 'Live Platform · 250+ Tools',
     badgeColorClass: 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20',
-    desc: 'A comprehensive ecosystem of 274+ lightning-fast online tools for Developers, QA Engineers, Civil Contractors, Architects, Finance Professionals, and Students. Computes 100% in browser RAM with zero tracking.',
+    desc: 'A comprehensive ecosystem of 250+ lightning-fast online tools for Developers, QA Engineers, Civil Contractors, Architects, Finance Professionals, and Students. Computes 100% in browser RAM with zero tracking.',
     previewIcon: Layers,
-    statLine: '274+ Tools · 21+ Suites · 100% Client-Side Privacy',
+    statLine: '250+ Tools · 21+ Suites · 100% Client-Side Privacy',
     primaryCta: { label: 'Explore Toolique', href: '/', external: false },
     secondaryCta: { label: 'Browse All Tools', href: '/tools', external: false }
   },
@@ -177,8 +177,8 @@ export const skillsData: SkillCategory[] = [
 
 export const projectsData: Project[] = [
   {
-    name: 'Toolique Platform (274+ Web Utilities)',
-    desc: 'An expansive suite of 274+ lightning-fast utility tools for software engineers, QA specialists, civil contractors, finance analysts, and students. Runs 100% in client-side RAM with zero cookies or server uploads.',
+    name: 'Toolique Platform (250+ Web Utilities)',
+    desc: 'An expansive suite of 250+ lightning-fast utility tools for software engineers, QA specialists, civil contractors, finance analysts, and students. Runs 100% in client-side RAM with zero cookies or server uploads.',
     tech: ['React', 'Vite', 'TypeScript', 'Tailwind CSS', 'MathJS', 'PDF-Lib', 'Web Crypto'],
     url: '/',
     icon: Layers

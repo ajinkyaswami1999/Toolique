@@ -1,27 +1,30 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import {
-  Search, Heart, Share2, Copy, Bookmark,
-  Clock, Check, ListFilter, LayoutGrid, HelpCircle, ArrowUpRight, X,
-  IndianRupee, Hammer, Compass, Palette, FileText, Image as ImageIcon, Code, Globe, Type, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart as HeartIcon, Printer
+  Search, Heart, Copy, Clock, ChevronRight,
+  Check, ListFilter, LayoutGrid, HelpCircle, X,
+  IndianRupee, Hammer, Compass, Palette, FileText, Image as ImageIcon, Code, Globe, Type, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart as HeartIcon, Printer, Zap, Bug, TrendingUp, Binary, Sparkles, Shuffle, Table, SlidersHorizontal
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import type { Tool } from '../data/tools';
 import { categories } from '../data/categories';
 import SEO from '../components/SEO';
 import LucideIcon from '../components/LucideIcon';
+import ToolCard from '../components/ToolCard';
+import { getToolCanonicalPath } from '../routes/AppRoutes';
 
 const categoryIcons: Record<string, React.ComponentType<any>> = {
   finance: IndianRupee,
   civil: Hammer,
   architecture: Compass,
   interior: Palette,
+  electrical: Zap,
   pdf: FileText,
   image: ImageIcon,
   developer: Code,
   web: Globe,
   text: Type,
-  social: Share2,
+  social: Globe,
   datetime: Calendar,
   unit: Scale,
   security: Lock,
@@ -30,18 +33,20 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
   business: Briefcase,
   health: HeartIcon,
   '3d-printing': Printer,
-  'math-studio': Scale
+  'math-studio': Binary,
+  qa: Bug,
+  economics: TrendingUp
 };
 
 const getToolBadge = (toolId: string) => {
-  if (['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator'].includes(toolId)) {
-    return { text: 'Popular', className: 'bg-pastel-mint/30 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-pastel-mint/60 dark:border-emerald-800/60' };
+  if (['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator', 'PDFMerge', 'STLVolumeCalculator'].includes(toolId)) {
+    return { text: 'Popular', className: 'bg-emerald-500/10 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-500/20 dark:border-emerald-800/60' };
   }
-  if (['FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor'].includes(toolId)) {
-    return { text: 'Trending', className: 'bg-pastel-peach/30 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-pastel-peach/60 dark:border-amber-800/60' };
+  if (['BuildingFeasibilityChecker', 'FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor', 'PrintFarmRevenueCalculator'].includes(toolId)) {
+    return { text: 'Trending', className: 'bg-amber-500/10 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-500/20 dark:border-amber-800/60' };
   }
-  if (['WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator'].includes(toolId)) {
-    return { text: 'New', className: 'bg-pastel-lavender/30 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border-pastel-lavender/60 dark:border-indigo-800/60' };
+  if (['PackagingCostCalculator', 'ScaleCalculator', 'LineWidthCalculator', 'PrintProfitCalculator', 'WardrobeCostCalculator'].includes(toolId)) {
+    return { text: 'New', className: 'bg-indigo-500/10 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-500/20 dark:border-indigo-800/60' };
   }
   return null;
 };
@@ -54,13 +59,14 @@ export default function ToolsDirectory() {
   const activeCollection = searchParams.get('collection') || 'all';
 
   const [sortBy, setSortBy] = useState<string>('popularity');
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [favorites, setFavorites] = useState<string[]>([]);
   const [recentViews, setRecentViews] = useState<Tool[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [bookmarkedId, setBookmarkedId] = useState<string | null>(null);
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
   const [showAllCategories, setShowAllCategories] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [displayCount, setDisplayCount] = useState<number>(32);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -75,7 +81,7 @@ export default function ToolsDirectory() {
       if (hist) {
         const parsedHist = JSON.parse(hist);
         const matchingTools = parsedHist
-          .map((h: any) => toolsList.find(t => t.name === h.name))
+          .map((h: any) => toolsList.find(t => t.name === h.name || t.slug === h.slug))
           .filter(Boolean) as Tool[];
         setRecentViews(matchingTools.slice(0, 8));
       }
@@ -108,6 +114,11 @@ export default function ToolsDirectory() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Reset display count when filter changes
+  useEffect(() => {
+    setDisplayCount(32);
+  }, [searchQuery, activeCategory, activeCollection, sortBy]);
+
   const toggleFavorite = (toolId: string) => {
     let updated = [...favorites];
     if (updated.includes(toolId)) {
@@ -119,25 +130,12 @@ export default function ToolsDirectory() {
     localStorage.setItem('toolique_favorites', JSON.stringify(updated));
   };
 
-  const handleCopyLink = (slug: string) => {
-    const link = `https://www.toolique.in/tool/${slug}`;
+  const handleCopyLink = (tool: Tool) => {
+    const canonicalPath = getToolCanonicalPath(tool.category, tool.slug);
+    const link = `https://www.toolique.in${canonicalPath}`;
     navigator.clipboard.writeText(link);
-    setCopiedId(slug);
+    setCopiedId(tool.slug);
     setTimeout(() => setCopiedId(null), 2000);
-  };
-
-  const handleBookmark = (tool: Tool) => {
-    try {
-      const saved = localStorage.getItem('toolique_bookmarks') || '[]';
-      const bookmarks = JSON.parse(saved);
-      const exists = bookmarks.some((b: any) => b.id === tool.id);
-      if (!exists) {
-        const updated = [...bookmarks, { id: tool.id, name: tool.name, type: 'tool', slug: tool.slug }];
-        localStorage.setItem('toolique_bookmarks', JSON.stringify(updated));
-      }
-      setBookmarkedId(tool.id);
-      setTimeout(() => setBookmarkedId(null), 1500);
-    } catch (e) { }
   };
 
   const handleSearchChange = (val: string) => {
@@ -171,24 +169,26 @@ export default function ToolsDirectory() {
     }, { replace: true });
   };
 
-  const addToHistory = (tool: Tool) => {
+  const addToHistory = useCallback((tool: Tool) => {
     try {
       const hist = localStorage.getItem('toolique_recent_history') || '[]';
       const parsedHist = JSON.parse(hist);
 
-      const filteredHist = parsedHist.filter((h: any) => h.name !== tool.name);
+      const filteredHist = parsedHist.filter((h: any) => h.name !== tool.name && h.slug !== tool.slug);
       const newItem = {
         name: tool.name,
+        slug: tool.slug,
+        category: tool.category,
         type: 'Tool Used',
         timestamp: 'Just now',
-        link: tool.slug === 'advanced-boq-calculator-india' ? '/tools/advanced-boq-calculator-india' : `/tool/${tool.slug}`
+        link: getToolCanonicalPath(tool.category, tool.slug)
       };
 
       const updated = [newItem, ...filteredHist].slice(0, 8);
       localStorage.setItem('toolique_recent_history', JSON.stringify(updated));
-      setRecentViews(updated.map((h: any) => toolsList.find(t => t.name === h.name)).filter(Boolean) as Tool[]);
+      setRecentViews(updated.map((h: any) => toolsList.find(t => t.name === h.name || t.slug === h.slug)).filter(Boolean) as Tool[]);
     } catch (e) { }
-  };
+  }, []);
 
   const handlePopularSuggestionClick = (query: string) => {
     setSearchParams((prev) => {
@@ -200,14 +200,25 @@ export default function ToolsDirectory() {
     setShowSuggestions(false);
   };
 
-  const [displayCount, setDisplayCount] = useState<number>(32);
+  // Pick random tool
+  const handleRandomTool = () => {
+    if (toolsList.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * toolsList.length);
+    const randomTool = toolsList[randomIndex];
+    addToHistory(randomTool);
+    navigate(getToolCanonicalPath(randomTool.category, randomTool.slug));
+  };
 
-  // Reset display count when filter changes
-  useEffect(() => {
-    setDisplayCount(32);
-  }, [searchQuery, activeCategory, activeCollection, sortBy]);
+  // Category counts calculation
+  const categoryCounts = useMemo(() => {
+    const map: Record<string, number> = {};
+    toolsList.forEach(tool => {
+      map[tool.category] = (map[tool.category] || 0) + 1;
+    });
+    return map;
+  }, []);
 
-  // Filter and sort tools inside useMemo to avoid recomputations on every render
+  // Filter and sort tools inside useMemo
   const filtered = useMemo(() => {
     const result = toolsList.filter((tool) => {
       if (searchQuery.trim()) {
@@ -226,19 +237,25 @@ export default function ToolsDirectory() {
 
       if (activeCollection !== 'all') {
         if (activeCollection === 'popular') {
-          return ['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator'].includes(tool.id);
+          return ['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator', 'PDFMerge', 'STLVolumeCalculator'].includes(tool.id);
         }
         if (activeCollection === 'trending') {
-          return ['FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor'].includes(tool.id);
+          return ['BuildingFeasibilityChecker', 'FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor', 'PrintFarmRevenueCalculator'].includes(tool.id);
         }
         if (activeCollection === 'new') {
-          return ['WardrobeCostCalculator', 'FalseCeilingCalculator', 'StaircaseCalculator'].includes(tool.id);
+          return ['PackagingCostCalculator', 'ScaleCalculator', 'LineWidthCalculator', 'PrintProfitCalculator', 'WardrobeCostCalculator', 'FalseCeilingCalculator'].includes(tool.id);
+        }
+        if (activeCollection === '3d-printing') {
+          return tool.category === '3d-printing';
         }
         if (activeCollection === 'dev-picks') {
-          return ['SQLMinifier', 'JSONFormatter', 'RegexTester', 'JWTDecoder'].includes(tool.id) || tool.category === 'developer';
+          return ['SQLMinifier', 'JSONFormatter', 'RegexTester', 'JWTDecoder'].includes(tool.id) || tool.category === 'developer' || tool.category === 'security';
         }
         if (activeCollection === 'engineering-picks') {
-          return tool.category === 'civil' || tool.category === 'electrical' || tool.category === 'math-studio';
+          return tool.category === 'civil' || tool.category === 'electrical' || tool.category === 'math-studio' || tool.category === 'architecture';
+        }
+        if (activeCollection === 'finance-picks') {
+          return tool.category === 'finance' || tool.category === 'economics';
         }
         if (activeCollection === 'favorites') {
           return favorites.includes(tool.id);
@@ -260,63 +277,102 @@ export default function ToolsDirectory() {
   }, [searchQuery, activeCategory, activeCollection, sortBy, favorites]);
 
   const collectionsList = [
-    { id: 'all', name: 'All Tools' },
-    { id: 'popular', name: 'Popular Utilities' },
-    { id: 'trending', name: 'Trending' },
-    { id: 'new', name: 'Newly Added' },
-    { id: 'dev-picks', name: 'Developer Picks' },
-    { id: 'engineering-picks', name: 'Engineering Picks' },
-    { id: 'favorites', name: 'My Favorites' }
+    { id: 'all', name: 'All Tools', count: toolsList.length },
+    { id: 'popular', name: '🌟 Popular & Core' },
+    { id: 'trending', name: '🔥 Trending' },
+    { id: 'new', name: '🚀 Newly Upgraded' },
+    { id: '3d-printing', name: '🧊 3D Print Studio', count: categoryCounts['3d-printing'] || 0 },
+    { id: 'dev-picks', name: '💻 Developer Picks', count: (categoryCounts['developer'] || 0) + (categoryCounts['security'] || 0) },
+    { id: 'engineering-picks', name: '🏗️ Engineering & Civil', count: (categoryCounts['civil'] || 0) + (categoryCounts['architecture'] || 0) + (categoryCounts['electrical'] || 0) },
+    { id: 'finance-picks', name: '📊 Finance & Tax', count: (categoryCounts['finance'] || 0) + (categoryCounts['economics'] || 0) },
+    { id: 'favorites', name: `❤️ Favorites (${favorites.length})` }
   ];
 
   const popularSuggestions = [
-    { name: 'GST Calculator', query: 'GST Calculator' },
+    { name: 'STL Volume Calculator', query: 'STL Volume' },
+    { name: 'GST Calculator', query: 'GST' },
+    { name: 'Scale Calculator', query: 'Scale' },
     { name: 'SQL Formatter', query: 'SQL' },
+    { name: 'Building Feasibility', query: 'Feasibility' },
+    { name: 'Packaging Cost', query: 'Packaging' },
     { name: 'JSON Formatter', query: 'JSON' },
-    { name: 'EMI Calculator', query: 'EMI' }
+    { name: 'Concrete Calculator', query: 'Concrete' }
   ];
 
-  // Top 5 autocomplete matches
+  // Top 6 autocomplete matches
   const autocompleteSuggestions = searchQuery.trim()
     ? toolsList
-      .filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()))
-      .slice(0, 5)
+      .filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()) || t.category.toLowerCase().includes(searchQuery.toLowerCase()))
+      .slice(0, 6)
     : [];
 
-  const visibleCategories = showAllCategories ? categories : categories.slice(0, 8);
+  const visibleCategories = showAllCategories ? categories : categories.slice(0, 9);
 
   return (
-    <div className="space-y-8 pb-12 text-left animate-fadeIn">
+    <div className="space-y-5 pb-16 text-left animate-fadeIn">
       <SEO
-        title="Tools Directory | Complete Utilities Catalog | Toolique"
-        description="Browse hundreds of free browser-based online tools. Search, filter, and run developer extensions, financial calculators, engineering apps, and PDF scripts locally."
+        title="Tools Directory | Complete 250+ Utilities Catalog | Toolique"
+        description="Browse hundreds of free browser-based online tools. Search, filter, and run 3D printing estimators, developer utilities, civil engineering tools, finance calculators, and PDF scripts 100% locally in your browser."
       />
 
-      {/* Directory Hero */}
-      <div className="space-y-2.5">
-        <h1 className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
-          All Tools
-        </h1>
-        <p className="text-sm text-zinc-550 dark:text-zinc-400 max-w-2xl font-semibold leading-relaxed">
-          255+ tools for developers, engineers, designers, finance, productivity, and everyday tasks.
-        </p>
+      {/* Compact Directory Hero Banner */}
+      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-purple-500/5 to-transparent border border-indigo-500/20 saas-card relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
+                Tools Directory
+              </h1>
+              <span className="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-indigo-600 text-white flex items-center gap-1 shadow-xs">
+                <Sparkles className="w-3 h-3" />
+                250+ Free Utilities
+              </span>
+              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 hidden sm:inline-block">
+                100% Client-Side Privacy
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 font-medium">
+              Explore professional-grade calculators, engineering utilities, 3D printing tools, and developer scripts running locally in your browser.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={handleRandomTool}
+              className="px-3 py-1.5 rounded-xl bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-bold text-xs shadow-xs hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all flex items-center gap-1.5 cursor-pointer"
+              title="Launch a random tool from the catalog"
+            >
+              <Shuffle className="w-3.5 h-3.5 text-indigo-400 dark:text-indigo-600" />
+              <span>Surprise Me</span>
+            </button>
+            <button
+              onClick={() => {
+                selectCollection('favorites');
+              }}
+              className="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 font-bold text-xs border border-zinc-200 dark:border-zinc-800 hover:border-indigo-500 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500/20" />
+              <span>Favorites ({favorites.length})</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Search and Curation Panel */}
-      <div className="space-y-4">
-        {/* Sticky Search bar wrapper */}
+      <div className="space-y-3.5">
+        {/* Search bar wrapper */}
         <div ref={searchContainerRef} className="relative w-full">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-5 h-5" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 w-4 h-4" />
           <input
             ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             onFocus={() => setShowSuggestions(true)}
-            placeholder="Search 255+ tools..."
-            className="saas-input !pl-12 pr-16 py-3.5 text-sm font-semibold focus:ring-indigo-500/10 focus:border-indigo-500 shadow-sm rounded-2xl"
+            placeholder="Search 250+ tools by name, category, or keyword (e.g. STL, GST, SQL, Concrete, Scale)..."
+            className="saas-input !pl-11 pr-20 py-3 text-sm font-semibold focus:ring-indigo-500/20 focus:border-indigo-500 shadow-xs rounded-xl"
           />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
             {searchQuery && (
               <button
                 type="button"
@@ -327,47 +383,48 @@ export default function ToolsDirectory() {
                   }, { replace: true });
                   searchInputRef.current?.focus();
                 }}
-                className="pointer-events-auto p-1 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition cursor-pointer"
+                className="p-1 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition cursor-pointer"
                 aria-label="Clear search"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-4 h-4" />
               </button>
             )}
-            <kbd className="hidden sm:inline-flex items-center h-5 select-none px-1.5 font-mono text-[10px] font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-550 border border-zinc-200/50 dark:border-zinc-800/80 rounded-md">
+            <kbd className="hidden sm:inline-flex items-center h-6 select-none px-2 font-mono text-[11px] font-bold bg-zinc-100 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 border border-zinc-200/60 dark:border-zinc-800 rounded-lg">
               ⌘K
             </kbd>
           </div>
 
           {/* Autocomplete Dropdown */}
           {showSuggestions && autocompleteSuggestions.length > 0 && (
-            <div className="absolute left-0 right-0 mt-2 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xl overflow-hidden py-1.5 z-50 animate-fadeIn animate-duration-200">
-              <div className="px-4 py-1.5 text-[9px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-550 border-b border-zinc-100 dark:border-zinc-900/50 mb-1">
-                Suggested Tools
+            <div className="absolute left-0 right-0 mt-2 rounded-2xl bg-white dark:bg-zinc-950 border border-zinc-200/90 dark:border-zinc-800 shadow-2xl overflow-hidden py-1.5 z-50 animate-fadeIn">
+              <div className="px-4 py-1.5 text-[9px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500 border-b border-zinc-100 dark:border-zinc-900 mb-1">
+                Suggested Tools ({autocompleteSuggestions.length})
               </div>
               {autocompleteSuggestions.map((tool) => (
                 <button
                   key={tool.id}
                   type="button"
                   onClick={() => {
-                    setSearchParams((prev) => {
-                      prev.set('q', tool.name);
-                      prev.delete('category');
-                      prev.delete('collection');
-                      return prev;
-                    }, { replace: true });
+                    addToHistory(tool);
+                    navigate(getToolCanonicalPath(tool.category, tool.slug));
                     setShowSuggestions(false);
                   }}
-                  className="flex items-center justify-between w-full px-4 py-2.5 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 transition group cursor-pointer text-left"
+                  className="flex items-center justify-between w-full px-4 py-2.5 hover:bg-zinc-50 dark:hover:bg-zinc-900/80 transition group cursor-pointer text-left"
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="p-1 rounded-lg bg-zinc-100 dark:bg-zinc-900 text-zinc-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="p-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                       <LucideIcon name={tool.icon} className="w-4 h-4" />
                     </div>
-                    <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors">
-                      {tool.name}
-                    </span>
+                    <div>
+                      <span className="text-xs font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors block">
+                        {tool.name}
+                      </span>
+                      <span className="text-[10px] text-zinc-400 truncate max-w-md block">
+                        {tool.shortDescription}
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-[9px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-550 bg-zinc-100 dark:bg-zinc-900/60 px-2 py-0.5 rounded border border-zinc-200/20 dark:border-zinc-800/40">
+                  <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500 bg-zinc-100 dark:bg-zinc-900 px-2 py-0.5 rounded border border-zinc-200/50 dark:border-zinc-800 shrink-0 ml-2">
                     {tool.category}
                   </span>
                 </button>
@@ -376,52 +433,87 @@ export default function ToolsDirectory() {
           )}
         </div>
 
-        {/* Popular Suggestions & Sorting selector */}
+        {/* Popular Tags Strip & Controls */}
         <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-450 dark:text-zinc-500 font-bold pl-1">
-            <span>Popular:</span>
+          <div className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-500 font-bold">
+            <span className="text-zinc-400 font-semibold mr-1">Quick Tags:</span>
             {popularSuggestions.map((s, idx) => (
               <button
                 key={idx}
                 onClick={() => handlePopularSuggestionClick(s.query)}
-                className="hover:text-indigo-650 dark:hover:text-indigo-400 transition cursor-pointer text-zinc-650 dark:text-zinc-400 font-semibold"
+                className="hover:text-indigo-600 dark:hover:text-indigo-400 transition cursor-pointer px-2.5 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-900/60 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold border border-zinc-200/50 dark:border-zinc-800/50"
               >
                 {s.name}
-                {idx < popularSuggestions.length - 1 && <span className="mx-1.5 text-zinc-300 dark:text-zinc-700">·</span>}
               </button>
             ))}
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-550 dark:text-zinc-400 self-end sm:self-auto">
-            <ListFilter className="w-3.5 h-3.5" />
-            <span>Sort:</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 text-[11px] font-extrabold text-zinc-800 dark:text-zinc-200 rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer"
-            >
-              <option value="popularity">Most Popular</option>
-              <option value="newest">Newest Added</option>
-              <option value="alphabetical">Alphabetical</option>
-              <option value="favorites">Favorites First</option>
-            </select>
+          <div className="flex items-center gap-3 self-end sm:self-auto">
+            {/* View Mode Toggle */}
+            <div className="flex items-center p-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                  viewMode === 'grid'
+                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-xs'
+                    : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+                }`}
+                title="Grid View"
+              >
+                <LayoutGrid className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode('table')}
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                  viewMode === 'table'
+                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-xs'
+                    : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+                }`}
+                title="Table List View"
+              >
+                <Table className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Sort Selector */}
+            <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-500 dark:text-zinc-400">
+              <ListFilter className="w-3.5 h-3.5" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                aria-label="Sort tools"
+                className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-extrabold text-zinc-800 dark:text-zinc-200 rounded-xl px-3 py-1.5 focus:outline-none cursor-pointer"
+              >
+                <option value="popularity">Most Popular</option>
+                <option value="newest">Newest Added</option>
+                <option value="alphabetical">Alphabetical (A-Z)</option>
+                <option value="favorites">Favorites First</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        {/* Curation Pills/Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] border-b border-zinc-200/50 dark:border-zinc-850/50">
+        {/* Horizontal Curation Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] border-b border-zinc-200/60 dark:border-zinc-800/60">
           {collectionsList.map((col) => {
             const isActive = activeCollection === col.id;
             return (
               <button
                 key={col.id}
                 onClick={() => selectCollection(col.id)}
-                className={`shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${isActive
+                className={`shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${isActive
                     ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 shadow-sm'
-                    : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60'
+                    : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60'
                   }`}
               >
-                {col.name}
+                <span>{col.name}</span>
+                {col.count !== undefined && (
+                  <span className={`ml-1.5 text-[10px] px-1.5 py-0.2 rounded-full ${
+                    isActive ? 'bg-zinc-700 text-white dark:bg-zinc-200 dark:text-zinc-900' : 'bg-zinc-200/60 dark:bg-zinc-800 text-zinc-500'
+                  }`}>
+                    {col.count}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -429,60 +521,73 @@ export default function ToolsDirectory() {
           {/* Mobile Categories toggler in tabs line */}
           <button
             onClick={() => setShowFiltersMobile(!showFiltersMobile)}
-            className="md:hidden shrink-0 px-3.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-xs font-bold text-zinc-600 dark:text-zinc-450 hover:bg-zinc-100 transition cursor-pointer"
+            className="md:hidden shrink-0 px-3.5 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 transition cursor-pointer flex items-center gap-1"
           >
-            Categories {showFiltersMobile ? '▲' : '▼'}
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            <span>Categories</span>
           </button>
         </div>
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
 
-        {/* SIDEBAR: Categories list */}
-        <div className={`w-full md:w-[240px] shrink-0 space-y-6 ${showFiltersMobile ? 'block' : 'hidden md:block'}`}>
+        {/* SIDEBAR: Categories list with live counts */}
+        <div className={`w-full md:w-[260px] shrink-0 space-y-6 ${showFiltersMobile ? 'block' : 'hidden md:block'}`}>
           <div className="space-y-2 text-left">
-            <span className="text-[10px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-500 pl-1">
-              Filter by Category
+            <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500 pl-1">
+              Browse by Category
             </span>
             <div className="flex flex-col gap-1">
               <button
                 onClick={() => selectCategory('all')}
-                className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer border ${activeCategory === 'all'
-                    ? 'bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border-pastel-indigo/45 dark:bg-indigo-950/40 dark:border-indigo-800/60 shadow-2xs'
-                    : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer border ${activeCategory === 'all'
+                    ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800 shadow-xs'
+                    : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
                   }`}
               >
-                <span>All Categories</span>
-                {activeCategory === 'all' && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />}
+                <div className="flex items-center gap-2">
+                  <LayoutGrid className="w-4 h-4 text-indigo-500" />
+                  <span>All Categories</span>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500">
+                  {toolsList.length}
+                </span>
               </button>
 
               {visibleCategories.map((cat) => {
                 const Icon = categoryIcons[cat.id] || LayoutGrid;
                 const isActive = activeCategory === cat.id;
+                const count = categoryCounts[cat.id] || 0;
+
                 return (
                   <button
                     key={cat.id}
                     onClick={() => selectCategory(cat.id)}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer border ${isActive
-                        ? 'bg-pastel-indigo/25 text-indigo-800 dark:text-indigo-300 border-pastel-indigo/45 dark:bg-indigo-950/40 dark:border-indigo-800/60 shadow-2xs'
-                        : 'text-zinc-550 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer border ${isActive
+                        ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800 shadow-xs'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 border-transparent'
                       }`}
                   >
-                    <div className="flex items-center gap-2">
-                      <Icon className="w-3.5 h-3.5" />
+                    <div className="flex items-center gap-2.5">
+                      <Icon className="w-4 h-4 text-zinc-500 group-hover:text-indigo-500" />
                       <span>{cat.name}</span>
                     </div>
-                    {isActive && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />}
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      isActive ? 'bg-indigo-200 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'
+                    }`}>
+                      {count}
+                    </span>
                   </button>
                 );
               })}
 
-              {categories.length > 8 && (
+              {categories.length > 9 && (
                 <button
                   onClick={() => setShowAllCategories(!showAllCategories)}
-                  className="w-full text-left px-3 py-2 rounded-xl text-[11px] font-extrabold text-indigo-700 dark:text-indigo-400 hover:bg-pastel-indigo/20 dark:hover:bg-indigo-950/20 transition cursor-pointer"
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/30 transition cursor-pointer flex items-center justify-between"
                 >
-                  {showAllCategories ? 'Show less categories ↑' : 'View all categories →'}
+                  <span>{showAllCategories ? 'Show fewer categories' : `Show all (${categories.length}) categories`}</span>
+                  <ChevronRight className={`w-3.5 h-3.5 transform transition-transform ${showAllCategories ? '-rotate-90' : 'rotate-90'}`} />
                 </button>
               )}
             </div>
@@ -493,8 +598,8 @@ export default function ToolsDirectory() {
         <div className="flex-grow space-y-6">
           {/* Recently Visited Quick row */}
           {recentViews.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 text-left bg-zinc-50/80 dark:bg-zinc-900/20 p-3.5 rounded-2xl border border-zinc-200/60 dark:border-zinc-850/60 backdrop-blur-xs">
-              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-550 pl-1 flex items-center gap-1.5 shrink-0">
+            <div className="flex flex-wrap items-center gap-2 text-left bg-zinc-50 dark:bg-zinc-900/40 p-3.5 rounded-2xl border border-zinc-200/70 dark:border-zinc-800">
+              <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500 pl-1 flex items-center gap-1.5 shrink-0">
                 <Clock className="w-3.5 h-3.5 text-indigo-500" />
                 <span>Recently Visited:</span>
               </span>
@@ -502,9 +607,9 @@ export default function ToolsDirectory() {
                 {recentViews.map((tool) => (
                   <Link
                     key={tool.id}
-                    to={tool.slug === 'advanced-boq-calculator-india' ? '/tools/advanced-boq-calculator-india' : `/tool/${tool.slug}`}
+                    to={getToolCanonicalPath(tool.category, tool.slug)}
                     onClick={() => addToHistory(tool)}
-                    className="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200/70 dark:border-zinc-800/80 hover:border-pastel-indigo/50 text-[11px] font-bold text-zinc-650 dark:text-zinc-350 hover:text-indigo-700 dark:hover:text-indigo-300 transition shadow-2xs"
+                    className="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200/80 dark:border-zinc-700 hover:border-indigo-500 text-[11px] font-bold text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-300 transition shadow-2xs"
                   >
                     {tool.name}
                   </Link>
@@ -513,27 +618,28 @@ export default function ToolsDirectory() {
             </div>
           )}
 
-          {/* Featured Tool Card */}
+          {/* Featured Hero Card (when in All view) */}
           {!searchQuery && activeCategory === 'all' && activeCollection === 'all' && (
-            <div className="p-6 rounded-3xl bg-gradient-to-r from-pastel-indigo/20 via-pastel-lavender/15 to-pastel-mint/15 border border-pastel-indigo/40 dark:border-indigo-500/20 space-y-4 text-left animate-fadeIn">
+            <div className="p-6 rounded-3xl bg-gradient-to-r from-indigo-500/15 via-purple-500/10 to-emerald-500/10 border border-indigo-500/30 space-y-4 text-left animate-fadeIn">
               <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300">
-                <span className="text-sm">🌟</span> Flagship Hero Tool of Toolique
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                Featured Flagship Engine
               </div>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="space-y-1.5 max-w-xl">
                   <h3 className="text-base font-extrabold text-zinc-900 dark:text-white tracking-tight">
                     Building Feasibility & Bye-Law Checker
                   </h3>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
-                    Location-aware architectural feasibility assessment. Calculate permissible FAR, ground coverage, setbacks, permissible height, parking ECS, fire NOC, and statutory approvals across 36 States & UTs and 60+ authorities.
+                  <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed font-medium">
+                    Automated location-aware architectural feasibility calculation. Check permissible FAR/FSI, ground coverage, setbacks, permissible building height, parking ECS, fire NOC, and development bye-laws across 36 Indian States & UTs.
                   </p>
                 </div>
                 <div className="shrink-0 flex items-center gap-2">
                   <Link
                     to="/architecture/building-feasibility-checker"
                     onClick={() => {
-                      const bfcTool = toolsList.find(t => t.slug === 'building-feasibility-checker');
-                      if (bfcTool) addToHistory(bfcTool);
+                      const bfc = toolsList.find(t => t.slug === 'building-feasibility-checker');
+                      if (bfc) addToHistory(bfc);
                     }}
                     className="px-4 py-2.5 rounded-2xl bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-extrabold text-xs shadow-md hover:scale-[1.02] active:scale-98 transition-all duration-200 cursor-pointer"
                   >
@@ -544,10 +650,12 @@ export default function ToolsDirectory() {
             </div>
           )}
 
-          {/* Listing Count Header */}
-          <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-wider text-zinc-450 dark:text-zinc-550 pl-1">
+          {/* Listing Count Header & Quick Reset */}
+          <div className="flex justify-between items-center text-xs font-bold text-zinc-500 pl-1">
             <div className="flex items-center gap-2">
-              <span>Results ({filtered.length} Tools Matching)</span>
+              <span className="text-zinc-900 dark:text-white font-extrabold">
+                {filtered.length} Tools Matching
+              </span>
               {(searchQuery || activeCategory !== 'all' || activeCollection !== 'all') && (
                 <button
                   type="button"
@@ -555,177 +663,198 @@ export default function ToolsDirectory() {
                     setSearchParams({});
                     setSortBy('popularity');
                   }}
-                  className="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition lowercase cursor-pointer font-extrabold"
+                  className="text-indigo-600 hover:underline dark:text-indigo-400 cursor-pointer font-bold text-xs"
                 >
-                  (Reset Filters)
+                  (Reset All Filters)
                 </button>
               )}
             </div>
             {activeCollection !== 'all' && (
-              <span className="text-indigo-650 dark:text-indigo-400 font-bold bg-indigo-500/5 px-2 py-0.5 rounded border border-indigo-500/10">
+              <span className="text-indigo-600 dark:text-indigo-400 font-bold bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20 text-[11px]">
                 Collection: {collectionsList.find(c => c.id === activeCollection)?.name}
               </span>
             )}
           </div>
+
+          {/* TOOLS DISPLAY: Grid View vs Table View */}
           {filtered.length > 0 ? (
             <div className="space-y-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fadeIn content-auto">
-                {filtered.slice(0, displayCount).map((tool) => {
-                  const isFavorite = favorites.includes(tool.id);
-                  const badge = getToolBadge(tool.id);
-
-                  return (
-                    <div
+              
+              {/* GRID VIEW */}
+              {viewMode === 'grid' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 animate-fadeIn">
+                  {filtered.slice(0, displayCount).map((tool) => (
+                    <ToolCard
                       key={tool.id}
-                      onClick={() => {
-                        addToHistory(tool);
-                        navigate(tool.slug === 'advanced-boq-calculator-india' ? '/tools/advanced-boq-calculator-india' : `/tool/${tool.slug}`);
-                      }}
-                      className="saas-card p-5 flex flex-col justify-between hover:border-indigo-500/20 dark:hover:border-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/[0.01] hover:-translate-y-0.5 transition-all duration-300 group relative cursor-pointer"
-                    >
-                      <div className="space-y-3.5">
-                        {/* Top actions/icons row */}
-                        <div className="flex justify-between items-start">
-                          <div className="p-2.5 rounded-xl bg-zinc-150/40 dark:bg-zinc-900/60 text-zinc-650 dark:text-zinc-400 border border-zinc-200/30 dark:border-zinc-800/60 group-hover:bg-indigo-500/10 group-hover:text-indigo-705 dark:group-hover:text-indigo-400 transition-colors duration-300">
-                            <LucideIcon name={tool.icon} className="w-4 h-4" />
-                          </div>
+                      tool={tool}
+                      onTagClick={handleSearchChange}
+                    />
+                  ))}
+                </div>
+              )}
 
-                          <div className="flex items-center gap-1.5">
-                            {badge && (
-                              <span className={`px-2 py-0.5 rounded-lg text-[9px] font-extrabold uppercase tracking-wider border ${badge.className}`}>
-                                {badge.text}
-                              </span>
-                            )}
+              {/* TABLE LIST VIEW */}
+              {viewMode === 'table' && (
+                <div className="saas-card overflow-hidden p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead>
+                        <tr className="border-b border-zinc-200 dark:border-zinc-800 text-zinc-400 font-bold uppercase text-[10px] bg-zinc-50/50 dark:bg-zinc-900/40">
+                          <th className="py-3 px-4">Tool Name</th>
+                          <th className="py-3 px-4">Category</th>
+                          <th className="py-3 px-4 hidden md:table-cell">Description</th>
+                          <th className="py-3 px-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+                        {filtered.slice(0, displayCount).map((tool) => {
+                          const isFavorite = favorites.includes(tool.id);
+                          const badge = getToolBadge(tool.id);
+                          const canonicalPath = getToolCanonicalPath(tool.category, tool.slug);
 
-                            {/* Favorites button */}
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleFavorite(tool.id);
+                          return (
+                            <tr
+                              key={tool.id}
+                              onClick={() => {
+                                addToHistory(tool);
+                                navigate(canonicalPath);
                               }}
-                              className={`p-1.5 rounded-lg border hover:bg-zinc-50 dark:hover:bg-zinc-900 transition duration-300 cursor-pointer ${isFavorite
-                                  ? 'bg-rose-500/5 border-rose-500/10 text-rose-500'
-                                  : 'bg-white/40 dark:bg-zinc-900/30 border-zinc-200/60 dark:border-zinc-800/60 text-zinc-400 hover:text-rose-500'
-                                }`}
-                              title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                              className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition cursor-pointer group"
                             >
-                              <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-current' : ''}`} />
-                            </button>
-                          </div>
-                        </div>
+                              <td className="py-3 px-4">
+                                <div className="flex items-center gap-3">
+                                  <div className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 group-hover:text-indigo-600">
+                                    <LucideIcon name={tool.icon} className="w-4 h-4" />
+                                  </div>
+                                  <div>
+                                    <div className="font-extrabold text-zinc-900 dark:text-white group-hover:text-indigo-600 flex items-center gap-2">
+                                      <span>{tool.name}</span>
+                                      {badge && (
+                                        <span className={`px-1.5 py-0.2 rounded text-[8px] font-black uppercase border ${badge.className}`}>
+                                          {badge.text}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <span className="text-[10px] text-zinc-400 font-mono">
+                                      {canonicalPath}
+                                    </span>
+                                  </div>
+                                </div>
+                              </td>
 
-                        {/* Info block */}
-                        <div className="space-y-1.5 text-left">
-                          <span className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-550 border border-zinc-200/30 dark:border-zinc-800/60">
-                            {tool.category}
-                          </span>
+                              <td className="py-3 px-4">
+                                <span className="px-2 py-0.5 rounded-md text-[9px] font-black uppercase bg-zinc-100 dark:bg-zinc-900 text-zinc-500 border border-zinc-200/50 dark:border-zinc-800">
+                                  {tool.category}
+                                </span>
+                              </td>
 
-                          <h3 className="text-xs font-extrabold text-zinc-900 dark:text-white tracking-tight leading-snug group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition duration-300 truncate">
-                            {tool.name}
-                          </h3>
+                              <td className="py-3 px-4 text-zinc-500 dark:text-zinc-400 hidden md:table-cell max-w-md truncate">
+                                {tool.shortDescription}
+                              </td>
 
-                          <p className="text-[11px] text-zinc-455 dark:text-zinc-500 font-semibold leading-relaxed line-clamp-2 h-8">
-                            {tool.shortDescription}
-                          </p>
-                        </div>
+                              <td className="py-3 px-4 text-right">
+                                <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+                                  <button
+                                    onClick={() => toggleFavorite(tool.id)}
+                                    className={`p-1.5 rounded-lg border transition ${
+                                      isFavorite ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'text-zinc-400 hover:text-rose-500 border-transparent'
+                                    }`}
+                                    title={isFavorite ? 'Remove Favorite' : 'Add Favorite'}
+                                  >
+                                    <Heart className={`w-3.5 h-3.5 ${isFavorite ? 'fill-current' : ''}`} />
+                                  </button>
+                                  <button
+                                    onClick={() => handleCopyLink(tool)}
+                                    className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-800 dark:hover:text-white"
+                                    title="Copy Link"
+                                  >
+                                    {copiedId === tool.slug ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                                  </button>
+                                  <Link
+                                    to={canonicalPath}
+                                    onClick={() => addToHistory(tool)}
+                                    className="px-3 py-1 text-[11px] font-extrabold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+                                  >
+                                    Open
+                                  </Link>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
 
-                        {/* Tags/Keywords section */}
-                        {tool.keywords && tool.keywords.length > 0 && (
-                          <div className="flex flex-wrap gap-1 pt-1">
-                            {tool.keywords.slice(0, 3).map((kw, idx) => (
-                              <button
-                                key={idx}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleSearchChange(kw);
-                                }}
-                                className="text-[9px] font-bold text-zinc-455 dark:text-zinc-555 hover:text-indigo-650 dark:hover:text-indigo-400 hover:bg-indigo-500/5 dark:hover:bg-indigo-500/5 bg-zinc-100/50 dark:bg-zinc-900/40 px-2 py-0.5 rounded border border-zinc-200/10 dark:border-zinc-800/10 transition cursor-pointer"
-                              >
-                                #{kw.split(' ')[0]}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Bottom CTA row */}
-                      <div className="pt-3 mt-3 border-t border-zinc-100 dark:border-zinc-850/80 flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-1">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleBookmark(tool);
-                            }}
-                            className="p-1.5 rounded-lg hover:bg-zinc-150 dark:hover:bg-zinc-900 text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
-                            title="Save Bookmark"
-                          >
-                            {bookmarkedId === tool.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Bookmark className="w-3.5 h-3.5" />}
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCopyLink(tool.slug);
-                            }}
-                            className="p-1.5 rounded-lg hover:bg-zinc-150 dark:hover:bg-zinc-900 text-zinc-400 hover:text-zinc-800 dark:hover:text-white transition cursor-pointer"
-                            title="Copy Tool Link"
-                          >
-                            {copiedId === tool.slug ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                          </button>
-                        </div>
-
-                        <div className="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 flex items-center gap-1 transition-all">
-                          <span>Open Tool</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300 text-zinc-400 group-hover:text-indigo-500" />
-                        </div>
-                      </div>
+              {/* Load More & Progress Bar */}
+              {displayCount < filtered.length ? (
+                <div className="saas-card p-5 text-center space-y-3">
+                  <div className="max-w-md mx-auto space-y-1.5">
+                    <div className="flex justify-between text-xs font-bold text-zinc-500">
+                      <span>Showing {Math.min(displayCount, filtered.length)} of {filtered.length} tools</span>
+                      <span>{Math.round((Math.min(displayCount, filtered.length) / filtered.length) * 100)}%</span>
                     </div>
-                  );
-                })}
-              </div>
+                    <div className="w-full bg-zinc-100 dark:bg-zinc-800 h-2 rounded-full overflow-hidden">
+                      <div
+                        className="bg-indigo-600 h-full rounded-full transition-all duration-300"
+                        style={{ width: `${(Math.min(displayCount, filtered.length) / filtered.length) * 100}%` }}
+                      />
+                    </div>
+                  </div>
 
-              {displayCount < filtered.length && (
-                <div className="flex justify-center pt-4">
-                  <button
-                    onClick={() => setDisplayCount((prev) => prev + 32)}
-                    className="px-6 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 font-black text-xs uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer flex items-center gap-2"
-                  >
-                    <span>Load More Tools ({filtered.length - displayCount} remaining)</span>
-                  </button>
+                  <div className="flex justify-center gap-3 pt-1">
+                    <button
+                      onClick={() => setDisplayCount((prev) => prev + 32)}
+                      className="px-6 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 font-extrabold text-xs uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer"
+                    >
+                      Load More ({filtered.length - displayCount} Remaining)
+                    </button>
+                    <button
+                      onClick={() => setDisplayCount(filtered.length)}
+                      className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 font-bold text-xs hover:border-indigo-500 transition cursor-pointer"
+                    >
+                      Show All ({filtered.length})
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-4 text-xs font-bold text-zinc-400">
+                  ✓ Displaying all {filtered.length} matching tools
                 </div>
               )}
             </div>
           ) : (
-              <div className="text-center py-20 saas-card space-y-4">
-                <div className="p-4 rounded-full bg-zinc-100 dark:bg-zinc-900 w-16 h-16 flex items-center justify-center mx-auto text-zinc-400 border border-zinc-200/50 dark:border-zinc-800/50">
-                  <HelpCircle className="w-8 h-8 animate-pulse" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white">No tools found</h3>
-                  <p className="text-xs text-zinc-450 dark:text-zinc-500 max-w-xs mx-auto leading-relaxed font-semibold">
-                    We couldn't find any utilities matching your queries. Try resetting filters or search parameters.
-                  </p>
-                </div>
-                <div className="flex justify-center gap-3">
-                  <button
-                    onClick={() => {
-                      setSearchParams({});
-                      setSortBy('popularity');
-                    }}
-                    className="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-[10px] uppercase tracking-wider cursor-pointer hover:opacity-90 transition shadow-sm"
-                  >
-                    Reset All Filters
-                  </button>
-                  <button
-                    onClick={() => {
-                      handlePopularSuggestionClick('GST Calculator');
-                    }}
-                    className="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/40 text-zinc-700 dark:text-zinc-300 font-extrabold text-[10px] uppercase tracking-wider cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900 transition"
-                  >
-                    Browse Popular Tools
-                  </button>
-                </div>
+            <div className="text-center py-20 saas-card space-y-4">
+              <div className="p-4 rounded-full bg-zinc-100 dark:bg-zinc-900 w-16 h-16 flex items-center justify-center mx-auto text-zinc-400 border border-zinc-200/50 dark:border-zinc-800/50">
+                <HelpCircle className="w-8 h-8 animate-pulse text-indigo-500" />
               </div>
-            )}
+              <div className="space-y-1">
+                <h3 className="text-base font-extrabold text-zinc-900 dark:text-white">No tools found</h3>
+                <p className="text-xs text-zinc-500 max-w-xs mx-auto leading-relaxed font-medium">
+                  We couldn't find any utilities matching "{searchQuery}". Try searching for another keyword or reset the category filter.
+                </p>
+              </div>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={() => {
+                    setSearchParams({});
+                    setSortBy('popularity');
+                  }}
+                  className="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-xs uppercase tracking-wider cursor-pointer hover:opacity-90 transition shadow-sm"
+                >
+                  Reset All Filters
+                </button>
+                <button
+                  onClick={() => handlePopularSuggestionClick('STL Volume')}
+                  className="px-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/40 dark:bg-zinc-950/40 text-zinc-700 dark:text-zinc-300 font-extrabold text-xs uppercase tracking-wider cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900 transition"
+                >
+                  Browse Popular Tools
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@ export default function About() {
             </p>
             
             <p className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-400 leading-relaxed font-normal">
-              Today, I channel that rigor into engineering <strong>Toolique</strong> — a lightning-fast, zero-tracking ecosystem of 274+ tools where every calculation runs completely in the user's browser RAM without sending a single byte of sensitive user data to external servers.
+              Today, I channel that rigor into engineering <strong>Toolique</strong> — a lightning-fast, zero-tracking ecosystem of 250+ tools where every calculation runs completely in the user's browser RAM without sending a single byte of sensitive user data to external servers.
             </p>
 
             <p className="text-xs sm:text-sm text-zinc-650 dark:text-zinc-400 leading-relaxed font-normal">

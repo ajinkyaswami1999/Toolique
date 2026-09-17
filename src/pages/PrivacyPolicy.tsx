@@ -457,7 +457,7 @@ export default function PrivacyPolicy() {
             Experience 100% Private, Client-Side Tools
           </h3>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            Zero sign-up, zero data collection, and zero server logging across all 274+ calculators and utilities.
+            Zero sign-up, zero data collection, and zero server logging across all 250+ calculators and utilities.
           </p>
         </div>
 
@@ -467,7 +467,7 @@ export default function PrivacyPolicy() {
             className="saas-button-primary py-3 px-6 text-xs font-extrabold inline-flex items-center gap-2 shadow-md cursor-pointer"
           >
             <Search className="w-4 h-4" />
-            <span>Explore All 274+ Tools</span>
+            <span>Explore All 250+ Tools</span>
           </Link>
 
           <Link

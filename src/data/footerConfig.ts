@@ -1,9 +1,9 @@
 export const footerConfig = {
   cta: {
     title: "Ready to accelerate your workflow with 100% privacy?",
-    subtitle: "Explore 274+ high-speed browser-based calculators, formatters, test generators, civil design tools, and developer playgrounds—completely free, ad-free, with zero data tracking.",
+    subtitle: "Explore 250+ high-speed browser-based calculators, formatters, test generators, civil design tools, and developer playgrounds—completely free, ad-free, with zero data tracking.",
     buttons: [
-      { label: "Explore All 274+ Tools", link: "/tools", variant: "primary" },
+      { label: "Explore All 250+ Tools", link: "/tools", variant: "primary" },
       { label: "Architecture Suite", link: "/architecture", variant: "secondary" },
       { label: "Learning Academy", link: "/academy", variant: "secondary" }
     ]
@@ -12,7 +12,7 @@ export const footerConfig = {
     logoText: "Toolique",
     description: "Toolique is a decentralized, client-side utility engine engineered for developers, structural engineers, QA architects, FinTech professionals, and makers. All computations execute locally in browser RAM with zero telemetry.",
     highlights: [
-      "✔ 274+ Specialized Utilities",
+      "✔ 250+ Specialized Utilities",
       "✔ 100% Client-Side In-Memory RAM",
       "✔ 0 Bytes Uploaded to Server",
       "✔ DPDP Act 2023 & GDPR Compliant",
@@ -83,7 +83,7 @@ export const footerConfig = {
     buttonText: "Subscribe"
   },
   stats: [
-    { value: "274+", label: "Browser Utilities" },
+    { value: "250+", label: "Browser Utilities" },
     { value: "100%", label: "Client-Side RAM" },
     { value: "0 Bytes", label: "Server Uploads" },
     { value: "21+", label: "Engineering Suites" }
@@ -94,7 +94,7 @@ export const footerConfig = {
     { label: "100% Offline PWA Ready", icon: "MonitorCheck" },
     { label: "Responsive Mobile UI", icon: "Smartphone" }
   ],
-  seoText: "Toolique is an open-access, zero-knowledge browser productivity platform providing 274+ client-side tools across software engineering, civil and structural architecture (NBC 2016 / IS 456), financial taxation (Union Budget 2025-26), QA automation, microeconomics, 3D printing, and algorithmic learning. All utilities run strictly inside local browser memory via WebAssembly, Web Workers, and Web Crypto APIs with zero server transmission.",
+  seoText: "Toolique is an open-access, zero-knowledge browser productivity platform providing 250+ client-side tools across software engineering, civil and structural architecture (NBC 2016 / IS 456), financial taxation (Union Budget 2025-26), QA automation, microeconomics, 3D printing, and algorithmic learning. All utilities run strictly inside local browser memory via WebAssembly, Web Workers, and Web Crypto APIs with zero server transmission.",
   bottom: {
     copyright: "© 2026 Toolique. All rights reserved.",
     builtBy: "Architected & engineered with ❤️ in India by Ajinkya Swami.",

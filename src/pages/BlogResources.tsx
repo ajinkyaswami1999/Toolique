@@ -230,7 +230,7 @@ export default function BlogResources() {
     <div className="space-y-10 text-left animate-fadeIn pb-16">
       <SEO
         title="Knowledge Base & Statutory Engineering Guides | Toolique"
-        description="Explore in-depth technical articles, municipal NBC 2016 bye-laws, IS 456 civil formulas, FY 2024-25 tax breakdown, SQL query plans, and 3D printing cost economics connected to 274+ free online tools."
+        description="Explore in-depth technical articles, municipal NBC 2016 bye-laws, IS 456 civil formulas, FY 2024-25 tax breakdown, SQL query plans, and 3D printing cost economics connected to 250+ free online tools."
         canonicalUrl="https://www.toolique.in/blog"
         keywords={['engineering blog', 'nbc 2016 calculations', 'is 456 concrete design', 'income tax slabs 2025', 'sql joins execution plan', '3d printing farm economics', 'price elasticity calculator']}
       />
@@ -272,7 +272,7 @@ export default function BlogResources() {
           </h1>
 
           <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-2xl font-medium">
-            Bridging statutory municipal standards (NBC 2016, IS 456), Union Budget tax frameworks, database execution plans, and additive manufacturing economics directly to <strong>274+ free browser-based tools</strong>.
+            Bridging statutory municipal standards (NBC 2016, IS 456), Union Budget tax frameworks, database execution plans, and additive manufacturing economics directly to <strong>250+ free browser-based tools</strong>.
           </p>
 
           {/* Quick Metrics Bar */}
@@ -282,7 +282,7 @@ export default function BlogResources() {
               <div className="text-[11px] text-slate-400 font-medium">Peer-Reviewed</div>
             </div>
             <div className="space-y-0.5">
-              <div className="text-lg sm:text-xl font-black text-emerald-400">274+ Live Tools</div>
+              <div className="text-lg sm:text-xl font-black text-emerald-400">250+ Live Tools</div>
               <div className="text-[11px] text-slate-400 font-medium">Direct Sandboxes</div>
             </div>
             <div className="space-y-0.5">

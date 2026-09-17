@@ -45,7 +45,7 @@ export default function Status() {
 
   const services = [
     { name: 'Core Platform & Router', desc: 'React Client App Router', status: 'Operational' },
-    { name: 'Ecosystem Utilities & Tools', desc: '255+ local browser calculators', status: 'Operational' },
+    { name: 'Ecosystem Utilities & Tools', desc: '250+ local browser calculators', status: 'Operational' },
     { name: 'AI Studio Sandboxes', desc: 'Free browser-based model interfaces', status: 'Operational' },
     { name: 'Playground Environments', desc: 'SQLite & JavaScript sandbox terminals', status: 'Operational' },
     { name: 'Static File Delivery (CDN)', desc: 'Asset load & font distribution', status: 'Operational' }

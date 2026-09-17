@@ -949,7 +949,7 @@ export default function Dashboard() {
                     to="/tools"
                     className="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-extrabold text-xs shadow-sm hover:scale-105 transition"
                   >
-                    Browse 274+ Tools
+                    Browse 250+ Tools
                   </Link>
                 </div>
               </div>

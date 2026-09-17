@@ -151,7 +151,7 @@ export default function Hero({ scrollToSection }: HeroProps) {
             </div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 text-[10px] font-black uppercase tracking-wider shadow-2xs">
               <Activity className="w-3 h-3 text-emerald-500" />
-              <span>274+ Live Tools</span>
+              <span>250+ Live Tools</span>
             </div>
           </div>
 
@@ -187,7 +187,7 @@ export default function Hero({ scrollToSection }: HeroProps) {
           {/* CTA Action Bar */}
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-2">
             <Link to="/tools" className="saas-button-primary py-2.5 px-5 text-xs font-black inline-flex items-center gap-2 cursor-pointer shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30">
-              <span>Explore Toolique (274+ Tools)</span>
+              <span>Explore Toolique (250+ Tools)</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
 

@@ -418,7 +418,7 @@ export default function Disclaimer() {
       <div className="saas-card p-8 sm:p-10 rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-500/5 via-indigo-500/5 to-teal-500/5 space-y-6 text-center shadow-md">
         <div className="max-w-2xl mx-auto space-y-2">
           <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-white">
-            Explore 274+ Client-Side Calculators & Tools
+            Explore 250+ Client-Side Calculators & Tools
           </h3>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
             High-speed, zero-knowledge browser utilities for engineers, developers, and creators.

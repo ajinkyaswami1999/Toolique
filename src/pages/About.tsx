@@ -55,7 +55,7 @@ const CORE_VALUES: ValueProp[] = [
     icon: Lock,
     title: 'Radical Open Access',
     subtitle: 'No Paywalls & No Accounts',
-    description: 'Every single one of our 274+ tools is completely free. We enforce zero daily rate limits, zero export watermarks, zero credit systems, and zero forced registration walls.',
+    description: 'Every single one of our 250+ tools is completely free. We enforce zero daily rate limits, zero export watermarks, zero credit systems, and zero forced registration walls.',
     color: 'text-purple-600 dark:text-purple-400 bg-pastel-purple/25 border-pastel-purple/50 dark:bg-purple-950/40 dark:border-purple-800/60'
   },
   {
@@ -136,7 +136,7 @@ const TECH_STACK_ITEMS = [
 const ABOUT_FAQS = [
   {
     q: 'What is Toolique and what is the mission behind it?',
-    a: 'Toolique is a privacy-first, decentralized online ecosystem of 274+ professional tools, calculators, developer utilities, and engineering studios. Our mission is to eliminate the friction, paywalls, and privacy risks of traditional utility websites by executing 100% of calculations directly inside the user\'s local web browser.'
+    a: 'Toolique is a privacy-first, decentralized online ecosystem of 250+ professional tools, calculators, developer utilities, and engineering studios. Our mission is to eliminate the friction, paywalls, and privacy risks of traditional utility websites by executing 100% of calculations directly inside the user\'s local web browser.'
   },
   {
     q: 'How does Toolique sustain itself without subscriptions or ads?',
@@ -172,7 +172,7 @@ export default function About() {
         '@id': 'https://www.toolique.in/about#webpage',
         'url': 'https://www.toolique.in/about',
         'name': 'About Toolique | Mission, Architecture & Open Client-Side Platform',
-        'description': 'Learn about Toolique: a free, privacy-first ecosystem of 274+ online calculators, developer utilities, and engineering studios running 100% in-browser.',
+        'description': 'Learn about Toolique: a free, privacy-first ecosystem of 250+ online calculators, developer utilities, and engineering studios running 100% in-browser.',
         'mainEntity': {
           '@type': 'Organization',
           'name': 'Toolique',
@@ -205,7 +205,7 @@ export default function About() {
     <div className="max-w-6xl mx-auto space-y-16 text-left py-8 px-4 sm:px-6 animate-fadeIn">
       <SEO
         title="About Toolique | Privacy-First Online Tools & Engineering Studios"
-        description="Learn about Toolique, a free online suite of 274+ calculators, developer utilities, QA studios, and architectural compliance engines running 100% client-side without data tracking."
+        description="Learn about Toolique, a free online suite of 250+ calculators, developer utilities, QA studios, and architectural compliance engines running 100% client-side without data tracking."
         keywords={[
           'about toolique',
           'client side tools platform',
@@ -271,7 +271,7 @@ export default function About() {
           className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-4 max-w-4xl mx-auto"
         >
           <div className="saas-card p-4 text-center rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md shadow-2xs">
-            <div className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400">274+</div>
+            <div className="text-2xl sm:text-3xl font-black text-indigo-600 dark:text-indigo-400">250+</div>
             <div className="text-[11px] font-extrabold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mt-0.5">
               Production Tools
             </div>
@@ -546,7 +546,7 @@ export default function About() {
             Ready to Explore the Toolique Suite?
           </h3>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            Instant, uncapped access to 274+ professional client-side calculators, developer utilities, and engineering studios.
+            Instant, uncapped access to 250+ professional client-side calculators, developer utilities, and engineering studios.
           </p>
         </div>
 
@@ -556,7 +556,7 @@ export default function About() {
             className="saas-button-primary py-3 px-6 text-xs font-extrabold inline-flex items-center gap-2 shadow-md cursor-pointer"
           >
             <Search className="w-4 h-4" />
-            <span>Explore All 274+ Tools</span>
+            <span>Explore All 250+ Tools</span>
           </Link>
 
           <Link
