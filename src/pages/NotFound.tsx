@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { toolsList } from '../data/tools';
+import { getToolCanonicalPath } from '../routes/AppRoutes';
 import { 
   FileQuestion, 
   Search, 
@@ -37,7 +38,7 @@ export default function NotFound() {
     e.preventDefault();
     if (searchQuery.trim()) {
       if (filteredTools.length > 0) {
-        navigate(`/tool/${filteredTools[0].slug}`);
+        navigate(getToolCanonicalPath(filteredTools[0].category, filteredTools[0].slug));
       } else {
         navigate(`/tools?search=${encodeURIComponent(searchQuery.trim())}`);
       }
@@ -151,7 +152,7 @@ export default function NotFound() {
                 filteredTools.map((tool) => (
                   <Link
                     key={tool.id}
-                    to={`/tool/${tool.slug}`}
+                    to={getToolCanonicalPath(tool.category, tool.slug)}
                     className="flex items-center justify-between p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors group"
                   >
                     <div className="space-y-0.5">

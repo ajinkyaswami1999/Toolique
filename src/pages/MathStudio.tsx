@@ -296,14 +296,14 @@ export default function MathStudio() {
     '@type': 'CollectionPage',
     'name': 'Advanced Math Studio - Solve & Visualize Calculations Online',
     'description': 'Explore 22 premium, browser-based calculators covering equation solving, matrix arithmetic, descriptive statistics, 2D/3D geometry, coordinate grids, and probability curves.',
-    'url': 'https://toolique.in/math-studio',
+    'url': 'https://www.toolique.in/math-studio',
     'mainEntity': {
       '@type': 'ItemList',
       'numberOfItems': allMathTools.length,
       'itemListElement': allMathTools.map((tool, index) => ({
         '@type': 'ListItem',
         'position': index + 1,
-        'url': `https://toolique.in/tool/${tool.slug}`,
+        'url': `https://www.toolique.in/calculators/${tool.slug}`,
         'name': tool.name
       }))
     }
@@ -315,7 +315,7 @@ export default function MathStudio() {
         title="Advanced Math Studio - Solve & Visualize Calculations Online"
         description="Explore 22 premium, browser-based calculators covering equation solving, matrix arithmetic, descriptive statistics, 2D/3D geometry, coordinate grids, and probability curves."
         keywords={['math studio', 'equation solver', 'matrix calculator', 'statistics calculator', 'unit converter pro', 'geometry solver', 'volume calculator 3d', 'probability calculator', 'coordinate geometry']}
-        canonicalUrl="https://toolique.in/math-studio"
+        canonicalUrl="https://www.toolique.in/math-studio"
         schemaMarkup={studioSchema}
       />
 
@@ -616,7 +616,7 @@ export default function MathStudio() {
                           return (
                             <Link
                               key={tool.slug}
-                              to={`/tool/${tool.slug}`}
+                              to={`/calculators/${tool.slug}`}
                               className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/50 group/tool transition-colors"
                             >
                               <div className={`mt-0.5 flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 group-hover/tool:bg-indigo-500/10 group-hover/tool:text-indigo-600 dark:group-hover/tool:text-indigo-400 transition-colors`}>
@@ -680,7 +680,7 @@ export default function MathStudio() {
                           </td>
                           <td className="px-6 py-4 text-right whitespace-nowrap">
                             <Link
-                              to={`/tool/${tool.slug}`}
+                              to={`/calculators/${tool.slug}`}
                               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-bold transition-colors"
                             >
                               <span>Open Tool</span>

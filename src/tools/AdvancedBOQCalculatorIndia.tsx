@@ -4534,13 +4534,13 @@ export default function AdvancedBOQCalculator() {
           <div className="pt-6 mt-6 border-t border-zinc-100 dark:border-zinc-800">
             <span className="text-[10px] font-black text-zinc-400 uppercase tracking-wider block mb-3">Related Civil Engineering Tools</span>
             <div className="flex flex-wrap gap-2 text-xs font-bold text-zinc-700 dark:text-zinc-300">
-              <Link to="/tool/concrete-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Concrete Mix Estimator</Link>
-              <Link to="/tool/rcc-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">RCC Slab Calculator</Link>
-              <Link to="/tool/steel-weight-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Steel Rebar Weight</Link>
-              <Link to="/tool/construction-cost-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Construction Cost Index</Link>
-              <Link to="/tool/brick-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Brick Calculator</Link>
-              <Link to="/tool/floor-tile-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Floor Tile Estimator</Link>
-              <Link to="/tool/paint-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Paint Coverage Estimator</Link>
+              <Link to="/civil/concrete-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Concrete Mix Estimator</Link>
+              <Link to="/civil/rcc-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">RCC Slab Calculator</Link>
+              <Link to="/civil/steel-weight-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Steel Rebar Weight</Link>
+              <Link to="/civil/construction-cost-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Construction Cost Index</Link>
+              <Link to="/civil/brick-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Brick Calculator</Link>
+              <Link to="/architecture/floor-tile-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Floor Tile Estimator</Link>
+              <Link to="/architecture/paint-calculator" className="px-3 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:text-indigo-500 hover:border-indigo-500 transition">Paint Coverage Estimator</Link>
             </div>
           </div>
         </div>

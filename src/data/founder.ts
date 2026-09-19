@@ -126,20 +126,20 @@ export const brands: Brand[] = [
     previewIcon: Box,
     statLine: 'Additive Manufacturing · Custom Rapid Prototyping',
     primaryCta: { label: 'Visit Voxelique Store', href: socialLinks.voxelique, external: true },
-    secondaryCta: { label: '3D Print Cost Tool', href: '/tool/3d-printing-cost-calculator', external: false }
+    secondaryCta: { label: '3D Print Cost Tool', href: '/3d-printing-tools/3d-printing-cost-calculator', external: false }
   }
 ];
 
 export const buildCategories: BuildCategory[] = [
-  { name: 'Developer & Code Tools', path: '/?category=developer', icon: Code, desc: 'JSON formatters, regex testers, minifiers, encoders, and hashing utilities.' },
+  { name: 'Developer & Code Tools', path: '/developer', icon: Code, desc: 'JSON formatters, regex testers, minifiers, encoders, and hashing utilities.' },
   { name: 'QA & Test Engineering', path: '/qa-hub', icon: CheckCircle2, desc: 'BVA calculators, test case builders, bug report formatters, and mock generators.' },
   { name: 'Indian Civil & Architecture', path: '/architecture', icon: HardHat, desc: 'BOQ estimators, FSI / FAR calculators, concrete mix designs, and steel weights.' },
-  { name: 'Finance & Taxation (India)', path: '/?category=finance', icon: Cpu, desc: 'Old vs New Tax slabs, GST billing, EMI amortizations, SIPs, and salary calculators.' },
-  { name: '3D Printing & Maker Hub', path: '/3d-print-studio', icon: Box, desc: 'Filament mass estimators, hourly printer depreciation, and multi-color AMS costs.' },
+  { name: 'Finance & Taxation (India)', path: '/finance', icon: Cpu, desc: 'Old vs New Tax slabs, GST billing, EMI amortizations, SIPs, and salary calculators.' },
+  { name: '3D Printing & Maker Hub', path: '/3d-printing-tools', icon: Box, desc: 'Filament mass estimators, hourly printer depreciation, and multi-color AMS costs.' },
   { name: 'Advanced Math Studio', path: '/math-studio', icon: Award, desc: 'Polynomial solvers, matrix algebra, calculus derivatives, and statistical regression.' },
-  { name: 'PDF & Document Suite', path: '/?category=pdf', icon: BookOpen, desc: 'Client-side PDF merging, splitting, watermarking, and text extraction.' },
-  { name: 'Media & Image Processing', path: '/?category=image', icon: Sparkles, desc: 'Local image compression, SVG formatters, color palette extractors, and EXIF readers.' },
-  { name: 'Text & Productivity Utilities', path: '/?category=text', icon: Smartphone, desc: 'Text diff checkers, markdown editors, case converters, and word analysis.' }
+  { name: 'PDF & Document Suite', path: '/calculators?category=pdf', icon: BookOpen, desc: 'Client-side PDF merging, splitting, watermarking, and text extraction.' },
+  { name: 'Media & Image Processing', path: '/calculators?category=image', icon: Sparkles, desc: 'Local image compression, SVG formatters, color palette extractors, and EXIF readers.' },
+  { name: 'Text & Productivity Utilities', path: '/calculators?category=text', icon: Smartphone, desc: 'Text diff checkers, markdown editors, case converters, and word analysis.' }
 ];
 
 export const skillsData: SkillCategory[] = [
@@ -194,14 +194,14 @@ export const projectsData: Project[] = [
     name: '3D Printing Cost & Pricing Calculator',
     desc: 'A full-spectrum commercial pricing engine factoring filament spool weights, electricity tariffs, machine depreciation, labor overheads, failure buffers, and profit margins.',
     tech: ['React', 'TypeScript', 'Tailwind CSS', 'LocalStorage State', 'Framer Motion'],
-    url: '/tool/3d-printing-cost-calculator',
+    url: '/3d-printing-tools/3d-printing-cost-calculator',
     icon: Calculator
   },
   {
     name: 'Advanced BOQ Calculator India',
     desc: 'A comprehensive civil engineering estimator generating complete Bill of Quantities (BOQ), material consumption tables, and instant Excel / PDF reports per CPWD / IS codes.',
     tech: ['React', 'PDF-Lib', 'SheetJS', 'Tailwind CSS', 'CPWD Thumb Rules'],
-    url: '/tools/advanced-boq-calculator-india',
+    url: '/civil/advanced-boq-calculator-india',
     icon: HardHat
   },
   {
