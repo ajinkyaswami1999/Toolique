@@ -573,84 +573,44 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
   ],
   "QRCodeGenerator": [
     {
-      "question": "What is the QR Code Generator?",
-      "answer": "It is an utility to generate custom, high-resolution QR codes from URLs, plain text, or numbers in-browser."
+      "question": "What is the QR Code Generator & Studio?",
+      "answer": "It is an advanced client-side studio for generating custom, high-resolution QR codes for websites, Wi-Fi auto-connect, UPI payments, vCard digital business cards, WhatsApp chats, email, SMS, and calendar events with custom colors, gradients, center logos, and vector SVG/PDF exports."
     },
     {
-      "question": "Do the QR codes expire?",
-      "answer": "No. The information is encoded directly into the pixel matrix of the QR code, meaning it will work forever and never expire."
+      "question": "Do the generated QR codes expire or require a monthly subscription?",
+      "answer": "No! These are 100% static QR codes where information is encoded directly into the pixel matrix. They work indefinitely, never expire, and have zero scan limits or subscription fees."
     },
     {
-      "question": "Can I download the QR code?",
-      "answer": "Yes, you can configure the size and color, and click 'Download PNG' to save the file to your computer."
+      "question": "Can I add my company logo to the center of the QR code?",
+      "answer": "Yes! You can upload your own custom logo (PNG, JPG, SVG) or select from preset brand icons. The tool automatically wraps your logo with a protective white badge and sets Error Correction to Level H (30% recovery) so scanners can read the code without disruption."
     },
     {
-      "question": "Are these QR codes free for commercial use?",
-      "answer": "Yes, the generated QR codes are 100% free with no licensing restrictions, suitable for printing, packaging, and marketing."
+      "question": "How do Wi-Fi QR codes allow guests to connect without typing passwords?",
+      "answer": "The generator encodes standard Wi-Fi configuration strings (WIFI:S:SSID;T:WPA;P:Password;;). When scanned with iOS or Android camera apps, the device automatically prompts 'Join Network' and connects seamlessly."
     },
     {
-      "question": "How do I choose the background and foreground colors?",
-      "answer": "You can select custom hex color values. Ensure there is high contrast (e.g. dark colors on light backgrounds) for easy scanning."
+      "question": "How do UPI Payment QR codes work in India?",
+      "answer": "UPI QR codes follow the NPCI upi://pay URI standard. Scanning with Google Pay, PhonePe, Paytm, BHIM, or banking apps instantly opens the payment screen with your Payee VPA, merchant name, and optional pre-set invoice amount."
     },
     {
-      "question": "What is the maximum text size I can encode?",
-      "answer": "A standard QR code can store up to 4,296 alphanumeric characters, but shorter strings generate cleaner, easier-to-scan patterns."
+      "question": "What export formats are available for digital and print use?",
+      "answer": "You can export in 3 formats: Ultra High-Res PNG (up to 4096px print quality), Scalable Vector SVG (infinite resolution for Figma, Illustrator, and billboard signage), and a Print-Ready PDF flyer formatted for A4 paper."
     },
     {
-      "question": "Does this QR generator require registration?",
-      "answer": "No, it is a serverless, browser-only tool with no signup sheets or fees."
+      "question": "What does the Scan Contrast ratio score indicate?",
+      "answer": "The live contrast analyzer checks the foreground vs background color luminance according to WCAG standards. A ratio of 4.5:1 or higher indicates excellent readability across all phone camera sensors."
     },
     {
-      "question": "Can I create dynamic QR codes here?",
-      "answer": "These are static QR codes. To create dynamic ones (which let you redirect URLs later), you need an external redirection server."
+      "question": "Are these QR codes free for commercial packaging and marketing?",
+      "answer": "Yes, all QR codes generated are 100% free with no licensing restrictions, watermarks, or branding requirements."
     },
     {
-      "question": "Why won't my QR code scan?",
-      "answer": "Ensure the background and foreground colors have high contrast, the image is not blurry, and the pattern size is large enough for the camera lens."
+      "question": "Is my private data (Wi-Fi password or contact details) sent to any server?",
+      "answer": "No. All QR matrix computation, color styling, and image generation are executed strictly inside your local browser memory. No data is transmitted over the internet."
     },
     {
-      "question": "What is error correction in QR codes?",
-      "answer": "Error correction allows the QR code to be scanned even if part of it is damaged, dirty, or covered by a logo."
-    },
-    {
-      "question": "Can I encode email addresses?",
-      "answer": "Yes, enter mailto:example@email.com in the content box to create an email QR code."
-    },
-    {
-      "question": "Can I encode Wi-Fi settings?",
-      "answer": "Yes, you can encode text configurations like WIFI:S:MyNetwork;T:WPA;P:MyPassword;; to create a Wi-Fi shareable QR code."
-    },
-    {
-      "question": "What format is the downloaded image?",
-      "answer": "The QR code is downloaded as a high-quality, transparent-ready PNG image file."
-    },
-    {
-      "question": "Does the QR code have a scan limit?",
-      "answer": "No, because it is a static QR code, it can be scanned an infinite number of times."
-    },
-    {
-      "question": "Can I place a logo in the center?",
-      "answer": "This basic generator creates standard static QR codes. For logo integration, use graphic editing software to overlay your logo over the center."
-    },
-    {
-      "question": "What size should I print the QR code?",
-      "answer": "For business cards, a minimum size of 2 cm x 2 cm is recommended. For print banners, use higher pixel resolutions."
-    },
-    {
-      "question": "Is the encoded data secure?",
-      "answer": "Yes. The QR code generator runs locally. Your text inputs are never sent over the network, ensuring absolute confidentiality."
-    },
-    {
-      "question": "Can I encode phone numbers?",
-      "answer": "Yes, write tel:+1234567890 to make a QR code that initiates a call when scanned."
-    },
-    {
-      "question": "Can I encode SMS messages?",
-      "answer": "Yes, write SMSTO:+1234567890:MessageText to pre-fill an SMS on the scanner device."
-    },
-    {
-      "question": "How does a QR code scanner read the image?",
-      "answer": "The camera identifies the three large square anchors in the corners to align the grid and decodes the black-and-white modules into binary text."
+      "question": "Can I copy the QR code directly to my clipboard?",
+      "answer": "Yes. Click 'Copy to Clipboard' to copy the image bitmap directly for instant pasting into Photoshop, Canva, Figma, or messaging apps."
     }
   ],
   "ImageCompressor": [
@@ -684,11 +644,11 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "Does it support bulk image compression?",
-      "answer": "This version processes images individually to ensure high-precision adjustments for each file."
+      "answer": "Yes! Switch to the Batch Optimizer tab to upload multiple images at once and compress them in parallel with 1-click ZIP archive export."
     },
     {
       "question": "Can I compress PNG files with transparency?",
-      "answer": "Yes, it compresses PNG files. If exported as JPEG, transparency is converted to a white background. Choose PNG mode to retain transparency."
+      "answer": "Yes, it compresses PNG files. If exported as JPEG, transparency is converted to a custom background color (default white). Choose WebP or PNG mode to retain alpha transparency."
     },
     {
       "question": "Does it strip EXIF data?",
@@ -696,43 +656,71 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     },
     {
       "question": "What is the difference between lossy and lossless compression?",
-      "answer": "Lossy compression (JPEG) discards some image data to shrink files dramatically. Lossless compression (PNG) reduces size without losing any pixel data, yielding larger file sizes."
+      "answer": "Lossy compression (JPEG, WebP) discards some image data to shrink files dramatically. Lossless compression (PNG) reduces size without losing any pixel data, yielding larger file sizes."
     },
     {
       "question": "Can I convert images to WebP here?",
-      "answer": "The current tool compresses files into their native formats. WebP options can be handled depending on browser compatibility."
+      "answer": "Yes! You can convert any uploaded JPG, PNG, or HEIC photo into modern WebP format for up to 35% smaller file sizes at identical visual fidelity."
     },
     {
-      "question": "Why should I compress images before uploading to WordPress?",
-      "answer": "Uncompressed images slow down page load speed and consume server storage. Compressing them keeps your site fast and hosting costs low."
+      "question": "How do I compress images for government application forms (UPSC, SSC, Visa)?",
+      "answer": "Use the Target Size (KB) mode or click the 'Passport / Govt Form' preset. Set your target limit (e.g. 50 KB), and the studio will automatically calculate the optimal compression ratio to guarantee the file stays under the required threshold."
     },
     {
       "question": "What is the maximum image file size I can upload?",
-      "answer": "Since it runs locally on your computer's RAM, you can easily compress large raw photos up to 20-30 MB."
+      "answer": "Since processing runs locally on your computer's RAM, you can easily compress large raw photos up to 50 MB without uploading to any remote server."
     },
     {
       "question": "Does compression affect print quality?",
-      "answer": "Highly compressed images (below 60% quality) may show pixel blocks, making them unsuitable for high-quality printing. Keep quality at 90%+ for print."
+      "answer": "Highly compressed images (below 60% quality) may show pixel artifacts. Keep quality at 85%+ or use lossless PNG mode for print workflows."
     },
     {
-      "question": "How do I compress images for email attachments?",
-      "answer": "Upload the file, set quality to 70%, and download the compressed version to fit email attachment limits (usually 25MB)."
+      "question": "How do I compare compression quality before downloading?",
+      "answer": "Use the interactive Before/After split slider to drag the divider across your photo and inspect fine visual details side-by-side in real time."
+    }
+  ],
+  "ImageCropper": [
+    {
+      "question": "How does the Image Cropper tool work?",
+      "answer": "It renders your image on an interactive HTML5 canvas where you can drag and resize the bounding crop box to extract any region with pixel-perfect accuracy."
     },
     {
-      "question": "Can I see the file size savings u/s real-time?",
-      "answer": "Yes, the tool displays the original size, compressed size, and the percentage of storage saved instantly."
+      "question": "Which aspect ratio presets are available?",
+      "answer": "The cropper supports Freeform, Square (1:1), Landscape (16:9), Stories/Reels (9:16), Standard (4:3), Photography (3:2), Portrait (2:3), and Ultrawide (21:9), plus social media templates for Instagram, YouTube, and LinkedIn."
     },
     {
-      "question": "Does this tool work on mobile devices?",
-      "answer": "Yes, it is fully responsive and runs on mobile browsers, using your phone's processor to compress photos."
+      "question": "Can I rotate or flip images before cropping?",
+      "answer": "Yes! You can rotate images 90 degrees clockwise or counter-clockwise, and flip horizontally or vertically with 1 click."
     },
     {
-      "question": "Why do PNG files compress less than JPEGs?",
-      "answer": "PNG uses lossless algorithms designed for drawings/icons, which cannot shrink as much as JPEG lossy algorithms designed for photos."
+      "question": "Are my images uploaded to any server?",
+      "answer": "No. All cropping and transformations happen 100% locally inside your web browser sandbox, ensuring absolute data privacy."
     },
     {
-      "question": "Is there a daily limit on the number of images I can compress?",
-      "answer": "No, you can compress an unlimited number of images completely for free."
+      "question": "Can I crop and resize in the same workflow?",
+      "answer": "Yes! Switch to the All-in-One Studio tab to crop, resize resolution, and compress your image in a single continuous pipeline."
+    }
+  ],
+  "ImageResizer": [
+    {
+      "question": "How does the Image Resizer work?",
+      "answer": "It recalculates the pixel grid using high-quality canvas bicubic interpolation, allowing you to upscale or downscale image dimensions by exact pixels or percentage."
+    },
+    {
+      "question": "What is Aspect Ratio Lock?",
+      "answer": "Aspect Ratio Lock ensures that changing either the width or height automatically scales the other dimension proportionally, preventing stretching or distortion."
+    },
+    {
+      "question": "Can I resize by percentage?",
+      "answer": "Yes! Quick buttons (25%, 50%, 75%, 100%) and percentage controls allow fast proportional scaling."
+    },
+    {
+      "question": "Can I batch resize multiple photos at once?",
+      "answer": "Yes! The integrated Batch Optimizer tab allows uploading multiple images and resizing them all simultaneously to a maximum dimension, with instant ZIP download."
+    },
+    {
+      "question": "Which formats can I export my resized images to?",
+      "answer": "You can export in modern WebP, universal JPEG, or lossless PNG format."
     }
   ],
   "UPIQRGenerator": [
@@ -1475,84 +1463,44 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
   ],
   "CAGRCalculator": [
     {
-      "question": "What is the main purpose of the CAGR Calculator?",
-      "answer": "The CAGR Calculator is designed to help users compute, format, or process values relating to Compound Annual Growth Rate calculations for multi-year investments quickly in the web browser."
+      "question": "What is CAGR and how does it differ from Absolute Return?",
+      "answer": "Absolute return measures the total percentage gain or loss over an entire holding period without considering the duration. CAGR (Compound Annual Growth Rate) dampens interim volatility and computes the constant geometric annualized rate at which your initial capital would have grown if it had compounded steadily year after year."
     },
     {
-      "question": "Does the CAGR Calculator store any of my inputs?",
-      "answer": "No, all data inputs entered into the CAGR Calculator are processed locally on your client machine. No data is stored, transmitted, or shared."
+      "question": "What is the exact mathematical formula used for CAGR?",
+      "answer": "The CAGR formula is: CAGR = ((Final Value / Initial Investment) ^ (1 / t)) - 1, where t is the elapsed duration in years (including fractional years or exact calendar day counts)."
     },
     {
-      "question": "Is there a daily calculation limit for CAGR Calculator?",
-      "answer": "No, you can perform unlimited operations u/s the CAGR Calculator without registration, payments, or credit limits."
+      "question": "How does CAGR differ from XIRR in Mutual Funds?",
+      "answer": "CAGR is designed for single lump sum point-to-point investments with one entry and one exit. XIRR (Extended Internal Rate of Return) is required when there are multiple periodic cash flows occurring on irregular dates, such as monthly SIP installments, SWP withdrawals, or dividend payouts."
     },
     {
-      "question": "Can I use the CAGR Calculator offline?",
-      "answer": "Yes, once the website is loaded, all JavaScript computations run locally, allowing you to use the tool offline."
+      "question": "How does inflation affect my CAGR (Real CAGR vs. Nominal CAGR)?",
+      "answer": "Nominal CAGR represents returns on paper, while inflation erodes purchasing power. Using the Fisher equation, Real CAGR = ((1 + Nominal CAGR) / (1 + Inflation Rate)) - 1. For instance, a 12% nominal CAGR in an economy with 6% annual inflation yields an actual real wealth expansion rate of ~5.66% per annum."
     },
     {
-      "question": "Why are the results of CAGR Calculator computed so quickly?",
-      "answer": "Because there are no network requests or server-side scripts. Everything is calculated instantaneously on your device."
+      "question": "How is Capital Gains Tax (LTCG) applied on CAGR returns in India?",
+      "answer": "Under Budget 2024 revised tax rules: For Equity Mutual Funds & Listed Shares held over 12 months, LTCG is taxed at 12.5% on profits exceeding ₹1.25 Lakh per financial year. For Debt Mutual Funds and Fixed Deposits, gains are taxed at your applicable income tax slab rate."
     },
     {
-      "question": "Is the CAGR Calculator optimized for mobile devices?",
-      "answer": "Yes, it features a responsive Tailwind CSS layout, adjusting perfectly to mobile phones, tablets, and desktop displays."
+      "question": "What are the Rule of 72, 114, and 144 in compounding?",
+      "answer": "These are mathematical heuristics estimating how long an investment takes to multiply at a given constant CAGR: Rule of 72 estimates years to double (72 / CAGR), Rule of 114 estimates years to triple (114 / CAGR), and Rule of 144 estimates years to quadruple (144 / CAGR)."
     },
     {
-      "question": "How accurate are the outputs of this finance tool?",
-      "answer": "The tool uses high-precision JavaScript arithmetic conforming to standard financial and mathematical guidelines."
+      "question": "Can CAGR be negative?",
+      "answer": "Yes. If your final redemption value is less than your initial purchase cost, the ratio of Final / Initial is less than 1, producing a negative CAGR that represents your annualized rate of capital depreciation."
     },
     {
-      "question": "Does CAGR Calculator comply with Indian standards?",
-      "answer": "Yes, where applicable, it complies with Indian banking, income tax, and development standards u/s local guidelines."
+      "question": "Why does CAGR ignore portfolio volatility and interim drawdowns?",
+      "answer": "CAGR evaluates only the start and end valuations. It does not reflect interim market crashes or drawdowns. To analyze volatility alongside CAGR, use our Multi-Year Series tab to review Year-on-Year (YoY) annual returns and Maximum Drawdown (MDD)."
     },
     {
-      "question": "Can I download or copy the outputs from the CAGR Calculator?",
-      "answer": "Yes, copy and download buttons are provided next to the output panels to save results directly."
+      "question": "How does equity CAGR compare against Gold, PPF, and Bank FDs in India?",
+      "answer": "Historically over 10-15+ year horizons in India: Nifty 50 Index Equities have delivered ~12-13.5% CAGR, Sovereign Gold ~9.5-10.5% CAGR, Real Estate ~8-8.5% CAGR, PPF ~7.1% (tax-free) CAGR, and Bank FDs ~6.5-7.5% CAGR before tax."
     },
     {
-      "question": "Are there any browser requirements for this tool?",
-      "answer": "It requires a modern web browser (like Chrome, Safari, Edge, or Firefox) with JavaScript enabled."
-    },
-    {
-      "question": "How can I share the results of CAGR Calculator?",
-      "answer": "You can copy the calculated report details to your clipboard and share them via email, chat, or documents."
-    },
-    {
-      "question": "Is my corporate data safe in CAGR Calculator?",
-      "answer": "Yes, since data never leaves your computer, the CAGR Calculator is safe for processing confidential business calculations."
-    },
-    {
-      "question": "Does the CAGR Calculator require custom browser extensions?",
-      "answer": "No, it runs natively on standard HTML5 and CSS3 specifications without requiring third-party plugins."
-    },
-    {
-      "question": "Why did the developer build CAGR Calculator?",
-      "answer": "To provide a faster, ad-supported, and private alternative to server-dependent tools that log user entries."
-    },
-    {
-      "question": "Can I suggest changes or report bugs for CAGR Calculator?",
-      "answer": "Yes! You can contact the engineering team via our Contact page to report bugs or request new features."
-    },
-    {
-      "question": "How does the theme selection affect CAGR Calculator?",
-      "answer": "The interface adapts to your selected Light or Dark mode preference, keeping the workspace readable."
-    },
-    {
-      "question": "Does this tool contain any hidden subscription fees?",
-      "answer": "No, all capabilities of this tool are completely free and supported by standard display banner ads."
-    },
-    {
-      "question": "How does CAGR Calculator handle invalid inputs?",
-      "answer": "It features validation checks, displaying help alerts or resetting results if input values are mathematically impossible."
-    },
-    {
-      "question": "What is the underlying technology of CAGR Calculator?",
-      "answer": "It is built using React, TypeScript, and Tailwind CSS, compiling down to standard optimized client assets."
-    },
-    {
-      "question": "Can I host this tool on my local intranet?",
-      "answer": "The tool is hosted publically at Toolique. For custom integrations, contact the administrator."
+      "question": "Is my portfolio data stored or transmitted anywhere?",
+      "answer": "No. 100% of calculations, amortization tables, and PDF report generation occur strictly inside your local browser memory. Your financial figures are completely private and never uploaded to any server."
     }
   ],
   "PercentageCalculator": [
@@ -4679,84 +4627,44 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
   ],
   "YouTubeThumbnailResizer": [
     {
-      "question": "What is the YouTube Thumbnail Resizer?",
-      "answer": "It is a utility that crops, scales, and fits any image to the exact dimensions required for a YouTube video thumbnail."
+      "question": "What is the YouTube Thumbnail Resizer & Studio?",
+      "answer": "It is an advanced client-side creator tool that allows you to crop, resize, rotate, color grade, frame, add bold text/badges, simulate safe zones, and optimize image files under YouTube's 2MB limit in 1280x720 (16:9), 1080p, and Shorts resolutions."
     },
     {
-      "question": "What is the standard size for a YouTube thumbnail?",
-      "answer": "YouTube recommends a resolution of 1280 x 720 pixels, with a minimum width of 640 pixels, in a 16:9 aspect ratio."
+      "question": "What is the official standard resolution for YouTube video thumbnails in 2026?",
+      "answer": "YouTube officially recommends a resolution of 1280 x 720 pixels (with a minimum width of 640 pixels) in a 16:9 aspect ratio and a file size under 2MB. 1920 x 1080 (1080p) is also widely supported for extra clarity on Retina and 4K displays."
     },
     {
-      "question": "Which file formats does this thumbnail resizer support?",
-      "answer": "You can upload JPEG, PNG, or WebP images, and export them as PNG or JPEG."
+      "question": "What is the YouTube thumbnail safe zone and why is the bottom-right corner dangerous?",
+      "answer": "YouTube superimposes the video duration badge (such as '14:25') and red watched progress bar directly on the bottom-right and bottom edge of thumbnails across desktop search, mobile feeds, and channel pages. Any text, face, or logo placed in the bottom-right 20% area will be obscured."
     },
     {
-      "question": "Is my uploaded image sent to a server?",
-      "answer": "No, all image processing, cropping, and canvas rendering are performed locally in your browser. No files are uploaded."
+      "question": "How can I extract and edit a thumbnail from an existing YouTube video?",
+      "answer": "Click the YouTube tab in the input selector and paste any YouTube video link or 11-digit video ID. The tool will automatically fetch the maximum resolution thumbnail directly onto the editing canvas."
     },
     {
-      "question": "What is the recommended aspect ratio for YouTube thumbnails?",
-      "answer": "A 16:9 aspect ratio is standard, which matches the video player size and prevents black bars."
+      "question": "What image formats and file size limits does YouTube enforce?",
+      "answer": "YouTube accepts JPEG, PNG, GIF, and WebP thumbnail files up to a maximum size of 2MB (2,048 KB). If your file is over 2MB, YouTube Studio will reject the upload. Our tool includes an Auto-Optimize button to compress files safely under 2MB."
     },
     {
-      "question": "What is the maximum file size for a YouTube thumbnail?",
-      "answer": "YouTube limits thumbnail uploads to 2MB. Our tool allows adjusting export quality to help compress your file."
+      "question": "Is my image uploaded to any remote server or third-party service?",
+      "answer": "No. All canvas transformations, color grading, text rendering, and image compression occur 100% locally inside your browser memory using HTML5 Canvas APIs. Your images never leave your device."
     },
     {
-      "question": "Can I crop my image using this tool?",
-      "answer": "Yes, the tool has built-in zoom, positioning, and rotation sliders to help you frame the crop perfectly."
+      "question": "Can I paste screenshots directly from my clipboard?",
+      "answer": "Yes! You can press Ctrl+V (or Cmd+V on Mac) anywhere on the page to instantly paste screenshots or copied images from Figma, Photoshop, or your clipboard."
     },
     {
-      "question": "How do I adjust the zoom or rotation of my image?",
-      "answer": "Use the visual sliders on the control panel to scale up, rotate, or slide the image vertically and horizontally."
+      "question": "How do I create a frosted glass blurred background for vertical or narrow images?",
+      "answer": "Select the 'Fit Frame (Letterbox)' mode in the Framing tab and choose 'Blurred Glass'. The engine will automatically generate an aesthetically blurred, color-matched frosted glass backdrop behind your focal image."
     },
     {
-      "question": "Does this tool support outputting as JPEG or PNG?",
-      "answer": "Yes, you can choose PNG for high lossless quality or JPEG for compressed files."
+      "question": "What color grading presets are available to increase CTR?",
+      "answer": "The studio offers 1-click creator grades including 'High CTR Punch' (boosted contrast and saturation for dark mode mobile feeds), 'Vibrant Pop', 'Cinematic Moody', 'High-Key Studio', and 'High-Contrast B&W', plus manual fine-tuning sliders."
     },
     {
-      "question": "How do I change the export quality?",
-      "answer": "When exporting as JPEG, you can use the Quality slider (from 10% to 100%) to optimize the file size."
-    },
-    {
-      "question": "Will resizing make my thumbnail look blurry?",
-      "answer": "If you upload a high-resolution image, it will remain sharp. Resizing small, low-res images can cause pixelation."
-    },
-    {
-      "question": "Can I resize images on mobile?",
-      "answer": "Yes, the layout works on touch interfaces, letting you crop and download thumbnails on your phone."
-    },
-    {
-      "question": "Why does YouTube require a specific thumbnail size?",
-      "answer": "Having 1280 x 720 dimensions ensures the thumbnail looks high-quality on desktop search results, mobile feeds, and TV screens."
-    },
-    {
-      "question": "What is the best resolution for custom thumbnails?",
-      "answer": "1280 x 720 pixels is the optimal standard. The tool exports exactly this size."
-    },
-    {
-      "question": "How do I make my thumbnail look clean?",
-      "answer": "Focus on a clear subject, use high-contrast outlines, and place text in the center-left to avoid the bottom-right timestamp."
-    },
-    {
-      "question": "Does the tool add a watermark?",
-      "answer": "No, our utility does not add any watermarks to your images."
-    },
-    {
-      "question": "Is there a limit on how many thumbnails I can resize?",
-      "answer": "No, you can process as many images as you like for free."
-    },
-    {
-      "question": "Is this tool completely free?",
-      "answer": "Yes, it is a free web tool with no signup, limits, or ads."
-    },
-    {
-      "question": "How do I download the resized thumbnail?",
-      "answer": "Click the 'Download Thumbnail' button, and it will trigger an instant download in your browser."
-    },
-    {
-      "question": "Can I rotate my image before downloading?",
-      "answer": "Yes, use the rotation slider to align or tilt your image up to 180 degrees."
+      "question": "Can I copy the resized thumbnail directly to my clipboard?",
+      "answer": "Yes. Click the 'Copy' button in the export panel to copy the rendered thumbnail directly as an image bitmap to your clipboard for instant pasting into Discord, Slack, Photoshop, or messaging apps."
     }
   ],
   "InstagramPostResizer": [
@@ -5874,5 +5782,47 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
   "AMSSlotPlanner": [
   ],
   "BuildPlateUtilizationCalculator": [
-  ]
+  ],
+  "QRScannerImage": [
+    {
+      "question": "How does the QR Code Scanner decode images without server uploads?",
+      "answer": "The scanner utilizes HTML5 Canvas APIs and the jsQR library to analyze raw pixel buffers directly inside your browser memory. 100% of processing happens on your local device with zero server transmission, guaranteeing complete data privacy."
+    },
+    {
+      "question": "Can I scan UPI payment QR codes and view transaction details?",
+      "answer": "Yes! When a UPI QR code (upi://pay?...) is scanned, the tool automatically parses the Payee VPA, Payee Name, Amount, Currency, and Transaction Note, and provides a 1-click button to launch your UPI app or copy the UPI ID."
+    },
+    {
+      "question": "How does Wi-Fi network QR code scanning work?",
+      "answer": "Wi-Fi QR codes (WIFI:S:...;T:...;P:...;;) are parsed into structured network name (SSID), security type (WPA/WPA2/WEP), and password fields with a show/hide password toggle and 1-click copy action."
+    },
+    {
+      "question": "Can I scan vCard contact QR codes and download .VCF files?",
+      "answer": "Yes! Contact card QR codes (BEGIN:VCARD...) are automatically extracted into Name, Organization, Phone, Email, and Address fields with a 1-click 'Download .VCF' button to save the contact directly into your device address book."
+    },
+    {
+      "question": "Can this scanner decode inverted or dark mode QR codes?",
+      "answer": "Yes. Our decoding engine executes dual inversion passes (attemptBoth), seamlessly parsing both standard black-on-white QR codes and inverted white-on-dark QR codes from dark mode apps or screenshots."
+    },
+    {
+      "question": "How does multi-pass image enhancement assist low-quality or blurry QR codes?",
+      "answer": "If initial detection fails, our engine runs automatic image enhancement passes—including high-contrast binarization, grayscale normalization, and luminance boosting—to extract and decode faint or blurry QR patterns."
+    },
+    {
+      "question": "Can I scan QR codes directly using my webcam or phone camera?",
+      "answer": "Yes! Under the 'Live Webcam Scanner' tab, you can grant browser camera permissions to scan physical QR codes in real time with an automated targeting guide, front/rear camera flip, and torch toggle."
+    },
+    {
+      "question": "Can I paste screenshots directly using Ctrl+V?",
+      "answer": "Yes! You do not need to save screenshot files to your computer. Press Ctrl+V (or Cmd+V on Mac) anywhere on the page to decode clipboard images instantly."
+    },
+    {
+      "question": "Does the scanner support calendar invites and geo-coordinates?",
+      "answer": "Yes! iCalendar (VEVENT) codes generate downloadable .ICS event invites, and Geo QR codes (geo:lat,lng) provide 1-click direct links to Google Maps navigation."
+    },
+    {
+      "question": "Are there any file size or daily calculation limits?",
+      "answer": "No. You can scan unlimited images, screenshots, and live camera streams without file size constraints, account sign-ups, or usage caps."
+    }
+  ],
 };

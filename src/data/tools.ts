@@ -492,53 +492,74 @@ export const toolsList: Tool[] = [
   {
     id: 'QRCodeGenerator',
     slug: 'qr-code-generator',
-    name: 'QR Code Generator',
+    name: 'QR Code Generator & Studio',
     category: 'social',
-    shortDescription: 'Generate high-quality QR codes for URLs, text, Wi-Fi details, and download them.',
-    metaDescription: 'Create custom QR codes for websites, texts, and contact details. Customize colors, sizes, and download the QR code as PNG in-browser.',
-    keywords: ['QR Code Generator', 'Make QR code free', 'Download QR code PNG', 'Custom QR color generator', 'No-expiry QR code generator'],
+    shortDescription: 'Generate custom QR codes for URLs, Wi-Fi, UPI Payments, vCard contacts, WhatsApp, and events in high-res PNG, SVG vector, and PDF formats.',
+    metaDescription: 'Free online QR Code Generator & Studio. Create custom QR codes for URLs, Wi-Fi passwords, UPI payments, vCards, and WhatsApp with gradients, center logos, and vector SVG/PNG downloads.',
+    keywords: [
+      'QR Code Generator',
+      'custom QR code maker',
+      'free QR code generator no sign up',
+      'Wi-Fi QR code generator',
+      'UPI QR code generator',
+      'vCard QR code maker',
+      'vector SVG QR code',
+      'print ready QR code PDF',
+      'color QR code generator with logo'
+    ],
     icon: 'QrCode',
     howToUse: [
-      'Type or paste your URL, phone number, or custom text in the content box.',
-      'Customize the background and foreground colors to match your brand.',
-      'Adjust the size of the QR code.',
-      'Click "Download PNG" to download a clean, high-resolution QR code directly to your device.'
+      'Choose your QR payload type: URL, Wi-Fi network, UPI payment, vCard contact card, WhatsApp chat, Email, SMS, Location, Event, or Plain Text.',
+      'Fill in the structured fields (e.g. Wi-Fi SSID & Password, UPI Payee VPA, or vCard profile details).',
+      'Customize colors, apply linear gradients, or select from curated brand palettes.',
+      'Add an optional Center Logo (upload your business logo or choose preset brand icons) with automatic High Error Correction (ECC H).',
+      'Optionally enable a Call-to-Action banner frame (e.g., "SCAN ME", "SCAN TO PAY", "CONNECT WI-FI").',
+      'Check the real-time Scan Contrast score to ensure 100% effortless camera readability.',
+      'Export instantly as High-Res PNG (up to 4K print), scalable vector SVG, print-ready PDF flyer, or copy directly to clipboard.'
     ],
     faqs: [
       {
-        question: 'Do these QR codes expire?',
-        answer: 'No! The generated QR codes encode static text directly into the pattern, meaning they will function indefinitely and never expire.'
+        question: 'Do these QR codes expire or have scan limits?',
+        answer: 'No! These are 100% static QR codes. All payload data is encoded directly into the pixel matrix itself without any intermediary redirect servers. They will work permanently and have zero scan limits.'
       },
       {
-        question: 'Can I use these QR codes for commercial projects?',
-        answer: 'Yes, these QR codes are free for commercial or personal use without any licensing restrictions.'
+        question: 'What is Error Correction (ECC) and which level should I choose?',
+        answer: 'Error Correction Level allows QR codes to be decoded even if partially dirty, damaged, or covered by a center logo. Levels include L (7%), M (15%), Q (25%), and H (30%). Level H is automatically recommended when adding custom center logos.'
+      },
+      {
+        question: 'Can I export scalable vector SVG files for professional print?',
+        answer: 'Yes! Click the "Vector SVG" button to download an infinite-resolution vector file suitable for Adobe Illustrator, Figma, large banners, and billboard printing.'
+      },
+      {
+        question: 'Are UPI Payment and Wi-Fi QR codes secure?',
+        answer: 'Yes. All QR generation is executed completely locally inside browser memory using HTML5 Canvas and vector rendering. No passwords, UPI IDs, contact details, or credentials ever leave your computer.'
       }
     ],
     sections: [
       {
-        title: 'How Do QR Codes Store Information?',
-        content: 'QR (Quick Response) codes are two-dimensional matrix barcodes. They represent alphanumeric characters in black and white squares (modules) arranged in a grid. Scanners detect standard positioning anchors (the three squares at the corners) to orient and decode the text or URL instantly.'
+        title: 'Complete Guide to QR Code Payload Standards',
+        content: 'Different smartphone camera scanners support specific URI schemas for instant 1-tap actions:\n\n• **Wi-Fi Auto-Connect**: `WIFI:S:NetworkName;T:WPA;P:Password;;` allows guests to join your network without typing passwords.\n• **UPI Direct Pay (India)**: `upi://pay?pa=merchant@bank&pn=MerchantName&am=499` opens GPay, PhonePe, Paytm, or BHIM instantly with pre-filled amounts.\n• **vCard 3.0 Digital Business Card**: `BEGIN:VCARD ... END:VCARD` adds full contact information, phone, email, and address directly into smartphone contacts.\n• **WhatsApp Direct Chat**: `https://wa.me/phone?text=Message` opens a direct WhatsApp conversation.\n• **Calendar Events**: `BEGIN:VEVENT ... END:VEVENT` triggers 1-tap calendar appointment creation.'
       },
       {
-        title: 'Static vs Dynamic QR Codes',
-        content: '- **Static QR Codes**: The data is encoded directly into the pattern itself. They are free, permanent, and never expire. However, the content cannot be modified once generated.\n- **Dynamic QR Codes**: Encode a short redirect link pointing to a server. You can change the destination URL later and track scan statistics.'
+        title: 'Design Best Practices for Maximum Scanability',
+        content: '1. **Maintain High Contrast**: Always ensure a contrast ratio of 4.5:1 or higher between foreground and background.\n2. **Preserve the Quiet Zone**: Keep a minimum border margin of 2 to 4 blocks around the code matrix to help camera lenses identify boundaries.\n3. **Use Error Correction Level H for Logos**: Center logos cover part of the QR matrix; setting ECC to H (30% recovery) ensures 100% scan reliability.\n4. **Keep URLs Concise**: Shorter URLs produce simpler, cleaner module grids that scan faster from further distances.'
       }
     ]
   },
   {
     id: 'ImageCompressor',
     slug: 'image-compressor',
-    name: 'Image Compressor',
+    name: 'Image Compressor & Studio',
     category: 'image',
-    shortDescription: 'Compress PNG, JPEG, and WebP images to smaller sizes without losing quality.',
-    metaDescription: 'Compress JPEG, PNG, and WebP images online for free in your browser. Reduce file size up to 90% while preserving visual clarity for SEO page speed.',
-    keywords: ['Image Compressor', 'Reduce photo size', 'Compress JPEG online', 'Resize PNG image', 'Website image optimizer', 'In-browser image compressor'],
+    shortDescription: 'Compress PNG, JPEG, WebP, and HEIC images with target KB size search, crop, and resize studio tools.',
+    metaDescription: 'Compress JPEG, PNG, WebP, and HEIC images online in your browser. Target exact KB file size, reduce weight up to 90%, crop, and resize with 100% privacy.',
+    keywords: ['Image Compressor', 'Reduce photo size', 'Compress JPEG online', 'Resize PNG image', 'Website image optimizer', 'In-browser image compressor', 'Target KB image compressor', 'Passport photo compress'],
     icon: 'FileImage',
     howToUse: [
-      'Drag and drop or select your image (JPEG, PNG, WebP) from your device.',
-      'Adjust the compression quality slider (from 10% to 100%). Lower values reduce file size more but may affect detail.',
-      'Optionally set a maximum width/height if you want to resize the image resolution.',
-      'Review the real-time file size comparison (Original vs Compressed) and click "Download Compressed Image".'
+      'Upload or drag-and-drop your image (JPEG, PNG, WebP, HEIC) into the studio.',
+      'Select your compression mode: Manual Quality slider (10% to 100%) or Target File Size in KB (e.g. under 50KB for UPSC, passport, and govt portals).',
+      'Optionally crop or scale dimensions using the integrated studio tabs or 1-click presets.',
+      'Compare original vs optimized with the interactive Before/After split slider and click "Download Image".'
     ],
     faqs: [
       {
@@ -546,18 +567,22 @@ export const toolsList: Tool[] = [
         answer: 'Yes, completely safe! This tool uses HTML5 Canvas APIs inside your local browser. Your images are never uploaded to any server, keeping your private documents 100% confidential.'
       },
       {
+        question: 'How does the Target File Size (KB) search work?',
+        answer: 'The studio runs an intelligent binary search compression algorithm locally, optimizing quality iterations until the generated file size strictly meets your desired target kilobyte limit.'
+      },
+      {
         question: 'Will image compression affect SEO?',
-        answer: 'Yes, positively! Compressed, fast-loading images speed up your page load times, which is a major factor in Google page experience rankings.'
+        answer: 'Yes, positively! Compressed, fast-loading images speed up your page load times, which is a major factor in Google page experience and Core Web Vitals rankings.'
       }
     ],
     sections: [
       {
-        title: 'Why is Image Optimization Vital for SEO?',
-        content: 'Page speed is a core ranking factor in search engines. High-resolution photos taken on modern cameras are often several megabytes in size, resulting in high bounce rates on mobile networks. Compressing images reduces bandwidth consumption and boosts Google Core Web Vitals (LCP) performance.'
+        title: 'Why is Image Optimization Vital for SEO and Web Performance?',
+        content: 'Page speed is a core ranking factor in search engines. High-resolution photos taken on modern cameras are often several megabytes in size, resulting in high bounce rates on mobile networks. Compressing images into next-gen WebP or optimized JPEG reduces bandwidth consumption and boosts Google Core Web Vitals (LCP) performance.'
       },
       {
-        title: 'Lossy vs Lossless Compression',
-        content: '- **Lossy Compression**: Strips unnoticeable image details to reduce file size dramatically (often 70% to 90%). Supported by JPEG and WebP formats.\n- **Lossless Compression**: Reconstructs pixel data perfectly but yields smaller file size reductions (e.g., PNG optimization).'
+        title: 'Lossy vs Lossless Compression Comparison',
+        content: '• **Lossy Compression (WebP / JPEG)**: Strips imperceptible high-frequency visual details to achieve massive file size reductions (typically 70% to 90% smaller).\n• **Lossless Compression (PNG)**: Preserves every pixel with mathematical precision, ideal for technical diagrams, logos, and UI graphics with transparent backgrounds.'
       }
     ]
   },
@@ -1148,38 +1173,43 @@ export const toolsList: Tool[] = [
     slug: 'cagr-calculator',
     name: 'CAGR Calculator',
     category: 'finance',
-    shortDescription: 'Compute the Compound Annual Growth Rate (CAGR) of your mutual funds or investments.',
-    metaDescription: 'Calculate Compound Annual Growth Rate (CAGR) online. Enter initial and final values along with the time period to get accurate annual compounding return percentages.',
-    keywords: ['CAGR Calculator', 'Compound Annual Growth Rate', 'Calculate mutual fund CAGR', 'Annualized returns calculator', 'Investment growth calculator'],
+    shortDescription: 'Compute point-to-point CAGR, future value projections, reverse goal rates, and benchmark comparisons.',
+    metaDescription: 'Calculate Compound Annual Growth Rate (CAGR) online for mutual funds, stocks, real estate & gold. Includes inflation-adjusted real returns, LTCG tax impact, Rule of 72 doubling time, and PDF report export.',
+    keywords: ['CAGR Calculator', 'Compound Annual Growth Rate', 'Calculate mutual fund CAGR', 'Annualized returns calculator', 'Investment growth calculator', 'Real return calculator', 'Rule of 72 calculator', 'Nifty 50 CAGR comparison', 'LTCG tax CAGR'],
     icon: 'Percent',
     howToUse: [
-      'Enter the Beginning Value (initial purchase price/investment).',
-      'Enter the Ending Value (current value or redemption price).',
-      'Enter the Time Period in years.',
-      'View the CAGR percentage instantly.'
+      'Select your calculation mode: Point-to-Point CAGR, Future Value Projector, Reverse Goal Rate, Multi-Year Series, or Asset Benchmarks.',
+      'Enter your Initial Investment and Final Portfolio Valuation.',
+      'Set the duration using Years & Months sliders or choose Exact Calendar Dates.',
+      'Optionally toggle Advanced Settings to adjust inflation rates and apply Indian Budget 2024 LTCG tax rules.',
+      'View instant CAGR (%), Real CAGR, wealth multiplier (x), doubling time, year-by-year compounding trajectory, and download a professional PDF report.'
     ],
     faqs: [
       {
         question: 'What is CAGR?',
-        answer: 'CAGR stands for Compound Annual Growth Rate. It represents the mean annual growth rate of an investment over a specified period of time longer than one year, assuming the investment compounds steadily.'
+        answer: 'CAGR stands for Compound Annual Growth Rate. It represents the constant geometric rate at which an investment would have grown if it had compounded smoothly year after year over a multi-year horizon.'
       },
       {
         question: 'What is the formula used for CAGR?',
-        answer: 'The formula is: CAGR = ((Ending Value / Beginning Value) ^ (1 / t)) - 1, where t is the total duration in years.'
+        answer: 'The formula is: CAGR = ((Ending Value / Beginning Value) ^ (1 / t)) - 1, where t is the total elapsed duration in years.'
       },
       {
-        question: 'Why is CAGR preferred over absolute returns?',
-        answer: 'Absolute return only shows the total growth percentage without considering time. CAGR factors in the time value of money, letting you compare the performance of different asset classes over identical periods.'
+        question: 'How is Real CAGR calculated against inflation?',
+        answer: 'Real CAGR is computed using the Fisher equation: Real CAGR = ((1 + Nominal CAGR) / (1 + Inflation Rate)) - 1, showing the true expansion of your purchasing power.'
       }
     ],
     sections: [
       {
-        title: 'What is CAGR (Compound Annual Growth Rate)?',
-        content: 'CAGR is not a real-world return rate; rather, it is a representational figure. It describes the rate at which an investment would have grown if it had grown at a steady, constant compounding rate every single year over the entire investment horizon.'
+        title: 'Understanding Compound Annual Growth Rate (CAGR)',
+        content: 'CAGR is the industry standard metric used by fund managers, financial advisors, and wealth analysts to evaluate the annualized performance of investments. Unlike absolute returns, which ignore the dimension of time, CAGR provides a smoothed, normalized annual percentage that enables fair side-by-side comparisons across different asset classes (e.g. comparing a 3-year mutual fund return against a 7-year real estate investment).'
       },
       {
-        title: 'CAGR Formula and Mathematics',
-        content: 'The math behind CAGR is computed using this algebraic formulation:\n\n**CAGR = [ ( Ending Value / Beginning Value )^(1 / t) ] − 1**\n\nWhere:\n- **Ending Value**: Final valuation of the asset\n- **Beginning Value**: Initial cost of the asset\n- **t**: Total elapsed years (can be fractional, e.g. 2.5 years)'
+        title: 'CAGR Formula and Compounding Mechanics',
+        content: 'The mathematical formulation for CAGR is:\\n\\n**CAGR = [ ( Ending Value / Beginning Value )^(1 / t) ] − 1**\\n\\nWhere:\\n- **Ending Value (V_final)**: The current market valuation or final redemption proceeds\\n- **Beginning Value (V_initial)**: The original principal capital invested\\n- **t**: Total duration in years (computed as fractional years, e.g., 4.25 years or exact day count / 365.25)\\n\\nBecause compounding operates geometrically rather than linearly, CAGR accounts for interest-on-interest accumulation, making it superior to simple arithmetic averages.'
+      },
+      {
+        title: 'Inflation Adjustment, Tax Implications & Doubling Rules',
+        content: 'To assess true real-world wealth accumulation, CAGR must be evaluated alongside:\\n\\n1. **Real Inflation-Adjusted Return**: High nominal returns can be eroded by inflation. If your portfolio generates 12% CAGR while CPI inflation runs at 6%, your real purchasing power expands at 5.66% p.a.\\n2. **Post-Tax In-Hand Returns**: Under Indian tax laws (Budget 2024), Equity LTCG is taxed at 12.5% on gains exceeding ₹1.25 Lakh per financial year, whereas Debt/FD returns are taxed at marginal income tax slabs.\\n3. **Rule of 72 & 114**: Dividing 72 by your CAGR gives the approximate number of years required to double your capital (e.g., 12% CAGR doubles wealth in ~6 years; 15% CAGR doubles wealth in ~4.8 years).'
       }
     ]
   },
@@ -3164,23 +3194,25 @@ export const toolsList: Tool[] = [
   {
     "id": "ImageCropper",
     "slug": "image-cropper",
-    "name": "Image Cropper",
+    "name": "Image Cropper & Studio",
     "category": "image",
-    "shortDescription": "Crop images to custom dimensions, locks aspect ratio options, and edit boundaries in browser.",
-    "metaDescription": "Free online Image Cropper tool. Crop JPG, PNG, and WebP images to standard aspect ratios (1:1, 16:9, 4:3) or custom free-hand shapes locally.",
+    "shortDescription": "Crop images with aspect ratio locks, rule-of-thirds grid, 90° rotation, flip, and studio resizing/compression.",
+    "metaDescription": "Free online Image Cropper tool. Crop JPG, PNG, WebP, and HEIC images to standard aspect ratios (1:1, 16:9, 4:3, 9:16) with rotation, flipping, and split preview.",
     "keywords": [
       "Image Cropper",
       "Crop photo online",
       "Cut image dimensions",
       "Crop JPG PNG",
-      "Resize image bounds"
+      "Rotate and flip photo",
+      "Aspect ratio crop",
+      "Social media crop"
     ],
     "icon": "Crop",
     "howToUse": [
-      "Select or drag-and-drop an image from your device.",
-      "Select your preferred aspect ratio preset (Free, 1:1, 16:9, 4:3).",
-      "Drag and resize the overlay crop window on the image preview.",
-      "Click the \"Download Crop\" button to compile and save the cropped image."
+      "Select or drag-and-drop an image (JPG, PNG, WebP, HEIC) into the crop canvas.",
+      "Choose an aspect ratio preset (Free, 1:1, 16:9, 9:16, 4:3, 3:2, 2:3, 21:9) or social media template.",
+      "Drag the bounding box and corner handles over your desired crop focus area.",
+      "Optionally apply 90° rotation or horizontal/vertical flip, and download the cropped file."
     ],
     "faqs": [
       {
@@ -3190,35 +3222,41 @@ export const toolsList: Tool[] = [
       {
         "question": "Does aspect ratio lock prevent free-form scaling?",
         "answer": "Yes. Locking the aspect ratio (like 16:9 or 1:1) forces the crop bounds to scale symmetrically, preserving the selected proportions."
+      },
+      {
+        "question": "Can I rotate or flip images while cropping?",
+        "answer": "Yes! The integrated studio supports 90° clockwise/counter-clockwise rotation and horizontal/vertical mirroring."
       }
     ],
     "sections": [
       {
-        "title": "Image Cropping Fundamentals",
-        "content": "Cropping is the process of removing unwanted outer areas from an image. It is used to improve framing, change aspect ratios, or isolate a specific subject. Doing this client-side prevents bandwidth usage and keeps private photos secure."
+        "title": "Image Cropping Fundamentals & Composition Rules",
+        "content": "Cropping is the process of removing unwanted outer areas from an image. It is used to improve framing, change aspect ratios, or isolate a specific subject using the Rule of Thirds. Doing this client-side prevents bandwidth usage and keeps private photos 100% secure."
       }
     ]
   },
   {
     "id": "ImageResizer",
     "slug": "image-resizer",
-    "name": "Image Resizer",
+    "name": "Image Resizer & Studio",
     "category": "image",
-    "shortDescription": "Resize images by pixel width/height or scaling percentage with aspect ratio locks.",
-    "metaDescription": "Free online Image Resizer. Adjust width and height of JPG, PNG, and WebP images. Lock aspect ratio or scale images by percentage instantly.",
+    "shortDescription": "Resize images by pixel width/height, scaling percentage, or target KB size with aspect ratio locks.",
+    "metaDescription": "Free online Image Resizer. Adjust width and height of JPG, PNG, WebP, and HEIC images. Lock aspect ratio, scale by percentage, or compress to target KB instantly.",
     "keywords": [
       "Image Resizer",
       "Resize photo online",
       "Change image dimensions",
       "Scale image percentage",
-      "Resize JPG PNG"
+      "Resize JPG PNG",
+      "Passport photo resize",
+      "Bulk image resizer"
     ],
     "icon": "Sliders",
     "howToUse": [
       "Choose the image file you wish to resize.",
-      "Enter new width or height in pixels, or use the scaling percentage slider.",
-      "Keep the \"Aspect Ratio Locked\" to avoid warping the image.",
-      "Download the resized image in PNG format."
+      "Enter new width or height in pixels, or use the scaling percentage buttons (25%, 50%, 75%, 100%).",
+      "Keep \"Aspect Ratio Locked\" to maintain original proportions without distortion.",
+      "Download the resized image in next-gen WebP, JPEG, or PNG format."
     ],
     "faqs": [
       {
@@ -3228,12 +3266,16 @@ export const toolsList: Tool[] = [
       {
         "question": "Will resizing reduce the file size of the image?",
         "answer": "Yes, reducing the pixel resolution of an image naturally reduces its raw byte size, making it faster to load on websites."
+      },
+      {
+        "question": "Can I batch resize multiple images at once?",
+        "answer": "Yes! Switch to the Batch Optimizer tab to upload multiple files and resize them simultaneously with 1-click ZIP export."
       }
     ],
     "sections": [
       {
         "title": "Pixel Dimensions vs File Size",
-        "content": "An image is made of pixels. Reducing the dimensions (e.g. from 4000x3000 to 800x600) decreases the total pixel count, which dramatically lowers file size while maintaining visibility at standard display sizes."
+        "content": "An image is made of pixels. Reducing the dimensions (e.g. from 4000x3000 to 800x600) decreases the total pixel count, which dramatically lowers file size while maintaining high visual clarity at standard display sizes."
       }
     ]
   },
@@ -3615,39 +3657,46 @@ export const toolsList: Tool[] = [
     ]
   },
   {
-    "id": "QRScannerImage",
-    "slug": "qr-scanner-image",
-    "name": "QR Code Scanner From Image",
-    "category": "image",
-    "shortDescription": "Scan and decode QR codes from image files locally inside browser memory.",
-    "metaDescription": "Scan QR code from image online. Upload JPG, PNG or WebP files and parse QR link or text contents instantly u/s local canvas decoding.",
-    "keywords": [
-      "QR Code Scanner From Image",
-      "Read QR code from file",
-      "QR decoder from photo",
-      "Online QR reader image",
-      "Scan QR code photo"
+    id: 'QRScannerImage',
+    slug: 'qr-scanner-image',
+    name: 'QR Code Scanner From Image',
+    category: 'image',
+    shortDescription: 'Scan and decode QR codes from image files, clipboard screenshots (Ctrl+V), or live webcam.',
+    metaDescription: 'Free online QR code scanner from image & webcam. Upload photos, paste screenshots (Ctrl+V), or scan live camera feed. Decodes UPI payments, Wi-Fi passwords, vCards, web URLs, and calendar invites locally in browser.',
+    keywords: ['QR Code Scanner From Image', 'Read QR code from file', 'QR decoder from photo', 'Online QR reader image', 'Scan QR code photo', 'UPI QR scanner online', 'WiFi QR code password reader', 'vCard QR scanner', 'Webcam QR scanner'],
+    icon: 'QrCode',
+    howToUse: [
+      'Choose an input method: Upload Image, Paste Screenshot (Ctrl+V), Live Webcam, Image URL, or Sample Presets.',
+      'Select or drop any image file (PNG, JPG, WebP, SVG) or point your webcam at a QR code.',
+      'Our multi-pass engine automatically handles inverted dark-mode QR codes, binarizes low-contrast photos, and draws a visual bounding box.',
+      'Inspect structured payload cards: Launch UPI payment apps, copy Wi-Fi passwords, download .VCF contact cards, or open web URLs.'
     ],
-    "icon": "QrCode",
-    "howToUse": [
-      "Select or drag-and-drop a photo containing a QR code.",
-      "The scanner will analyze the image data instantly in browser.",
-      "Review the decoded text result. Click copy or follow link shortcuts."
-    ],
-    "faqs": [
+    faqs: [
       {
-        "question": "Will this scanner work on blur or skewed QR codes?",
-        "answer": "Yes, the decoder (jsQR) contains error correction algorithms to resolve slightly skewed, rotated, or blurry QR codes, provided they are in focus."
+        question: 'Will this scanner work on blur or skewed QR codes?',
+        answer: 'Yes! The scanner runs progressive multi-pass image enhancement (binarization, contrast boosting, and dual inversion passes) to reconstruct and decode skewed, low-contrast, or slightly blurry QR codes.'
       },
       {
-        "question": "Can it scan QR codes from screenshots?",
-        "answer": "Yes. Any screenshot, photo, or downloaded graphic containing a QR code can be parsed and decoded."
+        question: 'Can it scan QR codes from screenshots?',
+        answer: 'Yes! You can upload screenshot image files or simply press Ctrl+V anywhere on the page to paste and decode clipboard screenshots immediately.'
+      },
+      {
+        question: 'Does it parse UPI, Wi-Fi, and Contact Cards?',
+        answer: 'Yes! The tool features dedicated smart parsers for UPI payment links (Payee, Amount, Note), Wi-Fi passwords (SSID, WPA2), vCard contacts (.VCF), calendar invites (.ICS), and GPS geo-coordinates.'
       }
     ],
-    "sections": [
+    sections: [
       {
-        "title": "How QR Code Scanning Works",
-        "content": "QR (Quick Response) codes contain black square blocks arranged in a square grid on a white background. The scanner reads these blocks as binary data, applies Reed-Solomon error correction, and extracts the encoded text strings."
+        title: 'How Client-Side QR Code Scanning Works',
+        content: 'QR (Quick Response) codes are two-dimensional matrix barcodes containing black and white square modules arranged on a square grid. Our scanner utilizes the HTML5 Canvas API and the jsQR algorithm to extract pixel luminance data directly inside your browser RAM. By analyzing finder patterns (the three square position markers at the corners) and applying Reed-Solomon algebraic error correction, the engine extracts the binary data stream without sending any bytes to external servers.'
+      },
+      {
+        title: 'Multi-Pass Image Enhancement & Inverted QR Support',
+        content: 'Real-world QR images often suffer from poor lighting, glare, low contrast, or dark mode color inversion (white modules on dark backgrounds). Our studio employs a robust 3-stage scanning pipeline:\\n\\n1. **Dual Inversion Pass (attemptBoth)**: Decodes standard and inverted QR codes seamlessly.\\n2. **Adaptive Binarization**: Converts color and grayscale photos into optimal black-and-white threshold masks.\\n3. **Multi-Scale Downsampling**: Optimizes multi-megapixel smartphone photos to prevent browser memory stalls while sharpening fine barcode modules.'
+      },
+      {
+        title: 'Smart Payload Parsing: UPI, Wi-Fi, vCard & Geo Links',
+        content: 'Rather than simply returning a raw text string, our scanner automatically categorizes and structures the decoded data:\\n\\n- **UPI Payments**: Extracts Payee VPA, merchant name, and amount with a 1-click Pay App launcher.\\n- **Wi-Fi Credentials**: Extracts SSID and WPA/WPA2 passwords with a show/hide toggle.\\n- **vCard Profiles**: Extracts contact information and generates instant downloadable .VCF files.\\n- **Web URLs**: Audits HTTPS security protocol and opens destinations safely.'
       }
     ]
   },
@@ -5251,28 +5300,58 @@ export const toolsList: Tool[] = [
   {
     id: 'YouTubeThumbnailResizer',
     slug: 'youtube-thumbnail-resizer',
-    name: 'YouTube Thumbnail Resizer',
+    name: 'YouTube Thumbnail Resizer & Studio',
     category: 'social',
-    shortDescription: 'Crop and resize images to standard YouTube thumbnail dimensions (1280 x 720).',
-    metaDescription: 'Free online YouTube Thumbnail Resizer. Resize and crop photos to exactly 1280 x 720 pixels in-browser.',
-    keywords: ['YouTube Thumbnail Resizer', 'crop thumbnail online', 'resize image to 1280x720', 'make youtube thumbnail size', 'image cropper 16:9'],
+    shortDescription: 'Resize, crop, frame, color grade, and optimize YouTube thumbnails to 1280x720 (16:9), 1080p, and Shorts formats under 2MB.',
+    metaDescription: 'Free online YouTube Thumbnail Resizer and Studio. Crop, scale, color grade, add bold text, test safe zones, and optimize under YouTube\'s 2MB limit in 1280x720.',
+    keywords: [
+      'YouTube Thumbnail Resizer',
+      'YouTube thumbnail creator studio',
+      'resize image to 1280x720',
+      '16:9 thumbnail cropper',
+      'youtube thumbnail safe zones',
+      'extract youtube thumbnail from url',
+      'compress thumbnail under 2mb',
+      'youtube shorts cover resizer',
+      'high ctr thumbnail maker'
+    ],
     icon: 'Image',
     howToUse: [
-      'Upload or drag-and-drop your image on the uploader.',
-      'Use the scale, rotation, and offset sliders to crop the image.',
-      'Choose output format (PNG or JPEG) and set JPEG quality.',
-      'Click Download Thumbnail to save.'
+      'Upload an image, drag-and-drop a file, paste with Ctrl+V, or fetch an existing thumbnail using a YouTube video URL.',
+      'Select your target resolution: 1280x720 (HD Standard), 1080p, 4K, YouTube Shorts (9:16), or Community Square (1:1).',
+      'Use the Framing tab to adjust Cover/Letterbox mode, pan offsets, zoom, rotation, or flip horizontally/vertically.',
+      'Enhance with Color Grades (High CTR Punch, Vibrant Pop, Cinematic) and adjust brightness, contrast, saturation, or vignette.',
+      'Add optional attention badges, bold headline text with stroke outlines, and glowing outer borders.',
+      'Toggle the Safe Zones overlay to prevent critical content from being covered by YouTube\'s timestamp box.',
+      'Preview your thumbnail inside real-time Desktop and Mobile feed simulators.',
+      'Check the live file size indicator to ensure compliance with YouTube\'s 2MB upload limit, then click Download or Copy to Clipboard.'
     ],
     faqs: [
       {
-        question: 'What is the correct size for a YouTube thumbnail?',
-        answer: 'YouTube recommends a resolution of 1280 x 720 pixels with a 16:9 aspect ratio and a file size under 2MB.'
+        question: 'What is the official recommended YouTube thumbnail size and aspect ratio?',
+        answer: 'YouTube officially recommends a resolution of 1280 x 720 pixels with a minimum width of 640 pixels, an aspect ratio of 16:9, and a maximum file size of 2MB (under 2048 KB). Supported file formats include JPEG, PNG, and WebP.'
+      },
+      {
+        question: 'Why is avoiding the bottom-right corner critical for YouTube thumbnails?',
+        answer: 'YouTube permanently displays the video duration timestamp (e.g., 14:25) in the bottom-right corner across all search results, recommendations, and home feeds. Any important text, logos, or faces placed in the bottom-right 20% area will be blocked and unreadable.'
+      },
+      {
+        question: 'Can I extract and resize thumbnails from an existing YouTube video?',
+        answer: 'Yes! Select the YouTube tab, paste any YouTube video link or 11-digit video ID, and the tool will automatically extract the highest available resolution thumbnail (maxresdefault or hqdefault) directly into your editor.'
+      },
+      {
+        question: 'How does the tool ensure my thumbnail stays under YouTube’s 2MB limit?',
+        answer: 'The studio includes a real-time byte estimator and a YouTube 2MB Compliance badge. If your output exceeds 2MB, a 1-click Auto-Optimize button calculates optimal JPEG compression to deliver maximum visual quality while staying safely under 2MB.'
       }
     ],
     sections: [
       {
-        title: 'Creating High-Converting YouTube Thumbnails',
-        content: 'Thumbnails are critical for driving CTR (Click-Through Rate). Ensure your visual focus is centered, text is highly legible, and the resolution is exactly 1280x720 to avoid black margins or cropping issues.'
+        title: 'Mastering the High-CTR YouTube Thumbnail Formula',
+        content: 'Your video thumbnail and title are responsible for over 80% of your click-through rate (CTR). Top YouTube creators follow key design principles to stand out in saturated feeds:\n\n1. **High Contrast & Vibrant Saturation**: Boost contrast and saturation so the thumbnail pops on dark mode mobile feeds.\n\n2. **The 3-Word Rule**: Limit thumbnail text to 2 to 4 punchy words that complement, rather than repeat, the video title.\n\n3. **Thick Dark Outlines**: Apply high-contrast black strokes around bright yellow or white text for effortless legibility at small preview sizes.\n\n4. **Rule of Thirds**: Position emotive faces and focal subjects along the vertical grid lines.\n\n5. **Respect Safe Zones**: Keep the bottom-right corner clear of critical information to avoid timestamp occlusion.'
+      },
+      {
+        title: 'YouTube 2026 Thumbnail & Banner Dimension Guide',
+        content: '• **Standard Video Thumbnail**: 1280 × 720 px (16:9 ratio, Min width: 640 px, Max 2MB)\n• **High-DPI 1080p Thumbnail**: 1920 × 1080 px (16:9 ratio, Ultra-sharp for 4K displays)\n• **YouTube Shorts Cover**: 1080 × 1920 px (9:16 vertical ratio)\n• **Community Post / Poll**: 1080 × 1080 px (1:1 square ratio)\n• **Channel Header Banner**: 2560 × 1440 px (Safe area for mobile: 1546 × 423 px)\n• **Video Watermark**: 150 × 150 px (Square PNG with transparency, under 1MB)'
       }
     ]
   },
