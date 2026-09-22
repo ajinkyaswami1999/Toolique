@@ -1975,16 +1975,24 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
   ],
   "ApiTester": [
     {
-      "question": "What is the main purpose of the REST API Client & HTTP Request Tester?",
-      "answer": "The API Tester is a client-side debugger designed to help developers construct requests, map custom query parameters, inspect response bodies and headers, run assert tests, and export runnable code snippets."
+      "question": "What is the main purpose of the REST API Client & HTTP Request Studio?",
+      "answer": "The API Studio is a comprehensive client-side workspace designed to help developers construct HTTP requests, manage multiple tabs, test endpoints, inspect response bodies and JSON Data Tables, decode JWT tokens, run automated test assertions, and export polyglot code snippets."
     },
     {
-      "question": "Why does CORS block requests in the API Tester?",
-      "answer": "Browser security sandboxes enforce Cross-Origin Resource Sharing (CORS). If target servers do not return access-control wildcard headers, browser scripts are blocked. You can export the request as equivalent cURL commands to execute them locally in CLI terminals."
+      "question": "How do I bypass CORS blocks in the browser?",
+      "answer": "Browser security sandboxes enforce Cross-Origin Resource Sharing (CORS). If target servers do not return access-control wildcard headers, browser scripts are blocked. In Toolique's API Studio, you can toggle the 'CORS Relay Proxy' option right under the URL bar to seamlessly route requests, or export the request as equivalent cURL commands."
     },
     {
       "question": "How are environment variables and authentication keys handled?",
       "answer": "All variables, Bearer tokens, passwords, and custom collection objects are stored locally in your browser's private localStorage. No secret credentials are sent to our servers."
+    },
+    {
+      "question": "How does the Table Visualizer work?",
+      "answer": "When an API response returns an array of objects (such as users, products, or logs), the studio automatically generates an interactive, searchable, and sortable Data Table, allowing fast data analysis without manual JSON parsing."
+    },
+    {
+      "question": "Can I import and export Postman collections?",
+      "answer": "Yes! You can export your current request session as a standard Postman Collection v2.1 JSON file, as well as import cURL commands directly into active tabs."
     }
   ],
   "AdvancedDataCleaner": [

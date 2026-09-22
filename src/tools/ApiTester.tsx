@@ -1,31 +1,57 @@
-import { useState, useEffect, useMemo } from 'react';
-import { 
-  Play, Folder, Plus, Trash2, Eye, EyeOff, Copy, Check, RefreshCw, Save, Search, Shield
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import {
+  Play,
+  Folder,
+  Plus,
+  Trash2,
+  Copy,
+  Check,
+  RefreshCw,
+  Save,
+  Search,
+  CheckCircle2,
+  XCircle,
+  X,
+  ChevronRight,
+  ChevronDown,
+  Share2,
+  MoreHorizontal,
+  Box,
+  Monitor,
+  History,
+  FileText
 } from 'lucide-react';
 
 interface KeyValueRow {
+  id: string;
   key: string;
   value: string;
   enabled: boolean;
 }
 
 interface AssertionRow {
-  type: 'status' | 'time' | 'json_exists' | 'json_value' | 'header';
-  property: string; // e.g. "$.user.id" or "Content-Type"
-  operator: 'equals' | 'contains' | 'less_than' | 'greater_than' | 'exists';
+  id: string;
+  type: 'status' | 'time' | 'header' | 'json_path' | 'body_contains';
+  property: string;
+  operator: 'equals' | 'contains' | 'not_equals' | 'less_than' | 'greater_than' | 'exists';
   value: string;
 }
 
-interface SavedRequest {
+interface RequestTab {
   id: string;
   name: string;
   method: string;
   url: string;
+  queryParams: KeyValueRow[];
   headers: KeyValueRow[];
-  params: KeyValueRow[];
-  bodyType: 'none' | 'json' | 'urlencoded' | 'raw';
+  bodyType: 'none' | 'json' | 'form-data' | 'urlencoded' | 'raw' | 'graphql';
   bodyJson: string;
+  bodyFormData: KeyValueRow[];
+  bodyUrlEncoded: KeyValueRow[];
   bodyRaw: string;
+  bodyRawFormat: 'text' | 'json' | 'xml' | 'html' | 'javascript';
+  bodyGraphQLQuery: string;
+  bodyGraphQLVars: string;
   authType: 'none' | 'bearer' | 'basic' | 'apikey';
   authBearer: string;
   authBasicUser: string;
@@ -34,22 +60,27 @@ interface SavedRequest {
   authApiKeyValue: string;
   authApiKeyLocation: 'header' | 'query';
   assertions: AssertionRow[];
+  useCorsProxy: boolean;
+  scriptPreRequest: string;
+  scriptPostResponse: string;
 }
 
 interface Collection {
   id: string;
   name: string;
-  requests: SavedRequest[];
+  requests: Partial<RequestTab>[];
 }
 
 interface HistoryItem {
+  id: string;
   method: string;
   url: string;
   timestamp: string;
   status: number;
   statusText: string;
   time: number;
-  requestConfig: SavedRequest;
+  size: string;
+  requestConfig: RequestTab;
 }
 
 interface EnvVariable {
@@ -57,1441 +88,2203 @@ interface EnvVariable {
   value: string;
 }
 
-export default function ApiTester() {
-  // Modes & View toggles
-  const [mode, setMode] = useState<'advanced' | 'simple'>('advanced');
-  const [activeTab, setActiveTab] = useState<'params' | 'auth' | 'headers' | 'body' | 'tests'>('params');
-  const [activeResponseTab, setActiveResponseTab] = useState<'pretty' | 'raw' | 'headers' | 'health' | 'codegen' | 'schema' | 'qa' | 'docs' | 'compare'>('pretty');
-  
-  // Sidebar tabs
-  const [sidebarTab, setSidebarTab] = useState<'collections' | 'history' | 'env'>('collections');
-
-  // Request Builder State
-  const [selectedMethod, setSelectedMethod] = useState<string>('GET');
-  const [requestUrl, setRequestUrl] = useState<string>('{{baseUrl}}/get');
-  const [queryParams, setQueryParams] = useState<KeyValueRow[]>([{ key: 'page', value: '1', enabled: true }]);
-  const [headersList, setHeadersList] = useState<KeyValueRow[]>([{ key: 'Accept', value: 'application/json', enabled: true }]);
-  
-  // Body states
-  const [bodyType, setBodyType] = useState<'none' | 'json' | 'urlencoded' | 'raw'>('json');
-  const [bodyJson, setBodyJson] = useState<string>('{\n  "name": "John Doe",\n  "role": "QA Engineer"\n}');
-  const [bodyRaw, setBodyRaw] = useState<string>('');
-  const [jsonValidationError, setJsonValidationError] = useState<string | null>(null);
-
-  // Authentication states
-  const [authType, setAuthType] = useState<'none' | 'bearer' | 'basic' | 'apikey'>('none');
-  const [authBearer, setAuthBearer] = useState<string>('');
-  const [authBasicUser, setAuthBasicUser] = useState<string>('');
-  const [authBasicPass, setAuthBasicPass] = useState<string>('');
-  const [maskPass, setMaskPass] = useState<boolean>(true);
-  const [authApiKeyName, setAuthApiKeyName] = useState<string>('X-API-Key');
-  const [authApiKeyValue, setAuthApiKeyValue] = useState<string>('');
-  const [authApiKeyLocation, setAuthApiKeyLocation] = useState<'header' | 'query'>('header');
-
-  // Assertions lists
-  const [assertions, setAssertions] = useState<AssertionRow[]>([
-    { type: 'status', property: '', operator: 'equals', value: '200' },
-    { type: 'time', property: '', operator: 'less_than', value: '1000' }
-  ]);
-
-  // Environment states
-  const [currentEnv, setCurrentEnv] = useState<'development' | 'staging' | 'production'>('development');
-  const [envVars, setEnvVars] = useState<Record<string, EnvVariable[]>>({
-    development: [
-      { key: 'baseUrl', value: 'https://httpbin.org' },
-      { key: 'token', value: 'dev_token_abc123' }
-    ],
-    staging: [
-      { key: 'baseUrl', value: 'https://staging.httpbin.org' },
-      { key: 'token', value: 'stage_token_xyz789' }
-    ],
-    production: [
-      { key: 'baseUrl', value: 'https://httpbin.org' },
-      { key: 'token', value: 'prod_token_sec456' }
+// Predefined Mock Datasets for testing
+const SAMPLE_DATASETS = [
+  {
+    id: 'users',
+    name: 'User Profiles',
+    icon: '👥',
+    desc: '3 user objects with ID, email, avatar & roles',
+    data: [
+      { id: 'usr_101', name: 'Aarav Sharma', email: 'aarav.sharma@example.com', role: 'admin', active: true },
+      { id: 'usr_102', name: 'Priya Patel', email: 'priya.patel@example.com', role: 'developer', active: true },
+      { id: 'usr_103', name: 'Rohan Gupta', email: 'rohan.gupta@example.com', role: 'viewer', active: false }
     ]
-  });
+  },
+  {
+    id: 'products',
+    name: 'E-Commerce Catalog',
+    icon: '🛍️',
+    desc: 'Inventory records with SKU, price, stock & ratings',
+    data: [
+      { id: 'prod_901', sku: 'SKU-HEADSET-01', title: 'Wireless ANC Headphones', price: 149.99, stock: 45, rating: 4.8 },
+      { id: 'prod_902', sku: 'SKU-KEYBOARD-02', title: 'Mechanical RGB Keyboard', price: 89.5, stock: 120, rating: 4.9 },
+      { id: 'prod_903', sku: 'SKU-MONITOR-03', title: '34" Curved 4K Monitor', price: 499.0, stock: 18, rating: 4.7 }
+    ]
+  },
+  {
+    id: 'transactions',
+    name: 'Orders & Payments',
+    icon: '💳',
+    desc: 'Transaction records with amount, currency & status',
+    data: [
+      { txnId: 'txn_982348123', orderId: 'ord_1001', amount: 249.49, currency: 'USD', status: 'succeeded', timestamp: '2026-09-22T10:00:00Z' },
+      { txnId: 'txn_982348124', orderId: 'ord_1002', amount: 89.0, currency: 'USD', status: 'pending', timestamp: '2026-09-22T10:05:00Z' }
+    ]
+  },
+  {
+    id: 'locations',
+    name: 'Geo Locations',
+    icon: '📍',
+    desc: 'Coordinates, city, state & postal code items',
+    data: [
+      { city: 'Mumbai', state: 'Maharashtra', country: 'India', lat: 19.076, lng: 72.8777, postalCode: '400001' },
+      { city: 'Bengaluru', state: 'Karnataka', country: 'India', lat: 12.9716, lng: 77.5946, postalCode: '560001' },
+      { city: 'San Francisco', state: 'CA', country: 'USA', lat: 37.7749, lng: -122.4194, postalCode: '94103' }
+    ]
+  },
+  {
+    id: 'auth_jwt',
+    name: 'JWT Auth Claims',
+    icon: '🔑',
+    desc: 'Standard JWT claims with sub, exp, aud, roles',
+    data: {
+      iss: 'https://auth.toolique.io/',
+      sub: 'usr_auth_7849102',
+      aud: 'https://api.toolique.io/v1',
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      iat: Math.floor(Date.now() / 1000),
+      scope: 'read:users write:users read:reports admin:all',
+      roles: ['SuperAdmin', 'Engineer']
+    }
+  }
+];
 
-  // Importers
-  const [curlImportText, setCurlImportText] = useState<string>('');
-  const [openApiImportText, setOpenApiImportText] = useState<string>('');
-
-  // Collections & Local History
-  const [collections, setCollections] = useState<Collection[]>([
-    {
-      id: 'col-1',
-      name: 'Default APIs',
-      requests: [
-        {
-          id: 'req-1',
-          name: 'Fetch Headers Info',
-          method: 'GET',
-          url: '{{baseUrl}}/headers',
-          headers: [{ key: 'Accept', value: 'application/json', enabled: true }],
-          params: [],
-          bodyType: 'none',
-          bodyJson: '{}',
-          bodyRaw: '',
-          authType: 'bearer',
-          authBearer: '{{token}}',
-          authBasicUser: '',
-          authBasicPass: '',
-          authApiKeyName: '',
-          authApiKeyValue: '',
-          authApiKeyLocation: 'header',
-          assertions: [{ type: 'status', property: '', operator: 'equals', value: '200' }]
-        }
+// 1-Click Starter API Templates
+const QUICK_STARTERS = [
+  {
+    label: 'JSONPlaceholder Users (GET)',
+    method: 'GET',
+    category: 'REST API',
+    desc: 'Fetch 10 users with email & address',
+    action: {
+      name: 'Fetch Users List',
+      method: 'GET',
+      url: 'https://jsonplaceholder.typicode.com/users',
+      bodyType: 'none' as const,
+      queryParams: [{ id: 'p1', key: '_limit', value: '10', enabled: true }],
+      headers: [{ id: 'h1', key: 'Accept', value: 'application/json', enabled: true }],
+      assertions: [
+        { id: 'a1', type: 'status' as const, property: '', operator: 'equals' as const, value: '200' },
+        { id: 'a2', type: 'time' as const, property: '', operator: 'less_than' as const, value: '1500' }
       ]
     }
-  ]);
+  },
+  {
+    label: 'Create Post (JSON Body)',
+    method: 'POST',
+    category: 'REST API',
+    desc: 'Create new post with JSON payload',
+    action: {
+      name: 'Create Post Item',
+      method: 'POST',
+      url: 'https://jsonplaceholder.typicode.com/posts',
+      bodyType: 'json' as const,
+      bodyJson: '{\n  "title": "REST API Studio Testing",\n  "body": "Testing multi-format HTTP client features",\n  "userId": 1\n}',
+      queryParams: [],
+      headers: [{ id: 'h1', key: 'Content-Type', value: 'application/json; charset=UTF-8', enabled: true }],
+      assertions: [
+        { id: 'a1', type: 'status' as const, property: '', operator: 'equals' as const, value: '201' }
+      ]
+    }
+  },
+  {
+    label: 'Form Data Upload (Multipart)',
+    method: 'POST',
+    category: 'Forms',
+    desc: 'Post multipart/form-data key-value pairs',
+    action: {
+      name: 'Submit Multipart Form',
+      method: 'POST',
+      url: 'https://httpbin.org/post',
+      bodyType: 'form-data' as const,
+      bodyFormData: [
+        { id: 'fd1', key: 'username', value: 'ajinkya_developer', enabled: true },
+        { id: 'fd2', key: 'environment', value: 'staging', enabled: true }
+      ],
+      queryParams: [],
+      headers: [{ id: 'h1', key: 'Accept', value: 'application/json', enabled: true }],
+      assertions: [
+        { id: 'a1', type: 'status' as const, property: '', operator: 'equals' as const, value: '200' }
+      ]
+    }
+  },
+  {
+    label: 'Countries GraphQL Query',
+    method: 'POST',
+    category: 'GraphQL',
+    desc: 'Fetch country names and emojis via GraphQL query',
+    action: {
+      name: 'Query Country Emojis',
+      method: 'POST',
+      url: 'https://countries.trevorblades.com/',
+      bodyType: 'graphql' as const,
+      bodyGraphQLQuery: 'query GetCountry {\n  country(code: "IN") {\n    name\n    native\n    capital\n    emoji\n    currency\n  }\n}',
+      bodyGraphQLVars: '{\n  \n}',
+      queryParams: [],
+      headers: [{ id: 'h1', key: 'Content-Type', value: 'application/json', enabled: true }],
+      assertions: [
+        { id: 'a1', type: 'status' as const, property: '', operator: 'equals' as const, value: '200' }
+      ]
+    }
+  },
+  {
+    label: 'HttpBin Client Diagnostics',
+    method: 'GET',
+    category: 'Diagnostics',
+    desc: 'Inspect browser request headers & IP',
+    action: {
+      name: 'Get Client IP & Headers',
+      method: 'GET',
+      url: 'https://httpbin.org/headers',
+      bodyType: 'none' as const,
+      queryParams: [],
+      headers: [{ id: 'h1', key: 'X-Client-Agent', value: 'Toolique-API-Studio', enabled: true }],
+      assertions: [
+        { id: 'a1', type: 'status' as const, property: '', operator: 'equals' as const, value: '200' }
+      ]
+    }
+  }
+];
+
+// Helper to create a clean blank request tab
+const createBlankTab = (idSuffix = '1', name = 'New Request'): RequestTab => ({
+  id: `tab-${Date.now()}-${idSuffix}`,
+  name,
+  method: 'GET',
+  url: '',
+  queryParams: [],
+  headers: [
+    { id: 'h1', key: 'Accept', value: 'application/json', enabled: true }
+  ],
+  bodyType: 'none',
+  bodyJson: '{\n  \n}',
+  bodyFormData: [
+    { id: 'fd1', key: '', value: '', enabled: true }
+  ],
+  bodyUrlEncoded: [
+    { id: 'ue1', key: '', value: '', enabled: true }
+  ],
+  bodyRaw: '',
+  bodyRawFormat: 'json',
+  bodyGraphQLQuery: 'query {\n  \n}',
+  bodyGraphQLVars: '{\n  \n}',
+  authType: 'none',
+  authBearer: '',
+  authBasicUser: '',
+  authBasicPass: '',
+  authApiKeyName: 'X-API-Key',
+  authApiKeyValue: '',
+  authApiKeyLocation: 'header',
+  assertions: [
+    { id: 'a1', type: 'status', property: '', operator: 'equals', value: '200' }
+  ],
+  useCorsProxy: false,
+  scriptPreRequest: '',
+  scriptPostResponse: ''
+});
+
+export default function ApiTester() {
+  // Tabs State: starts with 1 blank clean request tab
+  const [tabs, setTabs] = useState<RequestTab[]>([createBlankTab('1', 'New Request')]);
+  const [activeTabId, setActiveTabId] = useState<string>(tabs[0].id);
+
+  // Active Tab Selector
+  const activeTab = useMemo(() => {
+    return tabs.find((t) => t.id === activeTabId) || tabs[0];
+  }, [tabs, activeTabId]);
+
+  // Request Config Active Tab
+  const [requestConfigTab, setRequestConfigTab] = useState<'docs' | 'params' | 'auth' | 'headers' | 'body' | 'scripts' | 'settings'>('params');
+
+  // GraphQL Sub-Tab (Query vs Variables)
+  const [graphqlSubTab, setGraphqlSubTab] = useState<'query' | 'variables'>('query');
+
+  // Script Sub-Tab (Pre-request vs Post-response)
+  const [scriptSubTab, setScriptSubTab] = useState<'before' | 'after'>('before');
+
+  // Response View Sub-tabs
+  const [responseViewTab, setResponseViewTab] = useState<'body' | 'cookies' | 'headers' | 'tests'>('body');
+  const [responseFormat, setResponseFormat] = useState<'json' | 'preview' | 'visualize' | 'raw'>('json');
+
+  // Sidebar Multi-Accordion Expansion States
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    collections: true,
+    environments: true,
+    documents: false,
+    specs: false,
+    mocks: false,
+    datasets: false,
+    flows: false
+  });
+
+  const toggleSection = (key: string) => {
+    setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const [collectionSearchQuery, setCollectionSearchQuery] = useState<string>('');
+
+  // Environments: empty by default with no pre-filled values
+  const [currentEnv, setCurrentEnv] = useState<string>('');
+  const [envVars, setEnvVars] = useState<Record<string, EnvVariable[]>>({});
+
+  // Collections: empty by default with no hardcoded pre-filled requests
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
-  // Response execution states
+  // Execution States: initially null
   const [isSending, setIsSending] = useState<boolean>(false);
   const [responseState, setResponseState] = useState<any | null>(null);
-  const [responseError, setResponseError] = useState<any | null>(null);
-
-  // Assertion runner results
   const [assertionResults, setAssertionResults] = useState<any[]>([]);
 
-  // Response comparisons
-  const [compareResponseText, setCompareResponseText] = useState<string>('');
-  const [comparisonDelta, setComparisonDelta] = useState<any | null>(null);
-
-  // JSON search filters
-  const [prettySearchQuery, setPrettySearchQuery] = useState<string>('');
-
-  // Copy indicators
-  const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
-
-  // Keyboard Shortcuts (Ctrl/Cmd + Enter)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        triggerSendRequest();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [requestUrl, selectedMethod, queryParams, headersList, bodyType, bodyJson, bodyRaw, authType, authBearer, authBasicUser, authBasicPass, authApiKeyName, authApiKeyValue, authApiKeyLocation, assertions, currentEnv, envVars]);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   // Load from local storage
   useEffect(() => {
     try {
-      const storedHistory = localStorage.getItem('toolique_api_history');
-      if (storedHistory) setHistory(JSON.parse(storedHistory));
+      const storedHist = localStorage.getItem('toolique_api_history_v3');
+      if (storedHist) setHistory(JSON.parse(storedHist));
 
-      const storedCollections = localStorage.getItem('toolique_api_collections');
-      if (storedCollections) setCollections(JSON.parse(storedCollections));
+      const storedCols = localStorage.getItem('toolique_api_collections_v3');
+      if (storedCols) setCollections(JSON.parse(storedCols));
+
+      const storedEnvs = localStorage.getItem('toolique_api_env_v3');
+      if (storedEnvs) setEnvVars(JSON.parse(storedEnvs));
+
+      const storedCurEnv = localStorage.getItem('toolique_api_current_env_v3');
+      if (storedCurEnv) setCurrentEnv(storedCurEnv);
     } catch (e) {
-      console.error('Failed to load local data:', e);
+      console.error(e);
     }
   }, []);
 
-  const saveHistoryToLocal = (newHistory: HistoryItem[]) => {
+  const saveHistory = (items: HistoryItem[]) => {
     try {
-      localStorage.setItem('toolique_api_history', JSON.stringify(newHistory));
-    } catch (e) {
-      console.error(e);
-    }
+      localStorage.setItem('toolique_api_history_v3', JSON.stringify(items));
+    } catch {}
   };
 
-  const saveCollectionsToLocal = (newCols: Collection[]) => {
+  const saveCollections = (cols: Collection[]) => {
     try {
-      localStorage.setItem('toolique_api_collections', JSON.stringify(newCols));
-    } catch (e) {
-      console.error(e);
-    }
+      localStorage.setItem('toolique_api_collections_v3', JSON.stringify(cols));
+    } catch {}
   };
 
-  // Variable Substitutions interpolation helper
-  const interpolateUrl = (url: string) => {
-    let output = url;
-    const currentVars = envVars[currentEnv];
-    currentVars.forEach((variable) => {
-      const regex = new RegExp(`\\{\\{\\s*${variable.key}\\s*\\}\\}`, 'g');
-      output = output.replace(regex, variable.value);
-    });
-    return output;
+  const saveEnvVars = (envs: Record<string, EnvVariable[]>) => {
+    try {
+      localStorage.setItem('toolique_api_env_v3', JSON.stringify(envs));
+    } catch {}
   };
 
-  // SSRF & Security boundary validator (checks for private network host IPs)
-  const isSecuritySafeUrl = (urlStr: string) => {
-    try {
-      const url = new URL(urlStr);
-      const host = url.hostname.toLowerCase();
-
-      // Block local/internal lookups
-      const blockedHosts = [
-        'localhost', '127.0.0.1', '0.0.0.0', '169.254.169.254', 
-        '10.', '172.16.', '172.17.', '172.18.', '172.19.', 
-        '172.20.', '172.21.', '172.22.', '172.23.', '172.24.', 
-        '172.25.', '172.26.', '172.27.', '172.28.', '172.29.', 
-        '172.30.', '172.31.', '192.168.'
-      ];
-
-      return !blockedHosts.some(blocked => host.startsWith(blocked) || host === blocked);
-    } catch {
-      return false;
-    }
-  };
-
-  // Format / Validate JSON
-  const formatJsonBody = () => {
-    try {
-      const parsed = JSON.parse(bodyJson);
-      setBodyJson(JSON.stringify(parsed, null, 2));
-      setJsonValidationError(null);
-    } catch (err: any) {
-      setJsonValidationError(err.message);
-    }
-  };
-
-  const validateJsonSyntax = () => {
-    try {
-      JSON.parse(bodyJson);
-      setJsonValidationError('Syntax is VALID JSON ✔');
-    } catch (err: any) {
-      setJsonValidationError(`Error: ${err.message}`);
-    }
-  };
-
-  // --- CURL IMPORTER ---
-  const handleImportCurl = () => {
-    const raw = curlImportText.trim();
-    if (!raw) return;
-
-    try {
-      // Basic split parse logic
-      const methodMatch = raw.match(/-X\s+([A-Z]+)/);
-      const method = methodMatch ? methodMatch[1] : 'GET';
-
-      const urlMatch = raw.match(/(?:'|")?(https?:\/\/[^\s'"]+)/);
-      const url = urlMatch ? urlMatch[1] : 'https://';
-
-      // Parse headers
-      const headerMatches = raw.matchAll(/-H\s+["']([^"']+)["']/g);
-      const headers: KeyValueRow[] = [];
-      for (const m of headerMatches) {
-        const parts = m[1].split(':');
-        if (parts.length >= 2) {
-          headers.push({ key: parts[0].trim(), value: parts.slice(1).join(':').trim(), enabled: true });
+  // Interpolate {{variables}}
+  const interpolate = useCallback(
+    (text: string) => {
+      let res = text || '';
+      if (!currentEnv || !envVars[currentEnv]) return res;
+      const activeVars = envVars[currentEnv] || [];
+      activeVars.forEach((v) => {
+        if (v.key) {
+          const regex = new RegExp(`\\{\\{\\s*${v.key}\\s*\\}\\}`, 'g');
+          res = res.replace(regex, v.value);
         }
-      }
-
-      // Parse body
-      const bodyMatch = raw.match(/-d\s+['"]([^'"]+)['"]/);
-      const bodyText = bodyMatch ? bodyMatch[1] : '';
-
-      setSelectedMethod(method);
-      setRequestUrl(url);
-      if (headers.length > 0) setHeadersList(headers);
-      if (bodyText) {
-        setBodyType('json');
-        setBodyJson(bodyText);
-      }
-      setCurlImportText('');
-    } catch (e) {
-      alert('Failed parsing cURL block. Ensure valid layout format.');
-    }
-  };
-
-  // --- OPENAPI IMPORTER ---
-  const handleImportOpenApi = () => {
-    try {
-      const parsed = JSON.parse(openApiImportText);
-      const endpoints: SavedRequest[] = [];
-      
-      if (parsed.paths) {
-        Object.keys(parsed.paths).forEach((path) => {
-          const methods = parsed.paths[path];
-          Object.keys(methods).forEach((method) => {
-            endpoints.push({
-              id: `req-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
-              name: methods[method].summary || `${method.toUpperCase()} ${path}`,
-              method: method.toUpperCase(),
-              url: `{{baseUrl}}${path}`,
-              headers: [{ key: 'Accept', value: 'application/json', enabled: true }],
-              params: [],
-              bodyType: 'none',
-              bodyJson: '{}',
-              bodyRaw: '',
-              authType: 'none',
-              authBearer: '',
-              authBasicUser: '',
-              authBasicPass: '',
-              authApiKeyName: '',
-              authApiKeyValue: '',
-              authApiKeyLocation: 'header',
-              assertions: []
-            });
-          });
-        });
-      }
-
-      const newCol: Collection = {
-        id: `col-${Date.now()}`,
-        name: parsed.info?.title || 'OpenAPI Collection',
-        requests: endpoints
-      };
-
-      const updated = [...collections, newCol];
-      setCollections(updated);
-      saveCollectionsToLocal(updated);
-      setOpenApiImportText('');
-    } catch {
-      alert('Invalid OpenAPI JSON format.');
-    }
-  };
-
-  // Save requests to collection
-  const handleSaveRequest = () => {
-    const activeReq: SavedRequest = {
-      id: `req-${Date.now()}`,
-      name: `API Request ${new Date().toLocaleTimeString()}`,
-      method: selectedMethod,
-      url: requestUrl,
-      headers: headersList,
-      params: queryParams,
-      bodyType,
-      bodyJson,
-      bodyRaw,
-      authType,
-      authBearer,
-      authBasicUser,
-      authBasicPass,
-      authApiKeyName,
-      authApiKeyValue,
-      authApiKeyLocation,
-      assertions
-    };
-
-    const updated = collections.map((c, idx) => {
-      if (idx === 0) {
-        return { ...c, requests: [activeReq, ...c.requests] };
-      }
-      return c;
-    });
-    setCollections(updated);
-    saveCollectionsToLocal(updated);
-  };
-
-  // Restore request from config
-  const restoreRequestConfig = (req: SavedRequest) => {
-    setSelectedMethod(req.method);
-    setRequestUrl(req.url);
-    setHeadersList(req.headers);
-    setQueryParams(req.params);
-    setBodyType(req.bodyType);
-    setBodyJson(req.bodyJson);
-    setBodyRaw(req.bodyRaw);
-    setAuthType(req.authType);
-    setAuthBearer(req.authBearer);
-    setAuthBasicUser(req.authBasicUser);
-    setAuthBasicPass(req.authBasicPass);
-    setAuthApiKeyName(req.authApiKeyName);
-    setAuthApiKeyValue(req.authApiKeyValue);
-    setAuthApiKeyLocation(req.authApiKeyLocation);
-    setAssertions(req.assertions);
-  };
-
-  // Environment variables management
-  const updateEnvVar = (idx: number, key: string, value: string) => {
-    const updated = [...envVars[currentEnv]];
-    updated[idx] = { key, value };
-    const newVars = { ...envVars, [currentEnv]: updated };
-    setEnvVars(newVars);
-  };
-
-  const addEnvVar = () => {
-    const updated = [...envVars[currentEnv], { key: 'newKey', value: '' }];
-    setEnvVars({ ...envVars, [currentEnv]: updated });
-  };
-
-  const deleteEnvVar = (idx: number) => {
-    const updated = envVars[currentEnv].filter((_, i) => i !== idx);
-    setEnvVars({ ...envVars, [currentEnv]: updated });
-  };
-
-  // Trigger browser fetch operation
-  const triggerSendRequest = async () => {
-    setIsSending(true);
-    setResponseState(null);
-    setResponseError(null);
-    setAssertionResults([]);
-
-    const cleanUrl = interpolateUrl(requestUrl);
-    
-    // SSRF boundary block checks
-    if (!isSecuritySafeUrl(cleanUrl)) {
-      setResponseError({
-        type: 'SSRF_BLOCKED',
-        message: 'Security Boundary Alert: SSRF Protection blocked access to loopbacks or private local range IPs.'
       });
-      setIsSending(false);
+      return res;
+    },
+    [envVars, currentEnv]
+  );
+
+  // Update active tab property helper
+  const updateActiveTab = useCallback(
+    (updater: Partial<RequestTab> | ((prev: RequestTab) => RequestTab)) => {
+      setTabs((prevTabs) =>
+        prevTabs.map((t) => {
+          if (t.id === activeTabId) {
+            if (typeof updater === 'function') {
+              return updater(t);
+            }
+            return { ...t, ...updater };
+          }
+          return t;
+        })
+      );
+    },
+    [activeTabId]
+  );
+
+  // Method Color Styling (Harmonized across Light & Dark themes)
+  const getMethodBadgeClass = (method: string) => {
+    switch (method.toUpperCase()) {
+      case 'GET':
+        return 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30';
+      case 'POST':
+        return 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/30';
+      case 'PUT':
+        return 'text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30';
+      case 'DELETE':
+        return 'text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/30';
+      case 'PATCH':
+        return 'text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 border-purple-200 dark:border-purple-500/30';
+      default:
+        return 'text-zinc-700 dark:text-slate-400 bg-zinc-100 dark:bg-slate-500/10 border-zinc-200 dark:border-slate-500/30';
+    }
+  };
+
+  // Add new tab
+  const handleAddNewTab = () => {
+    const newTab = createBlankTab(String(tabs.length + 1), `Request ${tabs.length + 1}`);
+    setTabs((prev) => [...prev, newTab]);
+    setActiveTabId(newTab.id);
+  };
+
+  // Close tab
+  const handleCloseTab = (idToClose: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (tabs.length === 1) return;
+    const nextTabs = tabs.filter((t) => t.id !== idToClose);
+    setTabs(nextTabs);
+    if (activeTabId === idToClose) {
+      setActiveTabId(nextTabs[0].id);
+    }
+  };
+
+  // Create New Environment
+  const handleCreateEnvironment = () => {
+    const envName = prompt('Enter Environment Name (e.g. Development, Staging, Production):');
+    if (!envName || !envName.trim()) return;
+    const trimmed = envName.trim();
+    if (envVars[trimmed]) {
+      alert(`Environment "${trimmed}" already exists.`);
+      setCurrentEnv(trimmed);
       return;
     }
-
-    // Build URL query params
-    let finalUrl = cleanUrl;
-    const activeParams = queryParams.filter(p => p.enabled && p.key);
-    if (activeParams.length > 0) {
-      const urlObj = new URL(cleanUrl);
-      activeParams.forEach((param) => {
-        urlObj.searchParams.set(param.key, interpolateUrl(param.value));
-      });
-      finalUrl = urlObj.toString();
-    }
-
-    // Setup headers
-    const activeHeaders: Record<string, string> = {};
-    headersList.filter(h => h.enabled && h.key).forEach((header) => {
-      activeHeaders[header.key] = interpolateUrl(header.value);
-    });
-
-    // Inject Auth
-    if (authType === 'bearer' && authBearer) {
-      activeHeaders['Authorization'] = `Bearer ${interpolateUrl(authBearer)}`;
-    } else if (authType === 'basic') {
-      const token = btoa(`${interpolateUrl(authBasicUser)}:${interpolateUrl(authBasicPass)}`);
-      activeHeaders['Authorization'] = `Basic ${token}`;
-    } else if (authType === 'apikey' && authApiKeyLocation === 'header') {
-      activeHeaders[authApiKeyName] = interpolateUrl(authApiKeyValue);
-    }
-
-    // Body preparation
-    let fetchBody: any = undefined;
-    if (selectedMethod !== 'GET' && selectedMethod !== 'HEAD') {
-      if (bodyType === 'json') {
-        fetchBody = bodyJson;
-        activeHeaders['Content-Type'] = 'application/json';
-      } else if (bodyType === 'urlencoded') {
-        const bodyParams = new URLSearchParams();
-        fetchBody = bodyParams.toString();
-        activeHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
-      } else if (bodyType === 'raw') {
-        fetchBody = bodyRaw;
-      }
-    }
-
-    const startTime = performance.now();
-    try {
-      const response = await fetch(finalUrl, {
-        method: selectedMethod,
-        headers: activeHeaders,
-        body: fetchBody
-      });
-      const endTime = performance.now();
-      const latency = Math.round(endTime - startTime);
-
-      const responseText = await response.text();
-      
-      let parsedJson: any = null;
-      let isJson = false;
-      try {
-        parsedJson = JSON.parse(responseText);
-        isJson = true;
-      } catch {
-        // Safe to ignore if non-JSON
-      }
-
-      // Headers map
-      const headersObj: Record<string, string> = {};
-      response.headers.forEach((val, key) => {
-        headersObj[key] = val;
-      });
-
-      const resSize = (responseText.length / 1024).toFixed(2);
-
-      const resultPayload = {
-        status: response.status,
-        statusText: response.statusText,
-        time: latency,
-        size: resSize,
-        headers: headersObj,
-        isJson,
-        json: parsedJson,
-        text: responseText
-      };
-
-      setResponseState(resultPayload);
-      runAssertionChecks(resultPayload);
-
-      // Append history
-      const histItem: HistoryItem = {
-        method: selectedMethod,
-        url: requestUrl,
-        timestamp: new Date().toLocaleTimeString(),
-        status: response.status,
-        statusText: response.statusText,
-        time: latency,
-        requestConfig: {
-          id: `req-${Date.now()}`,
-          name: '',
-          method: selectedMethod,
-          url: requestUrl,
-          headers: headersList,
-          params: queryParams,
-          bodyType,
-          bodyJson,
-          bodyRaw,
-          authType,
-          authBearer,
-          authBasicUser,
-          authBasicPass,
-          authApiKeyName,
-          authApiKeyValue,
-          authApiKeyLocation,
-          assertions
-        }
-      };
-
-      const updatedHistory = [histItem, ...history].slice(0, 30);
-      setHistory(updatedHistory);
-      saveHistoryToLocal(updatedHistory);
-
-    } catch (e: any) {
-      // CORS Error check
-      setResponseError({
-        type: 'CORS_ERROR',
-        message: 'Network Error: This API request may be blocked by browser CORS security policies. Ensure headers are allowed.'
-      });
-    } finally {
-      setIsSending(false);
-    }
+    const updated = { ...envVars, [trimmed]: [] };
+    setEnvVars(updated);
+    saveEnvVars(updated);
+    setCurrentEnv(trimmed);
+    localStorage.setItem('toolique_api_current_env_v3', trimmed);
   };
 
-  // Run assertion tests
-  const runAssertionChecks = (res: any) => {
-    const results = assertions.map((ass) => {
-      let passed = false;
-      let actualValue = '';
+  // Add variable to current environment
+  const handleAddVariableToCurrentEnv = () => {
+    if (!currentEnv) {
+      handleCreateEnvironment();
+      return;
+    }
+    const currentList = envVars[currentEnv] || [];
+    const updatedList = [...currentList, { key: '', value: '' }];
+    const updatedAll = { ...envVars, [currentEnv]: updatedList };
+    setEnvVars(updatedAll);
+    saveEnvVars(updatedAll);
+  };
 
-      if (ass.type === 'status') {
-        actualValue = res.status.toString();
-        passed = actualValue === ass.value;
-      } else if (ass.type === 'time') {
-        actualValue = `${res.time} ms`;
-        passed = res.time < parseFloat(ass.value);
-      } else if (ass.type === 'json_exists') {
-        // Simple search index path exists check
-        if (res.isJson && res.json) {
-          passed = res.text.includes(ass.value);
+  // Create New Collection
+  const handleCreateCollection = () => {
+    const colName = prompt('Enter Collection / Folder Name:');
+    if (!colName || !colName.trim()) return;
+    const newCol: Collection = {
+      id: `col-${Date.now()}`,
+      name: colName.trim(),
+      requests: [
+        {
+          name: activeTab.name || 'Initial Request',
+          method: activeTab.method,
+          url: activeTab.url,
+          headers: activeTab.headers,
+          bodyType: activeTab.bodyType,
+          bodyJson: activeTab.bodyJson
         }
+      ]
+    };
+    const updated = [...collections, newCol];
+    setCollections(updated);
+    saveCollections(updated);
+  };
+
+  // Save active tab to existing or new collection
+  const handleSaveActiveToCollection = () => {
+    if (collections.length === 0) {
+      handleCreateCollection();
+      return;
+    }
+    const col = collections[0];
+    const updatedReqs = [
+      ...col.requests,
+      {
+        name: activeTab.name || 'New Request',
+        method: activeTab.method,
+        url: activeTab.url,
+        headers: activeTab.headers,
+        bodyType: activeTab.bodyType,
+        bodyJson: activeTab.bodyJson
+      }
+    ];
+    const updatedCols = collections.map((c, i) => (i === 0 ? { ...c, requests: updatedReqs } : c));
+    setCollections(updatedCols);
+    saveCollections(updatedCols);
+    alert(`Saved "${activeTab.name}" to folder "${col.name}"!`);
+  };
+
+  // Run Assertions Engine
+  const runAssertions = (resData: any, assertionRules: AssertionRow[]) => {
+    if (!assertionRules || assertionRules.length === 0) {
+      setAssertionResults([]);
+      return;
+    }
+    const results = assertionRules.map((rule) => {
+      let passed = false;
+      let actualVal: any = '';
+
+      switch (rule.type) {
+        case 'status':
+          actualVal = String(resData.status);
+          if (rule.operator === 'equals') passed = String(resData.status) === String(rule.value);
+          if (rule.operator === 'not_equals') passed = String(resData.status) !== String(rule.value);
+          break;
+        case 'time':
+          actualVal = `${resData.time}ms`;
+          if (rule.operator === 'less_than') passed = Number(resData.time) < Number(rule.value);
+          if (rule.operator === 'greater_than') passed = Number(resData.time) > Number(rule.value);
+          break;
+        case 'body_contains':
+          actualVal = resData.text;
+          passed = resData.text ? resData.text.includes(rule.value) : false;
+          break;
+        default:
+          passed = true;
       }
 
       return {
-        ...ass,
+        id: rule.id,
+        name: `Assertion: ${rule.type} ${rule.operator} ${rule.value}`,
         passed,
-        actualValue
+        actual: actualVal,
+        expected: rule.value
       };
     });
 
     setAssertionResults(results);
   };
 
-  // JSON Schema generator
-  const generatedSchemaText = useMemo(() => {
-    if (!responseState || !responseState.isJson) return 'No parsed JSON response output available.';
-    try {
-      const buildSchema = (obj: any): any => {
-        const type = typeof obj;
-        if (obj === null) return { type: 'null' };
-        if (Array.isArray(obj)) {
-          return {
-            type: 'array',
-            items: obj.length > 0 ? buildSchema(obj[0]) : {}
-          };
-        }
-        if (type === 'object') {
-          const properties: any = {};
-          Object.keys(obj).forEach((k) => {
-            properties[k] = buildSchema(obj[k]);
-          });
-          return { type: 'object', properties };
-        }
-        return { type };
-      };
-      return JSON.stringify(buildSchema(responseState.json), null, 2);
-    } catch {
-      return 'Failed generating schema.';
+  // Execute Network Fetch + Multi-Format Body Handling + Pre/Post Scripts
+  const triggerSendRequest = async () => {
+    if (!activeTab.url || !activeTab.url.trim()) {
+      alert('Please enter a request URL to send.');
+      return;
     }
-  }, [responseState]);
 
-  // QA test cases generator
-  const qaTestCases = useMemo(() => {
-    if (!responseState) return [];
-    return [
-      { id: 'TC001', scenario: 'Validate HTTP status matches expectations', request: `${selectedMethod} ${requestUrl}`, expected: `Status: ${responseState.status} ${responseState.statusText}`, priority: 'HIGH' },
-      { id: 'TC002', scenario: 'Verify response size within limits', request: `${selectedMethod} ${requestUrl}`, expected: 'Response size under 1 MB', priority: 'MEDIUM' },
-      { id: 'TC003', scenario: 'Verify JSON payload formatting syntax is valid', request: `${selectedMethod} ${requestUrl}`, expected: 'JSON structure validation check passes', priority: 'HIGH' }
-    ];
-  }, [responseState, selectedMethod, requestUrl]);
+    setIsSending(true);
+    setAssertionResults([]);
 
-  // API Documentation generator
-  const generatedDocsText = useMemo(() => {
-    return `### API Endpoint Reference\n---\n**Endpoint**: \`${requestUrl}\`  \n**Method**: \`${selectedMethod}\`  \n\n#### Headers Configuration\n${headersList.map(h => `- \`${h.key}\`: \`${h.value}\``).join('\n')}\n\n#### Response Details\n- **Status Code**: \`${responseState?.status || '—'}\`\n- **Response Size**: \`${responseState?.size || '—'} KB\`\n- **Latency**: \`${responseState?.time || '—'} ms\``;
-  }, [requestUrl, selectedMethod, headersList, responseState]);
-
-  // Code Gen snippets mapping
-  const codeGenSnippets = useMemo(() => {
-    const cleanUrl = interpolateUrl(requestUrl);
-    return {
-      curl: `curl -X ${selectedMethod} "${cleanUrl}" \\\n  -H "Accept: application/json"`,
-      python: `import requests\n\nurl = "${cleanUrl}"\nresponse = requests.${selectedMethod.toLowerCase()}(url)\nprint(response.status_code)`,
-      javascript: `fetch("${cleanUrl}", {\n  method: "${selectedMethod}"\n})\n  .then(res => res.json())\n  .then(data => console.log(data));`,
-      playwright: `const response = await request.${selectedMethod.toLowerCase()}('${cleanUrl}');\nexpect(response.ok()).toBeTruthy();`
-    };
-  }, [selectedMethod, requestUrl]);
-
-  // Diff Response Comparator
-  const executeResponseDiff = () => {
-    if (!responseState) return;
-    try {
-      const current = JSON.stringify(responseState.json || {});
-      const previous = JSON.stringify(JSON.parse(compareResponseText));
-      if (current === previous) {
-        setComparisonDelta('Responses are identical ✔');
-      } else {
-        setComparisonDelta('Detected changes in JSON parameters structure ✕');
+    // 1. Run Pre-Request Script in Sandbox
+    const dynamicVars: Record<string, string> = {};
+    if (activeTab.scriptPreRequest && activeTab.scriptPreRequest.trim()) {
+      try {
+        const pm = {
+          variables: {
+            set: (k: string, v: string) => {
+              dynamicVars[k] = String(v);
+            },
+            get: (k: string) => {
+              return dynamicVars[k] || envVars[currentEnv]?.find((x) => x.key === k)?.value;
+            }
+          }
+        };
+        const scriptFn = new Function('pm', 'console', activeTab.scriptPreRequest);
+        scriptFn(pm, console);
+      } catch (err) {
+        console.warn('Pre-request script execution:', err);
       }
-    } catch {
-      setComparisonDelta('Failed to parse previous response JSON.');
+    }
+
+    // Apply dynamic pre-request generated variables
+    let cleanRawUrl = activeTab.url;
+    Object.keys(dynamicVars).forEach((k) => {
+      const regex = new RegExp(`\\{\\{\\s*${k}\\s*\\}\\}`, 'g');
+      cleanRawUrl = cleanRawUrl.replace(regex, dynamicVars[k]);
+    });
+    cleanRawUrl = interpolate(cleanRawUrl);
+
+    let targetUrl = cleanRawUrl;
+    try {
+      const urlObj = new URL(cleanRawUrl);
+      const activeParams = activeTab.queryParams.filter((p) => p.enabled && p.key);
+      activeParams.forEach((p) => {
+        urlObj.searchParams.set(interpolate(p.key), interpolate(p.value));
+      });
+      targetUrl = urlObj.toString();
+    } catch {}
+
+    let finalFetchUrl = targetUrl;
+    if (activeTab.useCorsProxy) {
+      finalFetchUrl = `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`;
+    }
+
+    const headersObj: Record<string, string> = {};
+    activeTab.headers
+      .filter((h) => h.enabled && h.key)
+      .forEach((h) => {
+        let val = interpolate(h.value);
+        Object.keys(dynamicVars).forEach((k) => {
+          val = val.replace(new RegExp(`\\{\\{\\s*${k}\\s*\\}\\}`, 'g'), dynamicVars[k]);
+        });
+        headersObj[interpolate(h.key)] = val;
+      });
+
+    if (activeTab.authType === 'bearer' && activeTab.authBearer) {
+      headersObj['Authorization'] = `Bearer ${interpolate(activeTab.authBearer)}`;
+    } else if (activeTab.authType === 'basic') {
+      const credentials = btoa(`${interpolate(activeTab.authBasicUser)}:${interpolate(activeTab.authBasicPass)}`);
+      headersObj['Authorization'] = `Basic ${credentials}`;
+    } else if (activeTab.authType === 'apikey' && activeTab.authApiKeyLocation === 'header' && activeTab.authApiKeyName) {
+      headersObj[interpolate(activeTab.authApiKeyName)] = interpolate(activeTab.authApiKeyValue);
+    }
+
+    // 2. Build multi-format Request Body
+    let reqBody: any = undefined;
+    if (activeTab.method !== 'GET' && activeTab.method !== 'HEAD') {
+      if (activeTab.bodyType === 'json') {
+        reqBody = interpolate(activeTab.bodyJson || '{}');
+        if (!headersObj['Content-Type']) headersObj['Content-Type'] = 'application/json; charset=UTF-8';
+      } else if (activeTab.bodyType === 'form-data') {
+        const formData = new FormData();
+        activeTab.bodyFormData
+          .filter((r) => r.enabled && r.key)
+          .forEach((r) => {
+            formData.append(interpolate(r.key), interpolate(r.value));
+          });
+        reqBody = formData;
+        // Let browser generate multipart/form-data boundary automatically
+        delete headersObj['Content-Type'];
+      } else if (activeTab.bodyType === 'urlencoded') {
+        const urlParams = new URLSearchParams();
+        activeTab.bodyUrlEncoded
+          .filter((r) => r.enabled && r.key)
+          .forEach((r) => {
+            urlParams.append(interpolate(r.key), interpolate(r.value));
+          });
+        reqBody = urlParams.toString();
+        if (!headersObj['Content-Type']) {
+          headersObj['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+        }
+      } else if (activeTab.bodyType === 'raw') {
+        reqBody = interpolate(activeTab.bodyRaw || '');
+        const mimeMap: Record<string, string> = {
+          text: 'text/plain; charset=UTF-8',
+          json: 'application/json; charset=UTF-8',
+          xml: 'application/xml; charset=UTF-8',
+          html: 'text/html; charset=UTF-8',
+          javascript: 'application/javascript; charset=UTF-8'
+        };
+        if (!headersObj['Content-Type']) {
+          headersObj['Content-Type'] = mimeMap[activeTab.bodyRawFormat] || 'text/plain; charset=UTF-8';
+        }
+      } else if (activeTab.bodyType === 'graphql') {
+        let parsedVars = {};
+        try {
+          parsedVars = JSON.parse(interpolate(activeTab.bodyGraphQLVars || '{}'));
+        } catch {}
+        reqBody = JSON.stringify({
+          query: interpolate(activeTab.bodyGraphQLQuery || ''),
+          variables: parsedVars
+        });
+        if (!headersObj['Content-Type']) {
+          headersObj['Content-Type'] = 'application/json; charset=UTF-8';
+        }
+      }
+    }
+
+    const startTime = performance.now();
+
+    try {
+      const res = await fetch(finalFetchUrl, {
+        method: activeTab.method,
+        headers: headersObj,
+        body: reqBody
+      });
+
+      const endTime = performance.now();
+      const latency = Math.round(endTime - startTime);
+      const textOutput = await res.text();
+
+      let isJson = false;
+      let jsonPayload: any = null;
+      try {
+        jsonPayload = JSON.parse(textOutput);
+        isJson = true;
+      } catch {}
+
+      const resHeaders: Record<string, string> = {};
+      res.headers.forEach((val, key) => {
+        resHeaders[key] = val;
+      });
+
+      const sizeKb = `${(new Blob([textOutput]).size / 1024).toFixed(2)} KB`;
+
+      const payload = {
+        status: res.status,
+        statusText: res.statusText || (res.status === 200 ? 'OK' : 'Response Received'),
+        time: latency,
+        size: sizeKb,
+        headers: resHeaders,
+        isJson,
+        json: jsonPayload,
+        text: textOutput,
+        url: targetUrl
+      };
+
+      setResponseState(payload);
+
+      // Run assertion checks
+      runAssertions(payload, activeTab.assertions);
+
+      // Save to history
+      const histItem: HistoryItem = {
+        id: `h-${Date.now()}`,
+        method: activeTab.method,
+        url: targetUrl,
+        timestamp: new Date().toLocaleTimeString(),
+        status: res.status,
+        statusText: payload.statusText,
+        time: latency,
+        size: sizeKb,
+        requestConfig: { ...activeTab }
+      };
+      const newHist = [histItem, ...history].slice(0, 40);
+      setHistory(newHist);
+      saveHistory(newHist);
+    } catch (err: any) {
+      const errorPayload = {
+        status: 0,
+        statusText: 'Network / CORS Error',
+        time: Math.round(performance.now() - startTime),
+        size: '0 B',
+        headers: {},
+        isJson: false,
+        json: null,
+        text: `Request Failed: ${err?.message || 'Failed to fetch'}\n\nTip: Enable the 'CORS Proxy Relay' checkbox in the Settings tab to bypass cross-origin browser limits.`,
+        url: targetUrl
+      };
+      setResponseState(errorPayload);
+    } finally {
+      setIsSending(false);
     }
   };
 
-  const handleCopyCode = (code: string, id: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedCodeId(id);
-    setTimeout(() => setCopiedCodeId(null), 2000);
+  const handleCopy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  const clearLocalHistory = () => {
-    setHistory([]);
-    localStorage.removeItem('toolique_api_history');
+  // Comprehensive cURL Generator Supporting All Body Types
+  const generateCurlCommand = () => {
+    let cmd = `curl -X ${activeTab.method} "${interpolate(activeTab.url)}"`;
+
+    activeTab.headers
+      .filter((h) => h.enabled && h.key)
+      .forEach((h) => {
+        cmd += ` \\\n  -H "${interpolate(h.key)}: ${interpolate(h.value)}"`;
+      });
+
+    if (activeTab.authType === 'bearer' && activeTab.authBearer) {
+      cmd += ` \\\n  -H "Authorization: Bearer ${interpolate(activeTab.authBearer)}"`;
+    }
+
+    if (activeTab.method !== 'GET' && activeTab.method !== 'HEAD') {
+      if (activeTab.bodyType === 'json' && activeTab.bodyJson) {
+        cmd += ` \\\n  -H "Content-Type: application/json"`;
+        cmd += ` \\\n  -d '${interpolate(activeTab.bodyJson).replace(/'/g, "\\'")}'`;
+      } else if (activeTab.bodyType === 'urlencoded') {
+        cmd += ` \\\n  -H "Content-Type: application/x-www-form-urlencoded"`;
+        const params = new URLSearchParams();
+        activeTab.bodyUrlEncoded
+          .filter((r) => r.enabled && r.key)
+          .forEach((r) => params.append(interpolate(r.key), interpolate(r.value)));
+        cmd += ` \\\n  -d "${params.toString()}"`;
+      } else if (activeTab.bodyType === 'form-data') {
+        activeTab.bodyFormData
+          .filter((r) => r.enabled && r.key)
+          .forEach((r) => {
+            cmd += ` \\\n  -F "${interpolate(r.key)}=${interpolate(r.value)}"`;
+          });
+      } else if (activeTab.bodyType === 'raw') {
+        cmd += ` \\\n  -d '${interpolate(activeTab.bodyRaw).replace(/'/g, "\\'")}'`;
+      } else if (activeTab.bodyType === 'graphql') {
+        cmd += ` \\\n  -H "Content-Type: application/json"`;
+        cmd += ` \\\n  -d '${JSON.stringify({
+          query: interpolate(activeTab.bodyGraphQLQuery),
+          variables: JSON.parse(activeTab.bodyGraphQLVars || '{}')
+        }).replace(/'/g, "\\'")}'`;
+      }
+    }
+
+    return cmd;
   };
 
-  const clearCollections = () => {
-    setCollections([]);
-    localStorage.removeItem('toolique_api_collections');
+  // Helper to split lines for code editor display
+  const renderLineNumberedCode = (code: string, onChange?: (newVal: string) => void, placeholder?: string) => {
+    const lines = (code || '').split('\n');
+    return (
+      <div className="flex bg-zinc-50 dark:bg-[#0c101d] rounded-2xl border border-zinc-200 dark:border-slate-800 text-xs font-mono overflow-hidden shadow-inner">
+        {/* Line Numbers column */}
+        <div className="py-3 px-2.5 bg-zinc-100/80 dark:bg-[#080b14] text-zinc-400 dark:text-slate-600 select-none text-right font-mono text-[11px] leading-relaxed border-r border-zinc-200 dark:border-slate-800/80 min-w-[38px]">
+          {lines.map((_, i) => (
+            <div key={i}>{i + 1}</div>
+          ))}
+        </div>
+        {/* Code Content Area */}
+        <textarea
+          value={code}
+          onChange={(e) => onChange && onChange(e.target.value)}
+          readOnly={!onChange}
+          placeholder={placeholder}
+          className="flex-1 p-3 bg-transparent text-zinc-800 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none resize-none leading-relaxed font-mono text-[11px] overflow-x-auto whitespace-pre"
+          rows={Math.max(lines.length, 10)}
+          spellCheck={false}
+        />
+      </div>
+    );
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto text-left animate-fadeIn">
-      
-      {/* Dynamic Simple/Advanced Mode switch */}
-      <div className="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800 pb-3">
-        <h2 className="text-sm font-black text-zinc-800 dark:text-white uppercase tracking-wider">REST API Debugger Workspace</h2>
-        <div className="flex bg-zinc-50 rounded-lg p-0.5 text-[10px] font-bold">
-          <button onClick={() => setMode('simple')} className={`px-2.5 py-1 rounded ${mode === 'simple' ? 'bg-white shadow' : 'text-zinc-400'}`}>Simple Mode</button>
-          <button onClick={() => setMode('advanced')} className={`px-2.5 py-1 rounded ${mode === 'advanced' ? 'bg-white shadow' : 'text-zinc-400'}`}>Advanced Mode</button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div className="w-full max-w-7xl mx-auto space-y-5 text-left font-sans select-none">
+      {/* Main Studio Frame with Adaptive Light / Dark Theme Support & Enhanced Spacing */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start bg-white/90 dark:bg-[#0d121f] text-zinc-800 dark:text-slate-200 p-3 sm:p-4 md:p-5 rounded-3xl border border-zinc-200/90 dark:border-slate-800 shadow-xl dark:shadow-2xl backdrop-blur-md transition-colors duration-300">
         
-        {/* SIDEBAR: COLLECTIONS & HISTORY */}
-        <div className="lg:col-span-3 space-y-4">
-          <div className="flex gap-2 border-b text-[10px] font-bold pb-2">
-            <button onClick={() => setSidebarTab('collections')} className={`pb-1 border-b-2 transition ${sidebarTab === 'collections' ? 'border-teal-650 text-teal-650' : 'border-transparent text-zinc-400'}`}>Collections</button>
-            <button onClick={() => setSidebarTab('history')} className={`pb-1 border-b-2 transition ${sidebarTab === 'history' ? 'border-teal-650 text-teal-650' : 'border-transparent text-zinc-400'}`}>History</button>
-            <button onClick={() => setSidebarTab('env')} className={`pb-1 border-b-2 transition ${sidebarTab === 'env' ? 'border-teal-650 text-teal-650' : 'border-transparent text-zinc-400'}`}>Environment</button>
+        {/* 1. LEFT SIDEBAR NAVIGATION ACCORDION */}
+        <div className="lg:col-span-3 bg-zinc-50/90 dark:bg-[#111728] border border-zinc-200/80 dark:border-slate-800/90 rounded-2xl p-3.5 sm:p-4 space-y-3.5 transition-colors">
+          {/* Top Activity Rail Icons */}
+          <div className="flex items-center justify-between pb-3 border-b border-zinc-200/80 dark:border-slate-800/80">
+            <div className="flex items-center gap-1.5">
+              <button
+                className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shadow-2xs cursor-pointer"
+                title="Explorer"
+              >
+                <Box className="w-4 h-4" />
+              </button>
+              <button
+                className="p-1.5 rounded-lg text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-slate-800/60 transition cursor-pointer"
+                title="Environments"
+                onClick={() => toggleSection('environments')}
+              >
+                <Monitor className="w-4 h-4" />
+              </button>
+              <button
+                className="p-1.5 rounded-lg text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-slate-800/60 transition cursor-pointer"
+                title="History"
+                onClick={() => toggleSection('flows')}
+              >
+                <History className="w-4 h-4" />
+              </button>
+              <button
+                className="p-1.5 rounded-lg text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-slate-800/60 transition cursor-pointer"
+                title="Collections"
+                onClick={() => toggleSection('collections')}
+              >
+                <Folder className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => {
+                  const name = prompt('New Request Name:', 'My API Endpoint');
+                  if (name) {
+                    const newTab = createBlankTab(String(tabs.length + 1), name);
+                    setTabs([...tabs, newTab]);
+                    setActiveTabId(newTab.id);
+                  }
+                }}
+                className="p-1.5 text-zinc-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-slate-800 rounded-lg transition cursor-pointer"
+                title="Create New Request"
+              >
+                <Plus className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={handleCreateCollection}
+                className="p-1.5 text-zinc-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-slate-800 rounded-lg transition cursor-pointer"
+                title="Create New Collection Folder"
+              >
+                <Folder className="w-3.5 h-3.5" />
+              </button>
+              <button
+                className="p-1.5 text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/60 dark:hover:bg-slate-800 rounded-lg transition cursor-pointer"
+                title="More Options"
+              >
+                <MoreHorizontal className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
 
-          {sidebarTab === 'collections' && (
-            <div className="space-y-4">
-              {collections.map((col) => (
-                <div key={col.id} className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                    <Folder className="w-4 h-4 text-teal-605" />
-                    <span>{col.name}</span>
-                  </div>
-                  <div className="pl-4 space-y-1 text-[11px] font-medium text-zinc-500">
-                    {col.requests.map((req) => (
+          {/* Quick Search */}
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-slate-500" />
+            <input
+              type="text"
+              value={collectionSearchQuery}
+              onChange={(e) => setCollectionSearchQuery(e.target.value)}
+              placeholder="Search endpoints..."
+              className="w-full pl-8 pr-3 py-2 bg-white dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-800 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition"
+            />
+          </div>
+
+          {/* ACCORDION SECTIONS TREE */}
+          <div className="space-y-1.5 text-xs font-mono max-h-[580px] overflow-y-auto pr-1 scrollbar-thin">
+            {/* SECTION 1: COLLECTIONS */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between py-1.5 px-2 hover:bg-zinc-200/60 dark:hover:bg-slate-800/50 rounded-xl transition">
+                <button
+                  onClick={() => toggleSection('collections')}
+                  className="flex items-center gap-2 text-[11px] font-black uppercase text-zinc-700 dark:text-slate-300 tracking-wider flex-1 text-left cursor-pointer"
+                >
+                  {expandedSections.collections ? (
+                    <ChevronDown className="w-3.5 h-3.5 text-zinc-500 dark:text-slate-400" />
+                  ) : (
+                    <ChevronRight className="w-3.5 h-3.5 text-zinc-400 dark:text-slate-500" />
+                  )}
+                  <span>COLLECTIONS</span>
+                </button>
+                <button
+                  onClick={handleCreateCollection}
+                  className="text-zinc-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-teal-400 p-1 rounded hover:bg-zinc-200/80 dark:hover:bg-slate-800 transition cursor-pointer"
+                  title="Add Folder"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+              </div>
+
+              {expandedSections.collections && (
+                <div className="pl-3 mt-1 space-y-1">
+                  {collections.length === 0 ? (
+                    <div className="p-3 bg-white/70 dark:bg-[#090d17] border border-dashed border-zinc-200 dark:border-slate-800 rounded-xl text-center space-y-2">
+                      <div className="text-[10px] text-zinc-500 dark:text-slate-400">No collections created</div>
                       <button
-                        key={req.id}
-                        onClick={() => restoreRequestConfig(req)}
-                        className="block w-full text-left py-1 hover:text-teal-650 transition truncate"
+                        onClick={handleCreateCollection}
+                        className="px-2.5 py-1 text-[10px] font-bold text-indigo-600 dark:text-teal-400 bg-indigo-50 hover:bg-indigo-100 dark:bg-teal-500/10 dark:hover:bg-teal-500/20 rounded-lg border border-indigo-200 dark:border-teal-500/30 transition shadow-2xs cursor-pointer"
                       >
-                        <strong className="text-[9px] uppercase font-mono mr-1 text-teal-655">{req.method}</strong> {req.name}
+                        + New Folder
                       </button>
-                    ))}
+                    </div>
+                  ) : (
+                    collections.map((col) => (
+                      <div key={col.id} className="space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-800 dark:text-slate-300 py-1 px-1.5">
+                          <Folder className="w-3.5 h-3.5 text-indigo-500 dark:text-teal-400" />
+                          <span className="truncate">{col.name}</span>
+                        </div>
+                        <div className="pl-2 space-y-1">
+                          {col.requests.map((req, rIdx) => {
+                            const isSelected = activeTab.name === req.name;
+                            return (
+                              <button
+                                key={rIdx}
+                                onClick={() => {
+                                  updateActiveTab({
+                                    name: req.name,
+                                    method: req.method || 'GET',
+                                    url: req.url || '',
+                                    headers: req.headers || activeTab.headers,
+                                    bodyType: req.bodyType || 'none',
+                                    bodyJson: req.bodyJson || activeTab.bodyJson
+                                  });
+                                }}
+                                className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-left truncate transition cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-indigo-50 dark:bg-[#211a3b] text-indigo-900 dark:text-white font-bold border border-indigo-200 dark:border-indigo-500/40 shadow-xs'
+                                    : 'text-zinc-600 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-slate-200 hover:bg-zinc-200/50 dark:hover:bg-slate-800/40'
+                                }`}
+                              >
+                                <span
+                                  className={`text-[9px] font-black font-mono px-1 rounded uppercase border ${getMethodBadgeClass(
+                                    req.method || 'GET'
+                                  )}`}
+                                >
+                                  {req.method || 'GET'}
+                                </span>
+                                <span className="truncate text-[11px]">{req.name}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* SECTION 2: ENVIRONMENTS */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between py-1.5 px-2 hover:bg-zinc-200/60 dark:hover:bg-slate-800/50 rounded-xl transition">
+                <button
+                  onClick={() => toggleSection('environments')}
+                  className="flex items-center gap-2 text-[11px] font-black uppercase text-zinc-700 dark:text-slate-300 tracking-wider flex-1 text-left cursor-pointer"
+                >
+                  {expandedSections.environments ? (
+                    <ChevronDown className="w-3.5 h-3.5 text-zinc-500 dark:text-slate-400" />
+                  ) : (
+                    <ChevronRight className="w-3.5 h-3.5 text-zinc-400 dark:text-slate-500" />
+                  )}
+                  <span>ENVIRONMENTS</span>
+                </button>
+                <button
+                  onClick={handleCreateEnvironment}
+                  className="text-zinc-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-teal-400 p-1 rounded hover:bg-zinc-200/80 dark:hover:bg-slate-800 transition cursor-pointer"
+                  title="Add Environment"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+              </div>
+
+              {expandedSections.environments && (
+                <div className="pl-3 mt-1 space-y-2">
+                  {Object.keys(envVars).length === 0 ? (
+                    <div className="p-3 bg-white/70 dark:bg-[#090d17] border border-dashed border-zinc-200 dark:border-slate-800 rounded-xl text-center space-y-2">
+                      <div className="text-[10px] text-zinc-500 dark:text-slate-400">No environments configured</div>
+                      <button
+                        onClick={handleCreateEnvironment}
+                        className="px-2.5 py-1 text-[10px] font-bold text-indigo-600 dark:text-teal-400 bg-indigo-50 hover:bg-indigo-100 dark:bg-teal-500/10 dark:hover:bg-teal-500/20 rounded-lg border border-indigo-200 dark:border-teal-500/30 transition shadow-2xs cursor-pointer"
+                      >
+                        + New Environment
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {Object.keys(envVars).map((envName) => {
+                        const isCurrent = currentEnv === envName;
+                        return (
+                          <div
+                            key={envName}
+                            className={`p-2.5 rounded-xl border transition ${
+                              isCurrent
+                                ? 'bg-indigo-50/80 dark:bg-[#0e1626] border-indigo-300 dark:border-teal-500/40 text-indigo-950 dark:text-teal-300 shadow-xs'
+                                : 'bg-white dark:bg-[#090d17] border-zinc-200 dark:border-slate-800 text-zinc-600 dark:text-slate-400'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between pb-1.5">
+                              <button
+                                onClick={() => {
+                                  setCurrentEnv(envName);
+                                  localStorage.setItem('toolique_api_current_env_v3', envName);
+                                }}
+                                className="flex items-center gap-1.5 font-bold text-[11px] truncate text-left cursor-pointer"
+                              >
+                                <span className="truncate">{envName}</span>
+                                {isCurrent && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-teal-400 shrink-0" />}
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (confirm(`Delete environment "${envName}"?`)) {
+                                    const { [envName]: _, ...rest } = envVars;
+                                    setEnvVars(rest);
+                                    saveEnvVars(rest);
+                                    if (currentEnv === envName) {
+                                      setCurrentEnv('');
+                                      localStorage.removeItem('toolique_api_current_env_v3');
+                                    }
+                                  }
+                                }}
+                                className="text-zinc-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 p-0.5 rounded transition cursor-pointer"
+                                title="Delete Environment"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+
+                            {/* Variables list if active */}
+                            {isCurrent && (
+                              <div className="pt-2 border-t border-indigo-200/60 dark:border-slate-800/80 space-y-1.5">
+                                {envVars[envName].map((v, vIdx) => (
+                                  <div key={vIdx} className="flex items-center gap-1.5">
+                                    <input
+                                      type="text"
+                                      value={v.key}
+                                      onChange={(e) => {
+                                        const updatedList = [...envVars[envName]];
+                                        updatedList[vIdx].key = e.target.value;
+                                        const updatedAll = { ...envVars, [envName]: updatedList };
+                                        setEnvVars(updatedAll);
+                                        saveEnvVars(updatedAll);
+                                      }}
+                                      placeholder="key"
+                                      className="w-1/2 p-1.5 bg-white dark:bg-[#05070d] border border-zinc-200 dark:border-slate-800 rounded-lg text-[10px] font-mono text-zinc-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={v.value}
+                                      onChange={(e) => {
+                                        const updatedList = [...envVars[envName]];
+                                        updatedList[vIdx].value = e.target.value;
+                                        const updatedAll = { ...envVars, [envName]: updatedList };
+                                        setEnvVars(updatedAll);
+                                        saveEnvVars(updatedAll);
+                                      }}
+                                      placeholder="value"
+                                      className="w-1/2 p-1.5 bg-white dark:bg-[#05070d] border border-zinc-200 dark:border-slate-800 rounded-lg text-[10px] font-mono text-zinc-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
+                                    />
+                                    <button
+                                      onClick={() => {
+                                        const updatedList = envVars[envName].filter((_, i) => i !== vIdx);
+                                        const updatedAll = { ...envVars, [envName]: updatedList };
+                                        setEnvVars(updatedAll);
+                                        saveEnvVars(updatedAll);
+                                      }}
+                                      className="p-1 text-zinc-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition cursor-pointer"
+                                      title="Delete variable"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                ))}
+                                <button
+                                  onClick={handleAddVariableToCurrentEnv}
+                                  className="text-[10px] font-bold text-indigo-600 dark:text-teal-400 hover:underline flex items-center gap-1 pt-1 cursor-pointer"
+                                >
+                                  <Plus className="w-3 h-3" /> Add Variable
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* SECTION 3: DOCUMENTS */}
+            <div className="space-y-1">
+              <button
+                onClick={() => toggleSection('documents')}
+                className="w-full flex items-center gap-2 py-1.5 px-2 hover:bg-zinc-200/60 dark:hover:bg-slate-800/50 rounded-xl text-[11px] font-black uppercase text-zinc-700 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-slate-200 tracking-wider transition cursor-pointer"
+              >
+                {expandedSections.documents ? (
+                  <ChevronDown className="w-3.5 h-3.5 text-zinc-500 dark:text-slate-400" />
+                ) : (
+                  <ChevronRight className="w-3.5 h-3.5 text-zinc-400 dark:text-slate-500" />
+                )}
+                <span>DOCUMENTS</span>
+              </button>
+              {expandedSections.documents && (
+                <div className="pl-4 mt-1 space-y-1 text-[10px] text-zinc-600 dark:text-slate-400">
+                  <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-zinc-200 dark:border-slate-800 space-y-1">
+                    <div className="font-bold text-zinc-800 dark:text-slate-200">{activeTab.name || 'API Endpoint'} Docs</div>
+                    <div className="text-zinc-500 dark:text-slate-400">Auto-generated endpoint schema & specs</div>
                   </div>
                 </div>
-              ))}
-              <div className="flex justify-between items-center pt-2">
-                <button onClick={clearCollections} className="text-[9px] text-rose-500 font-bold uppercase hover:underline">Clear Collections</button>
-              </div>
-            </div>
-          )}
-
-          {sidebarTab === 'history' && (
-            <div className="space-y-3">
-              {history.map((hist, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => restoreRequestConfig(hist.requestConfig)}
-                  className="w-full text-left p-2 rounded-xl bg-zinc-50 dark:bg-zinc-900 border text-[11px] font-mono hover:border-teal-550 transition space-y-1 block"
-                >
-                  <div className="flex justify-between items-center">
-                    <strong className="text-teal-605">{hist.method}</strong>
-                    <span className="text-[9px] text-zinc-450">{hist.timestamp}</span>
-                  </div>
-                  <div className="text-zinc-650 truncate">{hist.url}</div>
-                  <div className="text-[9px] text-zinc-400 font-semibold">{hist.status} {hist.statusText} — {hist.time}ms</div>
-                </button>
-              ))}
-
-              {history.length === 0 && (
-                <div className="text-center py-6 text-zinc-400 italic text-xs">No local request history logs.</div>
-              )}
-              {history.length > 0 && (
-                <button onClick={clearLocalHistory} className="text-[9px] text-rose-500 font-bold uppercase hover:underline block">Clear History</button>
               )}
             </div>
-          )}
 
-          {sidebarTab === 'env' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-zinc-400 uppercase">Environment:</span>
-                <select
-                  value={currentEnv}
-                  onChange={(e) => setCurrentEnv(e.target.value as any)}
-                  className="p-1 border rounded text-[11px] bg-transparent font-bold"
-                >
-                  <option value="development">Development</option>
-                  <option value="staging">Staging</option>
-                  <option value="production">Production</option>
-                </select>
-              </div>
-
-              <div className="space-y-2">
-                {envVars[currentEnv].map((v, i) => (
-                  <div key={i} className="flex gap-1.5 items-center">
-                    <input
-                      type="text"
-                      value={v.key}
-                      onChange={(e) => updateEnvVar(i, e.target.value, v.value)}
-                      className="w-1/2 p-1.5 border rounded text-[11px] font-mono focus:outline-none"
-                    />
-                    <input
-                      type="text"
-                      value={v.value}
-                      onChange={(e) => updateEnvVar(i, v.key, e.target.value)}
-                      className="w-1/2 p-1.5 border rounded text-[11px] font-mono focus:outline-none"
-                    />
-                    <button onClick={() => deleteEnvVar(i)} className="text-rose-500"><Trash2 className="w-3.5 h-3.5" /></button>
-                  </div>
-                ))}
-                <button onClick={addEnvVar} className="text-[10px] text-teal-650 font-bold flex items-center gap-1 hover:underline">
-                  <Plus className="w-3.5 h-3.5" /> Add Variable
-                </button>
-              </div>
+            {/* SECTION 4: SPECS & TEMPLATES */}
+            <div className="space-y-1">
+              <button
+                onClick={() => toggleSection('specs')}
+                className="w-full flex items-center gap-2 py-1.5 px-2 hover:bg-zinc-200/60 dark:hover:bg-slate-800/50 rounded-xl text-[11px] font-black uppercase text-zinc-700 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-slate-200 tracking-wider transition cursor-pointer"
+              >
+                {expandedSections.specs ? (
+                  <ChevronDown className="w-3.5 h-3.5 text-zinc-500 dark:text-slate-400" />
+                ) : (
+                  <ChevronRight className="w-3.5 h-3.5 text-zinc-400 dark:text-slate-500" />
+                )}
+                <span>SPECS & TEMPLATES</span>
+              </button>
+              {expandedSections.specs && (
+                <div className="pl-4 mt-1 space-y-1 text-[10px]">
+                  {QUICK_STARTERS.map((qs, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        updateActiveTab({
+                          name: qs.action.name,
+                          method: qs.action.method,
+                          url: qs.action.url,
+                          bodyType: qs.action.bodyType,
+                          bodyJson: (qs.action as any).bodyJson || activeTab.bodyJson,
+                          bodyFormData: (qs.action as any).bodyFormData || activeTab.bodyFormData,
+                          bodyGraphQLQuery: (qs.action as any).bodyGraphQLQuery || activeTab.bodyGraphQLQuery,
+                          bodyGraphQLVars: (qs.action as any).bodyGraphQLVars || activeTab.bodyGraphQLVars,
+                          queryParams: qs.action.queryParams || activeTab.queryParams,
+                          headers: qs.action.headers || activeTab.headers,
+                          assertions: qs.action.assertions || activeTab.assertions
+                        });
+                      }}
+                      className="w-full text-left p-1.5 rounded-lg hover:bg-zinc-200/70 dark:hover:bg-slate-800 text-zinc-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-teal-400 truncate block transition cursor-pointer"
+                    >
+                      {qs.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+
+            {/* SECTION 5: MOCKS */}
+            <div className="space-y-1">
+              <button
+                onClick={() => toggleSection('mocks')}
+                className="w-full flex items-center gap-2 py-1.5 px-2 hover:bg-zinc-200/60 dark:hover:bg-slate-800/50 rounded-xl text-[11px] font-black uppercase text-zinc-700 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-slate-200 tracking-wider transition cursor-pointer"
+              >
+                {expandedSections.mocks ? (
+                  <ChevronDown className="w-3.5 h-3.5 text-zinc-500 dark:text-slate-400" />
+                ) : (
+                  <ChevronRight className="w-3.5 h-3.5 text-zinc-400 dark:text-slate-500" />
+                )}
+                <span>MOCKS</span>
+              </button>
+              {expandedSections.mocks && (
+                <div className="pl-4 mt-1 p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-zinc-200 dark:border-slate-800 space-y-1 text-[10px]">
+                  <div className="flex justify-between items-center text-zinc-700 dark:text-slate-300">
+                    <span>Mock Engine:</span>
+                    <span className="text-emerald-600 dark:text-teal-400 font-bold">Ready</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* SECTION 6: DATASETS */}
+            <div className="space-y-1">
+              <button
+                onClick={() => toggleSection('datasets')}
+                className="w-full flex items-center gap-2 py-1.5 px-2 hover:bg-zinc-200/60 dark:hover:bg-slate-800/50 rounded-xl text-[11px] font-black uppercase text-zinc-700 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-slate-200 tracking-wider transition cursor-pointer"
+              >
+                {expandedSections.datasets ? (
+                  <ChevronDown className="w-3.5 h-3.5 text-zinc-500 dark:text-slate-400" />
+                ) : (
+                  <ChevronRight className="w-3.5 h-3.5 text-zinc-400 dark:text-slate-500" />
+                )}
+                <span>DATASETS</span>
+              </button>
+              {expandedSections.datasets && (
+                <div className="pl-4 mt-1 space-y-1 text-[10px]">
+                  {SAMPLE_DATASETS.map((ds) => (
+                    <button
+                      key={ds.id}
+                      onClick={() => {
+                        updateActiveTab({
+                          bodyType: 'json',
+                          bodyJson: JSON.stringify(ds.data, null, 2)
+                        });
+                        alert(`Loaded "${ds.name}" into JSON Request Body!`);
+                      }}
+                      className="w-full text-left p-1.5 rounded-lg hover:bg-zinc-200/70 dark:hover:bg-slate-800 text-zinc-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-white truncate block transition cursor-pointer"
+                    >
+                      {ds.icon} {ds.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* SECTION 7: FLOWS & HISTORY */}
+            <div className="space-y-1">
+              <button
+                onClick={() => toggleSection('flows')}
+                className="w-full flex items-center gap-2 py-1.5 px-2 hover:bg-zinc-200/60 dark:hover:bg-slate-800/50 rounded-xl text-[11px] font-black uppercase text-zinc-700 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-slate-200 tracking-wider transition cursor-pointer"
+              >
+                {expandedSections.flows ? (
+                  <ChevronDown className="w-3.5 h-3.5 text-zinc-500 dark:text-slate-400" />
+                ) : (
+                  <ChevronRight className="w-3.5 h-3.5 text-zinc-400 dark:text-slate-500" />
+                )}
+                <span>FLOWS & HISTORY</span>
+              </button>
+              {expandedSections.flows && (
+                <div className="pl-4 mt-1 text-[10px] text-zinc-500 dark:text-slate-500 italic py-1">
+                  {history.length === 0 ? 'No requests recorded yet' : `${history.length} executions logged`}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* CORE BUILDER & WORKSPACE */}
-        <div className="lg:col-span-9 space-y-6">
+        {/* 2. MAIN WORKSPACE */}
+        <div className="lg:col-span-9 bg-white dark:bg-[#111728] border border-zinc-200/80 dark:border-slate-800/90 rounded-2xl p-3.5 sm:p-4 md:p-5 space-y-4 transition-colors">
           
-          {/* Main Method Selector / URL bar */}
-          <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
-            <div className="flex gap-2">
-              <select
-                value={selectedMethod}
-                onChange={(e) => setSelectedMethod(e.target.value)}
-                className="p-3 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 rounded-xl text-xs font-black font-mono focus:outline-none text-zinc-700 dark:text-zinc-300"
-              >
-                {['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'].map((m) => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
-              <input
-                type="text"
-                value={requestUrl}
-                onChange={(e) => setRequestUrl(e.target.value)}
-                placeholder="https://api.example.com/v1/users"
-                className="flex-grow p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono font-semibold focus:outline-none"
-              />
-              <button
-                onClick={triggerSendRequest}
-                disabled={isSending}
-                className="px-6 py-3 bg-teal-600 hover:bg-teal-700 disabled:opacity-40 text-white rounded-xl text-xs font-black font-mono flex items-center justify-center gap-1.5 shadow"
-              >
-                {isSending ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
-                <span>Send</span>
-              </button>
-            </div>
-            
-            <div className="flex justify-between items-center text-[10px] text-zinc-450 font-bold border-t pt-3">
-              <span>Send Shortcut: <strong>Ctrl + Enter</strong></span>
-              <button onClick={handleSaveRequest} className="text-teal-650 flex items-center gap-1 hover:underline">
-                <Save className="w-3.5 h-3.5" /> Save Request Configuration
-              </button>
-            </div>
-          </div>
-
-          {/* PARAMS, AUTHORIZATION, HEADERS, BODY, ASSERTIONS TABS */}
-          {mode === 'advanced' && (
-            <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-sm space-y-4">
-              <div className="flex gap-4 border-b pb-2 text-xs font-bold text-zinc-500">
-                {[
-                  { id: 'params', name: 'Query Params' },
-                  { id: 'auth', name: 'Authorization' },
-                  { id: 'headers', name: 'Headers' },
-                  { id: 'body', name: 'Request Body' },
-                  { id: 'tests', name: 'Assertions Lab' }
-                ].map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setActiveTab(t.id as any)}
-                    className={`pb-1.5 border-b-2 transition ${activeTab === t.id ? 'border-teal-655 text-teal-655' : 'border-transparent hover:text-zinc-700'}`}
-                  >
-                    {t.name}
-                  </button>
-                ))}
-              </div>
-
-              {/* QUERY PARAMS BUILDER */}
-              {activeTab === 'params' && (
-                <div className="space-y-3">
-                  {queryParams.map((p, idx) => (
-                    <div key={idx} className="flex gap-2 items-center">
-                      <input
-                        type="checkbox"
-                        checked={p.enabled}
-                        onChange={(e) => {
-                          const updated = [...queryParams];
-                          updated[idx].enabled = e.target.checked;
-                          setQueryParams(updated);
-                        }}
-                        className="rounded text-teal-600"
-                      />
-                      <input
-                        type="text"
-                        value={p.key}
-                        onChange={(e) => {
-                          const updated = [...queryParams];
-                          updated[idx].key = e.target.value;
-                          setQueryParams(updated);
-                        }}
-                        placeholder="Key"
-                        className="w-1/2 p-2 border rounded text-xs font-mono"
-                      />
-                      <input
-                        type="text"
-                        value={p.value}
-                        onChange={(e) => {
-                          const updated = [...queryParams];
-                          updated[idx].value = e.target.value;
-                          setQueryParams(updated);
-                        }}
-                        placeholder="Value"
-                        className="w-1/2 p-2 border rounded text-xs font-mono"
-                      />
-                      <button
-                        onClick={() => setQueryParams(queryParams.filter((_, i) => i !== idx))}
-                        className="text-rose-500"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    onClick={() => setQueryParams([...queryParams, { key: '', value: '', enabled: true }])}
-                    className="text-xs text-teal-605 font-bold flex items-center gap-1 hover:underline"
-                  >
-                    <Plus className="w-4 h-4" /> Add Parameter Row
-                  </button>
-                </div>
-              )}
-
-              {/* AUTHORIZATION CONFIGURATOR */}
-              {activeTab === 'auth' && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-                  <div>
-                    <label className="text-[10px] font-bold text-zinc-400 block uppercase mb-1">Auth Type</label>
-                    <select
-                      value={authType}
-                      onChange={(e) => setAuthType(e.target.value as any)}
-                      className="w-full p-2 border rounded"
-                    >
-                      <option value="none">No Auth</option>
-                      <option value="bearer">Bearer Token</option>
-                      <option value="basic">Basic Auth</option>
-                      <option value="apikey">API Key</option>
-                    </select>
-                  </div>
-
-                  <div className="md:col-span-2 space-y-4">
-                    {authType === 'bearer' && (
-                      <div>
-                        <label className="text-[10px] font-bold text-zinc-400 block uppercase mb-1">Token</label>
-                        <input
-                          type="password"
-                          value={authBearer}
-                          onChange={(e) => setAuthBearer(e.target.value)}
-                          placeholder="Bearer token secret..."
-                          className="w-full p-2 border rounded font-mono"
-                        />
-                      </div>
-                    )}
-
-                    {authType === 'basic' && (
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-[10px] font-bold text-zinc-400 block uppercase mb-1">Username</label>
-                          <input
-                            type="text"
-                            value={authBasicUser}
-                            onChange={(e) => setAuthBasicUser(e.target.value)}
-                            className="w-full p-2 border rounded"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-[10px] font-bold text-zinc-400 block uppercase mb-1">Password</label>
-                          <div className="relative">
-                            <input
-                              type={maskPass ? 'password' : 'text'}
-                              value={authBasicPass}
-                              onChange={(e) => setAuthBasicPass(e.target.value)}
-                              className="w-full p-2 border rounded pr-8"
-                            />
-                            <button
-                              onClick={() => setMaskPass(!maskPass)}
-                              className="absolute right-2 top-2.5 text-zinc-400"
-                            >
-                              {maskPass ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {authType === 'apikey' && (
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="text-[10px] font-bold text-zinc-400 block uppercase mb-1">Key Name</label>
-                            <input
-                              type="text"
-                              value={authApiKeyName}
-                              onChange={(e) => setAuthApiKeyName(e.target.value)}
-                              className="w-full p-2 border rounded font-mono"
-                            />
-                          </div>
-                          <div>
-                            <label className="text-[10px] font-bold text-zinc-400 block uppercase mb-1">Key Value</label>
-                            <input
-                              type="password"
-                              value={authApiKeyValue}
-                              onChange={(e) => setAuthApiKeyValue(e.target.value)}
-                              className="w-full p-2 border rounded font-mono"
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <label className="text-[10px] font-bold text-zinc-400 block uppercase mb-1">Location</label>
-                          <select
-                            value={authApiKeyLocation}
-                            onChange={(e) => setAuthApiKeyLocation(e.target.value as any)}
-                            className="p-1.5 border rounded text-xs"
-                          >
-                            <option value="header">HTTP Header</option>
-                            <option value="query">Query Parameter</option>
-                          </select>
-                        </div>
-                      </div>
-                    )}
-
-                    {authType === 'none' && (
-                      <p className="text-zinc-400 italic">This request does not send auth headers.</p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* REQUEST HEADERS BUILDER */}
-              {activeTab === 'headers' && (
-                <div className="space-y-3">
-                  {headersList.map((h, idx) => (
-                    <div key={idx} className="flex gap-2 items-center">
-                      <input
-                        type="checkbox"
-                        checked={h.enabled}
-                        onChange={(e) => {
-                          const updated = [...headersList];
-                          updated[idx].enabled = e.target.checked;
-                          setHeadersList(updated);
-                        }}
-                        className="rounded text-teal-600"
-                      />
-                      <input
-                        type="text"
-                        value={h.key}
-                        onChange={(e) => {
-                          const updated = [...headersList];
-                          updated[idx].key = e.target.value;
-                          setHeadersList(updated);
-                        }}
-                        placeholder="Key"
-                        className="w-1/2 p-2 border rounded text-xs font-mono"
-                      />
-                      <input
-                        type="text"
-                        value={h.value}
-                        onChange={(e) => {
-                          const updated = [...headersList];
-                          updated[idx].value = e.target.value;
-                          setHeadersList(updated);
-                        }}
-                        placeholder="Value"
-                        className="w-1/2 p-2 border rounded text-xs font-mono"
-                      />
-                      <button
-                        onClick={() => setHeadersList(headersList.filter((_, i) => i !== idx))}
-                        className="text-rose-500"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    onClick={() => setHeadersList([...headersList, { key: '', value: '', enabled: true }])}
-                    className="text-xs text-teal-605 font-bold flex items-center gap-1 hover:underline"
-                  >
-                    <Plus className="w-4 h-4" /> Add Header Row
-                  </button>
-                </div>
-              )}
-
-              {/* REQUEST BODY EDITOR */}
-              {activeTab === 'body' && (
-                <div className="space-y-4">
-                  <div className="flex gap-3 text-xs font-bold border-b pb-2">
-                    {['none', 'json', 'urlencoded', 'raw'].map((t) => (
-                      <button
-                        key={t}
-                        onClick={() => setBodyType(t as any)}
-                        className={`capitalize transition ${bodyType === t ? 'text-teal-605' : 'text-zinc-400'}`}
-                      >
-                        {t}
-                      </button>
-                    ))}
-                  </div>
-
-                  {bodyType === 'json' && (
-                    <div className="space-y-2">
-                      <div className="flex gap-2">
-                        <button onClick={formatJsonBody} className="px-2 py-1 bg-zinc-100 hover:bg-zinc-200 rounded text-[10px] font-bold transition">Format JSON</button>
-                        <button onClick={validateJsonSyntax} className="px-2 py-1 bg-zinc-100 hover:bg-zinc-200 rounded text-[10px] font-bold transition">Validate JSON</button>
-                      </div>
-                      <textarea
-                        value={bodyJson}
-                        onChange={(e) => setBodyJson(e.target.value)}
-                        className="w-full h-36 p-3 border rounded font-mono text-xs focus:outline-none"
-                      />
-                      {jsonValidationError && (
-                        <div className="p-2 rounded bg-zinc-50 border text-[10px] font-mono text-zinc-650">{jsonValidationError}</div>
-                      )}
-                    </div>
-                  )}
-
-                  {bodyType === 'raw' && (
-                    <textarea
-                      value={bodyRaw}
-                      onChange={(e) => setBodyRaw(e.target.value)}
-                      placeholder="Plain text payload..."
-                      className="w-full h-36 p-3 border rounded font-mono text-xs focus:outline-none"
-                    />
-                  )}
-
-                  {bodyType === 'none' && <p className="text-zinc-400 italic text-xs">No request body is sent.</p>}
-                </div>
-              )}
-
-              {/* ASSERTIONS LAB */}
-              {activeTab === 'tests' && (
-                <div className="space-y-3">
-                  {assertions.map((ass, idx) => (
-                    <div key={idx} className="flex gap-2 items-center text-xs">
-                      <select
-                        value={ass.type}
-                        onChange={(e) => {
-                          const updated = [...assertions];
-                          updated[idx].type = e.target.value as any;
-                          setAssertions(updated);
-                        }}
-                        className="p-2 border rounded"
-                      >
-                        <option value="status">Status Code</option>
-                        <option value="time">Response Time (ms)</option>
-                        <option value="json_exists">Response JSON path</option>
-                      </select>
-                      
-                      <select
-                        value={ass.operator}
-                        onChange={(e) => {
-                          const updated = [...assertions];
-                          updated[idx].operator = e.target.value as any;
-                          setAssertions(updated);
-                        }}
-                        className="p-2 border rounded font-mono"
-                      >
-                        <option value="equals">equals</option>
-                        <option value="less_than">less than</option>
-                        <option value="contains">contains</option>
-                      </select>
-
-                      <input
-                        type="text"
-                        value={ass.value}
-                        onChange={(e) => {
-                          const updated = [...assertions];
-                          updated[idx].value = e.target.value;
-                          setAssertions(updated);
-                        }}
-                        placeholder="Expected value"
-                        className="p-2 border rounded font-mono flex-grow"
-                      />
-
-                      <button
-                        onClick={() => setAssertions(assertions.filter((_, i) => i !== idx))}
-                        className="text-rose-500"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    onClick={() => setAssertions([...assertions, { type: 'status', property: '', operator: 'equals', value: '200' }])}
-                    className="text-xs text-teal-650 font-bold flex items-center gap-1 hover:underline"
-                  >
-                    <Plus className="w-4 h-4" /> Add Assertion Check
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* OPENAPI & CURL CODE IMPORTER DESK */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-sm space-y-3">
-              <span className="text-[10px] font-black uppercase text-zinc-400 block tracking-wider">Import CLI cURL Command</span>
-              <textarea
-                value={curlImportText}
-                onChange={(e) => setCurlImportText(e.target.value)}
-                placeholder="curl -X POST -H 'Content-Type: application/json' -d '...' https://..."
-                className="w-full h-20 p-2 border rounded text-[11px] font-mono focus:outline-none"
-              />
-              <button onClick={handleImportCurl} className="px-3 py-1.5 bg-zinc-900 text-white rounded-lg text-xs font-bold w-full">Import cURL</button>
-            </div>
-
-            <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-sm space-y-3">
-              <span className="text-[10px] font-black uppercase text-zinc-400 block tracking-wider">Import OpenAPI 3.0 (JSON)</span>
-              <textarea
-                value={openApiImportText}
-                onChange={(e) => setOpenApiImportText(e.target.value)}
-                placeholder='{ "openapi": "3.0.0", "paths": { ... } }'
-                className="w-full h-20 p-2 border rounded text-[11px] font-mono focus:outline-none"
-              />
-              <button onClick={handleImportOpenApi} className="px-3 py-1.5 bg-zinc-900 text-white rounded-lg text-xs font-bold w-full">Import OpenAPI Specification</button>
-            </div>
-          </div>
-
-          {/* RESPONSE VIEWER SUB-DASHBOARD */}
-          {responseState && (
-            <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-sm space-y-6 animate-fadeIn">
-              
-              {/* Response Stats indicators */}
-              <div className="flex flex-wrap gap-6 items-center justify-between border-b pb-3">
-                <div className="flex gap-4 items-center">
-                  <span className={`px-2.5 py-1 rounded-lg text-xs font-black font-mono ${
-                    responseState.status >= 200 && responseState.status < 300 ? 'bg-emerald-500/10 text-emerald-600' : 'bg-rose-500/10 text-rose-600'
-                  }`}>
-                    {responseState.status} {responseState.statusText}
-                  </span>
-                  <span className="text-xs font-mono font-bold text-zinc-500">Latency: <strong className="text-zinc-800 dark:text-zinc-200">{responseState.time} ms</strong></span>
-                  <span className="text-xs font-mono font-bold text-zinc-500">Size: <strong className="text-zinc-800 dark:text-zinc-200">{responseState.size} KB</strong></span>
-                </div>
-              </div>
-
-              {/* Sub tab selections */}
-              <div className="flex flex-wrap gap-2 text-xs font-bold">
-                {[
-                  { id: 'pretty', name: 'Pretty Body' },
-                  { id: 'raw', name: 'Raw Body' },
-                  { id: 'headers', name: 'Response Headers' },
-                  { id: 'health', name: 'Health Assertion Checks' },
-                  { id: 'codegen', name: 'Generate Code' },
-                  { id: 'schema', name: 'Export JSON Schema' },
-                  { id: 'qa', name: 'Generate QA Test Cases' },
-                  { id: 'docs', name: 'Generate API Docs' },
-                  { id: 'compare', name: 'Compare Responses' }
-                ].map((tab) => (
-                  <button
+          {/* TOP TAB STRIP & ACTIVE ENVIRONMENT DROPDOWN */}
+          <div className="flex flex-wrap items-center justify-between gap-2.5 pb-2.5 border-b border-zinc-200/80 dark:border-slate-800/80">
+            {/* Request Tabs Strip */}
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none max-w-full pb-0.5">
+              {tabs.map((tab) => {
+                const isActive = tab.id === activeTabId;
+                return (
+                  <div
                     key={tab.id}
-                    onClick={() => setActiveResponseTab(tab.id as any)}
-                    className={`px-3 py-1 rounded-lg border transition ${
-                      activeResponseTab === tab.id ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'bg-zinc-50 text-zinc-500'
+                    onClick={() => setActiveTabId(tab.id)}
+                    className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border transition cursor-pointer shrink-0 shadow-2xs ${
+                      isActive
+                        ? 'bg-indigo-50 dark:bg-[#231e3d] border-indigo-200 dark:border-indigo-500/60 text-indigo-700 dark:text-white shadow-xs'
+                        : 'bg-zinc-100/80 dark:bg-[#0a0e19] border-zinc-200/80 dark:border-slate-800 text-zinc-600 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-slate-200 hover:bg-zinc-200/60 dark:hover:bg-slate-800/50'
                     }`}
                   >
-                    {tab.name}
-                  </button>
-                ))}
-              </div>
-
-              {/* TAB VIEWER CONTENT PANELS */}
-              
-              {/* PRETTY JSON VIEWER */}
-              {activeResponseTab === 'pretty' && (
-                <div className="space-y-4 animate-fadeIn">
-                  <div className="flex gap-3 items-center">
-                    <Search className="w-4 h-4 text-zinc-400" />
-                    <input
-                      type="text"
-                      value={prettySearchQuery}
-                      onChange={(e) => setPrettySearchQuery(e.target.value)}
-                      placeholder="Search parameters in JSON response..."
-                      className="flex-grow p-1.5 border rounded text-xs focus:outline-none"
-                    />
-                  </div>
-
-                  {responseState.isJson ? (
-                    <pre className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 font-mono text-xs text-zinc-750 dark:text-zinc-250 max-h-96 overflow-y-auto select-all whitespace-pre-wrap break-all">
-                      {JSON.stringify(responseState.json, null, 2)}
-                    </pre>
-                  ) : (
-                    <pre className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 font-mono text-xs text-zinc-750 dark:text-zinc-250 max-h-96 overflow-y-auto select-all whitespace-pre-wrap break-all">
-                      {responseState.text}
-                    </pre>
-                  )}
-                </div>
-              )}
-
-              {/* RAW RESPONSE */}
-              {activeResponseTab === 'raw' && (
-                <pre className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 font-mono text-xs text-zinc-700 dark:text-zinc-300 max-h-96 overflow-y-auto select-all break-all whitespace-pre-wrap animate-fadeIn">
-                  {responseState.text}
-                </pre>
-              )}
-
-              {/* RESPONSE HEADERS */}
-              {activeResponseTab === 'headers' && (
-                <div className="overflow-x-auto animate-fadeIn">
-                  <table className="w-full text-xs text-left font-mono">
-                    <thead>
-                      <tr className="border-b text-zinc-400 font-bold">
-                        <th className="py-2 pl-2">Header Key</th>
-                        <th className="py-2">Value</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y text-zinc-700 dark:text-zinc-300">
-                      {Object.keys(responseState.headers).map((k) => (
-                        <tr key={k}>
-                          <td className="py-2.5 pl-2 font-bold text-teal-650">{k}</td>
-                          <td className="py-2.5 break-all">{responseState.headers[k]}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-
-              {/* HEALTH ASSERTIONS LIST */}
-              {activeResponseTab === 'health' && (
-                <div className="space-y-3 animate-fadeIn">
-                  <div className="text-xs font-black uppercase text-zinc-400 border-b pb-2">Assertion Results: {assertionResults.filter(r => r.passed).length} / {assertionResults.length} Passed</div>
-                  <div className="space-y-2">
-                    {assertionResults.map((res, i) => (
-                      <div key={i} className="p-3 border rounded-xl bg-zinc-50 dark:bg-zinc-900 flex justify-between items-center text-xs">
-                        <div>
-                          <strong className="capitalize text-zinc-800 dark:text-zinc-200">Assertion Type: {res.type.replace('_', ' ')}</strong>
-                          <span className="text-zinc-400 block mt-0.5">Condition: {res.operator} "{res.value}" (Actual: {res.actualValue})</span>
-                        </div>
-                        <span className={`px-2 py-0.5 rounded font-black font-mono text-[9px] uppercase ${
-                          res.passed ? 'bg-emerald-500/10 text-emerald-600' : 'bg-rose-500/10 text-rose-600'
-                        }`}>
-                          {res.passed ? 'Passed ✓' : 'Failed ✕'}
-                        </span>
-                      </div>
-                    ))}
-
-                    {assertionResults.length === 0 && (
-                      <p className="text-zinc-400 italic text-xs">No health assertions configured.</p>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-xs shadow-emerald-500/50 shrink-0" />
+                    <span className={`text-[9px] font-black uppercase ${getMethodBadgeClass(tab.method)}`}>
+                      {tab.method}
+                    </span>
+                    <span className="truncate max-w-[140px] text-[11px]">{tab.name}</span>
+                    {tabs.length > 1 && (
+                      <button
+                        onClick={(e) => handleCloseTab(tab.id, e)}
+                        className="p-0.5 rounded hover:bg-rose-500/10 text-zinc-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition ml-1"
+                        title="Close Tab"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
                     )}
                   </div>
-                </div>
-              )}
+                );
+              })}
 
-              {/* CODE GENERATOR */}
-              {activeResponseTab === 'codegen' && (
-                <div className="space-y-4 animate-fadeIn">
-                  {Object.entries(codeGenSnippets).map(([lang, code]) => (
-                    <div key={lang} className="space-y-1">
-                      <div className="flex justify-between items-center text-[10px] font-bold text-zinc-400 uppercase">
-                        <span>{lang} Snippet</span>
-                        <button
-                          onClick={() => handleCopyCode(code, lang)}
-                          className="text-teal-655 hover:underline flex items-center gap-1"
-                        >
-                          {copiedCodeId === lang ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                          <span>{copiedCodeId === lang ? 'Copied' : 'Copy'}</span>
-                        </button>
-                      </div>
-                      <pre className="p-3 border rounded-xl bg-zinc-50 dark:bg-zinc-950 font-mono text-xs text-zinc-700 dark:text-zinc-300 overflow-x-auto whitespace-pre-wrap select-all">
-                        {code}
-                      </pre>
-                    </div>
+              <button
+                onClick={handleAddNewTab}
+                className="p-2 rounded-xl border border-dashed border-zinc-300 dark:border-slate-700 text-zinc-500 dark:text-slate-400 hover:border-indigo-500 hover:text-indigo-600 dark:hover:border-teal-400 dark:hover:text-teal-400 transition cursor-pointer"
+                title="Add New Request Tab"
+              >
+                <Plus className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Active Environment Dropdown on Top Right */}
+            <div className="flex items-center gap-2 shrink-0 ml-auto">
+              <div className="flex items-center gap-2 bg-zinc-100/80 dark:bg-[#090d17] border border-zinc-200/80 dark:border-slate-800 px-3 py-1.5 rounded-xl text-xs">
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    currentEnv ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-400 dark:bg-slate-500'
+                  }`}
+                />
+                <select
+                  value={currentEnv}
+                  onChange={(e) => {
+                    if (e.target.value === '__add_new__') {
+                      handleCreateEnvironment();
+                    } else {
+                      setCurrentEnv(e.target.value);
+                      localStorage.setItem('toolique_api_current_env_v3', e.target.value);
+                    }
+                  }}
+                  className="bg-transparent border-0 text-zinc-800 dark:text-slate-300 font-bold focus:outline-none cursor-pointer text-xs"
+                >
+                  <option value="" className="bg-white dark:bg-slate-900 text-zinc-600 dark:text-slate-400">
+                    No Environment
+                  </option>
+                  {Object.keys(envVars).map((env) => (
+                    <option key={env} value={env} className="bg-white dark:bg-slate-900 text-zinc-900 dark:text-white">
+                      {env}
+                    </option>
                   ))}
-                </div>
-              )}
-
-              {/* EXPORT JSON SCHEMA */}
-              {activeResponseTab === 'schema' && (
-                <div className="space-y-2 animate-fadeIn">
-                  <div className="flex justify-between items-center text-[10px] font-bold text-zinc-400 uppercase">
-                    <span>Generated JSON Schema output</span>
-                    <button
-                      onClick={() => handleCopyCode(generatedSchemaText, 'schema')}
-                      className="text-teal-655 hover:underline"
-                    >
-                      {copiedCodeId === 'schema' ? 'Copied' : 'Copy Schema'}
-                    </button>
-                  </div>
-                  <pre className="p-4 border rounded-xl bg-zinc-50 dark:bg-zinc-950 font-mono text-xs text-zinc-700 dark:text-zinc-300 max-h-60 overflow-y-auto whitespace-pre-wrap select-all">
-                    {generatedSchemaText}
-                  </pre>
-                </div>
-              )}
-
-              {/* GENERATE QA TEST CASES */}
-              {activeResponseTab === 'qa' && (
-                <div className="overflow-x-auto animate-fadeIn">
-                  <table className="w-full text-xs text-left border-collapse">
-                    <thead>
-                      <tr className="border-b text-zinc-400 font-bold font-mono">
-                        <th className="py-2 pl-2">ID</th>
-                        <th className="py-2">Test Scenario</th>
-                        <th className="py-2">Endpoint Target</th>
-                        <th className="py-2">Expected Outcome</th>
-                        <th className="py-2 pr-2">Priority</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y text-zinc-700 dark:text-zinc-300 font-medium">
-                      {qaTestCases.map((tc) => (
-                        <tr key={tc.id}>
-                          <td className="py-2.5 pl-2 font-bold text-teal-650 font-mono">{tc.id}</td>
-                          <td className="py-2.5">{tc.scenario}</td>
-                          <td className="py-2.5 font-mono text-[10px] text-zinc-405">{tc.request}</td>
-                          <td className="py-2.5 text-zinc-650">{tc.expected}</td>
-                          <td className="py-2.5 pr-2 font-black font-mono text-[10px]">{tc.priority}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-
-              {/* GENERATE API DOCUMENTATION */}
-              {activeResponseTab === 'docs' && (
-                <div className="space-y-2 animate-fadeIn">
-                  <div className="flex justify-between items-center text-[10px] font-bold text-zinc-400 uppercase">
-                    <span>Generated Markdown Documentation</span>
-                    <button
-                      onClick={() => handleCopyCode(generatedDocsText, 'docs')}
-                      className="text-teal-655 hover:underline"
-                    >
-                      {copiedCodeId === 'docs' ? 'Copied' : 'Copy Documentation'}
-                    </button>
-                  </div>
-                  <pre className="p-4 border rounded-xl bg-zinc-50 dark:bg-zinc-950 font-mono text-xs text-zinc-700 dark:text-zinc-300 max-h-60 overflow-y-auto whitespace-pre-wrap select-all">
-                    {generatedDocsText}
-                  </pre>
-                </div>
-              )}
-
-              {/* COMPARE RESPONSES */}
-              {activeResponseTab === 'compare' && (
-                <div className="space-y-4 animate-fadeIn">
-                  <div>
-                    <label className="text-[10px] font-bold text-zinc-400 block uppercase mb-1">Paste Second Response Payload JSON</label>
-                    <textarea
-                      value={compareResponseText}
-                      onChange={(e) => setCompareResponseText(e.target.value)}
-                      placeholder='{ "key": "value" }'
-                      className="w-full h-24 p-2 border rounded font-mono text-xs focus:outline-none"
-                    />
-                  </div>
-                  <button onClick={executeResponseDiff} className="px-3 py-1.5 bg-zinc-900 text-white rounded-lg text-xs font-bold">Compare Responses</button>
-                  
-                  {comparisonDelta && (
-                    <div className="p-3 border rounded-xl bg-zinc-50 text-xs font-mono text-zinc-750 font-bold">
-                      Result: {comparisonDelta}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* CORS ERROR DETAILS PANEL */}
-          {responseError && (
-            <div className="p-6 rounded-3xl border border-rose-500/20 bg-rose-500/[0.02] space-y-4 text-xs animate-fadeIn">
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/10 text-rose-600 uppercase font-mono">⚠ Request Failed</span>
-                <span className="text-zinc-400 font-bold">Error Type: {responseError.type === 'CORS_ERROR' ? 'CORS BLOCK' : 'SSRF PROTECTED'}</span>
+                  <option value="__add_new__" className="bg-white dark:bg-slate-900 text-indigo-600 dark:text-teal-400 font-bold">
+                    + New Environment...
+                  </option>
+                </select>
               </div>
-              <p className="text-zinc-650 leading-relaxed font-semibold">
-                {responseError.message}
-              </p>
-              {responseError.type === 'CORS_ERROR' && (
-                <div className="pt-2 leading-relaxed text-zinc-500">
-                  🛡 <strong>Why did this happen?</strong> Browser environment fetch security policies (CORS) restrict standard direct client scripts from accessing third-party API hosts unless they respond with wildcard access headers (`Access-Control-Allow-Origin: *`). The request will compile and succeed cleanly when executed inside server clients (like Postman or raw CLI cURL).
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Disclaimers & Security sandbox policy */}
-      <div className="p-5 rounded-3xl bg-zinc-50/40 dark:bg-zinc-900/10 border border-zinc-200 dark:border-zinc-800/85 space-y-4">
-        <h4 className="text-xs font-black text-zinc-900 dark:text-zinc-250 uppercase tracking-wider flex items-center gap-1.5 border-b pb-2 border-zinc-200 dark:border-zinc-800/85">
-          <Shield className="w-4 h-4 text-teal-605" />
-          <span>Local Security Sandbox Controls</span>
-        </h4>
-        <p className="text-xs leading-relaxed text-zinc-550 dark:text-zinc-405">
-          🔒 <strong>SSRF Protection Shield:</strong> Requests pointing to local networks or cloud metadata directories (e.g. `localhost`, `127.0.0.1`, or `169.254.169.254`) are blocked before leaving the browser environment. No credentials or payload parameters are stored on third-party servers. All request history checkpoints reside locally inside your browser's private storage registry.
-        </p>
-      </div>
-
-      {/* Educational FAQ block */}
-      <div className="pt-6 border-t space-y-6">
-        <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider">REST API Testing Guide</h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-zinc-550 dark:text-zinc-450 leading-relaxed font-medium">
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-bold text-zinc-805 dark:text-white mb-1">What is an Online API Tester?</h4>
-              <p>An API tester is a utility allowing developers and QA engineers to send HTTP request configurations (GET, POST, PUT, DELETE, PATCH, etc.) to target backend servers and verify response payloads, headers, status codes, and connection latency metrics directly from the browser window.</p>
-            </div>
-            <div>
-              <h4 className="font-bold text-zinc-805 dark:text-white mb-1">Why does CORS block some API calls in the browser?</h4>
-              <p>Cross-Origin Resource Sharing (CORS) is a security guardrail built into modern browsers. If a target backend endpoint does not send appropriate headers allowing requests from your domain origin, the browser prevents reading the payload. Developers verify blocked APIs by copying cURL codes or executing them via CLI terminals.</p>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-bold text-zinc-805 dark:text-white mb-1">How do environment variables help?</h4>
-              <p>Variables let you customize API endpoints without rewriting paths manually. Use braces such as `{"{{baseUrl}}"}` inside query inputs or URL bars, and switch staging databases (Development, Staging, Production) to swap values instantly.</p>
+          {/* REQUEST HEADER BREADCRUMBS & ACTIONS */}
+          <div className="flex items-center justify-between text-xs pt-0.5">
+            <div className="flex items-center gap-2 text-zinc-500 dark:text-slate-400 font-mono text-[11px]">
+              <span className="px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-teal-500/10 text-indigo-700 dark:text-teal-400 font-bold border border-indigo-200 dark:border-teal-500/20 shadow-2xs">
+                HTTP
+              </span>
+              <span className="font-bold text-zinc-800 dark:text-slate-200">
+                {currentEnv ? `${currentEnv} > ` : ''}{activeTab.name}
+              </span>
             </div>
-            <div>
-              <h4 className="font-bold text-zinc-805 dark:text-white mb-1">Are authorization keys secure?</h4>
-              <p>Yes. All Bearer authentication strings, basic authentication passwords, and API key header values are saved exclusively in your browser session's local cache sandbox. No credentials leave your device.</p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleSaveActiveToCollection}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 dark:bg-slate-800 dark:hover:bg-slate-700 text-zinc-700 dark:text-slate-300 dark:hover:text-white transition text-xs font-bold shadow-2xs cursor-pointer"
+              >
+                <Save className="w-3.5 h-3.5" /> Save
+              </button>
+              <button
+                onClick={() => handleCopy(generateCurlCommand(), 'curl')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200/80 dark:bg-slate-800 dark:hover:bg-slate-700 text-zinc-700 dark:text-slate-300 dark:hover:text-white transition text-xs font-bold shadow-2xs cursor-pointer"
+                title="Export and copy cURL snippet"
+              >
+                {copiedKey === 'curl' ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Copied cURL
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-3.5 h-3.5" /> Share cURL
+                  </>
+                )}
+              </button>
             </div>
+          </div>
+
+          {/* URL & SEND ACTION BAR */}
+          <div className="flex flex-col sm:flex-row gap-2.5">
+            {/* Method Picker */}
+            <select
+              value={activeTab.method}
+              onChange={(e) => updateActiveTab({ method: e.target.value })}
+              className="p-2.5 px-3.5 bg-zinc-100/80 dark:bg-[#0a0e19] border border-zinc-200/90 dark:border-slate-800 rounded-xl text-xs font-mono font-black text-amber-600 dark:text-amber-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition cursor-pointer shadow-2xs"
+            >
+              {['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'].map((m) => (
+                <option key={m} value={m} className="bg-white dark:bg-slate-900 text-zinc-900 dark:text-white font-bold">
+                  {m}
+                </option>
+              ))}
+            </select>
+
+            {/* URL Input */}
+            <div className="flex-1 relative flex items-center bg-white dark:bg-[#0a0e19] border border-zinc-200/90 dark:border-slate-800 rounded-xl px-3.5 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/10 shadow-2xs transition">
+              <input
+                type="text"
+                value={activeTab.url}
+                onChange={(e) => updateActiveTab({ url: e.target.value })}
+                placeholder="https://api.example.com/v1/resource or {{baseUrl}}/path"
+                className="w-full bg-transparent text-xs font-mono text-zinc-900 dark:text-slate-100 placeholder-zinc-400 dark:placeholder-slate-500 font-bold focus:outline-none py-2.5"
+              />
+            </div>
+
+            {/* SEND BUTTON */}
+            <button
+              onClick={triggerSendRequest}
+              disabled={isSending}
+              className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 dark:from-emerald-500 dark:to-teal-500 text-white rounded-xl text-xs font-black font-mono flex items-center justify-center gap-2 shadow-md shadow-emerald-500/20 active:scale-95 disabled:opacity-50 transition cursor-pointer shrink-0"
+            >
+              {isSending ? (
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              ) : (
+                <Play className="w-4 h-4 fill-white" />
+              )}
+              <span>Send</span>
+            </button>
+          </div>
+
+          {/* REQUEST CONFIGURATION SUB-TABS (Postman/Bruno Style) */}
+          <div className="space-y-3 pt-1">
+            <div className="flex items-center gap-1.5 overflow-x-auto border-b border-zinc-200/80 dark:border-slate-800 pb-1.5 text-xs font-bold text-zinc-500 dark:text-slate-400">
+              {[
+                { id: 'params', label: `Params (${activeTab.queryParams.length})` },
+                { id: 'auth', label: 'Authorization' },
+                { id: 'headers', label: `Headers (${activeTab.headers.filter((h) => h.enabled && h.key).length})` },
+                { id: 'body', label: `Body ${activeTab.bodyType !== 'none' ? `(${activeTab.bodyType})` : ''}` },
+                { id: 'scripts', label: 'Scripts' },
+                { id: 'docs', label: '≡ Docs' },
+                { id: 'settings', label: 'Settings' }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setRequestConfigTab(tab.id as any)}
+                  className={`px-3.5 py-1.5 rounded-xl transition cursor-pointer shrink-0 ${
+                    requestConfigTab === tab.id
+                      ? 'text-indigo-700 dark:text-white bg-indigo-50/80 dark:bg-slate-800/80 font-black border-b-2 border-indigo-600 dark:border-indigo-500 shadow-2xs'
+                      : 'hover:text-zinc-900 dark:hover:text-slate-200 hover:bg-zinc-100/70 dark:hover:bg-slate-800/40'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* TAB CONTENT 1: PARAMS */}
+            {requestConfigTab === 'params' && (
+              <div className="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+                {activeTab.queryParams.map((q, idx) => (
+                  <div key={q.id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={q.enabled}
+                      onChange={(e) => {
+                        const updated = [...activeTab.queryParams];
+                        updated[idx].enabled = e.target.checked;
+                        updateActiveTab({ queryParams: updated });
+                      }}
+                      className="rounded accent-indigo-600 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={q.key}
+                      onChange={(e) => {
+                        const updated = [...activeTab.queryParams];
+                        updated[idx].key = e.target.value;
+                        updateActiveTab({ queryParams: updated });
+                      }}
+                      placeholder="Param Key"
+                      className="w-1/2 p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                    />
+                    <input
+                      type="text"
+                      value={q.value}
+                      onChange={(e) => {
+                        const updated = [...activeTab.queryParams];
+                        updated[idx].value = e.target.value;
+                        updateActiveTab({ queryParams: updated });
+                      }}
+                      placeholder="Value"
+                      className="w-1/2 p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                    />
+                    <button
+                      onClick={() => {
+                        const updated = activeTab.queryParams.filter((_, i) => i !== idx);
+                        updateActiveTab({ queryParams: updated });
+                      }}
+                      className="p-2 text-zinc-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition cursor-pointer"
+                      title="Remove Parameter"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  onClick={() => {
+                    const newP = {
+                      id: `q-${Date.now()}`,
+                      key: '',
+                      value: '',
+                      enabled: true
+                    };
+                    updateActiveTab({ queryParams: [...activeTab.queryParams, newP] });
+                  }}
+                  className="text-xs font-bold text-indigo-600 dark:text-teal-400 hover:underline flex items-center gap-1 pt-1 cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Add Query Parameter
+                </button>
+              </div>
+            )}
+
+            {/* TAB CONTENT 2: HEADERS */}
+            {requestConfigTab === 'headers' && (
+              <div className="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+                {activeTab.headers.map((h, idx) => (
+                  <div key={h.id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={h.enabled}
+                      onChange={(e) => {
+                        const updated = [...activeTab.headers];
+                        updated[idx].enabled = e.target.checked;
+                        updateActiveTab({ headers: updated });
+                      }}
+                      className="rounded accent-indigo-600 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={h.key}
+                      onChange={(e) => {
+                        const updated = [...activeTab.headers];
+                        updated[idx].key = e.target.value;
+                        updateActiveTab({ headers: updated });
+                      }}
+                      placeholder="Header Name (e.g. Authorization)"
+                      className="w-1/2 p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                    />
+                    <input
+                      type="text"
+                      value={h.value}
+                      onChange={(e) => {
+                        const updated = [...activeTab.headers];
+                        updated[idx].value = e.target.value;
+                        updateActiveTab({ headers: updated });
+                      }}
+                      placeholder="Header Value"
+                      className="w-1/2 p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                    />
+                    <button
+                      onClick={() => {
+                        const updated = activeTab.headers.filter((_, i) => i !== idx);
+                        updateActiveTab({ headers: updated });
+                      }}
+                      className="p-2 text-zinc-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition cursor-pointer"
+                      title="Remove Header"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+                <button
+                  onClick={() => {
+                    const newH = {
+                      id: `h-${Date.now()}`,
+                      key: '',
+                      value: '',
+                      enabled: true
+                    };
+                    updateActiveTab({ headers: [...activeTab.headers, newH] });
+                  }}
+                  className="text-xs font-bold text-indigo-600 dark:text-teal-400 hover:underline flex items-center gap-1 pt-1 cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Add Header
+                </button>
+              </div>
+            )}
+
+            {/* TAB CONTENT 3: MULTI-FORMAT BODY */}
+            {requestConfigTab === 'body' && (
+              <div className="space-y-3.5">
+                {/* Body Type Selection Pills */}
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200/80 dark:border-slate-800 pb-2.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {[
+                      { id: 'none', label: 'none' },
+                      { id: 'json', label: 'JSON' },
+                      { id: 'form-data', label: 'form-data' },
+                      { id: 'urlencoded', label: 'x-www-form-urlencoded' },
+                      { id: 'raw', label: 'raw' },
+                      { id: 'graphql', label: 'GraphQL' }
+                    ].map((bt) => (
+                      <button
+                        key={bt.id}
+                        onClick={() => updateActiveTab({ bodyType: bt.id as any })}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                          activeTab.bodyType === bt.id
+                            ? 'bg-indigo-600 text-white shadow-xs'
+                            : 'bg-zinc-100 dark:bg-slate-800 text-zinc-600 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white'
+                        }`}
+                      >
+                        {bt.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Format-Specific Quick Actions */}
+                  {activeTab.bodyType === 'json' && (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          try {
+                            const parsed = JSON.parse(activeTab.bodyJson || '{}');
+                            updateActiveTab({ bodyJson: JSON.stringify(parsed, null, 2) });
+                          } catch {
+                            alert('Invalid JSON structure to format.');
+                          }
+                        }}
+                        className="px-2.5 py-1 text-[11px] font-bold text-indigo-600 dark:text-teal-400 bg-indigo-50 dark:bg-teal-500/10 hover:bg-indigo-100 dark:hover:bg-teal-500/20 rounded-lg border border-indigo-200 dark:border-teal-500/30 transition cursor-pointer"
+                      >
+                        Beautify JSON
+                      </button>
+                      <button
+                        onClick={() => {
+                          try {
+                            const parsed = JSON.parse(activeTab.bodyJson || '{}');
+                            updateActiveTab({ bodyJson: JSON.stringify(parsed) });
+                          } catch {
+                            alert('Invalid JSON structure to minify.');
+                          }
+                        }}
+                        className="px-2.5 py-1 text-[11px] font-bold text-zinc-600 dark:text-slate-300 bg-zinc-100 dark:bg-slate-800 hover:bg-zinc-200 dark:hover:bg-slate-700 rounded-lg transition cursor-pointer"
+                      >
+                        Minify
+                      </button>
+                    </div>
+                  )}
+
+                  {activeTab.bodyType === 'raw' && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-500 dark:text-slate-400 font-bold">Type:</span>
+                      <select
+                        value={activeTab.bodyRawFormat}
+                        onChange={(e) => updateActiveTab({ bodyRawFormat: e.target.value as any })}
+                        className="p-1.5 bg-zinc-100 dark:bg-slate-800 border border-zinc-200 dark:border-slate-700 rounded-lg text-xs font-bold text-zinc-800 dark:text-slate-200 cursor-pointer"
+                      >
+                        <option value="json">JSON (application/json)</option>
+                        <option value="text">Text (text/plain)</option>
+                        <option value="xml">XML (application/xml)</option>
+                        <option value="html">HTML (text/html)</option>
+                        <option value="javascript">JavaScript (application/javascript)</option>
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                {/* 1. BODY TYPE: NONE */}
+                {activeTab.bodyType === 'none' && (
+                  <div className="p-8 bg-zinc-50/80 dark:bg-[#090d17] border border-dashed border-zinc-200 dark:border-slate-800/80 rounded-2xl text-center space-y-2 text-xs text-zinc-500 dark:text-slate-400 font-mono">
+                    <div className="w-10 h-10 mx-auto rounded-xl bg-zinc-200/80 dark:bg-slate-800/60 flex items-center justify-center text-zinc-400 dark:text-slate-500">
+                      <FileText className="w-4 h-4" />
+                    </div>
+                    <div className="text-xs font-bold text-zinc-800 dark:text-slate-300">This request does not have a body</div>
+                    <div className="text-[11px] text-zinc-500 dark:text-slate-500">
+                      Select one of the payload formats above (<strong>JSON</strong>, <strong>form-data</strong>, <strong>x-www-form-urlencoded</strong>, <strong>raw</strong>, or <strong>GraphQL</strong>) to add request data.
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. BODY TYPE: JSON */}
+                {activeTab.bodyType === 'json' && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-[11px] text-zinc-500 dark:text-slate-400">
+                      <span className="font-mono">application/json</span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => updateActiveTab({ bodyJson: '{\n  "name": "John Doe",\n  "email": "john@example.com",\n  "status": "active"\n}' })}
+                          className="text-xs font-bold text-indigo-600 dark:text-teal-400 hover:underline cursor-pointer"
+                        >
+                          + Insert Sample Object
+                        </button>
+                      </div>
+                    </div>
+                    {renderLineNumberedCode(activeTab.bodyJson, (val) => updateActiveTab({ bodyJson: val }), '{\n  "key": "value"\n}')}
+                  </div>
+                )}
+
+                {/* 3. BODY TYPE: FORM-DATA (MULTIPART) */}
+                {activeTab.bodyType === 'form-data' && (
+                  <div className="space-y-2.5">
+                    <div className="text-[11px] text-zinc-500 dark:text-slate-400 flex items-center justify-between">
+                      <span className="font-mono">multipart/form-data key-value pairs</span>
+                      <span className="text-[10px] text-zinc-400">Boundary will be generated automatically</span>
+                    </div>
+
+                    <div className="space-y-2 max-h-[260px] overflow-y-auto pr-1">
+                      {activeTab.bodyFormData.map((item, idx) => (
+                        <div key={item.id} className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={item.enabled}
+                            onChange={(e) => {
+                              const updated = [...activeTab.bodyFormData];
+                              updated[idx].enabled = e.target.checked;
+                              updateActiveTab({ bodyFormData: updated });
+                            }}
+                            className="rounded accent-indigo-600 cursor-pointer"
+                          />
+                          <input
+                            type="text"
+                            value={item.key}
+                            onChange={(e) => {
+                              const updated = [...activeTab.bodyFormData];
+                              updated[idx].key = e.target.value;
+                              updateActiveTab({ bodyFormData: updated });
+                            }}
+                            placeholder="Field Key"
+                            className="w-1/2 p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                          />
+                          <input
+                            type="text"
+                            value={item.value}
+                            onChange={(e) => {
+                              const updated = [...activeTab.bodyFormData];
+                              updated[idx].value = e.target.value;
+                              updateActiveTab({ bodyFormData: updated });
+                            }}
+                            placeholder="Field Value"
+                            className="w-1/2 p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                          />
+                          <span className="text-[10px] font-mono px-2 py-1 rounded bg-zinc-200/60 dark:bg-slate-800 text-zinc-600 dark:text-slate-400 shrink-0">
+                            Text
+                          </span>
+                          <button
+                            onClick={() => {
+                              const updated = activeTab.bodyFormData.filter((_, i) => i !== idx);
+                              updateActiveTab({ bodyFormData: updated });
+                            }}
+                            className="p-2 text-zinc-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition cursor-pointer"
+                            title="Remove Field"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        const newF = {
+                          id: `fd-${Date.now()}`,
+                          key: '',
+                          value: '',
+                          enabled: true
+                        };
+                        updateActiveTab({ bodyFormData: [...activeTab.bodyFormData, newF] });
+                      }}
+                      className="text-xs font-bold text-indigo-600 dark:text-teal-400 hover:underline flex items-center gap-1 pt-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" /> Add Form Field
+                    </button>
+                  </div>
+                )}
+
+                {/* 4. BODY TYPE: URLENCODED */}
+                {activeTab.bodyType === 'urlencoded' && (
+                  <div className="space-y-2.5">
+                    <div className="text-[11px] text-zinc-500 dark:text-slate-400 flex items-center justify-between">
+                      <span className="font-mono">application/x-www-form-urlencoded</span>
+                      <span className="text-[10px] text-zinc-400">URI-encoded format</span>
+                    </div>
+
+                    <div className="space-y-2 max-h-[260px] overflow-y-auto pr-1">
+                      {activeTab.bodyUrlEncoded.map((item, idx) => (
+                        <div key={item.id} className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={item.enabled}
+                            onChange={(e) => {
+                              const updated = [...activeTab.bodyUrlEncoded];
+                              updated[idx].enabled = e.target.checked;
+                              updateActiveTab({ bodyUrlEncoded: updated });
+                            }}
+                            className="rounded accent-indigo-600 cursor-pointer"
+                          />
+                          <input
+                            type="text"
+                            value={item.key}
+                            onChange={(e) => {
+                              const updated = [...activeTab.bodyUrlEncoded];
+                              updated[idx].key = e.target.value;
+                              updateActiveTab({ bodyUrlEncoded: updated });
+                            }}
+                            placeholder="Parameter Name"
+                            className="w-1/2 p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                          />
+                          <input
+                            type="text"
+                            value={item.value}
+                            onChange={(e) => {
+                              const updated = [...activeTab.bodyUrlEncoded];
+                              updated[idx].value = e.target.value;
+                              updateActiveTab({ bodyUrlEncoded: updated });
+                            }}
+                            placeholder="Value"
+                            className="w-1/2 p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 placeholder-zinc-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                          />
+                          <button
+                            onClick={() => {
+                              const updated = activeTab.bodyUrlEncoded.filter((_, i) => i !== idx);
+                              updateActiveTab({ bodyUrlEncoded: updated });
+                            }}
+                            className="p-2 text-zinc-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition cursor-pointer"
+                            title="Remove Parameter"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        const newU = {
+                          id: `ue-${Date.now()}`,
+                          key: '',
+                          value: '',
+                          enabled: true
+                        };
+                        updateActiveTab({ bodyUrlEncoded: [...activeTab.bodyUrlEncoded, newU] });
+                      }}
+                      className="text-xs font-bold text-indigo-600 dark:text-teal-400 hover:underline flex items-center gap-1 pt-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" /> Add URL-Encoded Parameter
+                    </button>
+                  </div>
+                )}
+
+                {/* 5. BODY TYPE: RAW */}
+                {activeTab.bodyType === 'raw' && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-[11px] text-zinc-500 dark:text-slate-400 font-mono">
+                      <span>Raw payload format: {activeTab.bodyRawFormat}</span>
+                      {activeTab.bodyRawFormat === 'xml' && (
+                        <button
+                          onClick={() => updateActiveTab({ bodyRaw: '<?xml version="1.0" encoding="UTF-8"?>\n<note>\n  <to>Developer</to>\n  <from>Toolique</from>\n  <heading>API Studio</heading>\n  <body>Testing raw XML payload</body>\n</note>' })}
+                          className="text-xs font-bold text-indigo-600 dark:text-teal-400 hover:underline cursor-pointer"
+                        >
+                          + Insert Sample XML
+                        </button>
+                      )}
+                    </div>
+                    {renderLineNumberedCode(activeTab.bodyRaw, (val) => updateActiveTab({ bodyRaw: val }), `Enter ${activeTab.bodyRawFormat} payload...`)}
+                  </div>
+                )}
+
+                {/* 6. BODY TYPE: GRAPHQL */}
+                {activeTab.bodyType === 'graphql' && (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between border-b border-zinc-200/80 dark:border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setGraphqlSubTab('query')}
+                          className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                            graphqlSubTab === 'query'
+                              ? 'bg-indigo-50 dark:bg-[#231e3d] text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30'
+                              : 'text-zinc-600 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white'
+                          }`}
+                        >
+                          GraphQL Query
+                        </button>
+                        <button
+                          onClick={() => setGraphqlSubTab('variables')}
+                          className={`px-3 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                            graphqlSubTab === 'variables'
+                              ? 'bg-indigo-50 dark:bg-[#231e3d] text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30'
+                              : 'text-zinc-600 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white'
+                          }`}
+                        >
+                          GraphQL Variables
+                        </button>
+                      </div>
+
+                      {graphqlSubTab === 'query' && (
+                        <button
+                          onClick={() => updateActiveTab({ bodyGraphQLQuery: 'query GetUserData($limit: Int) {\n  users(limit: $limit) {\n    id\n    name\n    email\n    role\n  }\n}' })}
+                          className="text-[11px] font-bold text-indigo-600 dark:text-teal-400 hover:underline cursor-pointer"
+                        >
+                          + Insert Sample Query
+                        </button>
+                      )}
+                    </div>
+
+                    {graphqlSubTab === 'query' ? (
+                      renderLineNumberedCode(
+                        activeTab.bodyGraphQLQuery,
+                        (val) => updateActiveTab({ bodyGraphQLQuery: val }),
+                        'query {\n  # Enter GraphQL query here\n}'
+                      )
+                    ) : (
+                      renderLineNumberedCode(
+                        activeTab.bodyGraphQLVars,
+                        (val) => updateActiveTab({ bodyGraphQLVars: val }),
+                        '{\n  # Enter GraphQL variables as JSON\n}'
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT 4: AUTH */}
+            {requestConfigTab === 'auth' && (
+              <div className="space-y-3.5 text-xs">
+                <div className="flex items-center gap-3">
+                  <label className="font-bold text-zinc-600 dark:text-slate-400">Auth Type:</label>
+                  <select
+                    value={activeTab.authType}
+                    onChange={(e) => updateActiveTab({ authType: e.target.value as any })}
+                    className="p-2 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-bold text-zinc-900 dark:text-slate-200 cursor-pointer"
+                  >
+                    <option value="none">No Auth</option>
+                    <option value="bearer">Bearer Token</option>
+                    <option value="basic">Basic Auth</option>
+                    <option value="apikey">API Key</option>
+                  </select>
+                </div>
+                {activeTab.authType === 'bearer' && (
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-zinc-600 dark:text-slate-400">Bearer Token:</label>
+                    <input
+                      type="text"
+                      value={activeTab.authBearer}
+                      onChange={(e) => updateActiveTab({ authBearer: e.target.value })}
+                      placeholder="{{token}} or token string"
+                      className="w-full p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
+                    />
+                  </div>
+                )}
+                {activeTab.authType === 'basic' && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold text-zinc-600 dark:text-slate-400 block">Username:</label>
+                      <input
+                        type="text"
+                        value={activeTab.authBasicUser}
+                        onChange={(e) => updateActiveTab({ authBasicUser: e.target.value })}
+                        placeholder="Username"
+                        className="w-full p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold text-zinc-600 dark:text-slate-400 block">Password:</label>
+                      <input
+                        type="password"
+                        value={activeTab.authBasicPass}
+                        onChange={(e) => updateActiveTab({ authBasicPass: e.target.value })}
+                        placeholder="Password"
+                        className="w-full p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+                )}
+                {activeTab.authType === 'apikey' && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold text-zinc-600 dark:text-slate-400 block">Key Name:</label>
+                      <input
+                        type="text"
+                        value={activeTab.authApiKeyName}
+                        onChange={(e) => updateActiveTab({ authApiKeyName: e.target.value })}
+                        placeholder="X-API-Key"
+                        className="w-full p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-bold text-zinc-600 dark:text-slate-400 block">Key Value:</label>
+                      <input
+                        type="text"
+                        value={activeTab.authApiKeyValue}
+                        onChange={(e) => updateActiveTab({ authApiKeyValue: e.target.value })}
+                        placeholder="api_key_value"
+                        className="w-full p-2.5 bg-zinc-50 dark:bg-[#090d17] border border-zinc-200 dark:border-slate-800 rounded-xl text-xs font-mono text-zinc-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB CONTENT 5: SCRIPTS */}
+            {requestConfigTab === 'scripts' && (
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-start">
+                <div className="md:col-span-3 space-y-1.5 text-xs font-bold">
+                  <button
+                    onClick={() => setScriptSubTab('before')}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl flex items-center justify-between transition cursor-pointer ${
+                      scriptSubTab === 'before'
+                        ? 'bg-indigo-50 dark:bg-[#231e3d] text-indigo-700 dark:text-indigo-300 font-black border border-indigo-200 dark:border-indigo-500/30 shadow-2xs'
+                        : 'text-zinc-600 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-slate-200 hover:bg-zinc-100 dark:hover:bg-slate-800/40'
+                    }`}
+                  >
+                    <span>Before request</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  </button>
+                  <button
+                    onClick={() => setScriptSubTab('after')}
+                    className={`w-full text-left px-3.5 py-2.5 rounded-xl flex items-center justify-between transition cursor-pointer ${
+                      scriptSubTab === 'after'
+                        ? 'bg-indigo-50 dark:bg-[#231e3d] text-indigo-700 dark:text-indigo-300 font-black border border-indigo-200 dark:border-indigo-500/30 shadow-2xs'
+                        : 'text-zinc-600 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-slate-200 hover:bg-zinc-100 dark:hover:bg-slate-800/40'
+                    }`}
+                  >
+                    <span>After response</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  </button>
+                </div>
+
+                <div className="md:col-span-9 space-y-2.5">
+                  {scriptSubTab === 'before' &&
+                    renderLineNumberedCode(activeTab.scriptPreRequest, (val) =>
+                      updateActiveTab({ scriptPreRequest: val })
+                    )}
+                  {scriptSubTab === 'after' &&
+                    renderLineNumberedCode(activeTab.scriptPostResponse, (val) =>
+                      updateActiveTab({ scriptPostResponse: val })
+                    )}
+
+                  <div className="flex items-center justify-end gap-2 text-xs font-mono">
+                    <button
+                      onClick={() => {
+                        const snippet = `\npm.variables.set("timestamp", Date.now().toString());`;
+                        if (scriptSubTab === 'before') {
+                          updateActiveTab({ scriptPreRequest: (activeTab.scriptPreRequest || '') + snippet });
+                        } else {
+                          updateActiveTab({ scriptPostResponse: (activeTab.scriptPostResponse || '') + snippet });
+                        }
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 text-[11px] font-bold transition shadow-2xs cursor-pointer"
+                    >
+                      &lt;/&gt; Insert Timestamp Snippet
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT 6: DOCS */}
+            {requestConfigTab === 'docs' && (
+              <div className="p-4 bg-zinc-50 dark:bg-[#0a0e19] border border-zinc-200 dark:border-slate-800 rounded-2xl space-y-2 text-xs font-mono">
+                <div className="font-bold text-zinc-900 dark:text-slate-200">{activeTab.name} Documentation</div>
+                <div className="text-indigo-600 dark:text-teal-400 font-bold">{activeTab.method} {activeTab.url || 'https://...'}</div>
+                <div className="text-zinc-500 dark:text-slate-400 text-[11px]">
+                  Body Format: <span className="font-bold uppercase text-zinc-700 dark:text-slate-200">{activeTab.bodyType}</span>
+                </div>
+                <pre className="text-[11px] text-zinc-600 dark:text-slate-400 whitespace-pre-wrap">
+                  {`### Request Headers\n${activeTab.headers.map((h) => `- ${h.key}: ${h.value}`).join('\n')}`}
+                </pre>
+              </div>
+            )}
+
+            {/* TAB CONTENT 7: SETTINGS */}
+            {requestConfigTab === 'settings' && (
+              <div className="p-4 bg-zinc-50 dark:bg-[#0a0e19] border border-zinc-200 dark:border-slate-800 rounded-2xl space-y-3 text-xs">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-bold text-zinc-900 dark:text-slate-200">Enable CORS Proxy Relay</div>
+                    <div className="text-[11px] text-zinc-500 dark:text-slate-500">Bypass browser cross-origin restrictions when testing external endpoints</div>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={activeTab.useCorsProxy}
+                    onChange={(e) => updateActiveTab({ useCorsProxy: e.target.checked })}
+                    className="w-4 h-4 rounded accent-indigo-600 cursor-pointer"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 3. RESPONSE VIEWER PANE */}
+          <div className="pt-4 border-t border-zinc-200/80 dark:border-slate-800/90 space-y-3.5">
+            {/* Response Toolbar with Status Badge, Time, and Size */}
+            <div className="flex flex-wrap items-center justify-between gap-2.5 pb-1 text-xs">
+              {/* Left Sub-Tabs */}
+              <div className="flex items-center gap-1.5 font-bold">
+                <button
+                  onClick={() => setResponseViewTab('body')}
+                  className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                    responseViewTab === 'body'
+                      ? 'bg-zinc-200/80 dark:bg-slate-800 text-zinc-900 dark:text-white font-black shadow-2xs'
+                      : 'text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white'
+                  }`}
+                >
+                  Body
+                </button>
+                <button
+                  onClick={() => setResponseViewTab('cookies')}
+                  className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                    responseViewTab === 'cookies'
+                      ? 'bg-zinc-200/80 dark:bg-slate-800 text-zinc-900 dark:text-white font-black shadow-2xs'
+                      : 'text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white'
+                  }`}
+                >
+                  Cookies
+                </button>
+                <button
+                  onClick={() => setResponseViewTab('headers')}
+                  className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                    responseViewTab === 'headers'
+                      ? 'bg-zinc-200/80 dark:bg-slate-800 text-zinc-900 dark:text-white font-black shadow-2xs'
+                      : 'text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white'
+                  }`}
+                >
+                  Headers {responseState?.headers ? `(${Object.keys(responseState.headers).length})` : ''}
+                </button>
+                <button
+                  onClick={() => setResponseViewTab('tests')}
+                  className={`px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer ${
+                    responseViewTab === 'tests'
+                      ? 'bg-zinc-200/80 dark:bg-slate-800 text-zinc-900 dark:text-white font-black shadow-2xs'
+                      : 'text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white'
+                  }`}
+                >
+                  <span>Test Results</span>
+                  {assertionResults.length > 0 && (
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 rounded font-bold">
+                      {assertionResults.filter((a) => a.passed).length}/{assertionResults.length}
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {/* Right Execution Metrics Badges */}
+              {responseState && (
+                <div className="flex items-center gap-2.5 font-mono text-xs">
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full font-black border shadow-2xs ${
+                      responseState.status >= 200 && responseState.status < 300
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/40'
+                        : 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-500/20 dark:text-rose-400 dark:border-rose-500/40'
+                    }`}
+                  >
+                    {responseState.status} {responseState.statusText}
+                  </span>
+                  <span className="text-zinc-500 dark:text-slate-400 font-bold">• {responseState.time} ms</span>
+                  <span className="text-zinc-500 dark:text-slate-400 font-bold">• {responseState.size}</span>
+                  <button
+                    onClick={() => handleCopy(responseState.text || '', 'response')}
+                    className="p-1 text-zinc-400 hover:text-zinc-900 dark:text-slate-400 dark:hover:text-white rounded transition cursor-pointer"
+                    title="Copy Response"
+                  >
+                    {copiedKey === 'response' ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* RESPONSE CONTENT BODY */}
+            {responseViewTab === 'body' && (
+              responseState ? (
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between text-[11px] font-mono">
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => setResponseFormat('json')}
+                        className={`px-2.5 py-1 rounded-lg transition cursor-pointer ${
+                          responseFormat === 'json'
+                            ? 'bg-indigo-50 dark:bg-[#231e3d] text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-indigo-500/30'
+                            : 'text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white'
+                        }`}
+                      >
+                        {'{ }'} JSON
+                      </button>
+                      <button
+                        onClick={() => setResponseFormat('raw')}
+                        className={`px-2.5 py-1 rounded-lg transition cursor-pointer ${
+                          responseFormat === 'raw'
+                            ? 'bg-indigo-50 dark:bg-[#231e3d] text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-indigo-500/30'
+                            : 'text-zinc-500 dark:text-slate-400 hover:text-zinc-900 dark:hover:text-white'
+                        }`}
+                      >
+                        Raw
+                      </button>
+                    </div>
+                  </div>
+
+                  {renderLineNumberedCode(responseState.text || JSON.stringify(responseState.json, null, 2))}
+                </div>
+              ) : (
+                <div className="p-8 bg-zinc-50/80 dark:bg-[#090d17] border border-dashed border-zinc-200 dark:border-slate-800/80 rounded-2xl text-center space-y-2.5 text-zinc-500 dark:text-slate-400 font-mono">
+                  <div className="w-10 h-10 mx-auto rounded-xl bg-zinc-200/80 dark:bg-slate-800/60 flex items-center justify-center text-indigo-600 dark:text-teal-400">
+                    <Play className="w-4 h-4 fill-indigo-600 dark:fill-teal-400" />
+                  </div>
+                  <div className="text-xs font-bold text-zinc-800 dark:text-slate-300">Ready to Send Request</div>
+                  <div className="text-[11px] text-zinc-500 dark:text-slate-500">
+                    Enter your endpoint URL above and click <strong>Send</strong> to inspect live response payloads.
+                  </div>
+                </div>
+              )
+            )}
+
+            {/* RESPONSE CONTENT TESTS */}
+            {responseViewTab === 'tests' && (
+              <div className="space-y-2 p-4 bg-zinc-50 dark:bg-[#0a0e19] border border-zinc-200 dark:border-slate-800 rounded-2xl font-mono text-xs">
+                {assertionResults.length === 0 ? (
+                  <div className="text-center py-4 text-zinc-400 dark:text-slate-500 text-xs italic">
+                    No assertions executed. Add test assertions in the Scripts or Params tab.
+                  </div>
+                ) : (
+                  assertionResults.map((test, i) => (
+                    <div key={i} className="flex items-center gap-2 py-1.5 border-b border-zinc-200/60 dark:border-slate-800/60 last:border-0">
+                      {test.passed ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                      ) : (
+                        <XCircle className="w-4 h-4 text-rose-500 shrink-0" />
+                      )}
+                      <span className={test.passed ? 'text-zinc-800 dark:text-slate-200 font-bold' : 'text-rose-600 dark:text-rose-400 font-bold'}>
+                        {test.name}
+                      </span>
+                      <span className="text-[10px] text-zinc-400 dark:text-slate-500 ml-auto">
+                        {test.passed ? 'PASS' : 'FAIL'}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+
+            {/* RESPONSE CONTENT HEADERS */}
+            {responseViewTab === 'headers' && responseState && (
+              <div className="space-y-1 p-4 bg-zinc-50 dark:bg-[#0a0e19] border border-zinc-200 dark:border-slate-800 rounded-2xl font-mono text-xs max-h-[220px] overflow-y-auto">
+                {Object.entries(responseState.headers || {}).map(([k, v]) => (
+                  <div key={k} className="flex justify-between py-1.5 border-b border-zinc-200/50 dark:border-slate-800/40 text-[11px]">
+                    <span className="text-indigo-600 dark:text-teal-400 font-bold">{k}:</span>
+                    <span className="text-zinc-700 dark:text-slate-300 truncate max-w-md">{String(v)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* RESPONSE CONTENT COOKIES */}
+            {responseViewTab === 'cookies' && (
+              <div className="p-6 bg-zinc-50 dark:bg-[#0a0e19] border border-zinc-200 dark:border-slate-800 rounded-2xl text-xs text-zinc-500 dark:text-slate-400 text-center font-mono">
+                No response cookies captured for this request.
+              </div>
+            )}
           </div>
         </div>
       </div>

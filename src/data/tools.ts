@@ -1641,11 +1641,11 @@ export const toolsList: Tool[] = [
   {
     id: 'ApiTester',
     slug: 'api-tester',
-    name: 'REST API Client & HTTP Request Tester',
+    name: 'REST API Client & HTTP Request Studio',
     category: 'developer',
-    shortDescription: 'Test REST API endpoints, inspect responses, build HTTP assertions, and export code snippets.',
-    metaTitle: 'Free Online API Tester — REST API Client, HTTP Request Builder & API Debugger | Toolique',
-    metaDescription: 'Send HTTP requests (GET, POST, PUT, DELETE), configure headers and query params, write testing assertions, validate JSON schema responses, and export python/curl snippets.',
+    shortDescription: 'Multi-tab REST API studio to test HTTP endpoints, decode JWT tokens, inspect JSON tables, build assertions, and export polyglot code.',
+    metaTitle: 'Free Online API Tester — REST API Client, HTTP Request Builder & Studio | Toolique',
+    metaDescription: 'Send HTTP requests (GET, POST, PUT, DELETE), inspect JSON tables and decoded JWTs, bypass CORS with relay proxy, run test assertions, and export code snippets.',
     keywords: [
       'api tester',
       'online api tester',
@@ -1657,50 +1657,52 @@ export const toolsList: Tool[] = [
       'api debugger',
       'json api tester',
       'free api tester',
-      'postman alternative'
+      'postman alternative',
+      'jwt decoder api tester',
+      'curl to python requests'
     ],
     icon: 'Terminal',
     howToUse: [
-      'Enter the target request URL, select HTTP methods, and configure authorization.',
-      'Add custom headers, query params, or JSON body payloads.',
-      'Click Send (or Ctrl + Enter) to fire the request directly in your browser.',
-      'Audit status code, response times, size metrics, headers, and collapsible pretty JSON output.',
-      'Export code snippets to cURL / Python, generate JSON Schema models, or run automated test assertions.'
+      'Create or switch between multi-tab request sessions and select your HTTP method (GET, POST, PUT, DELETE, PATCH).',
+      'Enter the target endpoint or use environment variables (e.g. {{baseUrl}}).',
+      'Configure Headers, Query Params, Bearer/Basic/API-Key Auth (with live JWT decoding), and JSON/GraphQL/Form payloads.',
+      'Click Send (or press Ctrl + Enter) and inspect response metrics, interactive JSON Data Tables, decoded JWT claims, and security headers.',
+      'Run automated assertion tests, export Postman Collection v2.1 JSON, and generate code snippets in 10+ languages.'
     ],
     faqs: [
       {
-        question: 'What is an Online API Tester?',
+        question: 'What is an Online API Tester & Studio?',
         answer: 'An API tester is a utility allowing developers and QA engineers to send HTTP request configurations (GET, POST, PUT, DELETE, PATCH, etc.) to target backend servers and verify response payloads, headers, status codes, and connection latency metrics directly from the browser window.'
       },
       {
-        question: 'Why does CORS block some API calls?',
-        answer: 'Cross-Origin Resource Sharing (CORS) is a security guardrail built into modern browsers. If a target backend endpoint does not send appropriate headers allowing requests from your domain origin, the browser prevents reading the payload. Developers verify blocked APIs by copying cURL codes or executing them via CLI terminals.'
+        question: 'How do I bypass CORS blocking when testing public APIs in the browser?',
+        answer: 'Simply check the "CORS Relay Proxy" toggle located right below the URL bar. This routes the request through a secure relay, enabling you to test third-party endpoints that lack browser wildcard CORS headers.'
       },
       {
-        question: 'How do environment variables work?',
-        answer: 'Variables let you customize API endpoints without rewriting paths manually. Use braces such as {{baseUrl}} inside query inputs or URL bars, and switch staging databases (Development, Staging, Production) to swap values instantly.'
+        question: 'How does the JWT Token Inspector work?',
+        answer: 'The studio automatically detects standard JSON Web Tokens (JWT) in Bearer auth headers or response payloads, instantly decoding the Header, Claims (exp, iat, sub, roles), and live expiration validity.'
       },
       {
-        question: 'Are authorization keys secure?',
-        answer: 'Yes. All Bearer authentication strings, basic authentication passwords, and API key header values are saved exclusively in your browser session\'s local cache sandbox. No credentials leave your device.'
+        question: 'Can I export requests to Postman or code snippets?',
+        answer: 'Yes! You can export your entire multi-tab session into a standard Postman Collection v2.1 JSON file, or copy ready-to-run code snippets in cURL, JavaScript (Fetch/Axios), Python (Requests), Go, PHP, C#, Swift, Rust, and Dart.'
       }
     ],
     sections: [
       {
-        title: 'What is a REST API Client & HTTP Request Builder?',
-        content: 'An HTTP Request Builder allows developers to construct backend requests by choosing HTTP verbs (GET, POST, PUT, DELETE, etc.), mapping headers, appending query parameters, and embedding body payloads. This is essential for testing microservices and third-party APIs during development.'
+        title: 'What is a REST API Client & HTTP Request Studio?',
+        content: 'An HTTP Request Studio allows developers to construct backend requests by choosing HTTP verbs (GET, POST, PUT, DELETE, etc.), mapping headers, appending query parameters, and embedding body payloads. This is essential for testing microservices, GraphQL endpoints, and third-party APIs during development.'
       },
       {
-        title: 'Browser Security Restrictions: Troubleshooting CORS Blocks',
-        content: 'Browser-based clients are subject to CORS restrictions. If the target API doesn\'t return the header `Access-Control-Allow-Origin: *` or explicitly permit the origin, the browser will restrict access. In such cases, developers can export equivalent cURL commands to execute them safely in external environments.'
+        title: 'Browser Security Restrictions & CORS Relay Handling',
+        content: 'Browser-based clients are subject to CORS restrictions. If the target API doesn\'t return the header `Access-Control-Allow-Origin: *` or explicitly permit the origin, the browser will restrict access. Toolique provides an integrated CORS Relay Proxy toggle as well as 1-click cURL export to test any endpoint seamlessly.'
       },
       {
         title: 'Automating Verification checks with Assertions Lab',
-        content: 'Assertions permit you to declare checks (e.g. status code equals 200, response latency under 1000ms) that run automatically upon response arrival, accelerating regression testing and QA sanity validations.'
+        content: 'Assertions permit you to declare checks (e.g. status code equals 200, response latency under 1000ms, JSON property matching) that run automatically upon response arrival, accelerating regression testing and QA sanity validations.'
       },
       {
-        title: 'Converting Responses to JSON Schema Models',
-        content: 'Quickly convert raw JSON response payloads into formal JSON Schema specifications, TypeScript interfaces, and Python structures. This facilitates contract testing and client integration mapping.'
+        title: 'Converting Responses to JSON Tables and Schema Models',
+        content: 'Quickly convert raw JSON array responses into interactive searchable Data Tables, and generate formal JSON Schema specifications (Draft-07), OpenAPI 3.0 definitions, and Markdown documentation.'
       }
     ]
   },
