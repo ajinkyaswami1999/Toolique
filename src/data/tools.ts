@@ -1639,6 +1639,102 @@ export const toolsList: Tool[] = [
     ]
   },
   {
+    id: 'WhatsMyIP',
+    slug: 'whats-my-ip',
+    name: "What's My IP Address",
+    category: 'developer',
+    shortDescription: 'Instantly check your public IPv4 and IPv6 address, network ISP, ASN organization, approximate geolocation, and connection latency with zero tracking.',
+    metaTitle: "What's My IP Address – Free Public IP, ISP & Geolocation Lookup | Toolique",
+    metaDescription: 'Find your public IPv4 & IPv6 address, Internet Service Provider (ISP), Autonomous System Number (ASN), country, city, timezone, and network latency instantly. 100% private, client-side, and free.',
+    keywords: [
+      "whats my ip",
+      "what is my ip",
+      "my ip address",
+      "ip address lookup",
+      "find my ip",
+      "public ip address",
+      "ipv4 lookup",
+      "ipv6 lookup",
+      "isp lookup",
+      "asn lookup",
+      "ip geolocation",
+      "check my ip",
+      "show my ip",
+      "ip location finder",
+      "whois ip",
+      "my ip location",
+      "what is my public ip",
+      "ip info",
+      "ip checker online",
+      "whats my ipv6",
+      "cgnat checker"
+    ],
+    icon: 'Globe',
+    howToUse: [
+      'Open the tool to automatically detect your public IPv4 and IPv6 addresses, ISP, ASN, and approximate location in milliseconds.',
+      'Click "Copy IP" to copy your active public IP address to clipboard, or "Copy All Details" to copy a structured text manifest.',
+      'Check dual-stack connectivity by reviewing the live IPv4, IPv6 badges, and round-trip ping latency.',
+      'Use the Custom IP & Domain Lookup search bar to inspect any external IPv4, IPv6, or domain hostname (e.g., 1.1.1.1 or 8.8.8.8).',
+      'Inspect the IP classification card (Public, RFC 1918 Private, CGNAT, Loopback) to verify subnet architecture and NAT configurations.'
+    ],
+    faqs: [
+      {
+        question: 'What is a public IP address?',
+        answer: 'A public IP address is a globally unique numerical identifier assigned to your internet router or modem by your Internet Service Provider (ISP). It is the address visible to external websites, APIs, and online servers when your device communicates over the public internet.'
+      },
+      {
+        question: 'What is the difference between IPv4 and IPv6?',
+        answer: 'IPv4 uses 32-bit addresses formatted as four decimal numbers separated by dots (e.g., 192.0.2.1), providing approximately 4.3 billion unique addresses. IPv6 uses 128-bit addresses formatted as eight hexadecimal groups separated by colons (e.g., 2001:db8::1), providing 340 undecillion addresses to solve IPv4 exhaustion.'
+      },
+      {
+        question: 'How is IP geolocation determined and is it 100% exact?',
+        answer: 'IP geolocation maps IP allocations to geographic locations using regional Internet registries (RIRs like ARIN, RIPE, APNIC) and ISP infrastructure nodes. It typically identifies your country, state/region, and city with high accuracy, but does NOT reveal your physical street address or exact room location.'
+      },
+      {
+        question: 'What is an ASN (Autonomous System Number) and ISP?',
+        answer: 'An Internet Service Provider (ISP) is the company providing your internet access (e.g., Airtel, Jio, Comcast, Vodafone). An Autonomous System Number (ASN) is a globally unique identifier assigned to a network routing domain controlled by an organization or ISP using Border Gateway Protocol (BGP).'
+      },
+      {
+        question: 'What is Carrier-Grade NAT (CGNAT / RFC 6598)?',
+        answer: 'Carrier-Grade NAT is a technology used by ISPs where multiple residential or mobile broadband customers share a single public IPv4 address. If your router’s WAN IP is in the 100.64.0.0/10 range, your ISP is using CGNAT, which can prevent direct inbound port forwarding.'
+      },
+      {
+        question: 'Does my IP address reveal my identity or physical address?',
+        answer: 'No. An IP address only identifies the routing node of your ISP. It does not contain your name, email, street address, or phone number. Only your ISP can legally correlate an IP address with a subscriber account under lawful court subpoena.'
+      },
+      {
+        question: 'How can I change or hide my public IP address?',
+        answer: 'You can mask or change your public IP address by connecting through a Virtual Private Network (VPN), using an encrypted proxy (Tor/SOCKS5), or restarting your home router if your ISP assigns dynamic IP addresses via DHCP.'
+      },
+      {
+        question: 'Does Toolique store, log, or track my IP address?',
+        answer: 'No. Toolique is built on a strict privacy-first architecture. All IP queries are performed directly inside your client browser via HTTPS. Toolique servers do not log, persist, or monitor your IP addresses or network activity.'
+      }
+    ],
+    sections: [
+      {
+        title: 'What is an IP Address and How Does Internet Routing Work?',
+        content: 'An Internet Protocol (IP) address serves as the digital postal code for devices connected to the global network. Every data packet sent across the internet contains a source IP (your device) and a destination IP (the target server). Routers along the transmission path inspect these headers and forward packets across interconnected Autonomous Systems (AS) until they reach their destination.'
+      },
+      {
+        title: 'Understanding IPv4 vs. IPv6 Architecture',
+        content: 'As the world ran out of unallocated IPv4 address pools, IPv6 was introduced to provide virtually unlimited addressing capacity, built-in network security (IPsec), simplified packet headers, and elimination of Network Address Translation (NAT) bottlenecks. Modern devices and ISPs often operate in Dual-Stack mode, carrying both IPv4 and IPv6 traffic simultaneously.'
+      },
+      {
+        title: 'How IP Geolocation and ASN Routing Function',
+        content: 'IP Geolocation databases correlate IP address ranges with physical routing facilities, exchange points (IXPs), and ISP regional data centers. While municipal-level accuracy is standard for metropolitan broadband, mobile cellular networks may route traffic through central regional gateways hundreds of kilometers away from your actual physical location.'
+      },
+      {
+        title: 'Public vs. Private IP Address Ranges (RFC 1918)',
+        content: 'Private IP addresses (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) are reserved for local area networks (LANs) and cannot be routed over the public internet. Your home router uses Network Address Translation (NAT) to translate multiple internal private IP devices into a single shared public IP address.'
+      },
+      {
+        title: 'IP Address Privacy, Security, and Protection Best Practices',
+        content: 'Your public IP address allows remote servers to detect your general geographic region and ISP. To safeguard your digital footprint against geo-blocking, DDoS attacks, or network tracking, consider using trusted VPN protocols (WireGuard/OpenVPN), enabling DNS-over-HTTPS (DoH), and verifying dual-stack leak prevention.'
+      }
+    ]
+  },
+  {
     id: 'ApiTester',
     slug: 'api-tester',
     name: 'REST API Client & HTTP Request Studio',
@@ -4446,30 +4542,60 @@ export const toolsList: Tool[] = [
     slug: 'word-counter',
     name: 'Word Counter',
     category: 'text',
-    shortDescription: 'Count words, characters, sentences, paragraphs, and estimate reading/speaking times in real-time.',
-    metaDescription: 'Free online Word Counter. Count characters, words, sentences, paragraphs, and check estimated reading and speaking times instantly in browser.',
-    keywords: ['Word Counter', 'Character Counter', 'Count words online', 'Reading time estimator', 'Text length checker'],
+    shortDescription: 'Count words, characters, sentences, readability scores, and estimate reading/speaking times in real-time.',
+    metaDescription: 'Free online Word Counter & Writing Analytics tool. Check real-time word count, character count, Flesch readability grade, keyword density, and social media limits in your browser.',
+    keywords: [
+      'Word Counter online',
+      'Character Counter with spaces',
+      'Count words and sentences',
+      'Reading time calculator',
+      'Speaking time estimator',
+      'Flesch Reading Ease calculator',
+      'Keyword density analyzer',
+      'Social media character counter',
+      'Case converter online',
+      'Writing goal tracker'
+    ],
     icon: 'Type',
     howToUse: [
-      'Type or paste your text into the input text area.',
-      'Check the real-time statistics panel on the side for words, characters, and sentences.',
-      'Use the case conversion buttons to instantly change text case (UPPERCASE, Title Case, etc.).',
-      'Click the Copy button to copy the updated text to your clipboard.'
+      'Type or paste your text into the editor canvas, or load a sample article (Blog Post, Essay, Social Post).',
+      'Monitor real-time core metrics: word count, characters (with/without spaces), sentences, paragraphs, unique words, and lexical diversity.',
+      'Explore the multi-tab intelligence panel to view Flesch Reading Ease & Grade Level, N-gram keyword density, and speaking time estimates.',
+      'Track character limits across major platforms (X/Twitter, LinkedIn, Instagram, SEO meta tags) with live progress bars.',
+      'Set custom word target goals (e.g. 500-word essay) to track your drafting progress in real-time.',
+      'Use the one-click case transformation buttons (Title Case, UPPERCASE, camelCase, snake_case) and text cleaners.',
+      'Copy your updated text or export a full writing analysis report with one click.'
     ],
     faqs: [
       {
-        question: 'Does this Word Counter count spaces as characters?',
-        answer: 'Yes, it displays both characters with spaces and characters without spaces in the statistics sidebar.'
+        question: 'How are reading and speaking times estimated?',
+        answer: 'Silent reading time is calculated using an average adult reading speed of 225 words per minute (WPM). Speaking/presentation time is estimated at 130 WPM (standard conversational pace), and handwriting time at 20 WPM.'
       },
       {
-        question: 'How is the reading time calculated?',
-        answer: 'It assumes an average adult reading speed of 225 words per minute (WPM).'
+        question: 'What do the readability scores (Flesch Reading Ease and Grade Level) mean?',
+        answer: 'Flesch Reading Ease scores content from 0 to 100, where higher scores (60-70+) indicate easy-to-read language. The Flesch-Kincaid Grade Level and Gunning Fog Index translate structural complexity (sentence length and multi-syllable words) into US school grade levels needed for comprehension.'
+      },
+      {
+        question: 'How does the Keyword Density analyzer work?',
+        answer: 'It extracts 1-word, 2-word (bi-grams), and 3-word (tri-grams) phrases, computes exact occurrence frequencies, and calculates keyword density percentages while allowing you to filter out common English stop words.'
+      },
+      {
+        question: 'Is my written text uploaded or stored on any server?',
+        answer: 'No. The entire analysis and case conversion pipeline runs 100% locally in your web browser. Your private essays, draft articles, and confidential notes never leave your computer.'
+      },
+      {
+        question: 'Does this tool count spaces and punctuation accurately?',
+        answer: 'Yes. It provides simultaneous counts for characters with spaces, characters without spaces, alphanumeric characters, syllables, lines, and paragraphs.'
       }
     ],
     sections: [
       {
-        title: 'Importance of Text Statistics in Writing',
-        content: 'Maintaining specific word counts is crucial for SEO meta descriptions, essays, social posts, and copy writing. Keeping track of reading time ensures your content fits standard attention spans.'
+        title: 'Mastering Content Length & Readability',
+        content: 'Whether writing technical documentation, academic research papers, social media copy, or search-optimized meta descriptions, maintaining strict word counts and optimal readability scores is essential for maximizing reader engagement and search engine visibility.'
+      },
+      {
+        title: '100% In-Browser Writing Intelligence',
+        content: 'Unlike cloud writing assistants that transmit your keystrokes to third-party servers, Toolique calculates all statistics, readability formulas, and keyword matrices entirely in client-side memory with zero network requests.'
       }
     ]
   },

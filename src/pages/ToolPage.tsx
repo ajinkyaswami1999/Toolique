@@ -53,6 +53,7 @@ const WebsiteSeoAudit = lazy(() => import('../tools/WebsiteSeoAudit'));
 const ApiTester = lazy(() => import('../tools/ApiTester'));
 const AdvancedDataCleaner = lazy(() => import('../tools/AdvancedDataCleaner'));
 const WebsiteCrawler = lazy(() => import('../tools/WebsiteCrawler'));
+const WhatsMyIP = lazy(() => import('../tools/WhatsMyIP'));
 
 // Phase 3 - Civil Engineering (9 tools)
 const ConstructionCostCalculator = lazy(() => import('../tools/ConstructionCostCalculator'));
@@ -460,6 +461,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   ApiTester,
   AdvancedDataCleaner,
   WebsiteCrawler,
+  WhatsMyIP,
 
   // Phase 3 - Civil Engineering
   ConstructionCostCalculator,
@@ -686,6 +688,12 @@ const toolComponents: Record<string, React.ComponentType> = {
 };
 
 const crossSuiteSuggestions: Record<string, { text: string; linkText: string; linkUrl: string; label: string }> = {
+  'whats-my-ip': {
+    label: 'API & Network Testing',
+    text: 'Need to test REST HTTP requests or verify connection headers with your IP?',
+    linkText: 'REST API Client & Studio',
+    linkUrl: '/developer/api-tester'
+  },
   'api-tester': {
     label: 'JSON Helper',
     text: 'Working with complex JSON payloads? Prettify, compress, or validate your parameters using the',

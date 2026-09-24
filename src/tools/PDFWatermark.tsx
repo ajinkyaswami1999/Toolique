@@ -13,7 +13,6 @@ import {
   Check,
   Sliders,
   Eye,
-  RefreshCw,
   Copy,
   Trash2,
   Grid,
@@ -823,48 +822,6 @@ export default function PDFWatermark() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 text-left">
-      {/* Top Banner & Quick Actions */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-500/10 via-purple-500/5 to-emerald-500/10 border border-indigo-500/20">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-indigo-600 text-white rounded-xl shadow-sm">
-            <Stamp className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-zinc-900 dark:text-white">PDF Watermark & Security Stamping Studio</span>
-              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
-                100% Client-Side
-              </span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">
-              Stamp text, logos, or tiled security matrices onto your PDF pages with real-time visual WYSIWYG preview.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {!file && (
-            <button
-              onClick={handleLoadSamplePdf}
-              className="px-3.5 py-1.5 rounded-xl bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 text-xs font-bold hover:bg-indigo-50 dark:hover:bg-zinc-700 transition flex items-center gap-1.5 shadow-sm cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Try Sample NDA Document</span>
-            </button>
-          )}
-
-          {file && (
-            <button
-              onClick={handleReset}
-              className="px-3 py-1.5 rounded-xl bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-semibold hover:bg-zinc-300 dark:hover:bg-zinc-700 transition flex items-center gap-1 cursor-pointer"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>New File</span>
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* Upload Dropzone if no file loaded */}
       {!file && (
         <div className="saas-card p-8 text-center border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-400 transition-colors rounded-2xl relative">
@@ -898,6 +855,17 @@ export default function PDFWatermark() {
                 Live Canvas WYSIWYG
               </span>
             </div>
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 relative z-10">
+            <button
+              type="button"
+              onClick={handleLoadSamplePdf}
+              className="px-3.5 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 text-xs font-bold hover:bg-indigo-100 transition inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>⚡ Try Sample NDA Document</span>
+            </button>
           </div>
         </div>
       )}

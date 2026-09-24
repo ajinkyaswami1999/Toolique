@@ -12,7 +12,6 @@ import {
   Check,
   FileSpreadsheet,
   Copy,
-  RefreshCw,
   Eye,
   Sliders,
   Palette,
@@ -683,48 +682,6 @@ export default function ExcelToPDF() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 text-left">
-      {/* Top Banner & Quick Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-indigo-500/10 border border-emerald-500/20">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-600 text-white rounded-xl shadow-sm">
-            <FileSpreadsheet className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-bold text-zinc-900 dark:text-white">Excel & Spreadsheet to PDF Studio</span>
-              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                100% Client-Side
-              </span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">
-              Convert XLSX, XLS, CSV & ODS workbooks to formatted PDF tables with custom themes & pagination.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {!file && (
-            <button
-              onClick={handleLoadSample}
-              className="px-3.5 py-1.5 rounded-xl bg-white dark:bg-zinc-800 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-xs font-bold hover:bg-emerald-50 dark:hover:bg-zinc-700 transition flex items-center gap-1.5 shadow-sm cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Try Financial Model Sample</span>
-            </button>
-          )}
-
-          {file && (
-            <button
-              onClick={handleReset}
-              className="px-3 py-1.5 rounded-xl bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-semibold hover:bg-zinc-300 dark:hover:bg-zinc-700 transition flex items-center gap-1 cursor-pointer"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>New File</span>
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* Upload Dropzone if no file loaded */}
       {!file && (
         <div className="saas-card p-8 text-center border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors rounded-2xl relative">
@@ -758,6 +715,17 @@ export default function ExcelToPDF() {
                 Custom Styling & Auto-Wrap
               </span>
             </div>
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 relative z-10">
+            <button
+              type="button"
+              onClick={handleLoadSample}
+              className="px-3.5 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 text-xs font-bold hover:bg-emerald-100 transition inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>⚡ Try Financial Model Sample</span>
+            </button>
           </div>
         </div>
       )}

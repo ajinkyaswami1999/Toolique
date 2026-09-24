@@ -35,8 +35,8 @@ export default function DeveloperHub() {
     'json-formatter', 'json-compare', 'json-validator', 'xml-formatter', 
     'yaml-formatter', 'html-formatter', 'sql-formatter', 'sql-minifier', 
     'css-formatter', 'js-formatter',
-    // API & Auth
-    'api-tester', 'jwt-decoder', 'url-encoder-decoder', 'base64-encoder-decoder', 
+    // API & Auth & Network
+    'whats-my-ip', 'api-tester', 'jwt-decoder', 'url-encoder-decoder', 'base64-encoder-decoder', 
     'timestamp-converter',
     // Security & Identifiers
     'hash-generator', 'uuid-generator', 'password-generator', 'regex-tester', 
@@ -59,7 +59,7 @@ export default function DeveloperHub() {
   ].includes(t.slug));
 
   const groupApiAuth = developerTools.filter(t => [
-    'api-tester', 'jwt-decoder', 'url-encoder-decoder', 'base64-encoder-decoder', 'timestamp-converter'
+    'whats-my-ip', 'api-tester', 'jwt-decoder', 'url-encoder-decoder', 'base64-encoder-decoder', 'timestamp-converter'
   ].includes(t.slug));
 
   const groupSecurityText = developerTools.filter(t => [
