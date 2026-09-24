@@ -2602,51 +2602,78 @@ export const toolsList: Tool[] = [
     ]
   },
   {
-  "id": "StaircaseCalculator",
-  "slug": "staircase-calculator",
-  "name": "Staircase Calculator",
-  "category": "architecture",
-  "subcategory": "Building Design",
-  "shortDescription": "Calculate staircase riser heights, tread depths, number of steps, total run, and pitch angle to verify comfort and safety compliance.",
-  "metaTitle": "Staircase Calculator | Riser & Tread Dimension Estimator",
-  "metaDescription": "Free online Staircase Calculator. Calculate riser height, tread depth, stair run, steps count, and pitch angle with comfort index guidelines.",
-  "keywords": [
-    "staircase calculator",
-    "stair riser and tread calculator",
-    "stair dimensions calculator",
-    "stairs calculator online",
-    "comfortable stair riser height",
-    "stair angle pitch estimator",
-    "stair run calculator"
-  ],
-  "icon": "Compass",
-  "howToUse": [
-    "Select unit mode: Imperial (inches) or Metric (cm).",
-    "Input the total floor-to-floor height (rise).",
-    "Input target riser height and tread depth values.",
-    "Check the actual riser height, steps count, run, and compliance indicators."
-  ],
-  "faqs": [
-    {
-      "question": "What riser height is recommended for comfortable stairs?",
-      "answer": "A riser height between 6 to 7 inches (15 to 18 cm) is recommended for comfortable residential walking stairs."
-    },
-    {
-      "question": "How is the staircase pitch angle calculated?",
-      "answer": "The stair angle is calculated using the inverse tangent of the riser height divided by the tread depth (Pitch = arctan(Riser/Tread) * 180 / pi)."
-    }
-  ],
-  "sections": [
-    {
-      "title": "Staircase Layout Criteria",
-      "content": "Proper stair design prevents tripping. It requires balancing riser height (vertical step distance) and tread depth (horizontal foot spacing) to match human walking strides."
-    },
-    {
-      "title": "Riser-Tread Walking Comfort Rule",
-      "content": "A standard architectural comfort index is:\n2 × Riser + Tread = 24 to 25 inches (60 to 64 cm)"
-    }
-  ]
-},
+    "id": "StaircaseCalculator",
+    "slug": "staircase-calculator",
+    "name": "Staircase Calculator",
+    "category": "architecture",
+    "subcategory": "Building Design",
+    "shortDescription": "Universal Staircase & Structural Studio. Calculate exact risers, treads, total run, pitch slope, headroom clearance, NBC 2016 / IRC compliance, carpenter cut-lists, and RCC/timber material BOQ.",
+    "metaTitle": "Staircase Calculator | Riser, Tread, Pitch & BOQ Estimator",
+    "metaDescription": "Free online Staircase Calculator & Blueprint Studio. Calculate riser height, tread depth, stair run, pitch angle, headroom, NBC 2016 / IRC code compliance, carpenter cut schedule, and concrete/timber BOQ.",
+    "keywords": [
+      "staircase calculator",
+      "stair riser and tread calculator",
+      "stair dimensions calculator",
+      "stairs calculator online",
+      "comfortable stair riser height",
+      "stair angle pitch estimator",
+      "stair run calculator",
+      "blondel comfort formula calculator",
+      "nbc 2016 staircase rules india",
+      "irc stair building code calculator",
+      "dog legged staircase calculator",
+      "spiral staircase calculator",
+      "staircase concrete volume calculator",
+      "carpenter stair stringer layout calculator"
+    ],
+    "icon": "Compass",
+    "howToUse": [
+      "Select your unit system: Millimeters (mm), Centimeters (cm), Meters (m), Inches (in), or Feet (ft).",
+      "Choose your staircase configuration: Straight Flight, L-Shaped (90° turn), Dog-Legged U-Shape (180° turn), or Spiral Helical Stair.",
+      "Input total floor-to-floor rise height, target riser height, and target tread depth.",
+      "Specify staircase clear width, floor opening length (well cutout), and slab thickness for live continuous headroom clearance checks.",
+      "Inspect the live 2D Architectural SVG Elevation Blueprint with interactive step callouts and pitch angle arcs.",
+      "Review the Building Code Compliance Audit against NBC 2016 (India), US IRC/IBC, or UK Part K.",
+      "Access the Carpenter Cut-List schedule for stringer layout markings and bottom step drop deductions.",
+      "Check the Bill of Quantities (BOQ) for RCC concrete volume, cement bags, rebar steel, formwork, and export to PDF/Excel."
+    ],
+    "faqs": [
+      {
+        "question": "What is Blondel's Rule of Comfort for staircases?",
+        "answer": "Blondel's ergonomic formula states: 2 × Riser + Tread (2R + T) should equal 600 to 640 mm (24 to 25 inches), with 630 mm (24.5 in) being the ideal walking rhythm for human stride mechanics."
+      },
+      {
+        "question": "What are the NBC 2016 (India) stair dimensions for residential and commercial buildings?",
+        "answer": "Under NBC 2016 India: Residential buildings require a maximum riser of 190 mm, minimum tread of 250 mm, minimum clear width of 900 mm, and minimum headroom of 2200 mm. Public/Commercial buildings require a maximum riser of 150 mm, minimum tread of 300 mm, minimum clear width of 1500 mm, and max 12 risers per flight."
+      },
+      {
+        "question": "Why is the bottom riser cut shorter by the tread thickness in timber stringers?",
+        "answer": "When framing wood stringers, you must subtract the thickness of the tread plank from the bottom riser cut. This ensures that once the finished tread boards are installed, the first step height from the finished floor exactly matches every subsequent step."
+      },
+      {
+        "question": "How is clear headroom clearance calculated?",
+        "answer": "Headroom is the vertical distance measured from the imaginary line connecting stair step nosings up to the underside of the ceiling opening header beam. Building codes require a minimum continuous clearance of 2032 mm (80 inches / 6 ft 8 in) to 2200 mm."
+      },
+      {
+        "question": "How do you calculate concrete volume for an RCC waist slab staircase?",
+        "answer": "RCC staircase concrete volume = (Waist slab thickness × Stair Width × Incline Hypotenuse Length) + (Number of Risers × 0.5 × Riser × Tread × Width) + Landing slab volume. For an M20 nominal mix (1:1.5:3), each cubic meter requires approximately 8.4 cement bags (50kg), 0.425 m³ sand, 0.85 m³ 20mm aggregate, and ~105 kg of Fe500 steel rebar."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Staircase Ergonomics & Blondel's Comfort Formula",
+        "content": "A well-designed staircase minimizes physical exertion and eliminates tripping hazards. In 1675, French architect François Blondel established the relationship between step rise (R) and tread going (T) based on the human walking step length (approx. 63 cm / 24.8 in):\n\n2R + T = 600 mm to 640 mm (24\" to 25\")\n\nWhen a staircase follows this ratio, climbing and descending feel natural without breaking human stride rhythm."
+      },
+      {
+        "title": "Comparative Building Codes: NBC 2016 vs US IRC/IBC vs UK Part K",
+        "content": "• **NBC 2016 (India Residential)**: Max Riser 190 mm, Min Tread 250 mm, Min Width 900 mm, Min Headroom 2200 mm.\n• **NBC 2016 (India Commercial/Public)**: Max Riser 150 mm, Min Tread 300 mm, Min Width 1500 mm, Max 12 risers per flight.\n• **US IRC 2024 (Residential)**: Max Riser 7 3/4\" (197 mm), Min Tread 10\" (254 mm), Min Width 36\" (914 mm), Min Headroom 80\" (2032 mm).\n• **US IBC 2024 (Commercial)**: Max Riser 7\" (178 mm), Min Tread 11\" (279 mm), Min Width 44\" (1118 mm).\n• **UK Approved Document K**: Private max riser 220 mm, min going 220 mm, max pitch 42°."
+      },
+      {
+        "title": "Carpenter Stringer Framing & Cut-List Guidelines",
+        "content": "To frame structural 2x12 lumber stringers:\n1. Lay out the framing square with the riser height on the tongue and tread depth on the body.\n2. Deduct the thickness of the tread material from the bottom of the stringer to prevent a tall first step.\n3. Verify the stringer throat (solid wood remaining under the notch) is at least 3.5 inches (90 mm) to withstand shear load.\n4. Secure top plumb cuts to structural header joists using approved metal joist hangers or bearing ledgers."
+      }
+    ]
+  },
   {
     "id": "RoomAreaCalculator",
     "slug": "room-area-calculator",
@@ -3707,30 +3734,59 @@ export const toolsList: Tool[] = [
     slug: 'pdf-merge',
     name: 'PDF Merge',
     category: 'pdf',
-    shortDescription: 'Combine multiple PDF files into a single document client-side.',
-    metaDescription: 'Free online PDF Merge tool. Combine multiple PDF documents into one PDF file easily and securely in your browser without uploading to any server.',
-    keywords: ['Merge PDF', 'Combine PDF files', 'Join PDF online', 'PDF merger free', 'Local PDF combiner'],
+    shortDescription: 'Combine multiple PDF files into a single document client-side with pagination & custom page ranges.',
+    metaDescription: 'Free 100% client-side PDF Merge tool. Combine multiple PDF documents, rearrange pages, set custom page ranges, normalize page sizes (A4/Letter), and add unified pagination without uploading files to any server.',
+    keywords: [
+      'Merge PDF',
+      'Combine PDF files',
+      'Join PDF online',
+      'PDF merger free',
+      'Local PDF combiner',
+      'Client side PDF merge',
+      'Merge PDF without upload',
+      'Combine PDF with page numbers',
+      'PDF page range merge',
+      'A4 PDF standardizer',
+      'Secure PDF merger privacy'
+    ],
     icon: 'Combine',
     howToUse: [
-      'Click Upload or drag & drop multiple PDF files into the upload zone.',
-      'Rearrange the uploaded files by dragging them up or down in the list.',
-      'Click the "Merge PDFs" button to combine the documents.',
-      'Your merged PDF file will download automatically.'
+      'Upload or drag & drop multiple PDF documents, or click "Load Sample PDFs" for an instant demo.',
+      'Reorder documents in the queue using drag handles, Move Up/Down buttons, or instant A-Z sorting.',
+      'Filter specific pages per file (e.g. "1-3, 5", "odd", "even") or rotate individual files by 90° increments.',
+      'Configure optional assembly options: Standardize paper size (A4, Letter, A3), add continuous pagination ("Page X of Y"), or generate an automatic Table of Contents index.',
+      'Click "Assemble & Merge PDF" to compile your document instantly in local browser memory and download your finished PDF or ZIP archive.'
     ],
     faqs: [
       {
-        question: 'Is there a limit on the number of PDFs I can merge?',
-        answer: 'No, there is no hard limit on the number of files you can combine, but merging very large PDFs may take more memory in your browser.'
+        question: 'Are my confidential PDF documents uploaded to any remote server?',
+        answer: 'No, absolutely not. The entire merging, reordering, scaling, and pagination process executes 100% locally inside your web browser using WebAssembly and pure client-side JavaScript (pdf-lib). No document bytes or personal data ever leave your device.'
       },
       {
-        question: 'Are my PDF files uploaded to a server?',
-        answer: 'No. The entire merging process happens 100% locally in your web browser. No files are uploaded to our servers, ensuring absolute privacy.'
+        question: 'Can I select only specific pages from each PDF instead of merging the whole file?',
+        answer: 'Yes! In the Document Queue, you can enter custom page ranges for each file (e.g. "1-5", "2, 4, 8-10", "odd", or "even"). Only the designated pages will be copied into the final merged document.'
+      },
+      {
+        question: 'What happens if my PDFs have mixed page orientations or different sizes (e.g. A4 and Letter)?',
+        answer: 'By default, Toolique preserves original dimensions and landscape/portrait orientations for every page. If you require a uniform document, select "Standard A4", "US Letter", or "A3 Blueprint" in Assembly Config to automatically scale and center all pages proportionally.'
+      },
+      {
+        question: 'Can I add sequential page numbers across the entire combined PDF?',
+        answer: 'Yes. Toggle "Unified Page Numbering" in Assembly Config to stamp continuous page numbers (such as "Page X of Y", "X / Y", or "— X —") with customizable position, font size, and the option to skip the cover page.'
+      },
+      {
+        question: 'Is there a file size or page limit when merging PDFs?',
+        answer: 'There are no artificial software limits or paywalls. The maximum capacity is governed purely by your computer’s browser memory (RAM), easily handling hundreds of pages and multi-hundred-megabyte document bundles.'
       }
     ],
     sections: [
       {
-        title: 'Why Merge PDFs Locally?',
-        content: 'Merging PDFs locally is the safest way to handle documents containing sensitive business or personal information. Unlike traditional online PDF tools that upload your files to external servers, local merging preserves your document integrity and guarantees that your data never leaves your computer.'
+        title: 'Why Client-Side PDF Assembly is the Modern Standard for Privacy',
+        content: 'Traditional online PDF editors require you to upload your sensitive contracts, tax returns, architectural blueprints, and medical records to third-party cloud servers. This introduces compliance risks under GDPR, HIPAA, and corporate data governance policies.\\n\\nToolique executes 100% in-browser document compilation. Utilizing modern WebAssembly and JavaScript binary streams, your PDF files are parsed, restructured, and saved entirely within local RAM. This guarantees total air-gapped security and zero data exposure.'
+      },
+      {
+        title: 'Advanced Splicing: Page Filtering, Rotation & Auto Indexing',
+        content: 'Modern document preparation frequently requires combining disparate source files with varying standards:\\n\\n- **Granular Page Slicing**: Avoid pre-splitting documents by defining precise ranges (e.g., extracting pages 1 to 4 from an appendix and pages 10 to 12 from a contract).\\n- **Orientation Correction**: Instantly correct sideways or upside-down scans with 90-degree rotational transforms before compilation.\\n- **Automated Document Index**: Generate a dedicated Table of Contents sheet listing each section title, page count, and starting page number.'
       }
     ]
   },
@@ -3739,30 +3795,59 @@ export const toolsList: Tool[] = [
     slug: 'pdf-split',
     name: 'PDF Split',
     category: 'pdf',
-    shortDescription: 'Extract specific pages or split a PDF document by ranges.',
-    metaDescription: 'Free online PDF Splitter. Extract specific pages or split PDF by custom ranges locally in your browser. Fast, secure, and completely serverless.',
-    keywords: ['Split PDF', 'Extract pages from PDF', 'Split PDF range', 'PDF splitter free', 'Cut PDF pages online'],
+    shortDescription: 'Extract specific pages, partition by custom ranges, burst into fixed chunks, or split odd/even duplex client-side.',
+    metaDescription: 'Free 100% client-side PDF Split & Page Slicing tool. Extract individual pages with visual thumbnails, split by custom page ranges, burst into fixed chunks, or separate odd and even pages securely in your browser without uploading to any server.',
+    keywords: [
+      'Split PDF',
+      'Extract pages from PDF',
+      'Split PDF range',
+      'PDF splitter free',
+      'Cut PDF pages online',
+      'Burst PDF into pages',
+      'Split PDF odd even',
+      'Client side PDF split',
+      'PDF page extractor',
+      'Slice PDF in browser',
+      'Secure PDF cutter'
+    ],
     icon: 'Scissors',
     howToUse: [
-      'Upload a single PDF document.',
-      'Choose whether to extract specific pages (e.g. 1, 3, 5) or split by ranges (e.g. 1-3, 4-6).',
-      'Input the desired pages or ranges.',
-      'Click "Split PDF" to generate and download the split document(s).'
+      'Upload a PDF document or click "Try Sample PDF" for an instant 6-page corporate demo.',
+      'Select your slicing method: Visual Page Grid (click thumbnails), Custom Ranges (e.g. 1-2, 5), Burst Chunks (split every N pages), or Odd/Even Duplex.',
+      'In Visual Grid mode, click individual pages to select/deselect or rotate pages by 90° increments.',
+      'Choose your packaging strategy: Single Merged PDF or Separate Files bundled in a ZIP archive.',
+      'Click "Execute Split & Extract" to process your document instantly in local browser memory and download your output.'
     ],
     faqs: [
       {
-        question: 'How do I specify multiple ranges to split?',
-        answer: 'Use commas to separate multiple ranges, such as 1-3, 4-6. This will extract pages 1 through 3 as one document, and 4 through 6 as another.'
+        question: 'Are my PDF documents uploaded to any external server during splitting?',
+        answer: 'No. All PDF page parsing, vector extraction, rotation, and ZIP packaging execute 100% locally in your browser memory using WebAssembly and pure client-side JavaScript. Your confidential files never leave your device.'
       },
       {
-        question: 'Can I split password-protected PDFs?',
-        answer: 'You will need to unlock the PDF first using our PDF Unlock tool before splitting it, as encrypted PDFs cannot be parsed directly.'
+        question: 'Can I extract non-adjacent pages into a single PDF?',
+        answer: 'Yes! You can use either the Visual Page Grid to select arbitrary pages (e.g. pages 1, 4, 7, and 12) or type a range like "1, 4, 7, 12". When "Single PDF" output mode is selected, those pages will be compiled together into one clean document.'
+      },
+      {
+        question: 'What is Burst Slicing and when should I use it?',
+        answer: 'Burst Slicing automatically partitions a large multi-page document into uniform chapter files of N pages each (e.g., splitting a 100-page book into 10-page chapters). All generated files are bundled into a convenient, named ZIP archive.'
+      },
+      {
+        question: 'How does Odd / Even duplex splitting work?',
+        answer: 'The Odd/Even mode separates odd front sheets (1, 3, 5...) and even back sheets (2, 4, 6...) into distinct PDF files. This is ideal for manual duplex printing or reconciling one-sided scanner batches.'
+      },
+      {
+        question: 'Are text layers and vector resolution preserved in extracted pages?',
+        answer: 'Yes. The underlying PDF streams, vector illustrations, font embeddings, and text search layers are preserved with 100% fidelity using native pdf-lib page cloning.'
       }
     ],
     sections: [
       {
-        title: 'PDF Splitting Modes',
-        content: '1. **Extract Page List**: Select individual page numbers (e.g., 2, 5, 9) to extract only those pages into a new PDF document.\n2. **Split Ranges**: Define ranges (e.g. 1-5, 6-10) to slice a larger report into smaller, manageable chapters.'
+        title: 'Modern Client-Side PDF Slicing & Extraction Architecture',
+        content: 'Traditional web-based PDF splitters force users to upload proprietary files to remote cloud servers, exposing sensitive contracts, invoices, and blueprints to security vulnerabilities.\\n\\nToolique processes PDF files entirely within local browser WebAssembly memory. Using hardware-accelerated offscreen canvas rendering and client-side binary streams, large documents are sliced, rotated, and packaged in milliseconds with zero remote transmission.'
+      },
+      {
+        title: '4 Flexible Slicing Workflows for Every Professional Use Case',
+        content: '1. **Visual Thumbnail Grid**: Visually inspect every page, toggle selections with a single click, and rotate individual pages before extraction.\\n2. **Custom Range Partitioning**: Specify granular page syntax (e.g. `1-3, 5, 8-12`) to extract specific chapters or contract clauses.\\n3. **Equal-Size Bursting**: Automatically divide massive binders into manageable chunks of 1, 2, 5, or 10 pages for email attachments and portal upload size caps.\\n4. **Duplex Reconciliation**: Separate alternating odd and even pages for dual-sided document collation.'
       }
     ]
   },
@@ -3771,30 +3856,59 @@ export const toolsList: Tool[] = [
     slug: 'pdf-compressor',
     name: 'PDF Compressor',
     category: 'pdf',
-    shortDescription: 'Reduce PDF file size by compressing images client-side.',
-    metaDescription: 'Free online PDF Compressor. Reduce PDF file size locally in your browser by optimizing image assets. Safe, secure, and fast.',
-    keywords: ['Compress PDF', 'Reduce PDF size', 'PDF size reducer', 'Compress PDF client side', 'Shrink PDF file size'],
+    shortDescription: 'Reduce PDF file size client-side with target size budgeting, extreme compression & grayscale conversion.',
+    metaDescription: 'Free 100% client-side PDF Compressor. Shrink heavy PDF files, target specific KB budgets (≤100KB, ≤200KB, ≤500KB), apply grayscale conversion, and optimize image DPI locally in your browser without uploading to any server.',
+    keywords: [
+      'Compress PDF',
+      'Reduce PDF size',
+      'PDF size reducer',
+      'Compress PDF client side',
+      'Shrink PDF file size',
+      'PDF under 100KB',
+      'PDF under 200KB',
+      'PDF compressor for government portal',
+      'Grayscale PDF compressor',
+      'Reduce PDF MB to KB',
+      'Secure PDF optimizer'
+    ],
     icon: 'FileDown',
     howToUse: [
-      'Upload the PDF file you wish to compress.',
-      'Select a compression level: Low (maximum quality), Medium (recommended balance), or High (smallest file size).',
-      'Click "Compress PDF" to optimize.',
-      'The compressed PDF will download automatically with a smaller file size.'
+      'Upload a PDF document or click "Try Sample Heavy PDF" for an instant demonstration.',
+      'Select a compression profile: Extreme (maximum ~80% shrinkage), Balanced (recommended for web & email), Studio (light print quality), or Target File Size (e.g. ≤200 KB).',
+      'Optionally enable Grayscale mode to reduce color channels by an additional ~35% for text forms and invoices.',
+      'Fine-tune resolution DPI scale and JPEG quality sliders under Custom Tuning if needed.',
+      'Click "Compress & Optimize PDF" to execute in local browser memory and download your compressed PDF.'
     ],
     faqs: [
       {
-        question: 'How does client-side PDF compression work?',
-        answer: 'It renders PDF pages onto standard canvases, applies high-efficiency image compression to the layouts, and outputs a rewritten PDF structure.'
+        question: 'Are my confidential documents uploaded to any remote server for compression?',
+        answer: 'No. All rasterization, JPEG quantization, grayscale conversion, and binary stream packing execute 100% locally inside your web browser using WebAssembly. No files or images are ever transmitted over the network.'
       },
       {
-        question: 'Does PDF compression reduce text quality?',
-        answer: 'No, textual elements remain sharp. The compressor primarily targets embedded images and graphics which contribute to the bulk of the file size.'
+        question: 'How do I compress a PDF to fit strict upload limits (e.g., under 100 KB, 200 KB, or 500 KB)?',
+        answer: 'Select the "Target File Size" profile or "Extreme" preset. You can choose specific budget targets like ≤100 KB or ≤200 KB, and the tool will automatically calculate the optimal DPI scaling and image quantization parameters.'
+      },
+      {
+        question: 'What is Grayscale compression and when should I use it?',
+        answer: 'Grayscale compression removes RGB color channel overhead and converts full-color scans into black and white. This is ideal for government applications, tax filings, legal forms, receipts, and invoices, often saving an extra 35% to 50% file size.'
+      },
+      {
+        question: 'Will text remain readable after compression?',
+        answer: 'Yes. The compression profiles are calibrated to preserve optical character legibility, ensuring numbers, signatures, and body copy remain clear even at high compression ratios.'
+      },
+      {
+        question: 'Is there a limit on the PDF file size I can upload for compression?',
+        answer: 'There are no artificial file size caps. The compression runs in your computer’s browser memory (RAM), easily processing multi-megabyte presentations, scans, and documents.'
       }
     ],
     sections: [
       {
-        title: 'Understanding PDF Compression Levels',
-        content: '- **Low Compression**: Minimal change in resolution, best for high-fidelity architectural drawings.\n- **Medium Compression**: Re-encodes images at 150 DPI, ideal for typical corporate slideshows and business agreements.\n- **High Compression**: Re-encodes at 72 DPI, ideal for quick drafts and mobile distributions.'
+        title: 'Why Client-Side In-Memory PDF Compression is Superior',
+        content: 'Traditional online compressors require uploading sensitive financial reports, tax returns, and identity documents to third-party cloud servers, posing severe data privacy and compliance risks.\\n\\nToolique executes hardware-accelerated offscreen canvas rendering and WebAssembly compression directly in your browser. Large image assets are quantized and rebuilt into streamlined PDF streams without a single byte ever touching a remote server.'
+      },
+      {
+        title: 'Compression Optimization Strategies & DPI Tuning',
+        content: '- **Extreme (~80% Reduction)**: Quantizes pages at 72 DPI with grayscale transform, designed specifically for strict portal caps (such as state examinations, university admissions, and government tenders).\\n- **Balanced (Recommended)**: Balances 120 DPI resolution with high-efficiency JPEG encoding, ideal for email attachments and corporate distribution.\\n- **Studio (Light Print)**: Preserves 180-200 DPI vector clarity for client portfolios, architectural drawings, and marketing brochures.\\n- **Custom Parameter Tuning**: Full control over DPI scale multiplier (0.5x to 1.8x), JPEG quality percentage (10% to 95%), and color channels.'
       }
     ]
   },
@@ -3803,30 +3917,58 @@ export const toolsList: Tool[] = [
     slug: 'pdf-page-remover',
     name: 'PDF Page Remover',
     category: 'pdf',
-    shortDescription: 'Delete selected pages from a PDF document visually.',
-    metaDescription: 'Free online PDF Page Remover. Delete unwanted pages from your PDF visually in your browser. Fast, secure, and client-side.',
-    keywords: ['Delete pages from PDF', 'Remove PDF pages', 'PDF page remover', 'Erase PDF pages online', 'PDF editor free'],
+    shortDescription: 'Delete selected pages from a PDF document visually with range presets, strikethrough previews & zero server uploads.',
+    metaDescription: 'Free 100% client-side PDF Page Remover. Delete unwanted, duplicate, or blank pages from your PDF visually using interactive thumbnails, range filters, and quick presets directly in your browser without uploading to any server.',
+    keywords: [
+      'Delete pages from PDF',
+      'Remove PDF pages',
+      'PDF page remover',
+      'Erase PDF pages online',
+      'Delete blank PDF pages',
+      'Remove first page PDF',
+      'Remove last page PDF',
+      'Delete PDF page range',
+      'Client side PDF page deletion',
+      'Secure PDF pruner'
+    ],
     icon: 'FileMinus',
     howToUse: [
-      'Upload a PDF document to load its pages.',
-      'Select the pages you want to delete by clicking on their thumbnails.',
-      'Click the "Remove Selected Pages" button.',
-      'Download the updated PDF with the chosen pages removed.'
+      'Upload a PDF document or click "Try Sample PDF" for an instant demonstration.',
+      'Click on any page thumbnail to toggle its deletion state (marked pages display a red strikethrough badge).',
+      'Use quick presets to instantly mark: "Delete Cover (Page 1)", "Delete Last Page", "Delete Odd Pages", "Delete Even Pages", or type custom ranges (e.g. 2, 5-8).',
+      'Click "Remove Selected Pages" to prune the document in local browser memory.',
+      'Inspect the cleaned document in the embedded previewer and download your output PDF.'
     ],
     faqs: [
       {
-        question: 'Can I undo a page deletion?',
-        answer: 'You can uncheck a thumbnail before downloading to restore the page. Once the file is downloaded, the pages are permanently removed from the output.'
+        question: 'Are my confidential documents uploaded to any remote server during page removal?',
+        answer: 'No. All PDF page parsing, vector extraction, thumbnail rendering, and binary rebuilding execute 100% locally inside your web browser using WebAssembly. No files or document contents are ever transmitted to any remote server.'
       },
       {
-        question: 'How many pages can I delete at once?',
-        answer: 'You can select and remove any number of pages, up to all but one page (PDFs must have at least 1 page).'
+        question: 'Can I delete multiple non-adjacent pages at the same time?',
+        answer: 'Yes. You can visually click any combination of arbitrary pages (e.g. pages 2, 5, 9, and 14) or type a range like "2, 5, 9, 14" to mark them for removal simultaneously.'
+      },
+      {
+        question: 'What is the minimum number of pages a PDF must have after removal?',
+        answer: 'According to ISO PDF specifications, every PDF document must retain at least 1 page. The tool automatically ensures you cannot accidentally delete all pages.'
+      },
+      {
+        question: 'Does deleting pages affect text quality or vector graphics on the remaining pages?',
+        answer: 'No. The preserved pages retain 100% of their original vector resolution, font embeddings, and search index layers with zero quality loss.'
+      },
+      {
+        question: 'Can I rotate individual pages while removing others?',
+        answer: 'Yes! Each page thumbnail card includes a 90° rotation button, allowing you to fix sideways scans while simultaneously removing unwanted sheets.'
       }
     ],
     sections: [
       {
-        title: 'Visual PDF Page Management',
-        content: 'Our visual interface renders a thumbnail preview of each page using HTML5 Canvas. This lets you visually identify and select unwanted pages (such as blank pages or draft versions) before rendering the output.'
+        title: 'Why Client-Side PDF Pruning is the Modern Choice for Document Security',
+        content: 'When handling sensitive contracts, tax records, employee files, or medical records, uploading entire documents to third-party cloud servers solely to delete a cover page or duplicate sheet poses severe data privacy risks.\\n\\nToolique executes hardware-accelerated document pruning directly in browser RAM. Using pure JavaScript binary streams (pdf-lib), unwanted page objects are excised from the document tree and the remaining structure is repacked in milliseconds.'
+      },
+      {
+        title: 'Efficient Document Cleanup: Blank Sheets, Duplicates & Appendix Stripping',
+        content: '- **Quick Cover & Back Removal**: 1-click removal of title covers or trailing blank pages before submitting portfolios or tenders.\\n- **Batch Range Deletion**: Eliminate obsolete draft clauses or confidential schedules by defining precise page ranges (e.g. `4-8, 12`).\\n- **Duplex Collation**: Remove alternate odd or even pages when cleaning up single-sided feeder scanner jobs.'
       }
     ]
   },
@@ -3835,30 +3977,58 @@ export const toolsList: Tool[] = [
     slug: 'pdf-page-reorder',
     name: 'PDF Page Reorder',
     category: 'pdf',
-    shortDescription: 'Rearrange the page order of a PDF using drag & drop.',
-    metaDescription: 'Free online PDF Page Reorder tool. Rearrange PDF pages visually via drag & drop. 100% secure, private, and client-side.',
-    keywords: ['Reorder PDF pages', 'Rearrange PDF pages', 'PDF page organizer', 'Move PDF pages', 'Organize PDF files'],
+    shortDescription: 'Rearrange PDF page sequences visually via fluid drag & drop, duplex interleaving & reverse sorting client-side.',
+    metaDescription: 'Free 100% client-side PDF Page Reorder & Organizer. Rearrange PDF pages with fluid drag & drop, 1-click sequence reversal, duplex sheet interleaving, and custom sorting in your browser without uploading to any server.',
+    keywords: [
+      'Reorder PDF pages',
+      'Rearrange PDF pages',
+      'PDF page organizer',
+      'Move PDF pages',
+      'Organize PDF files',
+      'Reverse PDF page order',
+      'Duplex interleave PDF',
+      'Drag and drop PDF sorter',
+      'Client side PDF organizer',
+      'Secure PDF sequencer'
+    ],
     icon: 'ArrowUpDown',
     howToUse: [
-      'Upload a PDF file to see page thumbnails.',
-      'Click and drag a page thumbnail to its new position.',
-      'Verify the new page sequence.',
-      'Click "Save PDF" to download the reordered document.'
+      'Upload a PDF document or click "Try Sample PDF" for an instant demonstration.',
+      'Drag and drop page thumbnail cards into your desired sequence, or use the card step arrows (Move First, Move Left, Move Right, Move Last).',
+      'Use quick sequence presets: "Reverse Order" (for back-to-front scans), "Duplex Interleave" (for manual double-sided scans), or type a custom sequence syntax (e.g. 1, 3, 2, 5, 4, 6).',
+      'Optionally rotate individual pages by 90° increments directly on their cards.',
+      'Click "Save Reordered PDF" to assemble the new sequence locally and download your output PDF.'
     ],
     faqs: [
       {
-        question: 'Is it easy to drag pages on mobile devices?',
-        answer: 'Yes, the page reordering interface supports touch gestures on mobile devices and tablets for easy page sorting.'
+        question: 'Are my confidential documents uploaded to any remote server during reordering?',
+        answer: 'No. All PDF page parsing, vector stream restructuring, thumbnail rendering, and binary compilation execute 100% locally inside your web browser using WebAssembly. Your files never leave your device.'
       },
       {
-        question: 'Can I insert new blank pages here?',
-        answer: 'This tool is currently designed for rearranging existing pages. To merge different documents, use the PDF Merge tool.'
+        question: 'How does the Reverse Order preset work?',
+        answer: 'Reverse Order instantly flips the entire page sequence from back to front (e.g. Page 10 becomes Page 1). This is ideal for automatic document feeder scans that processed pages in reverse order.'
+      },
+      {
+        question: 'What is Duplex Interleave mode?',
+        answer: 'Duplex Interleave takes a document where front sides were scanned first (e.g. pages 1, 2, 3) followed by back sides (e.g. pages 4, 5, 6) and automatically weaves them into their proper alternating sequence (1, 4, 2, 5, 3, 6).'
+      },
+      {
+        question: 'Can I remove an unwanted page while reordering?',
+        answer: 'Yes. Each page card features an "Exclude" trash icon that lets you prune individual pages directly while reorganizing the remaining sequence.'
+      },
+      {
+        question: 'Does rearranging pages degrade visual quality or remove text searchability?',
+        answer: 'No. Native pdf-lib page cloning is lossless, preserving all text layers, vector curves, bookmarks, and font embeddings with 100% precision.'
       }
     ],
     sections: [
       {
-        title: 'Client-Side PDF Organization',
-        content: 'Rearranging pages visually allows you to fix misordered scans, index slide presentations, or organize report headers immediately before delivery, without needing heavy desktop software.'
+        title: 'Why Client-Side Drag & Drop PDF Organization is Superior',
+        content: 'Reorganizing presentation decks, legal exhibits, and financial audits often involves proprietary documents that cannot be uploaded to third-party web servers without violating compliance policies.\\n\\nToolique executes hardware-accelerated page reordering directly in local browser memory. Using high-efficiency HTML5 drag-and-drop mechanics and client-side binary page stream grafting, massive documents are resequenced in seconds with zero remote exposure.'
+      },
+      {
+        title: 'Streamlined Collation Workflows: Scanners, Booklets & Decks',
+        content: '- **Feeder Scan Rectification**: 1-click sequence reversal for scanners that output sheets in reverse stack order.\\n- **Duplex Recombination**: Seamlessly interweave odd front passes and even back passes into a single coherent document.\\n- **Rapid Manual Shuffling**: Type custom index sequences (e.g. `1, 4, 2, 5, 3, 6`) to immediately reorder complex binder layouts.'
       }
     ]
   },
@@ -3963,30 +4133,59 @@ export const toolsList: Tool[] = [
     slug: 'pdf-watermark',
     name: 'PDF Watermark',
     category: 'pdf',
-    shortDescription: 'Add text or image watermarks to a PDF document.',
-    metaDescription: 'Free online PDF Watermark. Add custom text or image logos onto your PDF pages. Customize position, opacity, scale, and rotation in-browser.',
-    keywords: ['Watermark PDF', 'Add logo to PDF', 'PDF watermarker online', 'Stamp PDF pages', 'Brand PDF documents'],
+    shortDescription: 'Add customizable text, logo, and tiled security watermarks to PDF documents client-side.',
+    metaDescription: 'Free online PDF Watermark tool. Stamp custom text, image logos, or tiled security matrices onto PDF pages with real-time live preview. Private, secure, and 100% in-browser.',
+    keywords: [
+      'Watermark PDF online',
+      'Add logo to PDF',
+      'PDF watermarker online free',
+      'Stamp PDF pages client-side',
+      'Confidential watermark PDF',
+      'Draft watermark PDF maker',
+      'Tiled watermark PDF',
+      'Secure PDF stamp tool',
+      'Brand PDF documents',
+      'Batch watermark PDF'
+    ],
     icon: 'FileSignature',
     howToUse: [
-      'Upload a PDF document.',
-      'Choose "Text Watermark" (input your text, select font, size, color) or "Image Watermark" (upload an image logo).',
-      'Adjust settings like Opacity, Rotation angle, and Placement position.',
-      'Click "Apply Watermark" and download the stamped PDF.'
+      'Upload a PDF document, or click "Try Sample NDA Document" for an instant demonstration.',
+      'Select your watermark mode: "Text Watermark", "Image / Logo Stamp", or "Tiled Matrix".',
+      'Customize your watermark content (presets like CONFIDENTIAL, custom text tokens, or logo upload), font, color, size, and rotation angle.',
+      'Adjust the 9-point position anchor, fine-tuning margin offsets, and opacity slider while viewing the real-time WYSIWYG canvas preview.',
+      'Configure page targeting rules (All Pages, Skip Cover Page, Odd/Even Pages, or Custom Page Ranges).',
+      'Click "Stamp & Apply Watermark" to generate the secured PDF in memory and download instantly.'
     ],
     faqs: [
       {
-        question: 'Will the watermark appear on all pages?',
-        answer: 'Yes, the watermark will be drawn on every page of the document by default, but you can choose to skip the first page.'
+        question: 'Are my confidential documents uploaded to any external server?',
+        answer: 'No. Toolique processes your PDF files 100% client-side inside your browser memory using WebAssembly and PDF-Lib. Your sensitive agreements, invoices, and proprietary records are never transmitted across the network.'
       },
       {
-        question: 'Can the watermark be easily removed?',
-        answer: 'No, the watermark is rendered directly as content streams inside the PDF pages, making it permanent for standard readers.'
+        question: 'Can I use dynamic tokens in my text watermark?',
+        answer: 'Yes! You can insert dynamic placeholder tokens such as {{DATE}}, {{TIME}}, {{PAGE}}, {{TOTAL_PAGES}}, and {{FILENAME}} to automatically generate dynamic timestamps and document tags.'
+      },
+      {
+        question: 'What image formats can I upload for logo watermarks?',
+        answer: 'You can upload transparent PNG files, JPEGs, and WebP images. Transparent PNGs are recommended for seamless overlays on top of background text and charts.'
+      },
+      {
+        question: 'How do tiled security watermarks work?',
+        answer: 'The Tiled Matrix mode repeats your watermark text in a uniform diagonal grid across the entire page area (available in Sparse, Balanced, or Dense matrix layouts), making unauthorized redistribution or photo capture nearly impossible to crop out.'
+      },
+      {
+        question: 'Can I apply the watermark to specific pages only?',
+        answer: 'Yes. You can target All Pages, automatically skip the first cover page or back page, select Odd/Even pages, or specify exact comma-separated page ranges (e.g. 1-3, 5, 8-10).'
       }
     ],
     sections: [
       {
-        title: 'Branding and Protecting Intellectual Property',
-        content: 'Watermarks (like "CONFIDENTIAL", "DRAFT", or your company logo) protect your business drafts from being shared without credit or used before final review.'
+        title: 'Protecting Sensitive Business Documents with Watermarks',
+        content: 'Watermarking is an essential document security practice for legal agreements, financial models, creative pitch decks, and internal memos. Stamping prominent labels like "CONFIDENTIAL", "DRAFT", or your corporate seal establishes clear copyright ownership and deters unauthorized leaking or distribution.'
+      },
+      {
+        title: 'Zero-Trace Local PDF Processing',
+        content: 'Unlike cloud-based PDF web utilities that upload and store your files on external infrastructure, Toolique stamps vector text and image graphics directly into the PDF content stream in local browser memory. This guarantees total compliance with enterprise data security and confidentiality policies.'
       }
     ]
   },
@@ -4154,30 +4353,59 @@ export const toolsList: Tool[] = [
     slug: 'excel-to-pdf',
     name: 'Excel to PDF',
     category: 'pdf',
-    shortDescription: 'Convert Microsoft Excel (.xlsx) sheets to PDF tables.',
-    metaDescription: 'Free online Excel to PDF converter. Convert XLSX files into styled PDF tables locally in browser. Secure, fast, and serverless.',
-    keywords: ['Convert Excel to PDF', 'XLSX to PDF online', 'Excel sheet to PDF table', 'Convert spreadsheet to pdf', 'Local Excel converter'],
+    shortDescription: 'Convert Microsoft Excel (.xlsx, .xls, .csv) workbooks to formatted PDF tables client-side.',
+    metaDescription: 'Free online Excel to PDF converter. Convert XLSX, XLS, and CSV sheets into executive-ready PDF tables directly in your browser. Private, secure, and 100% client-side.',
+    keywords: [
+      'Convert Excel to PDF',
+      'XLSX to PDF online',
+      'Excel sheet to PDF table',
+      'Convert spreadsheet to pdf',
+      'Local Excel converter',
+      'Multi-sheet Excel to PDF',
+      'XLS to PDF free',
+      'CSV to PDF table maker',
+      'Private spreadsheet to PDF converter',
+      'Financial model to PDF report'
+    ],
     icon: 'Table',
     howToUse: [
-      'Upload a `.xlsx` spreadsheet.',
-      'Review the sheet selection list (all worksheets are converted).',
-      'Click "Convert to PDF" to compile.',
-      'Download the PDF displaying your data tables organized on pages.'
+      'Upload a `.xlsx`, `.xls`, `.csv`, or `.ods` spreadsheet file, or click "Try Financial Model Sample" for an instant demo.',
+      'Inspect your workbook sheets in the interactive grid viewer and filter rows or review table structure.',
+      'Choose your conversion scope (All Worksheets, Active Sheet Only, or Custom Selection).',
+      'Customize page layout (A4, Letter, A3), orientation (Landscape / Portrait), color theme (Executive Navy, Financial Emerald, Tech Indigo, Monochrome), and gridline styles.',
+      'Toggle repeating headers, page numbers ("Page X of Y"), and optional custom document titles or confidentiality notes.',
+      'Click "Generate & Preview PDF" to compile your document in-browser and download instantly.'
     ],
     faqs: [
       {
-        question: 'Will formulas be computed in the PDF?',
-        answer: 'The converter reads the last calculated values stored in the sheet cells, ensuring the outputs match your spreadsheet state.'
+        question: 'Are my financial spreadsheets uploaded to any remote server?',
+        answer: 'No. The entire conversion process runs 100% client-side in your web browser using in-memory WebAssembly and JavaScript. Your sensitive financial numbers, payroll records, and proprietary formulas never leave your computer.'
       },
       {
-        question: 'How are large sheets handled?',
-        answer: 'Worksheets are automatically scaled and fitted onto portrait or landscape pages with column borders to maintain layout alignment.'
+        question: 'How are formulas and computed numbers handled?',
+        answer: 'The parser reads the latest calculated values and formatted cell strings stored in your workbook, ensuring currency symbols, percentages, and dates display exactly as intended.'
+      },
+      {
+        question: 'Can I convert multiple worksheets within a single workbook?',
+        answer: 'Yes. You can convert all worksheets into continuous paginated sections, convert only the active tab, or selectively pick specific sheets using checkboxes.'
+      },
+      {
+        question: 'What happens if my spreadsheet has wide tables or many columns?',
+        answer: 'The layout engine intelligently computes proportional column weights and automatically wraps multi-line cell text. For extra wide datasets, you can select Landscape orientation or A3 paper size and set Compact font density.'
+      },
+      {
+        question: 'Does the generated PDF repeat table headers across multiple pages?',
+        answer: 'Yes. When "Repeat header on every overflow page" is enabled, column titles are automatically rendered at the top of each page break for effortless readability.'
       }
     ],
     sections: [
       {
-        title: 'Sharing Spreadsheet Reports',
-        content: 'Converting spreadsheets into static PDF sheets prevents accidental formula edits or column width adjustments by readers, ideal for sending financial statements, quotes, and bills.'
+        title: 'Publishing Executive Spreadsheet Reports',
+        content: 'Sharing raw Excel files can expose confidential formula logic, risk accidental cell edits, or cause layout shifts across different versions of Microsoft Office and Google Sheets. Converting your sheets to static PDF documents creates clean, tamper-resistant reports ideal for board meetings, investor memos, client invoices, and audits.'
+      },
+      {
+        title: 'Zero Cloud Risk with In-Browser Compiling',
+        content: 'Unlike traditional online converters that upload confidential workbooks to third-party cloud servers, Toolique executes the entire parsing and PDF compilation locally on your machine. This eliminates data leakage risks and satisfies strict enterprise compliance requirements.'
       }
     ]
   },
@@ -7733,57 +7961,73 @@ export const toolsList: Tool[] = [
       }
 ]
   },
-    {
+  {
     id: 'PurgeWasteCalculator',
     slug: 'purge-waste-calculator',
     name: 'Purge Waste Calculator',
     category: '3d-printing',
-    shortDescription: "Calculate plastic mass waste in purge towers and poop shoots.",
-    metaTitle: "3D Print Purge Waste Calculator | Poop & Prime Tower Cost",
-    metaDescription: "Calculate the mass, volume, and cost of purge waste (poop) and prime towers in multi-color 3D printing. Free waste reduction estimator.",
+    shortDescription: "Calculate plastic mass waste in purge towers and poop chutes across Bambu Lab AMS, Prusa MMU3, Anycubic ACE, and Voron ERCF multi-color prints.",
+    metaTitle: "3D Print Purge Waste Calculator | Bambu AMS Poop & Prime Tower Cost",
+    metaDescription: "Calculate exact filament purge waste mass, poop chute discharge, prime tower volume, and monetary cost in multi-color 3D printing. Optimize flush multipliers and batch plate savings.",
     keywords: [
       "purge waste calculator",
       "3d print poop calculator",
       "bambu purge waste cost",
       "prime tower volume calculator",
       "reduce 3d print waste",
-      "multi color waste calculator"
-],
+      "multi color waste calculator",
+      "bambu lab ams purge poop calculator",
+      "prusa mmu3 wipe tower waste",
+      "flush into infill waste savings",
+      "multi color batch print savings calculator"
+    ],
     icon: 'Printer',
     howToUse: [
-      "Enter your filament cost per kilogram (e.g. $20/kg).",
-      "Input total purge waste mass reported by slicer (in grams).",
-      "Include prime tower mass (in grams).",
-      "Instantly calculate the exact monetary cost of purged waste and total waste percentage."
-],
+      "Select your multi-color hardware profile (Bambu Lab AMS, Prusa MMU3, Anycubic ACE Pro, Creality CFS, or Voron ERCF).",
+      "Enter the net model mass (grams), total filament swaps, and sliced layer count.",
+      "Adjust average flush volume (mm³) and tune the global flush multiplier slider (0.3x to 1.5x).",
+      "Toggle advanced slicer options: Flush into Infill, Flush into Support, or Prime Tower dimensions.",
+      "Inspect the live visual plastic distribution bar comparing useful model plastic vs poop waste vs prime tower.",
+      "Check the Batch Plate Multiplier Schedule to see per-unit waste drop when printing multiple copies.",
+      "Explore the Color Contrast Transition Matrix to identify high-risk dark-to-light color swaps.",
+      "Export your complete multi-color purge audit report as a PDF or Excel BOQ schedule."
+    ],
     faqs: [
       {
-            "question": "What is purge waste in multi-color 3D printing?",
-            "answer": "Purge waste (often called 'filament poop') is the extruded material ejected during nozzle cleaning between color changes to prevent the previous color from bleeding into the new color."
+        "question": "What is purge waste (filament poop) in multi-color 3D printing?",
+        "answer": "In single-nozzle multi-material systems (like Bambu Lab AMS, Prusa MMU3, and Creality CFS), switching filament requires purging the previous color from the hotend melt zone. This extruded scrap plastic is ejected out of the purge chute (poop chute) or wiped onto a sacrificial prime tower to prevent color bleeding."
+      },
+      {
+        "question": "Why does a multi-color print generate more purge waste than the model's actual weight?",
+        "answer": "Because a color swap must occur on every single layer containing multiple colors regardless of the model size. If a 30-gram figurine requires 400 filament swaps and each swap purges 0.35g of plastic, the total purge waste is 140 grams — nearly 500% of the model's actual mass!"
+      },
+      {
+        "question": "How does batch printing on the same build plate reduce purge waste per unit?",
+        "answer": "The printer executes the exact same number of filament swaps per layer whether you print 1 copy or 8 copies on the build plate. Therefore, the fixed purge poop and prime tower mass is divided equally across all copies, reducing per-unit purge waste by up to 85%."
+      },
+      {
+        "question": "What is 'Flush into Infill' and how much filament does it save?",
+        "answer": "'Flush into Infill' directs the purged transition plastic into the hollow sparse interior cavity of the model instead of ejecting it into the poop chute. This typically saves 25% to 45% of total purge waste with zero exterior visual penalty."
+      },
+      {
+        "question": "What is the difference between dark-to-light and light-to-dark flush volumes?",
+        "answer": "Transitioning from dark to light (e.g. Black to White or Red to Yellow) requires a massive flush volume (500 to 700 mm³) to completely eliminate pigment tinting. Conversely, transitioning from light to dark (e.g. White to Black) requires only 120 to 180 mm³."
       }
-],
+    ],
     sections: [
       {
-            "title": "What is the Purge Waste Calculator?",
-            "content": "Calculates the financial expense and material waste percentage of sacrificial prime towers and purge wiper discharge."
+        "title": "Understanding Multi-Color 3D Printing Waste Economics",
+        "content": "Single-nozzle multi-material printing revolutionised desktop 3D printing, but color transitions create substantial scrap plastic. Each tool change requires cutting, retracting, feeding the new spool, purging the melt zone, and stabilizing pressure on a prime tower.\n\nWithout optimization, purge waste frequently exceeds the model's mass by 200% to 800%, multiplying filament expense and extending print time by several hours."
       },
       {
-            "title": "Formula Used",
-            "content": "• Total Waste (g) = Purge Poop Mass (g) + Prime Tower Mass (g)\n• Waste Cost ($) = Total Waste (g) × (Spool Price / 1000)\n• Waste Ratio (%) = (Total Waste / (Model Mass + Total Waste)) × 100"
+        "title": "Purge Waste Math & Slicer Formulation",
+        "content": "• **Single Swap Flush Mass (g)** = Flush Volume (mm³) × Slicer Multiplier × 0.001 × Filament Density (g/cm³)\n• **Net Poop Mass (g)** = (Total Swaps × Single Swap Mass) × (1 - Infill/Support Absorption Ratio)\n• **Prime Tower Mass (g)** = Tower Width × Depth × Layer Height × Active Layers × Infill Ratio × 0.001 × Density\n• **Waste-to-Model Ratio (%)** = (Total Purge Waste / Total Model Net Mass) × 100\n• **Financial Loss ($ / ₹)** = (Total Purge Waste in kg) × Filament Cost per kg"
       },
       {
-            "title": "Real-World Example",
-            "content": "A 50g figurine generates 150g of purge waste with $20/kg filament:\n• Total Waste = 150g (75% of all extruded filament is waste!)\n• Waste Cost = 150g × $0.02 = $3.00 wasted."
-      },
-      {
-            "title": "Accuracy and Limitations",
-            "content": "Tuning flush multipliers down (e.g. from 1.0 to 0.6) significantly decreases waste without color bleeding."
-      },
-      {
-            "title": "Who It Is For",
-            "content": "Print farm operators auditing scrap costs and makers tuning flush volumes."
+        "title": "Proven Strategies to Cut Multi-Color Waste by 75%",
+        "content": "1. **Tuned 0.6x Flush Multiplier**: Auto-calculate flushing volumes in Bambu Studio or OrcaSlicer with a 0.60 multiplier.\n2. **Enable Flush into Infill & Supports**: Absorb transition plastic internally.\n3. **Batch Production**: Fill the build plate with multiple copies to amortize purge swaps.\n4. **Purge-to-Object**: Place a sacrificial functional print (like a bin or tool) to absorb flushes.\n5. **Horizontal Color Alignment**: Orient models so color boundaries span minimal Z-layers."
       }
-]
+    ]
   },
     {
     id: 'FlushVolumeCalculator',
