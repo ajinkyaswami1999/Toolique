@@ -8382,29 +8382,63 @@ export const toolsList: Tool[] = [
     name: 'Equation Solver',
     category: 'math-studio',
     shortDescription: 'Solve linear, quadratic, and simultaneous equations with step-by-step solutions.',
-    metaDescription: 'Free online equation solver. Solve linear, quadratic, and simultaneous equations with detailed step-by-step workings and graphic visualization.',
-    keywords: ['equation solver', 'solve quadratic equation', 'solve simultaneous equations', 'linear equation solver', 'step by step math solver'],
+    metaTitle: 'Equation Solver Online — Linear, Quadratic, Cubic & Simultaneous Systems',
+    metaDescription: 'Free online equation solver with step-by-step solutions. Solve linear, quadratic (formula, vertex & factoring), cubic (Cardano reduction), 2×2 & 3×3 simultaneous systems, and non-linear roots with exact fractions & interactive Cartesian graphs.',
+    keywords: [
+      'equation solver',
+      'solve quadratic equation step by step',
+      'cubic equation solver cardano',
+      'solve simultaneous equations online',
+      'linear equation solver',
+      'cramer rule calculator',
+      'newton raphson calculator',
+      'quadratic formula calculator',
+      'system of 3 linear equations solver',
+      'step by step math solver',
+      'polynomial root finder'
+    ],
     icon: 'Binary',
     howToUse: [
-      'Select the equation type: Linear (ax + b = 0), Quadratic (ax² + bx + c = 0), or Simultaneous equations.',
-      'Enter the coefficients for your equation in the input fields.',
-      'View the calculated roots, discriminant, and step-by-step algebraic solutions instantly in the outputs panel.',
-      'Toggle the interactive coordinate graph to visualize the equation lines or quadratic curve.'
+      'Select the equation category: Linear (ax + b = c), Quadratic (ax² + bx + c = 0), Cubic (ax³ + bx² + cx + d = 0), 2×2 Simultaneous System, 3×3 Simultaneous System, or Non-Linear (Newton-Raphson f(x) = 0).',
+      'Enter the numeric coefficients or function expression in the input fields, or click one of the pre-configured presets (Real Roots, Complex Conjugates, Perfect Squares, Cardano Cubics, Kepler Equations).',
+      'Toggle between Decimal and Exact Rational Fraction (a/b) output formats.',
+      'Inspect the computed roots, vertex coordinates, discriminant (Δ), and interactive Cartesian graph with root markers.',
+      'Review the step-by-step algebraic proof breakdown and export the complete solution as a CSV file.'
     ],
     faqs: [
       {
-        question: 'What types of equations can this tool solve?',
-        answer: 'This solver currently handles Linear equations of the form ax + b = 0, Quadratic equations of the form ax² + bx + c = 0, and 2-variable Simultaneous equations.'
+        question: 'How does the quadratic formula solve ax² + bx + c = 0?',
+        answer: 'The quadratic formula x = (-b ± √(b² - 4ac)) / (2a) solves any second-degree polynomial. The discriminant Δ = b² - 4ac determines the root nature: if Δ > 0, there are two distinct real roots; if Δ = 0, there is exactly one real double root (the parabola touches the x-axis at its vertex); if Δ < 0, there are two complex conjugate roots (x = -b/2a ± i√(4ac - b²)/2a).'
       },
       {
-        question: 'How are complex quadratic roots handled?',
-        answer: 'If the discriminant (D = b² - 4ac) is negative, the calculator automatically computes complex conjugate roots (of the form x = real ± imag*i) and displays the imaginary steps.'
+        question: 'What is Cardano’s method for solving cubic equations?',
+        answer: 'Cardano’s method solves general cubic equations ax³ + bx² + cx + d = 0 by substituting x = t - b/(3a) to eliminate the quadratic term, producing the depressed cubic t³ + pt + q = 0. Depending on the cubic discriminant Δ = (q/2)² + (p/3)³, the equation yields one real root and two complex conjugate roots (Δ > 0) or three distinct real roots via trigonometric substitution (Δ < 0).'
+      },
+      {
+        question: 'How are 2×2 and 3×3 simultaneous systems solved?',
+        answer: 'The solver applies Cramer’s Rule using determinants. For 2×2 systems: D = a₁b₂ - a₂b₁, D_x = c₁b₂ - c₂b₁, D_y = a₁c₂ - a₂c₁. If D ≠ 0, the unique intersection is x = D_x/D and y = D_y/D. For 3×3 systems, matrix inversion and 3×3 determinants find the intersection vector (x, y, z).'
+      },
+      {
+        question: 'How does the Newton-Raphson non-linear root finder work?',
+        answer: 'The Newton-Raphson method is an iterative numerical algorithm that finds roots of arbitrary differentiable functions f(x) = 0 using tangent line approximations: x_{k+1} = x_k - f(x_k) / f’(x_k). The solver displays an iteration table showing convergence until tolerance < 10⁻⁸ is reached.'
+      },
+      {
+        question: 'Can this solver handle equations with no solution or infinite solutions?',
+        answer: 'Yes. For linear equations, 0x = 0 indicates an identity with infinitely many solutions, while 0x = c (c ≠ 0) indicates a contradiction with no solution. For simultaneous systems, D = 0 with zero numerator determinants indicates coincident lines (infinite solutions), while non-zero numerators indicate parallel lines (no solution).'
+      },
+      {
+        question: 'What information does the parabola vertex provide in quadratic equations?',
+        answer: 'The vertex (h, k) = (-b/(2a), c - b²/(4a)) represents the global minimum (if a > 0) or global maximum (if a < 0) of the quadratic curve, defining the line of symmetry x = h and the range of the quadratic function.'
       }
     ],
     sections: [
       {
-        title: 'Algebraic Equation Solving principles',
-        content: 'Equations form the foundation of algebra. Linear equations describe straight lines and represent constant rates of change, while quadratic equations represent parabolas with vertices. Simultaneous equations find the unique point where two independent lines intersect. This tool provides visual previews of these mathematical objects to build intuitive comprehension.'
+        title: 'Algebraic Foundations: From Linear Relations to Higher Polynomials',
+        content: 'Algebraic equations model physical trajectories, economic break-even thresholds, circuit node voltages, and optimization bounds. The Fundamental Theorem of Algebra guarantees that every n-th degree polynomial has exactly n complex roots, providing complete predictability in mathematical physics.'
+      },
+      {
+        title: 'Geometric Duality: Visualizing Algebraic Roots on the Coordinate Plane',
+        content: 'Every algebraic root corresponds to a geometric x-intercept where the function curve crosses the horizontal axis (f(x) = 0). Linear equations form straight lines, quadratics form parabolas with focal points, and cubics form S-shaped curves with inflection points.'
       }
     ]
   },
@@ -8515,29 +8549,61 @@ export const toolsList: Tool[] = [
     name: 'Data Analysis Calculator',
     category: 'math-studio',
     shortDescription: 'Analyze tabular data, detect outliers, perform regressions, and plot scatter charts.',
-    metaDescription: 'Upload CSV or paste spreadsheet datasets. Compute correlation matrices, run linear regression trendlines, detect outliers, and generate scatter plots.',
-    keywords: ['data analysis calculator', 'linear regression online', 'correlation matrix calculator', 'outlier detector', 'scatter plot generator'],
+    metaDescription: 'Upload CSV or paste tabular datasets to compute bivariate regressions (linear, polynomial, exponential, power, log), Pearson correlation matrices, Tukey IQR & Z-score outlier detection, and 95% confidence bands.',
+    keywords: [
+      'data analysis calculator',
+      'linear regression calculator',
+      'polynomial regression online',
+      'outlier detector tool',
+      'scatter plot generator',
+      'correlation matrix calculator',
+      'descriptive statistics calculator',
+      'tukey iqr anomaly detector',
+      'r squared calculator',
+      'bivariate data analyzer'
+    ],
     icon: 'TrendingUp',
     howToUse: [
-      'Upload a CSV file or paste your tabular spreadsheet data directly.',
-      'Select which columns represent the independent (X) and dependent (Y) variables.',
-      'Review the correlation index, regression formula (y = mx + c), and standard errors.',
-      'Inspect the scatter plot showing the data points overlaid with the linear regression trendline.'
+      'Paste your spreadsheet table or upload a CSV/TSV file with auto-detected delimiters.',
+      'Select the Independent (X) and Dependent (Y) variables from the dynamic column dropdowns.',
+      'Explore the multi-model curve fitting table comparing Linear, Quadratic, Cubic, Exponential, Power, and Logarithmic models with automatic Best Fit identification.',
+      'Inspect the interactive SVG scatter plot featuring 95% prediction interval ribbons, residual drop lines, and outlier halo highlights.',
+      'Switch between the Descriptive Statistics, Outlier Diagnostics, Correlation Heatmap, What-If Value Predictor, and Data Grid tabs to conduct comprehensive statistical analysis.'
     ],
     faqs: [
       {
-        question: 'How does this tool detect outliers?',
-        answer: 'Outliers are flagged using the standard IQR (Interquartile Range) method. Any value that falls below Q1 - 1.5*IQR or above Q3 + 1.5*IQR is categorized as an outlier.'
+        question: 'How does the calculator determine the Best Fitting regression model?',
+        answer: 'The calculator evaluates all valid models (Linear, Polynomial Degree 2 & 3, Exponential, Power Law, and Logarithmic) against your dataset by computing the Coefficient of Determination (R²), Adjusted R², and Root Mean Squared Error (RMSE). The model that minimizes residual sum of squares and maximizes R² without overfitting is designated with a Best Fit badge.'
       },
       {
-        question: 'What is the R-squared (R²) value?',
-        answer: 'R-squared (coefficient of determination) indicates the proportion of variance in the dependent variable that is predictable from the independent variable, ranging from 0 (no fit) to 1 (perfect fit).'
+        question: 'How are statistical outliers and anomalies identified?',
+        answer: 'Two complementary statistical methodologies are applied: (1) Tukey’s Interquartile Range (IQR) rule, which flags any observation lying beyond the inner fences [Q1 - 1.5×IQR, Q3 + 1.5×IQR], and (2) Standardized Z-Score rule, which flags data points with |z| > 2.0 (mild) or |z| > 3.0 (extreme anomaly). You can also toggle the "Exclude Outliers" switch to recalculate all regression parameters without anomalous points.'
+      },
+      {
+        question: 'What is the difference between Pearson Correlation (r) and R-Squared (R²)?',
+        answer: 'Pearson correlation coefficient (r) ranges from -1.0 to +1.0 and measures both the strength and direction of a linear relationship between two continuous variables. The coefficient of determination (R² = r² in simple linear regression) ranges from 0% to 100% and quantifies the exact proportion of variance in the dependent variable that is predictable from the independent variable.'
+      },
+      {
+        question: 'What does the 95% Confidence / Prediction Interval ribbon represent on the scatter chart?',
+        answer: 'The shaded confidence ribbon around the regression line depicts the range within which 95% of future individual observations are statistically expected to fall, taking into account sample variance, sample size (N), and distance from the centroid mean (x̄).'
+      },
+      {
+        question: 'How does the What-If Value Predictor work?',
+        answer: 'The What-If Predictor uses the active regression model to provide forward estimations (entering X to forecast Ŷ) and inverse calculations (entering target Y to calculate required X) with high precision.'
+      },
+      {
+        question: 'Can I analyze multi-variable datasets with more than two columns?',
+        answer: 'Yes. The Correlation Matrix tab generates an interactive N×N heatmap visualizing pairwise Pearson correlations across all numeric columns, while the Descriptive Statistics tab computes full five-number summaries, skewness, kurtosis, and confidence intervals for any selected dimension.'
       }
     ],
     sections: [
       {
-        title: 'Principles of Linear Regression',
-        content: 'Linear regression models the relationship between a scalar response and one or more explanatory variables. It seeks to find the line of best fit by minimizing the sum of squared residuals, providing forecasting capabilities for engineering, economic, and scientific studies.'
+        title: 'Bivariate Regression Analysis & Mathematical Models',
+        content: 'Regression analysis estimates mathematical relationships between dependent and explanatory variables. Simple linear regression minimizes the sum of squared residuals (Ordinary Least Squares - OLS), while polynomial, exponential, and power models capture nonlinear growth, diminishing returns, and power-law distributions across financial, biological, and engineering datasets.'
+      },
+      {
+        title: 'Univariate Statistics & Distribution Measures',
+        content: 'Descriptive statistics provide complete numerical characterizations of data spread. Central tendency metrics (mean, median, trimmed mean) indicate the location of the center, while dispersion metrics (variance, sample standard deviation, IQR, coefficient of variation) quantify dispersion. Higher-order moments like skewness and excess kurtosis diagnose tail heaviness and asymmetric distortions relative to Gaussian normal distributions.'
       }
     ]
   },
