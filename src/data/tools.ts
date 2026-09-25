@@ -5885,26 +5885,62 @@ export const toolsList: Tool[] = [
     slug: 'cable-size-calculator',
     name: 'Cable Size Calculator',
     category: 'electrical',
-    shortDescription: "Determine the minimum required cable conductor size based on load current, installation type, and voltage drop limits.",
-    metaDescription: "Free online Cable Size Calculator. Sizing electrical cables (mm² and AWG) according to ampacity and voltage drop criteria.",
-    keywords: ["cable size calculator","electrical wire sizing","wire size calculator","cable size for motor","conduit wire sizing"],
+    shortDescription: "Determine the minimum required cable conductor size (mm² / AWG) based on load current, installation method, deratings, and voltage drop limits.",
+    metaDescription: "Free online Electrical Cable Sizing Calculator (IEC 60364, IS 732, BS 7671, NEC). Calculate required conductor cross-section (mm² & AWG), derated ampacity, voltage drop, motor starting inrush, parallel runs, and conduit fill.",
+    keywords: [
+      "cable size calculator",
+      "electrical wire sizing calculator",
+      "cable sizing iec 60364",
+      "voltage drop cable calculator",
+      "motor feeder cable size calculator",
+      "parallel cable sizer",
+      "copper vs aluminum cable sizing",
+      "conduit wire sizing calculator",
+      "3 phase cable size calculator",
+      "cable derating factor calculator"
+    ],
     icon: 'Zap',
     howToUse: [
-      "Enter the connected load in kW, Amps, or Horsepower.",
-      "Specify the voltage, phase type, and run length.",
-      "Select conductor material, installation method (conduit, air, buried), and insulation (PVC/XLPE).",
-      "Choose the allowable voltage drop limit to view the recommended sizing."
+      "Select sizing mode: Standard Multi-Constraint Sizer, Voltage Drop & Distance Lab, Motor Feeder & Inrush, Parallel Multi-Runs, or Lifecycle Economics.",
+      "Enter connected load (kW, Amps, HP, or kVA), system voltage (230V, 415V, etc.), phase type (1-Ph, 3-Ph, DC), and route distance in meters.",
+      "Configure conductor metal (Copper or Aluminum), insulation type (XLPE 90°C, PVC 70°C, LSZH, EPR), and installation method (conduit, ladder tray, buried).",
+      "Adjust environmental derating factors (ambient air temp, grouped circuits, soil thermal resistivity, short-circuit kA).",
+      "Review the recommended conductor cross-section (mm² & AWG), voltage drop, conduit diameter (Ø mm), and copy engineering spec sheet or export CSV."
     ],
     faqs: [
       {
-        "question": "How do PVC and XLPE insulations differ in cable sizing?",
-        "answer": "XLPE insulation can withstand higher operating temperatures (up to 90°C) compared to PVC (70°C). This allows XLPE cables to carry higher currents, allowing smaller cable sizes for the same load."
+        "question": "What is the difference between Continuous Ampacity and Voltage Drop in cable sizing?",
+        "answer": "Ampacity (Current-Carrying Capacity) is the maximum current a conductor can carry continuously without exceeding its thermal insulation temperature limits (e.g. 70°C for PVC, 90°C for XLPE). Voltage Drop is the decrease in electrical potential over long distances due to conductor resistance and reactance. For short runs (<20m), ampacity usually governs sizing; for long runs (>50m), voltage drop often forces you to select a larger conductor size than ampacity alone requires."
+      },
+      {
+        "question": "How do XLPE and PVC cable insulations compare in current carrying capacity?",
+        "answer": "XLPE (Cross-linked Polyethylene) insulation is rated for continuous operation up to 90°C and short-circuit temperatures up to 250°C, compared to PVC which is limited to 70°C continuous and 160°C short-circuit. Consequently, an XLPE insulated cable carries approximately 20% to 25% higher current than an identical size PVC cable, often allowing a smaller cross-section and reduced cable weight."
+      },
+      {
+        "question": "What derating correction factors (k-factors) must be applied when sizing cables?",
+        "answer": "Base cable ampacity tables are specified at 30°C in open air or 20°C in ground. Real installations require derating multipliers: k_temp (ambient temperature correction), k_group (grouping or bunching of adjacent loaded circuits), k_soil (soil thermal resistivity for buried cables), and k_depth (burial depth). The effective derated ampacity is Iz = I0 × k_temp × k_group × k_soil × k_depth, which must be greater than or equal to the design load current Ib."
+      },
+      {
+        "question": "Why does a 3-Phase Induction Motor require cable oversizing (125% FLA rule)?",
+        "answer": "According to NEC 430.22 and IS 325, branch-circuit conductors supplying a single continuous-duty motor must have an ampacity rating of not less than 125% of the motor Full-Load Amps (FLA). This safety margin accommodates continuous full-load operating heat, mechanical overload margins, and starting inrush cycles without insulation thermal degradation."
+      },
+      {
+        "question": "When and why should parallel multi-run cables be installed instead of a single large cable?",
+        "answer": "Single-conductor or multi-core cables larger than 240 mm² or 300 mm² become extremely stiff, heavy, difficult to bend through raceways, and costly to terminate. Running two or more smaller conductors in parallel per phase (e.g. 2 runs of 3.5C 185 mm² instead of 1 run of 400 mm²) improves current sharing, heat dissipation due to larger surface area, flexibility, and installation labor cost."
+      },
+      {
+        "question": "What is the maximum allowable conduit fill percentage for electrical wires?",
+        "answer": "According to NEC Chapter 9 Table 1 and IS 732, maximum conduit cross-sectional fill is limited to 53% for 1 conductor, 31% for 2 conductors, and 40% for 3 or more conductors. The remaining 60% free air space is mandatory to allow heat dissipation and prevent mechanical damage during pulling through bends."
       }
     ],
     sections: [
       {
-        "title": "Factors Influencing Cable Selection",
-        "content": "Cable sizing depends on two main parameters: Ampacity (the maximum current a cable can safely carry without overheating) and Voltage Drop. Environmental factors like ambient temperature, grouping, and burial depth also require safety derating factors."
+        "title": "Cable Sizing Formulas & Electrical Principles",
+        "content": "Conductor selection must satisfy three independent criteria: 1) Thermal Ampacity: Iz = I0 × k_total ≥ Ib (and Iz ≥ In for circuit breaker coordination). 2) Voltage Drop: ΔV = √3 × I × L × (R cosφ + X sinφ) for 3-phase circuits (ΔV% ≤ 3% to 5%). 3) Short-Circuit Thermal Stress: S_min = (I_sc × √t) / k."
+      },
+      {
+        "title": "Copper vs Aluminum Conductor Selection",
+        "content": "Copper has lower electrical resistivity (ρ20 ≈ 0.01724 Ω·mm²/m) and higher mechanical ductility, making it the preferred choice for residential wiring, control panels, and compact spaces. Aluminum (ρ20 ≈ 0.02826 Ω·mm²/m) is approximately 3 times lighter and substantially less expensive per meter, making it the industry standard for large utility distribution feeders, industrial bus ducts, and high-power transmission cables."
       }
     ]
   },
