@@ -8414,29 +8414,66 @@ export const toolsList: Tool[] = [
     name: 'Matrix Calculator',
     category: 'math-studio',
     shortDescription: 'Perform matrix arithmetic, find determinants, inverses, rank, and transposes.',
-    metaDescription: 'Perform matrix addition, multiplication, determinant, rank, transpose, and inverse operations online. Supports matrices up to 4x4.',
-    keywords: ['matrix calculator', 'matrix multiplication', 'matrix inverse online', 'calculate matrix rank', 'determinant calculator'],
+    metaTitle: 'Matrix Calculator Online — Multi-Dimension Algebra, RREF, Determinants & Eigenvalues',
+    metaDescription: 'Free online matrix calculator for M×N linear algebra. Calculate matrix multiplication, inverses, determinants, rank-nullity, eigenvalues, RREF Gauss-Jordan, and linear systems Ax=b with exact fractions and step-by-step derivations.',
+    keywords: [
+      'matrix calculator',
+      'matrix multiplication online',
+      'matrix inverse calculator',
+      'calculate matrix rank',
+      'determinant calculator',
+      'rref calculator',
+      'gauss jordan elimination step by step',
+      'eigenvalue calculator',
+      'linear system solver ax=b',
+      'lu decomposition online',
+      'cholesky decomposition calculator',
+      'hadamard product calculator',
+      'kronecker product matrix'
+    ],
     icon: 'Grid',
     howToUse: [
-      'Choose the dimensions of your matrices (ranging from 2x2 to 4x4).',
-      'Fill in the matrix cells with your numeric coefficients.',
-      'Select the operation: Addition, Subtraction, Multiplication, Transpose, Determinant, Inverse, or Rank.',
-      'Review the step-by-step arithmetic breakdown and export the result matrix as a CSV file.'
+      'Select your calculation mode: Arithmetic (A+B, A×B, Hadamard, Kronecker), Properties (det, A⁻¹, rank, trace, powers), Decompositions (RREF, Eigenvalues, LU, QR, Cholesky), Linear Systems (Ax=b), or 2D Transformation Visualizer.',
+      'Configure Matrix A and Matrix B dimensions from 1×1 up to 6×6 using the row and column selectors, or load a preset (Identity, Symmetric, 2D Rotation, Hilbert, Markov).',
+      'Enter numeric coefficients or fractions into the matrix input cells.',
+      'Toggle between Decimal and Exact Rational Fraction (a/b) display modes.',
+      'Inspect the computed solution matrix, scalar values, 2D geometric transformation canvas, and step-by-step Gaussian derivations.',
+      'Export the resulting matrix as a CSV file or copy polyglot code in LaTeX, Python (NumPy), MATLAB/Octave, or JSON array format.'
     ],
     faqs: [
       {
-        question: 'What is a matrix determinant?',
-        answer: 'The determinant is a scalar value calculated from a square matrix. It provides critical information about the matrix, such as whether it is invertible (determinant is non-zero) and the scaling factor of the transformation.'
+        question: 'What is a matrix determinant and why is it important?',
+        answer: 'The determinant (det A or |A|) is a scalar value calculated exclusively for square matrices (n×n). Geometrically, it represents the scaling factor of the transformation on volume or area (e.g., in 2D it is the signed area of the transformed unit square). Algebraically, a matrix is invertible if and only if its determinant is non-zero (det A ≠ 0). A determinant of zero indicates a singular, rank-deficient matrix whose columns are linearly dependent.'
       },
       {
-        question: 'Can I multiply matrices of different dimensions?',
-        answer: 'Yes, matrix multiplication is possible if the number of columns in the first matrix equals the number of rows in the second matrix.'
+        question: 'What is the condition for matrix multiplication A × B?',
+        answer: 'Two matrices A (m×n) and B (p×q) can be multiplied (A × B) if and only if the number of columns in A equals the number of rows in B (n = p). The resulting product matrix C has dimension m×q, where each entry C[i][j] is the dot product of row i from A and column j from B.'
+      },
+      {
+        question: 'What is Reduced Row Echelon Form (RREF) and Gauss-Jordan elimination?',
+        answer: 'Reduced Row Echelon Form (RREF) is the unique canonical form of a matrix obtained via elementary row operations (row swapping, row scaling, and row addition). In RREF, the leading entry (pivot) of every non-zero row is 1, each pivot is strictly to the right of the pivot in the row above, all entries in pivot columns other than the pivot itself are 0, and all rows consisting entirely of zeros are at the bottom. RREF is used to determine matrix rank, find bases for column and null spaces, and solve systems of linear equations.'
+      },
+      {
+        question: 'What does the Rank-Nullity Theorem state?',
+        answer: 'For any m×n matrix representing a linear map from an n-dimensional vector space, the Rank-Nullity Theorem states that rank(A) + nullity(A) = n (the number of columns). The rank is the dimension of the column space (image/range), while the nullity is the dimension of the null space (kernel, solutions to Ax = 0).'
+      },
+      {
+        question: 'What are eigenvalues and eigenvectors in linear algebra?',
+        answer: 'Given a square matrix A, a non-zero vector v is an eigenvector and λ is its corresponding eigenvalue if Av = λv. This means the linear transformation A acts on v purely by scaling it by a factor of λ without changing its spatial direction. Eigenvalues are calculated by finding the roots of the characteristic polynomial det(A - λI) = 0.'
+      },
+      {
+        question: 'How does this calculator solve linear systems of equations (Ax = b)?',
+        answer: 'The calculator constructs the augmented matrix [A | b] and performs Gauss-Jordan elimination into RREF. According to the Rouché–Capelli theorem: if rank(A) < rank([A|b]), the system is inconsistent (no solution); if rank(A) = rank([A|b]) = n, the system has a unique solution vector; if rank(A) = rank([A|b]) < n, there are infinitely many solutions parameterized by n - rank(A) free variables.'
       }
     ],
     sections: [
       {
-        title: 'Applications of Matrix Algebra',
-        content: 'Matrices represent linear transformations in space and are heavily utilized in computer graphics, engineering structures, economic modeling, and physics. Finding the inverse of a matrix allows solving systems of linear equations, while computing the rank determines the dimensionality of the vector space spanned by its rows or columns.'
+        title: 'Matrix Algebra, Spatial Transformations & Linear Systems',
+        content: 'Matrices are the bedrock of computational mathematics, artificial intelligence, computer graphics, structural mechanics, quantum physics, and economic modeling. A matrix represents a linear transformation between vector spaces, encoding rotations, scalings, shears, projections, and coordinate changes.'
+      },
+      {
+        title: 'Matrix Decompositions & Modern Numerical Linear Algebra',
+        content: 'Matrix factorizations allow decomposing complex operators into simpler, computationally efficient components. LU Decomposition (A = LU) accelerates solving multiple linear systems with identical coefficients. QR Decomposition (A = QR) produces an orthogonal matrix Q and upper-triangular matrix R for stable least-squares regression. Cholesky Decomposition (A = LLᵀ) provides an ultra-fast square-root factorization for symmetric positive-definite covariance and stiffness matrices.'
       }
     ]
   },
@@ -8574,29 +8611,66 @@ export const toolsList: Tool[] = [
     name: '3D Geometry & Volume Calculator',
     category: 'math-studio',
     shortDescription: 'Calculate volume, surface area, and capacity in litres for cylinders, cones, and spheres.',
-    metaDescription: 'Online 3D geometry calculator. Compute volume, surface area, and capacity in litres for cubes, cylinders, cones, spheres, frustums, and pipes.',
-    keywords: ['volume calculator', 'cylinder volume calculator', 'sphere surface area', 'tank capacity litres', 'pipe volume calculator'],
+    metaTitle: '3D Geometry & Volume Calculator Online — Cylinders, Cones, Tanks & Prisms',
+    metaDescription: 'Free online 3D geometry and volume calculator. Compute volume, surface area, capacity in litres & gallons, and material weight for 19 shapes including cylinders, cones, spheres, frustums, prisms, and horizontal liquid dipstick tanks.',
+    keywords: [
+      'volume calculator',
+      'cylinder volume calculator',
+      'cone surface area calculator',
+      'sphere volume calculator',
+      'tank capacity litres calculator',
+      'pipe volume calculator',
+      'frustum volume formula',
+      'torus volume calculator',
+      'ellipsoid surface area',
+      'triangular prism volume',
+      'hexagonal prism volume',
+      'horizontal tank dipstick calculator',
+      'material weight from volume'
+    ],
     icon: 'Box',
     howToUse: [
-      'Choose the 3D shape (Cube, Cylinder, Cone, Sphere, Frustum, Pyramid, or Pipe/Tank).',
-      'Enter the dimensional inputs (radii, heights, lengths).',
-      'Review computed volume, total/lateral surface area, and capacity in litres.',
-      'Check the 3D isometric SVG vector preview for structural visual cues.'
+      'Select a solid geometry category (Curved Solids, Prisms & Cubes, Pyramids, or Tanks & Silos) and choose from 19 shapes including Cylinders, Cones, Spheres, Frustums, Torus, Cuboids, and Horizontal Cylindrical Tanks.',
+      'Select your preferred measurement unit: Meters (m), Centimeters (cm), Millimeters (mm), Feet (ft), Inches (in), or Yards (yd).',
+      'Enter the dimensional parameters (radii, heights, lengths, widths). For horizontal tanks, adjust the interactive dipstick liquid depth slider.',
+      'Select a solid or liquid material (Water, Concrete, Steel, Aluminum, Timber, PLA/PETG, Soil, Gasoline) to automatically calculate net physical mass in kg, tonnes, and lbs.',
+      'Inspect the computed 3D wireframe preview, SI volume (m³), holding capacity (Litres, US Gallons, UK Gallons, ft³, bbl), and total surface area.',
+      'Review the step-by-step geometric derivations and export the complete volumetric specification as a CSV file.'
     ],
     faqs: [
       {
-        question: 'How is pipe/tank volume computed?',
-        answer: 'Pipe volume uses hollow cylinder formula: V = π * (R² - r²) * L. Tank capacity integrates standard volume formulas with litre conversions (1 cubic meter = 1000 litres).'
+        question: 'How do you calculate the volume and capacity of a cylinder?',
+        answer: 'The volume of a cylinder is calculated using the formula V = π × r² × h, where r is the base radius and h is the height. To convert volume to liquid capacity: 1 cubic meter (m³) equals 1,000 Litres or approximately 264.172 US liquid gallons. Total surface area is given by A = 2πr(r + h).'
       },
       {
-        question: 'What is a frustum?',
-        answer: 'A frustum is a cone or pyramid with its top cut off by a plane parallel to its base, commonly found in architectural columns, conical hoppers, and circular bins.'
+        question: 'What is a frustum and how is its volume computed?',
+        answer: 'A frustum is a truncated cone (or pyramid) formed by cutting off the apex with a plane parallel to the base. The volume of a conical frustum with top radius r, bottom radius R, and vertical height h is V = (1/3) × π × h × (R² + r² + R×r). Its slant height is s = √((R - r)² + h²).'
+      },
+      {
+        question: 'How is the liquid volume calculated in a partially filled horizontal cylindrical tank?',
+        answer: 'For a horizontal cylinder of radius R and length L filled to depth h (h ≤ 2R), the cross-sectional liquid area is a circular segment: A_seg = R² × arccos((R - h)/R) - (R - h) × √(2Rh - h²). The total liquid volume is V_liquid = A_seg × L. This calculator computes exact dipstick liquid holding volumes and ullage (empty headspace).'
+      },
+      {
+        question: 'What is Cavalieri’s Principle in 3D geometry?',
+        answer: 'Cavalieri’s Principle states that if two three-dimensional solids have the same height and equal cross-sectional areas at every level parallel to their bases, their total volumes are equal. This fundamental theorem proves why right prisms/cylinders and oblique prisms/cylinders of identical base and height share the exact same volume formula.'
+      },
+      {
+        question: 'How do you calculate the mass/weight of a 3D solid from its volume?',
+        answer: 'The mass is calculated using the physical density relationship: Mass (kg) = Volume (m³) × Density (kg/m³). For example, a 2 m³ solid block made of reinforced concrete (density ~2,400 kg/m³) weighs 4,800 kg (4.8 metric tonnes).'
+      },
+      {
+        question: 'What is the difference between total surface area and lateral surface area?',
+        answer: 'Lateral Surface Area (LSA) measures only the area of the curved sides or perimeter faces excluding the top and bottom bases. Total Surface Area (TSA) includes the lateral area plus the area of all bases (e.g., for a cylinder, TSA = 2πrh + 2πr²).'
       }
     ],
     sections: [
       {
-        title: 'Volumetric and Spatial Calculations',
-        content: 'Three-dimensional calculations are key in design layout, civil material estimates (concrete cubic volume), tank design, and hydraulic pipe sizing. Surface area governs heat transfer rates and paint requirements, while internal volume determines fluid capacity.'
+        title: 'Volumetric & Spatial Geometry in Engineering and Science',
+        content: 'Volumetric calculations govern fluid storage design (chemical sumps, water reservoirs, pressurized silos), civil construction budgeting (concrete batch volumes, excavation soil tonnage), thermal heat exchange (surface-area-to-volume ratio), and logistics cargo containerization.'
+      },
+      {
+        title: 'Liquid Storage Tanks, Dipstick Calibration & Ullage',
+        content: 'Industrial tanks storing petroleum, milk, or chemicals require nonlinear dipstick volume charts because cylindrical cross-sections expand and contract nonlinearly with liquid depth. Our calculator provides instantaneous circular segment integration to accurately calibrate liquid inventories.'
       }
     ]
   },
@@ -8986,25 +9060,74 @@ export const toolsList: Tool[] = [
     slug: 'fourier-transform-tool',
     name: 'Fourier Transform Calculator',
     category: 'math-studio',
-    shortDescription: 'Compute Discrete Fourier Transforms (FFT) of signal arrays to analyze frequency spectra.',
-    metaDescription: 'Fast Fourier Transform (FFT) calculator. Paste signal data or generate waves. Inspect time and frequency domain charts with dominant frequencies.',
-    keywords: ['fourier transform calculator', 'fft calculator online', 'frequency spectrum analyzer', 'power spectrum dft', 'sampling rate nyquist'],
+    shortDescription: 'Compute Fast Fourier Transforms (FFT) and Inverse FFT (iFFT) of continuous signal formulas, multi-tone synthesizers, or raw time-series arrays.',
+    metaTitle: 'Fourier Transform Calculator – Fast Fourier Transform (FFT) & iFFT Spectral Studio | Toolique',
+    metaDescription: 'Free online Fast Fourier Transform (FFT) & iFFT calculator. Analyze frequency spectra, power spectral density (PSD), phase angles, window functions (Hann, Hamming, Blackman), and listen to synthesized audio.',
+    keywords: [
+      'fourier transform calculator',
+      'fft calculator online',
+      'fast fourier transform',
+      'inverse fourier transform',
+      'ifft calculator',
+      'frequency spectrum analyzer',
+      'power spectral density calculator',
+      'discrete fourier transform dft',
+      'nyquist frequency calculator',
+      'audio spectrum analyzer',
+      'hann window fft',
+      'spectral filter tool'
+    ],
     icon: 'Activity',
     howToUse: [
-      'Generate a sample signal (Sine, Square, or Mixed frequencies) or paste your own CSV data.',
-      'Input the sampling rate frequency (Fs).',
-      'Compute the FFT to extract time-domain waveforms and frequency amplitude spectra.'
+      'Select your input mode: Continuous Mathematical Formula f(t), Multi-Tone Harmonic Synthesizer, or Raw Numerical CSV Array.',
+      'Set the Sampling Rate (Fs) in Hz and the sample size (N points, power of 2) or choose one of the predefined signal presets.',
+      'Select a windowing function (Hann, Hamming, Blackman, Flat Top, or Rectangular) to control spectral leakage.',
+      'Explore the interactive graphs: Magnitude Spectrum (|X(f)| in Linear or dBV), Time Domain Waveform, Phase Spectrum, Power Spectral Density (PSD), or Complex Real/Imaginary components.',
+      'Experiment with the iFFT Filter Lab (Low-Pass, High-Pass, Band-Pass, Notch) and compare original vs. reconstructed waveforms.',
+      'Click "Listen to Synthesized Signal" to hear the audio tone generated directly in your browser, or export the full analysis to CSV.'
     ],
     faqs: [
       {
-        question: 'What is the Nyquist frequency?',
-        answer: 'The Nyquist frequency is half the sampling rate (Fs / 2). It represents the maximum frequency that can be resolved without aliasing.'
+        question: 'What is the Fast Fourier Transform (FFT)?',
+        answer: 'The Fast Fourier Transform (FFT) is an efficient algorithm to compute the Discrete Fourier Transform (DFT) and its inverse. It reduces the computational complexity from O(N²) to O(N log N), making real-time frequency analysis practical in digital signal processing (DSP).'
+      },
+      {
+        question: 'What is the Nyquist-Shannon Sampling Theorem?',
+        answer: 'The Nyquist-Shannon theorem states that to accurately reconstruct a signal without aliasing distortion, the sampling frequency (Fs) must be strictly greater than twice the maximum frequency component present in the signal: Fs > 2 × fmax. The frequency Fs / 2 is known as the Nyquist limit.'
+      },
+      {
+        question: 'Why do we use windowing functions like Hann or Hamming in FFT?',
+        answer: 'When an FFT is performed on a finite data segment, sharp discontinuities at the start and end of the sample block cause spectral leakage (energy smearing across adjacent frequency bins). Window functions taper the signal boundaries smoothly to zero, suppressing side-lobes and improving frequency resolution.'
+      },
+      {
+        question: 'What is the difference between FFT and iFFT?',
+        answer: 'FFT converts a signal from the time domain x(t) into the frequency domain X(f), revealing which frequencies are present. Inverse FFT (iFFT) performs the reverse mathematical operation, reconstructing the time-domain waveform from its complex frequency components.'
+      },
+      {
+        question: 'How is Magnitude Spectrum converted to Decibels (dBV)?',
+        answer: 'The decibel magnitude is calculated as: dBV = 20 × log10(Magnitude). A logarithmic dB scale makes it much easier to visualize weak harmonic overtones and noise floors alongside strong fundamental frequencies.'
+      },
+      {
+        question: 'Can I listen to the synthesized signal audio?',
+        answer: 'Yes! Toolique uses the browser Web Audio API to convert the computed time-domain waveform into real audible sound in real-time, allowing you to hear beats, multi-tone chords, and filter cutoffs.'
       }
     ],
     sections: [
       {
-        title: 'Fourier Analysis Basics',
-        content: 'Fourier transforms decompose signals from the time domain into constituent sinusoids in the frequency domain, enabling filter design and spectral diagnostics.'
+        title: 'Understanding Fourier Analysis and Spectral Decomposition',
+        content: 'Fourier analysis is built on the mathematical insight that any periodic or non-periodic waveform can be represented as an infinite summation of sinusoids with varying amplitudes, frequencies, and phase shifts. In engineering, Fourier transforms bridge the gap between time-domain observations (such as audio vibrations or voltage signals) and frequency-domain diagnostics (such as harmonic distortion or resonant peaks).'
+      },
+      {
+        title: 'Cooley-Tukey Radix-2 FFT Algorithm',
+        content: 'The Cooley-Tukey algorithm breaks down a DFT of composite size N = 2^m into smaller sub-transforms recursively using bit-reversal permutations and butterfly multiplication passes. By exploiting symmetry in the twiddle factors (W_N^k = e^(-j 2π k / N)), computing an FFT of 1,024 points requires approximately 10,240 operations instead of over 1,000,000 operations required by direct DFT matrix multiplication.'
+      },
+      {
+        title: 'Windowing Functions and Spectral Leakage Mitigation',
+        content: 'Different window functions provide specific trade-offs between main-lobe width (frequency resolution) and side-lobe suppression (amplitude dynamic range):\n- **Hann (Hanning)**: Excellent general-purpose window for random signals and noise reduction.\n- **Hamming**: Optimized first side-lobe cancellation (-43 dB).\n- **Blackman**: Heavy side-lobe suppression (-58 dB) ideal for wide dynamic range spectral analysis.\n- **Flat Top**: Best for calibrated sinusoidal amplitude accuracy with slight broadening of peak width.'
+      },
+      {
+        title: 'Parseval\'s Theorem and Energy Conservation',
+        content: 'Parseval\'s theorem establishes that the total energy in the time-domain equals the total spectral energy in the frequency-domain: ∑ |x[n]|² = (1/N) ∑ |X[k]|². This principle guarantees that frequency-domain filtering and synthesis preserve the quantitative energy properties of physical systems.'
       }
     ]
   },
@@ -9013,25 +9136,63 @@ export const toolsList: Tool[] = [
     slug: 'complex-number-calculator',
     name: 'Complex Number Calculator',
     category: 'math-studio',
-    shortDescription: 'Perform complex algebra, roots, powers, and plot on an Argand diagram.',
-    metaDescription: 'Solve complex number equations. Add, multiply, divide, exponentiate, find roots, and convert rectangular to polar form with Argand plots.',
-    keywords: ['complex number calculator', 'argand diagram calculator', 'polar form complex', 'de moivre roots', 'phasor conversion'],
-    icon: 'Box',
+    shortDescription: 'Perform complex algebra, roots of unity, De Moivre powers, AC impedance, and plot on an interactive Argand diagram.',
+    metaTitle: 'Complex Number Calculator – Arithmetic, Polar Conversion & Argand Diagram | Toolique',
+    metaDescription: 'Free online Complex Number Calculator. Add, multiply, divide, compute powers, find n-th roots of unity, calculate AC RLC impedance, and plot vectors on an interactive Argand plane.',
+    keywords: [
+      'complex number calculator',
+      'argand diagram calculator',
+      'polar form complex numbers',
+      'de moivre roots calculator',
+      'complex roots of unity',
+      'euler formula complex',
+      'ac impedance calculator',
+      'rectangular to polar complex',
+      'complex conjugate calculator',
+      'complex algebra online'
+    ],
+    icon: 'Compass',
     howToUse: [
-      'Enter two complex numbers in rectangular form (a + bi) or polar form (r, theta).',
-      'Select the arithmetic operation, conjugate, power, or roots count.',
-      'Examine formulas, step-by-step phasor details, and vectors on the Argand plane.'
+      'Select your calculation mode: Arithmetic (Z1 op Z2), Analytic Functions (Properties of Z1), De Moivre Roots of Unity, or AC RLC Circuit Impedance.',
+      'Enter complex numbers in either Cartesian/Rectangular format (a + bi) or Polar/Phasor format (r ∠ θ°).',
+      'Choose the operation: Addition (+), Subtraction (-), Multiplication (×), Division (÷), Complex Exponentiation (^), or Parallel Impedance (∥).',
+      'Inspect the interactive Argand Diagram with vector arrows, modulus circles, and root polygon geometry.',
+      'Review instant conversions across Rectangular, Polar (degrees/radians), and Euler exponential (r · e^(iθ)) notations alongside step-by-step math derivations.'
     ],
     faqs: [
       {
-        question: 'What is De Moivre\'s theorem?',
-        answer: 'De Moivre\'s theorem calculates powers and roots of complex numbers in polar coordinates: z^n = r^n * (cos(nθ) + i sin(nθ)).'
+        question: 'What is a complex number and an imaginary unit?',
+        answer: 'A complex number is an expression of the form a + bi, where a is the real part, b is the imaginary part, and i is the imaginary unit defined by the fundamental property i² = -1.'
+      },
+      {
+        question: 'What is an Argand Diagram?',
+        answer: 'An Argand diagram is a geometric representation of complex numbers as 2D position vectors on a Cartesian coordinate plane, where the horizontal axis represents the Real part (Re) and the vertical axis represents the Imaginary part (Im).'
+      },
+      {
+        question: 'How do you convert between Rectangular and Polar forms?',
+        answer: 'From Rectangular (a + bi) to Polar (r ∠ θ): r = √(a² + b²) and θ = atan2(b, a). From Polar (r ∠ θ) to Rectangular: a = r · cos(θ) and b = r · sin(θ).'
+      },
+      {
+        question: 'What is De Moivre\'s Theorem for powers and roots?',
+        answer: 'De Moivre\'s theorem states that for any real number θ and integer n: (cos θ + i sin θ)^n = cos(nθ) + i sin(nθ). To find the n-th roots of z = r e^(iθ), the roots are given by: wk = r^(1/n) · e^(i(θ + 2kπ)/n) for k = 0, 1, ..., n - 1.'
+      },
+      {
+        question: 'How are complex numbers used in AC electrical circuits?',
+        answer: 'In alternating current (AC) circuit analysis, sinusoids are represented as complex phasors. Resistance is purely real (R), inductive reactance is positive imaginary (+jωL), and capacitive reactance is negative imaginary (-j/(ωC)), allowing circuit networks to be analyzed using standard Ohm\'s and Kirchhoff\'s laws: V = I · Z.'
       }
     ],
     sections: [
       {
-        title: 'Complex Planes in Engineering',
-        content: 'Complex numbers model two-dimensional vectors, playing vital roles in electrical AC impedance, signal parsing, and control loops feedback.'
+        title: 'Fundamental Operations on Complex Numbers',
+        content: 'Complex arithmetic follows the standard field axioms of real algebra combined with the identity i² = -1:\n- **Addition & Subtraction**: Performed component-wise: (a + bi) ± (c + di) = (a ± c) + (b ± d)i.\n- **Multiplication**: (a + bi)(c + di) = (ac - bd) + (ad + bc)i.\n- **Division**: Multiplied by the complex conjugate of the denominator: (a + bi)/(c + di) = [(ac + bd) + (bc - ad)i] / (c² + d²).'
+      },
+      {
+        title: 'Euler\'s Formula and Exponential Representation',
+        content: 'Euler\'s identity e^(iθ) = cos(θ) + i sin(θ) establishes a profound bridge between trigonometry and complex analysis. It allows multiplication and division to be conceptualized as scaling and rotation in the complex plane: multiplying by e^(iθ) rotates any vector counterclockwise by angle θ without altering its magnitude.'
+      },
+      {
+        title: 'Roots of Unity and Regular Polygon Geometry',
+        content: 'The n-th roots of unity are the solutions to the equation z^n = 1. In the Argand plane, these n solutions lie on the unit circle (|z| = 1) spaced at equal angular intervals of 2π/n radians, forming the vertices of a regular n-sided polygon centered at the origin.'
       }
     ]
   },
