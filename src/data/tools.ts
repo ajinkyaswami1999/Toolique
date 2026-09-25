@@ -5942,25 +5942,61 @@ export const toolsList: Tool[] = [
     name: 'Power Consumption Calculator',
     category: 'electrical',
     shortDescription: "Estimate energy consumption in kWh and monthly electricity costs for home or office appliances.",
-    metaDescription: "Free online Power Consumption Calculator. Calculate daily, monthly, and yearly electricity usage costs in Rupees based on appliance wattages.",
-    keywords: ["power consumption calculator","electricity cost calculator","kWh calculator","energy cost estimator","appliance power consumption"],
+    metaDescription: "Free online Power Consumption & Electricity Cost Calculator. Estimate daily, monthly, and yearly kWh units, calculate tiered telescopic slab utility bills, compare 5-star appliance ROI, and simulate rooftop solar PV sizing.",
+    keywords: [
+      "power consumption calculator",
+      "electricity cost calculator",
+      "kWh calculator online",
+      "appliance wattage calculator",
+      "energy bill estimator india",
+      "bldc fan power savings calculator",
+      "inverter ac power consumption",
+      "solar rooftop sizing calculator",
+      "electricity bill slab calculator",
+      "carbon footprint electricity calculator"
+    ],
     icon: 'Zap',
     howToUse: [
-      "Select a preset appliance or enter a custom wattage rating.",
-      "Enter the quantity of appliances and hours used per day.",
-      "Input your local utility tariff rate in Rupees per unit (kWh).",
-      "Examine the daily, weekly, monthly, and annual cost projections."
+      "Select a whole-home preset (2BHK, 3BHK, WFH Studio) or add custom appliances from the 30+ device catalog.",
+      "Adjust operating wattage, quantity, daily usage hours, and compressor duty cycle percentages.",
+      "Configure your local utility tariff structure (telescopic progressive slab rates or flat per-unit rate) along with fixed meter charges and electricity taxes.",
+      "Explore the 5-Star vs Old Device ROI Comparison tab to determine the exact annual financial payback period for energy-saving upgrades.",
+      "Simulate rooftop solar PV sizing to calculate the required solar plant capacity (kWp) to offset your monthly grid bill."
     ],
     faqs: [
       {
-        "question": "What is 1 unit of electricity?",
-        "answer": "One unit of electricity is equal to 1 Kilowatt-hour (kWh). It represents the energy consumed by a 1,000-Watt appliance running continuously for 1 hour."
+        question: "What is 1 Unit of electricity and how is it calculated?",
+        answer: "One unit of electricity is exactly equal to 1 Kilowatt-hour (kWh). It represents 1,000 Watts of electrical power consumed continuously over 1 hour. The formula is: Energy (kWh) = (Power in Watts × Operating Hours × Quantity) / 1,000."
+      },
+      {
+        question: "What is a Duty Cycle and why is it important for ACs and refrigerators?",
+        answer: "Compressor-driven appliances (like inverter air conditioners and refrigerators) do not draw their peak rated wattage constantly. Once the set thermostat temperature is reached, the compressor cycles off or throttles down to maintain temperature. A duty cycle of 60% means the compressor operates at full load for only 60% of the runtime, providing a far more accurate energy forecast."
+      },
+      {
+        question: "How do progressive telescopic slab tariffs work in electricity billing?",
+        answer: "Most electric utility boards (like MSEDCL, BESCOM, TANGEDCO, DERC) charge electricity consumption using progressive tiers (slabs). For example, the first 100 units might be billed at ₹4.50/unit, units 101–300 at ₹7.20/unit, and units above 300 at ₹9.80/unit. Higher consumption pushes usage into more expensive brackets."
+      },
+      {
+        question: "How much money and electricity does a BLDC ceiling fan save compared to an induction fan?",
+        answer: "A standard conventional induction ceiling fan consumes 75 Watts, whereas a modern BLDC (Brushless DC) motor fan consumes only 28 Watts at peak speed. Running for 12 hours daily, a BLDC fan saves ~206 kWh per year (~₹1,500 annually per fan), recovering its purchase premium within 18 to 24 months."
+      },
+      {
+        question: "How do I calculate the solar rooftop plant capacity (kWp) needed for my house?",
+        answer: "In tropical climates, a 1 kWp rooftop solar PV plant generates approximately 4.0 to 4.5 units (kWh) per day (120–135 units per month). To offset a 400-unit monthly electricity bill, you would need roughly a 3.0 to 3.5 kWp rooftop solar installation."
+      },
+      {
+        question: "What is the carbon footprint of home electricity consumption?",
+        answer: "On fossil-fuel-dominated national electrical grids (such as India and the US), generating 1 kWh of electricity releases approximately 0.82 kg of CO₂ equivalent emissions. Consuming 500 units/month generates ~4.92 Tonnes of CO₂ per year, requiring around 225 mature trees to sequester."
       }
     ],
     sections: [
       {
-        "title": "Tips for Reducing Appliance Power Bills",
-        "content": "To lower your energy bills, focus on high-wattage heating/cooling loads (like ACs, heaters, geysers). Switching to 5-star inverter-based appliances and LED lighting significantly cuts down monthly unit consumption."
+        title: "Energy Efficiency Best Practices & Appliance Duty Cycles",
+        content: "High-wattage thermal heating and cooling loads (air conditioners, storage water geysers, space heaters, and induction hobs) account for 60% to 75% of residential electricity bills. Upgrading to Bureau of Energy Efficiency (BEE) 5-Star inverter appliances, utilizing programmable smart plugs, and cleaning AC filters regularly can reduce overall monthly consumption by 25% to 40%."
+      },
+      {
+        title: "Understanding Grid Electricity Surcharges & Power Factors",
+        content: "In addition to base per-unit energy charges, electricity utility bills include fixed meter charges, electricity duty (state taxes), and Fuel Price and Power Purchase Adjustment Surcharges (FPPPA/FCA). Monitoring connected load ensures you do not exceed sanctioned load limits, avoiding penalty demand charges."
       }
     ]
   },
@@ -5969,26 +6005,61 @@ export const toolsList: Tool[] = [
     slug: 'ups-calculator',
     name: 'UPS Capacity Calculator',
     category: 'electrical',
-    shortDescription: "Calculate the required UPS capacity (VA) and battery bank rating (Ah) to back up connected load demands.",
-    metaDescription: "Free online UPS Sizing Calculator. Calculate required inverter rating in VA and battery capacity in Ah for backup runtime.",
-    keywords: ["ups calculator","inverter capacity calculator","battery size for ups","ups runtime calculator","va rating calculator"],
+    shortDescription: "Calculate required commercial UPS capacity (VA/kVA), battery bank Ah rating, series-parallel string wiring, and generator pairing ratios.",
+    metaDescription: "Free online UPS Capacity & Battery Sizing Calculator. Calculate required UPS rating in VA/kVA, battery bank Ah & kWh with Peukert compensation, series-parallel strings, DC breaker sizing, and data center rack cooling loads.",
+    keywords: [
+      "ups capacity calculator",
+      "ups sizing calculator",
+      "battery bank ah calculator for ups",
+      "online double conversion ups sizing",
+      "line interactive vs online ups",
+      "ups battery string series parallel calculator",
+      "data center server rack ups sizing",
+      "ups generator sizing ratio",
+      "va to watts ups calculation",
+      "ups runtime calculation formula"
+    ],
     icon: 'Zap',
     howToUse: [
-      "Enter the total connected backup load in Watts or Volt-Amps.",
-      "Set the desired power factor, safety margin, and backup time.",
-      "Choose the battery system DC voltage (12V, 24V, 48V, etc.).",
-      "Select battery chemistry and click calculate to view sizing results."
+      "Select your sizing module: Standard UPS & Battery Sizer, Server Rack / Data Center, Battery String Layout, Connected Load Aggregator, or Generator Pairing.",
+      "Input total connected continuous load (Watts) and select your UPS topology (Offline, Line-Interactive AVR, or Online Double-Conversion).",
+      "Specify desired runtime backup duration, safety headroom buffer (20%–30%), and battery chemistry (Tubular, AGM, GEL, NMC, or LiFePO4).",
+      "Review commercial standard VA/kVA matching, exact battery capacity (Ah/kWh), series/parallel modular battery counts, DC cable gauge (mm²), and generator sizing."
     ],
     faqs: [
       {
-        "question": "How do I choose the correct battery system voltage?",
-        "answer": "Smaller UPS/Inverters (under 1000VA) typically use a single 12V battery. Larger loads (1.5kVA to 3kVA) use 24V or 36V configurations, while high-capacity units (5kVA+) use 48V or 96V to reduce currents."
+        "question": "What is the difference between Watts (W) and Volt-Amperes (VA) in UPS sizing?",
+        "answer": "Watts (W) measures true active power consumed and converted into real work or heat by equipment. Volt-Amperes (VA) measures apparent power, which is the product of RMS voltage and RMS current. The ratio between them is the Power Factor (PF = W / VA). For example, a 1000W server load with a 0.8 power factor requires a UPS capacity of at least 1000 / 0.8 = 1250 VA."
+      },
+      {
+        "question": "Which UPS topology should I choose: Offline, Line-Interactive, or Online Double-Conversion?",
+        "answer": "Offline/Standby UPS (4–10ms transfer) is suitable only for non-critical home desktop PCs and Wi-Fi routers. Line-Interactive with AVR (2–4ms transfer) is ideal for workstations, POS terminals, and small office network equipment. Online Double-Conversion (0ms transfer, continuous AC-DC-AC conversion) is essential for data center servers, medical diagnostic equipment, and sensitive industrial automation sensitive to harmonic distortion."
+      },
+      {
+        "question": "Why does a backup generator need to be 1.5× to 2.0× larger than the UPS capacity?",
+        "answer": "UPS rectifiers and chargers draw non-linear currents that create Total Harmonic Distortion (THD). Smaller or non-inverter generators struggle with frequency fluctuations when loaded with non-linear UPS rectifiers, causing the generator governor to hunt and the UPS to continuously reject generator power and cycle on battery. Sizing the generator at 1.5× to 2.0× the UPS capacity ensures stable frequency and voltage."
+      },
+      {
+        "question": "How do series and parallel battery wiring strings work in UPS battery banks?",
+        "answer": "Batteries connected in SERIES add voltages together while keeping Ah capacity unchanged (e.g., four 12V 100Ah batteries in series produce a 48V 100Ah bank). Batteries connected in PARALLEL add capacity together while maintaining voltage (e.g., two 48V 100Ah strings in parallel produce a 48V 200Ah bank). This calculator automatically computes exact series string counts and parallel string counts based on your DC bus voltage."
+      },
+      {
+        "question": "How does Peukert's Law affect high-rate battery backup discharge in UPS systems?",
+        "answer": "Peukert's Law demonstrates that discharging a lead-acid battery at high discharge rates (e.g. 15-minute to 30-minute full data center loads) significantly reduces its effective available capacity compared to standard 10-hour or 20-hour (C10/C20) test ratings. Modern LiFePO4 lithium batteries have a Peukert constant close to 1.02, delivering virtually 95%+ of their rated capacity even during rapid discharge."
+      },
+      {
+        "question": "How do you calculate cooling (HVAC BTU / Tons AC) requirements for UPS and server racks?",
+        "answer": "Every Watt of electrical energy consumed by enterprise IT hardware and UPS conversion losses is ultimately dissipated into the room as heat. Sizing rule: 1 Watt ≈ 3.41214 BTU/hr, and 1 Ton of refrigeration (TR) = 12,000 BTU/hr (approx. 3.517 kW of cooling capacity). For a 10 kW IT load room, at least 34,121 BTU/hr or approx. 2.85 to 3.5 Tons of HVAC capacity is recommended."
       }
     ],
     sections: [
       {
-        "title": "Inverter Sizing vs Battery Capacity Sizing",
-        "content": "Sizing backup systems requires two independent steps: First, select the UPS rating (VA) to handle peak power draw (including safety buffers). Second, compute the battery bank capacity (Ah) to hold enough energy for the desired runtime."
+        "title": "UPS Capacity Sizing Formulas & Mathematics",
+        "content": "To accurately size an Uninterruptible Power Supply: Minimum VA = Load Watts / (Power Factor × Inverter Efficiency). Recommended VA = Minimum VA × (1 + Headroom Buffer %). Battery Energy Required (Wh) = (Load Watts × Runtime Hours) / (Inverter Efficiency × Depth of Discharge × Wiring Efficiency). Battery Ah = Battery Wh / DC Bus Voltage."
+      },
+      {
+        "title": "Redundancy Architecture (N, N+1, 2N)",
+        "content": "In mission-critical enterprise data centers: N represents the exact baseline capacity needed. N+1 adds one redundant UPS module so maintenance or single module failure causes zero downtime. 2N (or 2N+1) implements two completely independent, mirrored power distribution paths from separate utility/generator feeds to dual-corded server power supplies."
       }
     ]
   },
@@ -6026,25 +6097,61 @@ export const toolsList: Tool[] = [
     name: 'Battery Backup Calculator',
     category: 'electrical',
     shortDescription: "Calculate battery backup runtime hours or required Ah capacity for a given electrical load.",
-    metaDescription: "Free online Battery Backup Calculator. Estimate battery run-time based on load wattage, voltage, and battery chemistry.",
-    keywords: ["battery backup calculator","battery runtime estimator","calculate battery ah","battery discharge calculator","ups battery backup time"],
+    metaDescription: "Free online Battery Backup & Inverter Sizing Calculator. Calculate backup runtime hours, required Ah capacity with Peukert's law, inverter efficiency, solar recharging, and 10-year Lead-Acid vs LiFePO4 TCO.",
+    keywords: [
+      "battery backup calculator",
+      "battery runtime calculator",
+      "calculate battery ah for inverter",
+      "peukert law calculator",
+      "lifepo4 battery sizing",
+      "ups battery backup time calculator",
+      "tubular battery backup duration",
+      "solar battery bank sizing",
+      "battery discharge rate calculator",
+      "home inverter battery calculator"
+    ],
     icon: 'Zap',
     howToUse: [
-      "Enter the average electrical load in Watts.",
-      "Select the battery nominal voltage and capacity in Ah.",
-      "Select battery chemistry (Tubular Lead Acid, AGM, Lithium, LiFePO4).",
-      "Set inverter/system efficiency to view estimated backup hours."
+      "Choose your preferred mode: Runtime Estimator (given battery & load) or Target Ah Sizer (given required backup hours).",
+      "Input your continuous running electrical load in Watts or aggregate multiple appliances in the Load Builder tab.",
+      "Select your battery chemistry (Tubular Lead-Acid, AGM, GEL, Lithium-Ion NMC, LiFePO4, or Sodium-Ion) to auto-apply realistic Depth of Discharge (DoD) and Peukert constants.",
+      "Configure the DC Bus Voltage (12V, 24V, 48V) and inverter/wiring loss efficiency percentages.",
+      "Inspect the Charging & Solar Sizing tab for mains charger amps and rooftop solar PV panel recommendations, or compare 10-Year Total Cost of Ownership."
     ],
     faqs: [
       {
-        "question": "What is Depth of Discharge (DoD)?",
-        "answer": "Depth of Discharge (DoD) is the percentage of battery capacity that can be safely used. Lead-acid batteries should not be discharged past 50% to 70% to avoid structural damage, while Lithium/LiFePO4 can handle up to 90% to 95% DoD."
+        question: "How is battery backup runtime calculated accurately?",
+        answer: "Basic runtime is calculated as: Runtime (Hours) = (Battery Ah × Voltage × DoD × Inverter Efficiency) / Load in Watts. When Peukert's Law is enabled, the calculator further accounts for the internal resistance and chemical diffusion limits of lead-acid batteries, which reduce available capacity under high discharge rates."
+      },
+      {
+        question: "What is Depth of Discharge (DoD) and why does it differ across chemistries?",
+        answer: "Depth of Discharge (DoD) represents the fraction of total stored energy that can be safely withdrawn without accelerating cell degradation. Flooded Tubular Lead-Acid batteries should not be discharged beyond 50% DoD to preserve cycle life, whereas Lithium Iron Phosphate (LiFePO4) can easily tolerate 90% to 95% DoD daily."
+      },
+      {
+        question: "What is Peukert's Law and how does it affect battery backup time?",
+        answer: "Peukert’s Law (t = H × (C / (I × H))^k) models how the effective capacity of a battery decreases when discharged at higher currents. Lead-acid batteries have a high Peukert exponent (k ≈ 1.25), meaning a heavy 1,000W load will deplete the battery much faster than a 100W load. Lithium batteries have k ≈ 1.02, making their capacity virtually independent of discharge current."
+      },
+      {
+        question: "How do I choose between a 12V, 24V, and 48V battery bank?",
+        answer: "For loads under 800W, a 12V system (1 battery) is cost-effective. For loads between 800W and 2,000W, a 24V system (2 batteries in series) halves the DC discharge current, reducing wire resistive heat losses. For heavy loads (>2,000W or solar installations), a 48V DC bus (4 batteries in series) is industry standard."
+      },
+      {
+        question: "Why does ambient temperature impact battery capacity?",
+        answer: "Electrochemical reactions slow down at lower temperatures. At 0°C (32°F), traditional lead-acid batteries deliver only ~70% of their rated 25°C capacity. LiFePO4 and Sodium-Ion batteries maintain significantly higher cold-weather efficiency, though lithium batteries must not be charged below freezing without low-temp BMS heating."
+      },
+      {
+        question: "Is LiFePO4 cheaper than Tubular Lead-Acid over a 10-year lifespan?",
+        answer: "Yes. While LiFePO4 has a higher initial upfront price, its 5,000+ cycle life lasts over 10 to 15 years without replacement. A lead-acid bank must be replaced 2 to 3 times over that same period and requires periodic distilled water maintenance, making LiFePO4 approximately 30% to 40% cheaper on a 10-year Levelized Cost of Storage (LCOS) basis."
       }
     ],
     sections: [
       {
-        "title": "Optimizing Battery Bank Lifespans",
-        "content": "To maximize battery cycles, avoid deep discharges beyond recommendations, perform regular equalization charging for flooded tubular batteries, and keep the installation room well-ventilated and cool."
+        title: "Battery Chemistry Specifications & Cycle Life Profiles",
+        content: "Selecting the correct battery chemistry depends on backup frequency and budget. Tall Tubular lead-acid batteries offer reliable, low-cost storage for regions with occasional grid cuts. In contrast, Lithium Iron Phosphate (LiFePO4) provides maintenance-free operation, fast 2-hour charging, zero acid fumes, high thermal stability, and 5,000+ deep discharge cycles."
+      },
+      {
+        title: "Inverter VA Sizing vs True Wattage & Power Factor",
+        content: "Apparent Power (VA) equals Real Power (Watts) divided by the Power Factor (PF ≈ 0.8 to 0.85 for inductive loads like ceiling fans and refrigerator motors). When sizing an inverter, ensure the continuous VA rating accommodates inductive reactive power and transient starting surges."
       }
     ]
   },
