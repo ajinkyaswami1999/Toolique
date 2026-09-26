@@ -185,6 +185,7 @@ const MetaTagGenerator = lazy(() => import('../tools/MetaTagGenerator'));
 const DiscountCalculator = lazy(() => import('../tools/DiscountCalculator'));
 const BMICalculator = lazy(() => import('../tools/BMICalculator'));
 const MileageCalculator = lazy(() => import('../tools/MileageCalculator'));
+const CarDepreciationCalculator = lazy(() => import('../tools/CarDepreciationCalculator'));
 const PasswordGenerator = lazy(() => import('../tools/PasswordGenerator'));
 const GPACalculator = lazy(() => import('../tools/GPACalculator'));
 
@@ -377,6 +378,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   DiscountCalculator,
   BMICalculator,
   MileageCalculator,
+  CarDepreciationCalculator,
   PasswordGenerator,
   GPACalculator,
 

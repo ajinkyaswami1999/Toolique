@@ -4793,6 +4793,70 @@ export const toolsList: Tool[] = [
     ]
   },
   {
+    id: 'CarDepreciationCalculator',
+    slug: 'car-depreciation-calculator',
+    name: 'Car Depreciation Calculator',
+    category: 'automobile',
+    shortDescription: 'Calculate vehicle depreciation trajectories, 10-year resale values, used car market appraisals, and total cost of ownership (TCO).',
+    metaDescription: 'Free online Car Depreciation Calculator. Estimate vehicle value loss, 10-year depreciation schedules, used car buying/selling price bands, and monthly TCO drain across Petrol, Diesel, CNG, and EV models.',
+    keywords: [
+      'Car Depreciation Calculator',
+      'vehicle depreciation calculator',
+      'car resale value calculator',
+      'used car valuation calculator',
+      'car value loss per year',
+      'IRDAI car depreciation schedule',
+      'declining balance car depreciation',
+      'total cost of ownership car TCO',
+      'new vs used car depreciation savings',
+      'automobile residual value calculator'
+    ],
+    icon: 'TrendingDown',
+    howToUse: [
+      'Enter the original invoice / ex-showroom purchase price of the vehicle and select the currency (₹, $, €, £).',
+      'Set the current age of the vehicle using the interactive timeline slider (0 to 15 years).',
+      'Choose the depreciation methodology: Industry Standard Market Curve (IRDAI), Declining Balance Method (DBM), or Straight Line (SLM).',
+      'Specify odometer reading, physical condition, number of previous owners, and fuel propulsion (Petrol, Diesel, CNG, EV).',
+      'Switch between the 4 specialized tabs: 10-Year Depreciation Schedule, Used Car Fair Market Evaluator, Total Cost of Ownership (TCO), or New vs 3-Year Certified Used Car Comparison.'
+    ],
+    faqs: [
+      {
+        question: 'How fast does a new car depreciate in its first few years?',
+        answer: 'A brand-new car experiences its steepest value drop immediately upon registration: approximately 9%–10% as soon as it is driven off the showroom floor (due to registration charges, road taxes, and dealer margins). By the end of Year 1, average market depreciation reaches 15%–20%. By Year 3, the vehicle has lost roughly 35%–40% of its initial value, and by Year 5, around 50%–60%.'
+      },
+      {
+        question: 'What is the standard IRDAI depreciation schedule used by Indian motor insurance companies?',
+        answer: 'The Insurance Regulatory and Development Authority of India (IRDAI) prescribes the following standard Insured Declared Value (IDV) depreciation rates: Up to 6 months: 5%; 6 months to 1 year: 15%; 1 to 2 years: 20%; 2 to 3 years: 30%; 3 to 4 years: 40%; 4 to 5 years: 50%. For vehicles older than 5 years, IDV is determined by mutual agreement between insurer and vehicle owner based on surveyor appraisal.'
+      },
+      {
+        question: 'Why is buying a 3-year-old certified used car considered the "sweet spot"?',
+        answer: 'The first owner absorbs the steepest portion of the depreciation curve (35%–45% loss over the first 36 months). From Year 3 to Year 6, the annual depreciation rate flattens significantly to just 7%–9% per year. Buying a 3-year-old vehicle allows you to acquire modern safety and tech features at a 40% discount while suffering minimal future depreciation.'
+      },
+      {
+        question: 'How does vehicle mileage and physical condition affect fair market resale value?',
+        answer: 'Average passenger vehicle usage is benchmarked at 10,000 to 12,000 km per year. Cars driven significantly higher than average (>18,000 km/year) suffer an additional 7%–10% value penalty due to increased mechanical powertrain wear. Conversely, a flawless maintenance record, single-owner Registration Certificate (RC), and immaculate cosmetic condition can command a 5%–8% premium over baseline market value.'
+      },
+      {
+        question: 'Do Electric Vehicles (EVs) and Diesel cars depreciate differently than Petrol cars?',
+        answer: 'Yes. Electric Vehicles currently depreciate slightly faster (18%–22% annually) in their initial years due to rapid advancements in battery technology, falling new EV prices, and uncertainty regarding 8-year battery replacement costs. In regions like Delhi-NCR (India), Diesel vehicles face strict 10-year end-of-life National Green Tribunal (NGT) rules, accelerating their resale depreciation past Year 6.'
+      },
+      {
+        question: 'What is the Total Cost of Ownership (TCO) and why is depreciation its largest component?',
+        answer: 'Total Cost of Ownership (TCO) measures all direct and indirect expenses of owning a vehicle: Fuel + Insurance + Periodic Maintenance + Road Taxes + Depreciation Loss. For most vehicles under 5 years old, depreciation represents 40%–50% of the total annual ownership cost, often exceeding fuel expenses.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Core Car Depreciation Formulations',
+        content: '• Declining Balance Method (DBM): Value(t) = P × (1 - r)^t\n• Straight Line Method (SLM): Annual Depreciation = (P - Salvage Value) / Useful Life\n• Total Depreciation % = [(Original Price - Current Fair Value) / Original Price] × 100\n• Retained Equity % = (Current Fair Value / Original Price) × 100'
+      },
+      {
+        title: 'Strategies to Maximize Your Vehicle Resale Value',
+        content: '1) Maintain an uninterrupted dealership service booklet with stamped records; 2) Park under covered parking to protect paint clear-coat from UV degradation; 3) Promptly touch up paint chips and minor bumper scuffs; 4) Retain both original factory keys, original manuals, and valid PUC/insurance certificates.'
+      }
+    ]
+  },
+  {
     id: 'PasswordGenerator',
     slug: 'password-generator',
     name: 'Password Generator',
