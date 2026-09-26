@@ -143,7 +143,7 @@ export default function CarDepreciationCalculator() {
   const [fuelType, setFuelType] = useState<FuelType>('petrol');
   const [condition, setCondition] = useState<CarCondition>('good');
   const [ownersCount, setOwnersCount] = useState<number>(1);
-  const [scrapValuePercent, setScrapValuePercent] = useState<number>(8); // Salvage floor
+  const scrapValuePercent = 8; // Salvage floor
 
   // TCO Mode Specifics
   const [annualInsurance, setAnnualInsurance] = useState<number>(25000);

@@ -117,7 +117,7 @@ export default function MileageCalculator() {
   const [activeMode, setActiveMode] = useState<MileageCalcMode>('trip');
 
   // General Settings
-  const [unitSystem, setUnitSystem] = useState<UnitSystem>('metric');
+  const unitSystem: UnitSystem = 'metric';
   const [fuelType, setFuelType] = useState<FuelType>('petrol');
   const [currency, setCurrency] = useState('₹');
 
@@ -129,7 +129,6 @@ export default function MileageCalculator() {
   const [passengers, setPassengers] = useState<number>(1);
   const [tollsParking, setTollsParking] = useState<number>(150);
   const [isRoundTrip, setIsRoundTrip] = useState<boolean>(false);
-  const [acPenaltyPct, setAcPenaltyPct] = useState<number>(10); // 10% penalty if AC is on
   const [acActive, setAcActive] = useState<boolean>(true);
 
   // Odometer Method Toggle
@@ -857,7 +856,6 @@ Generated via Toolique India (https://toolique.com/automobile/mileage-calculator
                   <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                     {comparisonMatrix.map((item) => {
                       const isEv = item.type === 'ev';
-                      const isCng = item.type === 'cng';
 
                       return (
                         <tr key={item.type} className={isEv ? 'bg-emerald-50/50 dark:bg-emerald-950/20 font-bold text-emerald-700 dark:text-emerald-300' : 'text-zinc-700 dark:text-zinc-300'}>
