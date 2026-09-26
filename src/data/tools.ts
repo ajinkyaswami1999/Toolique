@@ -4668,30 +4668,63 @@ export const toolsList: Tool[] = [
     slug: 'bmi-calculator',
     name: 'BMI Calculator',
     category: 'health',
-    shortDescription: 'Calculate your Body Mass Index (BMI) and check your corresponding healthy weight range.',
-    metaDescription: 'Free online BMI Calculator. Calculate body mass index using metric or imperial measurements and view weight category zones.',
-    keywords: ['BMI Calculator', 'Body Mass Index calculator', 'Healthy weight range', 'Body fat index', 'Metric BMI calculator'],
+    shortDescription: 'Clinical-grade Body Mass Index (BMI) calculator, WHO & Asian-Pacific classification, body fat estimator, and target weight calorie deficit planner.',
+    metaDescription: 'Free online BMI Calculator & Body Composition Studio. Compute Body Mass Index under WHO Global & Asian-Pacific guidelines. Estimate body fat %, BMR, TDEE, ideal body weight (IBW), and safe calorie deficit plans.',
+    keywords: [
+      'BMI Calculator',
+      'Body Mass Index calculator',
+      'WHO BMI calculator',
+      'Asian BMI cutoffs',
+      'healthy weight range calculator',
+      'body fat percentage estimator',
+      'BMR and TDEE calculator',
+      'calorie deficit target weight planner',
+      'waist to height ratio WHtR',
+      'ideal body weight Devine formula',
+      'Ponderal Index calculator'
+    ],
     icon: 'Heart',
     howToUse: [
-      'Select between Metric (kg/cm) and Imperial (lbs/inches) unit modes.',
-      'Enter your weight and height dimensions.',
-      'Review your BMI score and the corresponding weight category (Underweight, Normal, Overweight, Obese).',
-      'Consult the active progress bar mapping your score to health zones.'
+      'Select your preferred measurement units: Metric (kg/cm) or Imperial (lbs/feet/inches).',
+      'Choose the classification standard: WHO Global (Normal: 18.5–24.9) or WHO Asian-Pacific / ICMR (Normal: 18.5–22.9).',
+      'Enter your biological sex, age, weight, height, and waist circumference.',
+      'Explore the 4 specialized modes: Full Body Composition & BMR/TDEE, Target Weight Calorie Deficit Planner, Waist-to-Height Ratio (WHtR), or Height-Weight Reference Matrix.',
+      'Copy the comprehensive clinical health report or download the data summary as a CSV file.'
     ],
     faqs: [
       {
-        question: 'What is a normal BMI score?',
-        answer: 'A normal BMI range is between 18.5 and 24.9, according to WHO guidelines.'
+        question: 'What is the difference between WHO Global and Asian-Pacific BMI cutoffs?',
+        answer: 'The standard WHO Global cutoff defines Normal Weight as 18.5–24.9 kg/m² and Overweight as 25.0–29.9 kg/m². However, extensive epidemiological research (including WHO Western Pacific and Indian Council of Medical Research / ICMR studies) shows that Asian and South Asian populations accumulate higher visceral fat and face heightened risks of cardiovascular disease and Type 2 diabetes at lower BMI levels. Consequently, the Asian standard sets the Overweight threshold at 23.0 kg/m² and Obesity at 25.0 kg/m².'
       },
       {
-        question: 'Is BMI accurate for athletes?',
-        answer: 'BMI does not differentiate between muscle mass and fat, so highly muscular individuals or athletes may receive an overweight classification despite being healthy.'
+        question: 'Why is BMI alone not always accurate for athletes and bodybuilders?',
+        answer: 'BMI uses only total body mass and height (kg/m²), so it cannot distinguish between dense lean muscle tissue, bone mass, and adipose body fat. Highly conditioned athletes with high muscle mass frequently score in the "Overweight" or "Obese Class I" category despite having exceptionally low body fat percentages (e.g. 8–12%). In such cases, waist circumference and DEXA scans provide a more accurate evaluation.'
+      },
+      {
+        question: 'What is BMI Prime and how is it interpreted?',
+        answer: 'BMI Prime is the ratio of an individual\'s actual BMI to the upper limit of normal BMI (25.0 for WHO, 23.0 for Asian). A BMI Prime of exactly 1.0 represents the upper normal boundary. Values less than 0.74 indicate underweight, 0.74–1.00 indicate normal weight, 1.00–1.20 indicate overweight, and values above 1.20 indicate obesity.'
+      },
+      {
+        question: 'What is the Waist-to-Height Ratio (WHtR) and why is it recommended alongside BMI?',
+        answer: 'The Waist-to-Height Ratio (WHtR) measures central abdominal adiposity (visceral fat stored around vital organs). The universal Ashwell Shape Chart rule states that your waist circumference should be less than half your height (WHtR < 0.50). WHtR is often a superior predictor of cardiovascular disease and metabolic syndrome compared to BMI alone.'
+      },
+      {
+        question: 'How does this calculator estimate Basal Metabolic Rate (BMR) and TDEE?',
+        answer: 'This tool uses the scientifically validated Mifflin-St Jeor Equation to calculate your Basal Metabolic Rate (BMR) based on weight, height, age, and biological sex. Total Daily Energy Expenditure (TDEE) is then computed by multiplying BMR by your physical activity multiplier (1.2 for sedentary up to 1.9 for very active).'
+      },
+      {
+        question: 'What is a safe weekly weight loss pace and calorie deficit?',
+        answer: 'Clinical guidelines recommend a moderate, sustainable weight loss pace of 0.5 kg (1.1 lbs) per week, which corresponds to a daily caloric deficit of approximately 500–550 kcal below your maintenance TDEE (since 1 kg of body fat equates to ~7,700 kcal). Daily caloric intake should generally not drop below 1,200 kcal/day for women or 1,500 kcal/day for men without direct medical supervision.'
       }
     ],
     sections: [
       {
-        title: 'Understanding BMI Categories',
-        content: 'Underweight: BMI less than 18.5\nNormal weight: BMI 18.5 to 24.9\nOverweight: BMI 25 to 29.9\nObesity: BMI 30 or higher'
+        title: 'Formulas for Body Composition and Anthropometric Sizing',
+        content: '• Quetelet Body Mass Index (BMI): Weight (kg) / [Height (m)]²\n• Ponderal (Corpulence) Index: Weight (kg) / [Height (m)]³\n• Deurenberg Adult Body Fat %: (1.20 × BMI) + (0.23 × Age) - (10.8 × Sex) - 5.4\n• Mifflin-St Jeor BMR (Male): 10W + 6.25H - 5A + 5\n• Mifflin-St Jeor BMR (Female): 10W + 6.25H - 5A - 161'
+      },
+      {
+        title: 'Ideal Body Weight (IBW) Benchmark Formulations',
+        content: 'Clinical pharmacotherapy standards frequently utilize the Devine Equation for dosing hydrophilic medications: Men = 50 kg + 2.3 kg per inch over 5 feet; Women = 45.5 kg + 2.3 kg per inch over 5 feet.'
       }
     ]
   },
@@ -4700,30 +4733,62 @@ export const toolsList: Tool[] = [
     slug: 'mileage-calculator',
     name: 'Mileage Calculator',
     category: 'automobile',
-    shortDescription: 'Calculate vehicle fuel efficiency and estimate fuel expenses per kilometer or mile.',
-    metaDescription: 'Free online Mileage Calculator. Calculate fuel efficiency (km/l or mpg) and total trip cost based on distance and fuel filled.',
-    keywords: ['Mileage Calculator', 'Fuel efficiency calculator', 'Calculate average fuel usage', 'Vehicle run cost', 'Trip cost estimator'],
+    shortDescription: 'Calculate vehicle fuel efficiency (km/L, L/100km, MPG), trip fuel expenses, carpool splits, highway refueling stops, and multi-fuel comparison (Petrol vs Diesel vs CNG vs EV).',
+    metaDescription: 'Free online Mileage Calculator & Fuel Cost Planner. Compute fuel economy across km/L, L/100km, and MPG. Compare Petrol, Diesel, CNG, and EV operating costs, plan road trip budgets, and track CO2 emissions.',
+    keywords: [
+      'Mileage Calculator',
+      'Fuel efficiency calculator',
+      'km per liter calculator',
+      'MPG to km/l converter',
+      'petrol vs diesel vs cng vs ev calculator',
+      'road trip fuel cost calculator',
+      'carpool cost split calculator',
+      'vehicle running cost per km',
+      'tank to tank mileage calculator',
+      'CO2 emissions vehicle calculator'
+    ],
     icon: 'Car',
     howToUse: [
-      'Input the total distance traveled during the trip in kilometers or miles.',
-      'Enter the quantity of fuel filled or consumed in liters or gallons.',
-      'Input the unit price of fuel (₹ per Liter).',
-      'Check the computed mileage and cost details per kilometer.'
+      'Select your propulsion fuel type: Petrol, Diesel, CNG (kg), LPG, or Electric Vehicle (kWh).',
+      'Enter your journey distance directly or use the Odometer Start/End mode for tank-to-tank precision.',
+      'Input the fuel consumed and local fuel price per unit (₹, $, €, £).',
+      'Add carpool passengers and toll/parking fees to compute total split budgets.',
+      'Switch between the 4 modes: Trip Economy & Cost, Highway Range & Refueling Stops, Multi-Fuel Commute Comparison Matrix, or Green Emissions & Trees Offset.'
     ],
     faqs: [
       {
-        question: 'How is mileage calculated?',
-        answer: 'Mileage (km/l) = Distance Traveled / Fuel Consumed. A higher mileage indicates a more fuel-efficient vehicle.'
+        question: 'What is the most accurate way to calculate real-world vehicle mileage?',
+        answer: 'The tank-to-tank method is the gold standard: 1) Fill your fuel tank to full (auto-cut off) and reset your trip odometer to zero; 2) Drive your regular routine until the fuel gauge drops; 3) Refill the tank to full at the same fuel pump and note the exact liters filled and odometer distance. Formula: Mileage (km/L) = Odometer Distance (km) / Liters Refilled.'
       },
       {
-        question: 'How can I improve my vehicle mileage?',
-        answer: 'Maintain recommended tyre pressure, avoid aggressive acceleration, and perform timely servicing.'
+        question: 'How do I convert between km/L, L/100km, US MPG, and UK Imperial MPG?',
+        answer: '• To convert km/L to US MPG: Multiply km/L by 2.35215\n• To convert km/L to Imperial UK MPG: Multiply km/L by 2.82481\n• To convert km/L to L/100km: Divide 100 by (km/L)\n• Example: 15 km/L equals 35.28 US MPG, 42.37 UK MPG, and 6.67 L/100km.'
+      },
+      {
+        question: 'How much does running the car Air Conditioning (AC) affect fuel economy?',
+        answer: 'In modern combustion engine cars, running the air conditioner increases fuel consumption by approximately 8% to 15% in city traffic and about 4% to 8% at highway cruising speeds. On hot days in urban stop-and-go conditions, the AC compressor load can reduce overall mileage by up to 2.0–2.5 km/L.'
+      },
+      {
+        question: 'What are the typical operating running costs per km across Petrol, Diesel, CNG, and EV in India?',
+        answer: 'As of current average rates:\n• Electric Vehicle (EV): ₹1.00 – ₹1.50 per km (@ ₹8/kWh home grid)\n• CNG: ₹2.50 – ₹3.20 per km (@ ₹78/kg)\n• Diesel: ₹4.20 – ₹5.50 per km (@ ₹89/L)\n• Petrol: ₹5.80 – ₹7.50 per km (@ ₹102/L)\nEVs and CNG offer 65%–80% lower running costs for daily commuters.'
+      },
+      {
+        question: 'Why does my vehicle mileage drop significantly during winter or short trips?',
+        answer: 'Cold engine oil has higher viscosity, increasing mechanical friction until normal operating temperature (85°C–95°C) is reached. On trips shorter than 5 km, the engine runs in a "rich" fuel-air mixture mode for longer, consuming 20%–30% more fuel.'
+      },
+      {
+        question: 'How much CO2 emissions does a passenger car generate per liter of fuel?',
+        answer: 'Combusting 1 liter of Petrol produces approximately 2.31 kg of CO2, while 1 liter of Diesel produces 2.68 kg of CO2 due to higher carbon density. 1 kg of CNG emits about 2.75 kg of CO2. For an average commute of 15,000 km/year, a petrol car emits roughly 2.1 tonnes of CO2 annually.'
       }
     ],
     sections: [
       {
-        title: 'Importance of Fuel Tracking',
-        content: 'Consistently monitoring your vehicle mileage helps identify mechanical issues early. A sudden drop in fuel efficiency could indicate spark plug wear, low tyre pressure, or fuel injector issues.'
+        title: 'Core Vehicle Mileage Formulas',
+        content: '• Fuel Efficiency (km/L) = Total Distance (km) / Fuel Consumed (Liters)\n• Cost per km = Total Fuel Cost / Total Distance (km)\n• Fuel Required for Route = Target Distance (km) / Vehicle Mileage (km/L)\n• Total Trip Budget = Fuel Cost + Tolls + Parking'
+      },
+      {
+        title: 'Proven Techniques to Maximize Fuel Efficiency',
+        content: '1) Maintain optimal tyre pressure (+2 PSI above recommended for highway runs); 2) Cruise smoothly between 65–85 km/h in top gear; 3) Minimize excessive engine idling (>60 seconds); 4) Clear unnecessary heavy cargo from the boot to reduce vehicular payload.'
       }
     ]
   },
@@ -4796,25 +4861,63 @@ export const toolsList: Tool[] = [
     slug: 'open-graph-preview',
     name: 'Open Graph Preview',
     category: 'web',
-    shortDescription: 'Configure and preview website social sharing cards for Facebook, Twitter, and LinkedIn.',
-    metaDescription: 'Free online Open Graph Preview tool. Generate and preview how your website link card will look on social media platforms.',
-    keywords: ['Open Graph Preview', 'OG card generator', 'Facebook meta preview', 'Twitter card preview', 'Social sharing meta'],
+    shortDescription: 'Live interactive Open Graph previewer, Twitter Card simulator, and social meta tag generator for Facebook, Twitter/X, LinkedIn, WhatsApp, Discord, and Google SERP.',
+    metaDescription: 'Free online Open Graph Preview and Social Meta Tag Generator. Preview live link cards for Facebook, Twitter/X, LinkedIn, WhatsApp, and Google SERP. Generate production-ready HTML meta tags, Next.js metadata, and JSON-LD schema instantly.',
+    keywords: [
+      'Open Graph Preview',
+      'OG preview generator',
+      'Twitter card simulator',
+      'social share preview',
+      'Facebook open graph debugger',
+      'LinkedIn link card preview',
+      'WhatsApp link thumbnail preview',
+      'Next.js metadata generator',
+      'JSON-LD schema creator',
+      'og:image 1200x630 validator',
+      'social meta tags'
+    ],
     icon: 'Eye',
     howToUse: [
-      'Enter the webpage title, description, and absolute image URL.',
-      'Select between Facebook, Twitter, or LinkedIn tabs to inspect the visual mockup.',
-      'Copy the completed Open Graph code from the output container.'
+      'Select a preset archetype (SaaS Web App, Tech Blog Article, E-Commerce Product, or Portfolio) or enter your webpage details manually.',
+      'Fill in the essential Open Graph tags: Title, Description, Canonical URL, and absolute Image URL (recommended 1200×630 pixels).',
+      'Toggle across the live simulator tabs (Facebook, Twitter/X Summary Large Image, LinkedIn, WhatsApp, Discord, Google SERP) to verify real-time visual appearance and character truncation limits.',
+      'Check the automated Social Card Readiness Audit score and resolve any warnings for optimal click-through rates (CTR).',
+      'Switch to the Code Exporter panel to copy HTML `<head>` meta tags, Next.js App Router `metadata` object (TypeScript), or JSON-LD Structured Data Schema.'
     ],
     faqs: [
       {
-        question: 'What is the purpose of Open Graph previewing?',
-        answer: 'It lets you visually verify that your page title, description, and thumbnail align perfectly before publishing updates to production.'
+        question: 'What is the Open Graph (OG) protocol and why is it important?',
+        answer: 'The Open Graph protocol, originally created by Facebook, is an internet standard of `<meta>` tags that allows web developers to control how rich link preview cards look when shared across social networks, messaging apps, and collaborative tools (Facebook, LinkedIn, Twitter/X, WhatsApp, Discord, Slack, etc.). Without OG tags, crawlers attempt to guess text and images from page content, often showing awkward cropped thumbnails or generic text that hurts click-through rates.'
+      },
+      {
+        question: 'What is the recommended image resolution and aspect ratio for Open Graph images?',
+        answer: 'The universal gold standard resolution for Open Graph images (`og:image`) is 1200 × 630 pixels, which corresponds to a 1.91:1 aspect ratio. At this resolution, images render sharply on high-DPI displays across Facebook, LinkedIn, Twitter/X (`summary_large_image`), WhatsApp, and Discord. The file size should ideally be under 5 MB (preferably under 1 MB in WebP, PNG, or high-quality JPG format).'
+      },
+      {
+        question: 'What are the optimal character limits for OG Title and OG Description?',
+        answer: 'For `og:title`, keep length between 50 and 65 characters (approximately 600px rendered width) to prevent truncation in social newsfeeds. For `og:description`, keep length between 120 and 155 characters. Longer descriptions will be truncated with ellipses (...) on mobile devices and narrow cards.'
+      },
+      {
+        question: 'What is the difference between Twitter summary and summary_large_image cards?',
+        answer: 'A `summary` card displays a small square 1:1 thumbnail on the left with title and description on the right. A `summary_large_image` card displays a prominent, full-width 1200×628 banner above the text. Large image cards generally deliver 2x–3x higher user engagement and click-through rates for tech products, blogs, and news content.'
+      },
+      {
+        question: 'Why does my updated social preview image not update on Facebook, LinkedIn, or Twitter?',
+        answer: 'Social platforms aggressively cache Open Graph meta tags and scraper assets. When you update your `og:image` or description on a live URL, you must force the crawlers to re-scrape using their official debuggers: Meta Sharing Debugger for Facebook/Messenger, LinkedIn Post Inspector for LinkedIn, and Twitter Card Validator for X.'
+      },
+      {
+        question: 'How do I implement Open Graph tags in modern Next.js App Router applications?',
+        answer: 'In the Next.js App Router (version 13+ and 14+), you export a static or dynamic `metadata` object in your `layout.tsx` or `page.tsx` file containing `title`, `description`, `openGraph: { title, description, url, siteName, images: [...] }`, and `twitter: { card, creator, ... }`. You can use this tool to export fully typed TypeScript metadata objects directly.'
       }
     ],
     sections: [
       {
-        title: 'Social Card Specifications',
-        content: 'Facebook and LinkedIn prefer 1200x630 pixel sizes for optimal card resolution. Twitter summary large image cards utilize a similar 1.91:1 aspect ratio.'
+        title: 'Core Open Graph & Twitter Card Properties',
+        content: 'Essential tags for every modern webpage include `og:title`, `og:description`, `og:image`, `og:url`, `og:type` (website or article), `og:site_name`, `twitter:card` (summary_large_image), and `twitter:creator`. Ensuring all absolute HTTPS URLs are provided prevents scraper resolution errors.'
+      },
+      {
+        title: 'Optimizing Click-Through Rates (CTR) on Social Platforms',
+        content: 'A compelling social card acts as a high-converting billboard on social feeds. High-contrast headlines, clear branded imagery with 1200×630 dimensions, clear value propositions in under 150 characters, and customized theme colors significantly elevate user engagement.'
       }
     ]
   },
@@ -4904,25 +5007,63 @@ export const toolsList: Tool[] = [
     slug: 'favicon-generator',
     name: 'Favicon Generator',
     category: 'web',
-    shortDescription: 'Convert images to standard favicon dimensions and generate HTML markup links.',
-    metaDescription: 'Free online Favicon Generator. Resize source graphics to 16px, 32px, and 48px sizes, and copy browser link elements.',
-    keywords: ['Favicon Generator', 'create favicon online', 'icon resizer', 'website shortcut icon', 'apple touch icon'],
+    shortDescription: 'Generate multi-resolution favicon.ico binaries, Apple Touch icons, Android PWA manifests, and HTML head tags from images, text, or SVG.',
+    metaDescription: 'Free online Favicon Generator and App Icon Studio. Convert images, text, or SVGs into multi-resolution favicon.ico (16px, 32px, 48px), Apple Touch icons (180px), Android PWA assets (192px, 512px), Next.js metadata, and full 1-click ZIP packages.',
+    keywords: [
+      'Favicon Generator',
+      'create favicon online',
+      'favicon.ico generator',
+      'apple touch icon generator',
+      'PWA icon maker',
+      'multi resolution favicon',
+      'SVG favicon creator',
+      'emoji favicon maker',
+      'site.webmanifest generator',
+      'Next.js metadata icons',
+      'convert png to ico'
+    ],
     icon: 'Image',
     howToUse: [
-      'Upload a square source graphic.',
-      'Verify the live sizes preview panel.',
-      'Download individual PNG sizes and copy the link tags into your HTML header.'
+      'Choose a creation mode: upload an existing image/SVG, craft a typographic/emoji monogram, or edit raw SVG code.',
+      'Adjust background colors, linear gradients, corner radius (squircle/circle), padding margins, or toggle transparent backgrounds.',
+      'Inspect the live multi-device simulators: Dark/Light Mode Desktop Browser Tabs, iOS Apple Touch Icon, and Android PWA Adaptive Icon.',
+      'Review the automated Favicon Readiness & Asset Health Audit score for optimal scaling and legibility at 16×16px resolution.',
+      'Download individual PNG sizes, the standard binary `favicon.ico`, or click "Download Favicon Package (.ZIP)" for all production assets and configs.'
     ],
     faqs: [
       {
-        question: 'What is a Apple Touch Icon?',
-        answer: 'It is a high-resolution favicon used by iOS devices when users bookmark or pin your webpage to their home screen.'
+        question: 'What is a multi-resolution favicon.ico and why is it still needed in modern web development?',
+        answer: 'A `.ico` file is a special container format that holds multiple image resolutions (commonly 16×16, 32×32, and 48×48 pixels) in a single binary file. While modern browsers support PNG and SVG favicons, legacy browsers, desktop shortcuts, taskbars, and automated web crawlers (including Google Search bots) request `/favicon.ico` by default at the site root.'
+      },
+      {
+        question: 'What is the standard size for Apple Touch Icons (iOS)?',
+        answer: 'Apple iOS and iPadOS look for an `apple-touch-icon.png` at 180 × 180 pixels. When a user adds your website to their home screen or bookmarks it in Safari, iOS automatically crops the icon into Apple\'s signature squircle shape. The image should NOT have pre-rounded corners or transparency for best visual results on iOS.'
+      },
+      {
+        question: 'What favicon dimensions are required for Progressive Web Apps (PWA) and Android?',
+        answer: 'Progressive Web Apps and Android Chrome require at least two PNG icons declared in `site.webmanifest`: 192 × 192 pixels (standard Android home screen icon) and 512 × 512 pixels (splash screen and high-DPI displays). Adding a `purpose: "maskable"` 512×512 icon ensures proper adaptive circular/squircle rendering on Android 8+ devices.'
+      },
+      {
+        question: 'How do I add favicons in Next.js 13+ and Next.js 14+ App Router?',
+        answer: 'In Next.js App Router, you can either place `favicon.ico`, `icon.png` (32x32), and `apple-icon.png` (180x180) directly inside the `app/` directory for automatic route handling, or define an `icons` object inside the `export const metadata: Metadata` export in `app/layout.tsx`.'
+      },
+      {
+        question: 'Can I use SVG favicons and do they support dark mode switching?',
+        answer: 'Yes! Modern browsers (Chrome, Edge, Firefox, Safari) support `<link rel="icon" type="image/svg+xml" href="/favicon.svg" />`. SVG favicons can include CSS media queries like `@media (prefers-color-scheme: dark) { ... }` so your icon dynamically changes color when the user switches between OS light and dark themes.'
+      },
+      {
+        question: 'Where should favicon files be placed in a standard web server?',
+        answer: 'All favicon assets (`favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png`, `site.webmanifest`, `browserconfig.xml`) should be placed in the public root directory (e.g. `public/` in Vite, Next.js, or React projects) so they are directly accessible from `https://yourdomain.com/favicon.ico`.'
       }
     ],
     sections: [
       {
-        title: 'Favicon Standard Specifications',
-        content: 'Standard browsers require 16x16 or 32x32 pixel shortcut icons. Apple iOS devices look for a 180x180 pixel image named apple-touch-icon.png in the root directory.'
+        title: 'Modern Web Favicon Hierarchy & Fallback Strategy',
+        content: 'A robust modern web application includes: 1) SVG vector favicon for scalable high-DPI displays with dark mode media query support; 2) 32×32 and 16×16 PNG icons for standard browser tabs; 3) 180×180 Apple Touch Icon for iOS Safari; 4) 192×192 & 512×512 icons in webmanifest for Android/PWA; and 5) Fallback multi-resolution favicon.ico in the root directory for backward compatibility.'
+      },
+      {
+        title: 'Design Best Practices for 16×16 Pixel Legibility',
+        content: 'At 16×16 pixels, detailed photos and long words become unreadable pixel blur. Use high-contrast color palettes, 1–2 letter monograms or simple iconic glyphs, avoid tiny fine lines, and test on both pure white and dark gray background tabs.'
       }
     ]
   },
@@ -5856,27 +5997,62 @@ export const toolsList: Tool[] = [
     slug: 'voltage-drop-calculator',
     name: 'Voltage Drop Calculator',
     category: 'electrical',
-    shortDescription: "Calculate voltage drop percentage and receiving end voltage for DC, 1-Phase AC, and 3-Phase AC circuits.",
-    metaDescription: "Free online Voltage Drop Calculator. Calculate line voltage drop in copper or aluminum cables under NEC branch and feeder regulations.",
-    keywords: ["voltage drop calculator","calculate voltage drop","single phase voltage drop","three phase drop","cable voltage loss"],
+    shortDescription: "Calculate voltage drop percentage, terminal receiving voltage, conductor impedance, power loss, and maximum distance for DC, 1-Phase, and 3-Phase AC circuits.",
+    metaDescription: "Free online Voltage Drop Calculator (NEC 210.19, IS 732, BS 7671). Calculate line-to-line and line-to-neutral voltage drop, conductor loop impedance, receiving voltage, solar DC string loss, and motor starting dip.",
+    keywords: [
+      "voltage drop calculator",
+      "calculate voltage drop",
+      "single phase voltage drop calculator",
+      "3 phase voltage drop formula",
+      "dc voltage drop calculator solar",
+      "cable voltage loss calculator",
+      "nec voltage drop limits",
+      "max cable distance voltage drop",
+      "motor starting voltage dip calculator",
+      "conductor power loss calculator"
+    ],
     icon: 'Zap',
     howToUse: [
-      "Select the electrical phase (DC, 1-Phase AC, or 3-Phase AC).",
-      "Select the conductor material (Copper or Aluminum).",
-      "Select the cable size in square millimeters (mm²).",
-      "Enter the length of the run and choose meters or feet.",
-      "Enter source voltage, current load, power factor and review results."
+      "Select your analysis mode: Precision Voltage Drop Calculator, Maximum Distance Lab, Solar PV & DC Battery Feeder, Motor Starting Inrush Dip, or Power Loss & Carbon Waste.",
+      "Choose electrical phase (1-Phase AC 230V/120V, 3-Phase AC 415V/480V, or DC Bus) and enter nominal supply voltage.",
+      "Input continuous load current in Amps, conductor cross-section (mm² or AWG), and conductor material (Copper or Aluminum).",
+      "Specify one-way route length (meters or feet), power factor (cos φ), operating temperature (20°C to 90°C), and cable raceway arrangement.",
+      "Review voltage drop (Volts & %), receiving terminal voltage, transmission efficiency, active heat loss (Watts), and copy engineering report or export CSV."
     ],
     faqs: [
       {
-        "question": "What is a safe limit for voltage drop?",
-        "answer": "The National Electrical Code (NEC) recommends keeping voltage drop under 3% for branch circuits and under 5% for the combined feeder and branch circuits."
+        "question": "What are the standard regulatory limits for allowable voltage drop?",
+        "answer": "Under National Electrical Code (NEC 210.19(A) & NEC 215.2(A)) and international standards (IS 732, BS 7671): Maximum allowable voltage drop is 3% for branch circuits supplying power to final utilization equipment, and 5% total combined across the entire feeder and branch circuit system. For solar PV string arrays and battery inverter feeds, a stricter limit of 1.0% to 1.5% is recommended to prevent energy yield loss."
+      },
+      {
+        "question": "How do 1-Phase AC, 3-Phase AC, and DC voltage drop formulas differ?",
+        "answer": "For DC circuits: ΔV = 2 × I × R (current travels through forward and return conductors). For 1-Phase AC: ΔV = 2 × I × (R cosφ + X sinφ) (accounting for resistance and inductive reactance). For 3-Phase balanced AC: ΔV = √3 × I × (R cosφ + X sinφ) (Line-to-Line voltage drop, where √3 ≈ 1.732 accounts for 120° phase separation)."
+      },
+      {
+        "question": "Why does conductor operating temperature significantly affect voltage drop?",
+        "answer": "Metallic conductors have a positive temperature coefficient of resistance (approx +0.393%/°C for copper and +0.403%/°C for aluminum). An XLPE cable operating at full load temperature of 90°C has approximately 27% higher electrical resistance than at 20°C ambient room temperature, directly increasing voltage drop and I²R heat dissipation."
+      },
+      {
+        "question": "What is the effect of power factor (cos φ) on AC voltage drop?",
+        "answer": "In AC circuits with magnetic or inductive equipment (motors, transformers, ballasts), total impedance consists of active resistance (R) and inductive reactance (X). A lower power factor (e.g. 0.70 vs 0.95) increases reactive current and expands the (R cosφ + X sinφ) term, producing significantly higher voltage drop for the same active kW workload."
+      },
+      {
+        "question": "Why is voltage drop critical during motor starting (inrush transient)?",
+        "answer": "Direct-On-Line (DOL) 3-phase induction motors draw 6.0× to 7.5× their full-load current (FLA) during startup. This surge causes a severe transient voltage drop along feeder cables. If the motor terminal voltage dips below 80% of nominal rating, electromagnetic contactors may chatter or drop out, and the motor may fail to develop sufficient breakaway torque and stall."
+      },
+      {
+        "question": "How does voltage drop cause financial loss through active conductor heat dissipation?",
+        "answer": "Every volt dropped across a cable represents active electrical energy dissipated as pure heat (P = n × I² × R Watts). In commercial and industrial facilities operating 24/7, high voltage drop wastes thousands of kilowatt-hours annually in electrical resistance heating, increasing utility power bills and grid carbon emissions."
       }
     ],
     sections: [
       {
-        "title": "Understanding Voltage Drop in Electrical Systems",
-        "content": "Voltage drop is the decrease in electrical potential along the path of a current flowing in an electrical circuit. This is caused by the resistance and reactance of the cable conductors. Sizing conductors properly reduces power loss, heating, and prevents damage to connected loads."
+        "title": "Mathematical Formulas for Electrical Voltage Drop",
+        "content": "Line-to-Line Voltage Drop formulas: 1) DC 2-Wire: ΔV = 2 × I × R_total. 2) 1-Phase AC: ΔV = 2 × I × (R_total cosφ + X_total sinφ). 3) 3-Phase AC: ΔV = √3 × I × (R_total cosφ + X_total sinφ). Percentage Drop: ΔV% = (ΔV / V_source) × 100. Receiving End Terminal Voltage: V_receiving = V_source - ΔV."
+      },
+      {
+        "title": "Conductor Temperature Correction & Reactance Values",
+        "content": "Conductor resistance at operating temperature T: R_T = R_20 × [1 + α × (T - 20)], where α = 0.00393 / °C for Copper and α = 0.00403 / °C for Aluminum. Standard inductive reactance X_L at 50/60 Hz: 0.08 Ω/km for multi-core cables in conduit/trays, 0.09 Ω/km for single cores in trefoil, and 0.12 Ω/km for flat spaced runs."
       }
     ]
   },
