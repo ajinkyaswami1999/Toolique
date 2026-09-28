@@ -7,44 +7,116 @@ export const academyCategories: Category[] = [
     description: 'Master relational databases, queries, indexes, subqueries, and performance tuning.',
     icon: 'Database',
     learningTime: '15 Hours',
-    topics: ['SELECT', 'WHERE', 'ORDER BY', 'GROUP BY', 'HAVING', 'JOINs', 'Subqueries', 'Window Functions', 'CTEs', 'Transactions', 'Optimization'],
+    topics: ['SELECT', 'WHERE', 'ORDER BY', 'GROUP BY', 'HAVING', 'JOINs', 'Subqueries', 'Window Functions', 'CTEs', 'Recursive Queries', 'B-Tree Indexes', 'Query Optimization', 'Transactions & ACID', 'Normalization (1NF-BCNF)'],
     roadmap: [
       {
-        title: 'SQL Basics',
-        description: 'Basic database terminology, SELECT syntax, and simple filtering query logic.',
-        topics: ['SELECT', 'WHERE', 'ORDER BY', 'LIMIT/OFFSET']
+        title: '1. SQL Basics & Logical Query Lifecycle',
+        description: 'Understand relational models, RDBMS architectures, DDL/DML, and the logical execution order of SQL queries (FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT).',
+        topics: ['SELECT', 'WHERE', 'AND/OR/NOT', 'IN/BETWEEN', 'LIKE & Wildcards', 'ORDER BY', 'LIMIT/OFFSET']
       },
       {
-        title: 'Aggregation & Joins',
-        description: 'Combining and grouping data across tables using aggregation models.',
-        topics: ['GROUP BY', 'HAVING', 'INNER JOIN', 'LEFT/RIGHT JOIN', 'FULL OUTER JOIN']
+        title: '2. Relational Joins & Set Operations',
+        description: 'Combine datasets across normalized tables using relational algebra and set theory.',
+        topics: ['INNER JOIN', 'LEFT OUTER JOIN', 'RIGHT OUTER JOIN', 'FULL OUTER JOIN', 'CROSS JOIN', 'SELF JOIN', 'UNION & UNION ALL', 'INTERSECT & EXCEPT']
       },
       {
-        title: 'Advanced Subqueries & CTEs',
-        description: 'Structuring complex analytical SQL queries using sub-evaluation filters.',
-        topics: ['Subqueries', 'Common Table Expressions (CTEs)', 'Window Functions']
+        title: '3. Grouping, Aggregation & Pivoting',
+        description: 'Aggregate numerical metrics, calculate grouped summaries, and pivot data rows into analytical columns.',
+        topics: ['COUNT/SUM/AVG/MIN/MAX', 'GROUP BY', 'HAVING Clause', 'CASE WHEN Expressions', 'Conditional Aggregation', 'PIVOT & UNPIVOT']
       },
       {
-        title: 'Indexes & Query Optimization',
-        description: 'Speeding up query execution and analyzing explain plans.',
-        topics: ['Views', 'Indexes', 'Execution Plans', 'Transactions']
+        title: '4. Subqueries, CTEs & Recursive Hierarchies',
+        description: 'Structure nested evaluations and recursive graph traversals using modular Common Table Expressions.',
+        topics: ['Scalar Subqueries', 'Correlated Subqueries', 'EXISTS & NOT EXISTS', 'Common Table Expressions (CTEs)', 'Recursive CTEs', 'Hierarchical Trees']
+      },
+      {
+        title: '5. Analytic Window Functions',
+        description: 'Perform advanced calculations across rows related to the current query row without collapsing result sets.',
+        topics: ['OVER (PARTITION BY ... ORDER BY)', 'ROW_NUMBER()', 'RANK() vs DENSE_RANK()', 'LEAD() & LAG()', 'Running Totals & Moving Averages', 'NTILE() & FIRST_VALUE()']
+      },
+      {
+        title: '6. Indexes, SARGability & Query Optimization',
+        description: 'Analyze query execution plans, design B-Tree/Composite indexes, and eliminate table scans.',
+        topics: ['B+ Tree Indexes', 'Clustered vs Non-Clustered', 'Composite Index Column Order', 'SARGable Predicates', 'EXPLAIN ANALYZE', 'Join Algorithms (Nested Loop, Hash, Merge)']
+      },
+      {
+        title: '7. Transactions, Concurrency & Normalization',
+        description: 'Maintain data consistency with ACID guarantees, isolation levels, and normalized schema design.',
+        topics: ['ACID Properties', 'Isolation Levels', 'Dirty / Non-Repeatable / Phantom Reads', 'Deadlocks & Locking', '1NF, 2NF, 3NF & BCNF', 'Foreign Keys & Constraints']
       }
     ],
     cheatSheet: [
       {
-        title: 'Basic Query Syntax',
+        title: 'Logical Execution Order of SQL',
+        content: `Understanding how SQL engines evaluate queries logically:
+1. **\`FROM\` & \`JOIN\`**: Identify candidate tables and build Cartesian products / join matching rows.
+2. **\`WHERE\`**: Filter individual base rows before any grouping occurs.
+3. **\`GROUP BY\`**: Partition filtered rows into aggregate group buckets.
+4. **\`HAVING\`**: Filter grouped aggregates (e.g. \`HAVING COUNT(*) > 5\`).
+5. **\`SELECT\`**: Evaluate expressions, compute columns, and apply window functions.
+6. **\`DISTINCT\`**: Deduplicate identical output rows.
+7. **\`ORDER BY\`**: Sort the final projected dataset.
+8. **\`LIMIT\` / \`OFFSET\`**: Slice the output row boundaries.`
+      },
+      {
+        title: 'Relational Joins Reference',
+        content: `* **INNER JOIN**: Returns rows with matching keys in **both** tables.
+* **LEFT JOIN**: Returns **all** rows from left table, with \`NULL\` for non-matching right table rows.
+* **RIGHT JOIN**: Returns **all** rows from right table, with \`NULL\` for non-matching left table rows.
+* **FULL OUTER JOIN**: Returns all rows from both tables, filling \`NULL\` whenever a match is absent.
+* **CROSS JOIN**: Produces the Cartesian product ($M \\times N$ rows) combining every row of table 1 with table 2.
+* **ANTI-JOIN (LEFT JOIN ... WHERE right.id IS NULL)**: Efficiently isolates records with **no** matching counterpart.`
+      },
+      {
+        title: 'Window Functions Masterclass',
         content: `\`\`\`sql
-SELECT column1, column2 
-FROM table_name 
-WHERE condition 
-ORDER BY column1 ASC;
+-- Syntax: FUNCTION() OVER (PARTITION BY col1 ORDER BY col2 [FRAME])
+
+-- 1. ROW_NUMBER: Unique sequential integer (1, 2, 3, 4)
+ROW_NUMBER() OVER (PARTITION BY deptId ORDER BY salary DESC)
+
+-- 2. RANK: Tied values share rank, creates gaps (1, 2, 2, 4)
+RANK() OVER (PARTITION BY deptId ORDER BY salary DESC)
+
+-- 3. DENSE_RANK: Tied values share rank, NO gaps (1, 2, 2, 3)
+DENSE_RANK() OVER (PARTITION BY deptId ORDER BY salary DESC)
+
+-- 4. LAG & LEAD: Access previous or next row values
+LAG(salary, 1, 0) OVER (ORDER BY orderDate)
+LEAD(salary, 1, 0) OVER (ORDER BY orderDate)
+
+-- 5. Running Total:
+SUM(amount) OVER (PARTITION BY customerId ORDER BY orderDate ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
 \`\`\``
       },
       {
-        title: 'Common JOIN Types',
-        content: `* **INNER JOIN:** Returns matching rows in both tables.
-* **LEFT JOIN:** Returns all rows from left table, matching rows from right.
-* **RIGHT JOIN:** Returns all rows from right table, matching rows from left.`
+        title: 'Indexing & SARGability Rules',
+        content: `* **SARGable** stands for **S**earch **Arg**ument **Able**. Queries that allow the optimizer to perform an index seek rather than a full table scan.
+* **Non-SARGable (Slow):** \`WHERE YEAR(created_at) = 2026\` (Engine must evaluate the function on every row).
+* **SARGable (Fast):** \`WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'\` (Direct index range seek).
+* **Composite Index Rule (Leftmost Prefix):** An index on \`(tenant_id, status, created_at)\` accelerates queries filtering on \`(tenant_id)\` or \`(tenant_id, status)\`, but **not** queries filtering solely on \`(status, created_at)\`.`
+      },
+      {
+        title: 'Database Normalization (1NF to BCNF)',
+        content: `* **1NF (First Normal Form):** Every column contains atomic (indivisible) values; no repeating groups or arrays.
+* **2NF (Second Normal Form):** Meets 1NF + All non-key attributes are fully functionally dependent on the entire primary key (no partial dependencies on composite keys).
+* **3NF (Third Normal Form):** Meets 2NF + No transitive dependencies (non-key columns do not depend on other non-key columns).
+* **BCNF (Boyce-Codd Normal Form):** Stricter 3NF where for every functional dependency $X \\to Y$, $X$ must be a super key.`
+      },
+      {
+        title: 'ACID Properties & Transaction Isolation Levels',
+        content: `* **Atomicity:** All-or-nothing execution. If any operation in a transaction fails, everything is rolled back.
+* **Consistency:** Data remains in a valid state adhering to all constraints, types, and foreign keys.
+* **Isolation:** Concurrent transactions execute without interfering with one another.
+* **Durability:** Committed changes persist safely even across system crashes or power failures.
+
+### Isolation Levels vs Phenomena:
+| Isolation Level | Dirty Read | Non-Repeatable Read | Phantom Read |
+| :--- | :---: | :---: | :---: |
+| **Read Uncommitted** | Allowed | Allowed | Allowed |
+| **Read Committed** | Prevented | Allowed | Allowed |
+| **Repeatable Read** | Prevented | Prevented | Allowed (InnoDB prevents) |
+| **Serializable** | Prevented | Prevented | Prevented |`
       }
     ]
   },

@@ -20,6 +20,13 @@ import {
 import SEO from '../../../components/SEO';
 import JoinVisualizer from '../components/JoinVisualizer';
 import DataStructureVisual from '../components/DataStructureVisual';
+import { 
+  SQLExecutionLifecycleVisualizer, 
+  SQLBTreeVisualizer, 
+  SQLWindowFunctionVisualizer, 
+  SQLIsolationLevelsVisualizer, 
+  SQLNormalizationVisualizer 
+} from '../components/SQLVisualizers';
 
 // ----------------------------------------------------------------------------
 // INTERACTIVE SORTING ALGORITHM SIMULATOR COMPONENT
@@ -610,7 +617,7 @@ export default function AcademyLearn() {
       <div className="border-b border-slate-200 dark:border-slate-800 pb-2 flex flex-wrap items-center gap-2 overflow-x-auto scrollbar-none">
         {[
           { id: 'all', label: 'All Visualizers', icon: Layers },
-          { id: 'sql', label: 'SQL JOIN Venn Engine', icon: Database },
+          { id: 'sql', label: 'SQL Engines & Relational Algebra', icon: Database },
           { id: 'ds', label: 'Data Structures Node Stack', icon: Binary },
           { id: 'sorting', label: 'Sorting Step Animator', icon: BarChart3 },
           { id: 'search', label: 'Binary Search O(log N)', icon: Search }
@@ -636,24 +643,41 @@ export default function AcademyLearn() {
       </div>
 
       {/* Visualizers Stack */}
-      <div className="space-y-10">
-        {/* Engine 1: SQL JOIN Visualizer */}
+      <div className="space-y-12">
+        {/* Engine 1: SQL Suite */}
         {(activeVisualTab === 'all' || activeVisualTab === 'sql') && (
-          <section className="space-y-3">
-            <div className="flex items-center justify-between px-1">
+          <div className="space-y-8">
+            <div className="flex items-center justify-between px-1 border-b border-slate-200 dark:border-slate-800 pb-2">
               <div className="flex items-center gap-2">
                 <Database className="w-4 h-4 text-indigo-500" />
                 <h2 className="text-xs font-black text-slate-400 uppercase tracking-wider">
-                  Relational Algebra • Set Operations
+                  Relational Databases • Execution Pipelines &amp; Index Mechanics
                 </h2>
               </div>
               <Link to="/academy/sql" className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
-                <span>Explore SQL Track</span>
+                <span>100 SQL Practice Challenges</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
+
+            {/* 1.1 SQL JOIN Venn Engine */}
             <JoinVisualizer />
-          </section>
+
+            {/* 1.2 SQL Query Lifecycle */}
+            <SQLExecutionLifecycleVisualizer />
+
+            {/* 1.3 B+ Tree Indexing Engine */}
+            <SQLBTreeVisualizer />
+
+            {/* 1.4 Window Functions Matrix */}
+            <SQLWindowFunctionVisualizer />
+
+            {/* 1.5 ACID Transactions & Isolation Levels */}
+            <SQLIsolationLevelsVisualizer />
+
+            {/* 1.6 Database Normalization (1NF to BCNF) */}
+            <SQLNormalizationVisualizer />
+          </div>
         )}
 
         {/* Engine 2: Data Structures Node Simulator */}

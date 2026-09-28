@@ -3,6 +3,8 @@ export interface ValidationResult {
   status: 'correct' | 'incorrect' | 'syntax_error' | 'columns_mismatch' | 'rows_mismatch' | 'optimized';
   message: string;
   details?: string;
+  userRows?: any[];
+  officialRows?: any[];
   testCaseResults?: {
     index: number;
     passed: boolean;
@@ -59,7 +61,8 @@ export function validateSQLQuery(
     return {
       passed: false,
       status: 'syntax_error',
-      message: `❌ SQL Syntax Error: ${err.message}`
+      message: `❌ SQL Syntax Error: ${err.message}`,
+      officialRows
     };
   }
 
@@ -67,7 +70,9 @@ export function validateSQLQuery(
     return {
       passed: false,
       status: 'rows_mismatch',
-      message: '❌ Empty result set. Query returned no rows.'
+      message: '❌ Empty result set. Query returned no rows.',
+      userRows,
+      officialRows
     };
   }
 
@@ -82,7 +87,9 @@ export function validateSQLQuery(
       return {
         passed: false,
         status: 'columns_mismatch',
-        message: `⚠ Column Mismatch: Expected columns like: ${rules.matchColumns.join(', ')}`
+        message: `⚠ Column Mismatch: Expected columns like: ${rules.matchColumns.join(', ')}`,
+        userRows,
+        officialRows
       };
     }
   }
@@ -92,7 +99,9 @@ export function validateSQLQuery(
     return {
       passed: false,
       status: 'rows_mismatch',
-      message: `❌ Rows Mismatch: Returned ${userRows.length} rows, but expected ${officialRows.length}.`
+      message: `❌ Rows Mismatch: Returned ${userRows.length} rows, but expected ${officialRows.length}.`,
+      userRows,
+      officialRows
     };
   }
 
@@ -117,7 +126,9 @@ export function validateSQLQuery(
     return {
       passed: false,
       status: 'incorrect',
-      message: '❌ Incorrect Output: Query result values do not match expected answer.'
+      message: '❌ Incorrect Output: Query result values do not match expected answer.',
+      userRows,
+      officialRows
     };
   }
 
@@ -139,7 +150,9 @@ export function validateSQLQuery(
     status: isOptimized ? 'correct' : 'optimized',
     message: isOptimized 
       ? '✅ Correct Answer! Query passed all assertions.' 
-      : `✅ Correct Answer! But can be optimized: ${optimizationTip}`
+      : `✅ Correct Answer! But can be optimized: ${optimizationTip}`,
+    userRows,
+    officialRows
   };
 }
 

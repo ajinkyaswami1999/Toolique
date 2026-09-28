@@ -3,6 +3,7 @@ import Editor from '@monaco-editor/react';
 import { Play, Download, Database, Code, Terminal, Layers } from 'lucide-react';
 import { saveQueryHistory, getQueryHistory, clearQueryHistory } from '../utils/db';
 import HTMLPlayground from './HTMLPlayground';
+import { initSqlWasm } from '../utils/sqlWasmHelper';
 
 declare global {
   interface Window {
@@ -56,45 +57,18 @@ export default function SQLPlayground() {
     }
   };
 
-  const loadSQLWasm = () => {
+  const loadSQLWasm = async () => {
     setIsLoading(true);
-    // Dynamic import CDN script tags
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js';
-    script.async = true;
-    script.onload = async () => {
-      try {
-        const SQL = await window.initSqlJs({
-          locateFile: (file: string) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
-        });
-        const instance = new SQL.Database();
-        
-        // Initialize dummy tables
-        instance.run(`
-          CREATE TABLE Customers (id INT PRIMARY KEY, name VARCHAR(50), country VARCHAR(50));
-          INSERT INTO Customers VALUES (1, 'Ajinkya', 'India');
-          INSERT INTO Customers VALUES (2, 'Emily', 'USA');
-          INSERT INTO Customers VALUES (3, 'Hiroshi', 'Japan');
-          
-          CREATE TABLE Orders (orderId INT PRIMARY KEY, item VARCHAR(50), price INT, customerId INT);
-          INSERT INTO Orders VALUES (101, 'Mechanical Keyboard', 4500, 1);
-          INSERT INTO Orders VALUES (102, 'Bambu Filament', 2200, 1);
-          INSERT INTO Orders VALUES (103, 'SLA Resin Bottle', 3500, 2);
-        `);
-        setDb(instance);
-        setConsoleOutput(['SQLite Database initialized successfully with mock tables: Customers, Orders.']);
-      } catch (err) {
-        console.error('Failed to init sqlite wasm:', err);
-        setConsoleOutput(['Failed to load SQLite WebAssembly. Falling back to offline memory mode.']);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    script.onerror = () => {
-      setConsoleOutput(['Failed to connect to SQLite CDN hosts. Check your internet connection.']);
+    try {
+      const instance = await initSqlWasm();
+      setDb(instance);
+      setConsoleOutput(['SQLite Database initialized successfully with mock tables (Customers, Orders, Products, Employee, etc.).']);
+    } catch (err: any) {
+      console.error('Failed to init sqlite wasm:', err);
+      setConsoleOutput([`Failed to load SQLite WebAssembly: ${err.message || err}`]);
+    } finally {
       setIsLoading(false);
-    };
-    document.body.appendChild(script);
+    }
   };
 
   const loadPythonRuntime = () => {
@@ -154,14 +128,23 @@ export default function SQLPlayground() {
     };
 
     try {
-      const evalResult = eval(jsCode);
+      const sandboxFn = new Function(`"use strict"; return (${jsCode});`);
+      const evalResult = sandboxFn();
       logs.push(`➔ Return Value: ${typeof evalResult === 'object' ? JSON.stringify(evalResult) : String(evalResult)}`);
       setConsoleOutput(logs);
       await saveQueryHistory('js', jsCode);
       loadHistory();
-    } catch (err: any) {
-      logs.push(`Runtime JS Error: ${err.message}`);
-      setConsoleOutput(logs);
+    } catch {
+      try {
+        const statementFn = new Function(`"use strict"; ${jsCode}`);
+        statementFn();
+        setConsoleOutput(logs.length > 0 ? logs : ['Code executed successfully.']);
+        await saveQueryHistory('js', jsCode);
+        loadHistory();
+      } catch (err: any) {
+        logs.push(`Runtime JS Error: ${err.message}`);
+        setConsoleOutput(logs);
+      }
     } finally {
       console.log = originalLog;
     }
