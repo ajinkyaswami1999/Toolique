@@ -195,6 +195,17 @@ export default function Header() {
       bgDark: 'dark:bg-purple-950/40 dark:hover:bg-purple-900/40'
     },
     { 
+      name: 'Project Workflows', 
+      path: '/workflows', 
+      icon: Layers, 
+      desc: 'Multi-Step Pipelines Chaining Calculators & Formatters', 
+      badge: 'PIPELINES',
+      badgeColor: 'text-indigo-700 dark:text-indigo-300 bg-indigo-100/80 dark:bg-indigo-950/60 border-indigo-300/60',
+      color: 'text-indigo-600 dark:text-indigo-400',
+      bgLight: 'bg-indigo-50 hover:bg-indigo-100/70',
+      bgDark: 'dark:bg-indigo-950/40 dark:hover:bg-indigo-900/40'
+    },
+    { 
       name: 'Code Playground', 
       path: '/playground', 
       icon: Terminal, 
@@ -411,6 +422,22 @@ export default function Header() {
                 <span>All Tools</span>
                 <span className="text-[10px] font-black px-1.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60">
                   250+
+                </span>
+              </Link>
+
+              {/* 2.5 Workflows */}
+              <Link
+                to="/workflows"
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-150 inline-flex items-center gap-1.5 ${
+                  isActive('/workflows')
+                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/50 font-extrabold shadow-2xs'
+                    : 'text-zinc-650 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100/70 dark:hover:bg-zinc-850/60'
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
+                <span>Workflows</span>
+                <span className="text-[9px] font-black px-1.5 py-0.2 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-300/60">
+                  NEW
                 </span>
               </Link>
 

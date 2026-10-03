@@ -8,6 +8,7 @@ import { pythonQuestions } from '../src/features/academy/data/questions/python';
 import { javascriptQuestions } from '../src/features/academy/data/questions/javascript';
 import { reactQuestions } from '../src/features/academy/data/questions/react';
 import { qaQuestions } from '../src/features/academy/data/questions/qa';
+import { workflows } from '../src/data/workflows';
 
 const DIST_DIR = path.resolve('dist');
 const TEMPLATE_PATH = path.join(DIST_DIR, 'index.html');
@@ -799,6 +800,104 @@ const toolsDirectoryBodyHtml = `
     </div>
   </div>`;
 
+// Workflows Hub Page
+const workflowsFaqs = [
+  {
+    question: 'What are Multi-Step Project Workflows?',
+    answer: 'Workflows connect specialized calculators, developer formatters, and engineering utilities into ordered, cohesive pipelines. Instead of searching for individual tools one by one, workflows guide you step-by-step from raw project parameters to verified outputs and BOQ reports.'
+  },
+  {
+    question: 'Is any project data stored on Toolique servers during a workflow?',
+    answer: 'No. All calculations, parameter transformations, formatters, and diagram generations execute 100% locally in your web browser memory (RAM). No data is logged, sent to external servers, or tracked.'
+  },
+  {
+    question: 'Can I jump between steps or do I have to execute them in order?',
+    answer: 'You have complete freedom. You can launch Step 1 to follow the guided sequence or directly open any intermediate step from the workflow cards.'
+  }
+];
+
+const workflowsBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Multi-Step Project Workflows</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Multi-Step Project Workflows & Calculation Pipelines</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Connect multiple calculators, developer formatters, and engineering utilities together into cohesive, step-by-step project pipelines. 100% private, browser-based, and ad-free.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-bottom: 40px;">
+        ${workflows.map(wf => `
+          <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; gap: 8px; margin-bottom: 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">
+                <span style="background: #eef2ff; color: #4338ca; padding: 4px 8px; border-radius: 6px;">${wf.categoryLabel}</span>
+                <span style="background: #f1f5f9; color: #475569; padding: 4px 8px; border-radius: 6px;">${wf.difficulty}</span>
+              </div>
+              <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 8px;">
+                ${wf.name}
+              </h3>
+              <p style="font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 16px;">
+                ${wf.description}
+              </p>
+              <div style="font-size: 0.85rem; color: #475569; margin-bottom: 16px;">
+                <strong>Pipeline Steps (${wf.steps.length} tools):</strong>
+                <ol style="padding-left: 18px; margin-top: 6px; margin-bottom: 0;">
+                  ${wf.steps.map(s => {
+                    const stepTool = toolsList.find(t => t.id === s.id);
+                    const path = stepTool ? getToolCanonicalPath(stepTool.category, stepTool.slug) : '#';
+                    return `<li style="margin-bottom: 4px;"><a href="/${path}" style="color: #4f46e5; text-decoration: none; font-weight: 600;">${s.title}</a> - <span style="color: #64748b;">${s.description}</span></li>`;
+                  }).join('')}
+                </ol>
+              </div>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+
+      ${renderFaqsHtml(workflowsFaqs)}
+    </div>
+  </div>`;
+
+const workflowsSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/workflows#collection',
+      'name': 'Multi-Step Project Workflows & Engineering Pipelines',
+      'description': 'Connect multiple calculators, developer formatters, and engineering utilities into cohesive multi-step project pipelines.',
+      'url': 'https://www.toolique.in/workflows',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': 'Curated Project Workflows Directory',
+        'numberOfItems': workflows.length,
+        'itemListElement': workflows.map((w, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': w.name,
+          'description': w.description,
+          'url': `https://www.toolique.in/workflows#${w.id}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/workflows#faq',
+      'mainEntity': workflowsFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': faq.answer
+        }
+      }))
+    }
+  ]
+};
+
 // Static Pages Map
 const staticPages = [
   {
@@ -1021,6 +1120,14 @@ const staticPages = [
         }
       ]
     }
+  },
+  {
+    path: 'workflows',
+    title: 'Multi-Step Project Workflows & Calculation Pipelines | Toolique',
+    description: 'Connect multiple calculators, developer formatters, and engineering utilities together into cohesive, step-by-step project pipelines. 100% private and ad-free.',
+    keywords: ['project workflows', 'multi-step calculators', 'engineering pipelines', 'developer workflows', 'civil construction workflow'],
+    schemaMarkup: workflowsSchema,
+    bodyHtml: workflowsBodyHtml
   }
 ];
 
@@ -1366,6 +1473,7 @@ generateRedirectShell('tools/image-to-filament-art-maker', '3d-printing-tools/fi
 generateRedirectShell('3d-printing/image-to-filament-art-maker', '3d-printing-tools/filament-art-maker', 'Image to Filament Art Maker');
 generateRedirectShell('tools/advanced-boq-calculator-india', 'civil/advanced-boq-calculator-india', 'Advanced BOQ Calculator India');
 generateRedirectShell('economics-tools', 'economics', 'Economics Suite');
+generateRedirectShell('project-workflows', 'workflows', 'Multi-Step Project Workflows');
 
 console.log('SEO pre-rendering shells generation complete!');
 
@@ -1385,7 +1493,7 @@ function generateXmlSitemap() {
   staticPages.filter(p => !['404', '3d-print-studio', '3d-printing'].includes(p.path)).forEach(p => {
     let priority = '0.5';
     let freq = 'monthly';
-    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy', '3d-printing-tools', 'economics'].includes(p.path)) {
+    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy', '3d-printing-tools', 'economics', 'workflows'].includes(p.path)) {
       priority = '0.95';
       freq = 'daily';
     } else if (p.path === 'about-founder' || p.path === 'math-studio') {

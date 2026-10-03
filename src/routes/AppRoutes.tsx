@@ -33,6 +33,7 @@ const FinanceHub = lazy(() => import('../pages/FinanceHub'));
 const DeveloperHub = lazy(() => import('../pages/DeveloperHub'));
 const EconomicsHub = lazy(() => import('../pages/EconomicsHub'));
 const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
+const WorkflowsHub = lazy(() => import('../pages/WorkflowsHub'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
 export function getToolCanonicalPath(category: string, slug: string): string {
@@ -238,6 +239,16 @@ export default function AppRoutes() {
           <ThreeDPrintStudio />
         </Suspense>
       } />
+      <Route path="/workflows" element={
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">
+            Loading Workflows...
+          </div>
+        }>
+          <WorkflowsHub />
+        </Suspense>
+      } />
+      <Route path="/project-workflows" element={<Navigate to="/workflows" replace />} />
       <Route path="/math-studio" element={
         <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Math Studio...</div>}>
           <MathStudio />

@@ -26,6 +26,7 @@ export const footerConfig = {
       links: [
         { label: "Home", link: "/" },
         { label: "All Tools Directory", link: "/tools" },
+        { label: "Project Workflows", link: "/workflows" },
         { label: "AI Studio", link: "/ai" },
         { label: "Learning Academy", link: "/academy" },
         { label: "Developer Playground", link: "/playground" },
