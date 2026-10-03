@@ -4995,25 +4995,65 @@ export const toolsList: Tool[] = [
     slug: 'robots-txt-generator',
     name: 'Robots.txt Generator',
     category: 'web',
-    shortDescription: 'Generate standard robots.txt instructions to manage search crawler pathways.',
-    metaDescription: 'Free online Robots.txt Generator. Select default crawlers, specify disallow or allow rules, and generate robots.txt directives instantly.',
-    keywords: ['Robots.txt Generator', 'robots.txt creator', 'crawlers instructions', 'search bot rules', 'SEO robots.txt'],
-    icon: 'FileText',
+    shortDescription: 'Generate standard robots.txt directives, manage AI web scraping bots, test URL indexability rules, and declare XML sitemaps (RFC 9309).',
+    metaTitle: 'Robots.txt Generator | Create & Test SEO & AI Crawler Rules',
+    metaDescription: 'Free online Robots.txt Generator & Validator. Create search engine crawl rules, manage AI bots (GPTBot, ClaudeBot, Gemini), test URL indexability, and generate sitemap directives (RFC 9309).',
+    keywords: [
+      'Robots.txt Generator',
+      'robots.txt creator',
+      'block ai bots robots txt',
+      'GPTBot robots.txt',
+      'ClaudeBot disallow',
+      'googlebot crawl rules',
+      'robots.txt validator',
+      'robots txt path tester',
+      'crawl delay generator',
+      'ecommerce robots txt',
+      'wordpress robots txt generator'
+    ],
+    icon: 'Bot',
     howToUse: [
-      'Select the default crawler bot directive.',
-      'Enter allowed or disallowed relative pathways (e.g. /admin/).',
-      'Input your sitemap XML link and copy or download the compiled robots.txt file.'
+      'Choose a 1-click Preset (Standard Production, AI Bot Opt-Out Shield, WordPress/WooCommerce, Next.js/React SPA, or Staging Disallow All) or create custom crawler blocks.',
+      'Configure User-Agent groups for specific crawlers (Googlebot, Bingbot, GPTBot, ClaudeBot, Applebot, or All Bots *).',
+      'Add Allow and Disallow relative URL path directives with optional wildcards (* and $).',
+      'Set optional Crawl-Delay throttles (e.g. 1s, 2s, 5s) and attach one or more XML Sitemap URLs.',
+      'Test relative URL paths in the Real-Time RFC 9309 Indexability Simulator to verify if specific pages are allowed or blocked for different search bots.',
+      'Copy the clean robots.txt directives to clipboard, upload an existing file to edit, or download the formatted robots.txt file to place in your website root directory.'
     ],
     faqs: [
       {
-        question: 'Where should the robots.txt file be uploaded?',
-        answer: 'It must be uploaded to the root directory of your website domain (e.g. yourwebsite.com/robots.txt).'
+        question: 'Where must the robots.txt file be uploaded on a website?',
+        answer: 'The robots.txt file must reside in the top-level root directory of your website host (e.g., https://example.com/robots.txt). Search engine crawlers only query this exact root URL; placing it inside a subdirectory (such as /assets/robots.txt) will cause crawlers to ignore it completely.'
+      },
+      {
+        question: 'How do I block AI web crawlers (like OpenAI GPTBot and Anthropic ClaudeBot) without hurting Google Search rankings?',
+        answer: 'You can create dedicated User-agent directive blocks specifically targeting AI bots without modifying your primary Googlebot or general (*) rules. For example:\n\nUser-agent: GPTBot\nDisallow: /\n\nUser-agent: ClaudeBot\nDisallow: /\n\nUser-agent: Google-Extended\nDisallow: /\n\nDisallowing Google-Extended prevents your content from being used in Gemini AI training while leaving standard Googlebot search indexing 100% active.'
+      },
+      {
+        question: 'What is the difference between Robots.txt Disallow and the HTML noindex meta tag?',
+        answer: 'Disallow in robots.txt tells crawlers not to fetch or crawl the URL payload, but Google may still index the URL in search results if other websites link to it. In contrast, the <meta name="robots" content="noindex"> tag allows the page to be crawled but explicitly commands search engines never to display the URL in search results. Never disallow a page in robots.txt if you want Google to see your noindex tag.'
+      },
+      {
+        question: 'How does RFC 9309 longest-match rule priority work in robots.txt?',
+        answer: 'Under the official IETF RFC 9309 Robots Exclusion Protocol, when a URL matches multiple Allow and Disallow directives, the crawler selects the rule with the longest character string. If an Allow and a Disallow rule have the exact same character length, the Allow rule takes precedence.'
+      },
+      {
+        question: 'Does Googlebot support the Crawl-delay directive in robots.txt?',
+        answer: 'No. Googlebot ignores the Crawl-delay directive because Google’s crawler dynamically adjusts its crawl rate based on your server’s response latency. However, Bingbot, Yandex, and Baidu still respect Crawl-delay (specified in seconds) to prevent server CPU overload.'
+      },
+      {
+        question: 'Can I use wildcards (* and $) in robots.txt pathways?',
+        answer: 'Yes. The asterisk (*) matches any sequence of zero or more characters (e.g., `Disallow: /*?*sort=` blocks sorted query parameters). The dollar sign ($) marks the end of the URL pattern (e.g., `Disallow: /*.pdf$` blocks all PDF files while allowing URLs like /file.pdf.html).'
       }
     ],
     sections: [
       {
-        title: 'Robots.txt Directives standard',
-        content: 'Robots.txt is a voluntary standard. Respectable search crawlers (like Googlebot) follow it, but malicious bots can ignore it. Never use it to secure highly sensitive pages.'
+        title: 'Crawl Budget Optimization & Technical SEO Architecture',
+        content: 'Crawl budget refers to the number of URLs search engine bots can and want to crawl on your site within a given timeframe. Restricting crawler access to low-value, duplicate, or internal utility pages (such as facet filters, checkout funnels, staging previews, and admin panels) preserves crawl budget for your high-priority commercial and content pages.'
+      },
+      {
+        title: 'Essential Security Warning: Robots.txt is Not Access Control',
+        content: 'Robots.txt is a publicly accessible, plaintext document readable by anyone on the web. Never list confidential endpoints, unlisted staging URLs, or secret admin login paths in robots.txt as a security measure, as malicious scrapers actively read robots.txt to discover hidden directories. Use HTTP authentication, IP allowlists, and firewall rules to protect private areas.'
       }
     ]
   },
@@ -5168,25 +5208,65 @@ export const toolsList: Tool[] = [
     slug: 'css-minifier',
     name: 'CSS Minifier',
     category: 'web',
-    shortDescription: 'Compress stylesheets by stripping comments, spaces, and redundant characters.',
-    metaDescription: 'Free online CSS Minifier. Remove whitespaces and comments from CSS stylesheets to optimize file load speeds.',
-    keywords: ['CSS Minifier', 'minify stylesheet', 'compress CSS online', 'remove css comments', 'CSS optimization'],
-    icon: 'FileCode',
+    shortDescription: 'Compress and optimize CSS stylesheets by stripping comments, collapsing whitespace, shortening hex colors, and removing redundant zero units.',
+    metaTitle: 'CSS Minifier | Compress, Format & Optimize Stylesheets Online',
+    metaDescription: 'Free online CSS Minifier & Formatter. Compress stylesheets, strip comments, optimize hex colors, remove redundant zero units, simulate Gzip/Brotli wire sizes, and accelerate Core Web Vitals.',
+    keywords: [
+      'CSS Minifier',
+      'minify css',
+      'compress stylesheet online',
+      'css optimizer',
+      'css beautifier',
+      'clean css code',
+      'shorten hex colors',
+      'remove css comments',
+      'css gzip calculator',
+      'reduce render blocking css',
+      'inline css minifier'
+    ],
+    icon: 'Palette',
     howToUse: [
-      'Paste raw CSS inside the editor.',
-      'Inspect the original vs minified size savings statistics.',
-      'Copy the minified CSS from the result block.'
+      'Paste uncompressed CSS into the editor or upload an existing .css/.scss stylesheet file.',
+      'Select a 1-click Preset (e.g. Modern CSS Reset with Design Tokens, Glassmorphic Card, Responsive Auto-Fit Grid, Shimmer Keyframes, or Dark Mode Tokens).',
+      'Choose your optimization strategy: Safe Mode (whitespace & comments only), Aggressive Mode (hex color compaction, 0-unit removal, decimal compression, and shorthand consolidation), or Beautify Mode (formatted with 2-space indentation).',
+      'Toggle custom optimization rules: Shorten Hex Colors (#ffffff &rarr; #fff), strip zero units (0px &rarr; 0), or remove trailing semicolons before closing braces.',
+      'Inspect the live compression savings ratio, estimated Gzip/Brotli transfer sizes, and mobile 3G/4G download latency metrics.',
+      'Copy the minified CSS payload, export a .min.css file, or copy as an inline HTML <style> tag or Base64 CSS Data URI.'
     ],
     faqs: [
       {
-        question: 'Does CSS minification affect site functionality?',
-        answer: 'No, it only removes decorative styling rules spaces and comments, keeping stylesheet calculations fully readable by browsers.'
+        question: 'Why is CSS minification critical for Core Web Vitals and First Contentful Paint (FCP)?',
+        answer: 'By default, CSS is treated as a render-blocking resource by web browsers. The browser engine must download, parse, and construct the CSSOM (CSS Object Model) tree before it can paint a single pixel of content to the screen. Minifying your CSS reduces the byte payload across the network and accelerates CSSOM tree construction, directly speeding up First Contentful Paint (FCP) and Largest Contentful Paint (LCP).'
+      },
+      {
+        question: 'Does removing units from zero values (e.g. 0px to 0) cause browser rendering bugs?',
+        answer: 'In standard CSS lengths and distances (such as margin, padding, border-width, top, left), a value of 0 is mathematically identical across all units (0px = 0em = 0rem = 0%). However, our minifier carefully preserves unit designations for time durations (e.g., transition: 0s) and angles (e.g., rotate(0deg)) where the CSS specification strictly mandates explicit units.'
+      },
+      {
+        question: 'How does CSS Minification interact with Gzip and Brotli server compression?',
+        answer: 'Minification and Gzip/Brotli operate at different layers: Minification eliminates non-functional syntax characters before transmission, reducing the raw string length that the browser parser evaluates in memory. Gzip and Brotli compress that minified payload over the HTTP network stream. Combining both delivers the absolute smallest wire transfer payload and lowest browser CPU parse overhead.'
+      },
+      {
+        question: 'Will minifying CSS break modern features like calc(), var(), and @layer?',
+        answer: 'No. Our specialized CSS lexer recognizes math expressions inside calc(), min(), max(), clamp(), CSS custom property declarations (var(--theme-color)), and modern @layer/@container rules without stripping mandatory whitespace around math operators (such as + and - inside calc()).'
+      },
+      {
+        question: 'Can I preserve copyright and open-source license headers in minified CSS?',
+        answer: 'Yes. By default, comment blocks starting with /*! (exclamation mark banner) are treated as protected license headers and are preserved at the top of the minified stylesheet output.'
+      },
+      {
+        question: 'How can I format or un-minify a compressed CSS file back into readable code?',
+        answer: 'Select "Beautify Mode" in the studio. The formatter automatically adds consistent 2-space or 4-space indentations, places selectors on dedicated lines, and formats property-value declarations for clear readability and auditing.'
       }
     ],
     sections: [
       {
-        title: 'Stylesheets Optimization benefits',
-        content: 'Minification reduces file transfer size, improving First Contentful Paint (FCP) times and overall page loading speeds.'
+        title: 'Optimizing Critical Rendering Path with Minified Stylesheets',
+        content: 'When optimizing web performance, separating Critical CSS (the minimal stylesheet required to render above-the-fold content) from deferred styles is a best practice. Minifying both critical inline <style> blocks and asynchronous stylesheet bundles guarantees that the browser spends minimum CPU cycles parsing and tokenizing layout rules.'
+      },
+      {
+        title: 'Key Techniques Employed in CSS Minification',
+        content: '1) Whitespace Elimination: Stripping spaces around colons, braces, commas, and combinators (> + ~).\n2) Hex Color Compaction: Converting 6-digit hex values with identical pairs into 3-digit equivalents (#000000 &rarr; #000, #ffffff &rarr; #fff).\n3) Shorthand Merging: Collapsing 4-value identical declarations (margin: 10px 10px 10px 10px &rarr; margin: 10px).\n4) Semicolon Optimization: Omit the trailing semicolon before the final closing brace of a rule block.'
       }
     ]
   },
@@ -5195,25 +5275,65 @@ export const toolsList: Tool[] = [
     slug: 'js-minifier',
     name: 'JS Minifier',
     category: 'web',
-    shortDescription: 'Compress JavaScript script blocks by removing comment notations and spaces.',
-    metaDescription: 'Free online JS Minifier. Compress JavaScript code blocks, strip debug lines, and optimize scripts performance.',
-    keywords: ['JS Minifier', 'minify javascript', 'compress JS online', 'optimize scripts', 'JS comments remover'],
+    shortDescription: 'Compress and optimize JavaScript script blocks by safely removing redundant whitespace, stripping debug logs, and minimizing payload sizes.',
+    metaTitle: 'JS Minifier | Compress, Format & Optimize JavaScript Online',
+    metaDescription: 'Free online JavaScript Minifier & Formatter. Compress JS code blocks, strip comments & console.log, generate bookmarklets, simulate Gzip/Brotli wire sizes, and optimize web performance.',
+    keywords: [
+      'JS Minifier',
+      'minify javascript',
+      'compress JS online',
+      'javascript optimizer',
+      'js beautifier',
+      'strip console.log',
+      'bookmarklet generator',
+      'javascript code compressor',
+      'gzip size calculator js',
+      'online es6 minifier',
+      'safe javascript minification'
+    ],
     icon: 'FileCode',
     howToUse: [
-      'Paste raw JavaScript code inside the textarea.',
-      'Review the compression savings indicator.',
-      'Copy the optimized JavaScript string.'
+      'Paste raw JavaScript code into the editor or upload an existing .js/.ts script file.',
+      'Select your 1-click Preset (e.g. Async Fetch with Retry, Debounce/Throttle Helpers, DOM Modal Trap, Canvas Particle Loop, or Analytics Beacon).',
+      'Choose your optimization strategy: Safe Minification (whitespace & comments only), Aggressive Mode (boolean and identifier shortening), or Beautify Mode (formatted with 2-space indentation).',
+      'Toggle advanced optimization flags: Strip console.log() calls, remove debugger breakpoints, or shorten booleans (!0 / !1).',
+      'Inspect the live compression savings ratio, estimated Gzip/Brotli transfer sizes, and mobile 3G/4G latency reduction metrics.',
+      'Copy the minified payload, export a .min.js file, generate a drag-and-drop browser Bookmarklet, or embed as an inline <script> tag.'
     ],
     faqs: [
       {
-        question: 'Will minification break my variable scopes?',
-        answer: 'This minifier removes comments and whitespaces safely. For advanced renaming or obfuscation, full bundlers are recommended.'
+        question: 'What is the difference between JavaScript Minification and Gzip/Brotli compression?',
+        answer: 'JavaScript minification is a build-time or client-side code transformation that removes unnecessary characters (whitespaces, newlines, comments, dead debug statements) and shortens syntax tokens without altering program logic. In contrast, Gzip and Brotli are server-side stream compression algorithms (using LZ77/Huffman encoding) that compress the bytes over the network wire. Minification reduces the raw byte payload that the browser’s V8 engine must parse and compile, while Gzip reduces the transport download time. Using both together achieves maximum Core Web Vitals performance.'
+      },
+      {
+        question: 'Will minifying JavaScript break template literals, strings, or regular expressions?',
+        answer: 'No. Our intelligent JavaScript lexer parses single quotes, double quotes, ES6 template literals (`...`), and regular expression literals (/.../flags) in isolated token streams. Escaped characters and multiline template interpolations (${...}) remain completely intact and functional.'
+      },
+      {
+        question: 'Why should console.log() and debugger statements be stripped from production JavaScript?',
+        answer: 'Leaving console.log() and debugger statements in production code creates memory leaks (by retaining references to logged objects in memory), slows down the browser’s main UI thread during heavy loops, and exposes internal API keys or application logic to malicious actors in the DevTools console.'
+      },
+      {
+        question: 'How does Automatic Semicolon Insertion (ASI) work during code minification?',
+        answer: 'In JavaScript, newlines frequently act as statement terminators under ASI rules. When removing newlines, a naive minifier might concatenate statements into invalid syntax (e.g., `let a = 1\\nlet b = 2` becoming `let a = 1let b = 2`). Our minifier detects statement boundaries and inserts safe semicolons where newline collapse would otherwise trigger syntax errors.'
+      },
+      {
+        question: 'What is a JavaScript Bookmarklet and how do I use it?',
+        answer: 'A Bookmarklet is a small JavaScript program stored as a URL inside a web browser bookmark (using the `javascript:(function(){...})()` protocol). When you click the bookmark, the browser executes the script in the context of the current active webpage, allowing you to build custom browser automations, scrape data, or test UI layouts.'
+      },
+      {
+        question: 'Can I reverse a minified JavaScript file back into readable code?',
+        answer: 'Yes. Switch the compression strategy to "Beautify Mode" in this studio. The formatter reconstructs consistent indentations (2 or 4 spaces), aligns opening and closing braces, and separates individual statement blocks for human readability and debugging.'
       }
     ],
     sections: [
       {
-        title: 'Script payload optimization',
-        content: 'Smaller JS files accelerate code execution speeds and reduce processing delays on mobile devices.'
+        title: 'How JavaScript Minification Enhances Browser V8 Compilation Speeds',
+        content: 'When a web browser loads a JavaScript file, it undergoes four distinct phases: Network Download → Tokenization/Lexing → AST (Abstract Syntax Tree) Parsing → V8 Ignition Bytecode Compilation. While Gzip accelerates network delivery, the browser still has to decompress and parse the full uncompressed character stream in memory. By eliminating up to 40%–60% of unnecessary characters through minification, you directly reduce V8 main-thread parse times, leading to faster First Contentful Paint (FCP) and lower Total Blocking Time (TBT).'
+      },
+      {
+        title: 'Best Practices for Production Script Deployment',
+        content: '1) Always serve minified bundles (.min.js) with strict Cache-Control headers (`Cache-Control: public, max-age=31536000, immutable`).\n2) Enable HTTP/2 or HTTP/3 multiplexing and Brotli compression on your CDN (Cloudflare, Fastly, CloudFront).\n3) Keep third-party analytics and telemetry scripts deferred (`<script defer>` or `<script type="module">`) so they never block the critical rendering path.'
       }
     ]
   },

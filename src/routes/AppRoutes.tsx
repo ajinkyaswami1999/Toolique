@@ -184,6 +184,16 @@ export default function AppRoutes() {
       <Route path="/calculators/vehicle-depreciation-calculator" element={<Navigate to="/calculators/car-depreciation-calculator" replace />} />
       <Route path="/automobile/vehicle-depreciation-calculator" element={<Navigate to="/calculators/car-depreciation-calculator" replace />} />
       <Route path="/automobile/car-depreciation-calculator" element={<Navigate to="/calculators/car-depreciation-calculator" replace />} />
+      <Route path="/developer/javascript-minifier" element={<Navigate to="/developer/js-minifier" replace />} />
+      <Route path="/web/js-minifier" element={<Navigate to="/developer/js-minifier" replace />} />
+      <Route path="/calculators/js-minifier" element={<Navigate to="/developer/js-minifier" replace />} />
+      <Route path="/developer/stylesheet-minifier" element={<Navigate to="/developer/css-minifier" replace />} />
+      <Route path="/web/css-minifier" element={<Navigate to="/developer/css-minifier" replace />} />
+      <Route path="/calculators/css-minifier" element={<Navigate to="/developer/css-minifier" replace />} />
+      <Route path="/web/robots-txt-generator" element={<Navigate to="/developer/robots-txt-generator" replace />} />
+      <Route path="/calculators/robots-txt-generator" element={<Navigate to="/developer/robots-txt-generator" replace />} />
+      <Route path="/seo/robots-txt-generator" element={<Navigate to="/developer/robots-txt-generator" replace />} />
+      <Route path="/developer/robots-generator" element={<Navigate to="/developer/robots-txt-generator" replace />} />
       <Route path="/tools/advanced-boq-calculator-india" element={<Navigate to="/civil/advanced-boq-calculator-india" replace />} />
       <Route path="/architecture-tools" element={<Navigate to="/architecture" replace />} />
       <Route path="/qa-tools" element={<Navigate to="/qa" replace />} />
