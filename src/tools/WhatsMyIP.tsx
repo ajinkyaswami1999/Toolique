@@ -120,21 +120,71 @@ export default function WhatsMyIP() {
   const [copiedCustom, setCopiedCustom] = useState<boolean>(false);
   const [copiedSnippet, setCopiedSnippet] = useState<string | null>(null);
 
+  // Helper to parse Cloudflare CDN-CGI trace text
+  const parseCloudflareTrace = (text: string): { ip?: string; loc?: string; colo?: string } => {
+    const result: Record<string, string> = {};
+    text.split('\n').forEach(line => {
+      const parts = line.split('=');
+      if (parts.length >= 2) {
+        result[parts[0].trim()] = parts.slice(1).join('=').trim();
+      }
+    });
+    return { ip: result.ip, loc: result.loc, colo: result.colo };
+  };
+
   // Fetch Public IP and Geolocation with Multi-Source Fallbacks
   const fetchMyIP = useCallback(async () => {
     setLoading(true);
     setError(null);
     const startTime = performance.now();
 
+    let fetchedData: IPData | null = null;
+
+    // --- Provider 1: ipwho.is (CORS enabled, rich ASN, ISP, Geolocation, SSL, Free) ---
     try {
-      // Primary: ipwho.is (CORS enabled, rich ASN, ISP, Geolocation, SSL, Free)
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6500);
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
 
-      let fetchedData: IPData | null = null;
+      const res = await fetch('https://ipwho.is/', {
+        signal: controller.signal,
+        headers: { Accept: 'application/json' }
+      });
+      clearTimeout(timeoutId);
 
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.success !== false && json.ip) {
+          fetchedData = {
+            ip: json.ip,
+            type: json.type === 'IPv6' ? 'IPv6' : 'IPv4',
+            country: json.country,
+            countryCode: json.country_code,
+            countryFlag: json.flag?.emoji || '🌐',
+            region: json.region,
+            city: json.city,
+            postal: json.postal,
+            latitude: json.latitude,
+            longitude: json.longitude,
+            isp: json.connection?.isp,
+            org: json.connection?.org,
+            asn: json.connection?.asn ? `AS${json.connection.asn}` : undefined,
+            timezone: json.timezone?.id ? `${json.timezone.id} (${json.timezone.utc || ''})` : json.timezone?.id,
+            localTime: json.timezone?.current_time,
+            raw: json
+          };
+        }
+      }
+    } catch (e) {
+      console.warn('Provider 1 (ipwho.is) failed or blocked, attempting Provider 2 (freeipapi)...', e);
+    }
+
+    // --- Provider 2: freeipapi.com (Modern, SSL, High Rate Limit, CORS enabled) ---
+    if (!fetchedData) {
       try {
-        const res = await fetch('https://ipwho.is/', {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4500);
+
+        const res = await fetch('https://freeipapi.com/api/json', {
           signal: controller.signal,
           headers: { Accept: 'application/json' }
         });
@@ -142,70 +192,99 @@ export default function WhatsMyIP() {
 
         if (res.ok) {
           const json = await res.json();
-          if (json.success !== false && json.ip) {
+          if (json && json.ipAddress) {
             fetchedData = {
-              ip: json.ip,
-              type: json.type === 'IPv6' ? 'IPv6' : 'IPv4',
-              country: json.country,
-              countryCode: json.country_code,
-              countryFlag: json.flag?.emoji || '🌐',
-              region: json.region,
-              city: json.city,
-              postal: json.postal,
+              ip: json.ipAddress,
+              type: json.ipVersion === 6 ? 'IPv6' : 'IPv4',
+              country: json.countryName,
+              countryCode: json.countryCode,
+              countryFlag: '🌐',
+              region: json.regionName,
+              city: json.cityName,
+              postal: json.zipCode || undefined,
               latitude: json.latitude,
               longitude: json.longitude,
-              isp: json.connection?.isp,
-              org: json.connection?.org,
-              asn: json.connection?.asn ? `AS${json.connection.asn}` : undefined,
-              timezone: json.timezone?.id ? `${json.timezone.id} (${json.timezone.utc || ''})` : json.timezone?.id,
-              localTime: json.timezone?.current_time,
+              isp: json.asnOrganization,
+              org: json.asnOrganization,
+              asn: json.asn ? `AS${json.asn}` : undefined,
+              timezone: Array.isArray(json.timeZones) && json.timeZones.length > 0 ? json.timeZones[0] : undefined,
               raw: json
             };
           }
         }
       } catch (e) {
-        console.warn('Primary IP lookup endpoint failed, attempting fallback...', e);
+        console.warn('Provider 2 (freeipapi.com) failed, attempting Provider 3 (Cloudflare trace)...', e);
       }
+    }
 
-      // Fallback 1: ipapi.co
-      if (!fetchedData) {
+    // --- Provider 3: Cloudflare CDN-CGI Trace (1.1.1.1 & cloudflare.com) ---
+    // Immune to adblockers, no CORS issues, no rate limits, 100% reliable HTTPS
+    if (!fetchedData) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch('https://1.1.1.1/cdn-cgi/trace', {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const text = await res.text();
+          const trace = parseCloudflareTrace(text);
+          if (trace.ip) {
+            const isV6 = trace.ip.includes(':');
+            fetchedData = {
+              ip: trace.ip,
+              type: isV6 ? 'IPv6' : 'IPv4',
+              countryCode: trace.loc,
+              country: trace.loc || 'Global',
+              countryFlag: '🌐',
+              isp: trace.colo ? `Cloudflare Edge (${trace.colo})` : 'Cloudflare Anycast Network'
+            };
+          }
+        }
+      } catch (e) {
+        console.warn('Provider 3 (1.1.1.1 trace) failed, trying cloudflare.com/cdn-cgi/trace...', e);
         try {
-          const resFallback = await fetch('https://ipapi.co/json/', {
-            headers: { Accept: 'application/json' }
+          const controller2 = new AbortController();
+          const timeoutId2 = setTimeout(() => controller2.abort(), 4000);
+          const res2 = await fetch('https://cloudflare.com/cdn-cgi/trace', {
+            signal: controller2.signal
           });
-          if (resFallback.ok) {
-            const json = await resFallback.json();
-            if (json.ip && !json.error) {
+          clearTimeout(timeoutId2);
+          if (res2.ok) {
+            const text2 = await res2.text();
+            const trace2 = parseCloudflareTrace(text2);
+            if (trace2.ip) {
+              const isV6 = trace2.ip.includes(':');
               fetchedData = {
-                ip: json.ip,
-                type: json.version === 'IPv6' ? 'IPv6' : 'IPv4',
-                country: json.country_name,
-                countryCode: json.country_code,
+                ip: trace2.ip,
+                type: isV6 ? 'IPv6' : 'IPv4',
+                countryCode: trace2.loc,
+                country: trace2.loc || 'Global',
                 countryFlag: '🌐',
-                region: json.region,
-                city: json.city,
-                postal: json.postal,
-                latitude: json.latitude,
-                longitude: json.longitude,
-                isp: json.org,
-                org: json.org,
-                asn: json.asn,
-                timezone: json.timezone ? `${json.timezone} (${json.utc_offset || ''})` : json.timezone,
-                raw: json
+                isp: trace2.colo ? `Cloudflare Edge (${trace2.colo})` : 'Cloudflare Anycast Network'
               };
             }
           }
-        } catch (e) {
-          console.warn('Fallback 1 failed, attempting ipify...', e);
+        } catch (e2) {
+          console.warn('Cloudflare trace fallback failed...', e2);
         }
       }
+    }
 
-      // Fallback 2: api64.ipify.org (Dual-stack pure IP)
-      if (!fetchedData) {
-        const resIpify = await fetch('https://api64.ipify.org?format=json');
+    // --- Provider 4: api64.ipify.org (Dual-stack pure IP with try/catch) ---
+    if (!fetchedData) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const resIpify = await fetch('https://api64.ipify.org?format=json', {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
         if (resIpify.ok) {
           const json = await resIpify.json();
-          if (json.ip) {
+          if (json && json.ip) {
             const isV6 = json.ip.includes(':');
             fetchedData = {
               ip: json.ip,
@@ -214,30 +293,100 @@ export default function WhatsMyIP() {
             };
           }
         }
+      } catch (e) {
+        console.warn('Provider 4 (api64.ipify.org) failed...', e);
       }
-
-      const elapsed = Math.round(performance.now() - startTime);
-      setLatencyMs(elapsed);
-
-      if (fetchedData) {
-        setData(fetchedData);
-        setLastChecked(new Date());
-
-        // Update Dual-Stack status
-        if (fetchedData.type === 'IPv4') {
-          setDualStack(prev => ({ ...prev, ipv4: fetchedData.ip }));
-        } else {
-          setDualStack(prev => ({ ...prev, ipv6: fetchedData.ip }));
-        }
-      } else {
-        throw new Error('Unable to retrieve IP address. Please check your network connection or ad-blocker.');
-      }
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || 'Failed to detect IP address. Network request failed.');
-    } finally {
-      setLoading(false);
     }
+
+    // --- Provider 5: api.ipify.org (IPv4 fallback) ---
+    if (!fetchedData) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const resIpify = await fetch('https://api.ipify.org?format=json', {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (resIpify.ok) {
+          const json = await resIpify.json();
+          if (json && json.ip) {
+            fetchedData = {
+              ip: json.ip,
+              type: 'IPv4',
+              countryFlag: '🌐'
+            };
+          }
+        }
+      } catch (e) {
+        console.warn('Provider 5 (api.ipify.org) failed...', e);
+      }
+    }
+
+    // --- Provider 6: STUN WebRTC Candidate Extraction (Works even if all HTTP endpoints are blocked) ---
+    if (!fetchedData) {
+      try {
+        const discoveredIp = await new Promise<string | null>((resolve) => {
+          const RTCPeer = (window as any).RTCPeerConnection || (window as any).webkitRTCPeerConnection || (window as any).mozRTCPeerConnection;
+          if (!RTCPeer) return resolve(null);
+
+          const pc = new RTCPeer({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+          pc.createDataChannel('');
+          pc.createOffer().then((offer: any) => pc.setLocalDescription(offer)).catch(() => resolve(null));
+
+          const timeout = setTimeout(() => {
+            try { pc.close(); } catch {}
+            resolve(null);
+          }, 3000);
+
+          pc.onicecandidate = (event: any) => {
+            if (event && event.candidate) {
+              const candidate = event.candidate.candidate;
+              const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/gi;
+              const matches = candidate.match(ipRegex);
+              if (matches && matches.length > 0) {
+                for (const ip of matches) {
+                  if (!ip.endsWith('.local') && !ip.startsWith('10.') && !ip.startsWith('192.168.') && !ip.startsWith('172.16.')) {
+                    clearTimeout(timeout);
+                    try { pc.close(); } catch {}
+                    return resolve(ip);
+                  }
+                }
+              }
+            }
+          };
+        });
+
+        if (discoveredIp) {
+          fetchedData = {
+            ip: discoveredIp,
+            type: discoveredIp.includes(':') ? 'IPv6' : 'IPv4',
+            countryFlag: '🌐',
+            isp: 'Detected via STUN Protocol'
+          };
+        }
+      } catch (e) {
+        console.warn('STUN fallback failed...', e);
+      }
+    }
+
+    const elapsed = Math.round(performance.now() - startTime);
+    setLatencyMs(elapsed);
+
+    if (fetchedData) {
+      setData(fetchedData);
+      setLastChecked(new Date());
+
+      // Update Dual-Stack status
+      if (fetchedData.type === 'IPv4') {
+        setDualStack(prev => ({ ...prev, ipv4: fetchedData.ip }));
+      } else {
+        setDualStack(prev => ({ ...prev, ipv6: fetchedData.ip }));
+      }
+    } else {
+      setError('Unable to retrieve IP address. Please check your network connection or ad-blocker.');
+    }
+
+    setLoading(false);
   }, []);
 
   // Probe IPv6 connectivity in background
@@ -251,13 +400,24 @@ export default function WhatsMyIP() {
       clearTimeout(timeoutId);
       if (res.ok) {
         const json = await res.json();
-        if (json.ip && json.ip.includes(':')) {
+        if (json && json.ip && json.ip.includes(':')) {
           setDualStack(prev => ({ ...prev, ipv6: json.ip, checkingIpv6: false }));
           return;
         }
       }
     } catch {
-      // IPv6 not supported or timeout
+      // Try Cloudflare trace as IPv6 check
+      try {
+        const res = await fetch('https://cloudflare.com/cdn-cgi/trace');
+        if (res.ok) {
+          const text = await res.text();
+          const trace = parseCloudflareTrace(text);
+          if (trace.ip && trace.ip.includes(':')) {
+            setDualStack(prev => ({ ...prev, ipv6: trace.ip || null, checkingIpv6: false }));
+            return;
+          }
+        }
+      } catch {}
     }
     setDualStack(prev => ({ ...prev, checkingIpv6: false }));
   }, []);
@@ -288,7 +448,6 @@ export default function WhatsMyIP() {
           return;
         }
         const candidate = event.candidate.candidate;
-        // Extract IP addresses from ICE candidate string
         const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/gi;
         const matches = candidate.match(ipRegex);
         if (matches) {
@@ -316,7 +475,7 @@ export default function WhatsMyIP() {
     probeIPv6();
   }, [fetchMyIP, probeIPv6]);
 
-  // Lookup Custom IP / Domain
+  // Lookup Custom IP / Domain with multi-provider fallback
   const handleQueryCustomIP = async (ipToSearch?: string) => {
     const target = (ipToSearch || queryInput).trim();
     if (!target) return;
@@ -325,39 +484,76 @@ export default function WhatsMyIP() {
     setQueryError(null);
     setCustomResult(null);
 
+    let foundData: IPData | null = null;
+
+    // Try ipwho.is
     try {
       const res = await fetch(`https://ipwho.is/${encodeURIComponent(target)}`);
-      if (!res.ok) throw new Error('Query request failed.');
-      const json = await res.json();
-
-      if (json.success === false) {
-        throw new Error(json.message || `No data found for "${target}".`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success !== false && json.ip) {
+          foundData = {
+            ip: json.ip,
+            type: json.type === 'IPv6' ? 'IPv6' : 'IPv4',
+            country: json.country,
+            countryCode: json.country_code,
+            countryFlag: json.flag?.emoji || '🌐',
+            region: json.region,
+            city: json.city,
+            postal: json.postal,
+            latitude: json.latitude,
+            longitude: json.longitude,
+            isp: json.connection?.isp,
+            org: json.connection?.org,
+            asn: json.connection?.asn ? `AS${json.connection.asn}` : undefined,
+            timezone: json.timezone?.id ? `${json.timezone.id} (${json.timezone.utc || ''})` : json.timezone?.id,
+            localTime: json.timezone?.current_time,
+            raw: json
+          };
+        }
       }
-
-      setCustomResult({
-        ip: json.ip,
-        type: json.type === 'IPv6' ? 'IPv6' : 'IPv4',
-        country: json.country,
-        countryCode: json.country_code,
-        countryFlag: json.flag?.emoji || '🌐',
-        region: json.region,
-        city: json.city,
-        postal: json.postal,
-        latitude: json.latitude,
-        longitude: json.longitude,
-        isp: json.connection?.isp,
-        org: json.connection?.org,
-        asn: json.connection?.asn ? `AS${json.connection.asn}` : undefined,
-        timezone: json.timezone?.id ? `${json.timezone.id} (${json.timezone.utc || ''})` : json.timezone?.id,
-        localTime: json.timezone?.current_time,
-        raw: json
-      });
-    } catch (err: any) {
-      console.error(err);
-      setQueryError(err.message || 'Failed to lookup IP address. Verify IP format.');
-    } finally {
-      setQueryLoading(false);
+    } catch (e) {
+      console.warn('Custom query Provider 1 failed, trying Provider 2...', e);
     }
+
+    // Try freeipapi.com
+    if (!foundData) {
+      try {
+        const res = await fetch(`https://freeipapi.com/api/json/${encodeURIComponent(target)}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.ipAddress) {
+            foundData = {
+              ip: json.ipAddress,
+              type: json.ipVersion === 6 ? 'IPv6' : 'IPv4',
+              country: json.countryName,
+              countryCode: json.countryCode,
+              countryFlag: '🌐',
+              region: json.regionName,
+              city: json.cityName,
+              postal: json.zipCode || undefined,
+              latitude: json.latitude,
+              longitude: json.longitude,
+              isp: json.asnOrganization,
+              org: json.asnOrganization,
+              asn: json.asn ? `AS${json.asn}` : undefined,
+              timezone: Array.isArray(json.timeZones) && json.timeZones.length > 0 ? json.timeZones[0] : undefined,
+              raw: json
+            };
+          }
+        }
+      } catch (e) {
+        console.warn('Custom query Provider 2 failed...', e);
+      }
+    }
+
+    if (foundData) {
+      setCustomResult(foundData);
+    } else {
+      setQueryError(`Unable to locate IP/domain details for "${target}". Verify format or check connection.`);
+    }
+
+    setQueryLoading(false);
   };
 
   // Run Global Ping Benchmark

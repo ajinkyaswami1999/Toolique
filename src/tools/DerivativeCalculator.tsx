@@ -822,68 +822,53 @@ export default function DerivativeCalculator() {
   };
 
   return (
-    <div className="space-y-8 text-left max-w-7xl mx-auto">
-      {/* Top Banner / Feature Callout */}
-      <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-indigo-500/[0.05] via-purple-500/[0.03] to-transparent border border-indigo-500/15 dark:border-indigo-500/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="space-y-1.5 max-w-2xl">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 font-extrabold text-[10px] uppercase tracking-wider">
-              Calculus & Derivative Studio
-            </span>
-            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-bold">University & Engineering Grade</span>
-          </div>
-          <h2 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
-            Advanced Derivative & Calculus Studio
-          </h2>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed">
-            Perform Single-Variable, Multivariable & Partial, Implicit, Parametric, Taylor Series, and Curve Optimization derivations with step-by-step mathematical proofs and interactive multi-curve graphs.
-          </p>
+    <div className="space-y-6 text-left max-w-7xl mx-auto font-sans">
+      {/* Mode Navigation Tabs & Actions Toolbar (No duplicate heading banner) */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-3">
+        <div className="flex overflow-x-auto pb-1 gap-2 text-xs font-bold">
+          {[
+            { id: 'single', name: '1. Single Variable & Higher-Order', icon: Sliders },
+            { id: 'partial', name: '2. Multivariable & Partials (∇f, H)', icon: Grid },
+            { id: 'implicit', name: '3. Implicit Diff (F(x,y)=0)', icon: Activity },
+            { id: 'parametric', name: '4. Parametric (x(t), y(t))', icon: Compass },
+            { id: 'taylor', name: '5. Taylor & Maclaurin Series', icon: Sparkles },
+            { id: 'optimization', name: '6. Critical Points & Min/Max', icon: Target },
+          ].map(tab => {
+            const Icon = tab.icon;
+            const isActive = mode === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => { setMode(tab.id as CalculusMode); setError(null); }}
+                className={`px-3.5 py-2 rounded-xl shrink-0 flex items-center gap-2 border transition cursor-pointer ${
+                  isActive
+                    ? 'border-indigo-600/40 text-indigo-600 dark:border-indigo-400/40 dark:text-indigo-400 bg-indigo-50/70 dark:bg-indigo-950/40 shadow-sm'
+                    : 'border-transparent text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 bg-zinc-100/60 dark:bg-zinc-800/40'
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{tab.name}</span>
+              </button>
+            );
+          })}
         </div>
-        <div className="flex flex-wrap gap-2 shrink-0">
+
+        <div className="flex items-center gap-2 shrink-0 self-end lg:self-auto">
           <button
             onClick={() => handleCopySolution('latex')}
-            className="px-3.5 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-bold hover:border-indigo-500/40 text-zinc-700 dark:text-zinc-300 transition inline-flex items-center gap-1.5 shadow-sm cursor-pointer"
+            className="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold hover:border-indigo-500/40 text-zinc-700 dark:text-zinc-300 transition inline-flex items-center gap-1.5 shadow-sm cursor-pointer"
           >
             {copiedType === 'latex' ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-indigo-500" />}
             <span>{copiedType === 'latex' ? 'LaTeX Copied!' : 'Copy LaTeX'}</span>
           </button>
           <button
             onClick={() => handleCopySolution('all')}
-            className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition inline-flex items-center gap-1.5 shadow-sm cursor-pointer"
+            className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-sm cursor-pointer"
           >
             {copiedType === 'all' ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <FileText className="w-3.5 h-3.5" />}
-            <span>{copiedType === 'all' ? 'Solution Copied!' : 'Copy Full Analysis'}</span>
+            <span>{copiedType === 'all' ? 'Copied!' : 'Copy Full Analysis'}</span>
           </button>
         </div>
-      </div>
-
-      {/* Mode Navigation Tabs */}
-      <div className="flex overflow-x-auto pb-1 gap-2 border-b border-zinc-200 dark:border-zinc-800 text-xs font-bold">
-        {[
-          { id: 'single', name: '1. Single Variable & Higher-Order', icon: Sliders },
-          { id: 'partial', name: '2. Multivariable & Partials (∇f, H)', icon: Grid },
-          { id: 'implicit', name: '3. Implicit Diff (F(x,y)=0)', icon: Activity },
-          { id: 'parametric', name: '4. Parametric (x(t), y(t))', icon: Compass },
-          { id: 'taylor', name: '5. Taylor & Maclaurin Series', icon: Sparkles },
-          { id: 'optimization', name: '6. Critical Points & Min/Max', icon: Target },
-        ].map(tab => {
-          const Icon = tab.icon;
-          const isActive = mode === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => { setMode(tab.id as CalculusMode); setError(null); }}
-              className={`px-4 py-2.5 rounded-t-xl shrink-0 flex items-center gap-2 border-b-2 transition cursor-pointer ${
-                isActive
-                  ? 'border-indigo-600 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30'
-                  : 'border-transparent text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200'
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              <span>{tab.name}</span>
-            </button>
-          );
-        })}
       </div>
 
       {/* Error Alert Display */}
