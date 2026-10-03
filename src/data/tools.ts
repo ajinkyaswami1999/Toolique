@@ -4795,64 +4795,69 @@ export const toolsList: Tool[] = [
   {
     id: 'CarDepreciationCalculator',
     slug: 'car-depreciation-calculator',
-    name: 'Car Depreciation Calculator',
+    name: 'Vehicle Depreciation Calculator',
     category: 'automobile',
     shortDescription: 'Calculate vehicle depreciation trajectories, 10-year resale values, used car market appraisals, and total cost of ownership (TCO).',
-    metaDescription: 'Free online Car Depreciation Calculator. Estimate vehicle value loss, 10-year depreciation schedules, used car buying/selling price bands, and monthly TCO drain across Petrol, Diesel, CNG, and EV models.',
+    metaTitle: 'Vehicle Depreciation Calculator | Resale Value for Cars, Bikes, Trucks & EVs',
+    metaDescription: 'Free online Vehicle Depreciation Calculator. Calculate resale value, 10-year depreciation schedules, and monthly TCO for Cars, Bikes, Commercial Trucks, Taxis, Auto Rickshaws, and EVs.',
     keywords: [
-      'Car Depreciation Calculator',
-      'vehicle depreciation calculator',
-      'car resale value calculator',
+      'Vehicle Depreciation Calculator',
+      'car depreciation calculator',
+      'bike depreciation calculator',
+      'motorcycle resale value calculator',
+      'truck depreciation calculator',
+      'auto rickshaw resale value',
+      'taxi fleet depreciation calculator',
+      'commercial vehicle depreciation',
       'used car valuation calculator',
-      'car value loss per year',
-      'IRDAI car depreciation schedule',
-      'declining balance car depreciation',
-      'total cost of ownership car TCO',
-      'new vs used car depreciation savings',
-      'automobile residual value calculator'
+      'IRDAI vehicle depreciation schedule',
+      'declining balance vehicle depreciation',
+      'total cost of ownership TCO calculator',
+      'EV battery depreciation calculator'
     ],
     icon: 'TrendingDown',
     howToUse: [
-      'Enter the original invoice / ex-showroom purchase price of the vehicle and select the currency (₹, $, €, £).',
-      'Set the current age of the vehicle using the interactive timeline slider (0 to 15 years).',
-      'Choose the depreciation methodology: Industry Standard Market Curve (IRDAI), Declining Balance Method (DBM), or Straight Line (SLM).',
-      'Specify odometer reading, physical condition, number of previous owners, and fuel propulsion (Petrol, Diesel, CNG, EV).',
-      'Switch between the 4 specialized tabs: 10-Year Depreciation Schedule, Used Car Fair Market Evaluator, Total Cost of Ownership (TCO), or New vs 3-Year Certified Used Car Comparison.'
+      'Select your Vehicle Category: Passenger Car, Two-Wheeler / Motorcycle / Scooter, Commercial Truck / LCV / HCV, Commercial Taxi / Fleet Cab, Auto Rickshaw (3-Wheeler), Delivery Van, or Electric Vehicle (EV).',
+      'Pick a 1-click preset (e.g. Midsize SUV, Commuter Bike, Commercial LCV, Ola/Uber Taxi Cab, CNG Auto Rickshaw, or EV Fleet) or enter your original purchase price and currency (₹, $, €, £).',
+      'Adjust vehicle age (0 to 15 years), odometer reading (km or miles), physical cosmetic condition (Flawless, Good, Fair, Poor), and number of previous owners.',
+      'Select your depreciation calculation methodology: Standard Market Curve (IRDAI), Declining Balance Method (DBM), or Straight Line (SLM).',
+      'Switch between the 4 dedicated analysis tabs: 10-Year Depreciation Trajectory Schedule, Fair Market Resale Evaluator (Private vs Dealer Trade-In), Total Cost of Ownership (TCO), or New vs 3-Year Certified Pre-Owned Comparison.',
+      'Copy the itemized valuation audit report to clipboard or export a full 10-year CSV depreciation schedule with single-click actions.'
     ],
     faqs: [
       {
-        question: 'How fast does a new car depreciate in its first few years?',
-        answer: 'A brand-new car experiences its steepest value drop immediately upon registration: approximately 9%–10% as soon as it is driven off the showroom floor (due to registration charges, road taxes, and dealer margins). By the end of Year 1, average market depreciation reaches 15%–20%. By Year 3, the vehicle has lost roughly 35%–40% of its initial value, and by Year 5, around 50%–60%.'
+        question: 'How do depreciation rates differ across Cars, Bikes, Trucks, Taxis, and Auto Rickshaws?',
+        answer: 'Depreciation rates vary significantly by vehicle utility and duty cycle: (1) Two-Wheelers / Motorcycles lose ~12%–15% annually due to strong utility resale demand; (2) Passenger Cars lose ~15%–18% annually; (3) Commercial Taxis / Ride-Hail Cabs lose ~22%–28% annually due to severe high-mileage wear (40,000–60,000 km/year); (4) Auto Rickshaws (3-Wheelers) lose ~18%–22% annually from stop-and-go city duty; and (5) Commercial Trucks / LCVs follow a steady 16%–20% curve with a high scrap metal salvage residual value.'
       },
       {
-        question: 'What is the standard IRDAI depreciation schedule used by Indian motor insurance companies?',
-        answer: 'The Insurance Regulatory and Development Authority of India (IRDAI) prescribes the following standard Insured Declared Value (IDV) depreciation rates: Up to 6 months: 5%; 6 months to 1 year: 15%; 1 to 2 years: 20%; 2 to 3 years: 30%; 3 to 4 years: 40%; 4 to 5 years: 50%. For vehicles older than 5 years, IDV is determined by mutual agreement between insurer and vehicle owner based on surveyor appraisal.'
+        question: 'What is the standard IRDAI depreciation schedule used for Motor Insurance IDV in India?',
+        answer: 'The Insurance Regulatory and Development Authority of India (IRDAI) mandates the following Insured Declared Value (IDV) depreciation scale for all motor vehicles: Up to 6 months: 5%; 6 months to 1 year: 15%; 1 to 2 years: 20%; 2 to 3 years: 30%; 3 to 4 years: 40%; 4 to 5 years: 50%. For vehicles exceeding 5 years of age, IDV is mutually agreed upon based on surveyor inspection and chassis condition.'
       },
       {
-        question: 'Why is buying a 3-year-old certified used car considered the "sweet spot"?',
-        answer: 'The first owner absorbs the steepest portion of the depreciation curve (35%–45% loss over the first 36 months). From Year 3 to Year 6, the annual depreciation rate flattens significantly to just 7%–9% per year. Buying a 3-year-old vehicle allows you to acquire modern safety and tech features at a 40% discount while suffering minimal future depreciation.'
+        question: 'Why do Electric Vehicles (EVs) depreciate at a different trajectory than IC Engine vehicles?',
+        answer: 'Electric Vehicles (EVs) experience higher initial depreciation (18%–22% annually) in their first 3 years due to rapid battery energy density improvements, price reductions on newer EV models, and buyer concerns regarding out-of-warranty battery replacement costs. However, lower routine maintenance and cheaper electricity running costs significantly reduce their operational TCO over time.'
       },
       {
-        question: 'How does vehicle mileage and physical condition affect fair market resale value?',
-        answer: 'Average passenger vehicle usage is benchmarked at 10,000 to 12,000 km per year. Cars driven significantly higher than average (>18,000 km/year) suffer an additional 7%–10% value penalty due to increased mechanical powertrain wear. Conversely, a flawless maintenance record, single-owner Registration Certificate (RC), and immaculate cosmetic condition can command a 5%–8% premium over baseline market value.'
+        question: 'How does high mileage and multiple ownership affect fair market resale valuation?',
+        answer: 'Standard passenger vehicles are benchmarked at 10,000–12,000 km/year (commercial vehicles at 40,000–60,000 km/year). Vehicles with odometer readings exceeding 40% above benchmark suffer an additional 7%–12% valuation penalty. Second ownership incurs an average 6% deduction, while 3+ owners reduce resale value by 14%–18% due to fragmented service accountability.'
       },
       {
-        question: 'Do Electric Vehicles (EVs) and Diesel cars depreciate differently than Petrol cars?',
-        answer: 'Yes. Electric Vehicles currently depreciate slightly faster (18%–22% annually) in their initial years due to rapid advancements in battery technology, falling new EV prices, and uncertainty regarding 8-year battery replacement costs. In regions like Delhi-NCR (India), Diesel vehicles face strict 10-year end-of-life National Green Tribunal (NGT) rules, accelerating their resale depreciation past Year 6.'
+        question: 'Why is buying a 3-year-old certified pre-owned vehicle considered the optimal "sweet spot"?',
+        answer: 'A vehicle loses 35%–45% of its original showroom value in the first 36 months. From Year 3 to Year 7, the annual depreciation rate plateaus to just 6%–9% per year. Purchasing a 3-year-old certified vehicle lets you acquire modern mechanical reliability and features while shielding your capital from the steepest depreciation cliff.'
       },
       {
-        question: 'What is the Total Cost of Ownership (TCO) and why is depreciation its largest component?',
-        answer: 'Total Cost of Ownership (TCO) measures all direct and indirect expenses of owning a vehicle: Fuel + Insurance + Periodic Maintenance + Road Taxes + Depreciation Loss. For most vehicles under 5 years old, depreciation represents 40%–50% of the total annual ownership cost, often exceeding fuel expenses.'
+        question: 'What is Total Cost of Ownership (TCO) and why is depreciation its largest expense?',
+        answer: 'Total Cost of Ownership (TCO) encapsulates all direct and hidden expenses of operating a vehicle: Purchase Depreciation + Fuel/Energy + Insurance Premiums + Periodic Maintenance/Tyres + Road Taxes/Financing. In the first 5 years of vehicle life, depreciation accounts for 40%–50% of the total monthly ownership drain.'
       }
     ],
     sections: [
       {
-        title: 'Core Car Depreciation Formulations',
-        content: '• Declining Balance Method (DBM): Value(t) = P × (1 - r)^t\n• Straight Line Method (SLM): Annual Depreciation = (P - Salvage Value) / Useful Life\n• Total Depreciation % = [(Original Price - Current Fair Value) / Original Price] × 100\n• Retained Equity % = (Current Fair Value / Original Price) × 100'
+        title: 'Vehicle Depreciation Formulations & Mathematical Models',
+        content: '• Declining Balance Method (DBM): Value(t) = P × (1 - r)^t, where P is original ex-showroom price, r is annual depreciation rate, and t is vehicle age in years.\n• Straight Line Method (SLM): Annual Depreciation = (P - Salvage Value) / Useful Life (years).\n• Sum-of-the-Years-Digits (SYD): Accelerated depreciation model allocating higher fractions to initial years.\n• Retained Equity Ratio = (Current Fair Market Value / Original Invoice Price) × 100%.'
       },
       {
-        title: 'Strategies to Maximize Your Vehicle Resale Value',
-        content: '1) Maintain an uninterrupted dealership service booklet with stamped records; 2) Park under covered parking to protect paint clear-coat from UV degradation; 3) Promptly touch up paint chips and minor bumper scuffs; 4) Retain both original factory keys, original manuals, and valid PUC/insurance certificates.'
+        title: 'Proven Strategies to Maximize Resale Value Across Any Vehicle Type',
+        content: '1) Maintain Complete Dealership Service Logs: An unbroken authorized service history increases buyer trust and commands a 5%–10% valuation premium.\n2) Prevent Exterior Paint & Body Degradation: Use covered parking or ceramic coating to protect paint from UV oxidation and rust.\n3) Replace Worn Wear-and-Tear Items Before Sale: Fresh tyres, new wiper blades, and a detailed interior cabin yield a high return on investment at resale.\n4) Preserve All Documentation: Retain original invoice, warranty cards, spare smart keys, valid PUC, and unencumbered NOC/RC.'
       }
     ]
   },
@@ -8900,29 +8905,77 @@ export const toolsList: Tool[] = [
     name: 'Statistics Calculator',
     category: 'math-studio',
     shortDescription: 'Compute mean, median, mode, standard deviation, variance, and plot box/histogram charts.',
-    metaDescription: 'Free online statistics calculator. Input numerical datasets to find mean, median, standard deviation, quartiles, range, box plots, and frequency tables.',
-    keywords: ['statistics calculator', 'standard deviation calculator', 'mean median mode', 'variance calculator', 'box plot generator'],
+    metaTitle: 'Statistics Calculator | Mean, Median, Mode, Std Dev & Box Plots',
+    metaDescription: 'Free online Statistics Calculator. Compute mean, median, mode, sample/population standard deviation, variance, quartiles, Tukey outliers, and generate interactive SVG histograms and box plots in real time.',
+    keywords: [
+      'statistics calculator',
+      'descriptive statistics calculator',
+      'mean median mode calculator',
+      'standard deviation calculator',
+      'sample variance calculator',
+      'population variance calculator',
+      'box plot generator',
+      'interquartile range IQR calculator',
+      'tukey outlier detection',
+      'z score calculator',
+      'frequency distribution table generator',
+      'kurtosis and skewness calculator'
+    ],
     icon: 'BarChart3',
     howToUse: [
-      'Enter or paste your dataset as a list of numbers separated by commas.',
-      'View the computed summary statistics, including mean, median, mode, sample variance, standard deviation, and interquartile range.',
-      'Inspect the generated distribution histogram and box-and-whisker plot.',
-      'Copy the detailed text report or download the frequency table data.'
+      'Enter or paste your numerical dataset into the input field (delimited by commas, spaces, semicolons, tabs, or newlines), upload a CSV/TXT data file, or select a pre-loaded sample dataset (Exam Scores, Server Latency, Stock Returns, Quality Control, or Income Distribution).',
+      'Choose between Sample Statistics (n - 1 degrees of freedom with Bessel\'s correction) or Population Statistics (N degrees of freedom) depending on whether your data represents an experimental sample or a full census.',
+      'Explore the Comprehensive Metrics Grid: View Central Tendency (Arithmetic Mean, Median, Mode, Midrange, Trimmed Mean, Geometric Mean, Harmonic Mean), Dispersion (Variance, Standard Deviation, Standard Error SEM, Range, MAD, CV%), and 95% Confidence Intervals.',
+      'Inspect the Interactive SVG Visualization Studio: Switch between the Frequency Distribution Histogram (with customizable bin counts and Gaussian Bell Curve overlay) and the Box-and-Whisker Plot (featuring the five-number summary and highlighted Tukey outlier points).',
+      'Use the Interactive Z-Score & Percentile Probe: Enter any single value (X) to instantly calculate its standardized Z-score, theoretical standard normal percentile, and empirical rank within your dataset.',
+      'Export or Share Your Analysis: Copy the fully formatted plaintext statistical report to your clipboard, export data to a CSV spreadsheet with individual Z-scores, or generate synthetic distribution samples (Normal, Uniform, Exponential, Bimodal) for hypothesis testing.'
     ],
     faqs: [
       {
-        question: 'What is the difference between sample variance and population variance?',
-        answer: 'Sample variance divides the sum of squared differences by (n - 1) (Bessel\'s correction) to provide an unbiased estimate from sample data, whereas population variance divides by n.'
+        "question": "How do you calculate Mean, Median, and Mode, and when should each be used?",
+        "answer": "The Arithmetic Mean (x̄ = Σx / n) is the mathematical balance point, ideal for symmetric distributions without extreme anomalies. The Median (Q2) is the middle value of an ordered dataset, robust against extreme outliers and preferred for skewed distributions (such as household income or server latency). The Mode is the most frequently occurring value, useful for categorical or discrete count data. If Mean = Median = Mode, the distribution is perfectly symmetrical."
       },
       {
-        question: 'How is the box plot constructed?',
-        answer: 'The box plot displays the five-number summary: Minimum, First Quartile (Q1), Median (Q2), Third Quartile (Q3), and Maximum, visually representing dataset spread and skewness.'
+        "question": "What is the difference between Sample Standard Deviation (s) and Population Standard Deviation (σ)?",
+        "answer": "Sample standard deviation uses Bessel's correction by dividing the sum of squared deviations by (n - 1) instead of n (s = √(Σ(x - x̄)² / (n - 1))). This correction eliminates the systematic negative bias in sample variance, providing an exact, mathematically unbiased estimator for the true population variance. Population standard deviation (σ = √(Σ(x - μ)² / N)) divides by N and should only be used when the dataset comprises 100% of all possible observations in a closed population."
+      },
+      {
+        "question": "How is the Five-Number Summary constructed and displayed in a Box Plot?",
+        "answer": "The Five-Number Summary consists of: (1) Minimum (lowest non-outlier value), (2) First Quartile Q1 (25th percentile), (3) Median Q2 (50th percentile), (4) Third Quartile Q3 (75th percentile), and (5) Maximum (highest non-outlier value). The Box-and-Whisker plot renders a central box spanning from Q1 to Q3 (representing the Interquartile Range, IQR), a midline at the Median, and whiskers extending to the extreme values within 1.5 × IQR fences."
+      },
+      {
+        "question": "How does the 1.5 × IQR Tukey Fence rule detect Mild and Extreme Outliers?",
+        "answer": "John Tukey's exploratory data analysis method establishes mathematical boundaries (fences) using the Interquartile Range (IQR = Q3 - Q1): Inner Fences are set at [Q1 - 1.5×IQR, Q3 + 1.5×IQR]; points falling beyond inner fences are classified as Mild Outliers. Outer Fences are set at [Q1 - 3.0×IQR, Q3 + 3.0×IQR]; points falling outside outer fences are classified as Extreme Outliers. This non-parametric method requires no assumption of normality."
+      },
+      {
+        "question": "What do Skewness and Excess Kurtosis indicate about dataset distribution shape?",
+        "answer": "Skewness quantifies distribution asymmetry: a positive skew (> 0.5) indicates a long right tail (mean > median); a negative skew (< -0.5) indicates a long left tail (mean < median); near zero (-0.5 to 0.5) indicates approximate symmetry. Excess Kurtosis measures tail heaviness relative to a normal distribution: Leptokurtic (> 0.5) has heavy tails and high outlier frequency; Platykurtic (< -0.5) has light tails and uniform flatness; Mesokurtic (near 0) matches standard Gaussian bell-curve kurtosis."
+      },
+      {
+        "question": "How are Z-Scores and Standard Normal percentiles computed?",
+        "answer": "A Z-score (standard score) measures how many standard deviations an observation x lies above or below the mean: z = (x - x̄) / s. A Z-score of 0 represents the mean, +1.0 represents one standard deviation above, and -2.0 represents two standard deviations below. Using the cumulative standard normal distribution function Φ(z), the calculator converts any Z-score into a cumulative percentile (e.g. z = +1.96 corresponds to the 97.5th percentile)."
+      },
+      {
+        "question": "Does this statistics calculator upload or store my dataset on external servers?",
+        "answer": "No. All statistical computations, sorting algorithms, outlier evaluations, and SVG diagram renderings execute 100% locally in your web browser memory (RAM). Zero data packets are sent across the network, ensuring strict institutional compliance for proprietary financial, medical, and academic datasets."
       }
     ],
     sections: [
       {
-        title: 'Descriptive Statistics Overview',
-        content: 'Descriptive statistics summarize and organize characteristics of a dataset. Measures of central tendency (mean, median, mode) pinpoint the center of the distribution, while measures of variability (variance, standard deviation, range) quantify the scatter of observations.'
+        "title": "Descriptive Statistics Overview & Measures of Central Tendency",
+        "content": "Descriptive statistics synthesize raw numerical observations into meaningful summaries that describe the center, spread, and shape of a distribution.\n\n1. Measures of Central Tendency:\n- Arithmetic Mean (x̄): x̄ = (1/n) Σ xᵢ. The standard average and center of gravity for balanced distributions.\n- Median (Q2): The 50th percentile value dividing sorted observations in half. Robust against extreme outliers.\n- Mode: The value(s) with highest occurrence frequency. Can be unimodal, bimodal, multimodal, or non-existent.\n- Midrange: (Min + Max) / 2. A quick estimate of the midpoint between extrema.\n- Trimmed Mean (10%): Mean computed after discarding top 5% and bottom 5% of extreme values to reduce outlier distortion.\n- Geometric Mean: (∏ xᵢ)^(1/n). The multiplicative mean for exponential growth rates, compound interest, and normalized index factors (valid for positive numbers).\n- Harmonic Mean: n / Σ(1/xᵢ). The reciprocal mean for rates, ratios, and speed/distance computations.\n\n2. Selecting the Best Central Tendency Metric:\n- Symmetrical Data (Normal Distribution): Arithmetic Mean is most statistically efficient.\n- Skewed / Heavy-Tailed Data (Income, Web Traffic, House Prices): Median provides a more reliable measure of typical central values.\n- Categorical or Grouped Bins: Mode highlights the most popular cluster."
+      },
+      {
+        "title": "Measures of Dispersion, Variability & Bessel's Correction",
+        "content": "Measures of dispersion quantify the degree of spread, scatter, and variability among data points around the central value.\n\n1. Mathematical Formulas for Spread:\n- Sample Variance (s²): s² = Σ(xᵢ - x̄)² / (n - 1). Employs Bessel's correction (n - 1 degrees of freedom) to ensure that the sample variance estimator has an expected value exactly equal to the true population variance.\n- Population Variance (σ²): σ² = Σ(xᵢ - μ)² / N. Used when the dataset contains the exhaustive universe of observations.\n- Standard Deviation (s or σ): The square root of variance, expressed in identical physical units as the original data.\n- Standard Error of the Mean (SEM): SEM = s / √n. Measures the precision with which the sample mean estimates the true population mean.\n- Interquartile Range (IQR): IQR = Q3 - Q1. The middle 50% spread, completely immune to extreme outliers.\n- Range: R = Max - Min. Total spread between extrema.\n- Mean Absolute Deviation (MAD): MAD = (1/n) Σ |xᵢ - x̄|. The average absolute distance of points from the mean.\n- Coefficient of Variation (CV%): CV = (s / x̄) × 100%. A dimensionless relative measure of dispersion, allowing comparison across datasets with different scales."
+      },
+      {
+        "title": "Five-Number Summary, Quartiles & Tukey Outlier Detection",
+        "content": "The Five-Number Summary provides an exploratory summary of distribution position without making parametric assumptions:\n\n1. Five-Number Summary Construction:\n- Minimum: Lowest value observed.\n- First Quartile (Q1): 25th percentile (splits bottom 25% from top 75%).\n- Median (Q2): 50th percentile (central balance).\n- Third Quartile (Q3): 75th percentile (splits bottom 75% from top 25%).\n- Maximum: Highest value observed.\n\n2. Tukey IQR Outlier Detection Rules:\n- Interquartile Range: IQR = Q3 - Q1\n- Lower Inner Fence: Q1 - (1.5 × IQR)\n- Upper Inner Fence: Q3 + (1.5 × IQR)\n- Lower Outer Fence: Q1 - (3.0 × IQR)\n- Upper Outer Fence: Q3 + (3.0 × IQR)\n\nValues between Inner and Outer fences are designated Mild Outliers (plotted as open circles on box plots). Values beyond Outer fences are designated Extreme Outliers (plotted as filled markers), signaling severe anomalies or measurement artifacts."
+      },
+      {
+        "title": "Distribution Shape, Skewness, Kurtosis & Z-Score Standardization",
+        "content": "Beyond center and spread, higher statistical moments quantify the shape, asymmetry, and tail behavior of datasets:\n\n1. Distribution Asymmetry (Skewness):\n- Fisher-Pearson Skewness (g₁): g₁ = (n / ((n - 1)(n - 2))) Σ ((xᵢ - x̄) / s)³\n- Positive Skew (g₁ > +0.5): Right-skewed distribution with a prolonged right tail and Mean > Median.\n- Negative Skew (g₁ < -0.5): Left-skewed distribution with a prolonged left tail and Mean < Median.\n- Symmetric (g₁ between -0.5 and +0.5): Balanced bell-shaped profile.\n\n2. Tail Heaviness (Excess Kurtosis):\n- Excess Kurtosis (g₂): g₂ = [n(n + 1) / ((n - 1)(n - 2)(n - 3))] Σ ((xᵢ - x̄) / s)⁴ - [3(n - 1)² / ((n - 2)(n - 3))]\n- Leptokurtic (g₂ > +0.5): Fat-tailed distribution prone to extreme outlier events.\n- Platykurtic (g₂ < -0.5): Thin-tailed, flat distribution with low outlier likelihood.\n- Mesokurtic (g₂ ≈ 0): Matches the standard Gaussian normal distribution tail profile.\n\n3. Z-Score Standardization & Empirical Rule:\n- Standard Z-Score: z = (x - x̄) / s\n- Under a Normal Distribution: 68.27% of observations fall within ±1σ (z ∈ [-1, +1]); 95.45% fall within ±2σ (z ∈ [-2, +2]); and 99.73% fall within ±3σ (z ∈ [-3, +3])."
       }
     ]
   },
@@ -10356,30 +10409,66 @@ export const toolsList: Tool[] = [
     "category": "architecture",
     "subcategory": "Building Design",
     "shortDescription": "Calculate parking layout dimensions, bays, and turning radii.",
-    "metaDescription": "Free online Parking Space Calculator. Calculate building dimensions, clearances, and code compliance in browser.",
+    "metaTitle": "Parking Space Calculator | Layout Dimensions, Bays & Turning Radii",
+    "metaDescription": "Free online Parking Space Calculator & CAD Layout Studio. Calculate car bays, aisle widths, turning radii, ADA accessible stalls, and EV charging bays per NBC 2016 and IBC codes.",
     "keywords": [
       "Parking Space Calculator",
-      "Parking Space Calculator calculator",
-      "architectural planning",
-      "building design"
+      "parking layout dimensions",
+      "parking stall size calculator",
+      "turning radius parking lot",
+      "NBC 2016 parking standards",
+      "ADA parking stall requirements",
+      "ECS parking calculator",
+      "architectural parking blueprint",
+      "commercial parking lot layout"
     ],
     "icon": "Compass",
     "howToUse": [
-      "Select your units (Metric or Imperial).",
-      "Enter the required spatial and design parameters.",
-      "Review the compliance guidelines and results.",
-      "Export or copy the calculated parameters for blueprints."
+      "Select your measurement units (Feet or Meters) and choose a regional standard (NBC 2016 India, IBC/ADA USA, BS 8300 UK, or Custom).",
+      "Pick a 1-click project preset (Office Commercial, Retail Mall, Hospital, Residential Stilt, Hotel Valet, or EV Charging Hub) or manually input your lot length and width.",
+      "Choose your preferred parking stall angle (90° Perpendicular, 60° Angled, 45° Angled, 30° Angled, or 0° Parallel) and row layout (Double Row with central aisle or Single Row).",
+      "Customize stall width, stall depth, and driving aisle dimensions, then adjust the dedicated EV Fast-Charging ratio and Two-Wheeler / Bike bay allocations.",
+      "Review the live 2D CAD blueprint simulation (toggle CAD Dark, Blueprint Light, or Asphalt mode) to inspect bay geometries and circulation flow.",
+      "Check the Turning Radii & Maneuverability audit badge (1-shot vs multi-point turn status) and copy the complete technical dimension audit or share directly via WhatsApp."
     ],
     "faqs": [
       {
-        "question": "What is the purpose of the Parking Space Calculator?",
-        "answer": "This calculator allows architects, engineers, and students to quickly estimate spatial profiles, verify building codes, and generate layout clearance parameters."
+        "question": "What are the standard parking stall dimensions under NBC 2016 (India) vs IBC / ADA (USA)?",
+        "answer": "Under NBC 2016 and IRC standards in India, a standard passenger car parking stall is 2.5 m × 5.0 m (8.2 ft × 16.4 ft). Under US IBC and ADA guidelines, standard stalls are typically 9.0 ft × 18.0 ft (2.74 m × 5.49 m) for standard passenger cars or 8.5 ft × 18.0 ft for compact vehicles. British Standard BS 8300 recommends 2.4 m × 4.8 m."
+      },
+      {
+        "question": "What is the difference between 90° perpendicular and 60° / 45° angled parking?",
+        "answer": "90° perpendicular parking provides the highest vehicle stall density per linear curb length but requires a wider two-way driving aisle (minimum 6.0 m / 20–24 ft) for 90-degree turning maneuvers. Angled parking (60° or 45°) allows narrower one-way driving aisles (3.5–4.5 m / 12–15 ft), smoother one-shot entry and exit without blind spots, and reduced driver maneuvering friction, making it ideal for retail supermarkets and high-traffic shopping centers."
+      },
+      {
+        "question": "How many Accessible (ADA / Divyangjan) parking spaces are legally mandatory?",
+        "answer": "According to NBC 2016 Part 3 (Clause 4.3) and ADA Title III (Table 1106.1): 1–25 total bays require at least 1 accessible stall (minimum 3.6 m wide or 8.0 ft bay + 5.0 ft access aisle); 26–50 bays require 2 accessible stalls; 51–75 bays require 3 stalls; 76–100 bays require 4 stalls; and lots with over 100 bays require 2% of total capacity plus at least 1 van-accessible stall (8.0 ft bay + 8.0 ft access aisle)."
+      },
+      {
+        "question": "What is Equivalent Car Space (ECS) and how is it calculated?",
+        "answer": "Equivalent Car Space (ECS) is the standard urban planning metric used by municipal authorities (such as DDA, MCGM, BDA, and DTCP) to quantify parking requirements across mixed vehicle types: 1 Standard Passenger Car = 1.0 ECS (23–28 sq.m in open surface parking or 28–32 sq.m in stilt/basement including circulation); 1 Two-Wheeler (Motorcycle/Scooter) = 0.2 ECS (1.0 m × 2.0 m); 1 Bicycle = 0.1 ECS; and 1 Commercial Bus / Truck = 2.5 to 3.0 ECS."
+      },
+      {
+        "question": "What is the minimum vehicle turning radius and driving aisle clearance for parking lots?",
+        "answer": "Standard passenger sedans require a minimum outer turning radius of 5.5 m (18.0 ft) and an inner turning radius of 3.0 m (9.8 ft). Large SUVs and pickup trucks require 6.2 m (20.3 ft) outer turning radius. Two-way aisles must be at least 6.0 m (20 ft) wide, and one-way aisles must be at least 3.5 m (11.5 ft) wide to prevent vehicle corner scraping and ensure effortless one-shot parking maneuvers."
+      },
+      {
+        "question": "What are the EV charging bay infrastructure requirements in modern building bylaws?",
+        "answer": "Under the Model Building Bye-Laws (MBBL 2016 amended) and Central Electricity Authority (CEA) guidelines, modern residential and commercial developments must allocate at least 10% to 20% of total parking capacity equipped with EV slow/fast AC/DC charging infrastructure, including dedicated conduit pathways, fire suppression clearances, and electrical load capacity of 3.3 kW to 22 kW per charging stall."
       }
     ],
     "sections": [
       {
-        "title": "Architectural Guidelines for Parking Space Calculator",
-        "content": "Calculations comply with standard municipal zoning bylaws, building codes, and global design parameters. Double check outputs against local regulations."
+        "title": "Architectural Guidelines for Parking Layouts & Stall Geometry",
+        "content": "Designing an efficient parking facility requires balancing maximum vehicular capacity with smooth circulation and safety. Key dimensional standards include:\n\n1. Stall Geometry across Angles:\n- 90° Perpendicular: Stall Width 2.5 m (8.2 ft), Stall Depth 5.0 m (16.4 ft), Two-Way Aisle 6.0 m (19.7 ft). Highest space density.\n- 60° Angled: Stall Width 2.5 m (8.2 ft), Stall Depth 5.4 m (17.7 ft), One-Way Aisle 4.5 m (14.8 ft). Optimal compromise between density and ease of maneuvering.\n- 45° Angled: Stall Width 2.5 m (8.2 ft), Stall Depth 5.2 m (17.1 ft), One-Way Aisle 3.8 m (12.5 ft). Ideal for narrow site depths.\n- 0° Parallel: Stall Width 2.4 m (7.9 ft), Stall Length 6.0 m (19.7 ft), One-Way Aisle 3.5 m (11.5 ft). Used for curbside drop-off and narrow driveways.\n\n2. Accessible (ADA / Divyangjan) Clearances:\nAccessible stalls must be placed on the shortest accessible route of travel to building entrances, with a minimum width of 3.6 m (or 2.4 m stall + 1.2 m painted access transfer aisle) on flat ground not exceeding 1:50 (2%) slope."
+      },
+      {
+        "title": "Vehicle Turning Radii, Swept Path & Ramp Circulation Engineering",
+        "content": "Vehicular maneuvering in surface lots, multi-level parking podiums, and basements depends on vehicle turning physics:\n\n1. Turning Radii Equations:\n- Minimum Outer Turning Radius (Ro): 5.5 m (18.0 ft) for standard cars; 6.2 m (20.3 ft) for SUVs.\n- Minimum Inner Turning Radius (Ri): 3.0 m (9.8 ft).\n- Swept Path Width (W_swept): W_swept = √(Ro² - L_wheelbase²) - Ri + W_vehicle, ensuring adequate aisle width for single-movement 90° turning.\n\n2. Ramp Design Specifications:\n- Straight Vehicular Ramps: Maximum slope of 1:8 (12.5%) for private residential or 1:10 (10%) for commercial public parking.\n- Curved / Helical Ramps: Maximum slope of 1:12 (8.33%) with a minimum inner turning radius of 4.5 m (14.8 ft) and outer radius of 9.0 m (29.5 ft).\n- Vertical Headroom Clearance: Minimum 2.4 m (7.9 ft) clear height under structural beams and fire sprinkler pipes (2.75 m for accessible van routes)."
+      },
+      {
+        "title": "Equivalent Car Space (ECS) Planning & Basement Column Grid Optimization",
+        "content": "In multi-level basements and stilt floors, structural column grids directly dictate parking yield and efficiency:\n\n1. Recommended Column Spacing for 3-Car Bays:\n- Clear bay between columns: 7.5 m to 8.0 m (24.6 ft to 26.2 ft) clear width fits three standard 2.5 m passenger car stalls comfortably.\n- Column depth: 0.45 m to 0.6 m with wheel stops positioned 0.9 m from end walls.\n\n2. Gross Area Norms per Equivalent Car Space (ECS):\n- Open Surface Lot: 23 to 25 sq.m (250–270 sq.ft) per ECS including driveway aisles.\n- Stilt Floor Level: 28 to 30 sq.m (300–325 sq.ft) per ECS.\n- Multi-Level Basement Parking: 32 to 35 sq.m (345–375 sq.ft) per ECS accounting for structural columns, ramps, shafts, and stair cores."
       }
     ]
   },

@@ -2,6 +2,8 @@
 import { useState, useMemo } from 'react';
 import {
   Car,
+  Bike,
+  Truck,
   TrendingDown,
   Sparkles,
   RefreshCw,
@@ -16,17 +18,20 @@ import {
   DollarSign,
   AlertCircle,
   FileSpreadsheet,
-  Info
+  Info,
+  Zap
 } from 'lucide-react';
 
 // --- Types & Interfaces ---
+export type VehicleCategory = 'car' | 'bike' | 'truck' | 'taxi' | 'auto' | 'van' | 'ev';
 export type DepreciationMethod = 'standard_curve' | 'declining_balance' | 'straight_line';
 export type CarCondition = 'flawless' | 'good' | 'fair' | 'poor';
-export type FuelType = 'petrol' | 'diesel' | 'cng' | 'ev';
+export type FuelType = 'petrol' | 'diesel' | 'cng' | 'ev' | 'lpg';
 export type CalcMode = 'schedule' | 'used_evaluator' | 'tco' | 'new_vs_used';
 
 export interface DepreciationArchetype {
   id: string;
+  category: VehicleCategory;
   name: string;
   desc: string;
   originalPrice: number;
@@ -40,10 +45,128 @@ export interface DepreciationArchetype {
   currency: string;
 }
 
+export interface VehicleCategoryConfig {
+  id: VehicleCategory;
+  label: string;
+  icon: any;
+  defaultPrice: number;
+  expectedAnnualKm: number;
+  defaultDepRate: number;
+  salvagePct: number;
+  defaultInsurance: number;
+  defaultMaintenance: number;
+  defaultFuel: number;
+  defaultFuelType: FuelType;
+  allowedFuelTypes: FuelType[];
+}
+
+export const VEHICLE_CATEGORIES: VehicleCategoryConfig[] = [
+  {
+    id: 'car',
+    label: 'Car / SUV',
+    icon: Car,
+    defaultPrice: 1000000,
+    expectedAnnualKm: 12000,
+    defaultDepRate: 15,
+    salvagePct: 8,
+    defaultInsurance: 25000,
+    defaultMaintenance: 18000,
+    defaultFuel: 75000,
+    defaultFuelType: 'petrol',
+    allowedFuelTypes: ['petrol', 'diesel', 'cng', 'ev', 'lpg']
+  },
+  {
+    id: 'bike',
+    label: 'Motorcycle / Scooter',
+    icon: Bike,
+    defaultPrice: 120000,
+    expectedAnnualKm: 8000,
+    defaultDepRate: 13,
+    salvagePct: 10,
+    defaultInsurance: 3500,
+    defaultMaintenance: 5500,
+    defaultFuel: 24000,
+    defaultFuelType: 'petrol',
+    allowedFuelTypes: ['petrol', 'ev']
+  },
+  {
+    id: 'truck',
+    label: 'Commercial Truck / LCV',
+    icon: Truck,
+    defaultPrice: 2800000,
+    expectedAnnualKm: 60000,
+    defaultDepRate: 18,
+    salvagePct: 15,
+    defaultInsurance: 65000,
+    defaultMaintenance: 90000,
+    defaultFuel: 450000,
+    defaultFuelType: 'diesel',
+    allowedFuelTypes: ['diesel', 'cng', 'ev', 'petrol']
+  },
+  {
+    id: 'taxi',
+    label: 'Taxi / Fleet Cab',
+    icon: Car,
+    defaultPrice: 920000,
+    expectedAnnualKm: 45000,
+    defaultDepRate: 22,
+    salvagePct: 8,
+    defaultInsurance: 35000,
+    defaultMaintenance: 45000,
+    defaultFuel: 180000,
+    defaultFuelType: 'cng',
+    allowedFuelTypes: ['cng', 'diesel', 'petrol', 'ev']
+  },
+  {
+    id: 'auto',
+    label: 'Auto Rickshaw (3-Wheeler)',
+    icon: Gauge,
+    defaultPrice: 260000,
+    expectedAnnualKm: 30000,
+    defaultDepRate: 18,
+    salvagePct: 10,
+    defaultInsurance: 9000,
+    defaultMaintenance: 18000,
+    defaultFuel: 75000,
+    defaultFuelType: 'cng',
+    allowedFuelTypes: ['cng', 'petrol', 'ev', 'diesel', 'lpg']
+  },
+  {
+    id: 'van',
+    label: 'Delivery Van / Cargo LCV',
+    icon: Truck,
+    defaultPrice: 850000,
+    expectedAnnualKm: 35000,
+    defaultDepRate: 18,
+    salvagePct: 10,
+    defaultInsurance: 28000,
+    defaultMaintenance: 35000,
+    defaultFuel: 150000,
+    defaultFuelType: 'diesel',
+    allowedFuelTypes: ['diesel', 'cng', 'petrol', 'ev']
+  },
+  {
+    id: 'ev',
+    label: 'Electric Vehicle (EV)',
+    icon: Zap,
+    defaultPrice: 1850000,
+    expectedAnnualKm: 14000,
+    defaultDepRate: 18,
+    salvagePct: 10,
+    defaultInsurance: 30000,
+    defaultMaintenance: 12000,
+    defaultFuel: 32000,
+    defaultFuelType: 'ev',
+    allowedFuelTypes: ['ev']
+  }
+];
+
 const ARCHETYPES: DepreciationArchetype[] = [
+  // Car Presets
   {
     id: 'petrol_hatchback',
-    name: '🚗 New Compact Petrol Hatchback',
+    category: 'car',
+    name: '🚗 Compact Petrol Hatchback',
     desc: '₹8.5 Lakhs, Brand New (0y) - Standard market curve',
     originalPrice: 850000,
     vehicleAgeYears: 0,
@@ -57,6 +180,7 @@ const ARCHETYPES: DepreciationArchetype[] = [
   },
   {
     id: 'diesel_suv',
+    category: 'car',
     name: '🚙 1.5L Midsize Diesel SUV',
     desc: '₹16.0 Lakhs, 2 Years Old (32,000 km)',
     originalPrice: 1600000,
@@ -71,6 +195,7 @@ const ARCHETYPES: DepreciationArchetype[] = [
   },
   {
     id: 'luxury_sedan',
+    category: 'car',
     name: '🏎️ Luxury German Sedan',
     desc: '₹55.0 Lakhs, High 22% annual depreciation curve',
     originalPrice: 5500000,
@@ -83,14 +208,109 @@ const ARCHETYPES: DepreciationArchetype[] = [
     method: 'declining_balance',
     currency: '₹'
   },
+  // Two-Wheeler / Bike Presets
   {
-    id: 'electric_ev',
-    name: '⚡ Long-Range Electric EV',
-    desc: '₹18.5 Lakhs, EV Battery aging & tech evolution curve',
-    originalPrice: 1850000,
+    id: 'commuter_bike',
+    category: 'bike',
+    name: '🏍️ 125cc Commuter Motorcycle',
+    desc: '₹95,000, 2 Years Old (16,000 km, strong resale retention)',
+    originalPrice: 95000,
+    vehicleAgeYears: 2,
+    odometerKm: 16000,
+    fuelType: 'petrol',
+    condition: 'good',
+    ownersCount: 1,
+    depreciationRate: 12,
+    method: 'standard_curve',
+    currency: '₹'
+  },
+  {
+    id: 'cruiser_bike',
+    category: 'bike',
+    name: '🏍️ 350cc Cruiser / Premium Bike',
+    desc: '₹2.2 Lakhs, 1 Year Old (7,000 km)',
+    originalPrice: 220000,
     vehicleAgeYears: 1,
-    odometerKm: 18000,
+    odometerKm: 7000,
+    fuelType: 'petrol',
+    condition: 'flawless',
+    ownersCount: 1,
+    depreciationRate: 13,
+    method: 'standard_curve',
+    currency: '₹'
+  },
+  {
+    id: 'electric_scooter',
+    category: 'bike',
+    name: '🛵 Electric 2-Wheeler Scooter',
+    desc: '₹1.35 Lakhs, 1 Year Old (9,000 km)',
+    originalPrice: 135000,
+    vehicleAgeYears: 1,
+    odometerKm: 9000,
     fuelType: 'ev',
+    condition: 'good',
+    ownersCount: 1,
+    depreciationRate: 15,
+    method: 'standard_curve',
+    currency: '₹'
+  },
+  // Commercial Truck Presets
+  {
+    id: 'heavy_truck',
+    category: 'truck',
+    name: '🚛 16-Ton Heavy Commercial Truck (HCV)',
+    desc: '₹32.0 Lakhs, 4 Years Old (240,000 km, Straight-Line Fleet)',
+    originalPrice: 3200000,
+    vehicleAgeYears: 4,
+    odometerKm: 240000,
+    fuelType: 'diesel',
+    condition: 'good',
+    ownersCount: 1,
+    depreciationRate: 18,
+    method: 'straight_line',
+    currency: '₹'
+  },
+  {
+    id: 'light_truck',
+    category: 'truck',
+    name: '🚚 3.5-Ton Light Commercial Vehicle (LCV)',
+    desc: '₹11.5 Lakhs, 3 Years Old (110,000 km)',
+    originalPrice: 1150000,
+    vehicleAgeYears: 3,
+    odometerKm: 110000,
+    fuelType: 'diesel',
+    condition: 'good',
+    ownersCount: 1,
+    depreciationRate: 18,
+    method: 'straight_line',
+    currency: '₹'
+  },
+  // Commercial Taxi Presets
+  {
+    id: 'commercial_cab',
+    category: 'taxi',
+    name: '🚖 Commercial Fleet Sedan / Cab',
+    desc: '₹9.2 Lakhs, 3 Years Old (140,000 km, High Duty Cycle)',
+    originalPrice: 920000,
+    vehicleAgeYears: 3,
+    odometerKm: 140000,
+    fuelType: 'cng',
+    condition: 'good',
+    ownersCount: 1,
+    depreciationRate: 22,
+    method: 'declining_balance',
+    currency: '₹'
+  },
+  // Auto Rickshaw Presets
+  {
+    id: 'auto_rickshaw',
+    category: 'auto',
+    name: '🛺 3-Wheeler Passenger Auto Rickshaw',
+    desc: '₹2.6 Lakhs, 2 Years Old (65,000 km, City Duty)',
+    originalPrice: 260000,
+    vehicleAgeYears: 2,
+    odometerKm: 65000,
+    fuelType: 'cng',
     condition: 'good',
     ownersCount: 1,
     depreciationRate: 18,
@@ -98,30 +318,49 @@ const ARCHETYPES: DepreciationArchetype[] = [
     currency: '₹'
   },
   {
-    id: 'commercial_cab',
-    name: '🚖 Commercial Taxi / Fleet Cab',
-    desc: '₹9.0 Lakhs, High mileage (50,000 km/yr, Straight-Line)',
-    originalPrice: 900000,
-    vehicleAgeYears: 4,
-    odometerKm: 180000,
-    fuelType: 'cng',
-    condition: 'fair',
+    id: 'electric_cargo_3w',
+    category: 'auto',
+    name: '🛺 Electric Cargo 3-Wheeler',
+    desc: '₹3.1 Lakhs, 1 Year Old (28,000 km)',
+    originalPrice: 310000,
+    vehicleAgeYears: 1,
+    odometerKm: 28000,
+    fuelType: 'ev',
+    condition: 'good',
     ownersCount: 1,
-    depreciationRate: 20,
+    depreciationRate: 18,
+    method: 'standard_curve',
+    currency: '₹'
+  },
+  // Van Presets
+  {
+    id: 'delivery_van',
+    category: 'van',
+    name: '🚐 Commercial Delivery Cargo Van',
+    desc: '₹8.5 Lakhs, 3 Years Old (95,000 km)',
+    originalPrice: 850000,
+    vehicleAgeYears: 3,
+    odometerKm: 95000,
+    fuelType: 'diesel',
+    condition: 'good',
+    ownersCount: 1,
+    depreciationRate: 18,
     method: 'straight_line',
     currency: '₹'
   },
+  // EV Presets
   {
-    id: 'certified_preowned',
-    name: '🏷️ 3-Year Certified Used Car',
-    desc: '₹12.0 Lakhs original MSRP, Buying at 3y sweet spot',
-    originalPrice: 1200000,
-    vehicleAgeYears: 3,
-    odometerKm: 45000,
-    fuelType: 'petrol',
+    id: 'electric_ev_suv',
+    category: 'ev',
+    name: '⚡ Long-Range Electric SUV',
+    desc: '₹19.5 Lakhs, 2 Years Old (26,000 km)',
+    originalPrice: 1950000,
+    vehicleAgeYears: 2,
+    odometerKm: 26000,
+    fuelType: 'ev',
     condition: 'good',
     ownersCount: 1,
-    depreciationRate: 15,
+    depreciationRate: 18,
     method: 'standard_curve',
     currency: '₹'
   }
@@ -131,6 +370,9 @@ export default function CarDepreciationCalculator() {
   // Navigation Mode
   const [activeMode, setActiveMode] = useState<CalcMode>('schedule');
 
+  // Vehicle Category
+  const [vehicleCategory, setVehicleCategory] = useState<VehicleCategory>('car');
+
   // Core Inputs
   const [originalPrice, setOriginalPrice] = useState<number>(1000000); // 10 Lakhs
   const [vehicleAgeYears, setVehicleAgeYears] = useState<number>(3); // 0 - 15 years
@@ -138,8 +380,8 @@ export default function CarDepreciationCalculator() {
   const [depreciationMethod, setDepreciationMethod] = useState<DepreciationMethod>('standard_curve');
   const [currency, setCurrency] = useState('₹');
 
-  // Condition & Usage Modifiers for Used Car Evaluation
-  const [odometerKm, setOdometerKm] = useState<number>(42000);
+  // Condition & Usage Modifiers for Used Vehicle Evaluation
+  const [odometerKm, setOdometerKm] = useState<number>(36000);
   const [fuelType, setFuelType] = useState<FuelType>('petrol');
   const [condition, setCondition] = useState<CarCondition>('good');
   const [ownersCount, setOwnersCount] = useState<number>(1);
@@ -149,38 +391,69 @@ export default function CarDepreciationCalculator() {
   const [annualInsurance, setAnnualInsurance] = useState<number>(25000);
   const [annualMaintenance, setAnnualMaintenance] = useState<number>(18000);
   const [annualFuelSpend, setAnnualFuelSpend] = useState<number>(75000);
-  const [annualKmDriven, setAnnualKmDriven] = useState<number>(14000);
+  const [annualKmDriven, setAnnualKmDriven] = useState<number>(12000);
 
   const [copied, setCopied] = useState(false);
 
+  // Active Category Config
+  const activeCategoryConfig = useMemo(() => {
+    return VEHICLE_CATEGORIES.find((c) => c.id === vehicleCategory) || VEHICLE_CATEGORIES[0];
+  }, [vehicleCategory]);
+
+  // Handler for category switch
+  const handleCategorySelect = (cat: VehicleCategory) => {
+    setVehicleCategory(cat);
+    const config = VEHICLE_CATEGORIES.find((c) => c.id === cat) || VEHICLE_CATEGORIES[0];
+    setOriginalPrice(config.defaultPrice);
+    setVehicleAgeYears(3);
+    setCustomDepreciationRate(config.defaultDepRate);
+    setFuelType(config.defaultFuelType);
+    setAnnualInsurance(config.defaultInsurance);
+    setAnnualMaintenance(config.defaultMaintenance);
+    setAnnualFuelSpend(config.defaultFuel);
+    setAnnualKmDriven(config.expectedAnnualKm);
+    setOdometerKm(config.expectedAnnualKm * 3);
+  };
+
   // --- Depreciation Schedule Engine ---
   // Standard IRDAI / Industry baseline schedule:
-  // Year 0 (immediate showroom drive-off): ~9% loss (registration, taxes)
-  // Year 1: ~18% total loss
-  // Year 2: ~28% total loss
-  // Year 3: ~38% total loss
-  // Year 4: ~47% total loss
-  // Year 5: ~56% total loss
-  // Year 6: ~64% total loss
-  // Year 7: ~71% total loss
-  // Year 8: ~77% total loss
-  // Year 9: ~82% total loss
-  // Year 10: ~86% total loss
-  const getStandardDepreciationPct = (year: number): number => {
+  const getStandardDepreciationPct = (year: number, category: VehicleCategory): number => {
     if (year <= 0) return 0;
+    
+    // Taxi & Commercial high duty curves drop faster
+    if (category === 'taxi') {
+      const taxiRates = [0, 25, 40, 52, 62, 70, 77, 83, 88, 91, 93];
+      if (year < taxiRates.length) return taxiRates[year];
+      return Math.min(95, 93 + (year - 10) * 0.5);
+    }
+    
+    // Two-wheelers maintain strong secondary value
+    if (category === 'bike') {
+      const bikeRates = [0, 15, 24, 33, 42, 50, 58, 65, 71, 76, 80];
+      if (year < bikeRates.length) return bikeRates[year];
+      return Math.min(92, 80 + (year - 10) * 2.0);
+    }
+
     const standardRates = [0, 18, 28, 38, 47, 56, 64, 71, 77, 82, 86, 89, 91, 93, 94, 95];
     if (year < standardRates.length) return standardRates[year];
     return Math.min(95, 86 + (year - 10) * 1.8);
   };
 
-  // Computes base car value at any given year under selected method
-  const computeBaseValueAtYear = (p: number, year: number, method: DepreciationMethod, ratePct: number, salvagePct: number): number => {
+  // Computes base vehicle value at any given year under selected method
+  const computeBaseValueAtYear = (
+    p: number,
+    year: number,
+    method: DepreciationMethod,
+    ratePct: number,
+    salvagePct: number,
+    cat: VehicleCategory
+  ): number => {
     const salvageFloor = p * (salvagePct / 100);
 
     if (year <= 0) return p;
 
     if (method === 'standard_curve') {
-      const depPct = getStandardDepreciationPct(year);
+      const depPct = getStandardDepreciationPct(year, cat);
       const val = p * (1 - depPct / 100);
       return Math.max(salvageFloor, val);
     } else if (method === 'declining_balance') {
@@ -210,8 +483,9 @@ export default function CarDepreciationCalculator() {
     if (ownersCount === 2) factor -= 0.06;
     else if (ownersCount >= 3) factor -= 0.14;
 
-    // Mileage deviation penalty (average ~ 12,000 km/year)
-    const expectedKm = Math.max(1, vehicleAgeYears) * 12000;
+    // Mileage deviation penalty calibrated by vehicle category
+    const expectedAnnual = activeCategoryConfig.expectedAnnualKm;
+    const expectedKm = Math.max(1, vehicleAgeYears) * expectedAnnual;
     if (odometerKm > expectedKm * 1.4) {
       factor -= 0.07; // High mileage penalty
     } else if (odometerKm < expectedKm * 0.6 && odometerKm > 0) {
@@ -220,13 +494,13 @@ export default function CarDepreciationCalculator() {
 
     // Fuel type longevity factor
     if (fuelType === 'diesel') {
-      factor -= 0.03; // NGT 10-year limit / diesel stigma
+      factor -= 0.03; // NGT 10-year limit / diesel regulatory stigma
     } else if (fuelType === 'ev') {
       factor -= 0.04; // Rapid battery tech depreciation
     }
 
     return factor;
-  }, [condition, ownersCount, odometerKm, vehicleAgeYears, fuelType]);
+  }, [condition, ownersCount, odometerKm, vehicleAgeYears, fuelType, activeCategoryConfig]);
 
   // Current Estimated Value Calculation
   const currentValuation = useMemo(() => {
@@ -235,7 +509,8 @@ export default function CarDepreciationCalculator() {
       vehicleAgeYears,
       depreciationMethod,
       customDepreciationRate,
-      scrapValuePercent
+      scrapValuePercent,
+      vehicleCategory
     );
 
     const adjustedFairValue = Math.round(baseValue * conditionFactor);
@@ -249,11 +524,12 @@ export default function CarDepreciationCalculator() {
       5,
       depreciationMethod,
       customDepreciationRate,
-      scrapValuePercent
+      scrapValuePercent,
+      vehicleCategory
     );
     const residual5YearPct = originalPrice > 0 ? (valueAt5Years / originalPrice) * 100 : 0;
 
-    // Buying/Selling price bands for used cars
+    // Buying/Selling price bands for used vehicles
     const privateSellerPrice = adjustedFairValue;
     const dealerTradeInPrice = Math.round(adjustedFairValue * 0.88); // 12% dealer margin
     const certifiedShowroomPrice = Math.round(adjustedFairValue * 1.10); // 10% premium
@@ -275,6 +551,7 @@ export default function CarDepreciationCalculator() {
     depreciationMethod,
     customDepreciationRate,
     scrapValuePercent,
+    vehicleCategory,
     conditionFactor
   ]);
 
@@ -287,14 +564,16 @@ export default function CarDepreciationCalculator() {
         yr,
         depreciationMethod,
         customDepreciationRate,
-        scrapValuePercent
+        scrapValuePercent,
+        vehicleCategory
       );
       const prevVal = yr === 0 ? originalPrice : computeBaseValueAtYear(
         originalPrice,
         yr - 1,
         depreciationMethod,
         customDepreciationRate,
-        scrapValuePercent
+        scrapValuePercent,
+        vehicleCategory
       );
       const annualDrop = Math.max(0, prevVal - val);
       const cumulativeDrop = originalPrice - val;
@@ -309,7 +588,7 @@ export default function CarDepreciationCalculator() {
       });
     }
     return rows;
-  }, [originalPrice, depreciationMethod, customDepreciationRate, scrapValuePercent]);
+  }, [originalPrice, depreciationMethod, customDepreciationRate, scrapValuePercent, vehicleCategory]);
 
   // Total Cost of Ownership (TCO) Calculations
   const tcoCalculations = useMemo(() => {
@@ -320,7 +599,8 @@ export default function CarDepreciationCalculator() {
       vehicleAgeYears + 1,
       depreciationMethod,
       customDepreciationRate,
-      scrapValuePercent
+      scrapValuePercent,
+      vehicleCategory
     ) * conditionFactor;
 
     const annualDepreciationLoss = Math.max(0, currentVal - nextYearVal);
@@ -341,6 +621,7 @@ export default function CarDepreciationCalculator() {
     depreciationMethod,
     customDepreciationRate,
     scrapValuePercent,
+    vehicleCategory,
     conditionFactor,
     annualInsurance,
     annualMaintenance,
@@ -348,13 +629,13 @@ export default function CarDepreciationCalculator() {
     annualKmDriven
   ]);
 
-  // New vs 3-Year Used Car Comparison
+  // New vs 3-Year Used Vehicle Comparison
   const newVsUsedComparison = useMemo(() => {
     const newPrice = originalPrice;
     // Value at year 3
-    const usedBuyPrice = computeBaseValueAtYear(originalPrice, 3, 'standard_curve', 15, 8);
+    const usedBuyPrice = computeBaseValueAtYear(originalPrice, 3, 'standard_curve', 15, 8, vehicleCategory);
     // Value at year 6
-    const usedSellPriceAt6 = computeBaseValueAtYear(originalPrice, 6, 'standard_curve', 15, 8);
+    const usedSellPriceAt6 = computeBaseValueAtYear(originalPrice, 6, 'standard_curve', 15, 8, vehicleCategory);
 
     const new3YearDepreciationLoss = newPrice - usedBuyPrice;
     const used3YearDepreciationLoss = usedBuyPrice - usedSellPriceAt6;
@@ -369,10 +650,11 @@ export default function CarDepreciationCalculator() {
       savingsBuyingUsed: Math.round(savingsBuyingUsed),
       savingsPct: new3YearDepreciationLoss > 0 ? Number(((savingsBuyingUsed / new3YearDepreciationLoss) * 100).toFixed(0)) : 0
     };
-  }, [originalPrice]);
+  }, [originalPrice, vehicleCategory]);
 
   // Archetype Handler
   const handleApplyArchetype = (preset: DepreciationArchetype) => {
+    setVehicleCategory(preset.category);
     setOriginalPrice(preset.originalPrice);
     setVehicleAgeYears(preset.vehicleAgeYears);
     setOdometerKm(preset.odometerKm);
@@ -382,25 +664,37 @@ export default function CarDepreciationCalculator() {
     setCustomDepreciationRate(preset.depreciationRate);
     setDepreciationMethod(preset.method);
     setCurrency(preset.currency);
+
+    const config = VEHICLE_CATEGORIES.find((c) => c.id === preset.category) || VEHICLE_CATEGORIES[0];
+    setAnnualInsurance(config.defaultInsurance);
+    setAnnualMaintenance(config.defaultMaintenance);
+    setAnnualFuelSpend(config.defaultFuel);
+    setAnnualKmDriven(config.expectedAnnualKm);
   };
 
   const handleReset = () => {
-    setOriginalPrice(1000000);
+    const config = activeCategoryConfig;
+    setOriginalPrice(config.defaultPrice);
     setVehicleAgeYears(3);
-    setOdometerKm(42000);
-    setCustomDepreciationRate(15);
+    setOdometerKm(config.expectedAnnualKm * 3);
+    setCustomDepreciationRate(config.defaultDepRate);
     setDepreciationMethod('standard_curve');
     setCurrency('₹');
     setCondition('good');
     setOwnersCount(1);
-    setFuelType('petrol');
+    setFuelType(config.defaultFuelType);
+    setAnnualInsurance(config.defaultInsurance);
+    setAnnualMaintenance(config.defaultMaintenance);
+    setAnnualFuelSpend(config.defaultFuel);
+    setAnnualKmDriven(config.expectedAnnualKm);
   };
 
   // Copy Valuation Report
   const handleCopyReport = () => {
     const reportText = `=========================================
-TOOLIQUE CAR DEPRECIATION & VALUATION REPORT
+TOOLIQUE VEHICLE DEPRECIATION & VALUATION REPORT
 =========================================
+Vehicle Category: ${activeCategoryConfig.label.toUpperCase()}
 Vehicle Profile: ${vehicleAgeYears} Years Old | ${fuelType.toUpperCase()} | Condition: ${condition.toUpperCase()}
 Original Purchase Price: ${currency}${originalPrice.toLocaleString('en-IN')}
 Odometer Reading: ${odometerKm.toLocaleString('en-IN')} km | Ownership: ${ownersCount} Owner(s)
@@ -415,7 +709,7 @@ CURRENT VALUATION & RESIDUAL VALUE:
 • 5-Year Residual Value Retention: ${currentValuation.residual5YearPct}%
 
 -----------------------------------------
-USED CAR RESALE PRICING BANDS:
+USED VEHICLE RESALE PRICING BANDS:
 -----------------------------------------
 • Private Seller Listing Price: ${currency}${currentValuation.privateSellerPrice.toLocaleString('en-IN')}
 • Dealer Instant Trade-In Price: ${currency}${currentValuation.dealerTradeInPrice.toLocaleString('en-IN')}
@@ -439,6 +733,12 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
   // Export CSV
   const handleExportCsv = () => {
     const csvRows = [
+      ['Vehicle Category', activeCategoryConfig.label],
+      ['Original Price', `${currency}${originalPrice}`],
+      ['Age (Years)', vehicleAgeYears],
+      ['Odometer (km)', odometerKm],
+      ['Depreciation Method', depreciationMethod],
+      [],
       ['Year', 'Opening Value', 'Annual Depreciation', 'Closing Value', 'Retained %'],
       ...scheduleTable.map((r) => [
         `Year ${r.year}`,
@@ -453,11 +753,18 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `car_depreciation_schedule_${originalPrice}_${vehicleAgeYears}yrs.csv`);
+    link.setAttribute('download', `vehicle_depreciation_${vehicleCategory}_${originalPrice}_${vehicleAgeYears}yrs.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
+
+  // Filter archetypes for the active category + highlight
+  const filteredArchetypes = useMemo(() => {
+    const categoryMatches = ARCHETYPES.filter((a) => a.category === vehicleCategory);
+    if (categoryMatches.length > 0) return categoryMatches;
+    return ARCHETYPES.slice(0, 4);
+  }, [vehicleCategory]);
 
   return (
     <div className="space-y-6 text-left">
@@ -465,12 +772,12 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
       <div className="bg-gradient-to-br from-amber-50/90 via-white to-indigo-50/70 dark:from-amber-950/30 dark:via-zinc-900/60 dark:to-indigo-950/20 border border-amber-200/80 dark:border-amber-900/40 rounded-2xl p-5 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-600 text-white uppercase tracking-wider flex items-center gap-1">
-                <Car className="w-3 h-3" /> AEO Vehicle Valuation Studio
+                <Car className="w-3 h-3" /> Vehicle Valuation Studio
               </span>
               <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-                Residual Value & Depreciation Engine
+                Cars • Bikes • Trucks • Taxis • Auto Rickshaws • EVs
               </span>
             </div>
             <div className="text-sm font-semibold text-zinc-800 dark:text-zinc-200 flex items-center gap-2 flex-wrap">
@@ -505,9 +812,9 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
         {/* 1-Click Archetype Presets */}
         <div className="mt-3 pt-3 border-t border-amber-100/70 dark:border-amber-900/30 flex flex-wrap items-center gap-2">
           <span className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider flex items-center gap-1 mr-1">
-            <Sparkles className="w-3 h-3 text-amber-500" /> Archetypes:
+            <Sparkles className="w-3 h-3 text-amber-500" /> {activeCategoryConfig.label} Presets:
           </span>
-          {ARCHETYPES.map((preset) => (
+          {filteredArchetypes.map((preset) => (
             <button
               key={preset.id}
               onClick={() => handleApplyArchetype(preset)}
@@ -520,13 +827,41 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
         </div>
       </div>
 
+      {/* Vehicle Category Selector Bar */}
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3 shadow-xs">
+        <div className="flex items-center justify-between mb-2 px-1">
+          <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Select Vehicle Type:</span>
+          <span className="text-xs text-amber-600 dark:text-amber-400 font-semibold">{activeCategoryConfig.label} Active</span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+          {VEHICLE_CATEGORIES.map((cat) => {
+            const Icon = cat.icon;
+            const isSelected = vehicleCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => handleCategorySelect(cat.id)}
+                className={`px-3 py-2 rounded-xl text-xs font-bold flex flex-col items-center justify-center gap-1 transition cursor-pointer text-center ${
+                  isSelected
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'bg-zinc-50 dark:bg-zinc-800/70 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 border border-zinc-200/60 dark:border-zinc-700/60'
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span className="truncate w-full">{cat.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Mode Navigation Tabs */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-zinc-200 dark:border-zinc-800">
         {[
           { id: 'schedule', name: '📉 10-Year Depreciation Schedule', icon: TrendingDown },
-          { id: 'used_evaluator', name: '🔍 Used Car Fair Market Value', icon: ShieldCheck },
+          { id: 'used_evaluator', name: '🔍 Used Vehicle Fair Market Value', icon: ShieldCheck },
           { id: 'tco', name: '💸 TCO & Monthly Value Drain', icon: Coins },
-          { id: 'new_vs_used', name: '⚖️ New Car vs 3-Year Used Car', icon: Scale }
+          { id: 'new_vs_used', name: '⚖️ New Vehicle vs 3-Year Used', icon: Scale }
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeMode === tab.id;
@@ -555,7 +890,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
               <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                 <DollarSign className="w-4 h-4 text-amber-500" />
-                <span>Vehicle Financial Inputs</span>
+                <span>{activeCategoryConfig.label} Financial Inputs</span>
               </h3>
 
               <div className="flex items-center gap-2">
@@ -575,7 +910,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                 <button
                   onClick={handleReset}
                   className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 p-1 transition cursor-pointer"
-                  title="Reset to defaults"
+                  title="Reset to category defaults"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
                 </button>
@@ -590,7 +925,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
               <input
                 type="number"
                 step="10000"
-                min={50000}
+                min={10000}
                 value={originalPrice}
                 onChange={(e) => setOriginalPrice(Math.max(1000, Number(e.target.value)))}
                 className="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-base font-bold text-zinc-900 dark:text-white"
@@ -624,9 +959,9 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                 onChange={(e) => setDepreciationMethod(e.target.value as DepreciationMethod)}
                 className="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-xs font-semibold text-zinc-900 dark:text-white"
               >
-                <option value="standard_curve">Industry Standard Market Curve (IRDAI / Real Market)</option>
+                <option value="standard_curve">Industry Standard Market Curve (IRDAI / Category Benchmarked)</option>
                 <option value="declining_balance">Declining Balance Method (DBM - Fixed Annual %)</option>
-                <option value="straight_line">Straight Line Method (SLM - Uniform Commercial Fleet)</option>
+                <option value="straight_line">Straight Line Method (SLM - Commercial Fleet)</option>
               </select>
             </div>
 
@@ -648,7 +983,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
               </div>
             )}
 
-            {/* Used Car Specific Inputs (Odometer, Condition, Owners) */}
+            {/* Used Vehicle Specific Inputs (Odometer, Condition, Owners) */}
             <div className="space-y-3 pt-2 border-t border-zinc-100 dark:border-zinc-800">
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -707,10 +1042,21 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                     onChange={(e) => setFuelType(e.target.value as FuelType)}
                     className="w-full px-3 py-2 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-xs font-semibold text-zinc-900 dark:text-white"
                   >
-                    <option value="petrol">Petrol / Gasoline</option>
-                    <option value="diesel">Diesel</option>
-                    <option value="cng">CNG (Factory)</option>
-                    <option value="ev">Electric Vehicle (EV)</option>
+                    {activeCategoryConfig.allowedFuelTypes.includes('petrol') && (
+                      <option value="petrol">Petrol / Gasoline</option>
+                    )}
+                    {activeCategoryConfig.allowedFuelTypes.includes('diesel') && (
+                      <option value="diesel">Diesel</option>
+                    )}
+                    {activeCategoryConfig.allowedFuelTypes.includes('cng') && (
+                      <option value="cng">CNG (Natural Gas)</option>
+                    )}
+                    {activeCategoryConfig.allowedFuelTypes.includes('ev') && (
+                      <option value="ev">Electric Vehicle (EV Battery)</option>
+                    )}
+                    {activeCategoryConfig.allowedFuelTypes.includes('lpg') && (
+                      <option value="lpg">LPG / AutoGas</option>
+                    )}
                   </select>
                 </div>
               </div>
@@ -720,7 +1066,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
             {activeMode === 'tco' && (
               <div className="space-y-3 pt-2 border-t border-zinc-100 dark:border-zinc-800">
                 <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">
-                  Annual Operating Overheads
+                  Annual Operating Overheads ({activeCategoryConfig.label})
                 </span>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -733,7 +1079,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-medium text-zinc-500 mb-1">Annual Service</label>
+                    <label className="block text-[11px] font-medium text-zinc-500 mb-1">Annual Service/Tyres</label>
                     <input
                       type="number"
                       value={annualMaintenance}
@@ -745,7 +1091,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-medium text-zinc-500 mb-1">Annual Fuel Spend</label>
+                    <label className="block text-[11px] font-medium text-zinc-500 mb-1">Annual Fuel / Charging</label>
                     <input
                       type="number"
                       value={annualFuelSpend}
@@ -754,7 +1100,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-medium text-zinc-500 mb-1">Annual Mileage (km)</label>
+                    <label className="block text-[11px] font-medium text-zinc-500 mb-1">Annual Distance (km)</label>
                     <input
                       type="number"
                       value={annualKmDriven}
@@ -777,7 +1123,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 space-y-1 shadow-2xs">
                   <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-1">
-                    <Car className="w-3 h-3 text-amber-500" /> Current Value
+                    <Car className="w-3 h-3 text-amber-500" /> Current Fair Value
                   </span>
                   <div className="text-lg font-extrabold text-zinc-900 dark:text-white font-mono">
                     {currency}{currentValuation.adjustedFairValue.toLocaleString('en-IN')}
@@ -811,7 +1157,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                 <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
                   <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                     <FileSpreadsheet className="w-4 h-4 text-amber-500" />
-                    <span>Year-by-Year Depreciation Trajectory</span>
+                    <span>{activeCategoryConfig.label} 10-Year Trajectory</span>
                   </h3>
                   <span className="text-xs text-zinc-400 font-mono">
                     Method: {depreciationMethod.replace('_', ' ')}
@@ -867,13 +1213,13 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
             </div>
           )}
 
-          {/* MODE 2: Used Car Fair Market Evaluator */}
+          {/* MODE 2: Used Vehicle Fair Market Evaluator */}
           {activeMode === 'used_evaluator' && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 space-y-5 shadow-xs">
               <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
                 <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                  <span>Fair Market Value & Resale Pricing Bands</span>
+                  <span>Fair Market Resale Valuation Bands ({activeCategoryConfig.label})</span>
                 </h3>
               </div>
 
@@ -884,7 +1230,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                   <p className="text-xl font-black text-zinc-900 dark:text-white font-mono">
                     {currency}{currentValuation.dealerTradeInPrice.toLocaleString('en-IN')}
                   </p>
-                  <p className="text-[10px] text-zinc-500">Fastest sale, 10–12% dealer margin</p>
+                  <p className="text-[10px] text-zinc-500">Fastest liquid sale, 10–12% dealer margin</p>
                 </div>
 
                 <div className="p-4 bg-amber-50/60 dark:bg-amber-950/20 rounded-2xl border border-amber-200/80 dark:border-amber-900/40 text-center space-y-1 shadow-xs">
@@ -894,7 +1240,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                   <p className="text-2xl font-black text-amber-600 dark:text-amber-400 font-mono">
                     {currency}{currentValuation.privateSellerPrice.toLocaleString('en-IN')}
                   </p>
-                  <p className="text-[10px] text-zinc-500">Direct buyer-to-seller market value</p>
+                  <p className="text-[10px] text-zinc-500">Direct buyer-to-seller fair value</p>
                 </div>
 
                 <div className="p-4 bg-zinc-50 dark:bg-zinc-800/60 rounded-2xl border border-zinc-200/60 dark:border-zinc-700/60 text-center space-y-1">
@@ -902,20 +1248,20 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                   <p className="text-xl font-black text-zinc-900 dark:text-white font-mono">
                     {currency}{currentValuation.certifiedShowroomPrice.toLocaleString('en-IN')}
                   </p>
-                  <p className="text-[10px] text-zinc-500">With dealer warranty & refurbishing</p>
+                  <p className="text-[10px] text-zinc-500">With dealer refurbishment & warranty</p>
                 </div>
               </div>
 
               {/* Valuation Insights */}
               <div className="p-4 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200/60 dark:border-zinc-700/60 text-xs text-zinc-600 dark:text-zinc-300 space-y-2">
                 <p className="font-bold text-zinc-900 dark:text-white flex items-center gap-1.5">
-                  <Info className="w-3.5 h-3.5 text-amber-500" /> Valuation Factor Breakdown:
+                  <Info className="w-3.5 h-3.5 text-amber-500" /> Appraisal Audit Breakdown:
                 </p>
                 <ul className="list-disc list-inside space-y-1 text-[11px] text-zinc-500 dark:text-zinc-400">
-                  <li><strong>Odometer:</strong> {odometerKm.toLocaleString('en-IN')} km driven ({Math.round(odometerKm / Math.max(1, vehicleAgeYears)).toLocaleString('en-IN')} km/year vs national average 12,000 km/year).</li>
+                  <li><strong>Odometer:</strong> {odometerKm.toLocaleString('en-IN')} km driven ({Math.round(odometerKm / Math.max(1, vehicleAgeYears)).toLocaleString('en-IN')} km/year vs category benchmark {activeCategoryConfig.expectedAnnualKm.toLocaleString('en-IN')} km/year).</li>
                   <li><strong>Physical Condition:</strong> {condition.toUpperCase()} grade ({condition === 'flawless' ? '+6% premium' : condition === 'poor' ? '-18% discount' : 'standard market rate'}).</li>
                   <li><strong>Ownership Count:</strong> {ownersCount} owner{ownersCount > 1 ? 's' : ''} on Registration Certificate (RC).</li>
-                  <li><strong>Fuel Policy Factor:</strong> {fuelType.toUpperCase()} engine.</li>
+                  <li><strong>Fuel Propulsion:</strong> {fuelType.toUpperCase()} powertrain.</li>
                 </ul>
               </div>
             </div>
@@ -927,7 +1273,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
               <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
                 <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                   <Coins className="w-4 h-4 text-amber-500" />
-                  <span>Total Cost of Ownership & Monthly Value Drain</span>
+                  <span>Total Cost of Ownership & Monthly Value Drain ({activeCategoryConfig.label})</span>
                 </h3>
               </div>
 
@@ -937,7 +1283,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                   <p className="text-xl font-black text-rose-600 dark:text-rose-400 font-mono mt-0.5">
                     {currency}{tcoCalculations.annualDepreciationLoss.toLocaleString('en-IN')}
                   </p>
-                  <p className="text-[10px] text-zinc-500">Invisible asset value loss</p>
+                  <p className="text-[10px] text-zinc-500">Invisible asset value erosion</p>
                 </div>
 
                 <div className="p-4 bg-zinc-50 dark:bg-zinc-800/60 rounded-2xl border border-zinc-200/60 dark:border-zinc-700/60 text-center">
@@ -949,7 +1295,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                 </div>
 
                 <div className="p-4 bg-zinc-50 dark:bg-zinc-800/60 rounded-2xl border border-zinc-200/60 dark:border-zinc-700/60 text-center">
-                  <span className="text-[10px] font-bold text-zinc-400 uppercase">True Cost per km Driven</span>
+                  <span className="text-[10px] font-bold text-zinc-400 uppercase">True Cost per km</span>
                   <p className="text-xl font-black text-indigo-600 dark:text-indigo-400 font-mono mt-0.5">
                     {currency}{tcoCalculations.costPerKmDriven} / km
                   </p>
@@ -975,7 +1321,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                     style={{
                       width: `${(annualFuelSpend / tcoCalculations.totalAnnualOperatingCost) * 100}%`
                     }}
-                    title="Fuel"
+                    title="Fuel/Energy"
                   />
                   <div
                     className="h-full bg-indigo-500"
@@ -994,7 +1340,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                 </div>
                 <div className="flex flex-wrap items-center justify-between text-[10px] text-zinc-400 pt-1">
                   <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-rose-500" /> Depreciation ({Math.round((tcoCalculations.annualDepreciationLoss / tcoCalculations.totalAnnualOperatingCost) * 100)}%)</span>
-                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500" /> Fuel ({Math.round((annualFuelSpend / tcoCalculations.totalAnnualOperatingCost) * 100)}%)</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500" /> Fuel/Energy ({Math.round((annualFuelSpend / tcoCalculations.totalAnnualOperatingCost) * 100)}%)</span>
                   <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-500" /> Insurance ({Math.round((annualInsurance / tcoCalculations.totalAnnualOperatingCost) * 100)}%)</span>
                   <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Maintenance ({Math.round((annualMaintenance / tcoCalculations.totalAnnualOperatingCost) * 100)}%)</span>
                 </div>
@@ -1002,13 +1348,13 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
             </div>
           )}
 
-          {/* MODE 4: New vs 3-Year Used Car */}
+          {/* MODE 4: New vs 3-Year Used Vehicle */}
           {activeMode === 'new_vs_used' && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 space-y-4 shadow-xs">
               <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
                 <h3 className="text-sm font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                   <Scale className="w-4 h-4 text-amber-500" />
-                  <span>The 3-Year Certified Used Car Sweet Spot</span>
+                  <span>The 3-Year Used Vehicle Sweet Spot ({activeCategoryConfig.label})</span>
                 </h3>
               </div>
 
@@ -1023,7 +1369,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                   <p className="text-xs text-rose-600 dark:text-rose-400 font-bold font-mono">
                     3-Year Depreciation Loss: -{currency}{newVsUsedComparison.new3YearDepreciationLoss.toLocaleString('en-IN')}
                   </p>
-                  <p className="text-[11px] text-zinc-500">Takes the steepest ~38% initial depreciation hit.</p>
+                  <p className="text-[11px] text-zinc-500">Takes the steepest initial depreciation hit.</p>
                 </div>
 
                 <div className="p-4 bg-emerald-50/60 dark:bg-emerald-950/20 rounded-2xl border border-emerald-200/80 dark:border-emerald-900/40 space-y-2">
@@ -1036,7 +1382,7 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
                   <p className="text-xs text-emerald-600 dark:text-emerald-400 font-bold font-mono">
                     Next 3-Year Depreciation Loss: -{currency}{newVsUsedComparison.used3YearDepreciationLoss.toLocaleString('en-IN')}
                   </p>
-                  <p className="text-[11px] text-zinc-500">Much flatter depreciation curve (only ~26% drop).</p>
+                  <p className="text-[11px] text-zinc-500">Much flatter depreciation slope saves capital.</p>
                 </div>
               </div>
 
@@ -1063,9 +1409,9 @@ Generated via Toolique India (https://toolique.com/automobile/car-depreciation-c
           <div className="p-4 bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-900/30 rounded-2xl flex items-start gap-3">
             <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
             <div className="space-y-1 text-xs text-amber-900 dark:text-amber-200">
-              <p className="font-bold">Insurance & Resale Valuation Notice</p>
+              <p className="font-bold">Insurance IDV & Resale Valuation Notice</p>
               <p className="leading-relaxed opacity-90">
-                Car market values fluctuate based on regional demand, brand reliability reputations, service history records, local road taxes, and state green tax regulations. Actual dealer trade-in appraisals may vary by ±5–10%.
+                Vehicle market values fluctuate based on regional demand, brand reliability reputations, service history records, local road taxes, commercial permits, and state green tax regulations. Actual dealer trade-in appraisals may vary by ±5–10%.
               </p>
             </div>
           </div>
