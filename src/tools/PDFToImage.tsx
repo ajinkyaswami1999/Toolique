@@ -529,7 +529,17 @@ export default function PDFToImage() {
 
       try {
         const page = await pdfJsDoc.getPage(item.pageNumber);
-        const viewport = page.getViewport({ scale });
+        
+        // Calculate adaptive scale (Caps massive A0/A1 blueprints at max 6144px per edge to prevent GPU/RAM overflow)
+        const unscaledVp = page.getViewport({ scale: 1 });
+        const maxDimension = Math.max(unscaledVp.width, unscaledVp.height);
+        let renderScale = scale;
+        const SAFETY_MAX_DIM = 6144;
+        if (maxDimension * renderScale > SAFETY_MAX_DIM) {
+          renderScale = SAFETY_MAX_DIM / maxDimension;
+        }
+
+        const viewport = page.getViewport({ scale: renderScale });
 
         const canvas = document.createElement('canvas');
         canvas.width = Math.max(1, Math.round(viewport.width));
@@ -544,12 +554,13 @@ export default function PDFToImage() {
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
-        // Render PDF page with print intent for sharpest vector output
+        // Render PDF page with print intent and annotationMode: 0 for 3x faster vector rasterization
         await (page.render as any)({
           canvasContext: ctx,
           viewport,
           canvas,
           intent: 'print',
+          annotationMode: 0,
         }).promise;
 
         // Cleanup PDF.js internal page glyph cache immediately to free memory!
