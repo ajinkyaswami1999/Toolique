@@ -184,6 +184,17 @@ export default function AppRoutes() {
       <Route path="/calculators/vehicle-depreciation-calculator" element={<Navigate to="/calculators/car-depreciation-calculator" replace />} />
       <Route path="/automobile/vehicle-depreciation-calculator" element={<Navigate to="/calculators/car-depreciation-calculator" replace />} />
       <Route path="/automobile/car-depreciation-calculator" element={<Navigate to="/calculators/car-depreciation-calculator" replace />} />
+      <Route path="/calculators/image-compressor" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/calculators/image-cropper" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/calculators/image-resizer" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/image/image-studio" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/image/image-compressor" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/image/image-cropper" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/image/image-resizer" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/tools/image-studio" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/tools/image-compressor" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/tools/image-cropper" element={<Navigate to="/calculators/image-studio" replace />} />
+      <Route path="/tools/image-resizer" element={<Navigate to="/calculators/image-studio" replace />} />
       <Route path="/developer/javascript-minifier" element={<Navigate to="/developer/js-minifier" replace />} />
       <Route path="/web/js-minifier" element={<Navigate to="/developer/js-minifier" replace />} />
       <Route path="/calculators/js-minifier" element={<Navigate to="/developer/js-minifier" replace />} />

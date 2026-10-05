@@ -547,42 +547,97 @@ export const toolsList: Tool[] = [
     ]
   },
   {
-    id: 'ImageCompressor',
-    slug: 'image-compressor',
-    name: 'Image Compressor & Studio',
+    id: 'ImageStudio',
+    slug: 'image-studio',
+    name: 'Image Studio & Optimizer',
     category: 'image',
-    shortDescription: 'Compress PNG, JPEG, WebP, and HEIC images with target KB size search, crop, and resize studio tools.',
-    metaDescription: 'Compress JPEG, PNG, WebP, and HEIC images online in your browser. Target exact KB file size, reduce weight up to 90%, crop, and resize with 100% privacy.',
-    keywords: ['Image Compressor', 'Reduce photo size', 'Compress JPEG online', 'Resize PNG image', 'Website image optimizer', 'In-browser image compressor', 'Target KB image compressor', 'Passport photo compress'],
-    icon: 'FileImage',
+    shortDescription: 'Crop, Resize, Compress & Convert PNG, JPG, WebP, and HEIC images with 100% browser privacy.',
+    metaTitle: 'Image Studio & Optimizer – Crop, Resize, Compress & Convert Online',
+    metaDescription: 'All-in-one in-browser Image Studio. Crop, resize, compress to exact KB limits, convert between PNG, JPG, WebP & HEIC, rotate, and batch process with 100% private client-side processing.',
+    keywords: [
+      'Image Studio',
+      'Image Optimizer',
+      'Image Compressor',
+      'Image Cropper',
+      'Image Resizer',
+      'Image Converter',
+      'Compress JPG online',
+      'Reduce photo size KB',
+      'Resize image pixels',
+      'Crop image 1:1 16:9',
+      'HEIC to WebP',
+      'HEIC to JPG converter',
+      'Passport photo compressor',
+      'UPSC photo size resize',
+      'Batch image compressor',
+      'Browser image optimizer'
+    ],
+    icon: 'Sparkles',
     howToUse: [
-      'Upload or drag-and-drop your image (JPEG, PNG, WebP, HEIC) into the studio.',
-      'Select your compression mode: Manual Quality slider (10% to 100%) or Target File Size in KB (e.g. under 50KB for UPSC, passport, and govt portals).',
-      'Optionally crop or scale dimensions using the integrated studio tabs or 1-click presets.',
-      'Compare original vs optimized with the interactive Before/After split slider and click "Download Image".'
+      'Upload, drag-and-drop any image (PNG, JPG, WebP, HEIC), or press Ctrl+V to paste directly from your clipboard.',
+      'Select your studio mode: All-in-One Studio, Compressor (Quality slider or Target KB limit), Cropper (Aspect ratio locks, rotation, flipping), Resizer (Pixel scaling), or Batch Optimizer.',
+      'Choose from instant 1-click presets such as Passport / Govt Form (<50 KB), Web SEO (<150 KB WebP), Instagram Post (1:1), YouTube Thumbnail (16:9), or LinkedIn Banner (4:1).',
+      'Use the interactive Before/After split comparison slider to inspect visual sharpness and fine details in real time.',
+      'Download your optimized image instantly or export batch items as a compiled ZIP archive.'
     ],
     faqs: [
       {
-        question: 'Is it safe to upload private images here?',
-        answer: 'Yes, completely safe! This tool uses HTML5 Canvas APIs inside your local browser. Your images are never uploaded to any server, keeping your private documents 100% confidential.'
+        question: 'Is it safe to upload confidential documents and private photos?',
+        answer: 'Yes, 100% safe. All image cropping, resizing, compression, and format conversions are performed entirely on your device using local HTML5 Canvas APIs and client-side WebAssembly. No files or personal data are ever uploaded to any external server.'
       },
       {
-        question: 'How does the Target File Size (KB) search work?',
-        answer: 'The studio runs an intelligent binary search compression algorithm locally, optimizing quality iterations until the generated file size strictly meets your desired target kilobyte limit.'
+        question: 'How does the Target File Size (KB) compression feature work?',
+        answer: 'Our in-browser optimization engine executes an intelligent binary search compression algorithm across quality thresholds until the resulting file strictly meets your specified kilobyte limit (e.g., under 50KB for UPSC, passport, and visa portals).'
       },
       {
-        question: 'Will image compression affect SEO?',
-        answer: 'Yes, positively! Compressed, fast-loading images speed up your page load times, which is a major factor in Google page experience and Core Web Vitals rankings.'
+        question: 'Can I convert Apple iPhone HEIC/HEIF photos to WebP or JPEG?',
+        answer: 'Yes! The studio dynamically decodes Apple HEIC/HEIF files locally in the browser and converts them directly into high-efficiency WebP, JPEG, or PNG formats without needing third-party software.'
+      },
+      {
+        question: 'What aspect ratios are supported for cropping?',
+        answer: 'You can crop with Freeform aspect ratio or lock to standard ratios: 1:1 (Square / Instagram), 16:9 (Landscape / YouTube), 9:16 (Stories / Reels / Shorts), 4:3 (Standard), 3:2 (Photography), 2:3 (Portrait), and 21:9 (Ultrawide).'
+      },
+      {
+        question: 'Can I paste an image directly from my clipboard?',
+        answer: 'Yes! Simply press Ctrl+V (or Cmd+V on macOS) anywhere on the page to paste a screenshot or copied image directly into the editing canvas.'
+      },
+      {
+        question: 'Can I batch optimize multiple images simultaneously?',
+        answer: 'Yes! Switch to the Batch Optimizer tab to upload dozens of images. You can apply unified compression quality, set maximum pixel dimensions, convert formats, and download all processed assets in a single compressed ZIP file.'
+      },
+      {
+        question: 'How does converting to modern WebP improve website speed and SEO?',
+        answer: 'WebP provides superior lossy and lossless compression, producing files up to 30-40% smaller than standard JPEG and PNG at equivalent visual quality. Smaller assets speed up Largest Contentful Paint (LCP) and boost Google Core Web Vitals performance.'
+      },
+      {
+        question: 'Does this image optimizer strip camera and GPS EXIF metadata?',
+        answer: 'Yes. Exporting canvas elements automatically strips EXIF camera metadata, device models, and GPS location tags, protecting your privacy and saving additional kilobytes.'
+      },
+      {
+        question: 'How does PNG transparency conversion work when exporting to JPEG?',
+        answer: 'Since JPEG format does not support alpha transparency, the studio allows you to choose a custom matte background color (default white) to blend transparent layers seamlessly without black artifacts.'
       }
     ],
     sections: [
       {
-        title: 'Why is Image Optimization Vital for SEO and Web Performance?',
-        content: 'Page speed is a core ranking factor in search engines. High-resolution photos taken on modern cameras are often several megabytes in size, resulting in high bounce rates on mobile networks. Compressing images into next-gen WebP or optimized JPEG reduces bandwidth consumption and boosts Google Core Web Vitals (LCP) performance.'
+        title: 'Complete In-Browser Image Editing & Optimization Suite',
+        content: 'Image Studio & Optimizer combines professional image cropping, dimension scaling, lossy/lossless compression, format transcoding, and bulk batch processing into a seamless client-side application. Designed for designers, web developers, content creators, and government exam applicants, every transformation runs 100% in your browser sandbox with zero server uploads and zero privacy compromise.'
       },
       {
-        title: 'Lossy vs Lossless Compression Comparison',
-        content: '• **Lossy Compression (WebP / JPEG)**: Strips imperceptible high-frequency visual details to achieve massive file size reductions (typically 70% to 90% smaller).\n• **Lossless Compression (PNG)**: Preserves every pixel with mathematical precision, ideal for technical diagrams, logos, and UI graphics with transparent backgrounds.'
+        title: 'Mastering Lossy vs. Lossless Compression and Modern Formats',
+        content: '• **WebP**: Next-generation web standard supporting both lossy and lossless compression with alpha transparency. Ideal for high-speed websites, mobile apps, and Core Web Vitals optimization.\n• **JPEG / JPG**: Universally compatible lossy format optimized for continuous-tone photographic imagery.\n• **PNG**: Lossless compression format that preserves exact pixel data and crisp transparency, recommended for UI icons, vector logos, and technical blueprints.\n• **HEIC / HEIF**: High-Efficiency Image Container format used by modern iOS devices, decoded locally into standard web-friendly formats.'
+      },
+      {
+        title: 'Government Exam & Visa Photo Requirements (KB & Pixel Dimensions)',
+        content: 'Many official portals (such as UPSC, SSC, IBPS, Schengen/US Visa, and Indian Passport Seva) enforce strict file size limits (usually under 20KB, 50KB, or 100KB) and exact square pixel dimensions (like 600×600 px). Using our Target KB mode or 1-click Passport preset ensures guaranteed compliance without trial-and-error quality degradation.'
+      },
+      {
+        title: 'Core Web Vitals & Image Optimization Best Practices for Technical SEO',
+        content: 'Images typically account for over 60% of a webpage total payload. Optimizing images with modern formats (WebP/AVIF), responsive pixel dimension caps, and lossy compression below 150KB directly improves Largest Contentful Paint (LCP), minimizes Cumulative Layout Shift (CLS), and accelerates mobile page speed.'
+      },
+      {
+        title: 'Privacy Architecture & Client-Side Canvas Security Sandbox',
+        content: 'Unlike traditional online image compressors that upload your sensitive images to remote cloud servers for batch script processing, Toolique executes all image transformations locally inside your browser memory using HTML5 Canvas 2D Rendering Context and WebAssembly. Your photos, signatures, identity proofs, and personal documents never leave your device.'
       }
     ]
   },
@@ -3317,94 +3372,6 @@ export const toolsList: Tool[] = [
     ]
   },
   {
-    "id": "ImageCropper",
-    "slug": "image-cropper",
-    "name": "Image Cropper & Studio",
-    "category": "image",
-    "shortDescription": "Crop images with aspect ratio locks, rule-of-thirds grid, 90° rotation, flip, and studio resizing/compression.",
-    "metaDescription": "Free online Image Cropper tool. Crop JPG, PNG, WebP, and HEIC images to standard aspect ratios (1:1, 16:9, 4:3, 9:16) with rotation, flipping, and split preview.",
-    "keywords": [
-      "Image Cropper",
-      "Crop photo online",
-      "Cut image dimensions",
-      "Crop JPG PNG",
-      "Rotate and flip photo",
-      "Aspect ratio crop",
-      "Social media crop"
-    ],
-    "icon": "Crop",
-    "howToUse": [
-      "Select or drag-and-drop an image (JPG, PNG, WebP, HEIC) into the crop canvas.",
-      "Choose an aspect ratio preset (Free, 1:1, 16:9, 9:16, 4:3, 3:2, 2:3, 21:9) or social media template.",
-      "Drag the bounding box and corner handles over your desired crop focus area.",
-      "Optionally apply 90° rotation or horizontal/vertical flip, and download the cropped file."
-    ],
-    "faqs": [
-      {
-        "question": "Are my cropped images uploaded to any servers?",
-        "answer": "No. The image cropping is performed completely locally inside your web browser sandbox using HTML5 Canvas. No file is ever sent to our servers."
-      },
-      {
-        "question": "Does aspect ratio lock prevent free-form scaling?",
-        "answer": "Yes. Locking the aspect ratio (like 16:9 or 1:1) forces the crop bounds to scale symmetrically, preserving the selected proportions."
-      },
-      {
-        "question": "Can I rotate or flip images while cropping?",
-        "answer": "Yes! The integrated studio supports 90° clockwise/counter-clockwise rotation and horizontal/vertical mirroring."
-      }
-    ],
-    "sections": [
-      {
-        "title": "Image Cropping Fundamentals & Composition Rules",
-        "content": "Cropping is the process of removing unwanted outer areas from an image. It is used to improve framing, change aspect ratios, or isolate a specific subject using the Rule of Thirds. Doing this client-side prevents bandwidth usage and keeps private photos 100% secure."
-      }
-    ]
-  },
-  {
-    "id": "ImageResizer",
-    "slug": "image-resizer",
-    "name": "Image Resizer & Studio",
-    "category": "image",
-    "shortDescription": "Resize images by pixel width/height, scaling percentage, or target KB size with aspect ratio locks.",
-    "metaDescription": "Free online Image Resizer. Adjust width and height of JPG, PNG, WebP, and HEIC images. Lock aspect ratio, scale by percentage, or compress to target KB instantly.",
-    "keywords": [
-      "Image Resizer",
-      "Resize photo online",
-      "Change image dimensions",
-      "Scale image percentage",
-      "Resize JPG PNG",
-      "Passport photo resize",
-      "Bulk image resizer"
-    ],
-    "icon": "Sliders",
-    "howToUse": [
-      "Choose the image file you wish to resize.",
-      "Enter new width or height in pixels, or use the scaling percentage buttons (25%, 50%, 75%, 100%).",
-      "Keep \"Aspect Ratio Locked\" to maintain original proportions without distortion.",
-      "Download the resized image in next-gen WebP, JPEG, or PNG format."
-    ],
-    "faqs": [
-      {
-        "question": "What is the benefit of keeping Aspect Ratio locked?",
-        "answer": "Locking aspect ratio ensures that when you adjust the width, the height scales proportionally, preventing the image from looking stretched or squished."
-      },
-      {
-        "question": "Will resizing reduce the file size of the image?",
-        "answer": "Yes, reducing the pixel resolution of an image naturally reduces its raw byte size, making it faster to load on websites."
-      },
-      {
-        "question": "Can I batch resize multiple images at once?",
-        "answer": "Yes! Switch to the Batch Optimizer tab to upload multiple files and resize them simultaneously with 1-click ZIP export."
-      }
-    ],
-    "sections": [
-      {
-        "title": "Pixel Dimensions vs File Size",
-        "content": "An image is made of pixels. Reducing the dimensions (e.g. from 4000x3000 to 800x600) decreases the total pixel count, which dramatically lowers file size while maintaining high visual clarity at standard display sizes."
-      }
-    ]
-  },
-  {
     "id": "ImageConverter",
     "slug": "image-converter",
     "name": "Image Converter",
@@ -3883,6 +3850,77 @@ export const toolsList: Tool[] = [
       {
         title: 'Advanced Splicing: Page Filtering, Rotation & Auto Indexing',
         content: 'Modern document preparation frequently requires combining disparate source files with varying standards:\\n\\n- **Granular Page Slicing**: Avoid pre-splitting documents by defining precise ranges (e.g., extracting pages 1 to 4 from an appendix and pages 10 to 12 from a contract).\\n- **Orientation Correction**: Instantly correct sideways or upside-down scans with 90-degree rotational transforms before compilation.\\n- **Automated Document Index**: Generate a dedicated Table of Contents sheet listing each section title, page count, and starting page number.'
+      }
+    ]
+  },
+  {
+    id: 'PDFToImage',
+    slug: 'pdf-to-image',
+    name: 'PDF to Image Converter',
+    category: 'pdf',
+    metaTitle: 'PDF to Image Converter – Convert PDF to JPG, PNG & WebP Free',
+    shortDescription: 'Convert PDF pages to high-quality PNG, JPG, or WebP images with custom DPI scales, page range filters, and instant ZIP export.',
+    metaDescription: 'Convert PDF pages to JPG, PNG or WebP images directly in your browser. Free, private and secure PDF to image converter with no file uploads or registration.',
+    keywords: [
+      'PDF to image',
+      'Convert PDF to JPG',
+      'Convert PDF to PNG',
+      'Convert PDF to WebP',
+      'PDF to image converter free',
+      'Client side PDF to JPG',
+      'PDF to picture converter',
+      'High DPI PDF to image',
+      'Extract images from PDF',
+      'Convert PDF pages to photos',
+      'Batch PDF to image converter',
+      'Private PDF to image'
+    ],
+    icon: 'FileImage',
+    howToUse: [
+      'Upload or drag & drop your PDF document, or click "Try with Sample PDF" to test with an instant 3-page sample.',
+      'Select your target output format: PNG (lossless with optional transparency), JPG (compact photography format), or WebP (modern web format).',
+      'Choose your resolution DPI scale: 72 DPI (fast web preview), 150 DPI (standard), 300 DPI (high-def print & OCR), 600 DPI (maximum vector precision), or set a custom DPI value.',
+      'Select pages to convert: All pages, a custom range (e.g. 1-3, 5), Odd/Even pages, or toggle individual page checkboxes in the preview grid.',
+      'Click "Convert Selected Pages" to render the images in local browser memory, then download individual image files or export all images as a single ZIP archive.'
+    ],
+    faqs: [
+      {
+        question: 'Are my confidential PDF documents uploaded to any server during conversion?',
+        answer: 'No, absolutely not. All PDF parsing, vector rendering, and image rasterization execute 100% locally inside your web browser memory using PDF.js and the HTML5 Canvas API. Your files and data never leave your device.'
+      },
+      {
+        question: 'Which image format should I choose: PNG, JPG, or WebP?',
+        answer: 'Choose PNG if your document contains diagrams, blueprints, sharp text, or transparency where lossless quality is essential. Choose JPG for scanned photography or when you need small file sizes. Choose WebP for modern web publishing and optimal compression with transparent background support.'
+      },
+      {
+        question: 'What DPI resolution should I select?',
+        answer: '72 DPI is fast and perfect for quick digital viewing. 150 DPI is ideal for emails, presentations, and standard documents. 300 DPI produces crystal-clear, high-resolution images suitable for printing and OCR. 600 DPI provides maximum vector detail for blueprints and engineering schematics.'
+      },
+      {
+        question: 'Can I convert only specific pages instead of the whole document?',
+        answer: 'Yes! You can enter custom page ranges (such as "1-3, 5, 8-10"), toggle Odd/Even pages, or click the checkbox on any individual page card in the interactive preview grid.'
+      },
+      {
+        question: 'Can I download all converted pages at once?',
+        answer: 'Yes. With one click on "Download All as ZIP", all selected converted pages are compiled into a structured ZIP archive with sequential filenames (e.g. document-page-001.png) that preserve exact page order.'
+      },
+      {
+        question: 'Is there a limit on the number of pages or file size?',
+        answer: 'There are no artificial limits, paywalls, or account requirements. The capacity is governed solely by your device RAM and processor power, allowing you to convert multi-page documents seamlessly.'
+      }
+    ],
+    sections: [
+      {
+        title: 'What is a Client-Side PDF to Image Converter?',
+        content: 'A PDF to Image Converter transforms the vector graphics, text layers, and embedded photographs of a Portable Document Format (.pdf) into standard raster image files like PNG, JPEG, or WebP.\\n\\nUnlike traditional cloud converters that require uploading confidential files to third-party servers, Toolique executes the entire rasterization process directly in your browser. Using WebAssembly and the Canvas API, each page is rendered into high-definition bitmaps without network latency or data leakage.'
+      },
+      {
+        title: 'Understanding DPI & Resolution for PDF Conversions',
+        content: 'DPI (Dots Per Inch) determines the pixel dimensions and visual sharpness of converted images:\\n\\n- **72 DPI (Standard Web)**: 1.0× scale, creates small file sizes ideal for web thumbnails and fast previews.\\n- **150 DPI (Balanced Documents)**: 2.08× scale, provides clean readability on mobile screens, PDFs, and slide decks.\\n- **300 DPI (Print & OCR Ready)**: 4.17× scale, industry standard for commercial printing, legal document archiving, and automated text recognition.\\n- **600 DPI (Ultra Precision)**: 8.33× scale, maximum fidelity for architectural blueprints, engineering schematics, and fine typography.'
+      },
+      {
+        title: 'Complete Data Privacy & Zero Cloud Exposure',
+        content: 'When converting confidential bank statements, tax filings, legal agreements, or medical records, uploading documents to unknown cloud servers poses significant compliance risks.\\n\\nToolique guarantees 100% in-browser processing. Memory buffers and rendered canvases are discarded after conversion, ensuring complete privacy compliance with enterprise standards.'
       }
     ]
   },

@@ -23,7 +23,8 @@ import {
   SlidersHorizontal,
   SplitSquareVertical,
   Eye,
-  Maximize2
+  Maximize2,
+  ShieldCheck
 } from 'lucide-react';
 import JSZip from 'jszip';
 
@@ -138,6 +139,51 @@ const SMART_PRESETS = [
       mode: 'targetSize' as const,
       targetKb: 80,
       quality: 75,
+    },
+  },
+  {
+    id: 'story-reel',
+    label: 'Story / Reel / Shorts',
+    desc: '1080×1920 px • 9:16 Vertical',
+    badge: 'Mobile Story',
+    action: {
+      cropAspect: '9:16',
+      width: 1080,
+      height: 1920,
+      format: 'image/jpeg',
+      mode: 'quality' as const,
+      targetKb: 400,
+      quality: 85,
+    },
+  },
+  {
+    id: 'linkedin-banner',
+    label: 'LinkedIn Banner',
+    desc: '1584×396 px • 4:1 Ratio',
+    badge: 'Profile Cover',
+    action: {
+      cropAspect: 'free',
+      width: 1584,
+      height: 396,
+      format: 'image/jpeg',
+      mode: 'quality' as const,
+      targetKb: 350,
+      quality: 85,
+    },
+  },
+  {
+    id: 'lossless-png',
+    label: 'Lossless PNG (Alpha)',
+    desc: 'Original Res • Crisp Transparency',
+    badge: 'Logos & Icons',
+    action: {
+      cropAspect: 'free',
+      width: 0,
+      height: 0,
+      format: 'image/png',
+      mode: 'quality' as const,
+      targetKb: 500,
+      quality: 100,
     },
   },
 ];
@@ -309,6 +355,26 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
     };
     img.src = blobUrl;
   };
+
+  // Listen for global Ctrl+V paste event to upload image directly
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          const file = items[i].getAsFile();
+          if (file) {
+            handleSingleFileUpload(file);
+            setStatusMessage('Pasted image loaded from clipboard.');
+            break;
+          }
+        }
+      }
+    };
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, []);
 
   // Handle batch file additions
   const handleBatchUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -624,11 +690,24 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
     setStatusMessage(`Applied preset: ${preset.label}`);
   };
 
-  // Dragging & Resizing Crop Window Handler
+  // Dragging & Resizing Crop Window Handler (Mouse & Touch)
   const handleMouseDownCrop = (e: React.MouseEvent, type: string) => {
     e.preventDefault();
     if (!cropContainerRef.current) return;
     setDragStartPos({ x: e.clientX, y: e.clientY });
+    setCropBoxStart({ ...cropBox });
+
+    if (type === 'drag') {
+      setIsDraggingCrop(true);
+    } else {
+      setIsResizingHandle(type);
+    }
+  };
+
+  const handleTouchStartCrop = (e: React.TouchEvent, type: string) => {
+    if (!cropContainerRef.current || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    setDragStartPos({ x: touch.clientX, y: touch.clientY });
     setCropBoxStart({ ...cropBox });
 
     if (type === 'drag') {
@@ -729,6 +808,25 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
       }
     };
 
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDraggingCrop && !isResizingHandle) return;
+      if (!cropContainerRef.current || !cropImageRef.current || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const rect = cropImageRef.current.getBoundingClientRect();
+      const deltaX = ((touch.clientX - dragStartPos.x) / rect.width) * 100;
+      const deltaY = ((touch.clientY - dragStartPos.y) / rect.height) * 100;
+
+      if (isDraggingCrop) {
+        let newX = cropBoxStart.x + deltaX;
+        let newY = cropBoxStart.y + deltaY;
+
+        newX = Math.max(0, Math.min(newX, 100 - cropBoxStart.w));
+        newY = Math.max(0, Math.min(newY, 100 - cropBoxStart.h));
+
+        setCropBox((prev) => ({ ...prev, x: newX, y: newY }));
+      }
+    };
+
     const handleMouseUp = () => {
       setIsDraggingCrop(false);
       setIsResizingHandle(null);
@@ -737,35 +835,99 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
     if (isDraggingCrop || isResizingHandle) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('touchmove', handleTouchMove, { passive: false });
+      window.addEventListener('touchend', handleMouseUp);
     }
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleMouseUp);
     };
   }, [isDraggingCrop, isResizingHandle, dragStartPos, cropBoxStart, aspectRatio]);
 
-  // Split-screen drag handler
+  // Split-screen drag handler (Mouse + Touch)
   useEffect(() => {
-    const handleSplitMouseMove = (e: MouseEvent) => {
+    const handleSplitMove = (clientX: number) => {
       if (!isDraggingSplit || !splitContainerRef.current) return;
       const rect = splitContainerRef.current.getBoundingClientRect();
-      const pos = ((e.clientX - rect.left) / rect.width) * 100;
+      const pos = ((clientX - rect.left) / rect.width) * 100;
       setSplitPosition(Math.max(5, Math.min(95, pos)));
     };
 
-    const handleSplitMouseUp = () => {
+    const handleSplitMouseMove = (e: MouseEvent) => {
+      handleSplitMove(e.clientX);
+    };
+
+    const handleSplitTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        handleSplitMove(e.touches[0].clientX);
+      }
+    };
+
+    const handleSplitEnd = () => {
       setIsDraggingSplit(false);
     };
 
     if (isDraggingSplit) {
       window.addEventListener('mousemove', handleSplitMouseMove);
-      window.addEventListener('mouseup', handleSplitMouseUp);
+      window.addEventListener('mouseup', handleSplitEnd);
+      window.addEventListener('touchmove', handleSplitTouchMove, { passive: false });
+      window.addEventListener('touchend', handleSplitEnd);
     }
     return () => {
       window.removeEventListener('mousemove', handleSplitMouseMove);
-      window.removeEventListener('mouseup', handleSplitMouseUp);
+      window.removeEventListener('mouseup', handleSplitEnd);
+      window.removeEventListener('touchmove', handleSplitTouchMove);
+      window.removeEventListener('touchend', handleSplitEnd);
     };
   }, [isDraggingSplit]);
+
+  // Generate Sample Image for instant 1-click test
+  const handleLoadSample = () => {
+    const sampleCanvas = document.createElement('canvas');
+    sampleCanvas.width = 1600;
+    sampleCanvas.height = 1200;
+    const ctx = sampleCanvas.getContext('2d');
+    if (!ctx) return;
+
+    // Gradient background
+    const grad = ctx.createLinearGradient(0, 0, 1600, 1200);
+    grad.addColorStop(0, '#0f172a');
+    grad.addColorStop(0.4, '#0d9488');
+    grad.addColorStop(1, '#4f46e5');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 1600, 1200);
+
+    // Decorative geometric shapes
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.beginPath();
+    ctx.arc(400, 350, 220, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.beginPath();
+    ctx.arc(1200, 850, 320, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Typography
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 60px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Toolique Image Studio Pro', 800, 560);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '26px sans-serif';
+    ctx.fillText('1600 × 1200 px • Sample Photographic Canvas', 800, 630);
+
+    sampleCanvas.toBlob((blob) => {
+      if (blob) {
+        const sampleFile = new File([blob], 'sample-wallpaper.jpg', { type: 'image/jpeg' });
+        handleSingleFileUpload(sampleFile);
+        setStatusMessage('Loaded sample high-resolution photo.');
+      }
+    }, 'image/jpeg', 0.95);
+  };
 
   // Download Single Processed File
   const handleDownloadSingle = () => {
@@ -932,23 +1094,27 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6 text-left">
-      {/* Studio Header & Tab Switcher Bar */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-teal-500/20">
-            <Sparkles className="w-5 h-5" />
+      {/* Studio Command Bar & Tab Navigation */}
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-500/10 dark:bg-teal-950/40 border border-teal-500/20 text-teal-700 dark:text-teal-300 text-xs font-bold">
+            <ShieldCheck className="w-4 h-4 text-teal-500 shrink-0" />
+            <span>100% In-Browser Privacy</span>
           </div>
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              Image Studio & Optimizer
-              <span className="text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 border border-teal-200 dark:border-teal-800/60">
-                All-in-One Pro
+
+          {currentFile ? (
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/70 text-slate-700 dark:text-slate-300 text-xs font-medium max-w-sm">
+              <FileImage className="w-3.5 h-3.5 shrink-0 text-teal-500" />
+              <span className="truncate font-semibold">{currentFile.name}</span>
+              <span className="text-[11px] text-slate-400 dark:text-slate-500 shrink-0 font-mono">
+                ({originalWidth}×{originalHeight} • {formatSize(originalSize)})
               </span>
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Crop, Resize, Compress & Convert PNG, JPG, WebP, and HEIC images with 100% browser privacy.
-            </p>
-          </div>
+            </div>
+          ) : (
+            <span className="text-xs text-slate-400 dark:text-slate-500 font-medium hidden sm:inline">
+              Zero server uploads • PNG, JPG, WebP, HEIC • Press <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-slate-600 dark:text-slate-400">Ctrl+V</kbd> to paste
+            </span>
+          )}
         </div>
 
         {/* Tab Navigation */}
@@ -1313,23 +1479,29 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
               </div>
             )}
 
-            {/* Smart 1-Click Presets Carousel */}
+            {/* Smart 1-Click Presets */}
             <div className="space-y-2">
-              <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-                1-Click Quick Presets
+              <label className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block flex items-center justify-between">
+                <span>1-Click Smart Presets</span>
+                <span className="text-[10px] lowercase font-normal text-slate-400">8 templates</span>
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {SMART_PRESETS.slice(0, 3).map((pr) => (
+              <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                {SMART_PRESETS.map((pr) => (
                   <button
                     key={pr.id}
                     onClick={() => applySmartPreset(pr)}
                     disabled={!currentFile}
-                    className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-teal-500 text-left transition disabled:opacity-40 hover:bg-teal-500/5 group"
+                    className="p-2.5 rounded-xl border border-slate-200/90 dark:border-slate-800 hover:border-teal-500 text-left transition disabled:opacity-40 hover:bg-teal-500/5 dark:hover:bg-teal-500/10 group cursor-pointer"
                   >
-                    <div className="text-[11px] font-bold text-slate-700 dark:text-slate-200 group-hover:text-teal-600 dark:group-hover:text-teal-400 truncate">
-                      {pr.label}
+                    <div className="flex items-center justify-between gap-1 mb-0.5">
+                      <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200 group-hover:text-teal-600 dark:group-hover:text-teal-400 truncate">
+                        {pr.label}
+                      </span>
+                      <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 shrink-0">
+                        {pr.badge}
+                      </span>
                     </div>
-                    <div className="text-[9px] text-slate-400 truncate mt-0.5">{pr.desc}</div>
+                    <div className="text-[10px] text-slate-400 dark:text-slate-500 truncate">{pr.desc}</div>
                   </button>
                 ))}
               </div>
@@ -1718,6 +1890,7 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
                           height: `${cropBox.h}%`,
                         }}
                         onMouseDown={(e) => handleMouseDownCrop(e, 'drag')}
+                        onTouchStart={(e) => handleTouchStartCrop(e, 'drag')}
                       >
                         {/* Rule of Thirds Grid */}
                         <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-40">
@@ -1734,20 +1907,24 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
 
                         {/* Corner Handles */}
                         <div
-                          className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-teal-400 border border-white rounded-full cursor-nwse-resize z-20"
+                          className="absolute -top-2 -left-2 w-4 h-4 bg-teal-400 border-2 border-white rounded-full cursor-nwse-resize z-20 shadow-md"
                           onMouseDown={(e) => handleMouseDownCrop(e, 'tl')}
+                          onTouchStart={(e) => handleTouchStartCrop(e, 'tl')}
                         />
                         <div
-                          className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-teal-400 border border-white rounded-full cursor-nesw-resize z-20"
+                          className="absolute -top-2 -right-2 w-4 h-4 bg-teal-400 border-2 border-white rounded-full cursor-nesw-resize z-20 shadow-md"
                           onMouseDown={(e) => handleMouseDownCrop(e, 'tr')}
+                          onTouchStart={(e) => handleTouchStartCrop(e, 'tr')}
                         />
                         <div
-                          className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-teal-400 border border-white rounded-full cursor-nesw-resize z-20"
+                          className="absolute -bottom-2 -left-2 w-4 h-4 bg-teal-400 border-2 border-white rounded-full cursor-nesw-resize z-20 shadow-md"
                           onMouseDown={(e) => handleMouseDownCrop(e, 'bl')}
+                          onTouchStart={(e) => handleTouchStartCrop(e, 'bl')}
                         />
                         <div
-                          className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-teal-400 border border-white rounded-full cursor-nwse-resize z-20"
+                          className="absolute -bottom-2 -right-2 w-4 h-4 bg-teal-400 border-2 border-white rounded-full cursor-nwse-resize z-20 shadow-md"
                           onMouseDown={(e) => handleMouseDownCrop(e, 'br')}
+                          onTouchStart={(e) => handleTouchStartCrop(e, 'br')}
                         />
                       </div>
                     </div>
@@ -1756,8 +1933,9 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
                   /* 2. DRAGGABLE BEFORE/AFTER SPLIT COMPARISON SLIDER */
                   <div
                     ref={splitContainerRef}
-                    className="relative select-none w-full h-[320px] rounded-xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center cursor-ew-resize"
+                    className="relative select-none w-full h-[320px] rounded-xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center cursor-ew-resize touch-none"
                     onMouseDown={() => setIsDraggingSplit(true)}
+                    onTouchStart={() => setIsDraggingSplit(true)}
                   >
                     {/* Processed (After) Base Layer */}
                     <img
@@ -1870,10 +2048,40 @@ export default function ImageStudio({ initialTab = 'studio' }: ImageStudioProps)
                 </div>
               </div>
             ) : (
-              <div className="flex-grow flex flex-col items-center justify-center text-slate-500 text-center p-6">
-                <FileImage className="w-12 h-12 mb-3 text-slate-700" />
-                <p className="text-sm font-semibold text-slate-400">Upload an image to open the Studio</p>
-                <p className="text-xs text-slate-500 mt-1">Crop, resize, compress and compare with live split preview</p>
+              <div className="flex-grow flex flex-col items-center justify-center text-center p-8 border border-dashed border-slate-800 rounded-2xl bg-slate-950/40 relative">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-500/20 to-indigo-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400 mb-4 shadow-lg shadow-teal-500/10">
+                  <Sparkles className="w-7 h-7" />
+                </div>
+                <h4 className="text-base font-bold text-white mb-1">
+                  Ready to Optimize Your Image
+                </h4>
+                <p className="text-xs text-slate-400 max-w-sm mb-5 leading-relaxed">
+                  Crop with aspect ratio locks, scale pixel dimensions, compress to exact target KB limits, or convert formats with 100% in-browser privacy.
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center gap-2.5 mb-6">
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-4 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs flex items-center gap-2 transition shadow-md shadow-teal-500/20 cursor-pointer"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Upload Image</span>
+                  </button>
+                  <button
+                    onClick={handleLoadSample}
+                    className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs flex items-center gap-2 transition cursor-pointer"
+                  >
+                    <Zap className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Try with Sample Image</span>
+                  </button>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] text-slate-400">
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 font-mono text-[10px]">PNG (Alpha)</span>
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 font-mono text-[10px]">JPG / JPEG</span>
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 font-mono text-[10px]">WebP (Modern)</span>
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 font-mono text-[10px]">HEIC (Apple iOS)</span>
+                </div>
               </div>
             )}
           </div>

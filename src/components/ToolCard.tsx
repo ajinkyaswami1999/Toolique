@@ -26,13 +26,16 @@ function getFavoritesSet(): Set<string> {
 }
 
 const getToolBadge = (toolId: string) => {
+  if (toolId === 'ImageStudio') {
+    return { text: 'All-in-One Pro', className: 'bg-teal-500/10 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 border-teal-500/30' };
+  }
   if (toolId === 'BuildingFeasibilityChecker') {
     return { text: '★ Hero', className: 'bg-amber-500/10 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-500/30' };
   }
   if (['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator', 'PDFMerge', 'STLVolumeCalculator'].includes(toolId)) {
     return { text: 'Popular', className: 'bg-emerald-500/10 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-500/20' };
   }
-  if (['FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor', 'PrintFarmRevenueCalculator'].includes(toolId)) {
+  if (['FARFSICalculator', 'ModularKitchenCostCalculator', 'PrintFarmRevenueCalculator'].includes(toolId)) {
     return { text: 'Trending', className: 'bg-indigo-500/10 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border-indigo-500/20' };
   }
   if (['PackagingCostCalculator', 'ScaleCalculator', 'LineWidthCalculator', 'PrintProfitCalculator', 'WardrobeCostCalculator', 'FalseCeilingCalculator'].includes(toolId)) {

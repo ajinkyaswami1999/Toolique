@@ -22,7 +22,7 @@ const ExperienceCalculator = lazy(() => import('../tools/ExperienceCalculator'))
 const SQLFormatter = lazy(() => import('../tools/SQLFormatter'));
 const JSONFormatter = lazy(() => import('../tools/JSONFormatter'));
 const QRCodeGenerator = lazy(() => import('../tools/QRCodeGenerator'));
-const ImageCompressor = lazy(() => import('../tools/ImageCompressor'));
+const ImageStudio = lazy(() => import('../tools/ImageStudio'));
 const UPIQRGenerator = lazy(() => import('../tools/UPIQRGenerator'));
 const TDSCalculator = lazy(() => import('../tools/TDSCalculator'));
 const InHandSalaryCalculator = lazy(() => import('../tools/InHandSalaryCalculator'));
@@ -145,9 +145,7 @@ const ModularKitchenCostCalculator = lazy(() => import('../tools/ModularKitchenC
 const WardrobeCostCalculator = lazy(() => import('../tools/WardrobeCostCalculator'));
 
 
-// Phase 4 - Image Tools Expansion (13 tools)
-const ImageCropper = lazy(() => import('../tools/ImageCropper'));
-const ImageResizer = lazy(() => import('../tools/ImageResizer'));
+// Phase 4 - Image Tools Expansion
 const ImageConverter = lazy(() => import('../tools/ImageConverter'));
 const ImageRotator = lazy(() => import('../tools/ImageRotator'));
 const ImageWatermark = lazy(() => import('../tools/ImageWatermark'));
@@ -161,7 +159,8 @@ const ImageColorPicker = lazy(() => import('../tools/ImageColorPicker'));
 const QRScannerImage = lazy(() => import('../tools/QRScannerImage'));
 
 
-// Phase 5 - PDF Tools (16 tools)
+// Phase 5 - PDF Tools (17 tools)
+const PDFToImage = lazy(() => import('../tools/PDFToImage'));
 const PDFMerge = lazy(() => import('../tools/PDFMerge'));
 const PDFSplit = lazy(() => import('../tools/PDFSplit'));
 const PDFCompressor = lazy(() => import('../tools/PDFCompressor'));
@@ -367,7 +366,8 @@ const toolComponents: Record<string, React.ComponentType> = {
   SQLFormatter,
   JSONFormatter,
   QRCodeGenerator,
-  ImageCompressor,
+  ImageStudio,
+  ImageCompressor: ImageStudio,
   UPIQRGenerator,
   TDSCalculator,
   InHandSalaryCalculator,
@@ -554,8 +554,8 @@ const toolComponents: Record<string, React.ComponentType> = {
   WardrobeCostCalculator,
 
   // Phase 4 - Image Tools Expansion
-  ImageCropper,
-  ImageResizer,
+  ImageCropper: ImageStudio,
+  ImageResizer: ImageStudio,
   ImageConverter,
   ImageRotator,
   ImageWatermark,
@@ -569,6 +569,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   QRScannerImage,
 
   // Phase 5 - PDF Tools
+  PDFToImage,
   PDFMerge,
   PDFSplit,
   PDFCompressor,

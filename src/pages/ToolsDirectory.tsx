@@ -39,10 +39,13 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
 };
 
 const getToolBadge = (toolId: string) => {
+  if (toolId === 'ImageStudio') {
+    return { text: 'All-in-One Pro', className: 'bg-teal-500/10 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 border-teal-500/20 dark:border-teal-800/60' };
+  }
   if (['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator', 'PDFMerge', 'STLVolumeCalculator'].includes(toolId)) {
     return { text: 'Popular', className: 'bg-emerald-500/10 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-500/20 dark:border-emerald-800/60' };
   }
-  if (['BuildingFeasibilityChecker', 'FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor', 'PrintFarmRevenueCalculator'].includes(toolId)) {
+  if (['BuildingFeasibilityChecker', 'FARFSICalculator', 'ModularKitchenCostCalculator', 'PrintFarmRevenueCalculator'].includes(toolId)) {
     return { text: 'Trending', className: 'bg-amber-500/10 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-500/20 dark:border-amber-800/60' };
   }
   if (['PackagingCostCalculator', 'ScaleCalculator', 'LineWidthCalculator', 'PrintProfitCalculator', 'WardrobeCostCalculator'].includes(toolId)) {
@@ -240,7 +243,7 @@ export default function ToolsDirectory() {
           return ['GSTCalculator', 'ConcreteCalculator', 'InHandSalaryCalculator', 'SIPCalculator', 'EMICalculator', 'PDFMerge', 'STLVolumeCalculator'].includes(tool.id);
         }
         if (activeCollection === 'trending') {
-          return ['BuildingFeasibilityChecker', 'FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageCompressor', 'PrintFarmRevenueCalculator'].includes(tool.id);
+          return ['BuildingFeasibilityChecker', 'FARFSICalculator', 'ModularKitchenCostCalculator', 'ImageStudio', 'PrintFarmRevenueCalculator'].includes(tool.id);
         }
         if (activeCollection === 'new') {
           return ['PackagingCostCalculator', 'ScaleCalculator', 'LineWidthCalculator', 'PrintProfitCalculator', 'WardrobeCostCalculator', 'FalseCeilingCalculator'].includes(tool.id);

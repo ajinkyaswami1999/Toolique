@@ -613,6 +613,52 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
       "answer": "Yes. Click 'Copy to Clipboard' to copy the image bitmap directly for instant pasting into Photoshop, Canva, Figma, or messaging apps."
     }
   ],
+  "ImageStudio": [
+    {
+      "question": "How does Image Studio & Optimizer work?",
+      "answer": "It combines professional cropping, dimension resizing, target KB compression, and format conversion into a single in-browser studio using HTML5 Canvas and client-side WebAssembly."
+    },
+    {
+      "question": "Are my images uploaded to any remote server?",
+      "answer": "No. All cropping, resizing, compression, and transformations run 100% locally inside your web browser sandbox. Your private photos never leave your device."
+    },
+    {
+      "question": "Which image formats are supported for editing and export?",
+      "answer": "You can import PNG, JPG, JPEG, WebP, SVG, and Apple iPhone HEIC/HEIF files, and export them into high-efficiency WebP, universal JPEG, or lossless PNG."
+    },
+    {
+      "question": "How does the Target File Size (KB) compression feature work?",
+      "answer": "Our engine runs an intelligent binary search compression algorithm across quality iterations until the generated file size meets your exact specified target kilobyte limit."
+    },
+    {
+      "question": "How do I compress images for government application forms (UPSC, SSC, Visa)?",
+      "answer": "Select the 'Passport / Govt Form' 1-click preset or Target KB mode, enter your required limit (e.g. 50 KB), and the studio automatically optimizes dimensions and compression to stay strictly under the limit."
+    },
+    {
+      "question": "What aspect ratios are supported for cropping?",
+      "answer": "You can crop with Freeform aspect ratio or lock to standard ratios: Square (1:1), Landscape (16:9), Stories/Reels (9:16), Standard (4:3), Photography (3:2), Portrait (2:3), and Ultrawide (21:9)."
+    },
+    {
+      "question": "Can I rotate or flip images before cropping and exporting?",
+      "answer": "Yes! You can rotate images 90° clockwise or counter-clockwise, and flip horizontally or vertically with a single click."
+    },
+    {
+      "question": "What is Aspect Ratio Lock in the Resizer?",
+      "answer": "Aspect Ratio Lock ensures that changing either the width or height automatically calculates the other dimension proportionally, preventing any distortion or stretching."
+    },
+    {
+      "question": "Can I batch process multiple images at once?",
+      "answer": "Yes! Switch to the Batch Optimizer tab to upload multiple images at once, apply unified resizing/compression/format settings, and download everything as a single compiled ZIP archive."
+    },
+    {
+      "question": "How do I compare compression quality before downloading?",
+      "answer": "Use the interactive Before/After split slider to drag the divider across your photo and inspect fine visual details side-by-side in real time."
+    },
+    {
+      "question": "Does saving compressed images strip location and EXIF metadata?",
+      "answer": "Yes, saving canvas elements automatically strips EXIF camera metadata and GPS coordinates, safeguarding your personal privacy and saving extra file space."
+    }
+  ],
   "ImageCompressor": [
     {
       "question": "How does the Image Compressor work?",
@@ -4281,6 +4327,32 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
     {
       "question": "Does the PDF Metadata Viewer tool support batch mode operations or bulk files?",
       "answer": "Currently, PDF Metadata Viewer processes single files or selected arrays of files depending on the tool design. All page separations, merges, and encryption layers execute synchronously in-memory."
+    }
+  ],
+  "PDFToImage": [
+    {
+      "question": "How does PDF to Image protect my data privacy?",
+      "answer": "All PDF parsing, page extraction, and canvas rendering execute 100% locally inside your browser memory using PDF.js and WebAssembly. No PDF documents or image files are ever uploaded or transmitted across the network."
+    },
+    {
+      "question": "Which image format gives the best quality for PDF conversion?",
+      "answer": "PNG provides lossless rendering, making it the ideal choice for text-heavy documents, blueprints, and charts where crisp vector lines and transparency are vital. JPG offers the best compression for scanned photos, while WebP delivers smaller file sizes for web publishing."
+    },
+    {
+      "question": "What is the benefit of selecting 300 or 600 DPI?",
+      "answer": "Standard screen viewing typically uses 72 or 150 DPI. Selecting 300 or 600 DPI multiplies the pixel density (up to 8.33x scale), generating ultra-high-resolution images suitable for professional printing, OCR text extraction, and CAD drafting."
+    },
+    {
+      "question": "Can I convert only selected pages from a large PDF document?",
+      "answer": "Yes. You can use custom page range syntax (e.g. 1-5, 8, 12), filter odd or even pages, or click individual page cards in the interactive thumbnail grid to convert only the exact pages you need."
+    },
+    {
+      "question": "How are multiple converted images downloaded?",
+      "answer": "You can download any individual page image with one click, or download all converted pages simultaneously as a cleanly organized ZIP archive with sequential filenames preserving page order."
+    },
+    {
+      "question": "Is there any cost, subscription, or file size limit for converting PDFs?",
+      "answer": "No. The tool is 100% free with no account registration, subscriptions, or artificial daily limits. It runs entirely on your device hardware."
     }
   ],
   "PDFToWord": [
