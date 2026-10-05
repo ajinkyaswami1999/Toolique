@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FileText, Upload, Download, CheckCircle2, AlertCircle, Loader2, RotateCw } from 'lucide-react';
 import { PDFDocument, degrees } from 'pdf-lib';
-import * as pdfjs from 'pdfjs-dist';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+import { pdfjs } from '../utils/pdfWorker';
 
 interface PageThumb {
   pageNum: number;

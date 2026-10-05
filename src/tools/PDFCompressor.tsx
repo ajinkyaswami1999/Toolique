@@ -20,10 +20,7 @@ import {
   FileCheck
 } from 'lucide-react';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import * as pdfjs from 'pdfjs-dist';
-
-// Configure pdfjs worker
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+import { pdfjs } from '../utils/pdfWorker';
 
 export type CompressionPreset = 'extreme' | 'balanced' | 'studio' | 'target_size' | 'custom';
 export type ColorMode = 'color' | 'grayscale' | 'monochrome';

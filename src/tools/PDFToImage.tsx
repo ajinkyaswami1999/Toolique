@@ -25,11 +25,8 @@ import {
   FileText
 } from 'lucide-react';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import * as pdfjs from 'pdfjs-dist';
+import { pdfjs } from '../utils/pdfWorker';
 import JSZip from 'jszip';
-
-// Configure pdfjs worker
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export type ImageOutputFormat = 'image/png' | 'image/jpeg' | 'image/webp';
 export type DpiPreset = '72' | '150' | '300' | '600' | 'custom';

@@ -29,11 +29,8 @@ import {
   Maximize2
 } from 'lucide-react';
 import { PDFDocument, rgb, degrees, StandardFonts } from 'pdf-lib';
-import * as pdfjs from 'pdfjs-dist';
+import { pdfjs } from '../utils/pdfWorker';
 import JSZip from 'jszip';
-
-// Configure pdfjs worker
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export interface PDFFileItem {
   id: string;

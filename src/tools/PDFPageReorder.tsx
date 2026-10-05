@@ -25,10 +25,7 @@ import {
   Shuffle
 } from 'lucide-react';
 import { PDFDocument, rgb, degrees, StandardFonts } from 'pdf-lib';
-import * as pdfjs from 'pdfjs-dist';
-
-// Configure pdfjs worker
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+import { pdfjs } from '../utils/pdfWorker';
 
 export interface ReorderPageItem {
   id: string;
