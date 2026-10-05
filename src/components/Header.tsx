@@ -29,7 +29,8 @@ import {
   ChevronRight,
   Lock,
   Layers,
-  Phone
+  Phone,
+  FileText
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { TooliqueLogo } from './Logo';
@@ -136,6 +137,17 @@ export default function Header() {
       bgDark: 'dark:bg-rose-950/40 dark:hover:bg-rose-900/40'
     },
     { 
+      name: 'PDF Tools Hub', 
+      path: '/pdf', 
+      icon: FileText, 
+      desc: 'Convert to Image, Merge, Split, Compress, Watermark & Protect', 
+      badge: '100% Private',
+      badgeColor: 'text-rose-700 dark:text-rose-300 bg-rose-100/80 dark:bg-rose-950/60 border-rose-300/60',
+      color: 'text-rose-600 dark:text-rose-400',
+      bgLight: 'bg-rose-50 hover:bg-rose-100/70',
+      bgDark: 'dark:bg-rose-950/40 dark:hover:bg-rose-900/40'
+    },
+    { 
       name: 'Economics Hub', 
       path: '/economics', 
       icon: TrendingUp, 
@@ -236,6 +248,7 @@ export default function Header() {
     { id: 'developer', label: 'Developer' },
     { id: 'architecture', label: 'Architecture & Civil' },
     { id: 'qa', label: 'QA Engineering' },
+    { id: 'pdf', label: 'PDF Suite' },
     { id: 'math-studio', label: 'Math Studio' },
     { id: '3d-printing', label: '3D Maker' },
     { id: 'economics', label: 'Economics' }
@@ -471,7 +484,7 @@ export default function Header() {
                             <Layers className="w-3.5 h-3.5" />
                             Calculation Hubs
                           </span>
-                          <span className="text-[9px] font-bold text-zinc-400">5 Suites</span>
+                          <span className="text-[9px] font-bold text-zinc-400">{domainHubs.length} Suites</span>
                         </div>
 
                         <div className="space-y-1">
@@ -829,7 +842,7 @@ export default function Header() {
                           <Layers className="w-3.5 h-3.5" />
                           Calculation Hubs
                         </span>
-                        <span className="text-[10px] font-bold text-zinc-400">5 Suites</span>
+                        <span className="text-[10px] font-bold text-zinc-400">{domainHubs.length} Suites</span>
                       </div>
 
                       <div className="space-y-1.5">

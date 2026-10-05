@@ -32,6 +32,7 @@ const QAHub = lazy(() => import('../pages/QAHub'));
 const FinanceHub = lazy(() => import('../pages/FinanceHub'));
 const DeveloperHub = lazy(() => import('../pages/DeveloperHub'));
 const EconomicsHub = lazy(() => import('../pages/EconomicsHub'));
+const PDFHub = lazy(() => import('../pages/PDFHub'));
 const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
 const WorkflowsHub = lazy(() => import('../pages/WorkflowsHub'));
 const NotFound = lazy(() => import('../pages/NotFound'));
@@ -49,6 +50,8 @@ export function getToolCanonicalPath(category: string, slug: string): string {
     return `/3d-printing-tools/${slug}`;
   } else if (category === 'economics') {
     return `/economics/${slug}`;
+  } else if (category === 'pdf') {
+    return `/pdf/${slug}`;
   } else {
     return `/calculators/${slug}`;
   }
@@ -69,6 +72,8 @@ export function getCategoryCanonicalPath(category: string): string {
     return `/economics`;
   } else if (category === '3d-printing') {
     return `/3d-printing-tools`;
+  } else if (category === 'pdf') {
+    return `/pdf`;
   } else {
     return `/calculators`;
   }
@@ -134,9 +139,19 @@ export default function AppRoutes() {
           <EconomicsHub />
         </Suspense>
       } />
+      <Route path="/pdf" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading PDF Tools Hub...</div>}>
+          <PDFHub />
+        </Suspense>
+      } />
 
       {/* Primary Pillar Tool Detail Routes */}
       <Route path="/calculators/:slug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
+          <ToolPage />
+        </Suspense>
+      } />
+      <Route path="/pdf/:slug" element={
         <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
           <ToolPage />
         </Suspense>
@@ -172,6 +187,8 @@ export default function AppRoutes() {
         </Suspense>
       } />
       <Route path="/finance/:slug" element={<Navigate to="/calculators/:slug" replace />} />
+      <Route path="/pdf-tools" element={<Navigate to="/pdf" replace />} />
+      <Route path="/pdf-tools/:slug" element={<Navigate to="/pdf/:slug" replace />} />
       <Route path="/3d-printing/:slug" element={<LegacyToolRedirect />} />
       <Route path="/3d-print-studio/:slug" element={<LegacyToolRedirect />} />
 

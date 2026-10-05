@@ -114,6 +114,8 @@ export function getToolCanonicalPath(category: string, slug: string): string {
     return `3d-printing-tools/${slug}`;
   } else if (category === 'economics') {
     return `economics/${slug}`;
+  } else if (category === 'pdf') {
+    return `pdf/${slug}`;
   } else {
     return `calculators/${slug}`;
   }
@@ -132,6 +134,8 @@ export function getCategoryCanonicalPath(category: string): string {
     return `3d-printing-tools`;
   } else if (category === 'economics') {
     return `economics`;
+  } else if (category === 'pdf') {
+    return `pdf`;
   } else {
     return `calculators`;
   }
@@ -781,6 +785,91 @@ const econSchema = {
   ]
 };
 
+// PDF Hub Page
+const pdfTools = toolsList.filter(t => t.category === 'pdf');
+const pdfFaqs = [
+  {
+    question: 'Are my confidential PDF documents uploaded to any external server?',
+    answer: 'No, absolutely not. Every PDF utility in Toolique executes 100% locally inside your web browser sandbox using WebAssembly, PDF.js, and PDF-Lib. Your confidential agreements, tax returns, architectural drawings, and bank statements never leave your device.'
+  },
+  {
+    question: 'How do I convert PDF pages into high-resolution images?',
+    answer: 'Open the PDF to Image Converter tool, upload your PDF, choose your desired format (PNG, JPG, or WebP), select your DPI scale (72 to 600 DPI), filter pages, and click Convert. You can download individual sheets or download all pages bundled in a ZIP archive.'
+  },
+  {
+    question: 'Can I compress a PDF to a specific file size like under 100KB or 200KB?',
+    answer: 'Yes! The PDF Compressor includes a Target Size mode where you can specify an exact KB limit (e.g., 100 KB, 200 KB, or 500 KB) required for government portals, UPSC forms, and visa applications.'
+  },
+  {
+    question: 'How does PDF Merge maintain document quality and vector clarity?',
+    answer: 'Toolique preserves native vector paths, font glyphs, and embedded objects without rasterization or downsampling. When you merge multiple files, pages are cloned losslessly in browser memory.'
+  },
+  {
+    question: 'Can I split or extract non-consecutive pages from a large PDF binder?',
+    answer: 'Yes. The PDF Split tool supports custom range syntax (such as "1-3, 5, 8-12"), odd/even duplex splitting, fixed page chunking, and visual thumbnail selection.'
+  },
+  {
+    question: 'How does client-side PDF Watermarking work?',
+    answer: 'The PDF Watermark tool stamps customizable text, transparent company logos, or tiled security matrices directly into the PDF content stream in real-time, giving you full control over opacity, angle, and positioning.'
+  }
+];
+
+const pdfBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>PDF Tools Hub</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">All-in-One Client-Side PDF Tools Hub</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Convert, Merge, Split, Compress, Watermark, and Secure PDF documents directly in your browser. Engineered with WebAssembly and local JavaScript binary streams so your confidential agreements and blueprints never touch a remote server.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${pdfTools.map(renderToolCardHtml).join('')}
+      </div>
+
+      ${renderFaqsHtml(pdfFaqs)}
+    </div>
+  </div>`;
+
+const pdfSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/pdf#collection',
+      'name': 'PDF Tools Hub – Free In-Browser PDF Suite | Toolique',
+      'description': 'Complete suite of free, private, client-side PDF tools. Convert PDF to Image, Merge, Split, Compress, Watermark, and Secure documents with zero cloud uploads.',
+      'url': 'https://www.toolique.in/pdf',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': 'PDF Tools Suite Directory',
+        'numberOfItems': pdfTools.length,
+        'itemListElement': pdfTools.map((t, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': t.name,
+          'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/pdf#faq',
+      'mainEntity': pdfFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': faq.answer
+        }
+      }))
+    }
+  ]
+};
+
 // Tools Directory Page
 const toolsDirectoryBodyHtml = `
   <div id="root">
@@ -990,6 +1079,14 @@ const staticPages = [
     keywords: ['economics calculator', 'microeconomics calculator', 'macroeconomics calculator', 'elasticity calculator', 'gdp growth calculator', 'inflation calculator', 'marginal cost calculator'],
     schemaMarkup: econSchema,
     bodyHtml: econBodyHtml
+  },
+  {
+    path: 'pdf',
+    title: 'PDF Tools Hub – Free In-Browser PDF Suite | Toolique',
+    description: 'Complete suite of free, private, client-side PDF tools. Convert PDF to Image, Merge, Split, Compress, Watermark, Protect, and Secure documents with zero cloud uploads.',
+    keywords: ['PDF Tools Hub', 'Free PDF tools online', 'Client side PDF converter', 'PDF to Image converter', 'Merge PDF free', 'Split PDF range', 'Compress PDF target KB', 'Watermark PDF online', 'PDF password protect', 'Private PDF tools', 'PDF without upload'],
+    schemaMarkup: pdfSchema,
+    bodyHtml: pdfBodyHtml
   },
   {
     path: 'about-founder',
@@ -1457,6 +1554,12 @@ toolsList.forEach((tool) => {
   if (tool.category === 'math-studio' && canonicalPath.startsWith('calculators/')) {
     generateRedirectShell(`math-studio/${tool.slug}`, canonicalPath, tool.name);
   }
+
+  // 5. /pdf-tools/:slug, /calculators/:slug -> /pdf/:slug (if category is pdf)
+  if (tool.category === 'pdf') {
+    generateRedirectShell(`pdf-tools/${tool.slug}`, canonicalPath, tool.name);
+    generateRedirectShell(`calculators/${tool.slug}`, canonicalPath, tool.name);
+  }
 });
 
 // Standalone Legacy Aliases Redirects
@@ -1465,6 +1568,7 @@ generateRedirectShell('architecture-tools', 'architecture', 'Architecture Suite'
 generateRedirectShell('qa-tools', 'qa', 'QA Workspace');
 generateRedirectShell('finance-tools', 'calculators', 'Finance Calculators');
 generateRedirectShell('developer-tools', 'developer', 'Developer Suite');
+generateRedirectShell('pdf-tools', 'pdf', 'PDF Tools Hub');
 generateRedirectShell('3d-print-studio', '3d-printing-tools', '3D Printing Tools & Calculators');
 generateRedirectShell('3d-printing', '3d-printing-tools', '3D Printing Tools & Calculators');
 generateRedirectShell('tools/filament-art-maker', '3d-printing-tools/filament-art-maker', 'Filament Art Maker');
@@ -1493,7 +1597,7 @@ function generateXmlSitemap() {
   staticPages.filter(p => !['404', '3d-print-studio', '3d-printing'].includes(p.path)).forEach(p => {
     let priority = '0.5';
     let freq = 'monthly';
-    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy', '3d-printing-tools', 'economics', 'workflows'].includes(p.path)) {
+    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy', '3d-printing-tools', 'economics', 'workflows', 'pdf'].includes(p.path)) {
       priority = '0.95';
       freq = 'daily';
     } else if (p.path === 'about-founder' || p.path === 'math-studio') {
