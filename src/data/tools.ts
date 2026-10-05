@@ -4171,30 +4171,74 @@ export const toolsList: Tool[] = [
     slug: 'pdf-rotate',
     name: 'PDF Rotate',
     category: 'pdf',
-    shortDescription: 'Rotate pages of a PDF document visually.',
-    metaDescription: 'Free online PDF Rotator. Rotate individual pages or all pages of a PDF by 90, 180, or 270 degrees locally in browser.',
-    keywords: ['Rotate PDF', 'Turn PDF pages', 'Rotate PDF pages online', 'PDF page rotator', 'Fix upside down PDF'],
+    shortDescription: 'Rotate PDF pages visually with 90° CW, 90° CCW, 180° flip, batch odd/even filters, and lossless export.',
+    metaTitle: 'Rotate PDF Pages Online Free – Permanent Visual PDF Rotator',
+    metaDescription: 'Rotate individual or all pages of a PDF visually in your browser. Supports 90° clockwise, 90° counter-clockwise, 180° flip, odd/even batch filters, and lossless 100% private client-side export.',
+    keywords: [
+      'Rotate PDF',
+      'Rotate PDF pages',
+      'Rotate PDF online free',
+      'Rotate PDF 90 degrees',
+      'Flip PDF upside down',
+      'PDF page rotator',
+      'Turn PDF pages',
+      'Fix upside down scanned PDF',
+      'Rotate odd pages PDF',
+      'Rotate even pages PDF',
+      'Permanent PDF rotation',
+      'Lossless PDF rotate',
+      'Client side PDF rotate'
+    ],
     icon: 'RotateCw',
     howToUse: [
-      'Upload a PDF file.',
-      'Click the rotate buttons on individual page thumbnails, or click "Rotate All Pages".',
-      'Select rotation angles (90° CW, 90° CCW, or 180°).',
-      'Click "Save Rotated PDF" to download.'
+      'Upload or drag & drop your PDF file into the visual workspace (100% client-side, zero cloud uploads).',
+      'Rotate individual pages by clicking on the thumbnail or using the per-card ↺ 90° CCW, ↻ 90° CW, ⇅ 180°, or 0° reset buttons.',
+      'Use the Batch Rotation Toolbar to rotate All Pages, Selected Pages, Odd Pages Only, Even Pages Only, or a Custom Page Range (e.g. 1-3, 5, 8-10) with one click.',
+      'Double-click any page or click the magnifying glass to inspect high-resolution zoom preview and navigate across pages with keyboard shortcuts.',
+      'Click "Save PDF Rotations" to permanently write the rotation metadata losslessly and download your rotated PDF document instantly.'
     ],
     faqs: [
       {
-        question: 'Will the rotation be saved permanently?',
-        answer: 'Yes. The rotation tag of the selected pages is updated within the PDF structure, so it displays correctly in any standard PDF viewer.'
+        question: 'Will the rotation be saved permanently in the downloaded PDF?',
+        answer: 'Yes. Our engine updates the internal `/Rotate` dictionary tags within the PDF document structure according to official ISO 32000 PDF standards. When opened in Adobe Acrobat Reader, Google Chrome, Apple Preview, or any mobile PDF viewer, the pages will display in their newly chosen orientation permanently.'
       },
       {
-        question: 'Can I rotate only odd or even pages?',
-        answer: 'Yes, our batch tools allow quick selection and rotation filters for odd pages, even pages, or the entire document.'
+        question: 'Does rotating PDF pages degrade image quality or rasterize text?',
+        answer: 'No! Unlike tools that convert PDF pages into raster bitmaps and re-compile them, Toolique operates directly on PDF vector geometry and metadata. All fonts, crisp vector paths, searchable text, hyperlinks, interactive form fields, and original image resolutions remain 100% lossless and untouched.'
+      },
+      {
+        question: 'Can I rotate only odd pages or only even pages?',
+        answer: 'Yes. The Batch Rotation Toolbar allows you to instantly target "Odd Pages Only" or "Even Pages Only". This is especially useful for correcting duplex scanner feeds where one side was fed upside down.'
+      },
+      {
+        question: 'Can I rotate specific page ranges like pages 1-5 and 8?',
+        answer: 'Yes! Select the "Custom Range" filter in the batch toolbar and enter your desired page sequence (e.g., `1-5, 8, 11-14`). You can then apply 90° CW, 90° CCW, or 180° flip to those specific pages in a single click.'
+      },
+      {
+        question: 'Are my confidential PDF documents uploaded to your server?',
+        answer: 'Never. All PDF parsing, thumbnail rendering, and rotation modifications are executed 100% locally in your browser memory using WebAssembly and client-side JavaScript. Your confidential files never touch any external server.'
+      },
+      {
+        question: 'Can I rotate password-protected PDF files?',
+        answer: 'Yes. If your document is password protected, our secure in-browser prompt allows you to enter the password, decrypt the document locally, adjust page orientations, and compile the final document.'
+      },
+      {
+        question: 'What is the difference between 90° Clockwise and 90° Counter-Clockwise?',
+        answer: '90° Clockwise (CW) turns the page 90 degrees to the right (useful for landscape pages scanned vertically). 90° Counter-Clockwise (CCW / 270°) turns the page 90 degrees to the left.'
+      },
+      {
+        question: 'Can I preview pages in full screen before saving?',
+        answer: 'Yes. Double-click any page thumbnail or click the eye icon to open the interactive high-resolution modal. You can zoom in up to 200%, navigate using the Arrow keys, and rotate directly inside the modal.'
       }
     ],
     sections: [
       {
-        title: 'Fixing Scanned Documents',
-        content: 'Scanned invoices and documents often end up rotated sideways or upside-down. This tool updates the PDF `/Rotate` dictionary key on a page level, meaning pages are permanently corrected without compressing or lowering the document quality.'
+        title: 'Fixing Scanned & Mixed-Orientation Documents',
+        content: 'Scanned contracts, invoices, blueprints, and receipts frequently end up rotated sideways or upside-down due to automatic sheet feeders. Toolique PDF Rotate lets you visually identify misaligned pages and correct them individually or in batches with single-click precision.'
+      },
+      {
+        title: 'Lossless Vector Metadata vs Image Rasterization',
+        content: 'Many online PDF converters rasterize vector documents into low-resolution JPEG images to apply rotation, resulting in blurry fonts and bloated file sizes. Toolique modifies the native PDF rotation matrix parameters (`/Rotate 90/180/270`), preserving original crisp vector typography, selectable text layers, and embedded digital signatures.'
       }
     ]
   },
@@ -4203,30 +4247,70 @@ export const toolsList: Tool[] = [
     slug: 'pdf-password-protect',
     name: 'PDF Password Protect',
     category: 'pdf',
-    shortDescription: 'Encrypt a PDF document with a secure password.',
-    metaDescription: 'Free online PDF Password Protect. Encrypt your PDF files with user passwords to prevent unauthorized access. Safe and secure client-side encryption.',
-    keywords: ['Password protect PDF', 'Encrypt PDF online', 'Secure PDF file', 'Add password to PDF', 'PDF locker free'],
+    shortDescription: 'Encrypt PDF files with open passwords, granular ISO 32000 permissions, and 100% in-browser privacy.',
+    metaTitle: 'Password Protect PDF Online Free – Encrypt & Secure PDF Documents',
+    metaDescription: 'Encrypt your PDF documents with secure passwords directly in your browser. Configure granular permissions for printing, copying, and form filling with 100% private client-side encryption.',
+    keywords: [
+      'Password protect PDF',
+      'Encrypt PDF online free',
+      'Lock PDF with password',
+      'PDF password encryptor',
+      'Secure PDF file',
+      'Add password to PDF',
+      'PDF permissions protect',
+      'Prevent printing PDF',
+      'Restrict PDF copying',
+      'Client side PDF encrypt',
+      'ISO 32000 PDF encryption',
+      'PDF locker free'
+    ],
     icon: 'Lock',
     howToUse: [
-      'Upload the PDF file you wish to lock.',
-      'Type a secure password in the input field.',
-      'Confirm the password.',
-      'Click "Lock PDF" to encrypt and download the secured document.'
+      'Upload or drag & drop your PDF file into the secure workspace (100% in-browser encryption, zero cloud uploads).',
+      'Enter an Open / User password or click "Generate Strong Password" to auto-create a 16-character high-entropy key.',
+      'Confirm the password and monitor the real-time strength meter.',
+      'Select a security profile (Maximum, Standard, Fillable, or Custom) to configure granular permissions for printing, content copying, editing, and form annotations.',
+      'Choose your render quality preset (Standard 150 DPI, High 200 DPI, or Ultra 300 DPI) and click "Encrypt & Lock PDF".',
+      'Download your secured document or test the password prompt directly in a new browser tab.'
     ],
     faqs: [
       {
-        question: 'What type of encryption is used?',
-        answer: 'We use standard PDF security handlers (including standard RC4/MD5 128-bit encryption) to ensure compatibility across Acrobat Reader and browsers.'
+        question: 'Are my files and passwords uploaded to any cloud server during encryption?',
+        answer: 'Never. All PDF parsing, rendering, and cryptographic encryption occur 100% inside your browser memory using local WebAssembly and JavaScript. No document bytes or password strings are ever sent over the network.'
       },
       {
-        question: 'Can I recover the PDF if I forget the password?',
-        answer: 'No. Since the password is never uploaded to any server, there is no way to recover or reset it. Make sure to remember your password.'
+        question: 'What standard of PDF encryption is used?',
+        answer: 'We use official ISO 32000 PDF standard 128-bit security handlers with RC4 stream cipher encryption. This ensures seamless password authentication and permission enforcement across Adobe Acrobat Reader, Google Chrome, Apple Preview, Foxit, and mobile PDF viewers.'
+      },
+      {
+        question: 'What is the difference between an Open (User) Password and an Owner Password?',
+        answer: 'The Open/User Password is required to decrypt and view the document contents. The Owner Password controls administrative permissions (such as allowing or blocking high-resolution printing, text copying, and content modification).'
+      },
+      {
+        question: 'Can someone open the encrypted PDF without the password?',
+        answer: 'No. The document stream objects and internal cross-reference tables are cryptographically encrypted. Standard PDF viewers will refuse to render the document until the correct password is provided.'
+      },
+      {
+        question: 'What happens if I forget my password?',
+        answer: 'Because encryption happens entirely on your local device without backdoor storage, forgotten passwords cannot be retrieved by our system. We recommend clicking "Copy Key" to securely back up your password in your password manager.'
+      },
+      {
+        question: 'How do permissions like "Prevent Copying" or "Prevent Printing" work?',
+        answer: 'Permission flags are embedded directly into the encrypted document security dictionary. Compliant PDF readers respect these flags and disable "Print", "Select Text", and "Export" functionality for users who only possess the standard Open password.'
+      },
+      {
+        question: 'Can I test my encrypted PDF before sending it to clients?',
+        answer: 'Yes! After encryption completes, click the "Test Password" button to open the generated PDF in a new browser tab and verify that the password prompt and permissions behave exactly as intended.'
       }
     ],
     sections: [
       {
-        title: 'Why Password-Protect Your PDFs?',
-        content: 'Encrypting files with a password restricts unauthorized views, protecting critical customer details, payroll, or business receipts when sending attachments over email or chat applications.'
+        title: 'Confidential Document Security for Legal & Financial Records',
+        content: 'Whether sending employee payroll slips, tax forms, intellectual property disclosures, or private medical records over email, password-protecting PDFs prevents unauthorized eavesdropping and accidental data leaks.'
+      },
+      {
+        title: 'Granular Access Control & Digital Rights Management (DRM)',
+        content: 'Standard ISO 32000 PDF encryption allows document authors to distribute read-only reports while restricting recipients from modifying text, copying proprietary diagrams, or printing physical hard copies.'
       }
     ]
   },
@@ -4360,61 +4444,133 @@ export const toolsList: Tool[] = [
     slug: 'extract-text-pdf',
     name: 'Extract Text From PDF',
     category: 'pdf',
-    shortDescription: 'Extract plain text content from a PDF file locally.',
-    metaDescription: 'Free online PDF Text Extractor. Extract plain text from PDF documents in browser without uploads. View preview and download as TXT.',
-    keywords: ['Extract text from PDF', 'PDF to text converter', 'Read PDF text online', 'PDF text scraper', 'Convert PDF to TXT'],
+    shortDescription: 'Extract plain text content, hyperlinks, and structured data from PDF files with 100% browser privacy.',
+    metaDescription: 'Free online PDF Text Extractor. Extract plain text, markdown, JSON, CSV and links from PDF documents locally in your browser. Zero cloud uploads, fast layout parsing.',
+    keywords: [
+      'Extract text from PDF',
+      'PDF to text converter',
+      'Read PDF text online',
+      'PDF text scraper',
+      'Convert PDF to TXT',
+      'PDF to markdown',
+      'PDF to JSON text',
+      'Extract links from PDF',
+      'Client side PDF extractor'
+    ],
     icon: 'FileSearch',
     howToUse: [
-      'Upload a PDF document.',
-      'The tool will automatically parse text content from each page.',
-      'Review the extracted text preview in the editor box.',
-      'Click "Download Text" to save as a plain `.txt` file.'
+      'Drag and drop your PDF document or click the upload area to select a file.',
+      'Configure extraction settings such as page range, paragraph preservation, line numbering, and page dividers.',
+      'The WebAssembly engine parses text geometry, coordinates, and hyperlinks client-side in real-time.',
+      'Search inside the extracted text, inspect per-page breakdowns, or review detected hyperlinks.',
+      'Download the text as TXT, Markdown, JSON, CSV, or a multi-page ZIP archive.'
     ],
     faqs: [
       {
-        question: 'Can this extract text from scanned images or photos?',
-        answer: 'This is a text parser, not an OCR (Optical Character Recognition) tool. It extracts native searchable text from digital PDFs, not scanned images.'
+        question: 'Are my confidential PDF documents uploaded to any remote server?',
+        answer: 'No. The entire extraction process executes locally in your browser memory using WebAssembly and PDF.js. Your sensitive contracts, invoices, and reports never leave your device.'
       },
       {
-        question: 'Does it preserve document formatting?',
-        answer: 'It extracts words in layout order. While margins are lost, paragraph and line splits are preserved to maintain readability.'
+        question: 'Can this tool extract text from scanned paper or image-only PDFs?',
+        answer: 'This utility extracts native vector and digital text streams embedded in PDFs. For scanned document photos or flat image scans without embedded text layers, an Optical Character Recognition (OCR) layer is required.'
+      },
+      {
+        question: 'How does layout preservation work during extraction?',
+        answer: 'The extractor calculates the 2D coordinate matrix (X and Y positions) of every text glyph on each page to accurately reproduce line breaks, paragraph gaps, and horizontal word spacing.'
+      },
+      {
+        question: 'Can I extract text from password-protected or encrypted PDFs?',
+        answer: 'Yes. If your document is encrypted, the tool will prompt you for the decryption password and unlock it directly in your browser without transmitting credentials.'
+      },
+      {
+        question: 'Can I export individual pages as separate text files?',
+        answer: 'Yes. You can copy or download individual pages from the Per-Page Viewer tab, or click "ZIP Pages Archive" to download all pages as numbered `.txt` files in a single ZIP archive.'
+      },
+      {
+        question: 'Does this tool detect external URLs and email addresses in the PDF?',
+        answer: 'Yes! The parser automatically scans document annotations and text patterns to extract all hyperlinks and email addresses into a dedicated Links tab with one-click copying.'
       }
     ],
     sections: [
       {
-        title: 'Fast and Private Text Scrapes',
-        content: 'Local text extraction parses PDF layout streams in browser memory, letting you extract copyable texts, logs, or lists from massive files instantly without server latency.'
+        title: 'Instant In-Browser Text Extraction with Complete Data Privacy',
+        content: 'Traditional online converters upload your documents to third-party cloud servers, posing significant data security and confidentiality risks. Toolique Extract Text From PDF operates entirely inside your web browser sandbox using hardware-accelerated WebAssembly. Large corporate binders, legal briefs, tax filings, and technical documentation are parsed in milliseconds without consuming internet bandwidth or transmitting a single byte.'
+      },
+      {
+        title: 'Advanced Coordinate Geometry & Paragraph Flow Detection',
+        content: 'PDFs store text as individual character matrices and positional coordinates rather than continuous paragraphs. Our engine analyzes vertical coordinate deltas (ΔY) and horizontal glyph bounding boxes (ΔX) to accurately reconstruct natural paragraph breaks, indentation, and word spacing without garbled or overlapping sentences.'
+      },
+      {
+        title: 'Flexible Multi-Format Exports (TXT, Markdown, JSON, CSV & ZIP)',
+        content: 'Export your extracted text in whatever format fits your workflow:\n• **Plain Text (.txt)**: Clean, unformatted text stream for word processors or note-taking.\n• **Markdown (.md)**: Formatted headers and dividers ready for documentation or CMS publishing.\n• **Structured JSON**: Programmatic schema containing metadata, word counts, and page-by-page text arrays.\n• **Tabular CSV**: Spreadsheet-ready table mapping page numbers to text contents.\n• **ZIP Archive**: Separate numbered `.txt` files for every page in the document.'
       }
     ]
   },
   {
     id: 'PDFMetadataViewer',
     slug: 'pdf-metadata-viewer',
-    name: 'PDF Metadata Viewer',
+    name: 'PDF Metadata Viewer & Editor',
     category: 'pdf',
-    shortDescription: 'Inspect properties and metadata tags of a PDF file.',
-    metaDescription: 'Free online PDF Metadata Viewer. Inspect PDF properties, creation date, modifications, author, version, and producer tags locally.',
-    keywords: ['PDF metadata viewer', 'Inspect PDF tags', 'Check PDF properties', 'Read PDF author title', 'PDF file inspector'],
+    shortDescription: 'Inspect, edit, sanitize, and export PDF properties, XMP XML metadata, and page geometry with 100% browser privacy.',
+    metaTitle: 'PDF Metadata Viewer & Editor Online Free – Inspect & Wipe PDF Tags',
+    metaDescription: 'Inspect and edit PDF metadata directly in your browser. View author, creator, producer, creation dates, page dimensions, and raw XMP XML packets. Wipe or modify metadata tags losslessly with zero cloud uploads.',
+    keywords: [
+      'PDF metadata viewer',
+      'Inspect PDF tags',
+      'PDF metadata editor',
+      'Wipe PDF metadata',
+      'Sanitize PDF properties',
+      'Check PDF author creator',
+      'View PDF XMP XML',
+      'PDF page dimensions inspector',
+      'Remove author from PDF',
+      'PDF metadata stripper',
+      'Client side PDF inspector'
+    ],
     icon: 'Info',
     howToUse: [
-      'Upload a PDF document.',
-      'The viewer will read and parse standard document dictionaries.',
-      'Inspect metadata like Author, Title, Creator, Producer, Creation/Mod Date, Page Count, and file metrics.'
+      'Upload or drag & drop your PDF file into the inspection workspace (100% in-browser, zero cloud uploads).',
+      'View the Summary Overview for instant insights into Title, Author, Subject, Creator Software, PDF Producer Engine, Page Count, and Timestamps.',
+      'Explore the "/Info Dictionary" tab for low-level PDF catalog keys and search across properties.',
+      'Check the "Page Geometry" tab to inspect exact page dimensions in points, inches, and millimeters, plus automatic ISO paper size detection (e.g. A4, US Letter, Legal).',
+      'Inspect raw Adobe XMP Extensible Metadata Platform XML packets under the "XMP Raw XML" tab with 1-click XML copying.',
+      'Switch to the "Edit & Sanitize" tab to customize document properties or click "Wipe / Sanitize All Metadata" to remove all author fingerprints before sharing.',
+      'Export metadata reports as structured JSON or CSV spreadsheets, or download the updated PDF losslessly.'
     ],
     faqs: [
       {
-        question: 'Can I edit the metadata here?',
-        answer: 'This version is a read-only viewer. To write custom metadata, use dedicated PDF editing tools.'
+        question: 'Are my confidential documents uploaded to any server during metadata inspection?',
+        answer: 'Never. All PDF parsing, thumbnail rendering, and metadata extraction take place 100% locally inside your browser memory using WebAssembly. No files, tags, or metadata strings are ever transmitted over the network.'
       },
       {
-        question: 'Why is some metadata missing?',
-        answer: 'Metadata fields are optional. If the document creator did not specify a Title or Author, the corresponding fields will show as "Not Specified".'
+        question: 'Can I edit the PDF metadata and download an updated file?',
+        answer: 'Yes! Under the "Edit & Sanitize" tab, you can modify the Title, Author, Subject, Keywords, Creator Software, and Producer Engine. Clicking "Update & Save PDF" compiles an updated PDF file losslessly without re-compressing or modifying your document contents.'
+      },
+      {
+        question: 'How does the "Wipe / Sanitize All Metadata" feature protect my privacy?',
+        answer: 'PDF files created by word processors, design software, or scanners often embed hidden author names, company affiliations, computer usernames, software serials, and precise creation timestamps. Sanitizing wipes all these tags clean, ensuring zero accidental metadata leaks when publishing documents publicly.'
+      },
+      {
+        question: 'What is the difference between the /Info Dictionary and XMP Metadata?',
+        answer: 'The `/Info` dictionary is the classic PDF metadata structure stored in the document trailer catalog. XMP (Extensible Metadata Platform) is an ISO standard XML-based data stream embedded by modern tools like Adobe Acrobat and Photoshop to store Dublin Core, PDF/A, and rights management schemas.'
+      },
+      {
+        question: 'Can I inspect physical page dimensions and paper sizes?',
+        answer: 'Yes. The Page Geometry tab calculates the exact width and height of each page in points (72 pt = 1 inch), inches, and millimeters, and automatically identifies standard paper formats like A4, US Letter, Legal, A3, and Tabloid.'
+      },
+      {
+        question: 'Can I export the metadata for programmatic use or audits?',
+        answer: 'Yes. You can export the entire extracted metadata payload as a formatted JSON document (`.json`) or a spreadsheet-ready CSV table (`.csv`) with a single click.'
       }
     ],
     sections: [
       {
-        title: 'Verifying PDF Properties',
-        content: 'Inspecting PDF metadata lets you verify the software producer, creator, and modification dates to check document validity before archiving or printing.'
+        title: 'Document Forensics & Verification',
+        content: 'Inspecting PDF metadata reveals essential provenance information including the original authoring software (e.g. Microsoft Word, Google Docs, InDesign), PDF conversion engines (e.g. Quartz, Distiller, Toolique), creation timestamps, and linear fast web view flags.'
+      },
+      {
+        title: 'Privacy Sanitization Before Public Document Sharing',
+        content: 'Before publishing contracts, academic papers, or legal exhibits online, cleaning hidden metadata fields is a vital cybersecurity and privacy practice. Toolique lets you sanitize all author identifiers directly in your browser with zero data loss.'
       }
     ]
   },
@@ -4423,30 +4579,59 @@ export const toolsList: Tool[] = [
     slug: 'pdf-to-word',
     name: 'PDF to Word',
     category: 'pdf',
-    shortDescription: 'Convert a PDF document into a Word (.doc) document.',
-    metaDescription: 'Free online PDF to Word converter. Convert PDF files to editable Microsoft Word files locally. Secure, client-side conversion.',
-    keywords: ['Convert PDF to Word', 'PDF to DOCX online', 'Editable PDF to Word', 'Local PDF converter Word', 'PDF to doc converter'],
+    shortDescription: 'Convert PDF documents into editable Microsoft Word (.doc) documents with 100% browser privacy.',
+    metaDescription: 'Free online PDF to Word Converter. Convert PDF documents to editable Microsoft Word (.doc) files locally in your browser. Zero cloud uploads, layout preservation.',
+    keywords: [
+      'PDF to Word converter',
+      'Convert PDF to DOC online',
+      'Editable PDF to Word',
+      'Free PDF to Word no upload',
+      'PDF to Word private browser',
+      'Client side PDF converter',
+      'Convert PDF to Google Docs'
+    ],
     icon: 'FileText',
     howToUse: [
-      'Upload a PDF document.',
-      'Click "Convert to Word".',
-      'The tool will extract document texts and format them into an editable Word document.',
-      'Download your converted `.doc` file.'
+      'Upload or drag and drop your PDF document.',
+      'Select your conversion mode: "Editable Flow" for text documents or "Visual Layout Match" for scanned forms.',
+      'Customize Word typography (Calibri, Arial, Times New Roman, Georgia), font size, line spacing, and page margins.',
+      'Review the live formatted document preview in the virtual sheet viewer.',
+      'Download the converted Microsoft Word (.doc) file or copy formatted HTML to paste directly into Office/Google Docs.'
     ],
     faqs: [
       {
-        question: 'Will the Word file match my PDF layout exactly?',
-        answer: 'It transfers text blocks, paragraphs, and headings. Very complex layouts with multi-column text overlays may require slight adjustments in Word.'
+        question: 'Are my confidential PDF documents uploaded to an external server?',
+        answer: 'No. The entire conversion runs client-side in your web browser memory using WebAssembly and PDF.js. Your agreements, financial statements, and resumes never leave your computer.'
       },
       {
-        question: 'Can I edit the output document in Google Docs?',
-        answer: 'Yes, the exported file is compatible with Microsoft Word, Google Docs, LibreOffice, and WPS Writer.'
+        question: 'What is the difference between Editable Flow and Visual Layout Match?',
+        answer: 'Editable Flow parses semantic headings (H1/H2), paragraphs, and lists into native editable Word text. Visual Layout Match renders high-resolution page sheets (150 DPI) inside Word pages to guarantee 100% exact design fidelity for scanned documents and complex artwork.'
+      },
+      {
+        question: 'Can I open the downloaded .doc file in Google Docs, Microsoft Word, and LibreOffice?',
+        answer: 'Yes! The generated file uses standard Microsoft Word HTML/XML schema with UTF-8 encoding, ensuring seamless compatibility across MS Word (Office 2003–365), Google Docs, LibreOffice Writer, Apple Pages, and WPS Office.'
+      },
+      {
+        question: 'Can I convert password-protected PDF files to Word?',
+        answer: 'Yes. If the PDF is encrypted, the tool will prompt you for the decryption password and unlock it locally in your browser memory before converting.'
+      },
+      {
+        question: 'Can I choose specific pages or convert a range instead of the whole document?',
+        answer: 'Yes. You can select All Pages, enter custom page ranges (e.g., 1-5, 8, 12), or pick individual page chips visually.'
       }
     ],
     sections: [
       {
-        title: 'Editable PDF Conversions',
-        content: 'Converting a PDF to a editable Word file allows you to reuse old text contents, adjust contract clauses, or rewrite layout templates without typing from scratch.'
+        title: 'High-Fidelity Client-Side PDF to Word Conversion',
+        content: 'Converting PDF documents into editable Word documents usually requires uploading confidential files to third-party web servers. Toolique PDF to Word performs all parsing, layout reconstruction, font sizing, and document compilation 100% inside your web browser sandbox using hardware-accelerated WebAssembly. Your business contracts, tax filings, legal briefs, and personal documents remain strictly confidential.'
+      },
+      {
+        title: 'Intelligent Semantic Heading & Paragraph Flow',
+        content: 'Unlike simple text dumpers, our converter analyzes font heights, positional coordinates, and margin geometry to automatically recognize document titles, major section headings (H1/H2/H3), bulleted lists, and paragraph splits. The resulting Word document is clean, structured, and easy to edit in Microsoft Word or Google Docs.'
+      },
+      {
+        title: 'Universal Office & Cross-Platform Compatibility',
+        content: 'The converted `.doc` files are constructed using Microsoft Office Word HTML/XML specification with proper MSO page break controls (`mso-break-type: page-break`) and Word margins. You can open them directly in Microsoft Word for Windows/Mac, upload them to Google Drive, or paste the copied rich HTML directly into Word, Notion, or Apple Pages.'
       }
     ]
   },
