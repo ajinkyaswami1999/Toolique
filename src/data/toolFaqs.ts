@@ -249,84 +249,32 @@ export const additionalFaqs: Record<string, FAQItem[]> = {
   ],
   "AgeCalculator": [
     {
-      "question": "How does the Age Calculator calculate exact age?",
-      "answer": "It compares your birthdate with the current date, accounting for different calendar month lengths and leap years to output years, months, and days precisely."
+      "question": "What is the qualifying cut-off date for voter ID registration in India?",
+      "answer": "In India, the Election Commission of India (ECI) provides four qualifying dates in a year (January 1, April 1, July 1, and October 1). A citizen must be at least 18 years of age on or before the qualifying date to register as a voter."
     },
     {
-      "question": "Does this tool support timezone differences?",
-      "answer": "The calculations run locally on your device, using your local browser system time to calculate the exact age."
+      "question": "How is retirement age determined under Indian Central Civil Services (CCS) Pension Rules?",
+      "answer": "Under CCS rules, government employees typically retire on the afternoon of the last day of the month in which they reach 60 years of age. If born on the 1st of the month, the employee retires on the afternoon of the last day of the preceding month."
     },
     {
-      "question": "What is chronological age?",
-      "answer": "Chronological age is the exact amount of time that has elapsed from your birth to the present moment, measured in years, months, days, and hours."
+      "question": "How do Indian life insurance companies calculate 'Age Nearest Birthday' (ANB)?",
+      "answer": "Life insurance and term plan providers (such as LIC, HDFC Life, ICICI Prudential) often use 'Age Nearest Birthday' (ANB). If you are 29 years and 7 months old, your age is rounded up to 30 for premium rating; if you are 29 years and 4 months old, it is rounded down to 29."
     },
     {
-      "question": "How does a leap year affect my age calculation?",
-      "answer": "Our calculator accounts for leap years (containing 29 days in February), ensuring your exact day count is mathematically accurate."
+      "question": "What is the difference between Korean Age and International Age?",
+      "answer": "Under the traditional Korean age system, a baby was considered 1 year old at birth and gained a year every New Year's Day. However, as of June 2023, South Korea officially adopted the international chronological age system used by our calculator for all legal and administrative documents."
     },
     {
-      "question": "Can I use this tool to calculate age on a past date?",
-      "answer": "Yes, you can change the target date field to any past or future date to see how old you were or will be at that time."
+      "question": "How does the calculator define an exact full month between dates?",
+      "answer": "A full month is defined by the standard Gregorian calendar interval. The duration from January 15th to February 15th is counted as exactly 1 month, regardless of whether February has 28 or 29 days. Excess days are counted from that anchor date."
     },
     {
-      "question": "How many days are there until my next birthday?",
-      "answer": "The calculator includes a countdown section displaying the exact months and days remaining until your next birthday anniversary."
+      "question": "Can I calculate the exact age of a company, partnership, or startup?",
+      "answer": "Yes! Simply input the official incorporation date or establishment registration date into the Date of Birth field to calculate the exact operational age of your business or asset."
     },
     {
-      "question": "What day of the week was I born on?",
-      "answer": "The calculator parses your date of birth and displays the exact weekday (e.g. Monday, Friday) you were born."
-    },
-    {
-      "question": "Is my birthdate data sent to a server?",
-      "answer": "No, all calculation scripts run entirely in your local browser window. No data is stored or transmitted, ensuring complete confidentiality."
-    },
-    {
-      "question": "How does the calculator define a full month?",
-      "answer": "A month is defined by the standard Gregorian calendar intervals. The duration from January 15th to February 15th is counted as exactly 1 month, regardless of whether the month has 28, 30, or 31 days."
-    },
-    {
-      "question": "Can I calculate the age of an establishment or business?",
-      "answer": "Yes, simply enter the incorporation date in the birthdate field to find the exact age of your business or asset."
-    },
-    {
-      "question": "How is age calculated for insurance policies in India?",
-      "answer": "Life insurance companies often use your nearest birthday (rounding up or down if you are past the half-year mark) to determine premium brackets, which differs slightly from chronological age."
-    },
-    {
-      "question": "What is the age difference between two people?",
-      "answer": "To calculate the age difference, calculate each age on a specific date and subtract, or use our specialized Date Difference calculator."
-    },
-    {
-      "question": "How many seconds old am I?",
-      "answer": "The calculator displays a breakdown showing your total age converted into equivalent weeks, days, hours, and minutes for a detailed view."
-    },
-    {
-      "question": "Why does my age in days change depending on the year?",
-      "answer": "Because different years contain 365 or 366 days, the exact day count adjusts dynamically to match the calendar dates elapsed."
-    },
-    {
-      "question": "What is the minimum age to vote in India?",
-      "answer": "An citizen must be at least 18 years of age on the qualifying date to register as a voter in India."
-    },
-    {
-      "question": "Does this tool work offline?",
-      "answer": "Yes, once the website is loaded, all scripts are cached in your browser. You can perform calculations without an internet connection."
-    },
-    {
-      "question": "What is the Chinese lunar age?",
-      "answer": "Chinese age calculation uses the lunar calendar and counts a person as 1 year old at birth, adding another year at the Lunar New Year, which is not tracked by this Gregorian-based tool."
-    },
-    {
-      "question": "Can I calculate age for historical dates u/s BCE?",
-      "answer": "This calculator supports standard modern Gregorian dates and is not calibrated for historical Julian or BCE date math."
-    },
-    {
-      "question": "How is retirement age determined u/s Indian central government rules?",
-      "answer": "Retirement age is usually 60 years, with the retirement date falling on the last afternoon of the birth month."
-    },
-    {
-      "question": "Is this tool suitable for filling government application forms?",
-      "answer": "Yes, it provides the precise years, months, and days breakdowns required in job applications and state service registrations."
+      "question": "Does this Age Calculator work offline without an internet connection?",
+      "answer": "Yes! Once loaded in your browser, the tool operates as a client-side Progressive Web Application (PWA). All calculations, countdowns, and Vedic charts run locally without needing ongoing internet access."
     }
   ],
   "ExperienceCalculator": [

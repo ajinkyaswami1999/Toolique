@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import {
   Table,
   Upload,
@@ -15,12 +15,13 @@ import {
   Eye,
   Sliders,
   Palette,
-  FileCheck,
   Layers,
   Search,
   Trash2,
   Printer,
-  FileDown
+  FileDown,
+  Maximize2,
+  ExternalLink
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import * as xlsx from 'xlsx';
@@ -132,7 +133,7 @@ export default function ExcelToPDF() {
   // Customization & Formatting Options
   const [paperSize, setPaperSize] = useState<PaperSize>('a4');
   const [orientation, setOrientation] = useState<PageOrientation>('landscape');
-  const [theme, setTheme] = useState<ThemePreset>('corporate');
+  const [theme, setTheme] = useState<ThemePreset>('emerald');
   const [fontDensity, setFontDensity] = useState<FontDensity>('standard');
   const [gridlines, setGridlines] = useState<GridlineStyle>('all');
   const [firstRowIsHeader, setFirstRowIsHeader] = useState<boolean>(true);
@@ -156,9 +157,19 @@ export default function ExcelToPDF() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copiedReport, setCopiedReport] = useState<boolean>(false);
-  const [showPdfModal, setShowPdfModal] = useState<boolean>(false);
+  const [isFullscreenPreview, setIsFullscreenPreview] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<'grid' | 'pdf'>('grid');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Clean up blob URLs when component unmounts or new blob is generated
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   // Load workbook from File or Blob
   const loadWorkbook = async (uploadedFile: File) => {
@@ -217,6 +228,7 @@ export default function ExcelToPDF() {
       setSheets(parsedSheets);
       setActiveSheetIndex(0);
       setPreviewPage(1);
+      setActiveTab('grid');
       if (!customTitle) {
         setCustomTitle(uploadedFile.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '));
       }
@@ -326,6 +338,12 @@ export default function ExcelToPDF() {
     return filteredRows.slice(start, start + rowsPerPage);
   }, [filteredRows, previewPage]);
 
+  // Helper to detect numeric or currency strings for right alignment
+  const isNumericCell = (val: string): boolean => {
+    const cleaned = val.replace(/[$€£₹,%\s+]/g, '').trim();
+    return cleaned !== '' && !isNaN(Number(cleaned));
+  };
+
   // Execute High-Fidelity PDF Generation
   const handleGeneratePdf = async () => {
     if (sheets.length === 0) return;
@@ -353,12 +371,12 @@ export default function ExcelToPDF() {
       // Paper Dimensions & Orientation
       const currentTheme = THEMES[theme];
       const fontSettings = {
-        compact: { fontSize: 7, lineHeight: 9.5, padding: 3, headerFontSize: 8, minRowHeight: 14 },
-        standard: { fontSize: 8.5, lineHeight: 11.5, padding: 4, headerFontSize: 9.5, minRowHeight: 18 },
-        large: { fontSize: 10, lineHeight: 13.5, padding: 5, headerFontSize: 11, minRowHeight: 22 }
+        compact: { fontSize: 7, lineHeight: 9.5, padding: 3, headerFontSize: 8, minRowHeight: 16 },
+        standard: { fontSize: 8.5, lineHeight: 11.5, padding: 4.5, headerFontSize: 9.5, minRowHeight: 20 },
+        large: { fontSize: 10, lineHeight: 13.5, padding: 6, headerFontSize: 11, minRowHeight: 24 }
       }[fontDensity];
 
-      // Auto orientation logic: if max cols > 7, default landscape, else portrait
+      // Auto orientation logic: if max cols > 6, default landscape, else portrait
       let resolvedOrientation: 'p' | 'l' = 'l';
       if (orientation === 'landscape') resolvedOrientation = 'l';
       else if (orientation === 'portrait') resolvedOrientation = 'p';
@@ -433,33 +451,50 @@ export default function ExcelToPDF() {
 
         cursorY += 28;
 
-        // Helper to render table header row
+        // Helper to render robust table header row
         const renderHeaderRow = (headerData: string[]) => {
-          doc.setFont('Helvetica', 'bold');
-          doc.setFontSize(fontSettings.headerFontSize);
-          doc.setFillColor(currentTheme.headerBg[0], currentTheme.headerBg[1], currentTheme.headerBg[2]);
-          doc.setTextColor(currentTheme.headerText[0], currentTheme.headerText[1], currentTheme.headerText[2]);
-
           let startX = margin;
 
           if (showRowNumbers) {
+            doc.setFillColor(currentTheme.headerBg[0], currentTheme.headerBg[1], currentTheme.headerBg[2]);
             doc.rect(startX, cursorY, rowNumColWidth, fontSettings.minRowHeight, 'F');
             doc.setDrawColor(currentTheme.borderColor[0], currentTheme.borderColor[1], currentTheme.borderColor[2]);
             if (gridlines === 'all') doc.rect(startX, cursorY, rowNumColWidth, fontSettings.minRowHeight, 'S');
-            doc.text('#', startX + rowNumColWidth / 2, cursorY + fontSettings.minRowHeight - fontSettings.padding - 1, { align: 'center' });
+
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(fontSettings.headerFontSize);
+            doc.setTextColor(currentTheme.headerText[0], currentTheme.headerText[1], currentTheme.headerText[2]);
+            doc.text('#', startX + rowNumColWidth / 2, cursorY + fontSettings.minRowHeight / 2 + 3, { align: 'center' });
             startX += rowNumColWidth;
           }
 
           for (let c = 0; c < maxCols; c++) {
             const colW = colWidths[c];
+            // Explicitly set fill color and draw fill rect for EVERY column
+            doc.setFillColor(currentTheme.headerBg[0], currentTheme.headerBg[1], currentTheme.headerBg[2]);
             doc.rect(startX, cursorY, colW, fontSettings.minRowHeight, 'F');
+
+            // Draw border if requested
             if (gridlines === 'all') {
               doc.setDrawColor(currentTheme.borderColor[0], currentTheme.borderColor[1], currentTheme.borderColor[2]);
               doc.rect(startX, cursorY, colW, fontSettings.minRowHeight, 'S');
             }
+
+            // Draw Text
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(fontSettings.headerFontSize);
+            doc.setTextColor(currentTheme.headerText[0], currentTheme.headerText[1], currentTheme.headerText[2]);
+
             const cellTitle = firstRowIsHeader && headerData[c] !== undefined ? headerData[c] : String.fromCharCode(65 + (c % 26));
             const clipped = doc.splitTextToSize(cellTitle, colW - (fontSettings.padding * 2))[0] || '';
-            doc.text(clipped, startX + fontSettings.padding, cursorY + fontSettings.minRowHeight - fontSettings.padding - 1);
+            const isNum = isNumericCell(cellTitle);
+
+            if (isNum) {
+              doc.text(clipped, startX + colW - fontSettings.padding, cursorY + fontSettings.minRowHeight / 2 + 3, { align: 'right' });
+            } else {
+              doc.text(clipped, startX + fontSettings.padding, cursorY + fontSettings.minRowHeight / 2 + 3);
+            }
+
             startX += colW;
           }
 
@@ -523,7 +558,7 @@ export default function ExcelToPDF() {
             if (gridlines === 'all') doc.rect(startX, cursorY, rowNumColWidth, computedRowHeight, 'S');
 
             doc.setTextColor(140, 140, 140);
-            doc.text(String(rIdx + 1), startX + rowNumColWidth / 2, cursorY + fontSettings.padding + fontSettings.lineHeight - 2, { align: 'center' });
+            doc.text(String(rIdx + 1), startX + rowNumColWidth / 2, cursorY + fontSettings.padding + fontSettings.lineHeight - 1, { align: 'center' });
             startX += rowNumColWidth;
           }
 
@@ -546,8 +581,15 @@ export default function ExcelToPDF() {
 
             // Draw Text Lines
             doc.setTextColor(currentTheme.textColor[0], currentTheme.textColor[1], currentTheme.textColor[2]);
+            const isNum = isNumericCell(row[c] ?? '');
+
             lines.slice(0, cappedLines).forEach((line, lIdx) => {
-              doc.text(line, startX + fontSettings.padding, cursorY + fontSettings.padding + (lIdx + 0.8) * fontSettings.lineHeight);
+              const textY = cursorY + fontSettings.padding + (lIdx + 0.8) * fontSettings.lineHeight;
+              if (isNum && lines.length === 1) {
+                doc.text(line, startX + colW - fontSettings.padding, textY, { align: 'right' });
+              } else {
+                doc.text(line, startX + fontSettings.padding, textY);
+              }
             });
 
             startX += colW;
@@ -605,9 +647,12 @@ export default function ExcelToPDF() {
 
       const pdfBlob = doc.output('blob');
       setOutputBlob(pdfBlob);
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
       const url = URL.createObjectURL(pdfBlob);
       setPreviewUrl(url);
-      setShowPdfModal(true);
+      setActiveTab('pdf');
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'An error occurred during PDF conversion. Please check your data formatting.');
@@ -628,6 +673,11 @@ export default function ExcelToPDF() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+  };
+
+  const handleOpenInNewTab = () => {
+    if (!previewUrl) return;
+    window.open(previewUrl, '_blank', 'noopener,noreferrer');
   };
 
   const handleExportCsv = () => {
@@ -677,54 +727,68 @@ export default function ExcelToPDF() {
     if (previewUrl) URL.revokeObjectURL(previewUrl);
     setPreviewUrl(null);
     setError(null);
-    setShowPdfModal(false);
+    setIsFullscreenPreview(false);
+    setActiveTab('grid');
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 text-left">
+    <div className="w-full max-w-7xl mx-auto space-y-6 text-left">
+      {/* Privacy & Engine Assurance Banner */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-emerald-50/70 dark:bg-emerald-950/25 border border-emerald-200/70 dark:border-emerald-800/40 rounded-2xl text-xs">
+        <div className="flex items-center gap-2.5 text-emerald-950 dark:text-emerald-200">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <span>
+            <strong className="font-semibold text-emerald-900 dark:text-emerald-100">100% Client-Side Conversion:</strong> Your spreadsheet numbers, formulas, and confidential payroll records are compiled in browser memory. Zero files uploaded to any server.
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300 font-medium shrink-0">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+          <span>Executive Presentation Engine</span>
+        </div>
+      </div>
+
       {/* Upload Dropzone if no file loaded */}
       {!file && (
-        <div className="saas-card p-8 text-center border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-emerald-500 dark:hover:border-emerald-400 transition-colors rounded-2xl relative">
+        <div className="saas-card p-10 sm:p-14 text-center border-2 border-dashed border-zinc-250 dark:border-zinc-800 hover:border-emerald-500/80 dark:hover:border-emerald-400/80 transition-all rounded-2xl relative bg-zinc-50/40 dark:bg-zinc-900/30">
           <input
             ref={fileInputRef}
             type="file"
             accept=".xlsx, .xls, .csv, .tsv, .ods, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/csv"
             onChange={handleFileUpload}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            aria-label="Upload spreadsheet to convert to PDF"
           />
-          <div className="max-w-md mx-auto space-y-3 pointer-events-none">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+          <div className="max-w-md mx-auto space-y-4 pointer-events-none">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-sm">
               <Upload className="w-8 h-8" />
             </div>
-            <div>
+            <div className="space-y-1.5">
               <p className="text-base font-bold text-zinc-900 dark:text-white">
-                Drag and drop your spreadsheet here, or browse
+                Drag and drop your spreadsheet here, or <span className="text-emerald-600 dark:text-emerald-400 underline">browse</span>
               </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 Supports Microsoft Excel (.xlsx, .xls), CSV (.csv), TSV (.tsv), and OpenDocument (.ods)
               </p>
             </div>
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
-              <span className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
-                Multi-Sheet Support
-              </span>
-              <span className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
-                Zero Cloud Uploads
-              </span>
-              <span className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
-                Custom Styling & Auto-Wrap
-              </span>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-2 text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
+              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Multi-Sheet Support</span>
+              <span>•</span>
+              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Auto-Fit Columns</span>
+              <span>•</span>
+              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">5 Design Themes</span>
+              <span>•</span>
+              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Zero Cloud Uploads</span>
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/80 relative z-10">
+          <div className="mt-5 pt-4 border-t border-zinc-200/80 dark:border-zinc-800/80 relative z-20">
             <button
               type="button"
               onClick={handleLoadSample}
-              className="px-3.5 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 text-xs font-bold hover:bg-emerald-100 transition inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold transition inline-flex items-center gap-2 shadow-xs cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>⚡ Try Financial Model Sample</span>
+              <Sparkles className="w-4 h-4 text-emerald-500" />
+              <span>⚡ Try Financial Model Sample (3 Sheets)</span>
             </button>
           </div>
         </div>
@@ -736,14 +800,16 @@ export default function ExcelToPDF() {
           {/* Left Column: Sheet Preview & Inspection (7 cols) */}
           <div className="lg:col-span-7 space-y-4">
             {/* File Info Bar */}
-            <div className="saas-card p-4 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3 min-w-0">
+            <div className="saas-card p-4 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5 min-w-0">
                 <div className="p-2.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl shrink-0">
                   <FileSpreadsheet className="w-5 h-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-bold text-zinc-900 dark:text-white truncate">{file.name}</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  <p className="text-sm font-bold text-zinc-900 dark:text-white truncate max-w-sm sm:max-w-md">
+                    {file.name}
+                  </p>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-0.5">
                     {(file.size / 1024).toFixed(1)} KB &bull; {sheets.length} Worksheet{sheets.length > 1 ? 's' : ''} &bull; {sheets.reduce((a, s) => a + s.rowCount, 0)} Total Rows
                   </p>
                 </div>
@@ -753,184 +819,268 @@ export default function ExcelToPDF() {
                 <button
                   onClick={handleExportCsv}
                   title="Export active sheet as CSV"
-                  className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                  className="px-2.5 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-750 text-zinc-700 dark:text-zinc-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                 >
-                  <FileDown className="w-4 h-4" />
+                  <FileDown className="w-3.5 h-3.5 text-emerald-600" />
                   <span className="hidden sm:inline">CSV</span>
                 </button>
                 <button
                   onClick={handleCopyManifest}
                   title="Copy Workbook Manifest"
-                  className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                  className="p-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-750 text-zinc-700 dark:text-zinc-300 text-xs font-semibold flex items-center gap-1 transition cursor-pointer"
                 >
-                  {copiedReport ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+                  {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                 </button>
                 <button
                   onClick={handleReset}
-                  title="Remove File"
-                  className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 transition cursor-pointer"
+                  title="Change Spreadsheet"
+                  className="px-2.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Change File</span>
                 </button>
               </div>
             </div>
 
-            {/* Sheet Tabs */}
-            <div className="saas-card p-3">
-              <div className="flex items-center justify-between gap-2 mb-2 px-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5" />
-                  Worksheets ({sheets.length})
-                </span>
-                {conversionScope === 'custom' && (
-                  <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold">
-                    {sheets.filter(s => s.selected).length} sheets selected for PDF
-                  </span>
-                )}
+            {/* View Mode Tabs (Spreadsheet Data vs Live PDF Output) */}
+            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setActiveTab('grid')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                    activeTab === 'grid'
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'bg-zinc-100 dark:bg-zinc-850 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
+                  }`}
+                >
+                  <Table className="w-3.5 h-3.5" />
+                  <span>Spreadsheet Grid ({activeSheet?.rowCount || 0}r)</span>
+                </button>
+                <button
+                  onClick={() => {
+                    if (!outputBlob) handleGeneratePdf();
+                    else setActiveTab('pdf');
+                  }}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                    activeTab === 'pdf'
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'bg-zinc-100 dark:bg-zinc-850 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
+                  }`}
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>PDF Document Viewer {outputBlob ? '✓' : ''}</span>
+                </button>
               </div>
 
-              <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                {sheets.map((s, idx) => (
-                  <div
-                    key={s.name + idx}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer border ${
-                      activeSheetIndex === idx
-                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                        : 'bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-emerald-500/50'
-                    }`}
-                    onClick={() => {
-                      setActiveSheetIndex(idx);
-                      setPreviewPage(1);
-                    }}
+              {activeTab === 'pdf' && previewUrl && (
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={handleOpenInNewTab}
+                    className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 transition cursor-pointer"
+                    title="Open in new browser tab"
                   >
-                    {conversionScope === 'custom' && (
-                      <input
-                        type="checkbox"
-                        checked={s.selected}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          toggleSheetSelected(idx);
-                        }}
-                        className="rounded accent-emerald-500 cursor-pointer"
-                      />
-                    )}
-                    <span>{s.name}</span>
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
-                      activeSheetIndex === idx
-                        ? 'bg-emerald-700/50 text-emerald-100'
-                        : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400'
-                    }`}>
-                      {s.rowCount}r
-                    </span>
-                  </div>
-                ))}
-              </div>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => setIsFullscreenPreview(true)}
+                    className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 transition cursor-pointer"
+                    title="Fullscreen preview"
+                  >
+                    <Maximize2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* Interactive Spreadsheet Grid Preview */}
-            <div className="saas-card p-4 space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <Table className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-xs font-bold text-zinc-900 dark:text-white">
-                    Sheet Preview: {activeSheet?.name}
-                  </span>
-                  <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                    ({activeSheet?.rowCount || 0} rows &bull; {activeSheet?.colCount || 0} cols)
-                  </span>
-                </div>
+            {/* TAB 1: SPREADSHEET GRID VIEW */}
+            {activeTab === 'grid' && (
+              <div className="space-y-4">
+                {/* Sheet Selector Tabs */}
+                <div className="saas-card p-3">
+                  <div className="flex items-center justify-between gap-2 mb-2 px-1">
+                    <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
+                      <Layers className="w-3.5 h-3.5" />
+                      Worksheets ({sheets.length})
+                    </span>
+                    {conversionScope === 'custom' && (
+                      <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                        {sheets.filter(s => s.selected).length} sheets selected for PDF
+                      </span>
+                    )}
+                  </div>
 
-                <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400" />
-                    <input
-                      type="text"
-                      placeholder="Filter rows..."
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        setPreviewPage(1);
-                      }}
-                      className="pl-8 pr-3 py-1 text-xs rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 focus:outline-none focus:border-emerald-500 w-36 sm:w-44"
-                    />
+                  <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                    {sheets.map((s, idx) => (
+                      <div
+                        key={s.name + idx}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer border ${
+                          activeSheetIndex === idx
+                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                            : 'bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-emerald-500/50'
+                        }`}
+                        onClick={() => {
+                          setActiveSheetIndex(idx);
+                          setPreviewPage(1);
+                        }}
+                      >
+                        {conversionScope === 'custom' && (
+                          <input
+                            type="checkbox"
+                            checked={s.selected}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              toggleSheetSelected(idx);
+                            }}
+                            className="rounded accent-emerald-500 cursor-pointer"
+                          />
+                        )}
+                        <span>{s.name}</span>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${
+                          activeSheetIndex === idx
+                            ? 'bg-emerald-700/50 text-emerald-100'
+                            : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400'
+                        }`}>
+                          {s.rowCount}r
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
 
-              {/* Data Grid Table */}
-              {activeSheet && activeSheet.rows.length > 0 ? (
-                <div className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden max-h-96 overflow-y-auto">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs border-collapse">
-                      <thead className="bg-zinc-100 dark:bg-zinc-800/90 text-zinc-700 dark:text-zinc-300 font-bold sticky top-0 z-10 border-b border-zinc-200 dark:border-zinc-700">
-                        <tr>
-                          <th className="p-2 w-10 text-center text-zinc-400 border-r border-zinc-200 dark:border-zinc-700">#</th>
-                          {Array.from({ length: activeSheet.colCount }).map((_, cIdx) => (
-                            <th key={cIdx} className="p-2 min-w-[120px] max-w-[220px] truncate border-r border-zinc-200 dark:border-zinc-700">
-                              {firstRowIsHeader && activeSheet.rows[0] && activeSheet.rows[0][cIdx] !== undefined
-                                ? activeSheet.rows[0][cIdx]
-                                : String.fromCharCode(65 + (cIdx % 26))}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900/50">
-                        {currentPreviewRows.map((row, rIdx) => {
-                          const displayIndex = (previewPage - 1) * rowsPerPage + rIdx + 1;
-                          const isHeaderRow = firstRowIsHeader && displayIndex === 1 && previewPage === 1;
-                          if (isHeaderRow) return null; // Already shown in thead
+                {/* Interactive Spreadsheet Grid Preview */}
+                <div className="saas-card p-4 space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <Table className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-xs font-bold text-zinc-900 dark:text-white">
+                        Sheet Preview: {activeSheet?.name}
+                      </span>
+                      <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">
+                        ({activeSheet?.rowCount || 0} rows &bull; {activeSheet?.colCount || 0} cols)
+                      </span>
+                    </div>
 
-                          return (
-                            <tr key={rIdx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
-                              <td className="p-2 text-center text-[10px] text-zinc-400 bg-zinc-50/50 dark:bg-zinc-800/20 font-mono border-r border-zinc-200 dark:border-zinc-800">
-                                {displayIndex}
-                              </td>
+                    <div className="relative">
+                      <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+                      <input
+                        type="text"
+                        placeholder="Filter rows..."
+                        value={searchQuery}
+                        onChange={(e) => {
+                          setSearchQuery(e.target.value);
+                          setPreviewPage(1);
+                        }}
+                        className="pl-8 pr-3 py-1 text-xs rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 focus:outline-none focus:border-emerald-500 w-36 sm:w-44"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Data Grid Table */}
+                  {activeSheet && activeSheet.rows.length > 0 ? (
+                    <div className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden max-h-[460px] overflow-y-auto">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs border-collapse">
+                          <thead className="bg-zinc-100 dark:bg-zinc-800/90 text-zinc-700 dark:text-zinc-300 font-bold sticky top-0 z-10 border-b border-zinc-200 dark:border-zinc-700">
+                            <tr>
+                              <th className="p-2 w-10 text-center text-zinc-400 border-r border-zinc-200 dark:border-zinc-700">#</th>
                               {Array.from({ length: activeSheet.colCount }).map((_, cIdx) => (
-                                <td key={cIdx} className="p-2 truncate max-w-[220px] text-zinc-800 dark:text-zinc-200 border-r border-zinc-200 dark:border-zinc-800">
-                                  {row[cIdx] || <span className="text-zinc-400 dark:text-zinc-600 italic">-</span>}
-                                </td>
+                                <th key={cIdx} className="p-2 min-w-[120px] max-w-[220px] truncate border-r border-zinc-200 dark:border-zinc-700">
+                                  {firstRowIsHeader && activeSheet.rows[0] && activeSheet.rows[0][cIdx] !== undefined
+                                    ? activeSheet.rows[0][cIdx]
+                                    : String.fromCharCode(65 + (cIdx % 26))}
+                                </th>
                               ))}
                             </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-8 text-center bg-zinc-50 dark:bg-zinc-900/40 rounded-xl text-zinc-500 text-xs">
-                  This worksheet does not contain any data rows.
-                </div>
-              )}
+                          </thead>
+                          <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900/50">
+                            {currentPreviewRows.map((row, rIdx) => {
+                              const displayIndex = (previewPage - 1) * rowsPerPage + rIdx + 1;
+                              const isHeaderRow = firstRowIsHeader && displayIndex === 1 && previewPage === 1;
+                              if (isHeaderRow) return null; // Already shown in thead
 
-              {/* Grid Pagination */}
-              {totalPreviewPages > 1 && (
-                <div className="flex items-center justify-between text-xs text-zinc-500 pt-1">
-                  <span>
-                    Showing {Math.min(filteredRows.length, (previewPage - 1) * rowsPerPage + 1)} - {Math.min(filteredRows.length, previewPage * rowsPerPage)} of {filteredRows.length} rows
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() => setPreviewPage(p => Math.max(1, p - 1))}
-                      disabled={previewPage === 1}
-                      className="px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      Prev
-                    </button>
-                    <span className="font-semibold text-zinc-700 dark:text-zinc-300 px-2">
-                      {previewPage} / {totalPreviewPages}
-                    </span>
-                    <button
-                      onClick={() => setPreviewPage(p => Math.min(totalPreviewPages, p + 1))}
-                      disabled={previewPage === totalPreviewPages}
-                      className="px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      Next
-                    </button>
-                  </div>
+                              return (
+                                <tr key={rIdx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition">
+                                  <td className="p-2 text-center text-[10px] text-zinc-400 bg-zinc-50/50 dark:bg-zinc-800/20 font-mono border-r border-zinc-200 dark:border-zinc-800">
+                                    {displayIndex}
+                                  </td>
+                                  {Array.from({ length: activeSheet.colCount }).map((_, cIdx) => {
+                                    const cellVal = row[cIdx] || '';
+                                    const isNum = isNumericCell(cellVal);
+                                    return (
+                                      <td
+                                        key={cIdx}
+                                        className={`p-2 truncate max-w-[220px] text-zinc-800 dark:text-zinc-200 border-r border-zinc-200 dark:border-zinc-800 ${
+                                          isNum ? 'text-right font-mono' : ''
+                                        }`}
+                                      >
+                                        {cellVal || <span className="text-zinc-400 dark:text-zinc-600 italic">-</span>}
+                                      </td>
+                                    );
+                                  })}
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-8 text-center bg-zinc-50 dark:bg-zinc-900/40 rounded-xl text-zinc-500 text-xs">
+                      This worksheet does not contain any data rows.
+                    </div>
+                  )}
+
+                  {/* Grid Pagination */}
+                  {totalPreviewPages > 1 && (
+                    <div className="flex items-center justify-between text-xs text-zinc-500 pt-1">
+                      <span>
+                        Showing {Math.min(filteredRows.length, (previewPage - 1) * rowsPerPage + 1)} - {Math.min(filteredRows.length, previewPage * rowsPerPage)} of {filteredRows.length} rows
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => setPreviewPage(p => Math.max(1, p - 1))}
+                          disabled={previewPage === 1}
+                          className="px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                        >
+                          Prev
+                        </button>
+                        <span className="font-semibold text-zinc-700 dark:text-zinc-300 px-2">
+                          {previewPage} / {totalPreviewPages}
+                        </span>
+                        <button
+                          onClick={() => setPreviewPage(p => Math.min(totalPreviewPages, p + 1))}
+                          disabled={previewPage === totalPreviewPages}
+                          className="px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+
+            {/* TAB 2: LIVE PDF VIEWER */}
+            {activeTab === 'pdf' && (
+              <div className="saas-card p-3 space-y-3">
+                {previewUrl ? (
+                  <div className="h-[520px] rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-950">
+                    <iframe
+                      src={previewUrl}
+                      title="Generated PDF Preview"
+                      className="w-full h-full rounded-xl"
+                    />
+                  </div>
+                ) : (
+                  <div className="p-16 text-center space-y-3">
+                    <Printer className="w-10 h-10 mx-auto text-zinc-400" />
+                    <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200">No PDF compiled yet</p>
+                    <p className="text-xs text-zinc-500">Click "Generate & Preview PDF" to compile your spreadsheet.</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right Column: Layout & Styling Studio Controls (5 cols) */}
@@ -960,13 +1110,13 @@ export default function ExcelToPDF() {
                 ) : (
                   <>
                     <Sparkles className="w-4.5 h-4.5" />
-                    <span>Generate & Preview PDF</span>
+                    <span>{outputBlob ? 'Recompile PDF Document' : 'Generate & Preview PDF'}</span>
                   </>
                 )}
               </button>
 
               {outputBlob && (
-                <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-3">
+                <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 space-y-3 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between text-xs font-bold text-emerald-700 dark:text-emerald-300">
                     <span className="flex items-center gap-1.5">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -983,11 +1133,12 @@ export default function ExcelToPDF() {
                       <span>Download PDF</span>
                     </button>
                     <button
-                      onClick={() => setShowPdfModal(true)}
+                      onClick={handleOpenInNewTab}
                       className="px-3.5 py-2.5 rounded-xl bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                      title="Open in new tab"
                     >
-                      <Eye className="w-4 h-4" />
-                      <span>View</span>
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Tab</span>
                     </button>
                   </div>
                 </div>
@@ -1204,7 +1355,7 @@ export default function ExcelToPDF() {
                   <span className="font-semibold text-zinc-600 dark:text-zinc-400">Custom Footer Note</span>
                   <input
                     type="text"
-                    placeholder="e.g. Confidential &bull; For Internal Management Use Only"
+                    placeholder="e.g. Confidential • For Internal Management Use Only"
                     value={customFooter}
                     onChange={(e) => setCustomFooter(e.target.value)}
                     className="w-full p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white focus:outline-none focus:border-emerald-500"
@@ -1212,32 +1363,23 @@ export default function ExcelToPDF() {
                 </div>
               </div>
             </div>
-
-            {/* Privacy & Security Guarantee Badge */}
-            <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/15 flex items-start gap-3">
-              <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-              <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                <p className="font-bold text-zinc-900 dark:text-white mb-0.5">100% In-Browser Privacy</p>
-                Your spreadsheets are compiled directly inside your browser memory using WebAssembly & JS. Sensitive financial numbers and payroll records never leave your device.
-              </div>
-            </div>
           </div>
         </div>
       )}
 
       {/* Fullscreen PDF Preview Modal */}
-      {showPdfModal && previewUrl && (
+      {isFullscreenPreview && previewUrl && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-6xl h-[92vh] flex flex-col overflow-hidden shadow-2xl">
             {/* Modal Header */}
             <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-4 bg-zinc-50 dark:bg-zinc-850">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 bg-emerald-600 text-white rounded-lg">
-                  <FileCheck className="w-4 h-4" />
+                  <Printer className="w-4 h-4" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-zinc-900 dark:text-white">Generated PDF Document Preview</h3>
-                  <p className="text-[11px] text-zinc-500">
+                  <p className="text-[11px] text-zinc-500 font-medium">
                     {paperSize.toUpperCase()} &bull; {orientation.toUpperCase()} &bull; {THEMES[theme].name} &bull; {outputBlob ? (outputBlob.size / 1024).toFixed(1) + ' KB' : ''}
                   </p>
                 </div>
@@ -1249,10 +1391,10 @@ export default function ExcelToPDF() {
                   className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
-                  <span>Download</span>
+                  <span>Download PDF</span>
                 </button>
                 <button
-                  onClick={() => setShowPdfModal(false)}
+                  onClick={() => setIsFullscreenPreview(false)}
                   className="px-3.5 py-2 rounded-xl bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-bold transition cursor-pointer"
                 >
                   Close

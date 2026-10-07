@@ -306,34 +306,124 @@ export const toolsList: Tool[] = [
     slug: 'age-calculator',
     name: 'Age Calculator',
     category: 'datetime',
-    shortDescription: 'Calculate your exact age in years, months, weeks, days, and countdown to next birthday.',
-    metaDescription: 'Free online Age Calculator. Calculate your exact age from date of birth in years, months, days, hours, and find out the remaining days until your next birthday.',
-    keywords: ['Age Calculator', 'Exact Age Calculator', 'DOB Calculator', 'Calculate age online', 'Birthday countdown'],
+    metaTitle: 'Age Calculator – Exact Age, DOB, Birthday Countdown & Vedic Suite',
+    shortDescription: 'Calculate your exact age in years, months, weeks, days, hours, and live seconds, compare age differences, and explore Vedic astrology.',
+    metaDescription: 'Free online Age Calculator. Calculate your exact chronological age from Date of Birth (DOB) in years, months, weeks, days, hours, and live seconds. Features 2-person age comparison, upcoming birthday countdown, life milestones, and Vedic astrology & numerology.',
+    keywords: [
+      'Age Calculator',
+      'Exact Age Calculator Online',
+      'Calculate Age from Date of Birth',
+      'DOB Calculator',
+      'Age Calculator in Years Months Days',
+      'Chronological Age Calculator',
+      'How Old Am I Today',
+      'Calculate My Age Online Free',
+      'Age Difference Calculator',
+      'Age Gap Calculator Between 2 People',
+      'Age Calculator for Govt Exams',
+      'Age Calculator for UPSC SSC IBPS Cut Off',
+      'Birthday Countdown Calculator',
+      'Next Birthday Day of Week Calculator',
+      'Vedic Astrology Age Calculator',
+      'Kundali Rashi Calculator by DOB',
+      'Moolank and Bhagyank Numerology Calculator',
+      'Planetary Age Calculator',
+      'Life Milestones 10000 Days Alive',
+      '1 Billion Seconds Milestone Calculator',
+      'Half Birthday Calculator',
+      'Age on Specific Date Calculator',
+      'Retirement Age Calculator',
+      'Date of Birth to Age Converter'
+    ],
     icon: 'Calendar',
     howToUse: [
-      'Select your Date of Birth using the calendar input.',
-      'Specify the "Age at Date" (defaults to current date, but can be customized).',
-      'Click "Calculate" (or watch it update dynamically) to see your age broken down into years, months, days, weeks, hours, and minutes.',
-      'Check the countdown timer showing months and days left until your next birthday.'
+      'Select your Date of Birth (DOB) using the interactive year, month, and day calendar picker, with optional exact birth time for second-level precision.',
+      'Specify the "Calculate Age On Date" field (defaults to today\'s current date, or choose any historical or future cut-off date for exams or admissions).',
+      'Instantly view your exact chronological age in Years, Months, Days, and live ticking Seconds alongside cumulative lifetime metrics (total months, weeks, days, hours, minutes, seconds).',
+      'Check your Next Birthday Countdown showing exact months, days, hours, and seconds remaining, along with your half-birthday and upcoming birthday weekday schedule.',
+      'Switch to "Age Difference (2 People)" to compare two birth dates down to exact days, find who is older, and calculate your exact 2x Double-Age milestone date.',
+      'Explore "Life Milestones & Timeline" to track monumental day achievements like 1,000, 5,000, 10,000, and 25,000 days on Earth, 1 Billion seconds alive, and jubilee birthdays.',
+      'Open "Planetary Ages & Bio-Stats" to discover your orbital age across Mercury, Venus, Mars, Jupiter, Saturn, Uranus, and Neptune, alongside estimated cumulative heartbeats and breaths.',
+      'Navigate to "Vedic Astrology & Numerology" to explore your Nirayana Sidereal Solar Rashi, ruling Graha lord, auspicious gemstone, Graha Beej Mantra with English transliteration, Moolank (Root Number), and Bhagyank (Destiny Number).'
     ],
     faqs: [
       {
-        question: 'How does the Age Calculator compute months and days?',
-        answer: 'The calculator accounts for leap years and the varying number of days in each calendar month to give you the most mathematically precise breakdown of your age.'
+        question: 'How does the Age Calculator compute exact years, months, and days?',
+        answer: 'The calculator accounts for leap years (including February 29th) and the exact number of days in each calendar month (28, 29, 30, or 31). Rather than assuming a constant 30-day month or 365.25-day year, it borrows exact days from the preceding calendar month when calculating day differences, ensuring 100% mathematical precision.'
       },
       {
-        question: 'Can I calculate my age on a specific future or past date?',
-        answer: 'Yes! You can change the "Calculate Age at" field to any date in the past or future to see what your age was or will be at that time.'
+        question: 'How do I calculate my age on a specific cut-off date for government exams (UPSC, SSC, Banking)?',
+        answer: 'To check eligibility for exams like UPSC Civil Services, SSC CGL, IBPS PO, NDA, CDS, or State PSCs, set the "Calculate Age On Date" field to the official cut-off date specified in the exam notification (e.g. "1st August 2026" or "1st January 2026"). The tool will instantly display your exact age on that date down to years, months, and days.'
+      },
+      {
+        question: 'How does the Age Difference and Double-Age (2x) Milestone work?',
+        answer: 'The Age Difference mode compares two birth dates down to exact years, months, and days. The double-age milestone calculates the exact historical or future date when the older person is or was precisely twice as old as the younger person (calculated as the younger person\'s birth date plus the exact difference between the two birth dates).'
+      },
+      {
+        question: 'How does the calculator handle leap years and February 29th birthdays?',
+        answer: 'Our mathematical algorithm accounts for standard 4-year leap rules and 400-year century exceptions. For individuals born on February 29th (leap day), the tool calculates their chronological age based on elapsed calendar days, with next birthday anniversaries landing on March 1st in non-leap years and February 29th in leap years.'
+      },
+      {
+        question: 'What is the difference between Chronological Age and Biological Age?',
+        answer: 'Chronological age is the exact calendar duration that has elapsed from your birth date to the present moment. Biological (or physiological) age refers to how old your cells, tissues, and organs are based on lifestyle, cardiovascular health, epigenetics, and biological wear-and-tear.'
+      },
+      {
+        question: 'How does the calculator determine my Vedic Solar Rashi and Ruling Planet?',
+        answer: 'The calculator uses the Nirayana Sidereal Zodiac system traditional to Indian Vedic Jyotish. Unlike the Western tropical system (which is fixed to the equinoxes), the Vedic system accounts for the astronomical precession of the Earth\'s axis (Ayanamsha, ~24° shift), determining your true celestial solar sign, ruling Graha lord, element, and auspicious gemstone.'
+      },
+      {
+        question: 'What are Moolank and Bhagyank in Vedic Numerology and how are they calculated?',
+        answer: 'In Vedic Numerology (Sankhya Shastra), Moolank (Root / Soul Number) is calculated by reducing your birth day to a single digit (e.g., born on the 28th = 2 + 8 = 10 = 1 + 0 = 1, ruled by the Sun). It represents your inborn psychology and instinctive temperament. Bhagyank (Destiny Number) is calculated by summing your full birth date (Day + Month + Year) to a single digit (1-9), representing your life path and karmic destiny.'
+      },
+      {
+        question: 'What are Planetary Ages and how are they calculated?',
+        answer: 'Planetary age calculates your age based on each planet\'s orbital period around the Sun. For instance, Mercury completes an orbit in ~87.97 Earth days (making you older in Mercury years), while Mars takes ~686.98 Earth days and Jupiter takes ~4,332.59 Earth days (11.86 Earth years). The tool computes your fractional age and remaining Earth days until your next planetary birthday.'
+      },
+      {
+        question: 'What is a Half-Birthday and how is it determined?',
+        answer: 'A half-birthday occurs exactly 6 calendar months after your actual date of birth. It is often celebrated for infants (6-month milestones), school children with summer birthdays, and milestone tracking.'
+      },
+      {
+        question: 'How are total days, hours, and seconds alive calculated?',
+        answer: 'The calculator computes the exact millisecond delta between your birth timestamp (including optional birth time) and the target timestamp: Total Days = Difference in ms / (1000 × 60 × 60 × 24); Total Hours = Difference in ms / (1000 × 60 × 60); Total Seconds = Difference in ms / 1000.'
+      },
+      {
+        question: 'Is my birth date and personal data saved or sent to any server?',
+        answer: 'No. All calculations are executed 100% locally in your web browser using client-side JavaScript. None of your inputs, dates, names, or personal details are ever uploaded, tracked, or stored on any server, guaranteeing complete privacy.'
       }
     ],
     sections: [
       {
-        title: 'Why Calculate Exact Age?',
-        content: 'An age calculator is essential for several standard scenarios:\n- **Eligibility Verification**: Checking if you meet the exact age requirements for state examinations, government job forms, or school admissions.\n- **Insurance Policies**: Premium rates for health or term insurance are calculated based on your exact age in years and months.\n- **Legal Milestones**: Determining dates for retirement, voter registration, or pension eligibility.'
+        title: 'The Mathematics of Exact Chronological Age: Month-Borrowing & Calendar Drift',
+        content: 'Calculating chronological age with mathematical precision is more complex than simple subtraction due to two fundamental calendar realities:\n1. **Variable Month Lengths**: Calendar months contain 28, 29, 30, or 31 days. When subtracting the birth day from the target calculation day, if the target day is smaller, days must be borrowed from the preceding calendar month using that specific month\'s exact length rather than an arbitrary 30-day average.\n2. **Leap Years & Gregorian Rules**: Every 4 years (except centuries not divisible by 400), February contains 29 days. Chronological age algorithms must accurately traverse leap years without accumulating fractional day drift.\n\nOur computational engine handles all edge cases, including end-of-month births (e.g. January 31st to February 28th), leap-year birthdays (February 29th), and time-zone boundaries with zero mathematical error.'
       },
       {
-        title: 'How Age is Computed Mathematically',
-        content: 'Calculating age seems simple but is complex due to:\n1. **Varying Month Lengths**: Calendar months contain 28, 29, 30, or 31 days.\n2. **Leap Years**: Adding a day in February every 4 years (29 days).\n\nOur system determines full elapsed calendar years first, followed by remaining complete months, and converts fractional weeks and remaining days precisely.'
+        title: 'Government Exam & Academic Admission Cut-Off Age Rules in India',
+        content: 'Exact chronological age verification is a mandatory statutory requirement across major Indian competitive exams and administrative bodies:\n- **UPSC Civil Services (IAS/IPS/IFS)**: Minimum 21 years and maximum 32 years for General category, measured strictly as on **1st August** of the examination year.\n- **SSC CGL & CHSL**: Age criteria ranging from 18–27, 18–30, or 20–30 years, typically benchmarked against **1st January** or **1st August** cut-off dates.\n- **Banking (IBPS PO/Clerk, SBI PO)**: Age brackets (20–28 or 20–30 years) benchmarked to the notification month.\n- **Defence (NDA, CDS, AFCAT)**: Strict age windows calculated down to the exact day of birth without relaxation.\n- **School Admissions (RTE & State Norms)**: Pre-school, LKG, and Class 1 admissions enforce strict minimum ages (e.g., Class 1 minimum age of 6 years completed as of 31st March or 1st June).\n\nUse our "Calculate Age On Date" feature to verify eligibility against any official cut-off date with total confidence.'
+      },
+      {
+        title: 'Step-by-Step Mathematical Formulas for Chronological Time Units',
+        content: 'Given birth timestamp Tb and target timestamp Tt with difference Δt in milliseconds:\n- **Total Days**: `Floor(Δt / 86,400,000)`\n- **Total Weeks**: `Floor(Total Days / 7)`\n- **Total Months**: `(Years × 12) + Months`\n- **Total Hours**: `Floor(Δt / 3,600,000)`\n- **Total Minutes**: `Floor(Δt / 60,000)`\n- **Total Seconds**: `Floor(Δt / 1,000)`\n- **Next Birthday Countdown**: `Target Next Birthday - Current Timestamp`'
+      },
+      {
+        title: 'The Science of Age Gaps & The 2x Double-Age Milestone',
+        content: 'When comparing two individuals born at dates T0 (older) and T1 (younger), the age difference is constant: `D = T1 - T0`.\nAs time progresses, the relative ratio of their ages changes continuously. The **Double-Age (2x) Milestone** is the unique point in history when the older person is exactly twice as old as the younger person.\n- **Formula**: When the younger person reaches age `A`, the older person is age `A + D`. For the older person to be twice as old: `A + D = 2A` ⟹ `A = D`.\n- **Conclusion**: The double-age point occurs on the exact date `T1 + D` (the younger person\'s birth date plus the age difference). If that date is in the past, the milestone has already passed; if in the future, it marks an exciting upcoming life event.'
+      },
+      {
+        title: 'Vedic Jyotish vs. Western Tropical Astrology: Nirayana Sidereal System Explained',
+        content: 'Traditional Indian Vedic astrology (Jyotish Shastra) is based on the **Nirayana (Sidereal)** zodiac system, which calculates planetary positions relative to the observable, fixed cosmic constellations (Nakshatras). In contrast, Western astrology utilizes the **Sayana (Tropical)** system, which locks 0° Aries to the vernal equinox.\nDue to the **Precession of the Equinoxes (Ayanamsha)**, the tropical and sidereal systems drift by approximately 1 degree every 72 years (currently ~24° difference using the standard Lahiri Ayanamsha). As a result, your Vedic Sun Sign (Rashi) typically falls approximately 23 to 24 days earlier than your Western tropical zodiac sign.'
+      },
+      {
+        title: 'Vedic Numerology (Sankhya Shastra): Moolank (Root) & Bhagyank (Destiny) Mechanics',
+        content: 'Vedic Numerology categorizes cosmic vibrational numbers into two primary pillars:\n1. **Moolank (Root / Soul Number)**: The single-digit sum of your birth date (1 to 31). It reveals innate temperament, subconscious desires, mental strengths, and behavioral instincts.\n   - *Planetary Rulerships*: 1 (Surya/Sun), 2 (Chandra/Moon), 3 (Brihaspati/Jupiter), 4 (Rahu), 5 (Budh/Mercury), 6 (Shukra/Venus), 7 (Ketu), 8 (Shani/Saturn), 9 (Mangal/Mars).\n2. **Bhagyank (Destiny / Life Path Number)**: The single-digit sum of your entire date of birth (Day + Month + Year). It represents your life purpose, karmic opportunities, career culmination, and outer worldly success.'
+      },
+      {
+        title: 'Planetary Mechanics: How Orbital Periods Define Your Age in the Solar System',
+        content: 'A "year" is scientifically defined as the time taken for a celestial body to complete one full revolution around the Sun. Because orbital distances vary, your chronological age changes dramatically across the solar system:\n- **Mercury**: Orbital period of 87.97 Earth days (you age ~4.15× faster in Mercury years).\n- **Venus**: Orbital period of 224.7 Earth days (you age ~1.62× faster in Venus years).\n- **Mars**: Orbital period of 686.98 Earth days (a Mars year is ~1.88 Earth years).\n- **Jupiter**: Orbital period of 4,332.59 Earth days (~11.86 Earth years).\n- **Saturn**: Orbital period of 10,759.22 Earth days (~29.45 Earth years).\n- **Uranus**: Orbital period of 30,685.4 Earth days (~84.02 Earth years).\n- **Neptune**: Orbital period of 60,189.0 Earth days (~164.8 Earth years).'
+      },
+      {
+        title: 'Life Milestones: 10,000 Days on Earth, 1 Billion Seconds, and Jubilee Celebrations',
+        content: 'Life is rich with unique chronological markers beyond standard annual birthdays:\n- **1,000 Days**: Reached at approximately 2 years and 9 months of age.\n- **5,000 Days**: Reached at approximately 13 years and 8 months.\n- **10,000 Days**: Reached at approximately 27 years and 4 months (a major milestone of early adulthood).\n- **1 Billion Seconds Alive**: Reached at 31 years, 251 days, 7 hours, 46 minutes, and 40 seconds.\n- **20,000 Days**: Reached at approximately 54 years and 9 months.\n- **Silver Jubilee (25 Years), Golden Jubilee (50 Years), Diamond (60 Years), and Centenarian (100 Years)** celebrations.'
       }
     ]
   },
@@ -4673,6 +4763,7 @@ export const toolsList: Tool[] = [
     name: 'Excel to PDF',
     category: 'pdf',
     shortDescription: 'Convert Microsoft Excel (.xlsx, .xls, .csv) workbooks to formatted PDF tables client-side.',
+    metaTitle: 'Excel to PDF Converter Online Free – XLSX & CSV to PDF Tables',
     metaDescription: 'Free online Excel to PDF converter. Convert XLSX, XLS, and CSV sheets into executive-ready PDF tables directly in your browser. Private, secure, and 100% client-side.',
     keywords: [
       'Convert Excel to PDF',
@@ -4684,14 +4775,16 @@ export const toolsList: Tool[] = [
       'XLS to PDF free',
       'CSV to PDF table maker',
       'Private spreadsheet to PDF converter',
-      'Financial model to PDF report'
+      'Financial model to PDF report',
+      'Excel to PDF high quality',
+      'Spreadsheet to printable PDF'
     ],
     icon: 'Table',
     howToUse: [
       'Upload a `.xlsx`, `.xls`, `.csv`, or `.ods` spreadsheet file, or click "Try Financial Model Sample" for an instant demo.',
       'Inspect your workbook sheets in the interactive grid viewer and filter rows or review table structure.',
       'Choose your conversion scope (All Worksheets, Active Sheet Only, or Custom Selection).',
-      'Customize page layout (A4, Letter, A3), orientation (Landscape / Portrait), color theme (Executive Navy, Financial Emerald, Tech Indigo, Monochrome), and gridline styles.',
+      'Customize page layout (A4, Letter, A3), orientation (Landscape / Portrait), color theme (Executive Navy, Financial Emerald, Tech Indigo, Monochrome, Warm Amber), and gridline styles.',
       'Toggle repeating headers, page numbers ("Page X of Y"), and optional custom document titles or confidentiality notes.',
       'Click "Generate & Preview PDF" to compile your document in-browser and download instantly.'
     ],
@@ -6046,25 +6139,108 @@ export const toolsList: Tool[] = [
     slug: 'barcode-generator',
     name: 'Barcode Generator',
     category: 'business',
-    shortDescription: 'Generate standard Code39 barcode labels online and export as PNG files.',
-    metaDescription: 'Free online Barcode Generator. Convert alphanumeric strings into high-resolution Code39 barcodes and download them instantly.',
-    keywords: ['Barcode Generator', 'create Code39 barcode', 'barcode maker online', 'download barcode PNG', 'sku bar code generator'],
+    shortDescription: 'Generate custom high-resolution Code 128, Code 39, GS1 EAN-13, UPC-A, ITF-14, and QR barcodes. Export as PNG, SVG, JPEG, or print A4 sticker label sheets.',
+    metaTitle: 'Free Barcode Generator Online – Code 128, EAN-13, UPC, Code 39 & Label Maker',
+    metaDescription: 'Free online Barcode Generator & Label Maker. Create GS1 EAN-13, Code 128, UPC-A, Code 39, ITF-14, and QR barcodes. Customize bar colors, heights, headers & prices. Download vector SVG, PNG, or print Avery A4 / thermal sheets.',
+    keywords: [
+      'Barcode Generator',
+      'Free Barcode Generator Online',
+      'Code 128 Barcode Generator',
+      'EAN 13 Barcode Generator India',
+      'Code 39 Barcode Maker',
+      'UPC Barcode Generator',
+      'Bulk Barcode Generator',
+      'Printable Barcode Label Sheet Maker',
+      'GS1 Barcode Generator',
+      'Thermal Shipping Barcode 4x6',
+      'ITF 14 Carton Barcode',
+      'Download Barcode PNG SVG',
+      'SKU Barcode Generator',
+      'Retail POS Barcode Generator'
+    ],
     icon: 'Barcode',
     howToUse: [
-      'Input alphanumeric characters representing SKU or product IDs.',
-      'Verify barcode scan bars render correctly.',
-      'Click Download PNG Barcode to save.'
+      'Choose your desired barcode symbology: Code 128, Code 39, GS1 EAN-13, UPC-A, ITF-14, or QR Code.',
+      'Enter your product SKU, serial number, or alphanumeric barcode data into the input field.',
+      'Optionally click Auto-Calculate Checksum for EAN-13, UPC-A, and ITF-14 standard numbers.',
+      'Customize bar height, bar width density, colors, quiet zones, product header, and retail MRP price footer.',
+      'Download your high-resolution barcode as 300 DPI PNG, vector SVG, or JPEG, or copy directly to clipboard.',
+      'Switch to Bulk Mode to batch generate up to 100 barcodes into a ZIP archive, or use Label Sheets to print standard A4 sticker layouts.'
     ],
     faqs: [
       {
-        question: 'What characters does Code39 support?',
-        answer: 'It supports uppercase letters (A-Z), numbers (0-9), spaces, and symbols: - . $ / + %'
+        question: 'What is the difference between Code 128 and Code 39?',
+        answer: 'Code 128 is a compact, modern high-density barcode that supports all 128 standard ASCII characters (numbers, uppercase/lowercase letters, and punctuation). Code 39 is an older industrial standard that only supports uppercase letters, digits, and a few symbols. For new projects, logistics, and warehousing, Code 128 is generally preferred due to its smaller physical footprint and higher scanning reliability.'
+      },
+      {
+        question: 'What barcode format is used for retail products in India and worldwide?',
+        answer: 'The international retail standard is EAN-13 (International Article Number). In India, official GS1-registered barcodes start with the 890 country prefix. For North America (US and Canada), the standard 12-digit UPC-A (Universal Product Code) is used. Both can be read by all standard modern retail point-of-sale (POS) barcode scanners.'
+      },
+      {
+        question: 'How is the check digit calculated for EAN-13 and UPC-A barcodes?',
+        answer: 'EAN-13 uses a Modulo-10 checksum algorithm. The first 12 digits are multiplied alternatively by 1 and 3, summed together, and the check digit is the number required to round up to the nearest multiple of 10. Our tool features an Auto-Calculate Checksum button that calculates and appends this digit automatically.'
+      },
+      {
+        question: 'Can I generate barcodes in bulk from a list or CSV file?',
+        answer: 'Yes. Switch to the "Bulk / Batch Generator" tab, paste your list of SKUs or upload a CSV/TXT file. The tool will render all barcodes concurrently and allow you to download all files bundled inside a single ZIP archive or export a multi-page printable PDF sheet.'
+      },
+      {
+        question: 'What barcode format is required for Amazon FBA & FNSKU labels?',
+        answer: 'Amazon FBA FNSKU (Fulfillment Network Stock Keeping Unit) barcode labels typically use standard Code 128 encoding. You can input your Amazon FNSKU code (e.g. X00...) into our Code 128 generator and print it directly onto standard 24-up or 30-up A4 address label sheets.'
+      },
+      {
+        question: 'What is a barcode quiet zone, and why is it critical?',
+        answer: 'The quiet zone is the clear, unprinted margin on the left and right sides of a barcode. Optical laser and CCD scanners require this empty margin (typically at least 10 times the width of the narrowest bar) to establish the start and stop boundaries of the code. Without sufficient quiet zones, scanners will fail to decode the barcode.'
+      },
+      {
+        question: 'Can I print barcode labels on standard A4 sticker paper or thermal printers?',
+        answer: 'Yes. Open the "Printable Label Sheets" tab to format your barcodes for standard A4 sticker sheets (24 labels, 14 labels, or 65 labels per page), 4" x 6" thermal shipping labels, or 2" x 1" product barcode roll stickers. You can print directly through your browser.'
+      },
+      {
+        question: 'Can I download barcodes in vector SVG format for graphic design & packaging?',
+        answer: 'Yes. You can export clean, lossless vector SVG files that can be imported directly into packaging design software such as Adobe Illustrator, CorelDRAW, InDesign, or Figma without any pixelation or loss of edge sharpness.'
+      },
+      {
+        question: 'What is an ITF-14 barcode and when should it be used?',
+        answer: 'ITF-14 (Interleaved 2 of 5, 14 digits) is the global GS1 standard for master shipping cartons and outer corrugated boxes. Its thick bars and bearer bars make it easily readable through shrink wrap and rough cardboard packaging from a distance.'
+      },
+      {
+        question: 'Is this barcode generator free and secure?',
+        answer: 'Yes. Toolique\'s Barcode Generator runs 100% on the client-side inside your web browser using HTML5 Canvas and SVG. No SKU numbers, proprietary product data, or barcodes are ever transmitted to or stored on our servers.'
       }
     ],
     sections: [
       {
-        title: 'Barcode Integration in Inventory',
-        content: 'Barcode labels streamline warehouses logging, product checkout speeds, and reduce manual entry errors.'
+        title: 'What is a Barcode and How Does It Work?',
+        content: 'A barcode is a machine-readable optical representation of data. 1D (linear) barcodes represent alphanumeric characters through varying widths of parallel dark bars and light spaces. When an optical scanner or camera illuminates the barcode, a photodiode sensor measures the reflected light intensity, translating the pattern into electrical signals that decode the original numeric or character sequence into inventory software or POS registers.'
+      },
+      {
+        title: 'Comparison of Major 1D & 2D Barcode Symbologies',
+        content: 'Different industries rely on specialized barcode standards:\n- **Code 128**: Universal alphanumeric standard for logistics, shipping containers, and Amazon FNSKUs.\n- **Code 39**: Classic industrial and military barcode supporting uppercase letters, numbers, and basic symbols.\n- **EAN-13**: 13-digit GS1 standard for consumer retail products worldwide (prefix 890 for India).\n- **UPC-A**: 12-digit standard retail barcode used throughout North America.\n- **ITF-14**: 14-digit heavy-duty code printed on outer corrugated master cartons.\n- **QR Code**: 2D matrix symbology capable of storing URLs, contact details, payment links, and up to 7,089 characters.'
+      },
+      {
+        title: 'GS1 India & Retail Product Barcode Architecture',
+        content: 'GS1 is the international non-profit organization that manages global supply chain standards. In India, retail barcodes adhere to the EAN-13 architecture consisting of:\n1. **Country Prefix (3 Digits)**: 890 designates GS1 India.\n2. **Company Prefix (4 to 6 Digits)**: Unique identifier assigned to the brand or manufacturer.\n3. **Item Reference (3 to 5 Digits)**: Allocated by the manufacturer to identify individual product SKUs.\n4. **Check Digit (1 Digit)**: Calculated automatically using the Modulo-10 checksum formula to detect scan errors.'
+      },
+      {
+        title: 'How to Calculate the Modulo-10 Checksum Digit',
+        content: 'For an EAN-13 barcode with 12 initial digits d1 through d12:\n1. Multiply all odd-positioned digits (1st, 3rd, 5th, etc.) by 1.\n2. Multiply all even-positioned digits (2nd, 4th, 6th, etc.) by 3.\n3. Add all products together to find the Total Sum.\n4. Calculate the remainder when dividing the sum by 10 (Sum mod 10).\n5. If the remainder is 0, the check digit is 0. Otherwise, subtract the remainder from 10.\n\n*Example:* For 890103098765, the sum is 126. 126 mod 10 = 6. 10 - 6 = 4. The complete 13-digit EAN is **8901030987654**.'
+      },
+      {
+        title: 'Barcode Label Design: Quiet Zones, Contrast & Resolution',
+        content: 'To guarantee 100% first-pass scan success rates across retail checkout scanners and handheld warehouse guns:\n- **Quiet Zone Margin**: Maintain a blank margin of at least 10 times the width of a single narrow bar on both left and right ends.\n- **Color Contrast**: Always use high-contrast combinations. High-contrast dark black bars on a pure white or off-white background provide the highest optical reflectivity delta.\n- **Avoid Warm Bar Colors**: Barcode lasers emit red light (~650 nm). Never use red, orange, or yellow lines, as the red laser cannot distinguish warm inks from a white background.\n- **Bar Height**: Maintain adequate vertical height (at least 15% of the total barcode length) to allow omnidirectional and cross-swiping laser beams to cross the bars.'
+      },
+      {
+        title: 'Thermal Printing vs Laser Printing for Barcode Stickers',
+        content: 'When printing production barcode stickers:\n- **Direct Thermal Printers (203 / 300 DPI)**: Ideal for short-term shipping labels, logistics tags, and courier airbills. Heat-sensitive paper eliminates ink ribbons.\n- **Thermal Transfer Printers**: Uses resin or wax ribbons for durable, fade-resistant retail packaging stickers and chemical-resistant asset labels.\n- **Laser / Inkjet Printers on A4 Sticker Sheets**: Cost-effective for small batch runs, inventory cataloging, and office labeling using pre-cut 24-up or 65-up A4 adhesive label sheets.'
+      },
+      {
+        title: 'Batch Barcode Generation for E-commerce & Warehousing',
+        content: 'Modern e-commerce brands on Amazon, Flipkart, Shopify, and quick-commerce platforms (Blinkit, Zepto, Instamart) manage hundreds of product SKUs across size and color variants. Our Batch Generator enables warehouse managers and entrepreneurs to upload a CSV inventory manifest and generate high-resolution PNG barcode images in seconds, ready for automated cataloging and packaging production.'
+      },
+      {
+        title: 'Troubleshooting Unscannable Barcodes',
+        content: 'If your barcode scanner fails to read a printed label, verify the following common causes:\n1. **Insufficient Quiet Zone**: Ensure the barcode is not cropped too close to the edge of the label.\n2. **Low DPI / Pixelation**: Avoid scaling up low-resolution raster images. Use vector SVG or 300 DPI PNG exports.\n3. **Print Head Smudging**: Check thermal print heads for dust or burnt elements creating voids in the black bars.\n4. **Incorrect Aspect Ratio**: Ensure the barcode width and height were not disproportionately stretched in graphic editors.'
       }
     ]
   },
