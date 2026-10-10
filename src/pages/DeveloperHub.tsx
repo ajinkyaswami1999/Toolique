@@ -38,9 +38,10 @@ export default function DeveloperHub() {
     // API & Auth & Network
     'whats-my-ip', 'api-tester', 'jwt-decoder', 'url-encoder-decoder', 'base64-encoder-decoder', 
     'timestamp-converter',
-    // Security & Identifiers
+    // Security, Hardware & Identifiers
     'hash-generator', 'uuid-generator', 'password-generator', 'regex-tester', 
     'advanced-data-cleaner-quality-analyzer', 'lorem-ipsum-generator', 'upi-qr-generator',
+    'biometric-device-tester',
     // Web & SEO Engineering
     'website-crawler', 'website-seo-audit', 'robots-txt-generator', 'sitemap-generator', 
     'canonical-url-generator', 'meta-tag-generator', 'open-graph-preview', 

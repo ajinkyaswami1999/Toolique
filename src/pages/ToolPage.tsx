@@ -54,6 +54,7 @@ const ApiTester = lazy(() => import('../tools/ApiTester'));
 const AdvancedDataCleaner = lazy(() => import('../tools/AdvancedDataCleaner'));
 const WebsiteCrawler = lazy(() => import('../tools/WebsiteCrawler'));
 const WhatsMyIP = lazy(() => import('../tools/WhatsMyIP'));
+const BiometricDeviceTester = lazy(() => import('../tools/BiometricDeviceTester'));
 
 // Phase 3 - Civil Engineering (9 tools)
 const ConstructionCostCalculator = lazy(() => import('../tools/ConstructionCostCalculator'));
@@ -380,6 +381,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   MileageCalculator,
   CarDepreciationCalculator,
   PasswordGenerator,
+  BiometricDeviceTester,
   GPACalculator,
 
   // New Business Tools Registration

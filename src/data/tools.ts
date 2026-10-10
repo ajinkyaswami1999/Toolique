@@ -14890,5 +14890,95 @@ export const toolsList: Tool[] = [
                   "content": "Over multi-decade investment horizons, small differences in real returns produce monumental divergences in purchasing power. Compounding $100,000 at a +3% real return over 30 years expands real wealth to $242,726 (a 2.4x expansion in living standards). Conversely, leaving capital in low-yield cash earning a -2% real return reduces real purchasing power to $54,548\u2014a 45% loss of lifetime purchasing power. To insulate portfolios against real yield erosion, institutional allocators utilize Treasury Inflation-Protected Securities (TIPS), index-linked sovereign bonds, equities with pricing power, and real estate assets."
             }
       ]
+},
+{
+    id: 'BiometricDeviceTester',
+    slug: 'biometric-device-tester',
+    name: 'Biometric Device Tester & UIDAI RD Service Diagnostics (L0 & L1)',
+    category: 'developer',
+    shortDescription: 'Test Aadhaar biometric fingerprint and iris scanners (Mantra, Morpho, Startek, SecuGen, Precision), verify RD Service loopback connectivity on Windows 10/11, test capture in Production & Pre-Production (P/PP), and troubleshoot UIDAI errors.',
+    metaTitle: 'Biometric Device Tester & UIDAI RD Service Diagnostics | Toolique',
+    metaDescription: 'Test Aadhaar biometric devices (Mantra, Morpho, Startek, SecuGen, Precision) and RD Service on Windows 10/11. Run diagnostics for loopback ports 11100–11105, USB detection, P/PP environment capture, and fix Error 1140 & 720.',
+    keywords: [
+      'Biometric device tester',
+      'RD Service test online',
+      'Mantra MFS110 L1 tester',
+      'Morpho MSO 1300 E3 RD service',
+      'Startek FM220U RD service test',
+      'SecuGen Hamster Pro 20 RD service',
+      'Precision PB510 L1 tester',
+      'UIDAI L1 biometric device test',
+      'Aadhaar biometric tester',
+      'RD service port 11100 test',
+      'UIDAI env P vs PP capture test',
+      'Error 1140 device not attached',
+      'Error 720 not registered in management server',
+      'AePS biometric scanner test',
+      'Iris scanner RD service test'
+    ],
+    icon: 'Fingerprint',
+    howToUse: [
+      'Select your biometric hardware manufacturer (Mantra, Morpho, Startek, SecuGen, Precision) and specific device model.',
+      'Select your UIDAI Environment: Production ("P") for live auth or Pre-Production ("PP") for sandbox staging.',
+      'Choose between "Mock Simulator" for sandbox testing or "Live Loopback Probe" to test your local Windows machine.',
+      'Click "Run Full Diagnostics" or "Trigger Biometric Capture" to test RD Service connectivity, USB detection, and sensor response.',
+      'Review real-time Pass, Fail, Inconclusive, and Skipped badges, and inspect protocol XML telemetry or troubleshooting steps.'
+    ],
+    faqs: [
+      {
+        question: 'What is the difference between UIDAI L0 and L1 biometric devices?',
+        answer: 'Level 0 (L0) devices sign biometric data at the software/driver layer, making them vulnerable to software tampering or replay attacks. Level 1 (L1) devices like the Mantra MFS110 L1 sign the biometric sample using hardware cryptographic keys inside a trusted execution environment (TEE/Secure Boot) embedded directly on the physical scanner before transmitting data to the PC.'
+      },
+      {
+        question: 'Which loopback ports does Mantra RD Service use on Windows 10 and 11?',
+        answer: 'Mantra RD Service binds to local loopback ports between 11100 and 11105 on IP 127.0.0.1. By default, it prioritizes port 11100. If port 11100 is occupied by another service, it incrementally tries 11101, 11102, up to 11105.'
+      },
+      {
+        question: 'How do I resolve Mantra Error 1140 ("Device not attached")?',
+        answer: 'Error 1140 occurs when the RD Service daemon is running but cannot detect the physical MFS110 USB device. To resolve it: (1) Connect the scanner to a direct rear motherboard USB 2.0 or 3.0 port rather than an unpowered USB hub, (2) Disable Windows USB Selective Suspend in Power Options, (3) Check Device Manager to ensure the device shows up under USB devices without an exclamation mark, and (4) Restart the Mantra RD Service in services.msc.'
+      },
+      {
+        question: 'What causes Mantra Error 720 ("Device not registered in management server")?',
+        answer: 'Error 720 indicates that the MFS110 L1 hardware serial number has not completed online key exchange with Mantra\'s cloud Management Server. Every UIDAI L1 device must synchronize its cryptographic certificate with the manufacturer. Ensure your PC has active internet access, unplug the USB cable, wait 5 seconds, and plug it back in so the daemon can automatically complete online registration.'
+      },
+      {
+        question: 'Why does Google Chrome or Microsoft Edge block localhost RD Service requests?',
+        answer: 'Modern web browsers enforce Private Network Access (PNA) and Mixed-Content policies, which restrict unencrypted HTTP requests from HTTPS websites to 127.0.0.1. To allow testing, open chrome://flags/#allow-insecure-localhost (or edge://flags/#allow-insecure-localhost), enable the flag, and restart the browser, or ensure you are running the latest SSL-enabled Mantra RD Service package.'
+      },
+      {
+        question: 'Does Toolique collect or upload my fingerprint data?',
+        answer: 'Never. Toolique is architected on a zero-retention, client-side first foundation. We do not capture, record, save, or transmit fingerprint templates, ISO minutiae (FMR/FIR), PID blocks, or personal identity numbers. The capture section is locked, and all diagnostics run purely inside your local browser memory.'
+      },
+      {
+        question: 'How do I restart the Mantra RD Service daemon in Windows?',
+        answer: 'Press Win + R on your Windows keyboard, type services.msc, and press Enter. Locate "Mantra AVDM" or "Mantra MFS110 RD Service" in the services list, right-click it, and select "Restart". Alternatively, open PowerShell as Administrator and run: Get-Service *Mantra* | Restart-Service.'
+      }
+    ],
+    sections: [
+      {
+        title: 'Architecture of the UIDAI Registered Device (RD) Service Ecosystem',
+        content: 'The Unique Identification Authority of India (UIDAI) mandated the Registered Device (RD) Service architecture to replace public device models. Under this model, biometric hardware vendors develop a local daemon service (AVDM - Authentication Vendor Device Module) that abstracts the physical scanner. Web applications and banking portals (AePS, eKYC, Jeevan Pramaan) never directly access raw biometric hardware or raw images; instead, they communicate over HTTP/HTTPS loopback sockets with the vendor RD Service, which encrypts biometric samples into standard PID (Personal Identity Data) blocks using UIDAI 2048-bit public keys.'
+      },
+      {
+        title: 'UIDAI L1 Security Architecture: Hardware Key Signing vs L0 Legacy Software',
+        content: 'UIDAI circulars mandated the phase-out of Level 0 (L0) devices in favor of Level 1 (L1) devices such as the Mantra MFS110 L1. While L0 devices performed encryption and digital signing within software drivers running on the host Windows machine, L1 devices feature dedicated secure microcontrollers with hardware-enforced Secure Boot and tamper-proof cryptographic enclaves. The biometric capture, quality evaluation, and asymmetric key signing take place entirely on the MFS110 sensor hardware before the encrypted payload ever touches the host operating system, preventing man-in-the-middle and replay exploits.'
+      },
+      {
+        title: 'Localhost Loopback Network Flow & Port Allocation (11100–11105)',
+        content: 'The RD Service specification establishes that vendor daemons must listen on local loopback sockets (127.0.0.1) across port range 11100 to 11105. When an authentication web application loads, it performs discovery by scanning each port sequentially with an HTTP RDSERVICE verb. Once an active daemon responds, the client queries /rd/info to inspect device registration (dpId, rdsId, mi, mc) before triggering an encrypted /rd/capture request. Firewalls, corporate VPNs, and conflicting port bindings must allow local loopback traffic on these dedicated ports.'
+      },
+      {
+        title: 'Browser Security Constraints: Private Network Access (PNA) & Mixed Content',
+        content: 'Modern web browsers (Google Chrome 120+, Microsoft Edge, Mozilla Firefox) enforce strict security boundaries between public internet origins and private/loopback IP addresses (127.0.0.1). When an HTTPS web page attempts to fetch http://127.0.0.1:11100, the browser blocks the connection unless Private Network Access (PNA) preflight headers (Access-Control-Allow-Private-Network) and CORS headers are returned by the vendor daemon, or the user configures the localhost insecure flag in chrome://flags/#allow-insecure-localhost.'
+      },
+      {
+        title: 'Windows 10/11 Driver & USB Host Controller Troubleshooting',
+        content: 'Biometric optical sensors require consistent 5V/500mA USB bus power. On Windows 10 and Windows 11, aggressive power-saving policies such as USB Selective Suspend often power down the MFS110 platen LED, leading to intermittent disconnects and Error 1140. Technicians should ensure the device is plugged directly into a high-speed motherboard USB port, verify driver installation in Device Manager under Universal Serial Bus devices, and confirm that the background service Mantra AVDM is set to Automatic startup in services.msc.'
+      },
+      {
+        title: 'Privacy and Zero-Retention Architecture: Protecting Citizen Biometric Data',
+        content: 'In strict alignment with the Digital Personal Data Protection (DPDP) Act 2023 and UIDAI Information Security Regulations, Toolique does not capture, store, log, or forward biometric information. The Biometric Device Tester is strictly designed for hardware health checks, driver verification, port reachability audits, and technician troubleshooting. Biometric capture is intentionally locked in this stage to guarantee complete user privacy and compliance.'
+      }
+    ]
 }
 ];
