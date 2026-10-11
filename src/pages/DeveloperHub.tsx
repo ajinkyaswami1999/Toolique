@@ -13,7 +13,8 @@ import {
   Lock,
   Terminal,
   Database,
-  GraduationCap
+  GraduationCap,
+  Fingerprint
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { workflows } from '../data/workflows';
@@ -63,6 +64,10 @@ export default function DeveloperHub() {
     'whats-my-ip', 'api-tester', 'jwt-decoder', 'url-encoder-decoder', 'base64-encoder-decoder', 'timestamp-converter'
   ].includes(t.slug));
 
+  const groupBiometrics = developerTools.filter(t => [
+    'biometric-device-tester'
+  ].includes(t.slug));
+
   const groupSecurityText = developerTools.filter(t => [
     'regex-tester', 'uuid-generator', 'hash-generator', 'password-generator', 
     'advanced-data-cleaner-quality-analyzer', 'lorem-ipsum-generator', 'upi-qr-generator'
@@ -81,6 +86,7 @@ export default function DeveloperHub() {
   const categoriesData = [
     { id: 'formatters', name: 'Code & Data Formatters', description: 'Prettify, validate, and minify SQL, JSON, XML, YAML, HTML, CSS, and JS', tools: groupFormatters, icon: Code },
     { id: 'api-auth', name: 'API, Network & Authentication', description: 'Test REST endpoints, inspect JWT tokens, encode Base64, and convert Epoch timestamps', tools: groupApiAuth, icon: Terminal },
+    { id: 'biometrics', name: 'Biometric & Hardware Diagnostics', description: 'UIDAI Aadhaar RD Service diagnostics, loopback ports 11100–11105 tester, L0/L1 attestation, and fingerprint/iris capture sandbox', tools: groupBiometrics, icon: Fingerprint },
     { id: 'security-text', name: 'Security, Hashes & Regex', description: 'Test regex expressions, generate UUIDs, compute SHA/MD5 hashes, and clean data', tools: groupSecurityText, icon: Lock },
     { id: 'web-seo', name: 'Web Performance & Technical SEO', description: 'Crawl websites, audit meta tags, generate robots.txt directives, and build XML sitemaps', tools: groupWebSeo, icon: Globe },
     { id: 'automation', name: 'Cron & Automation', description: 'Build cron schedule expressions with human-readable syntax explanations', tools: groupAutomation, icon: Database }
@@ -103,6 +109,10 @@ export default function DeveloperHub() {
     {
       question: 'Are my SQL queries, JSON payloads, or JWT tokens sent to a backend server?',
       answer: 'No. All developer tools in this suite execute 100% client-side inside your browser sandbox using Web Workers and local JavaScript engines. Your proprietary database schemas, authentication tokens, API secrets, and source code never leave your device.'
+    },
+    {
+      question: 'How does the Biometric Device Tester communicate with UIDAI RD Services?',
+      answer: 'The Biometric Device Tester communicates directly with local Registered Device (RD) services listening on loopback ports 11100–11105 using standard HTTP RDSERVICE, DEVICEINFO, and CAPTURE methods. All diagnostics and XML PID blocks execute client-side in your local browser environment with zero external telemetry.'
     },
     {
       question: 'Which SQL dialects are supported by the SQL Formatter?',
@@ -178,13 +188,13 @@ export default function DeveloperHub() {
             <span className="px-3 py-1 rounded-xl bg-pastel-indigo/30 text-indigo-800 dark:text-indigo-300 font-extrabold text-[10px] uppercase tracking-wider border border-pastel-indigo/50 shadow-2xs">
               Developer & Web Suite
             </span>
-            <span className="text-[10px] text-zinc-500 font-bold">34 Browser-Sandboxed Tools</span>
+            <span className="text-[10px] text-zinc-500 font-bold">{developerTools.length} Browser-Sandboxed Tools</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-zinc-905 dark:text-white tracking-tight leading-none">
             Developer Utilities Hub
           </h1>
           <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium">
-            Format SQL, beautify and validate JSON, decode JWTs, test regular expressions, inspect REST API endpoints, and audit technical SEO. 100% private, client-side computation with zero telemetry.
+            Format SQL, beautify and validate JSON, decode JWTs, test regular expressions, diagnose UIDAI biometric RD Services, inspect REST API endpoints, and audit technical SEO. 100% private, client-side computation with zero telemetry.
           </p>
         </div>
         <div className="p-5 rounded-3xl bg-pastel-indigo/30 text-indigo-700 dark:text-indigo-300 border border-pastel-indigo/60 dark:border-indigo-800/60 shrink-0 hidden sm:block shadow-2xs">
@@ -199,7 +209,7 @@ export default function DeveloperHub() {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search developer tools (e.g. SQL, JSON, JWT, Regex, API)..."
+          placeholder="Search developer tools (e.g. SQL, JSON, JWT, Biometric, Regex, API)..."
           className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-zinc-200/80 dark:border-zinc-850 bg-white/80 dark:bg-zinc-900/40 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-pastel-indigo/30 font-semibold placeholder-zinc-400 dark:placeholder-zinc-650 shadow-2xs"
         />
       </div>
@@ -308,7 +318,7 @@ export default function DeveloperHub() {
           <div className="p-12 text-center border border-dashed border-zinc-200 dark:border-zinc-800 rounded-3xl space-y-3">
             <Info className="w-8 h-8 text-zinc-300 dark:text-zinc-700 mx-auto" />
             <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white">No developer tools match your query</h3>
-            <p className="text-xs text-zinc-450 font-medium">Try searching for terms like "SQL", "JSON", "JWT", "Regex", or "API".</p>
+            <p className="text-xs text-zinc-450 font-medium">Try searching for terms like "SQL", "JSON", "JWT", "Biometric", "Regex", or "API".</p>
           </div>
         )}
       </div>

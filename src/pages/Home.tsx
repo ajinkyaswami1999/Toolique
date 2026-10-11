@@ -157,8 +157,8 @@ export default function Home() {
     { 
       id: 'developer', 
       title: 'Developer Utilities Hub', 
-      badge: '34 Tools',
-      desc: 'SQL formatting, JSON diffing/validation, JWT debugging, Regex testers, and Unix timestamp converters.', 
+      badge: '36 Tools',
+      desc: 'SQL formatting, JSON diffing/validation, biometric RD service testing, JWT debugging, and regex tools.', 
       link: '/developer', 
       icon: Code, 
       color: 'text-indigo-700 dark:text-indigo-300 bg-pastel-indigo/30 border-pastel-indigo/60 dark:bg-indigo-950/40 dark:border-indigo-800/60' 
