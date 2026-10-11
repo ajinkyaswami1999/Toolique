@@ -5183,29 +5183,66 @@ export const toolsList: Tool[] = [
     name: 'Password Generator',
     category: 'developer',
     shortDescription: 'Create secure, highly customizable random passwords with strength indicators.',
-    metaDescription: 'Free online Password Generator. Create strong random passwords. Choose length, configure character sets, and copy secure passwords locally.',
-    keywords: ['Password Generator', 'Create strong password', 'Random password maker', 'Secure key generator', 'Local password checker'],
+    metaDescription: 'Free online Password Generator. Create cryptographically secure random passwords (CSPRNG), memorable Diceware passphrases, and numeric PINs with Shannon entropy, brute-force crack time estimates, and 100% client-side privacy.',
+    keywords: [
+      'Password Generator',
+      'Create strong password',
+      'Random password maker',
+      'Secure key generator',
+      'Local password checker',
+      'CSPRNG password generator',
+      'Diceware passphrase generator',
+      'NIST SP 800-63B password',
+      'Password entropy calculator',
+      'Brute force crack time estimator',
+      'Indian banking password generator'
+    ],
     icon: 'Lock',
     howToUse: [
-      'Select your desired password length using the slider (8 to 64 characters).',
-      'Toggle character options (Uppercase, Lowercase, Numbers, Symbols).',
-      'Optionally exclude similar looking characters for readability.',
-      'Click the Copy button or click the Regenerate button to create new variations.'
+      'Select your generator mode: Random Characters, Memorable Passphrase (Diceware), Numeric PIN, Bulk Batch, or Audit & Strength Test.',
+      'Configure password parameters: length slider (4 to 128 chars), word count, character sets (Uppercase, Lowercase, Numbers, Symbols), and ambiguous character filters.',
+      'Apply instant security presets such as Indian Banking portal compliant, NIST SP 800-63B standard, 32-character maximum entropy, or Wi-Fi WPA3 pre-shared keys.',
+      'Inspect live Shannon entropy (bits), character distribution breakdown, and brute-force crack times across online throttling, desktop GPUs, and supercomputer clusters.',
+      'Click Copy, view recent session generation history, or export batches to TXT/CSV with 100% client-side cryptographic security.'
     ],
     faqs: [
       {
-        question: 'Are my generated passwords secure?',
-        answer: 'Yes. All password generation processes run locally in your web browser memory. No passwords are sent or saved to any external servers.'
+        question: 'Are my generated passwords sent to any server or logged?',
+        answer: 'No. All password generation, passphrase assembly, and entropy calculations run 100% locally inside your browser memory using the Web Cryptography API (crypto.getRandomValues). Zero network calls, telemetry, or server storage occur.'
       },
       {
-        question: 'What makes a password strong?',
-        answer: 'A password is strong if it is long (at least 12-16 characters) and contains a mix of uppercase letters, lowercase letters, numbers, and special symbols.'
+        question: 'Why is CSPRNG (crypto.getRandomValues) superior to Math.random()?',
+        answer: 'Standard Math.random() is a pseudo-random number generator designed for execution speed, not cryptographic entropy. Its output states are mathematically predictable by attackers. In contrast, the Web Cryptography API CSPRNG samples hardware entropy directly from your operating system kernel, ensuring cryptographic unpredictability and attack resilience.'
+      },
+      {
+        question: 'What is Shannon entropy and how much do I need?',
+        answer: 'Shannon entropy measures the cryptographic unpredictability of a password in bits. A password with 60+ bits of entropy reliably resists standard brute-force cracking, while 80+ to 128+ bits provides military-grade resistance against massive GPU hashcat clusters and ASIC cracking rigs.'
+      },
+      {
+        question: 'What are the NIST SP 800-63B password guidelines?',
+        answer: 'NIST guidelines emphasize password length over forced arbitrary complexity rules, recommend supporting passwords up to 64+ characters, discourage mandatory periodic expiration (which leads to predictable patterns), and encourage the use of multi-word passphrases.'
+      },
+      {
+        question: 'What are Memorable Passphrases (Diceware)?',
+        answer: 'A passphrase combines randomly selected words (e.g., Galaxy-Beacon-Amber-Orbit). Because each word in our curated dictionary contributes significant entropy, a 4 to 6 word passphrase is both exceptionally difficult for computers to guess and easy for humans to remember without writing it down.'
+      },
+      {
+        question: 'How can I generate passwords compliant with Indian banking portals (SBI, HDFC, ICICI)?',
+        answer: 'Click the "Indian Banking (Safe)" quick preset. It configures a 14-character password containing uppercase, lowercase, numbers, and allowed special characters while blacklisting troublesome symbols (like quotes, backticks, or slashes) that often trigger banking portal login validation errors.'
       }
     ],
     sections: [
       {
-        title: 'Tips for Secure Password Management',
-        content: 'Never reuse passwords across multiple sites. Always use a dedicated password manager to store and organize your generated login credentials securely.'
+        title: 'Cryptographic Randomness & The Web Cryptography API',
+        content: 'True password security begins with unpredictable entropy. This tool avoids insecure Math.random() implementations and exclusively utilizes the window.crypto.getRandomValues API with unbiased rejection sampling. This guarantees that every character, word, or digit is picked with strictly uniform probability, protecting your credentials against cryptanalytic seed-reconstruction attacks.'
+      },
+      {
+        title: 'Password Entropy vs. Brute-Force Feasibility',
+        content: 'A password\'s resistance against cracking is a direct function of its search space size: Combinations = (Pool Size)^(Length). Modern multi-GPU rigs running Hashcat can compute tens of billions of NTLM or MD5 hashes per second. Increasing length from 8 characters to 16 characters expands the attack space by billions of times, turning crack times from seconds into centuries.'
+      },
+      {
+        title: 'Best Practices for Modern Password Hygiene',
+        content: '1) Never reuse passwords across accounts—a breach on one platform compromises all matching logins.\n2) Use a dedicated, audited password manager (such as Bitwarden, 1Password, or KeePassXC) to generate and store high-entropy credentials.\n3) Enforce Multi-Factor Authentication (MFA), prioritizing hardware security keys (FIDO2 / WebAuthn) or TOTP authenticator apps over SMS verification.'
       }
     ]
   },
