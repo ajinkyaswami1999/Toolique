@@ -5900,24 +5900,62 @@ export const toolsList: Tool[] = [
     name: 'YAML Formatter',
     category: 'developer',
     shortDescription: 'Beautify, validate, and convert YAML configurations into JSON payloads.',
-    metaDescription: 'Format and validate YAML files. Cleanup nested indentation spaces and convert YAML configurations to JSON schemas.',
-    keywords: ['YAML Formatter', 'YAML beautifier', 'validate YAML', 'convert YAML to JSON', 'YAML editor'],
+    metaDescription: 'Free online YAML Formatter, Validator & Converter. Beautify messy YAML, fix indentation spaces, validate multi-document manifests, and convert bidirectionally between YAML and JSON schemas with 100% private in-browser computation.',
+    keywords: [
+      'YAML Formatter',
+      'YAML beautifier',
+      'validate YAML online',
+      'convert YAML to JSON',
+      'convert JSON to YAML',
+      'Kubernetes YAML validator',
+      'Docker Compose formatter',
+      'YAML 1.2 validator',
+      'YAML syntax checker',
+      'fix YAML indentation'
+    ],
     icon: 'FileText',
     howToUse: [
-      'Paste your YAML document.',
-      'Select indent spaces and click Format YAML.',
-      'Use Convert to JSON to translate the config into a JSON string.'
+      'Paste your YAML or JSON snippet directly into the input editor, or select from built-in DevOps presets (Kubernetes, Docker Compose, GitHub Actions, Ansible, OpenAPI).',
+      'Configure formatting parameters: indentation spacing (2 or 4 spaces), alphabetical key sorting (A-Z), and quotation styles (Auto, Single, Double).',
+      'Click "Format & Beautify YAML" to clean up nesting, fix indentations, and normalize document spacing.',
+      'Click "Convert to JSON" to translate single or multi-document YAML into structured, validated JSON payloads.',
+      'Inspect real-time syntax validation diagnostics showing exact line numbers, column numbers, and illegal tab character warnings.',
+      'Copy formatted output to clipboard with one click, swap panels bidirectionally, or export directly to a .yaml or .json file.'
     ],
     faqs: [
       {
-        question: 'Why is YAML formatting strict?',
-        answer: 'Unlike JSON or XML, YAML uses whitespace indentation to define structures instead of brackets. Missing or extra spaces will break parsing.'
+        question: 'Why does YAML strictly forbid tab characters (\\t)?',
+        answer: 'The official YAML 1.2 specification strictly forbids hard tab characters for indentation because different code editors and terminals render tabs with varying column widths (e.g. 2, 4, or 8 spaces), creating visual ambiguity in hierarchical data structures. Our formatter automatically detects tab characters and provides a one-click action to convert them into uniform spaces.'
+      },
+      {
+        question: 'Can I convert JSON back into YAML?',
+        answer: 'Yes! The tool is fully bidirectional. You can paste JSON directly into the editor, click "Swap Panels", or click "Convert JSON → YAML" to generate clean, idiomatic YAML with customizable indentation and sorted keys.'
+      },
+      {
+        question: 'Does this formatter support multi-document YAML files (---)?',
+        answer: 'Yes. Multi-document YAML streams—standard in Kubernetes manifests, Helm charts, and composite Docker stacks separated by triple hyphens (---)—are fully supported for validation, formatting, and conversion into multi-document JSON arrays.'
+      },
+      {
+        question: 'How does alphabetical key sorting (A-Z) improve Git diffs?',
+        answer: 'Alphabetically sorting dictionary keys ensures consistent configuration order across Git commits, eliminating noisy merge conflicts and phantom diffs caused by arbitrary key reordering in Kubernetes, Terraform, and Ansible manifests.'
+      },
+      {
+        question: 'Are my configuration files or API secrets uploaded to an external server?',
+        answer: 'No. All parsing, validation, and conversion execute 100% client-side inside your browser sandbox using the WebAssembly/JavaScript YAML parser engine. No code, configuration tokens, or credentials ever leave your device.'
       }
     ],
     sections: [
       {
-        title: 'YAML vs JSON Configurations',
-        content: 'YAML is highly readable and clean, making it a standard choice for Docker, Kubernetes, and CI/CD pipelines. Converting to JSON helps validate payloads for API payloads.'
+        title: 'YAML Indentation & Whitespace Hierarchy',
+        content: 'Unlike JSON or XML which use explicit delimiters like braces ({}) and closing tags (</>), YAML conveys hierarchy purely through leading whitespace columns. Every nested level must maintain consistent indentation relative to its parent node. Using spaces uniformly avoids syntax parsing errors like "mapping values are not allowed here" or "did not find expected key".'
+      },
+      {
+        title: 'YAML vs. JSON in Modern Cloud Infrastructure',
+        content: 'While JSON remains the standard data interchange format for RESTful APIs and browser clients due to native JSON.parse() speed, YAML is preferred for human-authored configurations in Kubernetes, Docker Compose, GitHub Actions, and Prometheus because it supports comments (#), multiline string blocks (|, >), and eliminates bracket fatigue.'
+      },
+      {
+        title: 'Multi-Document Streams & Kubernetes Manifests',
+        content: 'In Kubernetes and Helm, multiple API resources (such as a Deployment, Service, and ConfigMap) are routinely bundled in a single file separated by triple dashes (---). This formatter parses each document stream independently, validates their schemas, and allows exporting them as unified multi-document configurations.'
       }
     ]
   },
