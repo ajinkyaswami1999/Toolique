@@ -283,7 +283,14 @@ export default function PDFCompressor() {
 
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const loadingTask = pdfjs.getDocument({ data: arrayBuffer.slice(0) });
+      const loadingTask = pdfjs.getDocument({
+        data: new Uint8Array(arrayBuffer),
+        cMapUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version || '6.0.227'}/cmaps/`,
+        cMapPacked: true,
+        standardFontDataUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version || '6.0.227'}/standard_fonts/`,
+        disableAutoFetch: true,
+        disableStream: false,
+      });
       const pdf = await loadingTask.promise;
       const numPages = pdf.numPages;
 
@@ -296,14 +303,23 @@ export default function PDFCompressor() {
         setProgressStatus(`Optimizing page ${i} of ${numPages} (${percent}%)...`);
 
         const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale });
+        const unscaledViewport = page.getViewport({ scale: 1.0 });
+
+        // Clamp max raster dimension for large architectural / CAD drawings (e.g. A0/A1 sheets)
+        // This prevents canvas buffer allocation overflow & browser crash while maintaining crisp resolution
+        const MAX_DIM = 2400;
+        let pageScale = scale;
+        if (unscaledViewport.width * pageScale > MAX_DIM || unscaledViewport.height * pageScale > MAX_DIM) {
+          pageScale = Math.min(MAX_DIM / unscaledViewport.width, MAX_DIM / unscaledViewport.height);
+        }
+        const viewport = page.getViewport({ scale: pageScale });
 
         const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        if (!context) throw new Error('Could not initialize canvas context.');
+        const context = canvas.getContext('2d', { willReadFrequently: grayscale });
+        if (!context) throw new Error(`Could not initialize canvas context for page ${i}.`);
 
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+        canvas.height = Math.round(viewport.height);
+        canvas.width = Math.round(viewport.width);
 
         await (page.render as any)({
           canvasContext: context,
@@ -324,24 +340,56 @@ export default function PDFCompressor() {
           context.putImageData(imgData, 0, 0);
         }
 
-        // Convert to JPEG data URL
-        const jpegDataUrl = canvas.toDataURL('image/jpeg', quality);
-        const imageBytes = await fetch(jpegDataUrl).then((r) => r.arrayBuffer());
+        // Convert canvas to JPEG bytes natively via toBlob (bypasses fetch & CSP data: policy)
+        const imageBytes = await new Promise<Uint8Array>((resolve, reject) => {
+          canvas.toBlob(
+            async (blob) => {
+              if (!blob) {
+                reject(new Error(`Failed to compress canvas for page ${i}`));
+                return;
+              }
+              try {
+                const buf = await blob.arrayBuffer();
+                resolve(new Uint8Array(buf));
+              } catch (blobErr) {
+                reject(blobErr);
+              }
+            },
+            'image/jpeg',
+            quality
+          );
+        });
 
+        // Embed in PDF document with the original page physical dimensions
         const pdfImage = await compressedPdfDoc.embedJpg(imageBytes);
-        const newPage = compressedPdfDoc.addPage([viewport.width, viewport.height]);
+        const newPage = compressedPdfDoc.addPage([unscaledViewport.width, unscaledViewport.height]);
         newPage.drawImage(pdfImage, {
           x: 0,
           y: 0,
-          width: viewport.width,
-          height: viewport.height,
+          width: unscaledViewport.width,
+          height: unscaledViewport.height,
         });
+
+        // Memory cleanup per page
+        canvas.width = 0;
+        canvas.height = 0;
+        if (typeof (page as any).cleanup === 'function') {
+          (page as any).cleanup();
+        }
       }
 
       setProgressPercent(95);
       setProgressStatus('Packaging compressed PDF binary stream...');
       const compressedBytes = await compressedPdfDoc.save();
       const blob = new Blob([compressedBytes as any], { type: 'application/pdf' });
+
+      // Clean up pdf instance
+      if (typeof (pdf as any).cleanup === 'function') {
+        await (pdf as any).cleanup();
+      }
+      if (typeof (pdf as any).destroy === 'function') {
+        await (pdf as any).destroy();
+      }
 
       const origSize = file.size;
       const compSize = blob.size;
@@ -361,8 +409,9 @@ export default function PDFCompressor() {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
       setPreviewUrl(URL.createObjectURL(blob));
     } catch (err: any) {
-      console.error(err);
-      setError('An error occurred during compression. Please ensure the PDF is uncorrupted.');
+      console.error('PDF compression error:', err);
+      const errMsg = err?.message || String(err);
+      setError(`An error occurred during compression: ${errMsg}. Please ensure the PDF is uncorrupted.`);
     } finally {
       setIsProcessing(false);
       setProgressStatus('');

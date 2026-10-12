@@ -737,33 +737,56 @@ export const toolsList: Tool[] = [
     name: 'UPI QR Code Generator',
     category: 'security',
     shortDescription: 'Create standard Indian UPI payment QR codes for fast mobile scans and transfers.',
-    metaDescription: 'Generate dynamic UPI QR codes for GPAY, PhonePe, Paytm, BHIM and Amazon Pay. Insert UPI ID, Payee Name, Amount, and Remarks for easy scans.',
-    keywords: ['UPI QR Generator', 'Paytm QR maker', 'PhonePe QR code online', 'Indian UPI payment QR', 'Dynamic UPI QR generator', 'Bhumi QR code maker'],
+    metaDescription: 'Generate NPCI-compliant dynamic & static UPI QR codes for Google Pay, PhonePe, Paytm, BHIM, and bank apps. Customize themes, export crisp vector SVG or high-res PNG, and print counter standees.',
+    keywords: [
+      'UPI QR Generator',
+      'Paytm QR maker',
+      'PhonePe QR code online',
+      'Indian UPI payment QR',
+      'Dynamic UPI QR generator',
+      'BHIM UPI QR code maker',
+      'UPI standee print',
+      'UPI QR SVG download',
+      'NPCI UPI URI specification'
+    ],
     icon: 'Scan',
     howToUse: [
-      'Enter the receiver UPI ID (e.g., username@bankname or mobile@upi).',
-      'Enter the payee/business name.',
-      'Optionally, specify a fixed transaction amount (in INR) and a transaction note (e.g., "Office Lunch").',
-      'The UPI-compliant QR code is generated instantly. Test it by scanning with any Indian UPI app (BHIM, Google Pay, PhonePe, Paytm), and download the QR image.'
+      'Enter your receiver UPI ID / VPA (e.g., store@okaxis or 9876543210@paytm) or pick one of the quick bank handle chips.',
+      'Enter the payee or shop name to display on the scanning confirmation screen.',
+      'Optionally specify a fixed INR amount (or leave blank to let customers type any custom payment) and a transaction note.',
+      'Configure advanced NPCI merchant options if needed, such as Merchant Category Code (MCC) or transaction reference ID.',
+      'Pick a standee theme (Classic Retail, Royal Indigo, Merchant Teal, Modern Dark) and download as high-res PNG, vector SVG, or print directly to your physical counter standee.'
     ],
     faqs: [
       {
-        question: 'Is this UPI QR code compatible with all UPI apps?',
-        answer: 'Yes, the QR code uses the official NPCI (National Payments Corporation of India) UPI URI specification, which is supported by Google Pay, PhonePe, BHIM, Paytm, WhatsApp Pay, and all major bank UPI apps.'
+        question: 'Is this UPI QR code compatible with all Indian UPI apps?',
+        answer: 'Yes. The QR code strictly conforms to the NPCI (National Payments Corporation of India) UPI URI specification (upi://pay), making it natively recognized by Google Pay, PhonePe, BHIM, Paytm, CRED, Amazon Pay, WhatsApp Pay, and all scheduled commercial bank UPI apps.'
       },
       {
-        question: 'Does this generator charge a commission or process payments?',
-        answer: 'No, this generator simply encodes the payment instructions into a standard format QR code. The actual payment transfer is completed directly between the sender and receiver bank accounts via the scanning app. We do not handle or track any funds.'
+        question: 'Does this generator charge commissions or track payments?',
+        answer: 'No. All QR generation and rendering happens 100% locally inside your web browser. No bank details, VPAs, or amounts are sent to any server. The actual money settlement happens peer-to-peer or peer-to-merchant directly via the banking rail.'
+      },
+      {
+        question: 'What is the difference between a static QR and dynamic QR?',
+        answer: 'A static UPI QR code has no pre-set amount, allowing the customer to enter any value at checkout (ideal for retail counters, kirana stores, and street vendors). A dynamic UPI QR code specifies a fixed amount and optional order reference, locking the payment to an exact invoice figure.'
+      },
+      {
+        question: 'Does the center UPI logo interfere with QR code scanners?',
+        answer: 'No. The QR code is generated with Error Correction Level H (High), which embeds up to 30% redundant recovery data. The official NPCI UPI badge sits comfortably within this tolerance margin without impacting scan speed or accuracy.'
+      },
+      {
+        question: 'Can I print this for a physical desk or counter standee?',
+        answer: 'Yes. Use the "Print Standee" button to trigger a clean, borderless print layout formatted for standard A5/A4 acrylic display stands, or export SVG for professional large-format vinyl printing.'
       }
     ],
     sections: [
       {
-        title: 'How a UPI QR Code Works',
-        content: 'Unified Payments Interface (UPI) is a real-time instant payment system developed by NPCI. A UPI QR code contains a specific payment link scheme:\n\n`upi://pay?pa=payee@bank&pn=Name&am=Amount&cu=INR`\n\nWhen scanned, the UPI application parses this URL structure to identify the receiver VPA and pre-fill details.'
+        title: 'NPCI UPI Payment URI Specification',
+        content: 'Unified Payments Interface (UPI) specifies a standardized URI scheme structured as:\n\n`upi://pay?pa={vpa}&pn={name}&am={amount}&tn={note}&cu=INR`\n\n- `pa` (Payee Address): The recipient Virtual Payment Address (e.g. `vendor@okhdfcbank`).\n- `pn` (Payee Name): Legal name or trade name of the payee.\n- `am` (Amount): Transaction amount formatted to two decimal places in INR.\n- `tn` (Transaction Note): Remarks or invoice reference visible in bank passbooks.\n- `cu` (Currency): Fixed to `INR` for domestic Indian interbank settlements.\n- `mc` (Merchant Code): 4-digit Merchant Category Code for verified business accounts.'
       },
       {
-        title: 'Security and Authentication',
-        content: 'Static UPI QR codes do not require access to your bank PIN or passwords to be generated. They are public keys, meaning they are completely safe to print, put up in shops, or share with customers. The sender is the one who initiates the authentication.'
+        title: 'Zero Latency & Client-Side Privacy',
+        content: 'Your financial credentials and payee information never leave your local browser sandbox. No analytics, tracking pixels, or intermediate APIs monitor your billing details or customer transactions.'
       }
     ]
   },
@@ -2116,28 +2139,57 @@ export const toolsList: Tool[] = [
     name: 'Hash Generator',
     category: 'developer',
     shortDescription: 'Calculate MD5, SHA-1, SHA-256, and SHA-512 cryptographic checksums.',
-    metaDescription: 'Generate cryptographic hashes from text. View MD5, SHA-1, SHA-256, and SHA-512 hashes simultaneously in real-time inside your browser.',
-    keywords: ['Hash Generator', 'MD5 generator online', 'Calculate SHA-256', 'SHA-512 hash creator', 'Cryptographic checksum tool'],
+    metaDescription: 'Calculate MD5, SHA-1, SHA-256, SHA-384, SHA-512, and CRC-32 hashes in real-time. Features file checksum hashing, HMAC secret keys, Base64 SRI encoding, and instant checksum verification.',
+    keywords: [
+      'Hash Generator',
+      'MD5 generator online',
+      'Calculate SHA-256',
+      'SHA-512 hash creator',
+      'Cryptographic checksum tool',
+      'File checksum calculator',
+      'HMAC SHA256 generator',
+      'CRC32 checksum online',
+      'Verify SHA256 checksum'
+    ],
     icon: 'KeyRound',
     howToUse: [
-      'Type or paste your text string into the input box.',
-      'View the computed MD5, SHA-1, SHA-256, and SHA-512 hashes automatically in real-time.',
-      'Click Copy next to any hash to save it.'
+      'Type or paste your text string, or switch to "File Checksum Studio" and drag-and-drop any file (up to 200MB).',
+      'View calculated MD5, SHA-1, SHA-256, SHA-384, SHA-512, and CRC-32 checksums updated live in real time.',
+      'Enable "HMAC Mode" if you need keyed-hash message authentication (RFC 2104) with a shared secret key.',
+      'Toggle between Lowercase, Uppercase, or Base64 (SRI) output formatting.',
+      'Paste a vendor or release checksum into the "Checksum Verifier" box to verify file integrity with 1-click confirmation.',
+      'Copy individual hashes, click "Copy All Hashes", or download an official formatted checksums.txt file.'
     ],
     faqs: [
       {
-        question: 'Is my text safe when generating hashes?',
-        answer: 'Yes, hashing is computed completely in your browser. No text is uploaded to any server, keeping credentials secure.'
+        question: 'Is my data or file uploaded to any remote server?',
+        answer: 'No. All calculations are executed 100% locally in your web browser memory using the W3C Web Cryptography API (crypto.subtle) and pure client-side JavaScript. Your text strings, files, passwords, and secret keys never touch any external server.'
       },
       {
-        question: 'What is the difference between encryption and hashing?',
-        answer: 'Encryption is a two-way function used to hide data that can be decrypted later. Hashing is a one-way mathematical function that converts input into a fixed-length string, which cannot be reversed.'
+        question: 'Can I verify the checksum of a downloaded file or ISO image?',
+        answer: 'Yes! Switch to the "File Checksum Studio" tab, select your file, and paste the vendor-provided hash into the "Checksum Verifier" field. Toolique will instantly tell you whether the checksum matches and which algorithm was used.'
+      },
+      {
+        question: 'What is HMAC and when should I use it?',
+        answer: 'HMAC (Hash-based Message Authentication Code) combines a cryptographic hash algorithm with a secret shared key. It is commonly used in REST APIs (such as AWS Signature v4, Stripe webhooks, and GitHub Webhook secrets) to guarantee both data integrity and authentication.'
+      },
+      {
+        question: 'Why are MD5 and SHA-1 labeled as legacy or integrity only?',
+        answer: 'Due to mathematical advances, theoretical collision attacks have been demonstrated against MD5 and SHA-1. They remain safe and standard for detecting accidental file corruption and deduplication, but should never be used for password hashing or high-security digital signatures. For modern security, use SHA-256 or SHA-512.'
+      },
+      {
+        question: 'What is Subresource Integrity (SRI) Base64 format?',
+        answer: 'Web browsers allow loading scripts with an integrity attribute like `integrity="sha256-..."`. By toggling the format to Base64, you can copy the exact base64-encoded hash needed for HTML script and stylesheet tags.'
       }
     ],
     sections: [
       {
-        title: 'Cryptographic Hash Families',
-        content: 'SHA-256 and SHA-512 are part of the SHA-2 family and remain highly secure for data integrity verification, password storage, and digital signatures. MD5 and SHA-1 are legacy hashes now used only for non-security checks due to collision vulnerabilities.'
+        title: 'Cryptographic Hash Functions vs Checksums',
+        content: 'Cryptographic hash functions (like SHA-256, SHA-512, and SHA-384) are one-way mathematical algorithms designed to be irreversible and collision-resistant. A single bit change in the input produces a completely unpredictable and radically different output (the avalanche effect). CRC-32 is a non-cryptographic cyclic redundancy check designed specifically for high-speed transmission and zip storage error detection.'
+      },
+      {
+        title: 'RFC 2104 HMAC Authentication',
+        content: 'Keyed-Hash Message Authentication Code (HMAC) allows two parties sharing a secret key to authenticate messages. Toolique supports HMAC computation for SHA-256, SHA-512, SHA-384, SHA-1, and MD5, matching standard Node.js `crypto.createHmac` and OpenSSL output.'
       }
     ]
   },
@@ -2178,33 +2230,75 @@ export const toolsList: Tool[] = [
     name: 'Regex Tester',
     category: 'developer',
     shortDescription: 'Test regular expressions in real-time with visual matching highlights.',
-    metaDescription: 'Online Regular Expression (Regex) tester. Write patterns, apply global, case-insensitive, or multiline flags, and view matching capture groups instantly.',
-    keywords: ['Regex Tester', 'Test regular expression', 'Regex matcher online', 'JavaScript regex tester', 'Regex capture groups'],
+    metaDescription: 'Interactive online Regular Expression (Regex) tester & debugger. Test patterns with real-time visual highlights, capture group breakdown, substitution & find-replace, ReDoS safety timer, and multi-language code export.',
+    keywords: [
+      'Regex Tester',
+      'Test regular expression',
+      'Regex matcher online',
+      'JavaScript regex tester',
+      'Regex capture groups',
+      'Regex replace online',
+      'Regular expression debugger',
+      'Regex cheat sheet',
+      'Indian PAN regex',
+      'Indian GSTIN regex',
+      'Regex lookahead lookbehind',
+      'ReDoS safety check'
+    ],
     icon: 'Search',
     howToUse: [
-      'Enter the regular expression pattern (e.g. [a-z]+) without trailing/leading slashes.',
-      'Configure flags: Global (g), Case-insensitive (i), Multiline (m).',
-      'Type or paste your test subject text in the text box.',
-      'View highlighted matches in the visual viewer and inspect matching index details.'
+      'Enter your regular expression pattern in the input field without leading or trailing slashes.',
+      'Configure regex flags: Global (g), Case-Insensitive (i), Multiline (m), DotAll (s), and Unicode (u).',
+      'Type or paste your test subject text into the subject textarea.',
+      'Inspect highlighted matches in the visual highlight viewer and check capture group extractions in the match breakdown drawer.',
+      'Switch to the "Find & Replace" tab to preview string substitutions using $1, $2, or $& template variables in real-time.',
+      'Click "Export Code" to generate ready-to-run snippets in JavaScript/TypeScript, Python, Go, or PHP.'
     ],
     faqs: [
       {
-        question: 'What is a regular expression (Regex)?',
-        answer: 'A regular expression is a sequence of characters that forms a search pattern, used for string matching, search and replace operations, and data validations.'
+        question: 'What is a regular expression (Regex) and how does it work?',
+        answer: 'A regular expression is a specialized sequence of characters that defines a search pattern. A regex engine compiles the pattern into a state machine (deterministic or non-deterministic finite automaton) that scans the target string to locate matching substrings, validate input formats, or extract delimited capture groups.'
       },
       {
-        question: 'What does the Global (g) flag do?',
-        answer: 'The global flag causes the regular expression to match all occurrences in the subject string, rather than stopping after the first match.'
+        question: 'What do the regex flags g, i, m, s, and u mean?',
+        answer: 'Regex flags modify search behavior: Global (g) matches all occurrences across the subject string instead of stopping at the first match; Insensitive (i) makes letter matching case-insensitive; Multiline (m) allows ^ and $ to match the beginning and end of each line; DotAll (s) allows the dot (.) character to match newline characters (\\n); and Unicode (u) treats the pattern as a sequence of full UTF-16 code points.'
+      },
+      {
+        question: 'What is the difference between capturing groups and non-capturing groups?',
+        answer: 'A capturing group `(pattern)` isolates matched text and assigns it an index ($1, $2, etc.) or a named variable, allowing programmatic extraction or replacement. A non-capturing group `(?:pattern)` applies quantifiers or alternation to sub-expressions without memory allocation or back-reference capture, which improves matching speed and reduces memory overhead.'
+      },
+      {
+        question: 'How do lookahead and lookbehind assertions work?',
+        answer: 'Lookaheads and lookbehinds are zero-width assertions that verify conditions without consuming characters in the match result. Positive lookahead `(?=abc)` verifies that "abc" follows the current position. Negative lookahead `(?!abc)` ensures "abc" does not follow. Positive lookbehind `(?<=abc)` verifies that "abc" precedes the position, and negative lookbehind `(?<!abc)` ensures "abc" does not precede.'
+      },
+      {
+        question: 'How do I substitute text using capture groups ($1, $2)?',
+        answer: 'In the replacement string, `$1`, `$2`, and `$n` reference the corresponding capture group indexed from left to right. `$&` inserts the entire matched substring, while `$`` and `$\'` insert the text preceding and following the match respectively. For example, replacing `(\\w+)\\s(\\w+)` with `$2, $1` transforms "John Doe" into "Doe, John".'
+      },
+      {
+        question: 'What is Catastrophic Backtracking (ReDoS)?',
+        answer: 'Regular Expression Denial of Service (ReDoS) occurs when nested quantifiers (such as `(a+)+$`) cause the regex engine to explore exponentially many permutations when attempting to match non-matching strings. Toolique safeguards your browser by enforcing execution safety limits and tracking execution time in milliseconds.'
+      },
+      {
+        question: 'What are standard regular expressions for Indian identification and billing?',
+        answer: 'Indian business and government compliance patterns: PAN Card: `^[A-Z]{5}[0-9]{4}[A-Z]{1}$`; GSTIN: `^\\d{2}[A-Z]{5}\\d{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$`; Indian 10-digit mobile: `^(?:\\+91|91|0)?[6-9]\\d{9}$`; Indian PIN Code: `^[1-9][0-9]{5}$`; Formatted Aadhaar: `^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$`.'
       }
     ],
     sections: [
       {
-        title: 'Regular Expression syntax',
-        content: 'Regex is a powerful matching syntax supported by all programming languages. Key tokens include . (any character), \\d (digits), \\w (alphanumeric), * (0 or more times), + (1 or more times), and parenthesis () for capture grouping.'
+        title: 'Quick Regex Syntax & Token Reference',
+        content: 'Common regular expression tokens:\n\n- `\\d`: Any digit (0-9) | `\\D`: Any non-digit\n- `\\w`: Any word character (alphanumeric plus underscore) | `\\W`: Non-word character\n- `\\s`: Any whitespace (space, tab, newline) | `\\S`: Non-whitespace\n- `.`: Any character except newline (unless flag `s` is active)\n- `^`: Beginning of string/line | `$`: End of string/line\n- `\\b`: Word boundary assertion | `\\B`: Non-word boundary\n- `*`: 0 or more occurrences | `+`: 1 or more occurrences | `?`: 0 or 1 occurrence (optional)\n- `{n,m}`: Between n and m occurrences'
+      },
+      {
+        title: 'Find & Replace Template Variables',
+        content: 'When performing substitutions, use standard replacement template operators:\n\n- `$1`, `$2`, ... `$n`: Inserts the nth captured group.\n- `$&`: Inserts the entire matched string.\n- `$``: Inserts the text preceding the matched substring.\n- `$\'`: Inserts the text following the matched substring.\n- `$$`: Escapes a literal dollar sign (`$`).'
+      },
+      {
+        title: 'Multi-Language Integration Examples',
+        content: 'Easily port patterns into backend and frontend applications:\n\n```javascript\n// JavaScript / TypeScript\nconst regex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i;\nconst isValidPan = regex.test(userInput);\n```\n\n```python\n# Python re\nimport re\npattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"\nis_valid = bool(re.match(pattern, user_input))\n```\n\n```go\n// Go regexp\npackage main\nimport "regexp"\nvar panRegex = regexp.MustCompile(`^[A-Z]{5}[0-9]{4}[A-Z]{1}$`)\n```'
       }
     ]
-  }
-,
+  },
   {
   "id": "ConstructionCostCalculator",
   "slug": "construction-cost-calculator",
@@ -5991,7 +6085,7 @@ export const toolsList: Tool[] = [
     name: 'Timestamp Converter',
     category: 'developer',
     shortDescription: 'Convert Unix Epoch timestamps to local time, UTC, and ISO 8601 calendar dates.',
-    metaDescription: 'Free online Unix Timestamp Converter. Convert seconds and milliseconds epoch timestamps to UTC, local time, ISO 8601, and relative human dates. 100% private in-browser.',
+    metaDescription: 'Free online Unix Timestamp Converter. Convert seconds, milliseconds, microseconds, and nanoseconds epoch timestamps to UTC, local time, ISO 8601, and relative dates with IANA timezones and batch export.',
     keywords: [
       'Timestamp Converter',
       'Unix Epoch Converter',
@@ -6000,13 +6094,19 @@ export const toolsList: Tool[] = [
       'Date to Epoch Converter',
       'Unix Timestamp to UTC',
       'Epoch Time Converter Online',
-      'Epoch Seconds to ISO'
+      'Epoch Seconds to ISO',
+      'Batch Timestamp Converter',
+      'Timestamp Difference Calculator',
+      'Year 2038 Problem'
     ],
     icon: 'Clock',
     howToUse: [
-      'Enter an Epoch integer (10-digit seconds or 13-digit milliseconds) into the input field to instantly see UTC, Local, and ISO dates.',
-      'Or use the calendar date-time picker to convert a human date back into Unix timestamp seconds and milliseconds.',
-      'Copy the timestamp in seconds, milliseconds, ISO 8601, or RFC 2822 format with 1 click.'
+      'Inspect the live Unix Epoch clock with ticking seconds, milliseconds, microseconds, and nanoseconds.',
+      'Enter an Epoch integer (10-digit seconds, 13-digit milliseconds, 16-digit microseconds, or 19-digit nanoseconds) to view automatic unit detection, local time, UTC, ISO 8601, and calendar statistics.',
+      'Use the Date-to-Epoch tab with our interactive calendar picker and IANA timezone selector to translate any local or global datetime into exact Unix timestamps.',
+      'Switch to the Batch Converter tab to convert dozens of timestamps simultaneously and export results to CSV or TXT.',
+      'Use the Time Diff calculator to determine the exact elapsed duration between two timestamps in days, hours, and seconds.',
+      'Browse the Developer Code Snippets tab for instant copyable code across JavaScript, Python, Go, PHP, Java, Rust, SQL, and Bash.'
     ],
     faqs: [
       {
@@ -6014,18 +6114,30 @@ export const toolsList: Tool[] = [
         answer: 'Unix Epoch time is the total number of seconds that have elapsed since 00:00:00 UTC on 1 January 1970 (the Unix epoch), excluding leap seconds.'
       },
       {
-        question: 'How do I know if a timestamp is in seconds or milliseconds?',
-        answer: 'Timestamps in seconds are currently 10 digits (e.g. 1725250000), while timestamps in milliseconds (commonly used in JavaScript Date.now() and Java) are 13 digits (e.g. 1725250000000).'
+        question: 'How does automatic granularity detection work?',
+        answer: 'Our converter inspects digit length automatically: 10-11 digits are treated as seconds, 12-14 digits as milliseconds (standard in JavaScript Date.now()), 15-17 digits as microseconds, and 18-19 digits as nanoseconds (standard in Python time_ns() and Go).'
       },
       {
         question: 'What will happen during the Year 2038 problem (Y2K38)?',
-        answer: 'On January 19, 2038, 32-bit signed integers will overflow when reaching 2,147,483,647 seconds. Modern 64-bit systems represent timestamps up to approximately 292 billion years into the future, preventing this overflow.'
+        answer: 'On January 19, 2038 at 03:14:07 UTC, legacy 32-bit signed integers will overflow at 2,147,483,647 seconds and wrap around to negative numbers (December 13, 1901). Modern 64-bit systems represent timestamps up to approximately 292 billion years into the future, preventing this overflow.'
+      },
+      {
+        question: 'How do I handle timezones when converting Epoch timestamps?',
+        answer: 'Unix Epoch timestamps are universally absolute in UTC. When displaying human-readable dates, the timestamp is projected into your local browser timezone or any chosen IANA timezone (such as IST, EST, PST, CET, or JST) using standard UTC offsets.'
+      },
+      {
+        question: 'Are my timestamps or date queries sent to any external server?',
+        answer: 'No. All calculations run 100% client-side inside your browser memory using native JavaScript Date and Intl APIs. No data or telemetry ever leaves your computer.'
       }
     ],
     sections: [
       {
         title: 'Epoch Timestamp Conversion Cheat Sheet',
-        content: '| Unit | Digit Count | Example Timestamp | Formula in JS / Python |\n| :--- | :--- | :--- | :--- |\n| **Seconds (Unix)** | 10 digits | `1725250000` | `Math.floor(Date.now() / 1000)` / `time.time()` |\n| **Milliseconds** | 13 digits | `1725250000000` | `Date.now()` / `int(time.time() * 1000)` |\n| **Microseconds** | 16 digits | `1725250000000000` | `int(time.time() * 1e6)` |\n| **Nanoseconds** | 19 digits | `1725250000000000000` | `time.time_ns()` in Python |'
+        content: '| Unit | Digit Count | Example Timestamp | Formula in JS / Python |\n| :--- | :--- | :--- | :--- |\n| **Seconds (Unix)** | 10 digits | `1725250000` | `Math.floor(Date.now() / 1000)` / `int(time.time())` |\n| **Milliseconds** | 13 digits | `1725250000000` | `Date.now()` / `int(time.time() * 1000)` |\n| **Microseconds** | 16 digits | `1725250000000000` | `int(time.time() * 1e6)` |\n| **Nanoseconds** | 19 digits | `1725250000000000000` | `time.time_ns()` in Python |'
+      },
+      {
+        title: 'Understanding ISO 8601 & RFC 3339 Standards',
+        content: 'ISO 8601 standardizes date and time notation in the format `YYYY-MM-DDTHH:mm:ss.sssZ`, where `T` separates the calendar date from time and `Z` denotes zero UTC offset (Zulu time). RFC 3339 is an internet profile of ISO 8601 widely mandated across REST APIs, JSON schemas, Kubernetes events, and database audit logs.'
       }
     ]
   },
