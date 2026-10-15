@@ -535,18 +535,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.toolique.in/calculators/image-color-picker</loc>
-    <lastmod>2026-10-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.toolique.in/calculators/qr-scanner-image</loc>
-    <lastmod>2026-10-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://www.toolique.in/pdf/pdf-merge</loc>
     <lastmod>2026-10-15</lastmod>
     <changefreq>weekly</changefreq>

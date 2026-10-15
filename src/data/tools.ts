@@ -3632,81 +3632,195 @@ export const toolsList: Tool[] = [
     ]
   },
   {
-    "id": "ImageWatermark",
-    "slug": "image-watermark",
-    "name": "Add Watermark to Image",
-    "category": "image",
-    "shortDescription": "Add text or logo image watermarks to protect your photos with custom opacity and grid positioning.",
-    "metaDescription": "Add watermark to images online for free. Protect photos with text or logo overlays, configure transparency, sizing, and position grids.",
-    "keywords": [
-      "Add Watermark to Image",
-      "Watermark photo online",
-      "Protect images copyright",
-      "Logo watermark maker",
-      "Overlay text on image"
-    ],
-    "icon": "Type",
-    "howToUse": [
-      "Upload the primary image you wish to protect.",
-      "Choose between \"Text\" or \"Logo\" watermark settings.",
-      "Configure the watermark (enter text/upload logo, choose size, color, opacity).",
-      "Select a grid position (Center, Corners) or choose the \"Tiled\" repeating layout."
-    ],
-    "faqs": [
-      {
-        "question": "What is the purpose of a tiled watermark?",
-        "answer": "A tiled watermark repeats the text or logo across the entire image in a grid, making it much harder to crop out or remove than a single corner mark."
-      },
-      {
-        "question": "Can I upload a transparent PNG logo as a watermark?",
-        "answer": "Yes, transparent PNG or WebP logos are supported and recommended, preserving their transparency when overlaid."
-      }
-    ],
-    "sections": [
-      {
-        "title": "Copyright Protection with Watermarks",
-        "content": "Watermarking is a visual signature placed on photos to claim ownership. Lowering the opacity ensures the watermark protects the work without blocking the primary visual elements."
-      }
-    ]
-  },
+  "id": "ImageWatermark",
+  "slug": "image-watermark",
+  "name": "Add Watermark to Image",
+  "category": "image",
+  "shortDescription": "Add text or logo image watermarks to protect your photos with custom opacity, live font styling, 9-point grid or tiled repeating positioning, and bulk ZIP export.",
+  "metaTitle": "Add Watermark to Image Online – Free Bulk Photo Watermarker | Toolique",
+  "metaDescription": "Watermark photos online for free in bulk. Protect your images with custom text or transparent PNG logos, adjustable opacity, 9-point positioning, or full tiled repeating patterns. 100% private in-browser processing with single or batch ZIP download.",
+  "keywords": [
+    "Add Watermark to Image",
+    "Watermark photo online",
+    "Batch watermark images",
+    "Bulk photo watermarker",
+    "Add logo to multiple photos",
+    "Free image watermark tool",
+    "Tiled repeating watermark",
+    "Protect photos copyright",
+    "Transparent PNG watermark maker",
+    "Client side watermark without upload",
+    "Watermark images and export to ZIP",
+    "Stamp copyright on photos"
+  ],
+  "icon": "Type",
+  "howToUse": [
+    "Upload one or multiple photos by dragging and dropping them into the workspace, clicking 'Upload Images', selecting 'Upload Folder', or pasting images from your clipboard with Ctrl+V.",
+    "Choose your watermark type: select 'Text' to type a copyright notice, company name, or proof stamp, or select 'Logo' to upload a transparent PNG or SVG graphic.",
+    "Customize appearance parameters including font family, text fill color, outline stroke, proportional font scale (% of image width), rotation angle (-90° to +90°), and transparency opacity (5% to 100%).",
+    "Choose placement: pick any position on the 9-point cardinal grid (corners, edges, center) with custom edge margins, or enable 'Tiled Repeating Pattern' for full-frame diagonal coverage.",
+    "Preview changes across individual photos via the interactive batch queue filmstrip, then click 'Download Current' for a single image or 'Download All (ZIP)' to batch process and save all watermarked photos in a compressed archive."
+  ],
+  "faqs": [
+    {
+      "question": "How do I add a watermark to multiple images at once?",
+      "answer": "Upload multiple images or an entire folder into the bulk watermarker, configure your desired text or logo watermark parameters once, and click 'Download All (ZIP)'. Every image in your queue is rendered through client-side HTML5 canvas with your watermark and packaged into a single ZIP file."
+    },
+    {
+      "question": "Can I use my company logo as a watermark?",
+      "answer": "Yes. Switch the watermark type to 'Logo' and upload any PNG, WebP, or SVG file with transparent alpha channels. The tool preserves the transparency, allows you to resize the logo relative to the image dimensions, and lets you position it anywhere on the 9-point grid or in a repeating pattern."
+    },
+    {
+      "question": "Are my images or private logos uploaded to any remote server?",
+      "answer": "No. All watermarking operations, image decoding, canvas composition, and ZIP packaging run 100% locally in your web browser. Your confidential client proofs, photography, real estate listings, and company logos never leave your computer or touch external servers."
+    },
+    {
+      "question": "What is a tiled repeating watermark and why is it effective?",
+      "answer": "A tiled repeating watermark stamps your copyright text or logo diagonally across the entire photo surface in a recurring grid. Unlike a single corner watermark that can easily be cropped out or erased with AI inpainting tools, a tiled pattern protects the core visual subjects and intellectual property of the image."
+    },
+    {
+      "question": "How does proportional font scaling work for mixed-resolution photos?",
+      "answer": "When processing photos of mixed dimensions (e.g. 1080p web photos mixed with 24-megapixel DSLR shots), fixed pixel font sizes would look huge on small photos and invisible on large ones. Proportional scaling calculates the watermark font size as a percentage of each individual photo's width, ensuring visual consistency across your entire batch."
+    },
+    {
+      "question": "How can I prevent watermarks from ruining the visual appeal of my photos?",
+      "answer": "To protect your photos while maintaining aesthetics, lower the opacity slider to between 20% and 40%, use an elegant semi-transparent neutral color (such as soft white or light charcoal), and apply a subtle text outline stroke so the mark remains legible across both dark and bright backgrounds without obscuring fine details."
+    },
+    {
+      "question": "Can I add copyright symbols like © or trade labels easily?",
+      "answer": "Yes. Quick preset buttons allow one-click insertion of '© Copyright', 'CONFIDENTIAL', 'SAMPLE / PROOF', 'DO NOT COPY', and 'DRAFT' directly into the text editor, followed by your custom name or year."
+    },
+    {
+      "question": "What image formats are supported for input and export?",
+      "answer": "You can upload JPEG, PNG, WebP, GIF, BMP, and SVG files. PNG uploads are exported as crisp lossless PNGs to retain transparency, while JPEGs and other formats are exported as high-quality JPEGs (92% quality) to optimize file size."
+    },
+    {
+      "question": "Can I upload an entire directory of photos directly?",
+      "answer": "Yes. Click the 'Upload Folder' button or drop a directory into the upload zone. Modern desktop browsers will recursively read the image files within the folder and populate your batch queue automatically."
+    },
+    {
+      "question": "Does watermarking images reduce their original resolution or quality?",
+      "answer": "No. The watermarker operates directly on the native pixel resolution of each source image (e.g. 4000x3000 stays 4000x3000). The output is rendered at 1:1 original canvas dimensions with zero downsampling."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Why Watermarking Matters in the Era of Generative AI and Content Scraping",
+      "content": "As artificial intelligence scrapers and unauthorized automated crawlers proliferate, publishing unwatermarked high-resolution photography or proprietary visual designs online presents significant risks of unauthorized commercial exploitation. A thoughtfully positioned watermark establishes instant visual provenance, attaches clear copyright attribution, and creates high frictional barriers against theft, reposting without credit, and unauthorized model training datasets."
+    },
+    {
+      "title": "Text Watermarks vs. Logo Badges: Choosing the Right Protection Strategy",
+      "content": "Selecting between text strings and graphical logo watermarks depends on your primary objective:\n\n• **Text Watermarks:** Best for dynamic copyright notices (e.g., '© 2026 Studio Name'), confidential document classifications ('DO NOT DISTRIBUTE'), and client review stamps ('PROOF ONLY'). Our tool includes customizable outline strokes to guarantee legibility regardless of whether the background is deep shadow or bright sunlight.\n• **Logo Badges:** Ideal for brand awareness, watermarking e-commerce product catalogs, and professional photography signatures. Using transparent PNG or SVG assets allows your brand icon to float seamlessly over the image without harsh rectangular borders."
+    },
+    {
+      "title": "Corner Grid vs. Tiled Repeating Patterns: Security Trade-Offs",
+      "content": "Watermark placement represents a balance between aesthetic preservation and intellectual property security:\n\n• **9-Point Cardinal Grid:** Placing a discreet logo or copyright notice in the bottom-right or bottom-left corner preserves maximum visual impact for final portfolio showcases and social media posts while claiming ownership.\n• **Tiled Diagonal Pattern:** Repeating the watermark at an angle across the entire image provides uncompromised security for preliminary client proofs, contract drafts, and sample previews. Because the watermark overlays the focal points of the photograph, it cannot be cropped away or effortlessly inpainted by content-aware editing software."
+    },
+    {
+      "title": "Resolution-Aware Proportional Scaling Across Mixed Batches",
+      "content": "A common pitfall in bulk photo watermarking is using absolute pixel dimensions (e.g., a 36px font), which renders perfectly on a 1200x800 social graphic but becomes microscopic on a 6000x4000 camera raw export. Our engine employs adaptive proportional scaling, calculating text and logo sizes as a relative percentage of each image's native width. This ensures that every photo in your batch receives a watermark with consistent visual weight and legibility, regardless of mixed camera sensors or aspect ratios."
+    },
+    {
+      "title": "Local In-Browser Processing: Maximum Security for Sensitive Assets",
+      "content": "Unlike legacy cloud converters that require uploading gigabytes of private photography to remote cloud servers—raising privacy, compliance, and bandwidth concerns—our watermarker executes 100% within your client browser. Utilizing HTML5 Canvas 2D contexts and JSZip memory streaming, your original photos, confidential client drafts, and proprietary logo files never leave your device, ensuring total data privacy, zero latency, and zero data caps."
+    }
+  ]
+},
   {
-    "id": "ImageBlur",
-    "slug": "image-blur",
-    "name": "Blur Image",
-    "category": "image",
-    "shortDescription": "Apply Gaussian blur to images with adjustable intensity sliders.",
-    "metaDescription": "Blur images online for free. Adjust Gaussian blur radius for photos to create smooth background effects instantly in browser.",
-    "keywords": [
-      "Blur Image",
-      "Blur photo background",
-      "Gaussian blur online",
-      "Smoothen image pixels",
-      "Blur image tool"
-    ],
-    "icon": "Layers",
-    "howToUse": [
-      "Upload the image you want to blur.",
-      "Adjust the blur intensity slider (from 0px to 60px).",
-      "Review the live preview on the canvas workspace.",
-      "Download the blurred image in PNG format."
-    ],
-    "faqs": [
-      {
-        "question": "How is the blur effect computed?",
-        "answer": "The blur uses high-performance hardware-accelerated canvas filter properties (`blur(Xpx)`), rendering the blurred pixels instantly in browser memory."
-      },
-      {
-        "question": "Can I blur only a specific portion of the image?",
-        "answer": "Currently, this tool applies Gaussian blur to the entire image. To blur a specific area, you can crop that segment first."
-      }
-    ],
-    "sections": [
-      {
-        "title": "Gaussian Blur Applications",
-        "content": "Gaussian blur is a math filter that averages pixel colors with surrounding values. It is commonly used to create decorative backgrounds, protect text privacy, or reduce digital noise."
-      }
-    ]
-  },
+  "id": "ImageBlur",
+  "slug": "image-blur",
+  "name": "Blur Image",
+  "category": "image",
+  "shortDescription": "Apply Gaussian blur or pixelate mosaic censorship to multiple photos in bulk with adjustable radius, selective privacy box, and portrait bokeh modes.",
+  "metaTitle": "Blur Image Online – Free Bulk Photo Blur & Privacy Redaction | Toolique",
+  "metaDescription": "Blur photos online in bulk or redact sensitive faces, documents, and license plates with Gaussian blur and pixelate mosaic filters. 100% private in-browser processing with ZIP download.",
+  "keywords": [
+    "Blur Image",
+    "Blur photo online",
+    "Batch blur images",
+    "Bulk photo blur tool",
+    "Gaussian blur photo editor",
+    "Pixelate image online",
+    "Censor photo redaction tool",
+    "Blur faces in pictures",
+    "Portrait bokeh blur background",
+    "Redact sensitive info from image",
+    "Free client side image blur",
+    "Download blurred photos as zip"
+  ],
+  "icon": "Layers",
+  "howToUse": [
+    "Upload one or multiple photos by dropping them into the workspace, clicking 'Select Images', choosing 'Upload Folder', or pasting from your clipboard with Ctrl+V.",
+    "Select your target area mode: 'Full Image' to blur the entire canvas, 'Censor Box' to redact confidential details, or 'Portrait Bokeh' to keep the subject sharp while blurring the background.",
+    "Choose your filter style: 'Gaussian Blur' for silky optical smoothness (1px to 100px) or 'Pixelate / Mosaic' for authentic grid redaction (4px to 64px blocks).",
+    "In selective mode, customize the region shape (Rectangle or Ellipse) and adjust position sliders (X, Y, Width, Height) with live visual overlay feedback on the preview canvas.",
+    "Press and hold 'Hold to Compare' to inspect against the original image, then click 'Download Current' or 'Download All (ZIP)' to batch process and package all photos locally."
+  ],
+  "faqs": [
+    {
+      "question": "How do I blur multiple images at once?",
+      "answer": "Upload multiple photos or an entire folder into the bulk blur tool, configure your preferred blur intensity or censor area, and click 'Download All (ZIP)'. The tool processes every image locally through client-side HTML5 canvas and packages them into a single compressed ZIP file."
+    },
+    {
+      "question": "Can I blur only a specific part of an image like a face or license plate?",
+      "answer": "Yes. Switch the Target Area Mode to 'Censor Box'. You can adjust the box or circle dimensions to precisely cover faces, credit card numbers, license plates, addresses, or signatures using either Gaussian blur or a pixelated mosaic filter."
+    },
+    {
+      "question": "What is the difference between Gaussian blur and Pixelate mosaic?",
+      "answer": "Gaussian blur applies a smooth mathematical curve that blends adjacent pixel values into a soft, frosted-glass effect, ideal for aesthetic photography and backgrounds. Pixelate mosaic downsamples the image into blocky squares, which is the journalistic standard for censoring identities and confidential documents."
+    },
+    {
+      "question": "Are my confidential photos or documents uploaded to any server?",
+      "answer": "No. All blur calculations, pixel downsampling, and ZIP archiving execute 100% locally within your web browser using HTML5 Canvas 2D contexts. Your sensitive personal documents, IDs, and private photos never leave your device."
+    },
+    {
+      "question": "How does Portrait Bokeh mode work?",
+      "answer": "Portrait Bokeh mode inverts the selective blur mask: it smoothly blurs the entire background while preserving the original crispness and sharpness of your central subject or face inside the focal region, simulating expensive DSLR camera lenses with shallow depth-of-field."
+    },
+    {
+      "question": "Does blurring an image reduce its original resolution or dimensions?",
+      "answer": "No. The blur and redaction filters are computed at the native 1:1 pixel resolution of each uploaded photo (e.g., 4000x3000 remains 4000x3000). The export process preserves original pixel fidelity with zero downsampling."
+    },
+    {
+      "question": "Can a blurred or pixelated image be unblurred or reversed?",
+      "answer": "No. When an image is exported from our tool, the original underlying pixel values are irreversibly averaged and overwritten in the canvas pixel buffer. Because the raw data is permanently replaced, neither image viewers nor AI tools can restore the original hidden information."
+    },
+    {
+      "question": "What image formats are supported for input and export?",
+      "answer": "You can upload JPEG, PNG, WebP, GIF, BMP, SVG, and AVIF files. You can export your processed images as crisp lossless PNGs or compressed JPEGs with an adjustable quality slider (50% to 100%)."
+    },
+    {
+      "question": "How do I compare the blurred image with the original before downloading?",
+      "answer": "Simply click and hold the 'Hold to Compare' button in the canvas toolbar (or touch and hold on mobile). The preview canvas immediately toggles to show your untouched original image for instant quality inspection."
+    },
+    {
+      "question": "Can I upload an entire directory of photos directly?",
+      "answer": "Yes. Click the 'Upload Folder' button or drag and drop a folder into the intake dropzone. The tool automatically reads all supported image files within the folder into the interactive batch filmstrip."
+    }
+  ],
+  "sections": [
+    {
+      "title": "The Mathematics of Gaussian Blur: How Convolution Kernels Soften Images",
+      "content": "Gaussian blur is named after mathematician Carl Friedrich Gauss and operates using a 2D normal distribution function as its point-spread convolution matrix. Rather than averaging neighboring pixels uniformly (as seen in simple box blurs, which introduce harsh ringing artifacts), Gaussian filtering applies weights according to a bell-shaped curve: pixels closest to the center contribute most heavily to the new pixel value, while distant pixels have progressively diminished influence. This mathematical distribution produces a natural, organic optical smoothing effect identical to an out-of-focus camera lens."
+    },
+    {
+      "title": "Data Privacy & Legal Redaction: Gaussian Blur vs. Pixelated Mosaic",
+      "content": "When publishing visual evidence, investigative journalism, legal filings, or customer support screenshots, protecting Personally Identifiable Information (PII) is mandatory. Both heavy Gaussian blur and mosaic pixelation provide irreversible redaction:\n\n• **Gaussian Blur:** Eliminates high-frequency spatial frequencies, turning readable text or facial features into soft gradients. For high-security redaction, ensure the radius exceeds 35px so stroke geometry cannot be reconstructed.\n• **Pixelated Mosaic:** Decimates spatial resolution by grouping 8x8 to 48x48 pixel blocks into uniform median color tiles. This provides the gold standard for obscuring vehicle license plates, minors' faces, and government ID numbers because all internal contour lines are permanently destroyed in the rendered output."
+    },
+    {
+      "title": "Simulating Shallow Depth-of-Field: The Physics of Bokeh in Digital Photography",
+      "content": "In physical camera optics, shallow depth of field is produced by wide-aperture lenses (such as f/1.4 or f/1.8), where light rays converging outside the focal plane form soft circles of confusion known as 'bokeh'. Our Portrait Bokeh mode simulates this physical phenomenon computationally. By defining a focal circle or rectangular subject mask, the algorithm keeps the foreground subject pin-sharp while applying progressive Gaussian diffusion to the exterior backdrop. This draws the viewer's eye directly to the subject and elevates standard smartphone snapshots into studio-grade portraits."
+    },
+    {
+      "title": "Resolution-Invariant Blur Sizing Across Mixed Image Batches",
+      "content": "When processing a mixed queue of low-resolution web screenshots (e.g., 720p) and ultra-high-resolution mobile camera captures (e.g., 48 megapixels), fixed pixel dimensions can cause inconsistent results. Our interface provides intuitive visual presets and normalized percentage coordinates for redaction regions. This ensures that a censor box placed at the header or center of a photograph scales proportionately across diverse aspect ratios and sensor resolutions without clipping or misalignment."
+    },
+    {
+      "title": "Local Client-Side Canvas Processing: Zero-Knowledge Architecture",
+      "content": "Traditional online photo editors transmit your images over the internet to cloud servers for GPU processing, creating severe security vulnerabilities for corporate documents, medical scans, and personal photo libraries. Toolique's Image Blur tool functions on a strictly zero-knowledge architecture: all image decoding, 2D canvas filter operations, offscreen downsampling, and ZIP compression occur directly within your device's browser memory via the HTML5 Canvas API and Web Workers. Your data is never transmitted, cached, or logged by external servers, guaranteeing complete compliance with privacy frameworks such as GDPR and HIPAA."
+    }
+  ]
+},
   {
     "id": "BackgroundRemover",
     "slug": "background-remover",
@@ -3746,42 +3860,100 @@ export const toolsList: Tool[] = [
     ]
   },
   {
-    "id": "MetadataViewer",
-    "slug": "metadata-viewer",
-    "name": "Image Metadata Viewer",
-    "category": "image",
-    "shortDescription": "View basic image specifications and decode EXIF header metadata from camera photos.",
-    "metaDescription": "Read image metadata online. View file sizes, resolutions, aspect ratios, and extract EXIF headers (ISO, aperture, exposure, camera model).",
-    "keywords": [
-      "Image Metadata Viewer",
-      "Read EXIF online",
-      "View photo details",
-      "Image property reader",
-      "Camera metadata checker"
-    ],
-    "icon": "Table",
-    "howToUse": [
-      "Select a photo from your device (JPEG/JPG is highly recommended).",
-      "The general properties (resolution, size, type) will display immediately.",
-      "Review the EXIF headers section for camera make, model, exposure settings, and date taken details."
-    ],
-    "faqs": [
-      {
-        "question": "Why does my image show no EXIF metadata?",
-        "answer": "Most image uploads on social media, messaging apps, or optimization tools strip EXIF data to protect user privacy and minimize file sizes."
-      },
-      {
-        "question": "Does this metadata viewer store my GPS locations?",
-        "answer": "No. The file data is parsed entirely locally in your browser tab. No location details, camera tags, or image properties are sent to any server."
-      }
-    ],
-    "sections": [
-      {
-        "title": "What is EXIF Data?",
-        "content": "EXIF (Exchangeable Image File Format) is a metadata standard embedded inside image files. It stores details written by digital cameras and smartphones, such as date/time, camera model, coordinates, and exposure information."
-      }
-    ]
-  },
+  "id": "MetadataViewer",
+  "slug": "metadata-viewer",
+  "name": "Image Metadata Viewer",
+  "category": "image",
+  "shortDescription": "View image specifications and decode EXIF, TIFF, and GPS geolocation metadata from camera photos locally in your browser.",
+  "metaTitle": "Image Metadata Viewer Online – Free EXIF & GPS Location Inspector | Toolique",
+  "metaDescription": "View image metadata, camera specifications, and EXIF headers online for free. Read shutter speed, aperture, ISO, lens model, and embedded GPS map coordinates with 100% private in-browser decoding.",
+  "keywords": [
+    "Image Metadata Viewer",
+    "Read EXIF online",
+    "View photo metadata",
+    "EXIF data viewer",
+    "Extract GPS from photo",
+    "Check camera settings online",
+    "Photo EXIF reader",
+    "Find where picture was taken",
+    "ISO shutter aperture viewer",
+    "Image property inspector",
+    "Free online EXIF checker",
+    "Client side image metadata"
+  ],
+  "icon": "Table",
+  "howToUse": [
+    "Upload one or multiple photos by dropping them into the workspace, clicking 'Select Images', choosing 'Upload Folder', or pasting from your clipboard with Ctrl+V.",
+    "Inspect the Overview tab to view image dimensions, megapixels, aspect ratio, file size, and the exposure triangle summary (Aperture, Shutter Speed, ISO, Focal Length).",
+    "Open the 'Exposure & Shooting' tab for detailed capture parameters including metering mode, exposure program, EV bias, flash status, and white balance.",
+    "Check the 'GPS Geolocation' tab to view embedded latitude, longitude, and altitude, with direct 1-click links to Google Maps and OpenStreetMap.",
+    "Export your metadata report as JSON or CSV, or copy the formatted text summary to your clipboard."
+  ],
+  "faqs": [
+    {
+      "question": "What is EXIF metadata in digital images?",
+      "answer": "EXIF (Exchangeable Image File Format) is an international standard format for storing technical metadata directly inside JPEG, WebP, and TIFF image files. It records camera settings, lens hardware, date/time timestamps, exposure settings (ISO, shutter speed, aperture), and optional GPS coordinates at the moment a photograph is captured."
+    },
+    {
+      "question": "How do I find out where a photo was taken?",
+      "answer": "Upload the photo into the Image Metadata Viewer and navigate to the 'GPS Geolocation' tab. If the camera or smartphone had location services enabled when taking the photo, the tool decodes the embedded GPS latitude, longitude, and altitude, and provides direct links to view the exact location on Google Maps and OpenStreetMap."
+    },
+    {
+      "question": "Why does my image show no EXIF metadata?",
+      "answer": "Most social media platforms (such as Instagram, WhatsApp, Facebook, and Twitter), messaging apps, and image compressors automatically strip EXIF metadata to protect user privacy and minimize download file sizes. To view complete EXIF metadata, inspect the original uncompressed photo straight from your camera, memory card, or smartphone roll."
+    },
+    {
+      "question": "Are my photos or confidential GPS locations uploaded to any remote server?",
+      "answer": "No. All EXIF binary decoding, TIFF IFD traversal, and metadata parsing execute 100% locally in your web browser using JavaScript DataView byte reading. Your photos, private location coordinates, and camera serial numbers never leave your device."
+    },
+    {
+      "question": "Can I view metadata for multiple photos at once?",
+      "answer": "Yes. You can upload multiple photos or an entire folder. The interactive filmstrip queue allows you to toggle between pictures instantly to compare camera settings, resolutions, and exposure parameters across your shoot."
+    },
+    {
+      "question": "How can I export or save the image metadata?",
+      "answer": "You can click 'Copy Summary' to copy a formatted text report to your clipboard, click 'JSON' to download a structured JSON file, or click 'CSV' to export all metadata tags as a spreadsheet-compatible comma-separated values file."
+    },
+    {
+      "question": "What does the Exposure Triangle represent in EXIF data?",
+      "answer": "The Exposure Triangle consists of Aperture (f-number), Shutter Speed (exposure time), and ISO sensitivity. Together with focal length, these three variables determine the light exposure, motion blur, and depth-of-field in a photograph. Our tool highlights these metrics prominently in the Overview tab."
+    },
+    {
+      "question": "Can EXIF metadata reveal my personal identity or camera serial number?",
+      "answer": "Yes. Many modern DSLR, mirrorless cameras, and smartphones embed the camera body serial number, lens serial number, owner/artist name, and copyright notice in the ExifIFD and MakerNote tags, which our tool decodes in the 'Camera & Hardware' and 'Raw Tags' tabs."
+    },
+    {
+      "question": "What image formats contain EXIF metadata?",
+      "answer": "JPEG and TIFF are the primary formats containing EXIF metadata headers. Some WebP, PNG, and HEIC files also support embedded EXIF and XMP chunks. Formats like GIF and basic SVG do not use standard EXIF headers."
+    },
+    {
+      "question": "How can I test the tool if I don't have a camera photo ready?",
+      "answer": "Click 'Load 3 Pro Samples' on the intake screen. This loads three realistic sample photographs (Sony A7R IV landscape in Banff with GPS, iPhone 15 Pro night shot in Tokyo with GPS, and Canon EOS R5 studio portrait) with complete authentic EXIF headers for immediate exploration."
+    }
+  ],
+  "sections": [
+    {
+      "title": "The Architecture of EXIF Metadata: TIFF Headers, IFD Trees, and Marker Segments",
+      "content": "Exchangeable Image File Format (EXIF) operates as a structured binary container within image files. In JPEG files, EXIF is stored within an APP1 application marker segment (byte sequence 0xFFE1) containing the signature 'Exif\\0\\0'. The internal structure conforms to the TIFF standard, commencing with byte-order endianness ('II' for Intel Little-Endian or 'MM' for Motorola Big-Endian) and establishing an Image File Directory (IFD) tree. Primary IFD0 contains general camera make and model details, which then points to specialized sub-directories including ExifIFD (tag 0x8769) for exposure variables, GPS IFD (tag 0x8825) for geolocation, and Interoperability IFD."
+    },
+    {
+      "title": "Privacy Risks of Embedded Geotagging: Why GPS Metadata Demands Caution",
+      "content": "When smartphone or camera location services are enabled, digital captures automatically encode decimal or DMS geographic coordinates, altitude, compass bearing, and atomic GPS timestamps into the image header. While invaluable for travel photography organization and mapping, publishing unscrubbed original images online can inadvertently reveal private home addresses, daily routines, sensitive work facilities, or vacation schedules to malicious actors. Understanding how to inspect and detect GPS tags is an essential first step in managing your digital footprint."
+    },
+    {
+      "title": "Deciphering the Exposure Triangle: Technical Photometry in Digital Photography",
+      "content": "Every photograph is an exercise in photographic photometry governed by the Exposure Triangle:\n\n• **Aperture (f-number):** The ratio of lens focal length to entrance pupil diameter. Smaller f-numbers (e.g., f/1.4) yield wider physical openings, admitting more light and producing a shallow depth of field with creamy background bokeh.\n• **Shutter Speed (exposure time):** The duration for which the sensor or mechanical shutter admits light, ranging from fractions of a millisecond (1/8000s to freeze sports action) to multiple seconds for night landscapes.\n• **ISO Sensitivity:** The signal gain amplification applied to sensor photoreceptors. Lower values (ISO 50–100) yield maximum dynamic range and lowest noise, whereas higher values (ISO 3200+) enable handheld low-light photography at the cost of digital grain."
+    },
+    {
+      "title": "Metadata Stripping vs. Preservation: Web Performance vs. Archival Integrity",
+      "content": "The treatment of image metadata represents a fundamental balance in web engineering. For consumer web performance and bandwidth conservation, stripping EXIF headers saves between 2KB and 60KB per image, which significantly improves Core Web Vitals (LCP) across large image catalogs. Conversely, for legal archival integrity, digital forensics, intellectual property management, and professional photography agencies, preserving IPTC copyright declarations, camera serial numbers, and original timestamps is mandatory to prove visual provenance and protect creator rights."
+    },
+    {
+      "title": "Client-Side Binary Parsing: Reading Binary Streams Safely in the Browser",
+      "content": "Historically, examining image headers required uploading multi-megabyte files to third-party web servers running CLI tools like ExifTool. Toolique's Image Metadata Viewer utilizes modern web standards including the JavaScript File API, ArrayBuffer, and DataView interfaces. The byte stream is decoded directly within browser sandbox memory, parsing 16-bit tags, 32-bit offsets, and rational fractions without transmitting any data over the network. This guarantees instantaneous zero-latency inspection and complete data sovereignty for confidential photography."
+    }
+  ]
+},
   {
     "id": "ImageToBase64",
     "slug": "image-to-base64",
@@ -3857,125 +4029,100 @@ export const toolsList: Tool[] = [
     ]
   },
   {
-    "id": "ImagesToZip",
-    "slug": "images-to-zip",
-    "name": "Convert Multiple Images to ZIP",
-    "category": "image",
-    "shortDescription": "Select and package multiple images into a single compressed ZIP archive locally.",
-    "metaDescription": "Compress multiple images to ZIP online. Package photo selections into a single zip download file entirely in browser.",
-    "keywords": [
-      "Convert Multiple Images to ZIP",
-      "Images to ZIP converter",
-      "Zip photos online",
-      "Compress folder images",
-      "Pack files to zip"
-    ],
-    "icon": "Archive",
-    "howToUse": [
-      "Select or drag-and-drop multiple image files into the upload box.",
-      "Review and manage the selected files list (remove unwanted items).",
-      "Click \"Compile ZIP Archive\" to create the zip folder locally.",
-      "Download the compiled `.zip` file with a single click."
-    ],
-    "faqs": [
-      {
-        "question": "Is there a limit on the number of images I can zip?",
-        "answer": "There is no strict limit, but zipping runs inside your browser memory. Processing hundreds of megabytes of images at once can slow down older devices."
-      },
-      {
-        "question": "Are the files zipped securely?",
-        "answer": "Yes, compression runs 100% locally in your browser memory. Your files are never uploaded to any remote server."
-      }
-    ],
-    "sections": [
-      {
-        "title": "Benefits of Client-Side Zipping",
-        "content": "Zipping locally allows you to package and download bulk assets instantly without spending data bandwidth to upload files to a server, providing perfect security for private snapshots."
-      }
-    ]
-  },
-  {
-    "id": "ImageColorPicker",
-    "slug": "image-color-picker",
-    "name": "Image Color Picker",
-    "category": "image",
-    "shortDescription": "Extract pixel color codes from images with a magnifying zoom loupe overlay.",
-    "metaDescription": "Pick color from image online. Hover with magnifying glass zoom and click to copy hex, rgb, and hsl color codes from any pixel.",
-    "keywords": [
-      "Image Color Picker",
-      "Pick color from image",
-      "Hex color dropper",
-      "Find pixel color online",
-      "Color identifier from photo"
-    ],
-    "icon": "Pipette",
-    "howToUse": [
-      "Upload the image from which you want to pick colors.",
-      "Hover over the image canvas. A zoom loupe overlay will follow your cursor.",
-      "Click to lock-select the color of that pixel.",
-      "Copy Hex, RGB, or HSL codes from the sidebar panel."
-    ],
-    "faqs": [
-      {
-        "question": "How accurate is the magnifying loupe?",
-        "answer": "It zooms into the exact pixel coordinate on the canvas, showing a 9x9 grid of pixels around the cursor for precise color selections."
-      },
-      {
-        "question": "What color formats does this tool output?",
-        "answer": "It outputs standard CSS hexadecimal (#Hex), rgb(r, g, b), and hsl(h, s, l) codes ready to copy directly into designs."
-      }
-    ],
-    "sections": [
-      {
-        "title": "Color Codes in Web Development",
-        "content": "- **HEX**: Alphanumeric representation of Red, Green, and Blue intensity in base-16.\n- **RGB**: Specifies additive red, green, blue channels directly.\n- **HSL**: Stands for Hue, Saturation, Lightness, offering a more human-intuitive model for editing colors."
-      }
-    ]
-  },
-  {
-    id: 'QRScannerImage',
-    slug: 'qr-scanner-image',
-    name: 'QR Code Scanner From Image',
-    category: 'image',
-    shortDescription: 'Scan and decode QR codes from image files, clipboard screenshots (Ctrl+V), or live webcam.',
-    metaDescription: 'Free online QR code scanner from image & webcam. Upload photos, paste screenshots (Ctrl+V), or scan live camera feed. Decodes UPI payments, Wi-Fi passwords, vCards, web URLs, and calendar invites locally in browser.',
-    keywords: ['QR Code Scanner From Image', 'Read QR code from file', 'QR decoder from photo', 'Online QR reader image', 'Scan QR code photo', 'UPI QR scanner online', 'WiFi QR code password reader', 'vCard QR scanner', 'Webcam QR scanner'],
-    icon: 'QrCode',
-    howToUse: [
-      'Choose an input method: Upload Image, Paste Screenshot (Ctrl+V), Live Webcam, Image URL, or Sample Presets.',
-      'Select or drop any image file (PNG, JPG, WebP, SVG) or point your webcam at a QR code.',
-      'Our multi-pass engine automatically handles inverted dark-mode QR codes, binarizes low-contrast photos, and draws a visual bounding box.',
-      'Inspect structured payload cards: Launch UPI payment apps, copy Wi-Fi passwords, download .VCF contact cards, or open web URLs.'
-    ],
-    faqs: [
-      {
-        question: 'Will this scanner work on blur or skewed QR codes?',
-        answer: 'Yes! The scanner runs progressive multi-pass image enhancement (binarization, contrast boosting, and dual inversion passes) to reconstruct and decode skewed, low-contrast, or slightly blurry QR codes.'
-      },
-      {
-        question: 'Can it scan QR codes from screenshots?',
-        answer: 'Yes! You can upload screenshot image files or simply press Ctrl+V anywhere on the page to paste and decode clipboard screenshots immediately.'
-      },
-      {
-        question: 'Does it parse UPI, Wi-Fi, and Contact Cards?',
-        answer: 'Yes! The tool features dedicated smart parsers for UPI payment links (Payee, Amount, Note), Wi-Fi passwords (SSID, WPA2), vCard contacts (.VCF), calendar invites (.ICS), and GPS geo-coordinates.'
-      }
-    ],
-    sections: [
-      {
-        title: 'How Client-Side QR Code Scanning Works',
-        content: 'QR (Quick Response) codes are two-dimensional matrix barcodes containing black and white square modules arranged on a square grid. Our scanner utilizes the HTML5 Canvas API and the jsQR algorithm to extract pixel luminance data directly inside your browser RAM. By analyzing finder patterns (the three square position markers at the corners) and applying Reed-Solomon algebraic error correction, the engine extracts the binary data stream without sending any bytes to external servers.'
-      },
-      {
-        title: 'Multi-Pass Image Enhancement & Inverted QR Support',
-        content: 'Real-world QR images often suffer from poor lighting, glare, low contrast, or dark mode color inversion (white modules on dark backgrounds). Our studio employs a robust 3-stage scanning pipeline:\\n\\n1. **Dual Inversion Pass (attemptBoth)**: Decodes standard and inverted QR codes seamlessly.\\n2. **Adaptive Binarization**: Converts color and grayscale photos into optimal black-and-white threshold masks.\\n3. **Multi-Scale Downsampling**: Optimizes multi-megapixel smartphone photos to prevent browser memory stalls while sharpening fine barcode modules.'
-      },
-      {
-        title: 'Smart Payload Parsing: UPI, Wi-Fi, vCard & Geo Links',
-        content: 'Rather than simply returning a raw text string, our scanner automatically categorizes and structures the decoded data:\\n\\n- **UPI Payments**: Extracts Payee VPA, merchant name, and amount with a 1-click Pay App launcher.\\n- **Wi-Fi Credentials**: Extracts SSID and WPA/WPA2 passwords with a show/hide toggle.\\n- **vCard Profiles**: Extracts contact information and generates instant downloadable .VCF files.\\n- **Web URLs**: Audits HTTPS security protocol and opens destinations safely.'
-      }
-    ]
-  },
+  "id": "ImagesToZip",
+  "slug": "images-to-zip",
+  "name": "Convert Multiple Images to ZIP",
+  "category": "image",
+  "shortDescription": "Package and compress multiple images (JPG, PNG, WebP, GIF, SVG, AVIF) into a single ZIP archive locally in your browser with zero file limits.",
+  "metaTitle": "Convert Multiple Images to ZIP Online – Free Bulk Photo Archiver | Toolique",
+  "metaDescription": "Package and compress multiple images (JPG, PNG, WebP, GIF, SVG, AVIF) into a single ZIP archive locally in your browser. Zero file limits, instant client-side privacy, optional batch WebP conversion and resizing.",
+  "keywords": [
+    "Convert Multiple Images to ZIP",
+    "Images to ZIP converter online",
+    "Bulk photo to zip",
+    "Batch images to zip archive",
+    "Compress photos into zip file",
+    "Combine images into single zip",
+    "Client-side image zip generator",
+    "Zip images without uploading",
+    "JPG to ZIP converter",
+    "PNG to ZIP archive",
+    "WebP bulk zip tool",
+    "How to zip multiple pictures"
+  ],
+  "icon": "Archive",
+  "howToUse": [
+    "Upload your images by dragging and dropping them into the workspace, clicking 'Select Images', choosing 'Upload Folder', or pressing Ctrl+V to paste from your clipboard.",
+    "Review the queued images in the list or grid view with real-time resolution, format badges, and individual file size indicators.",
+    "Optionally open 'Archive Config' to adjust ZIP compression (DEFLATE Level 1–9 vs. STORE 0), batch convert to WebP or JPEG, apply max-resolution bounds, or set sequential numbering (e.g. photo_01.jpg).",
+    "Click 'Compile ZIP Archive' to generate the compressed package entirely in your browser memory via Web Workers.",
+    "Click 'Download ZIP' to save your compiled .zip file immediately with zero bandwidth waste and complete privacy."
+  ],
+  "faqs": [
+    {
+      "question": "How do I convert multiple images into a single ZIP archive?",
+      "answer": "To convert multiple images into a ZIP file, drag and drop your photos into the Toolique Images to ZIP dropzone, or click 'Select Images'. You can also upload entire folders or paste screenshots directly with Ctrl+V. Once loaded, click 'Compile ZIP Archive', and your browser will package and compress every image into a single .zip download file instantly."
+    },
+    {
+      "question": "Are my photos uploaded to any external server during ZIP conversion?",
+      "answer": "No. Toolique operates on a strict zero-knowledge, client-side execution model. All image parsing, thumbnail generation, canvas resizing, and JSZip DEFLATE compression happen exclusively within your device's browser memory (RAM). Not a single byte of your photos is ever sent to or stored on any remote cloud server."
+    },
+    {
+      "question": "What image file formats can be packaged into the ZIP archive?",
+      "answer": "You can package all standard image formats including JPEG (.jpg, .jpeg), PNG (.png), WebP (.webp), AVIF (.avif), GIF (.gif), SVG (.svg), BMP (.bmp), ICO (.ico), and TIFF (.tif, .tiff). You can also mix different image formats in the same ZIP archive without restriction."
+    },
+    {
+      "question": "What is the difference between DEFLATE and STORE compression for images?",
+      "answer": "DEFLATE (Levels 1–9) applies the standard zlib compression algorithm, searching for redundant bit sequences to shrink archive size. STORE (Level 0) packages files into the ZIP container with zero compression. Because modern formats like JPEG, PNG, and WebP are already heavily compressed, STORE is much faster (instant CPU execution), while DEFLATE shrinks uncompressed formats like BMP, SVG, and TIFF significantly."
+    },
+    {
+      "question": "Can I compress or resize my images before creating the ZIP file?",
+      "answer": "Yes. In the 'Archive Config' panel, you can choose to batch convert all queued images to modern WebP or standard JPEG with adjustable quality sliders (e.g., 85%). You can also enforce maximum resolution bounds (such as 4K, 1080p Full HD, or 800px web thumbnails) to save up to 70% of total storage space before packaging."
+    },
+    {
+      "question": "Is there a limit on the number of images or file size I can zip?",
+      "answer": "There is no artificial limit imposed by Toolique. You can package dozens or hundreds of photos. Because the operation is constrained solely by your device's available browser memory (RAM), modern desktop and mobile browsers can easily process gigabytes of imagery smoothly."
+    },
+    {
+      "question": "Can I upload an entire folder of photos to zip them together?",
+      "answer": "Yes. Click the 'Upload Folder' button to select an entire folder from your computer. The tool will ingest all image files located within that directory and allow you to package them with custom subfolder structures."
+    },
+    {
+      "question": "Does putting images into a ZIP file reduce image quality?",
+      "answer": "No. By default, packaging images into a ZIP archive is a 100% lossless container operation. The byte-for-byte fidelity of your original photos is preserved identically. Quality is only modified if you explicitly enable the optional 'Pre-Conversion Image Format' or resolution downscaling features."
+    },
+    {
+      "question": "Can I rename image files sequentially inside the ZIP archive?",
+      "answer": "Yes. In 'Archive Config', you can select the 'Internal File Naming Pattern' and choose 'Sequential Numbers' (01.jpg, 02.jpg), 'Custom Prefix + Sequential' (e.g., vacation_01.jpg), or 'Clean & Slugified' to standardize names across heterogeneous photo collections."
+    },
+    {
+      "question": "How can I open or extract the ZIP file after downloading?",
+      "answer": "On Windows, right-click the downloaded .zip file and select 'Extract All...'. On macOS, simply double-click the .zip file to expand it into a folder. On iOS and Android, open the native Files or My Files app and tap the .zip archive to preview or decompress the contents."
+    }
+  ],
+  "sections": [
+    {
+      "title": "Why Package Multiple Images into a Unified Compressed ZIP File",
+      "content": "Distributing multiple loose image files over email, chat applications, or cloud drives frequently introduces friction: files get sent out of order, email providers enforce individual attachment limits, and messaging apps often aggressively re-compress and degrade image fidelity. Packaging your photo selections into a single standardized `.zip` archive eliminates these bottlenecks.\n\n- **Preserve Full Metadata & Resolution**: Standard ZIP archiving ensures that EXIF camera data, original color profiles, and raw pixel dimensions remain untouched.\n- **Bypass Attachment Caps**: Sending one structured `.zip` file avoids having to attach 30 separate attachments in Gmail, Outlook, or client ticketing portals.\n- **Easy Cloud & USB Backup**: A single archive simplifies folder synchronization, hard drive archiving, and sharing with clients or team members."
+    },
+    {
+      "title": "Client-Side In-Browser Zipping vs. Server-Side Converters: The Privacy Advantage",
+      "content": "Most online 'Images to ZIP' converters force users to upload their private photos to external cloud servers where files are queued on shared disks before being processed and returned via download links. This workflow poses severe privacy risks for sensitive photos, confidential receipts, corporate graphics, and identity documents.\n\nToolique executes 100% of the zipping pipeline directly inside your browser memory using WebAssembly and JSZip:\n- **Zero Server Transmission**: Your photos never leave your device's memory.\n- **Instant Zero-Latency Execution**: No waiting for multi-gigabyte files to upload over slow home or mobile internet connections.\n- **Guaranteed Data Security**: When you close the browser tab, all temporary memory objects are instantly garbage-collected with zero footprint."
+    },
+    {
+      "title": "DEFLATE vs. STORE: Choosing the Optimal Compression Algorithm",
+      "content": "When compiling a ZIP file, selecting the appropriate compression algorithm depends on the nature of your files:\n\n- **STORE Mode (Level 0)**: In STORE mode, the ZIP utility acts purely as an archive aggregator without running mathematical entropy reduction. For already-compressed image formats such as JPEG (.jpg) and WebP (.webp), re-running compression algorithms yields minimal space savings while consuming high CPU power. STORE mode finishes in milliseconds.\n- **DEFLATE Mode (Levels 1 to 9)**: DEFLATE employs LZ77 and Huffman coding. For uncompressed or lossless graphics such as bitmaps (.bmp), vector graphics (.svg), medical TIFFs (.tif), and screenshots (.png), DEFLATE mode reduces file footprints by 20% to 75%."
+    },
+    {
+      "title": "Pre-Archive Batch Optimization: Converting to WebP and Auto-Rescaling",
+      "content": "Need to share photos with clients or colleagues while minimizing download sizes? Toolique's integrated batch optimization engine lets you pre-process images before archiving:\n\n1. **Format Modernization**: Convert legacy JPEGs and heavy PNGs into modern Google WebP format with up to 30% smaller footprints at identical visual fidelity.\n2. **Proportional Rescaling**: Downsample 24MP+ high-resolution camera originals to standard display bounds (such as 4K 3840px or 1080p 1920px Full HD), preserving exact aspect ratios without distortion.\n3. **Quality Tuning**: Adjust lossy compression thresholds to balance crystalline visual sharpness with minimal byte weights."
+    },
+    {
+      "title": "Automated Archive Manifest and Sequential Indexing",
+      "content": "For developers, photographers, and e-commerce merchants managing large product catalogs, maintaining asset provenance is critical. When enabled, Toolique automatically generates a machine-readable `manifest.json` file inside the ZIP archive. This JSON index documents the original filename, target path, file dimensions (width × height), exact byte counts, and generation timestamps, providing an audit trail for automated workflows and digital asset managers (DAM)."
+    }
+  ]
+},
   {
     id: 'PDFMerge',
     slug: 'pdf-merge',
