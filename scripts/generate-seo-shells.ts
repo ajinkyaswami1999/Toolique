@@ -116,6 +116,8 @@ export function getToolCanonicalPath(category: string, slug: string): string {
     return `economics/${slug}`;
   } else if (category === 'pdf') {
     return `pdf/${slug}`;
+  } else if (['compliance', 'dpdp-privacy', 'rbi-financial', 'uidai-aadhaar', 'audit-evidence'].includes(category)) {
+    return `compliance/${slug}`;
   } else {
     return `calculators/${slug}`;
   }
@@ -136,6 +138,8 @@ export function getCategoryCanonicalPath(category: string): string {
     return `economics`;
   } else if (category === 'pdf') {
     return `pdf`;
+  } else if (['compliance', 'dpdp-privacy', 'rbi-financial', 'uidai-aadhaar', 'audit-evidence'].includes(category)) {
+    return `compliance`;
   } else {
     return `calculators`;
   }
@@ -870,6 +874,83 @@ const pdfSchema = {
   ]
 };
 
+// Compliance & Regulatory Suite
+const complianceTools = toolsList.filter(t => ['compliance', 'dpdp-privacy', 'rbi-financial', 'uidai-aadhaar', 'audit-evidence'].includes(t.category));
+const complianceFaqs = [
+  {
+    question: 'What is the Compliance & Regulatory Suite on Toolique?',
+    answer: 'The Compliance & Regulatory Suite is an integrated collection of client-side statutory assessment calculators and evidence generation utilities designed for Indian enterprises, FinTechs, banks, and cybersecurity teams operating under Indian legal frameworks including the DPDP Act 2023, RBI Digital Lending Guidelines, UIDAI Aadhaar Regulations, and CERT-In Directions 2022.'
+  },
+  {
+    question: 'Are sensitive business records or compliance inputs uploaded to external servers?',
+    answer: 'Never. Every calculation, assessment checklist, Verhoeff checksum validation, and cryptographic SHA-256 hash generation is executed 100% locally in your web browser. No Aadhaar numbers, loan portfolios, incident logs, or internal policy details are ever transmitted over the network or saved on our servers.'
+  },
+  {
+    question: 'How do the 4 regulatory categories map to statutory authorities in India?',
+    answer: 'The suite is divided into 4 specialized categories: (1) DPDP & Privacy (Data Protection Board of India & MeitY), (2) RBI & Financial Regulations (Reserve Bank of India FinTech directives), (3) UIDAI & Aadhaar (Unique Identification Authority of India), and (4) Audit & Evidence Management (CERT-In IT Act Sec 70B & Bharatiya Sakshya Adhiniyam Sec 63 / Evidence Act Sec 65B).'
+  },
+  {
+    question: 'Can I export audit reports and evidence certificates from these tools?',
+    answer: 'Yes. The tools provide one-click export for DPDP Readiness Audit Summaries, DLG Lending Checklists, CERT-In Incident Reports pre-formatted for incident@cert-in.org.in, and court-admissible Section 65B / BSA Section 63 Digital Evidence Certificates.'
+  }
+];
+
+const complianceBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Compliance & Regulatory Suite</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Statutory Compliance & Regulatory Suite for India</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Evaluate enterprise readiness under the DPDP Act 2023, audit FinTech operations against RBI Digital Lending Guidelines and 5% FLDG caps, validate UIDAI Aadhaar Data Vault tokenization and Verhoeff check digits, and monitor CERT-In mandatory 6-hour cybersecurity incident reporting deadlines with 180-day NPL NTP log retention. 100% private, client-side execution.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${complianceTools.map(renderToolCardHtml).join('')}
+      </div>
+
+      ${renderFaqsHtml(complianceFaqs)}
+    </div>
+  </div>`;
+
+const complianceSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/compliance#collection',
+      'name': 'Compliance & Regulatory Suite – DPDP, RBI DLG, UIDAI & CERT-In | Toolique',
+      'description': 'Statutory compliance & regulatory calculation suite for Indian enterprises. Evaluate DPDP Act 2023 readiness, audit RBI Digital Lending 5% FLDG caps, test UIDAI Aadhaar Vault & Verhoeff, and track CERT-In 6-hour incident deadlines.',
+      'url': 'https://www.toolique.in/compliance',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': 'Compliance & Regulatory Tools Directory',
+        'numberOfItems': complianceTools.length,
+        'itemListElement': complianceTools.map((t, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': t.name,
+          'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/compliance#faq',
+      'mainEntity': complianceFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': faq.answer
+        }
+      }))
+    }
+  ]
+};
+
 // Tools Directory Page
 const toolsDirectoryBodyHtml = `
   <div id="root">
@@ -1087,6 +1168,14 @@ const staticPages = [
     keywords: ['PDF Tools Hub', 'Free PDF tools online', 'Client side PDF converter', 'PDF to Image converter', 'Merge PDF free', 'Split PDF range', 'Compress PDF target KB', 'Watermark PDF online', 'PDF password protect', 'Private PDF tools', 'PDF without upload'],
     schemaMarkup: pdfSchema,
     bodyHtml: pdfBodyHtml
+  },
+  {
+    path: 'compliance',
+    title: 'Compliance & Regulatory Suite – DPDP, RBI DLG, UIDAI & CERT-In | Toolique',
+    description: 'Statutory compliance & regulatory calculation suite for Indian enterprises. Evaluate DPDP Act 2023 readiness, audit RBI Digital Lending 5% FLDG caps, test UIDAI Aadhaar Vault & Verhoeff, and track CERT-In 6-hour incident deadlines.',
+    keywords: ['compliance suite India', 'DPDP Act 2023 compliance', 'RBI Digital Lending Guidelines', 'FLDG 5% cap calculator', 'UIDAI Aadhaar Data Vault', 'Verhoeff algorithm validator', 'CERT-In 6-hour incident reporting', 'Section 65B evidence certificate', 'BSA Section 63'],
+    schemaMarkup: complianceSchema,
+    bodyHtml: complianceBodyHtml
   },
   {
     path: 'about-founder',

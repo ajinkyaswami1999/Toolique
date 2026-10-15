@@ -3,7 +3,7 @@ import {
   Search, Sparkles, LayoutGrid, IndianRupee, Code, Image as ImageIcon,
   Hammer, Compass, Palette, ArrowRight,
   Globe, FileText, Share2, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart, Type,
-  Flame, Award, Printer, ShieldCheck, Layers, TrendingUp
+  Flame, Award, Printer, ShieldCheck, Layers, TrendingUp, Shield, Landmark, Fingerprint, FileCheck
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { categories } from '../data/categories';
@@ -35,7 +35,11 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
   '3d-printing': Printer,
   'math-studio': Scale,
   qa: ShieldCheck,
-  economics: TrendingUp
+  economics: TrendingUp,
+  'dpdp-privacy': Shield,
+  'rbi-financial': Landmark,
+  'uidai-aadhaar': Fingerprint,
+  'audit-evidence': FileCheck
 };
 
 export default function Home() {
@@ -216,6 +220,15 @@ export default function Home() {
       link: '/ai', 
       icon: Sparkles, 
       color: 'text-purple-700 dark:text-purple-300 bg-pastel-purple/30 border-pastel-purple/60 dark:bg-purple-950/40 dark:border-purple-800/60' 
+    },
+    { 
+      id: 'compliance', 
+      title: 'Compliance & Regulatory Suite', 
+      badge: 'Statutory Hub',
+      desc: 'DPDP Act 2023 readiness, RBI 5% FLDG caps & DLG guidelines, UIDAI Aadhaar Vault tokenization, and CERT-In 6-hour incident clock.', 
+      link: '/compliance', 
+      icon: Scale, 
+      color: 'text-amber-700 dark:text-amber-300 bg-amber-500/10 border-amber-500/30 dark:bg-amber-950/40 dark:border-amber-800/60' 
     }
   ];
 
@@ -374,6 +387,13 @@ export default function Home() {
             >
               <IndianRupee className="w-3.5 h-3.5" />
               <span>Finance Hub</span>
+            </Link>
+            <Link
+              to="/compliance"
+              className="px-3.5 py-2 rounded-2xl bg-white/90 dark:bg-zinc-900/90 hover:bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-300/50 font-extrabold text-xs transition duration-200 active:scale-98 cursor-pointer flex items-center gap-1.5 shadow-xs"
+            >
+              <Scale className="w-3.5 h-3.5" />
+              <span>Compliance Suite</span>
             </Link>
           </div>
 

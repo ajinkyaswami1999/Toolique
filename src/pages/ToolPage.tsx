@@ -357,6 +357,51 @@ const ComparativeAdvantageCalculator = lazy(() => import('../tools/economics/Com
 const VelocityOfMoneyCalculator = lazy(() => import('../tools/economics/VelocityOfMoneyCalculator'));
 const RealInterestRateCalculator = lazy(() => import('../tools/economics/RealInterestRateCalculator'));
 
+// Phase 4 - Compliance & Regulatory Suite
+const DPDPReadinessEvaluator = lazy(() => import('../tools/compliance/DPDPReadinessEvaluator'));
+const RBIDigitalLendingChecker = lazy(() => import('../tools/compliance/RBIDigitalLendingChecker'));
+const AadhaarVaultValidator = lazy(() => import('../tools/compliance/AadhaarVaultValidator'));
+const CERTInIncidentCalculator = lazy(() => import('../tools/compliance/CERTInIncidentCalculator'));
+
+// DPDP & Privacy
+const DPDPComplianceChecklist = lazy(() => import('../tools/compliance/dpdp/DPDPComplianceChecklist'));
+const PIIDataScanner = lazy(() => import('../tools/compliance/dpdp/PIIDataScanner'));
+const PersonalDataMaskingTool = lazy(() => import('../tools/compliance/dpdp/PersonalDataMaskingTool'));
+const ConsentRecordValidator = lazy(() => import('../tools/compliance/dpdp/ConsentRecordValidator'));
+const PrivacyPolicyChecklist = lazy(() => import('../tools/compliance/dpdp/PrivacyPolicyChecklist'));
+const DataRetentionPlanner = lazy(() => import('../tools/compliance/dpdp/DataRetentionPlanner'));
+const DataBreachAssessment = lazy(() => import('../tools/compliance/dpdp/DataBreachAssessment'));
+const DataPrincipalRightsTracker = lazy(() => import('../tools/compliance/dpdp/DataPrincipalRightsTracker'));
+
+// RBI & Financial Regulations
+const RBIComplianceChecklist = lazy(() => import('../tools/compliance/rbi/RBIComplianceChecklist'));
+const KYCAMLControlAssessment = lazy(() => import('../tools/compliance/rbi/KYCAMLControlAssessment'));
+const DigitalPaymentSecurityChecklist = lazy(() => import('../tools/compliance/rbi/DigitalPaymentSecurityChecklist'));
+const TransactionReversalSLACalculator = lazy(() => import('../tools/compliance/rbi/TransactionReversalSLACalculator'));
+const APISecurityChecklist = lazy(() => import('../tools/compliance/rbi/APISecurityChecklist'));
+const VendorRiskAssessment = lazy(() => import('../tools/compliance/rbi/VendorRiskAssessment'));
+const AccessControlAudit = lazy(() => import('../tools/compliance/rbi/AccessControlAudit'));
+const RegulatoryCircularTracker = lazy(() => import('../tools/compliance/rbi/RegulatoryCircularTracker'));
+
+// UIDAI & Aadhaar
+const AadhaarDataMaskingTool = lazy(() => import('../tools/compliance/uidai/AadhaarDataMaskingTool'));
+const EKYCDataValidator = lazy(() => import('../tools/compliance/uidai/EKYCDataValidator'));
+const AadhaarXMLValidator = lazy(() => import('../tools/compliance/uidai/AadhaarXMLValidator'));
+const KYCNameDOBMatchAnalyzer = lazy(() => import('../tools/compliance/uidai/KYCNameDOBMatchAnalyzer'));
+const RDServiceHealthTester = lazy(() => import('../tools/compliance/uidai/RDServiceHealthTester'));
+const AuthResponseAnalyzer = lazy(() => import('../tools/compliance/uidai/AuthResponseAnalyzer'));
+const PIDXMLStructureValidator = lazy(() => import('../tools/compliance/uidai/PIDXMLStructureValidator'));
+const AadhaarDataExposureScanner = lazy(() => import('../tools/compliance/uidai/AadhaarDataExposureScanner'));
+
+// Audit & Evidence Management
+const ComplianceAuditChecklist = lazy(() => import('../tools/compliance/audit/ComplianceAuditChecklist'));
+const AuditEvidenceOrganizer = lazy(() => import('../tools/compliance/audit/AuditEvidenceOrganizer'));
+const ControlGapAssessment = lazy(() => import('../tools/compliance/audit/ControlGapAssessment'));
+const RiskRegisterGenerator = lazy(() => import('../tools/compliance/audit/RiskRegisterGenerator'));
+const RemediationTracker = lazy(() => import('../tools/compliance/audit/RemediationTracker'));
+const PolicyDocumentAnalyzer = lazy(() => import('../tools/compliance/audit/PolicyDocumentAnalyzer'));
+const AuditReportGenerator = lazy(() => import('../tools/compliance/audit/AuditReportGenerator'));
+const RegulatoryEvidenceMapping = lazy(() => import('../tools/compliance/audit/RegulatoryEvidenceMapping'));
 
 const toolComponents: Record<string, React.ComponentType> = {
   GSTCalculator,
@@ -690,6 +735,52 @@ const toolComponents: Record<string, React.ComponentType> = {
   ComparativeAdvantageCalculator,
   VelocityOfMoneyCalculator,
   RealInterestRateCalculator,
+
+  // Compliance & Regulatory Suite
+  DPDPReadinessEvaluator,
+  RBIDigitalLendingChecker,
+  AadhaarVaultValidator,
+  CERTInIncidentCalculator,
+
+  // DPDP & Privacy
+  DPDPComplianceChecklist,
+  PIIDataScanner,
+  PersonalDataMaskingTool,
+  ConsentRecordValidator,
+  PrivacyPolicyChecklist,
+  DataRetentionPlanner,
+  DataBreachAssessment,
+  DataPrincipalRightsTracker,
+
+  // RBI & Financial Regulations
+  RBIComplianceChecklist,
+  KYCAMLControlAssessment,
+  DigitalPaymentSecurityChecklist,
+  TransactionReversalSLACalculator,
+  APISecurityChecklist,
+  VendorRiskAssessment,
+  AccessControlAudit,
+  RegulatoryCircularTracker,
+
+  // UIDAI & Aadhaar
+  AadhaarDataMaskingTool,
+  EKYCDataValidator,
+  AadhaarXMLValidator,
+  KYCNameDOBMatchAnalyzer,
+  RDServiceHealthTester,
+  AuthResponseAnalyzer,
+  PIDXMLStructureValidator,
+  AadhaarDataExposureScanner,
+
+  // Audit & Evidence Management
+  ComplianceAuditChecklist,
+  AuditEvidenceOrganizer,
+  ControlGapAssessment,
+  RiskRegisterGenerator,
+  RemediationTracker,
+  PolicyDocumentAnalyzer,
+  AuditReportGenerator,
+  RegulatoryEvidenceMapping,
 };
 
 const crossSuiteSuggestions: Record<string, { text: string; linkText: string; linkUrl: string; label: string }> = {
@@ -848,6 +939,36 @@ const crossSuiteSuggestions: Record<string, { text: string; linkText: string; li
     text: 'Looking for multi-tier state bye-law checks, 2D buildable envelope, and fire clearances? Check',
     linkText: 'Building Feasibility & Bye-Law Checker',
     linkUrl: '/architecture/building-feasibility-checker'
+  },
+  'dpdp-readiness-evaluator': {
+    label: 'Cybersecurity Incident Notice',
+    text: 'Facing an active security incident or breach? Track the mandatory 6-hour statutory reporting window with the',
+    linkText: 'CERT-In 6-Hour Incident Reporter',
+    linkUrl: '/compliance/cert-in-incident-calculator'
+  },
+  'rbi-digital-lending-checker': {
+    label: 'Data Governance Audit',
+    text: 'Audit FinTech and digital lending borrower data protection compliance under the',
+    linkText: 'DPDP Act 2023 Readiness Evaluator',
+    linkUrl: '/compliance/dpdp-readiness-evaluator'
+  },
+  'aadhaar-data-vault-validator': {
+    label: 'Hardware RD Service Diagnostics',
+    text: 'Need to diagnose local loopback ports (11100–11105) for Mantra, Morpho, or Startek scanners? Run',
+    linkText: 'Biometric Device Tester (L0/L1)',
+    linkUrl: '/compliance/biometric-device-tester'
+  },
+  'biometric-device-tester': {
+    label: 'UIDAI Aadhaar Data Vault',
+    text: 'Validating Aadhaar numbers or implementing mandatory surrogate tokenization? Check the',
+    linkText: 'UIDAI Aadhaar Vault & Verhoeff Validator',
+    linkUrl: '/compliance/aadhaar-data-vault-validator'
+  },
+  'cert-in-incident-calculator': {
+    label: 'Statutory DPDP Exposure',
+    text: 'Evaluating potential breach liability under Section 33 of the DPDP Act? Assess exposure with the',
+    linkText: 'DPDP Act 2023 Readiness Evaluator',
+    linkUrl: '/compliance/dpdp-readiness-evaluator'
   }
 };
 

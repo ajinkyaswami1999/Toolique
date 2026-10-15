@@ -160,5 +160,33 @@ export const categories: Category[] = [
     description: 'Solve micro and macro economics formulas, price elasticity, GDP growth, inflation rate, break-even, and market equilibrium.',
     icon: 'TrendingUp',
     colorClass: 'from-blue-400/20 to-indigo-400/20 text-blue-800 dark:text-blue-300 border-blue-300/40 shadow-xs'
+  },
+  {
+    id: 'dpdp-privacy',
+    name: 'DPDP & Privacy',
+    description: 'Evaluate DPDP Act 2023 compliance, Data Fiduciary vs SDF obligations, consent notices, and Section 33 statutory penalties.',
+    icon: 'Shield',
+    colorClass: 'from-blue-400/20 to-indigo-400/20 text-blue-800 dark:text-blue-300 border-blue-300/40 shadow-xs'
+  },
+  {
+    id: 'rbi-financial',
+    name: 'RBI & Financial Regulations',
+    description: 'Audit digital lending guidelines (DLG), 5% FLDG caps, Key Fact Statement (KFS) APR, and fintech KYC/AML thresholds.',
+    icon: 'Landmark',
+    colorClass: 'from-emerald-400/20 to-teal-400/20 text-emerald-800 dark:text-emerald-300 border-emerald-300/40 shadow-xs'
+  },
+  {
+    id: 'uidai-aadhaar',
+    name: 'UIDAI & Aadhaar',
+    description: 'UIDAI Registered Device (RD) Service tester, L0/L1 attestation, Aadhaar Data Vault tokenization, and Verhoeff checksum validator.',
+    icon: 'Fingerprint',
+    colorClass: 'from-amber-400/20 to-orange-400/20 text-amber-800 dark:text-amber-300 border-amber-300/40 shadow-xs'
+  },
+  {
+    id: 'audit-evidence',
+    name: 'Audit & Evidence Management',
+    description: 'CERT-In 6-hour incident reporting countdown, cryptographic log checksums, and Section 65B evidence certificates.',
+    icon: 'FileCheck',
+    colorClass: 'from-purple-400/20 to-rose-400/20 text-purple-800 dark:text-purple-300 border-purple-300/40 shadow-xs'
   }
 ];

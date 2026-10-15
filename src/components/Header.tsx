@@ -157,6 +157,17 @@ export default function Header() {
       color: 'text-blue-600 dark:text-blue-400',
       bgLight: 'bg-blue-50 hover:bg-blue-100/70',
       bgDark: 'dark:bg-blue-950/40 dark:hover:bg-blue-900/40'
+    },
+    { 
+      name: 'Compliance & Regulatory', 
+      path: '/compliance', 
+      icon: Scale, 
+      desc: 'DPDP Act 2023, RBI 5% FLDG, UIDAI Vault & CERT-In 6-Hour Clock', 
+      badge: 'Statutory',
+      badgeColor: 'text-amber-700 dark:text-amber-300 bg-amber-100/80 dark:bg-amber-950/60 border-amber-300/60',
+      color: 'text-amber-600 dark:text-amber-400',
+      bgLight: 'bg-amber-50 hover:bg-amber-100/70',
+      bgDark: 'dark:bg-amber-950/40 dark:hover:bg-amber-900/40'
     }
   ];
 
@@ -249,6 +260,7 @@ export default function Header() {
     { id: 'architecture', label: 'Architecture & Civil' },
     { id: 'qa', label: 'QA Engineering' },
     { id: 'pdf', label: 'PDF Suite' },
+    { id: 'compliance', label: 'Compliance & Legal' },
     { id: 'math-studio', label: 'Math Studio' },
     { id: '3d-printing', label: '3D Maker' },
     { id: 'economics', label: 'Economics' }
@@ -263,6 +275,8 @@ export default function Header() {
     if (searchCategory !== 'all') {
       if (searchCategory === 'developer') {
         list = list.filter(t => ['developer', 'web', 'security'].includes(t.category));
+      } else if (searchCategory === 'compliance') {
+        list = list.filter(t => ['compliance', 'dpdp-privacy', 'rbi-financial', 'uidai-aadhaar', 'audit-evidence'].includes(t.category));
       } else {
         list = list.filter(t => t.category === searchCategory);
       }

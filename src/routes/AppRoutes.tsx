@@ -33,6 +33,7 @@ const FinanceHub = lazy(() => import('../pages/FinanceHub'));
 const DeveloperHub = lazy(() => import('../pages/DeveloperHub'));
 const EconomicsHub = lazy(() => import('../pages/EconomicsHub'));
 const PDFHub = lazy(() => import('../pages/PDFHub'));
+const ComplianceHub = lazy(() => import('../pages/ComplianceHub'));
 const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
 const WorkflowsHub = lazy(() => import('../pages/WorkflowsHub'));
 const NotFound = lazy(() => import('../pages/NotFound'));
@@ -52,6 +53,8 @@ export function getToolCanonicalPath(category: string, slug: string): string {
     return `/economics/${slug}`;
   } else if (category === 'pdf') {
     return `/pdf/${slug}`;
+  } else if (['compliance', 'dpdp-privacy', 'rbi-financial', 'uidai-aadhaar', 'audit-evidence'].includes(category)) {
+    return `/compliance/${slug}`;
   } else {
     return `/calculators/${slug}`;
   }
@@ -74,6 +77,8 @@ export function getCategoryCanonicalPath(category: string): string {
     return `/3d-printing-tools`;
   } else if (category === 'pdf') {
     return `/pdf`;
+  } else if (['compliance', 'dpdp-privacy', 'rbi-financial', 'uidai-aadhaar', 'audit-evidence'].includes(category)) {
+    return `/compliance`;
   } else {
     return `/calculators`;
   }
@@ -144,6 +149,11 @@ export default function AppRoutes() {
           <PDFHub />
         </Suspense>
       } />
+      <Route path="/compliance" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Compliance Suite...</div>}>
+          <ComplianceHub />
+        </Suspense>
+      } />
 
       {/* Primary Pillar Tool Detail Routes */}
       <Route path="/calculators/:slug" element={
@@ -151,6 +161,12 @@ export default function AppRoutes() {
           <ToolPage />
         </Suspense>
       } />
+      <Route path="/compliance/:slug" element={
+        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
+          <ToolPage />
+        </Suspense>
+      } />
+      <Route path="/developer/biometric-device-tester" element={<Navigate to="/compliance/biometric-device-tester" replace />} />
       <Route path="/pdf/:slug" element={
         <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Tool...</div>}>
           <ToolPage />

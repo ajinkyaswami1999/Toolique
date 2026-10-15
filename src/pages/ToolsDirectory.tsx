@@ -3,7 +3,8 @@ import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import {
   Search, Heart, Copy, Clock, ChevronRight,
   Check, ListFilter, LayoutGrid, HelpCircle, X,
-  IndianRupee, Hammer, Compass, Palette, FileText, Image as ImageIcon, Code, Globe, Type, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart as HeartIcon, Printer, Zap, Bug, TrendingUp, Binary, Sparkles, Shuffle, Table, SlidersHorizontal
+  IndianRupee, Hammer, Compass, Palette, FileText, Image as ImageIcon, Code, Globe, Type, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart as HeartIcon, Printer, Zap, Bug, TrendingUp, Binary, Sparkles, Shuffle, Table, SlidersHorizontal,
+  Shield, Landmark, Fingerprint, FileCheck
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import type { Tool } from '../data/tools';
@@ -35,7 +36,11 @@ const categoryIcons: Record<string, React.ComponentType<any>> = {
   '3d-printing': Printer,
   'math-studio': Binary,
   qa: Bug,
-  economics: TrendingUp
+  economics: TrendingUp,
+  'dpdp-privacy': Shield,
+  'rbi-financial': Landmark,
+  'uidai-aadhaar': Fingerprint,
+  'audit-evidence': FileCheck
 };
 
 const getToolBadge = (toolId: string) => {
