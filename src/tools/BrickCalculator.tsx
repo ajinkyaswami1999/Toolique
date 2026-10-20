@@ -1085,18 +1085,10 @@ export default function BrickCalculator() {
             <Building className="w-80 h-80" />
           </div>
 
-          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black uppercase tracking-wider">
-                <Compass className="w-3.5 h-3.5" />
-                <span>IS 1077 • IS 2212 • IS 1200 Pt-3 • CPWD DSR Compliant</span>
-              </div>
-              <h1 className="text-2xl md:text-4xl font-black tracking-tight text-white">
-                Brickwork &amp; Masonry Estimator India
-              </h1>
-              <p className="text-xs md:text-sm text-amber-200/80 leading-relaxed">
-                High-precision civil engineering quantity takeoff for 4.5&quot; partition walls, 9&quot; / 13.5&quot; external walls, AAC blocks, and cost-saving Laurie Baker Rat-Trap cavity bonds. Complete with opening deductions, cement-sand mortar split, and live city market pricing.
-              </p>
+          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black uppercase tracking-wider">
+              <Compass className="w-3.5 h-3.5" />
+              <span>IS 1077 • IS 2212 • IS 1200 Pt-3 • CPWD DSR Compliant</span>
             </div>
 
             {/* Top Stat Card */}

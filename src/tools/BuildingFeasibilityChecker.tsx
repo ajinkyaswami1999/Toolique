@@ -1,41 +1,7 @@
 // Toolique Building Feasibility & Bye-Law Checker - Location-Aware Architectural Feasibility Engine
 
 import { useState, useMemo, useEffect } from 'react';
-import { 
-  Building2, 
-  Ruler, 
-  ShieldCheck, 
-  AlertTriangle, 
-  CheckCircle2, 
-  XCircle, 
-  FileText, 
-  Download, 
-  Copy, 
-  Check, 
-  Sparkles, 
-  Send, 
-  Compass, 
-  ChevronRight, 
-  ChevronLeft, 
-  RefreshCw, 
-  BookOpen, 
-  Flame, 
-  Trees, 
-  Sliders, 
-  FileCheck, 
-  Eye, 
-  HelpCircle, 
-  ExternalLink, 
-  Search, 
-  Layers, 
-  MapPin, 
-  Navigation, 
-  CheckCircle, 
-  X,
-  Building,
-  Landmark,
-  ShieldAlert
-} from 'lucide-react';
+import { Ruler, ShieldCheck, AlertTriangle, CheckCircle2, XCircle, FileText, Download, Copy, Check, Sparkles, Send, Compass, ChevronRight, ChevronLeft, RefreshCw, BookOpen, Flame, Trees, Sliders, FileCheck, Eye, HelpCircle, ExternalLink, Search, Layers, MapPin, Navigation, CheckCircle, X, Building, Landmark, ShieldAlert } from 'lucide-react';
 import type { 
   AreaUnit, 
   BuildingUse, 
@@ -648,22 +614,13 @@ Parking: ${report.developmentControls.parking.requiredEcs} ECS
       {/* Top Header Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-5 md:p-6 shadow-xl border border-indigo-500/20">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 text-[11px] font-bold tracking-wider uppercase bg-indigo-500/30 text-indigo-300 rounded border border-indigo-400/30">
-                Architecture & Statutory Feasibility
-              </span>
-              <span className="px-2 py-0.5 text-[11px] font-medium bg-emerald-500/20 text-emerald-300 rounded border border-emerald-500/30">
-                Location-Aware Bye-Law Engine
-              </span>
-            </div>
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-              <Building2 className="w-6 h-6 text-indigo-400" />
-              Building Feasibility & Bye-Law Checker
-            </h1>
-            <p className="text-slate-300 text-xs md:text-sm max-w-2xl">
-              Location-aware architectural feasibility engine. Evaluates FAR/FSI, setbacks, massing, parking, fire safety, and statutory clearances across 4 levels of Indian regulations.
-            </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-2.5 py-1 text-xs font-bold tracking-wider uppercase bg-indigo-500/30 text-indigo-300 rounded-lg border border-indigo-400/30">
+              Architecture &amp; Statutory Feasibility
+            </span>
+            <span className="px-2.5 py-1 text-xs font-semibold bg-emerald-500/20 text-emerald-300 rounded-lg border border-emerald-500/30">
+              Location-Aware Bye-Law Engine
+            </span>
           </div>
 
           {/* Quick Dual View & Action Buttons */}

@@ -835,22 +835,14 @@ Generated via Toolique Interior Engineering Suite.`;
       {/* Top Header Card */}
       <div className="p-6 rounded-3xl bg-linear-to-r from-pink-900/40 via-purple-900/30 to-slate-900/50 border border-pink-500/20 shadow-xl backdrop-blur-md">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1.5">
+            <div className="flex items-center gap-2">
               <div className="p-2 rounded-xl bg-pink-600/20 text-pink-400 border border-pink-500/30">
                 <Palette className="w-5 h-5" />
               </div>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-pink-500/10 text-pink-400 border border-pink-500/20 tracking-wide uppercase">
+              <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-pink-500/10 text-pink-400 border border-pink-500/20 tracking-wide uppercase">
                 2026 Modular Interior Suite
               </span>
             </div>
-            <h1 className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-              Modular Kitchen Cost Calculator & 2D Studio
-            </h1>
-            <p className="text-xs lg:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
-              Architectural BOQ estimator supporting L-Shape, Parallel, Straight, U-Shape & Island layouts with BWP Marine Ply, Acrylic, Quartz, Hettich/Blum hardware, and 2D elevation visualizer.
-            </p>
-          </div>
 
           {/* Quick Stats Pill */}
           <div className="flex items-center gap-3 bg-white/60 dark:bg-slate-900/80 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-xs">

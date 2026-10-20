@@ -710,18 +710,10 @@ export default function SandCalculator() {
             <Building className="w-80 h-80" />
           </div>
 
-          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black uppercase tracking-wider">
-                <Compass className="w-3.5 h-3.5" />
-                <span>IS 383:2016 • IS 1542 • IS 2116 • IS 2386 Compliant</span>
-              </div>
-              <h1 className="text-2xl md:text-4xl font-black tracking-tight text-white">
-                Sand &amp; Fine Aggregate Calculator India
-              </h1>
-              <p className="text-xs md:text-sm text-amber-200/80 leading-relaxed">
-                Compute sand volume in <strong>Cubic Feet (CFT)</strong>, <strong>Brass (100 CFT)</strong>, and <strong>Metric Tonnes</strong> across Structural Concrete (M5 to M30), Brickwork Masonry, and Plastering. Includes River Sand vs M-Sand grading zones (I to IV), moisture bulking corrections, and tipper truck logistics.
-              </p>
+          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-black uppercase tracking-wider">
+              <Compass className="w-3.5 h-3.5" />
+              <span>IS 383:2016 • IS 1542 • IS 2116 • IS 2386 Compliant</span>
             </div>
 
             {/* Top Stat Card */}

@@ -738,18 +738,10 @@ export default function CementCalculator() {
             <Building className="w-80 h-80" />
           </div>
 
-          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-black uppercase tracking-wider">
-                <Compass className="w-3.5 h-3.5" />
-                <span>IS 456:2000 • IS 1077 • IS 1661:1972 • IS 4082 Compliant</span>
-              </div>
-              <h1 className="text-2xl md:text-4xl font-black tracking-tight text-white">
-                Cement Quantity Calculator India
-              </h1>
-              <p className="text-xs md:text-sm text-indigo-200/80 leading-relaxed">
-                High-precision civil engineering estimator for 50kg cement bags, sand, and aggregate across Structural Concrete (M5 to M30), Brickwork Masonry, and Wall/Ceiling Plastering. Includes IS dry volume expansion factors, water-cement ratios, and site storage footprint.
-              </p>
+          <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-black uppercase tracking-wider">
+              <Compass className="w-3.5 h-3.5" />
+              <span>IS 456:2000 • IS 1077 • IS 1661:1972 • IS 4082 Compliant</span>
             </div>
 
             {/* Top Stat Card */}

@@ -675,20 +675,14 @@ Certified under NBC 2016 Part 4 Fire & Life Safety & IBC/NFPA 101 Guidelines.`;
       <div className="p-6 rounded-3xl bg-linear-to-r from-indigo-900/40 via-purple-900/30 to-slate-900/50 border border-indigo-500/20 shadow-xl backdrop-blur-md">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-1.5">
+            <div className="flex items-center gap-2">
               <div className="p-2 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
                 <DoorClosed className="w-5 h-5" />
               </div>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 tracking-wide uppercase">
-                NBC 2016 & IBC Egress Suite
+              <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 tracking-wide uppercase">
+                NBC 2016 &amp; IBC Egress Suite
               </span>
             </div>
-            <h1 className="text-2xl lg:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-              Door Size Calculator & Architectural Egress Studio
-            </h1>
-            <p className="text-xs lg:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
-              Calculate clear walkthrough openings, rough masonry framing, occupant egress capacities, ADA wheelchair clearances, and export certified architectural door schedules.
-            </p>
           </div>
 
           {/* Quick Stats Pill */}

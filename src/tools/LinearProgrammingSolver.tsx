@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ArrowLeft, RotateCcw, Download, Percent, AlertCircle } from 'lucide-react';
+import { RotateCcw, Download, AlertCircle } from 'lucide-react';
 import SEO from '../components/SEO';
 import { solveSimplexLP } from '../utils/mathAdvanced';
 
@@ -249,39 +249,7 @@ export default function LinearProgrammingSolver() {
         keywords={['linear programming', 'simplex algorithm', 'lp solver', 'simplex calculator', 'feasible region']}
       />
 
-      {/* Breadcrumbs */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4 mb-6">
-        <a
-          href="/math-studio"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-500 dark:text-zinc-400 dark:hover:text-indigo-400 transition"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Math Studio</span>
-        </a>
-        <div className="text-xs text-zinc-450 dark:text-zinc-500 font-semibold flex items-center gap-1.5">
-          <a href="/" className="hover:text-indigo-500 transition-colors">Home</a>
-          <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
-          <a href="/math-studio" className="hover:text-indigo-500 transition-colors">Math Studio</a>
-          <span className="text-zinc-350 dark:text-zinc-700">&gt;</span>
-          <span className="text-zinc-650 dark:text-zinc-300 font-medium">Linear Programming Solver</span>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2.5 rounded-2xl bg-indigo-500/10 text-indigo-650 dark:text-indigo-400">
-            <Percent className="w-6 h-6" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-black text-zinc-900 dark:text-white">
-              Linear Programming (Simplex) Solver
-            </h1>
-            <p className="text-xs text-zinc-550 dark:text-zinc-400 mt-0.5">
-              Solve linear optimization equations symbolically, view constraints boundary slacks, and render 2D feasibility graphs.
-            </p>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
           {/* Inputs Section */}
           <div className="lg:col-span-6 space-y-6">

@@ -1533,16 +1533,10 @@ export default function UnitConverter() {
             <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
               <Ruler className="w-5 h-5" />
             </div>
-            <div>
-              <h1 className="text-base sm:text-lg font-black tracking-tight text-zinc-900 dark:text-white flex items-center gap-1.5">
-                <span>Unit Converter</span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800">
-                  Engineering Suite
-                </span>
-              </h1>
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-none mt-0.5">
-                Architecture, Civil, Electrical, Electronics, Metallurgy & Regional Land
-              </p>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800">
+                Engineering Suite &amp; Regional Land
+              </span>
             </div>
           </div>
 

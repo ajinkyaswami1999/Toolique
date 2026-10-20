@@ -2617,18 +2617,13 @@ export default function AdvancedBOQCalculator() {
         <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-indigo-500/15 blur-2xl pointer-events-none" />
         <div className="relative z-10 p-6 md:p-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div>
-            <div className="flex items-center gap-4">
-              <div className="p-3.5 rounded-2xl bg-amber-500/20 border border-amber-400/30 shadow-lg shadow-amber-500/10">
-                <Calculator className="w-8 h-8 text-amber-400" />
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-amber-500/20 border border-amber-400/30 shadow-lg shadow-amber-500/10">
+                <Calculator className="w-6 h-6 text-amber-400" />
               </div>
-              <div>
-                <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                  Advanced BOQ Calculator <span className="text-amber-400">India</span>
-                </h1>
-                <p className="text-xs md:text-sm text-indigo-300 mt-1 font-medium">
-                  Quantity takeoff, CPWD DSR rate analysis &amp; material procurement workspace
-                </p>
-              </div>
+              <span className="text-xs md:text-sm font-bold text-amber-300 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30">
+                CPWD DSR Rate Analysis &amp; Procurement Workspace
+              </span>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">

@@ -754,18 +754,12 @@ Calculated per IS 456:2000 & SP 34 standard civil engineering codes.`;
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 text-left">
-      {/* Header Bar */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold tracking-tight">RCC Calculator & Reinforcement BOQ</h2>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
-              IS 456 & SP 34 Compliant
-            </span>
-          </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-            Calculate concrete mix quantities, TMT steel reinforcement (BBS), and shuttering formwork area for slabs, beams, columns, footings, and stairs.
-          </p>
+      {/* Action Toolbar */}
+      <div className="flex flex-wrap justify-between items-center gap-3 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+            IS 456 &amp; SP 34 Compliant
+          </span>
         </div>
 
         {/* Action Buttons */}

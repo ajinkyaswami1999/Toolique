@@ -799,18 +799,9 @@ _Calculated on ToolStack India Ramp Engineering Suite_`;
       <div className="bg-gradient-to-r from-indigo-900 via-slate-900 to-zinc-900 rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/20 border border-indigo-400/30 rounded-full text-indigo-300 text-xs font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Harmonised Guidelines 2021 • NBC 2016 • ADA 2010 • UK Part M</span>
-            </div>
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight">
-              Accessible Ramp Calculator & Compliance Suite
-            </h1>
-            <p className="text-zinc-300 text-sm max-w-3xl leading-relaxed">
-              Design barrier-free wheelchair ramps with automated slope gradients, intermediate resting landings, 
-              dual handrails, edge kerbs, dynamic 2D/Plan CAD blueprints, and instant RCC material takeoffs.
-            </p>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/20 border border-indigo-400/30 rounded-full text-indigo-300 text-xs font-semibold">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Harmonised Guidelines 2021 • NBC 2016 • ADA 2010 • UK Part M</span>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">

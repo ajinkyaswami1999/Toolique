@@ -707,18 +707,12 @@ Calculated via Toolique Steel Weight Calculator (IS 1786 / IS 2062 Compliant)`;
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 text-left">
-      {/* Header Bar */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold tracking-tight">Steel Weight Calculator & BBS Indent</h2>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border border-teal-500/20">
-              IS 1786 / IS 2062 / IS 808
-            </span>
-          </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-            Calculate weight and procurement cost for TMT Rebars, Plates, Channels (ISMC), Beams (ISMB), Angles (ISA), Hollow Sections, and Pipes.
-          </p>
+      {/* Action Toolbar */}
+      <div className="flex flex-wrap justify-between items-center gap-3 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 border border-teal-500/20">
+            IS 1786 / IS 2062 / IS 808
+          </span>
         </div>
 
         {/* Global Action Buttons */}

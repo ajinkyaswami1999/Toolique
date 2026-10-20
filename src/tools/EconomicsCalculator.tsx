@@ -1398,18 +1398,9 @@ _Calculate all micro & macro formulas at:_ https://www.toolique.in/calculators/e
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-zinc-900 rounded-3xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/20 border border-indigo-400/30 rounded-full text-indigo-300 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>25 Micro & Macro Formula Engines • Interactive Visualizers • Step-by-Step Math</span>
-            </div>
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight">
-              Economics Calculator Hub
-            </h1>
-            <p className="text-zinc-300 text-sm max-w-3xl leading-relaxed">
-              Solve complex economics problems instantly. Compute Price Elasticity (PED/YED/XED/PES), Market Equilibrium, 
-              Marginal Cost & Revenue, Break-Even volume, Real GDP, Inflation erosion, and Keynesian national accounts with step-by-step mathematical proofs.
-            </p>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/20 border border-indigo-400/30 rounded-full text-indigo-300 text-xs font-semibold">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>25 Micro &amp; Macro Formula Engines • Interactive Visualizers • Step-by-Step Math</span>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">

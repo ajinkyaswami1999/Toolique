@@ -821,21 +821,13 @@ export default function TestDataGenerator() {
       {/* Top Banner & Mode Tabs */}
       <div className="saas-card p-4 sm:p-5">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200/50 dark:border-zinc-800/50 pb-4">
-          <div className="space-y-1 text-left">
-            <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-xl bg-pastel-indigo/25 text-indigo-700 dark:text-indigo-400 border border-pastel-indigo/40">
-                <Database className="w-4 h-4" />
-              </span>
-              <h2 className="text-base sm:text-lg font-black text-zinc-900 dark:text-white">
-                Mock & Test Data Generator Studio
-              </h2>
-              <span className="saas-badge bg-pastel-emerald/30 text-emerald-800 dark:text-emerald-300 border-pastel-emerald/40 text-[10px] font-black uppercase">
-                45+ Field Types
-              </span>
-            </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 font-medium">
-              Create deterministic, high-entropy test datasets with Indian + Global localized fields, custom schemas, and instant multi-dialect exports.
-            </p>
+          <div className="flex items-center gap-2">
+            <span className="p-1.5 rounded-xl bg-pastel-indigo/25 text-indigo-700 dark:text-indigo-400 border border-pastel-indigo/40">
+              <Database className="w-4 h-4" />
+            </span>
+            <span className="saas-badge bg-pastel-emerald/30 text-emerald-800 dark:text-emerald-300 border-pastel-emerald/40 text-[10px] font-black uppercase">
+              45+ Field Types Available
+            </span>
           </div>
 
           {/* Action Trigger */}
