@@ -603,23 +603,16 @@ MUNICIPAL ZONING AUDIT:
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 text-left pb-16">
-      {/* Header Card */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 rounded-xl">
-              <Compass className="w-5 h-5" />
-            </span>
-            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-              Site Coverage & Master Planning Suite
-            </h2>
-          </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-            Calculate Ground Coverage Ratio (GCR %), open space ratio, setback buildable envelopes, FAR vertical massing, and stormwater detention cisterns.
-          </p>
+      {/* Top Action Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 flex items-center gap-1.5">
+            <Compass className="w-3.5 h-3.5" />
+            <span>NBC 2016 &amp; Master Plan Guidelines</span>
+          </span>
         </div>
 
-        <div className="flex items-center gap-3 self-end sm:self-center">
+        <div className="flex items-center gap-3">
           <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl text-xs font-semibold">
             <button
               onClick={() => setUnit('sqft')}

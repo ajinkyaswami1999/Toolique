@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
 import {
   FileText,
   Download,
@@ -74,10 +77,6 @@ export default function PDFPasswordProtect() {
   });
   const [encryptedBlobInfo, setEncryptedBlobInfo] = useState<{ blob: Blob; url: string; size: number } | null>(null);
   const [encryptionError, setEncryptionError] = useState<string | null>(null);
-  const [isCopied, setIsCopied] = useState<boolean>(false);
-
-  // Drag & drop ref
-  const [isDragging, setIsDragging] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Clean up blob URL on unmount
@@ -143,14 +142,6 @@ export default function PDFPasswordProtect() {
     setEncryptedBlobInfo(null);
   };
 
-  // Copy password to clipboard
-  const handleCopyPassword = () => {
-    if (!userPassword) return;
-    navigator.clipboard.writeText(userPassword);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
-  };
-
   // Inspect uploaded PDF file and generate cover thumbnail
   const processUploadedFile = async (uploadedFile: File) => {
     setFileError(null);
@@ -211,30 +202,6 @@ export default function PDFPasswordProtect() {
       setDocInfo(null);
     } finally {
       setIsReadingFile(false);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploaded = e.target.files?.[0];
-    if (uploaded) {
-      if (uploaded.type !== 'application/pdf' && !uploaded.name.toLowerCase().endsWith('.pdf')) {
-        setFileError('Please upload a valid PDF document (.pdf file only).');
-        return;
-      }
-      processUploadedFile(uploaded);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const dropped = e.dataTransfer.files?.[0];
-    if (dropped) {
-      if (dropped.type !== 'application/pdf' && !dropped.name.toLowerCase().endsWith('.pdf')) {
-        setFileError('Please drop a valid PDF document (.pdf format).');
-        return;
-      }
-      processUploadedFile(dropped);
     }
   };
 
@@ -418,53 +385,16 @@ export default function PDFPasswordProtect() {
 
       {/* Upload Zone (When No File Loaded) */}
       {!file && (
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
+        <FileDropzone
+          accept=".pdf,application/pdf"
+          onFilesSelected={(files) => {
+            const dropped = files[0];
+            if (dropped) processUploadedFile(dropped);
           }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-          className={`saas-card relative border-2 border-dashed p-10 sm:p-14 text-center transition-all ${
-            isDragging
-              ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 scale-[0.99]'
-              : 'border-zinc-250 dark:border-zinc-800 hover:border-indigo-400/80 bg-zinc-50/40 dark:bg-zinc-900/30'
-          }`}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf,application/pdf"
-            onChange={handleFileChange}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-            aria-label="Upload PDF document to encrypt"
-          />
-
-          <div className="max-w-md mx-auto space-y-4 pointer-events-none">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-sm">
-              <Lock className="w-8 h-8" />
-            </div>
-
-            <div className="space-y-1.5">
-              <p className="text-base font-bold text-zinc-900 dark:text-white">
-                Drop your PDF here or <span className="text-indigo-600 dark:text-indigo-400 underline">browse</span>
-              </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Encrypt PDF with secure open password and custom permissions
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Open Password</span>
-              <span>•</span>
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Print/Copy Permissions</span>
-              <span>•</span>
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Password Generator</span>
-              <span>•</span>
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Zero Cloud Uploads</span>
-            </div>
-          </div>
-        </div>
+          title="Drop your PDF here or browse"
+          description="Encrypt PDF with secure open password and custom permissions"
+          colorTheme="indigo"
+        />
       )}
 
       {/* Reading File Spinner */}
@@ -561,14 +491,7 @@ export default function PDFPasswordProtect() {
                     Open / User Password <span className="text-red-500">*</span>
                   </label>
                   {userPassword && (
-                    <button
-                      type="button"
-                      onClick={handleCopyPassword}
-                      className="text-[11px] text-indigo-600 dark:text-indigo-400 font-semibold flex items-center gap-1 hover:underline cursor-pointer"
-                    >
-                      {isCopied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-                      <span>{isCopied ? 'Copied!' : 'Copy Password'}</span>
-                    </button>
+                    <CopyButton text={userPassword} label="Copy Password" className="text-[11px] py-0.5 px-2" />
                   )}
                 </div>
 
@@ -936,7 +859,7 @@ export default function PDFPasswordProtect() {
                       <span>Download Encrypted PDF</span>
                     </button>
 
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       <button
                         onClick={handleOpenInNewTab}
                         className="py-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-750 transition cursor-pointer"
@@ -945,13 +868,8 @@ export default function PDFPasswordProtect() {
                         <span>Test Password</span>
                       </button>
 
-                      <button
-                        onClick={handleCopyPassword}
-                        className="py-2 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-750 transition cursor-pointer"
-                      >
-                        {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                        <span>{isCopied ? 'Copied' : 'Copy Key'}</span>
-                      </button>
+                      <CopyButton text={userPassword} label="Copy Password" className="py-2 justify-center" />
+                      <ShareWhatsApp text={`I just password-protected "${file?.name || 'my PDF'}" using Toolique PDF Studio!`} className="py-2 justify-center" />
                     </div>
                   </div>
                 </div>

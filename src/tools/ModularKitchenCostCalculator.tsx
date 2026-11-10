@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
 import { 
-  Palette, Copy, Check, RotateCcw, Download, 
+  Palette, RotateCcw, Download, 
   Layers, Box, Zap, Eye, Save, Trash2, 
   Flame, Sparkles, Sliders
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { ShareWhatsApp, CopyButton, UnitSwitcher } from '../components/common';
 
 // --- Types & Data Definitions ---
 export type KitchenShape = 'straight' | 'l_shaped' | 'parallel' | 'u_shaped' | 'island';
@@ -397,7 +398,6 @@ export default function ModularKitchenCostCalculator() {
   const [ledGlowActive, setLedGlowActive] = useState<boolean>(true);
 
   // UI state
-  const [copied, setCopied] = useState<boolean>(false);
   const [savedQuotes, setSavedQuotes] = useState<SavedKitchenQuote[]>([]);
   const [quoteName, setQuoteName] = useState<string>('My Dream Kitchen Quote');
   const [activeTab, setActiveTab] = useState<'config' | 'organizers' | 'appliances' | 'boq'>('config');
@@ -659,10 +659,10 @@ export default function ModularKitchenCostCalculator() {
     } catch {}
   };
 
-  // Copy Quotation to Clipboard
-  const copyReport = () => {
+  // Format Quotation Text for Clipboard & WhatsApp
+  const getReportText = () => {
     const unitLabel = unit === 'feet' ? 'ft' : 'm';
-    const text = `🍽️ MODULAR KITCHEN ESTIMATION SUMMARY (Toolique Studio)
+    return `🍽️ MODULAR KITCHEN ESTIMATION SUMMARY (Toolique Studio)
 --------------------------------------------------
 Layout Style      : ${shape.toUpperCase().replace('_', '-')} (${calculations.baseRunningFt} Rft)
 Carcass Body Box  : ${CARCASS_CONFIG[carcassMaterial].name}
@@ -689,142 +689,82 @@ Effective Rate per Running Foot  : ₹${calculations.effectiveRatePerRft.toLocal
 Effective Rate per Woodwork Sq Ft: ₹${calculations.effectiveRatePerSqFt.toLocaleString('en-IN')} / Sq Ft
 --------------------------------------------------
 Generated via Toolique Interior Engineering Suite.`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
-  // Generate Professional PDF Quotation
+  // Generate Professional PDF Quotation via Standardized Engine
   const generatePdfQuote = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-
-    // Brand Header
-    doc.setFillColor(15, 23, 42); // slate-900
-    doc.rect(0, 0, pageWidth, 38, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(18);
-    doc.setFont('helvetica', 'bold');
-    doc.text('TOOLIQUE ARCHITECTURAL INTERIORS', 14, 18);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(203, 213, 225);
-    doc.text('Modular Kitchen Engineering Specification & BOQ Estimate', 14, 25);
-    doc.text(`Generated Date: ${new Date().toLocaleDateString('en-IN')} | Ref: TLI-KIT-${Date.now().toString().slice(-6)}`, 14, 31);
-
-    // Section 1: Specifications
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(15, 23, 42);
-    doc.text('1. Project & Technical Specifications', 14, 48);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(51, 65, 85);
-
-    const specs = [
-      ['Layout Shape', `${shape.toUpperCase().replace('_', '-')} (${calculations.baseRunningFt} Running Feet)`],
-      ['Carcass Body Box', CARCASS_CONFIG[carcassMaterial].name],
-      ['Shutter Finish', FINISH_CONFIG[shutterFinish].name],
-      ['Countertop Slab', COUNTERTOP_CONFIG[countertop].name],
-      ['Hardware & Motion', HARDWARE_CONFIG[hardware].name],
-      ['Overhead Lofts', includeLoft ? `Included (${loftHeight} ft Height)` : 'Not Included'],
-      ['Pantry Tall Units', `${tallUnits} Unit(s) (2ft × 7ft)`]
-    ];
-
-    let yPos = 55;
-    specs.forEach(([label, value]) => {
-      doc.setFont('helvetica', 'bold');
-      doc.text(`${label}:`, 14, yPos);
-      doc.setFont('helvetica', 'normal');
-      doc.text(value, 60, yPos);
-      yPos += 6;
+    downloadPdfReport({
+      title: 'MODULAR KITCHEN ESTIMATION & BOQ',
+      subtitle: 'Complete Cabinetry, Hardware, Stone & Appliance Specification',
+      category: 'INTERIOR ARCHITECTURE & ESTIMATION',
+      theme: 'brand',
+      project: {
+        projectName: `${shape.toUpperCase().replace('_', '-')} Modular Kitchen`,
+        notes: `Carcass: ${CARCASS_CONFIG[carcassMaterial].name} | Finish: ${FINISH_CONFIG[shutterFinish].name}`,
+      },
+      kpis: [
+        { label: 'Grand Total', value: `₹${calculations.grandTotal.toLocaleString('en-IN')}`, highlight: true },
+        { label: 'Running Length', value: `${calculations.baseRunningFt} Rft`, subtext: 'Base counter line' },
+        { label: 'Rate / Rft', value: `₹${calculations.effectiveRatePerRft.toLocaleString('en-IN')}` },
+        { label: 'Woodwork Sq Ft', value: `₹${calculations.effectiveRatePerSqFt.toLocaleString('en-IN')}/sqft` },
+      ],
+      parameters: [
+        { label: 'Layout Shape', value: `${shape.toUpperCase().replace('_', '-')} (${calculations.baseRunningFt} Rft)` },
+        { label: 'Carcass Body Box', value: CARCASS_CONFIG[carcassMaterial].name },
+        { label: 'Shutter Finish', value: FINISH_CONFIG[shutterFinish].name },
+        { label: 'Countertop Slab', value: COUNTERTOP_CONFIG[countertop].name },
+        { label: 'Hardware & Motion', value: HARDWARE_CONFIG[hardware].name },
+        { label: 'Overhead Lofts', value: includeLoft ? `Included (${loftHeight} ft Height)` : 'Not Included' },
+        { label: 'Pantry Tall Units', value: `${tallUnits} Unit(s) (2ft × 7ft)` },
+      ],
+      tables: [
+        {
+          title: 'Detailed Bill of Quantities (BOQ)',
+          columns: [
+            { header: 'Item Description', dataKey: 'item' },
+            { header: 'Scope / Qty', dataKey: 'scope' },
+            { header: 'Amount (INR)', dataKey: 'amt', align: 'right' },
+          ],
+          rows: [
+            { item: 'Base Cabinets (Drawers, Carcass & Shutters)', scope: `${calculations.baseRunningFt} Rft`, amt: `₹${calculations.baseCabinetsCost.toLocaleString('en-IN')}` },
+            { item: 'Wall Overhead Cabinets (Single/Lift-up)', scope: `${calculations.wallRunningFt} Rft`, amt: `₹${calculations.wallCabinetsCost.toLocaleString('en-IN')}` },
+            { item: 'Overhead Ceiling-Touch Lofts', scope: includeLoft ? `${calculations.loftRunningFt} Rft` : 'N/A', amt: `₹${calculations.loftCabinetsCost.toLocaleString('en-IN')}` },
+            { item: 'Tall Pantry / Appliance Towers', scope: `${tallUnits} Units`, amt: `₹${calculations.tallUnitsCost.toLocaleString('en-IN')}` },
+            { item: 'Countertop Slab, Bullnose & Cutouts', scope: `${calculations.countertopAreaSqFt} Sq Ft`, amt: `₹${calculations.totalCountertopCost.toLocaleString('en-IN')}` },
+            { item: 'Smart Organizers (Tandems, Pullouts)', scope: `${tandemDrawerCount} Drawers + Addons`, amt: `₹${calculations.totalOrganizersCost.toLocaleString('en-IN')}` },
+            { item: 'Appliances & Sanitary Fixtures', scope: 'Chimney, Hob & Sink', amt: `₹${calculations.totalAppliancesCost.toLocaleString('en-IN')}` },
+            { item: 'Factory PUR Edge-Banding & Assembly', scope: 'Complete Fitting', amt: `₹${calculations.installationLaborCost.toLocaleString('en-IN')}` },
+          ],
+          totalsRow: [
+            { dataKey: 'item', value: 'Subtotal' },
+            { dataKey: 'amt', value: `₹${calculations.discountedTotal.toLocaleString('en-IN')}` },
+          ],
+        },
+        {
+          title: 'Taxation & Final Investment',
+          columns: [
+            { header: 'Component', dataKey: 'label' },
+            { header: 'Rate / Notes', dataKey: 'rate' },
+            { header: 'Net Amount (INR)', dataKey: 'value', align: 'right' },
+          ],
+          rows: [
+            { label: 'Subtotal Before Taxes', rate: 'Discounted Woodwork & Fitout', value: `₹${calculations.discountedTotal.toLocaleString('en-IN')}` },
+            { label: 'GST (18% Modular Works)', rate: 'CGST 9% + SGST 9%', value: `₹${calculations.gstAmount.toLocaleString('en-IN')}` },
+          ],
+          totalsRow: [
+            { dataKey: 'label', value: 'Grand Total' },
+            { dataKey: 'value', value: `₹${calculations.grandTotal.toLocaleString('en-IN')}` },
+          ],
+        },
+      ],
+      disclaimers: [
+        'All carcass boxes factory-processed with 1.0mm/2.0mm hot-melt PUR edge-banding for moisture protection.',
+        'BWP Grade Marine Plywood conforms to IS:710 standards with boiling waterproof test compliance.',
+        'Final pricing subject to actual laser site measurements and civil plumbing / electrical alignment.',
+      ],
+      includeSignoff: true,
+      fileName: `Toolique_Modular_Kitchen_Quote_${Date.now().toString().slice(-6)}.pdf`,
     });
-
-    // Section 2: Bill of Quantities Table
-    yPos += 4;
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(15, 23, 42);
-    doc.text('2. Detailed Bill of Quantities (BOQ)', 14, yPos);
-
-    yPos += 6;
-    doc.setFillColor(241, 245, 249);
-    doc.rect(14, yPos, pageWidth - 28, 7, 'F');
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 41, 59);
-    doc.text('Item Description', 18, yPos + 5);
-    doc.text('Scope / Qty', 115, yPos + 5);
-    doc.text('Amount (INR)', pageWidth - 20, yPos + 5, { align: 'right' });
-
-    yPos += 7;
-    const boqItems = [
-      ['Base Cabinets (Drawers, Carcass & Shutters)', `${calculations.baseRunningFt} Rft`, `Rs. ${calculations.baseCabinetsCost.toLocaleString('en-IN')}`],
-      ['Wall Overhead Cabinets (Single/Lift-up)', `${calculations.wallRunningFt} Rft`, `Rs. ${calculations.wallCabinetsCost.toLocaleString('en-IN')}`],
-      ['Overhead Ceiling-Touch Lofts', includeLoft ? `${calculations.loftRunningFt} Rft` : 'N/A', `Rs. ${calculations.loftCabinetsCost.toLocaleString('en-IN')}`],
-      ['Tall Pantry / Appliance Towers', `${tallUnits} Units`, `Rs. ${calculations.tallUnitsCost.toLocaleString('en-IN')}`],
-      ['Countertop Slab, Bullnose Moulding & Cutouts', `${calculations.countertopAreaSqFt} Sq Ft`, `Rs. ${calculations.totalCountertopCost.toLocaleString('en-IN')}`],
-      ['Smart Organizers (Tandems, Pullouts, Corners)', `${tandemDrawerCount} Drawers + Addons`, `Rs. ${calculations.totalOrganizersCost.toLocaleString('en-IN')}`],
-      ['Appliances & Sanitary Fixtures Suite', 'Chimney, Hob & Sink', `Rs. ${calculations.totalAppliancesCost.toLocaleString('en-IN')}`],
-      ['Factory PUR Edge-Banding & Site Assembly', 'Complete Fitting', `Rs. ${calculations.installationLaborCost.toLocaleString('en-IN')}`]
-    ];
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(51, 65, 85);
-
-    boqItems.forEach(([desc, qty, amt], index) => {
-      if (index % 2 === 1) {
-        doc.setFillColor(248, 250, 252);
-        doc.rect(14, yPos, pageWidth - 28, 6.5, 'F');
-      }
-      doc.text(desc, 18, yPos + 4.5);
-      doc.text(qty, 115, yPos + 4.5);
-      doc.text(amt, pageWidth - 20, yPos + 4.5, { align: 'right' });
-      yPos += 6.5;
-    });
-
-    // Summary Totals
-    yPos += 4;
-    doc.setDrawColor(226, 232, 240);
-    doc.line(14, yPos, pageWidth - 14, yPos);
-    yPos += 6;
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.text('Subtotal Before Taxes:', 115, yPos);
-    doc.text(`Rs. ${calculations.discountedTotal.toLocaleString('en-IN')}`, pageWidth - 20, yPos, { align: 'right' });
-
-    yPos += 6;
-    doc.text('GST (18% Modular Works):', 115, yPos);
-    doc.text(`Rs. ${calculations.gstAmount.toLocaleString('en-IN')}`, pageWidth - 20, yPos, { align: 'right' });
-
-    yPos += 7;
-    doc.setFillColor(236, 72, 153); // pink-600
-    doc.rect(110, yPos - 5, pageWidth - 124, 9, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(255, 255, 255);
-    doc.text('GRAND TOTAL:', 115, yPos + 1.5);
-    doc.text(`Rs. ${calculations.grandTotal.toLocaleString('en-IN')}`, pageWidth - 20, yPos + 1.5, { align: 'right' });
-
-    // Footer & Terms
-    yPos = 265;
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.setTextColor(15, 23, 42);
-    doc.text('Standards & Compliance Notes:', 14, yPos);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 116, 139);
-    doc.text('• All carcass boxes factory-processed with 1.0mm/2.0mm hot-melt PUR edge-banding for moisture protection.', 14, yPos + 4.5);
-    doc.text('• BWP Grade Marine Plywood conforms to IS:710 standards with boiling waterproof test compliance.', 14, yPos + 8.5);
-    doc.text('• Final pricing subject to actual laser site measurements and civil plumbing / electrical alignment.', 14, yPos + 12.5);
-
-    doc.save(`Toolique_Modular_Kitchen_Quote_${Date.now().toString().slice(-6)}.pdf`);
   };
 
   const currentTheme = THEMES[activeTheme];
@@ -931,20 +871,15 @@ Generated via Toolique Interior Engineering Suite.`;
                   Kitchen Layout & Material Matrix
                 </h3>
                 <div className="flex items-center gap-2">
-                  <div className="flex rounded-lg bg-slate-100 dark:bg-slate-800 p-0.5 text-xs font-bold">
-                    <button
-                      onClick={() => setUnit('feet')}
-                      className={`px-2.5 py-1 rounded-md transition ${unit === 'feet' ? 'bg-white dark:bg-slate-700 text-pink-600 shadow-xs' : 'text-slate-655 dark:text-slate-400'}`}
-                    >
-                      Feet (ft)
-                    </button>
-                    <button
-                      onClick={() => setUnit('meters')}
-                      className={`px-2.5 py-1 rounded-md transition ${unit === 'meters' ? 'bg-white dark:bg-slate-700 text-pink-600 shadow-xs' : 'text-slate-655 dark:text-slate-400'}`}
-                    >
-                      Meters (m)
-                    </button>
-                  </div>
+                  <UnitSwitcher
+                    value={unit}
+                    onChange={(val) => setUnit(val as 'feet' | 'meters')}
+                    options={[
+                      { id: 'feet', label: 'Feet (ft)', shortLabel: 'ft' },
+                      { id: 'meters', label: 'Meters (m)', shortLabel: 'm' },
+                    ]}
+                    size="sm"
+                  />
                   <button
                     onClick={handleReset}
                     className="p-1.5 rounded-lg text-slate-655 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
@@ -1921,13 +1856,8 @@ Generated via Toolique Interior Engineering Suite.`;
                 Official Estimate Summary
               </span>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={copyReport}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold transition shadow-sm"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy Quote'}</span>
-                </button>
+                <CopyButton text={getReportText} label="Copy Quote" copiedLabel="Copied" size="xs" variant="primary" />
+                <ShareWhatsApp text={getReportText} label="WhatsApp" size="xs" variant="solid" />
                 <button
                   onClick={generatePdfQuote}
                   className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition shadow-sm"

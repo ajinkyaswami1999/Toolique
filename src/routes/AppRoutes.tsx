@@ -95,6 +95,12 @@ function LegacyToolRedirect() {
 
 function LegacyCategoryRedirect() {
   const { categoryName } = useParams<{ categoryName: string }>();
+  if (!categoryName) return <Navigate to="/tools" replace />;
+  // Check if param is actually a tool slug first to recover legacy GSC /tools/:slug links
+  const tool = toolsList.find((t) => t.slug === categoryName);
+  if (tool) {
+    return <Navigate to={getToolCanonicalPath(tool.category, tool.slug)} replace />;
+  }
   return <Navigate to={getCategoryCanonicalPath(categoryName || '')} replace />;
 }
 
@@ -207,6 +213,7 @@ export default function AppRoutes() {
       <Route path="/pdf-tools/:slug" element={<Navigate to="/pdf/:slug" replace />} />
       <Route path="/3d-printing/:slug" element={<LegacyToolRedirect />} />
       <Route path="/3d-print-studio/:slug" element={<LegacyToolRedirect />} />
+      <Route path="/tool/:slug" element={<LegacyToolRedirect />} />
 
       {/* Legacy Category & Tool Redirects */}
       <Route path="/tools/filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />

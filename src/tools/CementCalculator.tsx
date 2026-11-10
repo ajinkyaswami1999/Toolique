@@ -1,13 +1,14 @@
 import { useState, useMemo } from 'react';
 import {
-  Layers, Copy, Check, RotateCcw, Building, Plus, Trash2,
+  Layers, Check, RotateCcw, Building, Plus, Trash2,
   FileSpreadsheet, FileText, Share2, Ruler,
   TrendingDown, HardHat, Compass, Warehouse, ShieldAlert
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import SEO from '../components/SEO';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
+import { downloadPdfReport } from '../utils/pdf';
+import { UnitSwitcher, ShareWhatsApp, CopyButton } from '../components/common';
 
 // -------------------------------------------------------------
 // Engineering Constants & Indian Standards (IS 456 / IS 1077 / IS 1661)
@@ -166,7 +167,6 @@ export default function CementCalculator() {
   const [plasterWastagePct, setPlasterWastagePct] = useState<number>(10);
 
   // UI helpers
-  const [copied, setCopied] = useState<boolean>(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -496,20 +496,6 @@ export default function CementCalculator() {
     return quoteLines.join('\n');
   };
 
-  const handleCopyQuote = () => {
-    const text = generateWhatsAppQuote();
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    showToast('Quotation copied to clipboard!');
-    setTimeout(() => setCopied(false), 2500);
-  };
-
-  const handleShareWhatsApp = () => {
-    const text = generateWhatsAppQuote();
-    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-  };
-
   // Multi-Sheet Excel Workbook Export
   const handleExportExcel = () => {
     const wb = XLSX.utils.book_new();
@@ -564,134 +550,92 @@ export default function CementCalculator() {
     showToast('Downloaded Excel Workbook (.xlsx)');
   };
 
-  // High-Resolution PDF Export
+  // High-Resolution Standardized PDF Report Export (Pillar 2)
   const handleExportPDF = () => {
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const margin = 14;
-    let y = 14;
-
-    // Header Banner
-    doc.setFillColor(30, 41, 59); // slate-800
-    doc.rect(0, 0, 210, 36, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('CEMENT & MASONRY MATERIAL QUANTITY TAKEOFF', margin, 16);
-
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(203, 213, 225);
-    doc.text('Compliant with IS 456:2000, IS 1077, IS 1661:1972 & CPWD DSR Specifications', margin, 23);
-    doc.text(`Generated: ${new Date().toLocaleDateString('en-IN')} | Market: ${CITY_CEMENT_RATES[selectedCity]?.name || 'Standard'} (Cement: Rs.${cementRatePerBag}/bag)`, margin, 29);
-
-    y = 44;
-
-    // Summary Box
-    doc.setFillColor(248, 250, 252);
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(margin, y, 182, 38, 2, 2, 'FD');
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.setTextColor(79, 70, 229); // indigo-600
-    doc.text('CONSOLIDATED PROJECT MATERIAL INDENT', margin + 4, y + 6);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8.5);
-    doc.setTextColor(71, 85, 105);
-
-    doc.text(`• Total Cement Required: ${consolidatedTakeoff.totalBags} Bags (${consolidatedTakeoff.totalTonnes} Metric Tonnes)`, margin + 4, y + 14);
-    doc.text(`• Fine Sand / M-Sand: ${consolidatedTakeoff.totalSandCft} cft (${consolidatedTakeoff.totalSandBrass} Brass)`, margin + 4, y + 20);
-    doc.text(`• Coarse Aggregate (20mm): ${consolidatedTakeoff.totalAggCft} cft (${consolidatedTakeoff.totalAggBrass} Brass)`, margin + 4, y + 26);
-    doc.text(`• Total Estimated Material Budget: Rs.${consolidatedTakeoff.totalCost.toLocaleString('en-IN')}`, margin + 4, y + 32);
-
-    doc.text(`• Structural Concrete Bags: ${concreteCalculation.totalCementBags} Bags`, margin + 105, y + 14);
-    doc.text(`• Brick Masonry Bags: ${masonryCalculation.cementBags} Bags`, margin + 105, y + 20);
-    doc.text(`• Wall Plastering Bags: ${plasterCalculation.cementBags} Bags`, margin + 105, y + 26);
-    doc.text(`• Storage Footprint: ~${consolidatedTakeoff.storageFloorSqFt} sq.ft (IS 4082)`, margin + 105, y + 32);
-
-    y += 44;
-
-    // Discipline Breakdown Table Header
-    doc.setFillColor(15, 23, 42); // slate-900
-    doc.rect(margin, y, 182, 7, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.text('Work Discipline', margin + 3, y + 5);
-    doc.text('Dry Mix Ratio', margin + 55, y + 5);
-    doc.text('Cement Bags', margin + 95, y + 5);
-    doc.text('Sand (cft)', margin + 130, y + 5);
-    doc.text('Est. Cost (Rs)', margin + 155, y + 5);
-
-    y += 7;
-
-    const disciplineRows = [
-      ['1. Structural Concrete (Slabs, Beams, Columns)', 'M20 / M25 (1.54x)', `${concreteCalculation.totalCementBags} Bags`, `${concreteCalculation.totalSandCft} cft`, `Rs.${concreteCalculation.grandCostConcrete.toLocaleString('en-IN')}`],
-      ['2. Brickwork Masonry (Walls & Deductions)', `${masonryMixRatio} Mortar (1.33x)`, `${masonryCalculation.cementBags} Bags`, `${masonryCalculation.sandCft} cft`, `Rs.${masonryCalculation.grandCostMasonry.toLocaleString('en-IN')}`],
-      ['3. Wall & Ceiling Plastering', `${plasterPresetId} (1.60x)`, `${plasterCalculation.cementBags} Bags`, `${plasterCalculation.sandCft} cft`, `Rs.${plasterCalculation.grandCostPlaster.toLocaleString('en-IN')}`]
-    ];
-
-    disciplineRows.forEach((row, i) => {
-      doc.setFillColor(i % 2 === 0 ? 255 : 248, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 252);
-      doc.rect(margin, y, 182, 7, 'F');
-      doc.setDrawColor(226, 232, 240);
-      doc.line(margin, y + 7, margin + 182, y + 7);
-
-      doc.setTextColor(30, 41, 59);
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.text(row[0], margin + 3, y + 5);
-      doc.text(row[1], margin + 55, y + 5);
-      doc.setFont('helvetica', 'bold');
-      doc.text(row[2], margin + 95, y + 5);
-      doc.setFont('helvetica', 'normal');
-      doc.text(row[3], margin + 130, y + 5);
-      doc.setFont('helvetica', 'bold');
-      doc.text(row[4], margin + 155, y + 5);
-      y += 7;
+    downloadPdfReport({
+      title: 'Cement & Masonry Material Quantity Takeoff',
+      subtitle: 'Compliant with IS 456:2000, IS 1077, IS 1661:1972 & CPWD DSR Specifications',
+      category: 'civil',
+      complianceBadge: 'IS 456 & IS 1661 COMPLIANT',
+      referenceId: `CEM-${Date.now().toString().slice(-6)}`,
+      project: {
+        projectName: 'Cement & Masonry Material Indent',
+        clientName: 'Owner / Builder',
+        location: CITY_CEMENT_RATES[selectedCity]?.name || 'Standard India',
+        notes: `Cement: ₹${cementRatePerBag}/bag | Sand: ₹${sandRateCft}/cft | Agg: ₹${aggregateRateCft}/cft`
+      },
+      parameters: [
+        { label: 'Cement Rate', value: `₹${cementRatePerBag} / 50kg bag` },
+        { label: 'Sand Rate', value: `₹${sandRateCft} / cft` },
+        { label: 'Aggregate Rate', value: `₹${aggregateRateCft} / cft` },
+        { label: 'Unit System', value: unitMode === 'meters' ? 'Metric (m, cm, m³)' : 'Imperial (ft, in, cft)' }
+      ],
+      kpis: [
+        { label: 'Total Cement', value: `${consolidatedTakeoff.totalBags} Bags`, subtext: `${consolidatedTakeoff.totalTonnes} Metric Tonnes`, highlight: true },
+        { label: 'Fine Sand', value: `${consolidatedTakeoff.totalSandCft} cft`, subtext: `${consolidatedTakeoff.totalSandBrass} Brass` },
+        { label: 'Coarse Aggregate', value: `${consolidatedTakeoff.totalAggCft} cft`, subtext: `${consolidatedTakeoff.totalAggBrass} Brass` },
+        { label: 'Est. Material Budget', value: `₹${consolidatedTakeoff.totalCost.toLocaleString('en-IN')}`, subtext: `~${consolidatedTakeoff.storageFloorSqFt} sq.ft storage (IS 4082)`, highlight: true }
+      ],
+      tables: [
+        {
+          title: 'Discipline-Wise Material Breakdown',
+          columns: [
+            { header: 'Work Discipline', dataKey: 'discipline', width: 62 },
+            { header: 'Mix Ratio / Factor', dataKey: 'ratio', width: 38 },
+            { header: 'Cement Bags', dataKey: 'cement', width: 28, align: 'right' },
+            { header: 'Sand (cft)', dataKey: 'sand', width: 24, align: 'right' },
+            { header: 'Est. Cost', dataKey: 'cost', width: 30, align: 'right' }
+          ],
+          rows: [
+            { discipline: '1. Structural Concrete (Slabs, Beams, Columns)', ratio: 'M20 / M25 (1.54x)', cement: `${concreteCalculation.totalCementBags} Bags`, sand: `${concreteCalculation.totalSandCft}`, cost: `₹${concreteCalculation.grandCostConcrete.toLocaleString('en-IN')}` },
+            { discipline: '2. Brickwork Masonry (Walls & Deductions)', ratio: `${masonryMixRatio} Mortar (1.33x)`, cement: `${masonryCalculation.cementBags} Bags`, sand: `${masonryCalculation.sandCft}`, cost: `₹${masonryCalculation.grandCostMasonry.toLocaleString('en-IN')}` },
+            { discipline: '3. Wall & Ceiling Plastering', ratio: `${plasterPresetId} (1.60x)`, cement: `${plasterCalculation.cementBags} Bags`, sand: `${plasterCalculation.sandCft}`, cost: `₹${plasterCalculation.grandCostPlaster.toLocaleString('en-IN')}` }
+          ],
+          totalsRow: [
+            { dataKey: 'discipline', value: 'Total Consolidated Takeoff' },
+            { dataKey: 'cement', value: `${consolidatedTakeoff.totalBags} Bags` },
+            { dataKey: 'sand', value: `${consolidatedTakeoff.totalSandCft} cft` },
+            { dataKey: 'cost', value: `₹${consolidatedTakeoff.totalCost.toLocaleString('en-IN')}` }
+          ]
+        },
+        {
+          title: 'Structural Concrete Member Schedule',
+          columns: [
+            { header: 'Member Name', dataKey: 'name', width: 45 },
+            { header: 'Type', dataKey: 'type', width: 25 },
+            { header: 'Dimensions', dataKey: 'dims', width: 35 },
+            { header: 'Mix Grade', dataKey: 'grade', width: 22 },
+            { header: 'Wet Vol (m³)', dataKey: 'vol', width: 25, align: 'right' },
+            { header: 'Cement Bags', dataKey: 'bags', width: 30, align: 'right' }
+          ],
+          rows: concreteCalculation.itemDetails.map(el => ({
+            name: el.name,
+            type: el.type.toUpperCase(),
+            dims: `${el.length}x${el.width} (${el.depthOrHeight} ${unitMode === 'meters' ? 'cm' : 'in'})`,
+            grade: el.mixGrade,
+            vol: el.wetVolM3.toFixed(2),
+            bags: `${el.cementBags} Bags`
+          }))
+        }
+      ],
+      sections: [
+        {
+          title: 'Cement Storage Guidelines per IS 4082',
+          bullets: [
+            'Stacking Limit: Max 10 to 12 bags high on raised timber plinths (150mm above ground) to prevent moisture absorption and warehouse setting.',
+            'Clearance: Maintain minimum 450mm clearance between stacks and exterior shed walls. Cover with waterproof tarpaulin sheets.',
+            'Shelf-Life Notice: Use cement within 90 days of manufacture. Strength decreases ~20% after 3 months and ~30% after 6 months per IS 456.',
+            'Standard Civil Factors: Concrete dry volume factor is 1.54x wet volume; Brickwork mortar dry factor is 1.33x; Plastering factor is 1.60x (1.33 dry + 20% joint filling/wastage per IS 1661).'
+          ]
+        }
+      ],
+      disclaimers: [
+        'Material estimates include standard dry volume conversion and bulk density factors per IS 456 / IS 1077 / IS 1661.',
+        'Site wastage of 3-5% for cement and 5-8% for aggregates must be factored into actual purchase orders based on site handling conditions.'
+      ],
+      includeSignoff: true,
+      fileName: `Cement_Material_Indent_${Date.now()}.pdf`
     });
-
-    // Grand Total Banner
-    y += 3;
-    doc.setFillColor(16, 185, 129); // emerald-500
-    doc.roundedRect(margin, y, 182, 12, 2, 2, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.text('TOTAL CEMENT PROCUREMENT:', margin + 4, y + 8);
-    doc.setFontSize(13);
-    doc.text(`${consolidatedTakeoff.totalBags} Bags (Rs.${consolidatedTakeoff.totalCost.toLocaleString('en-IN')})`, margin + 115, y + 8.5);
-
-    y += 18;
-
-    // Cement Storage & Site Rules (IS 4082)
-    doc.setFillColor(241, 245, 249);
-    doc.roundedRect(margin, y, 182, 24, 2, 2, 'F');
-    doc.setTextColor(15, 23, 42);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.text('Cement Storage Guidelines per IS 4082:', margin + 4, y + 5);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.text('• Stacking Limit: Max 10 to 12 bags high on raised timber plinths (150mm above ground) to prevent warehouse setting.', margin + 4, y + 10);
-    doc.text('• Weather Protection: Keep min 450mm clear from external walls; enclose in heavy gauge tarpaulin sheets.', margin + 4, y + 15);
-    doc.text('• Shelf-Life Rule: Use cement within 90 days of manufacturing. Strength reduces 20% after 3 months & 30% after 6 months.', margin + 4, y + 20);
-
-    y += 28;
-
-    // Engineering Notes
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 116, 139);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Standard Civil Engineering Coefficients Applied:', margin, y);
-    doc.setFont('helvetica', 'normal');
-    doc.text('1. Concrete dry volume factor: 1.54x wet volume (IS 456). 1 bag = 50kg = 0.0347 m3.', margin, y + 4.5);
-    doc.text('2. Brickwork mortar dry factor: 1.33x wet volume. Deductions follow IS 1200 Part 3.', margin, y + 8.5);
-    doc.text('3. Plastering dry factor: 1.60x nominal volume (1.33x dry + 20% joint filling & wastage per IS 1661).', margin, y + 12.5);
-
-    doc.save(`Cement_Material_Indent_${Date.now()}.pdf`);
     showToast('Downloaded PDF Engineering Takeoff!');
   };
 
@@ -807,20 +751,15 @@ export default function CementCalculator() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl flex text-xs font-bold">
-                    <button
-                      onClick={() => setUnitMode('feet')}
-                      className={`px-3 py-1 rounded-lg transition ${unitMode === 'feet' ? 'bg-indigo-600 text-white font-black' : 'text-zinc-500'}`}
-                    >
-                      Cu.Ft (cft)
-                    </button>
-                    <button
-                      onClick={() => setUnitMode('meters')}
-                      className={`px-3 py-1 rounded-lg transition ${unitMode === 'meters' ? 'bg-indigo-600 text-white font-black' : 'text-zinc-500'}`}
-                    >
-                      Cu.Meters (m³)
-                    </button>
-                  </div>
+                  <UnitSwitcher<'feet' | 'meters'>
+                    value={unitMode}
+                    onChange={setUnitMode}
+                    options={[
+                      { id: 'feet', label: 'Cu.Ft (cft)', shortLabel: 'cft' },
+                      { id: 'meters', label: 'Cu.Meters (m³)', shortLabel: 'm³' }
+                    ]}
+                    size="sm"
+                  />
                   <button
                     onClick={handleReset}
                     className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800"
@@ -1567,20 +1506,20 @@ export default function CementCalculator() {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <button
-                    onClick={handleShareWhatsApp}
-                    className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition inline-flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20"
-                  >
-                    <Share2 className="w-3.5 h-3.5" />
-                    <span>Send Quote</span>
-                  </button>
-                  <button
-                    onClick={handleCopyQuote}
-                    className="p-2.5 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 text-xs"
+                  <ShareWhatsApp
+                    text={generateWhatsAppQuote}
+                    label="Send Quote"
+                    variant="solid"
+                    size="md"
+                    className="flex-1"
+                  />
+                  <CopyButton
+                    text={generateWhatsAppQuote}
+                    variant="secondary"
+                    size="md"
+                    iconOnly
                     title="Copy quotation text"
-                  >
-                    {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                  </button>
+                  />
                 </div>
               </div>
 

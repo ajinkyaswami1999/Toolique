@@ -1,13 +1,33 @@
 import { useState, useMemo } from 'react';
 import {
-  Ruler, Copy, Check, RotateCcw, Building, Plus, Trash2,
+  Ruler, Check, RotateCcw, Building, Plus, Trash2,
   FileSpreadsheet, FileText, Share2, Layers,
   Compass, Truck, Scale, Droplets
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import SEO from '../components/SEO';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
+import { downloadPdfReport } from '../utils/pdf';
+import { UnitSwitcher, ShareWhatsApp, CopyButton } from '../components/common';
+import {
+  DRY_VOLUME_FACTOR_CONCRETE,
+  DRY_VOLUME_FACTOR_MORTAR,
+  CFT_PER_CUM,
+  CUM_PER_CFT,
+  CFT_PER_BRASS,
+  CUM_PER_BRASS,
+  SQFT_PER_SQM,
+  SQM_PER_SQFT,
+  CEMENT_BAG_VOLUME_M3,
+  cumToCft,
+  cftToCum,
+  cftToBrass,
+  sqmToSqft,
+  sqftToSqm,
+  wetToDryVolumeConcrete,
+  wetToDryVolumeMortar,
+  calculateCementBags,
+} from '../utils/civilMath';
 
 // -------------------------------------------------------------
 // Engineering Types & Constants (IS 383:2016 / IS 1542 / IS 2116)
@@ -168,8 +188,7 @@ export default function SandCalculator() {
   const [plasterDeductionSqFt, setPlasterDeductionSqFt] = useState<number>(50);
   const [plasterWastagePct, setPlasterWastagePct] = useState<number>(10);
 
-  // Toast & Copied helpers
-  const [copied, setCopied] = useState<boolean>(false);
+  // Toast helper
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -237,9 +256,9 @@ export default function SandCalculator() {
       return {
         ...el,
         wetVolM3: Number(wetVolM3.toFixed(3)),
-        wetVolCft: Number((wetVolM3 * 35.3147).toFixed(1)),
+        wetVolCft: Number(cumToCft(wetVolM3).toFixed(1)),
         sandCft: Number(sandCft.toFixed(1)),
-        sandBrass: Number((sandCft / 100).toFixed(2)),
+        sandBrass: Number(cftToBrass(sandCft).toFixed(2)),
         sandTonnes: Number(((sandCft * sandDef.densityKgCft) / 1000).toFixed(2)),
         cementBags,
         aggCft: Number(aggCft.toFixed(1))
@@ -257,15 +276,15 @@ export default function SandCalculator() {
     });
 
     // Quick output
-    const qWetM3 = isM ? quickConcreteVol : quickConcreteVol * 0.0283168;
-    const qDryM3 = qWetM3 * 1.54 * (1 + quickWastagePct / 100);
+    const qWetM3 = isM ? quickConcreteVol : cftToCum(quickConcreteVol);
+    const qDryM3 = wetToDryVolumeConcrete(qWetM3) * (1 + quickWastagePct / 100);
     const qMix = CONCRETE_MIX_SAND[quickConcreteMix] || CONCRETE_MIX_SAND.M20;
     const qParts = qMix.cement + qMix.sand + qMix.agg;
-    const qSandCft = Number((((qMix.sand / qParts) * qDryM3) * 35.3147).toFixed(1));
-    const qSandBrass = Number((qSandCft / 100).toFixed(2));
+    const qSandCft = Number(cumToCft((qMix.sand / qParts) * qDryM3).toFixed(1));
+    const qSandBrass = Number(cftToBrass(qSandCft).toFixed(2));
     const qSandTonnes = Number(((qSandCft * sandDef.densityKgCft) / 1000).toFixed(2));
 
-    const totalBrass = Number((sumSandCft / 100).toFixed(2));
+    const totalBrass = Number(cftToBrass(sumSandCft).toFixed(2));
     const totalTonnes = Number(((sumSandCft * sandDef.densityKgCft) / 1000).toFixed(2));
     const bulkingAdjustedCft = Number((sumSandCft * bulkingFactor).toFixed(1));
     const totalCost = Math.round(sumSandCft * sandRateCft);
@@ -278,7 +297,7 @@ export default function SandCalculator() {
     return {
       itemDetails,
       totalWetVolM3: Number(totalWetVolM3.toFixed(3)),
-      totalWetVolCft: Number((totalWetVolM3 * 35.3147).toFixed(1)),
+      totalWetVolCft: Number(cumToCft(totalWetVolM3).toFixed(1)),
       sumSandCft: Number(sumSandCft.toFixed(1)),
       totalBrass,
       totalTonnes,
@@ -306,18 +325,18 @@ export default function SandCalculator() {
     const thkM = (masonryThicknessInches / 12) * 0.3048;
 
     const grossWallAreaSqM = lenM * htM;
-    const grossWallAreaSqFt = grossWallAreaSqM * 10.7639;
+    const grossWallAreaSqFt = sqmToSqft(grossWallAreaSqM);
 
-    const openingsSqM = isM ? masonryOpeningsSqFt : masonryOpeningsSqFt * 0.092903;
+    const openingsSqM = isM ? masonryOpeningsSqFt : sqftToSqm(masonryOpeningsSqFt);
     const netWallAreaSqM = Math.max(0, grossWallAreaSqM - openingsSqM);
-    const netWallAreaSqFt = netWallAreaSqM * 10.7639;
+    const netWallAreaSqFt = sqmToSqft(netWallAreaSqM);
     const netWallVolM3 = netWallAreaSqM * thkM;
-    const netWallVolCft = netWallVolM3 * 35.3147;
+    const netWallVolCft = cumToCft(netWallVolM3);
 
     // Mortar volume in 9" brickwork is approx 28% of wall volume
     const wetMortarVolM3 = netWallVolM3 * 0.28;
-    const dryMortarVolM3 = wetMortarVolM3 * 1.33 * (1 + masonryWastagePct / 100);
-    const dryMortarVolCft = dryMortarVolM3 * 35.3147;
+    const dryMortarVolM3 = wetToDryVolumeMortar(wetMortarVolM3) * (1 + masonryWastagePct / 100);
+    const dryMortarVolCft = cumToCft(dryMortarVolM3);
 
     const parts = MASONRY_MORTAR_SAND[masonryMixRatio] || MASONRY_MORTAR_SAND['1:6'];
     const totalParts = parts.cement + parts.sand;
@@ -325,10 +344,10 @@ export default function SandCalculator() {
     const sandVolM3 = (parts.sand / totalParts) * dryMortarVolM3;
     const cementVolM3 = (parts.cement / totalParts) * dryMortarVolM3;
 
-    const sandCft = Number((sandVolM3 * 35.3147).toFixed(1));
-    const sandBrass = Number((sandCft / 100).toFixed(2));
+    const sandCft = Number(cumToCft(sandVolM3).toFixed(1));
+    const sandBrass = Number(cftToBrass(sandCft).toFixed(2));
     const sandTonnes = Number(((sandCft * sandDef.densityKgCft) / 1000).toFixed(2));
-    const cementBags = Math.ceil(cementVolM3 / 0.0347);
+    const cementBags = calculateCementBags(cementVolM3);
     const bricksCount = Math.ceil(netWallVolM3 * 450 * (1 + masonryWastagePct / 100));
     const totalCost = Math.round(sandCft * sandRateCft);
 
@@ -352,25 +371,25 @@ export default function SandCalculator() {
   // -------------------------------------------------------------
   const plasterCalculation = useMemo(() => {
     const isM = unitMode === 'meters';
-    const grossAreaSqM = isM ? plasterArea : plasterArea * 0.092903;
-    const openingDeductionSqM = isM ? plasterDeductionSqFt : plasterDeductionSqFt * 0.092903;
+    const grossAreaSqM = isM ? plasterArea : sqftToSqm(plasterArea);
+    const openingDeductionSqM = isM ? plasterDeductionSqFt : sqftToSqm(plasterDeductionSqFt);
 
     const netAreaSqM = Math.max(0, grossAreaSqM - openingDeductionSqM);
-    const netAreaSqFt = netAreaSqM * 10.7639;
+    const netAreaSqFt = sqmToSqft(netAreaSqM);
 
     const preset = PLASTER_SAND_PRESETS[plasterPresetId] || PLASTER_SAND_PRESETS.internal_12mm_14;
     const wetVolM3 = netAreaSqM * (preset.thkMm / 1000);
     const dryVolM3 = wetVolM3 * preset.mult * (1 + plasterWastagePct / 100);
-    const dryVolCft = dryVolM3 * 35.3147;
+    const dryVolCft = cumToCft(dryVolM3);
 
     const totalParts = preset.cement + preset.sand;
     const sandVolM3 = (preset.sand / totalParts) * dryVolM3;
     const cementVolM3 = (preset.cement / totalParts) * dryVolM3;
 
-    const sandCft = Number((sandVolM3 * 35.3147).toFixed(1));
-    const sandBrass = Number((sandCft / 100).toFixed(2));
+    const sandCft = Number(cumToCft(sandVolM3).toFixed(1));
+    const sandBrass = Number(cftToBrass(sandCft).toFixed(2));
     const sandTonnes = Number(((sandCft * sandDef.densityKgCft) / 1000).toFixed(2));
-    const cementBags = Math.ceil(cementVolM3 / 0.0347);
+    const cementBags = calculateCementBags(cementVolM3);
     const totalCost = Math.round(sandCft * sandRateCft);
 
     return {
@@ -468,20 +487,6 @@ export default function SandCalculator() {
     return lines.join('\n');
   };
 
-  const handleCopyQuote = () => {
-    const text = generateWhatsAppQuote();
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    showToast('Quotation copied to clipboard!');
-    setTimeout(() => setCopied(false), 2500);
-  };
-
-  const handleShareWhatsApp = () => {
-    const text = generateWhatsAppQuote();
-    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-  };
-
   // Multi-Sheet Excel Export
   const handleExportExcel = () => {
     const wb = XLSX.utils.book_new();
@@ -538,131 +543,93 @@ export default function SandCalculator() {
     showToast('Downloaded Excel Workbook (.xlsx)');
   };
 
-  // High-Resolution PDF Export
+  // High-Resolution Standardized PDF Report Export (Pillar 2)
   const handleExportPDF = () => {
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const margin = 14;
-    let y = 14;
-
-    // Header Banner
-    doc.setFillColor(30, 41, 59); // slate-800
-    doc.rect(0, 0, 210, 36, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('SAND & FINE AGGREGATE QUANTITY TAKEOFF', margin, 16);
-
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(203, 213, 225);
-    doc.text('Compliant with IS 383:2016, IS 1542, IS 2116 & CPWD DSR Specifications', margin, 23);
-    doc.text(`Generated: ${new Date().toLocaleDateString('en-IN')} | Sand: ${sandDef.name} | Rate: Rs.${sandRateCft}/cft`, margin, 29);
-
-    y = 44;
-
-    // Summary Box
-    doc.setFillColor(248, 250, 252);
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(margin, y, 182, 38, 2, 2, 'FD');
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.setTextColor(217, 119, 6); // amber-600
-    doc.text('CONSOLIDATED SAND INDENT & LOGISTICS', margin + 4, y + 6);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8.5);
-    doc.setTextColor(71, 85, 105);
-
-    doc.text(`• Total Volume: ${consolidatedIndent.totalCft} CFT (${consolidatedIndent.totalBrass} Brass)`, margin + 4, y + 14);
-    doc.text(`• Total Weight: ${consolidatedIndent.totalTonnes} Metric Tonnes (@ ${sandDef.densityKgCft} kg/cft)`, margin + 4, y + 20);
-    doc.text(`• Total Sand Budget: Rs.${consolidatedIndent.totalCost.toLocaleString('en-IN')}`, margin + 4, y + 26);
-    doc.text(`• Bulking Factor: ${Math.round((bulkingFactor - 1) * 100)}% Volume Expansion (@ ${bulkingMoisturePct}% moisture)`, margin + 4, y + 32);
-
-    doc.text(`• Structural Concrete Sand: ${concreteCalculation.sumSandCft} cft`, margin + 105, y + 14);
-    doc.text(`• Brick Masonry Sand: ${masonryCalculation.sandCft} cft`, margin + 105, y + 20);
-    doc.text(`• Wall Plastering Sand: ${plasterCalculation.sandCft} cft`, margin + 105, y + 26);
-    doc.text(`• Transport Requirement: ~${consolidatedIndent.tippers} Tippers / ${consolidatedIndent.trolleys} Trolleys`, margin + 105, y + 32);
-
-    y += 44;
-
-    // Discipline Breakdown Table Header
-    doc.setFillColor(15, 23, 42); // slate-900
-    doc.rect(margin, y, 182, 7, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.text('Work Discipline', margin + 3, y + 5);
-    doc.text('Mix Specification', margin + 60, y + 5);
-    doc.text('Sand (CFT)', margin + 105, y + 5);
-    doc.text('Sand (Brass)', margin + 130, y + 5);
-    doc.text('Amount (Rs)', margin + 155, y + 5);
-
-    y += 7;
-
-    const disciplineRows = [
-      ['1. Structural Concrete (Slabs, Beams, Columns)', 'M20 / M25 (1.54x)', `${concreteCalculation.sumSandCft} cft`, `${concreteCalculation.totalBrass} Brass`, `Rs.${concreteCalculation.totalCost.toLocaleString('en-IN')}`],
-      ['2. Brickwork Masonry (9" / 4.5" Walls)', `${masonryMixRatio} Mortar (1.33x)`, `${masonryCalculation.sandCft} cft`, `${masonryCalculation.sandBrass} Brass`, `Rs.${masonryCalculation.totalCost.toLocaleString('en-IN')}`],
-      ['3. Wall & Ceiling Plastering', `${plasterPresetId} (1.60x)`, `${plasterCalculation.sandCft} cft`, `${plasterCalculation.sandBrass} Brass`, `Rs.${plasterCalculation.totalCost.toLocaleString('en-IN')}`]
-    ];
-
-    disciplineRows.forEach((row, i) => {
-      doc.setFillColor(i % 2 === 0 ? 255 : 248, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 252);
-      doc.rect(margin, y, 182, 7, 'F');
-      doc.setDrawColor(226, 232, 240);
-      doc.line(margin, y + 7, margin + 182, y + 7);
-
-      doc.setTextColor(30, 41, 59);
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.text(row[0], margin + 3, y + 5);
-      doc.text(row[1], margin + 60, y + 5);
-      doc.setFont('helvetica', 'bold');
-      doc.text(row[2], margin + 105, y + 5);
-      doc.setFont('helvetica', 'normal');
-      doc.text(row[3], margin + 130, y + 5);
-      doc.setFont('helvetica', 'bold');
-      doc.text(row[4], margin + 155, y + 5);
-      y += 7;
+    downloadPdfReport({
+      title: 'Sand & Fine Aggregate Quantity Takeoff',
+      subtitle: 'Compliant with IS 383:2016, IS 1542, IS 2116 & CPWD DSR Specifications',
+      category: 'civil',
+      complianceBadge: 'IS 383:2016 COMPLIANT',
+      referenceId: `SND-${Date.now().toString().slice(-6)}`,
+      theme: 'amber',
+      project: {
+        projectName: 'Sand & Fine Aggregate Takeoff',
+        clientName: 'Owner / Builder',
+        location: CITY_SAND_RATES[selectedCity]?.name || 'Standard India',
+        notes: `Sand Type: ${sandDef.name} | Rate: ₹${sandRateCft}/cft`
+      },
+      parameters: [
+        { label: 'Sand Type', value: sandDef.name },
+        { label: 'Sand Rate', value: `₹${sandRateCft} / cft` },
+        { label: 'Bulking Factor', value: `${Math.round((bulkingFactor - 1) * 100)}% (@ ${bulkingMoisturePct}% moisture)` },
+        { label: 'Unit System', value: unitMode === 'meters' ? 'Metric (m, cm, m³)' : 'Imperial (ft, in, cft)' }
+      ],
+      kpis: [
+        { label: 'Total Volume', value: `${consolidatedIndent.totalCft} CFT`, subtext: `${consolidatedIndent.totalBrass} Brass`, highlight: true },
+        { label: 'Total Weight', value: `${consolidatedIndent.totalTonnes} Tonnes`, subtext: `@ ${sandDef.densityKgCft} kg/cft` },
+        { label: 'Est. Sand Budget', value: `₹${consolidatedIndent.totalCost.toLocaleString('en-IN')}`, subtext: `₹${sandRateCft}/cft`, highlight: true },
+        { label: 'Transport Indent', value: `${consolidatedIndent.tippers} Tippers`, subtext: `or ~${consolidatedIndent.trolleys} Trolleys` }
+      ],
+      tables: [
+        {
+          title: 'Discipline-Wise Sand Breakdown',
+          columns: [
+            { header: 'Work Discipline', dataKey: 'discipline', width: 62 },
+            { header: 'Mix Specification', dataKey: 'ratio', width: 38 },
+            { header: 'Sand (CFT)', dataKey: 'cft', width: 28, align: 'right' },
+            { header: 'Sand (Brass)', dataKey: 'brass', width: 26, align: 'right' },
+            { header: 'Amount (₹)', dataKey: 'cost', width: 28, align: 'right' }
+          ],
+          rows: [
+            { discipline: '1. Structural Concrete (Slabs, Beams, Columns)', ratio: 'M20 / M25 (1.54x)', cft: `${concreteCalculation.sumSandCft} cft`, brass: `${concreteCalculation.totalBrass} Brass`, cost: `₹${concreteCalculation.totalCost.toLocaleString('en-IN')}` },
+            { discipline: '2. Brickwork Masonry (9" / 4.5" Walls)', ratio: `${masonryMixRatio} Mortar (1.33x)`, cft: `${masonryCalculation.sandCft} cft`, brass: `${masonryCalculation.sandBrass} Brass`, cost: `₹${masonryCalculation.totalCost.toLocaleString('en-IN')}` },
+            { discipline: '3. Wall & Ceiling Plastering', ratio: `${plasterPresetId} (1.60x)`, cft: `${plasterCalculation.sandCft} cft`, brass: `${plasterCalculation.sandBrass} Brass`, cost: `₹${plasterCalculation.totalCost.toLocaleString('en-IN')}` }
+          ],
+          totalsRow: [
+            { dataKey: 'discipline', value: 'Total Consolidated Indent' },
+            { dataKey: 'cft', value: `${consolidatedIndent.totalCft} cft` },
+            { dataKey: 'brass', value: `${consolidatedIndent.totalBrass} Brass` },
+            { dataKey: 'cost', value: `₹${consolidatedIndent.totalCost.toLocaleString('en-IN')}` }
+          ]
+        },
+        {
+          title: 'Structural Concrete Member Sand Schedule',
+          columns: [
+            { header: 'Element Description', dataKey: 'name', width: 45 },
+            { header: 'Type', dataKey: 'type', width: 25 },
+            { header: 'Dimensions', dataKey: 'dims', width: 35 },
+            { header: 'Grade', dataKey: 'grade', width: 22 },
+            { header: 'Wet Vol (m³)', dataKey: 'vol', width: 25, align: 'right' },
+            { header: 'Sand (CFT)', dataKey: 'sand', width: 30, align: 'right' }
+          ],
+          rows: concreteCalculation.itemDetails.map(el => ({
+            name: el.name,
+            type: el.type.toUpperCase(),
+            dims: `${el.length}x${el.width} (${el.depthOrHeight} ${unitMode === 'meters' ? 'cm' : 'in'})`,
+            grade: el.mixGrade,
+            vol: el.wetVolM3.toFixed(2),
+            sand: `${el.sandCft} cft`
+          }))
+        }
+      ],
+      sections: [
+        {
+          title: 'Engineering Standards & Bulking Rules (IS 2386 / IS 383)',
+          bullets: [
+            '1 Brass = 100 Cubic Feet (CFT) = 2.8317 Cubic Meters (m³) in Indian construction practice.',
+            'Sand Bulking: Damp sand with 4-6% moisture expands by 15-25% in volume. Adjust batch volumes accordingly.',
+            'Silt Testing: Field jar test must show <= 3% silt by volume. Excessive silt weakens concrete bond strength.',
+            'Standard Multipliers: Concrete dry multiplier 1.54x | Mortar dry multiplier 1.33x | Plastering multiplier 1.60x.'
+          ]
+        }
+      ],
+      disclaimers: [
+        'Sand quantities include standard bulk density and dry conversion allowances.',
+        'Contractor must account for 5-8% transit and site unloading spillage when placing commercial supply orders.'
+      ],
+      includeSignoff: true,
+      fileName: `Sand_Quantity_Indent_${Date.now()}.pdf`
     });
-
-    // Grand Total Banner
-    y += 3;
-    doc.setFillColor(217, 119, 6); // amber-600
-    doc.roundedRect(margin, y, 182, 12, 2, 2, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.text('TOTAL SAND PROCUREMENT:', margin + 4, y + 8);
-    doc.setFontSize(13);
-    doc.text(`${consolidatedIndent.totalCft} CFT (${consolidatedIndent.totalBrass} Brass)`, margin + 105, y + 8.5);
-
-    y += 18;
-
-    // Sand Quality & Bulking Notes
-    doc.setFillColor(241, 245, 249);
-    doc.roundedRect(margin, y, 182, 24, 2, 2, 'F');
-    doc.setTextColor(15, 23, 42);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.text('Engineering Standards & Bulking Rules (IS 2386 / IS 383):', margin + 4, y + 5);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.text('• 1 Brass = 100 Cubic Feet (CFT) = 2.8317 Cubic Meters (m3) in Indian construction practice.', margin + 4, y + 10);
-    doc.text('• Sand Bulking: Damp sand with 4-6% moisture expands by 15-25% in volume. Adjust batch volumes accordingly.', margin + 4, y + 15);
-    doc.text('• Silt Testing: Field jar test must show <= 3% silt by volume. Excessive silt weakens concrete bond strength.', margin + 4, y + 20);
-
-    y += 28;
-
-    doc.setFontSize(7.5);
-    doc.setTextColor(100, 116, 139);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Standard Conversion Factors:', margin, y);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Concrete dry multiplier: 1.54x | Mortar dry multiplier: 1.33x | Plastering multiplier: 1.60x.', margin, y + 4.5);
-
-    doc.save(`Sand_Quantity_Indent_${Date.now()}.pdf`);
     showToast('Downloaded PDF Engineering Takeoff!');
   };
 
@@ -779,20 +746,15 @@ export default function SandCalculator() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl flex text-xs font-bold">
-                    <button
-                      onClick={() => setUnitMode('feet')}
-                      className={`px-3 py-1 rounded-lg transition ${unitMode === 'feet' ? 'bg-amber-500 text-slate-950 font-black' : 'text-zinc-500'}`}
-                    >
-                      Cu.Ft (cft)
-                    </button>
-                    <button
-                      onClick={() => setUnitMode('meters')}
-                      className={`px-3 py-1 rounded-lg transition ${unitMode === 'meters' ? 'bg-amber-500 text-slate-950 font-black' : 'text-zinc-500'}`}
-                    >
-                      Cu.Meters (m³)
-                    </button>
-                  </div>
+                  <UnitSwitcher<'feet' | 'meters'>
+                    value={unitMode}
+                    onChange={setUnitMode}
+                    options={[
+                      { id: 'feet', label: 'Cu.Ft (cft)', shortLabel: 'cft' },
+                      { id: 'meters', label: 'Cu.Meters (m³)', shortLabel: 'm³' }
+                    ]}
+                    size="sm"
+                  />
                   <button
                     onClick={handleReset}
                     className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-800"
@@ -1471,20 +1433,20 @@ export default function SandCalculator() {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <button
-                    onClick={handleShareWhatsApp}
-                    className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition inline-flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20"
-                  >
-                    <Share2 className="w-3.5 h-3.5" />
-                    <span>Send Quote</span>
-                  </button>
-                  <button
-                    onClick={handleCopyQuote}
-                    className="p-2.5 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 text-xs"
+                  <ShareWhatsApp
+                    text={generateWhatsAppQuote}
+                    label="Send Quote"
+                    variant="solid"
+                    size="md"
+                    className="flex-1"
+                  />
+                  <CopyButton
+                    text={generateWhatsAppQuote}
+                    variant="secondary"
+                    size="md"
+                    iconOnly
                     title="Copy quotation text"
-                  >
-                    {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                  </button>
+                  />
                 </div>
               </div>
 

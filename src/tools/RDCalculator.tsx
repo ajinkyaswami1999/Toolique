@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react';
 import { 
-  Landmark, Copy, Check, Info, ArrowRightLeft, 
+  Landmark, Info, ArrowRightLeft, 
   Download, Printer, Sparkles
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp } from '../components/common';
 
 // --- Interfaces & Types ---
 type BankType = 'public' | 'private' | 'small_finance';
@@ -215,8 +216,6 @@ export default function RDCalculator() {
   const [rateDiffCompareVal, setRateDiffCompareVal] = useState<number>(6.5);
 
   // UI state
-  const [copiedLink, setCopiedLink] = useState<boolean>(false);
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [filterType, setFilterType] = useState<'all' | 'public' | 'private' | 'small_finance'>('all');
 
   // Retrieve current active bank configuration
@@ -463,8 +462,8 @@ export default function RDCalculator() {
   }, [currentTenureMonths, resolvedRate]);
 
   // --- Export Actions Handlers ---
-  const copyFormattedReport = () => {
-    const text = `Recurring Deposit (RD) Planning Audit (Toolique)
+  const getReportText = () => {
+    return `Recurring Deposit (RD) Planning Audit (Toolique)
 ----------------------------------------------
 Selected Bank       : ${activeBank.name}
 Customer Type       : ${customerType === 'senior' ? 'Senior Citizen (+0.50% benefit)' : 'General Citizen'}
@@ -479,10 +478,6 @@ FINAL MATURITY VALUE: ₹${calculations.maturityValue.toLocaleString('en-IN')}
 Effective yield     : ${calculations.simpleYield}%
 ----------------------------------------------
 Potential TDS (10%) : ₹${calculations.tdsDeducted.toLocaleString('en-IN')} (if applicable)`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
   };
 
   const exportCSV = () => {
@@ -529,38 +524,56 @@ Potential TDS (10%) : ₹${calculations.tdsDeducted.toLocaleString('en-IN')} (if
   };
 
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFillColor(15, 23, 42); // slate-900 theme color
-    doc.rect(0, 0, 210, 38, 'F');
+    const projectionRows = calculations.yearByYear.map((r) => ({
+      period: r.period,
+      deposited: `₹${r.deposited.toLocaleString('en-IN')}`,
+      interest: `₹${r.interest.toLocaleString('en-IN')}`,
+      maturityValue: `₹${r.maturityValue.toLocaleString('en-IN')}`,
+    }));
 
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text('RECURRING DEPOSIT RETIREMENT PLAN', 15, 22);
-    doc.setFontSize(10);
-    doc.text('IBA Compounding Maturity Report — Toolique.in', 15, 30);
-
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(12);
-    doc.text('RD Savings Parameters', 15, 52);
-
-    doc.setFontSize(10);
-    doc.text(`Selected Bank: ${activeBank.name}`, 15, 60);
-    doc.text(`Tenure duration: ${tenure} ${tenureUnit} (${currentTenureMonths} Months)`, 15, 66);
-    doc.text(`Interest rate: ${resolvedRate}% p.a.`, 15, 72);
-    doc.text(`Maturity Date: ${calculations.maturityDate}`, 15, 78);
-
-    doc.line(15, 84, 195, 84);
-
-    doc.setFontSize(12);
-    doc.text('Maturity Splits', 15, 94);
-
-    doc.setFontSize(10);
-    doc.text(`Monthly Instalment: Rs. ${monthlyDeposit.toLocaleString('en-IN')}`, 15, 102);
-    doc.text(`Total Deposited: Rs. ${calculations.invested.toLocaleString('en-IN')}`, 15, 108);
-    doc.text(`Estimated Interest Earned: Rs. ${calculations.interest.toLocaleString('en-IN')}`, 15, 114);
-    doc.text(`Final Maturity Value: Rs. ${calculations.maturityValue.toLocaleString('en-IN')}`, 15, 120);
-
-    doc.save(`RD_Maturity_Report_${Date.now()}.pdf`);
+    downloadPdfReport({
+      title: 'Recurring Deposit (RD) Accumulation & Yield Audit',
+      subtitle: `${activeBank.name} | Rate: ${resolvedRate}% p.a. | Tenure: ${tenure} ${tenureUnit}`,
+      category: 'Banking & Term Deposits',
+      project: 'Toolique Financial Suite',
+      theme: 'emerald',
+      parameters: [
+        { label: 'Bank Name', value: activeBank.name },
+        { label: 'Customer Category', value: customerType === 'senior' ? 'Senior Citizen' : 'General Citizen' },
+        { label: 'Monthly Instalment', value: `₹${monthlyDeposit.toLocaleString('en-IN')}/mo` },
+        { label: 'Total Tenure', value: `${tenure} ${tenureUnit} (${currentTenureMonths} Months)` },
+        { label: 'Annual Interest Rate', value: `${resolvedRate}% p.a.` },
+        { label: 'Maturity Date', value: calculations.maturityDate },
+        { label: 'Total Capital Deposited', value: `₹${calculations.invested.toLocaleString('en-IN')}` },
+        { label: 'Estimated Interest', value: `₹${calculations.interest.toLocaleString('en-IN')}` },
+        { label: 'Final Maturity Payout', value: `₹${calculations.maturityValue.toLocaleString('en-IN')}` },
+        { label: 'Effective Annual Yield', value: `${calculations.simpleYield}%` },
+      ],
+      tables: [
+        {
+          title: 'Yearly Accumulation Projections',
+          columns: [
+            { header: 'Period', dataKey: 'period' },
+            { header: 'Cumulative Deposit', dataKey: 'deposited', align: 'right' as const },
+            { header: 'Interest Accrued', dataKey: 'interest', align: 'right' as const },
+            { header: 'Maturity Balance', dataKey: 'maturityValue', align: 'right' as const },
+          ],
+          rows: projectionRows,
+          totalsRow: [
+            { dataKey: 'period', value: 'FINAL MATURITY' },
+            { dataKey: 'deposited', value: `₹${calculations.invested.toLocaleString('en-IN')}` },
+            { dataKey: 'interest', value: `₹${calculations.interest.toLocaleString('en-IN')}` },
+            { dataKey: 'maturityValue', value: `₹${calculations.maturityValue.toLocaleString('en-IN')}` },
+          ],
+        },
+      ],
+      disclaimers: [
+        'Recurring Deposit interest rates follow Indian Banks’ Association (IBA) quarterly compounding guidelines.',
+        'Premature withdrawal or missed instalments may attract standard banking penalty deductions.',
+        'TDS liability depends on individual income tax slabs and aggregate interest earned across accounts.',
+      ],
+      fileName: `RD_Maturity_Report_${Date.now()}.pdf`,
+    });
   };
 
   const getShareLink = () => {
@@ -603,17 +616,8 @@ Potential TDS (10%) : ₹${calculations.tdsDeducted.toLocaleString('en-IN')} (if
             ))}
           </div>
 
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(getShareLink());
-              setCopiedLink(true);
-              setTimeout(() => setCopiedLink(false), 2000);
-            }}
-            className="text-[9px] font-bold text-slate-700 dark:text-slate-400 bg-slate-500/10 border border-slate-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm"
-          >
-            {copiedLink ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-            <span>{copiedLink ? 'Link Copied' : 'Share Scenario'}</span>
-          </button>
+          <CopyButton text={getShareLink} label="Share Scenario" size="xs" variant="outline" />
+          <ShareWhatsApp text={getShareLink} label="WhatsApp" size="xs" />
         </div>
       </div>
 
@@ -827,13 +831,10 @@ Potential TDS (10%) : ₹${calculations.tdsDeducted.toLocaleString('en-IN')} (if
                 <span className="text-[9px] font-black uppercase text-zinc-450 tracking-wider block">Estimated maturity payout value</span>
                 <h3 className="text-sm font-black text-teal-400 mt-0.5">Recurring deposit returns</h3>
               </div>
-              <button
-                onClick={copyFormattedReport}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-350 hover:bg-zinc-850 hover:text-white transition"
-              >
-                {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedReport ? 'Copied' : 'Copy Breakup'}</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <CopyButton text={getReportText} label="Copy Breakup" size="xs" variant="secondary" />
+                <ShareWhatsApp text={getReportText} label="WhatsApp" size="xs" />
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -1051,13 +1052,8 @@ Potential TDS (10%) : ₹${calculations.tdsDeducted.toLocaleString('en-IN')} (if
       <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
         <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b border-zinc-150 dark:border-zinc-850 pb-2">Export Maturity Audit</h3>
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={copyFormattedReport}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
-          >
-            {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedReport ? 'Report Copied' : 'Copy Maturity Breakup'}</span>
-          </button>
+          <CopyButton text={getReportText} label="Copy Maturity Breakup" />
+          <ShareWhatsApp text={getReportText} label="Share on WhatsApp" />
           <button
             onClick={exportCSV}
             className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"

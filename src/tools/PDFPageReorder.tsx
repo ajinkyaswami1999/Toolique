@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useRef } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
 import {
   ArrowUpDown,
   Upload,
@@ -10,12 +13,10 @@ import {
   RotateCw,
   Sparkles,
   ShieldCheck,
-  Check,
   Info,
   Layers,
   FileCheck,
   Trash2,
-  Copy,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
@@ -49,7 +50,6 @@ export default function PDFPageReorder() {
   // Results & preview
   const [outputBlob, setOutputBlob] = useState<Blob | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [showPreview, setShowPreview] = useState<boolean>(false);
 
   // Drag and drop state
@@ -445,13 +445,6 @@ export default function PDFPageReorder() {
     return text;
   };
 
-  const handleCopyReport = () => {
-    const report = generateReport();
-    navigator.clipboard.writeText(report);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
-  };
-
   return (
     <div className="max-w-7xl mx-auto space-y-6 text-left">
       {/* Top Action & Reordering Presets Bar */}
@@ -555,43 +548,29 @@ export default function PDFPageReorder() {
         <div className="lg:col-span-8 space-y-6">
           {!file ? (
             /* Upload Empty State */
-            <div className="saas-card p-12 text-center border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-3xl space-y-4 hover:border-indigo-500/50 transition">
-              <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 flex items-center justify-center mx-auto text-indigo-600 dark:text-indigo-400">
-                <ArrowUpDown className="w-8 h-8" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-white">Upload a PDF to Rearrange Page Sequence</h3>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 max-w-md mx-auto">
-                  Drag and drop page thumbnail cards into your desired sequence, reverse flipped scans, or interleave duplex sheets.
-                </p>
-              </div>
-              <div className="flex justify-center gap-3 pt-2">
-                <label className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold cursor-pointer transition shadow-md flex items-center gap-2">
-                  <Upload className="w-4 h-4" />
-                  <span>Choose PDF File</span>
-                  <input
-                    type="file"
-                    accept=".pdf,application/pdf"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
-                </label>
+            <div className="space-y-4">
+              <FileDropzone
+                accept=".pdf,application/pdf"
+                onFilesSelected={(files) => {
+                  const f = files[0];
+                  if (f) {
+                    setFile(f);
+                    loadPdf(f);
+                  }
+                }}
+                title="Upload a PDF to Rearrange Page Sequence"
+                description="Drag and drop your PDF here or browse to rearrange page sequence, reverse scans, or interleave duplex sheets"
+                colorTheme="indigo"
+              />
+              <div className="flex justify-center">
                 <button
+                  type="button"
                   onClick={handleLoadSamplePdf}
                   className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-850 text-zinc-700 dark:text-zinc-300 text-xs font-bold hover:bg-zinc-50 dark:hover:bg-zinc-750 transition cursor-pointer flex items-center gap-2"
                 >
                   <Sparkles className="w-4 h-4 text-indigo-500" />
-                  <span>Try Scrambled PDF</span>
+                  <span>Try Scrambled Sample PDF</span>
                 </button>
-              </div>
-              <div className="pt-4 flex items-center justify-center gap-4 text-[11px] text-zinc-400">
-                <span className="flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> 100% In-Browser Privacy
-                </span>
-                <span>•</span>
-                <span>Fluid HTML5 Drag & Drop</span>
-                <span>•</span>
-                <span>Zero File Uploads</span>
               </div>
             </div>
           ) : (
@@ -870,23 +849,16 @@ export default function PDFPageReorder() {
 
             {/* Copy Audit Report */}
             {file && (
-              <div className="border-t border-zinc-150 dark:border-zinc-800 pt-4">
-                <button
-                  onClick={handleCopyReport}
-                  className="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-850 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-[11px] font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  {copiedReport ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-500" />
-                      <span>Copied Schedule!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5 text-indigo-500" />
-                      <span>Copy Sequence Schedule</span>
-                    </>
-                  )}
-                </button>
+              <div className="border-t border-zinc-150 dark:border-zinc-800 pt-4 space-y-2">
+                <CopyButton
+                  text={generateReport()}
+                  label="Copy Sequence Schedule"
+                  className="w-full justify-center"
+                />
+                <ShareWhatsApp
+                  text={generateReport()}
+                  className="w-full justify-center"
+                />
               </div>
             )}
           </div>

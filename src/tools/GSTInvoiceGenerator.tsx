@@ -15,6 +15,7 @@ import {
   Eye, 
   Edit3 
 } from 'lucide-react';
+import { CopyButton, ShareWhatsApp } from '../components/common';
 
 export interface IndianState {
   code: string;
@@ -593,6 +594,22 @@ export default function GSTInvoiceGenerator() {
     doc.save(`GST-Invoice-${invoiceNo}.pdf`);
   };
 
+  const getInvoiceSummary = () => {
+    return `🧾 GST TAX INVOICE — ${sellerName}
+---------------------------------------------
+Invoice No   : ${invoiceNo}
+Date         : ${invoiceDate}
+Billed To    : ${clientName} (${clientGstin || 'Unregistered'})
+Place Supply : ${placeOfSupply}
+Taxable Sum  : ₹${totalTaxable.toFixed(2)}
+Total GST    : ₹${(isIntraState ? totalCgst + totalSgst : totalIgst).toFixed(2)}
+---------------------------------------------
+GRAND TOTAL  : ₹${grandTotal.toFixed(2)}
+---------------------------------------------
+Bank Account : ${accountNumber} (${bankName}) | IFSC: ${ifscCode}
+UPI ID       : ${upiId}`;
+  };
+
   const handlePrint = () => {
     window.print();
   };
@@ -600,22 +617,13 @@ export default function GSTInvoiceGenerator() {
   return (
     <div className="space-y-6 text-left max-w-5xl mx-auto">
       
-      {/* Header Bar & Tab Switcher */}
-      <div className="saas-card p-5 border border-zinc-200/80 dark:border-zinc-800/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-              <FileSpreadsheet className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-lg font-black text-zinc-900 dark:text-white">
-                GST Tax Invoice Generator
-              </h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
-                Generate, preview, and download compliant GST invoices with auto state-supply calculation.
-              </p>
-            </div>
-          </div>
+      {/* Top Action & View Toolbar */}
+      <div className="saas-card p-4 border border-zinc-200/80 dark:border-zinc-800/80 flex flex-wrap justify-between items-center gap-3">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+            <FileSpreadsheet className="w-3.5 h-3.5" />
+            <span>CBIC &amp; Rule 46 CGST Tax Compliant</span>
+          </span>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
@@ -646,6 +654,19 @@ export default function GSTInvoiceGenerator() {
               <span>Live Preview</span>
             </button>
           </div>
+
+          <CopyButton text={getInvoiceSummary} label="Copy Summary" size="xs" variant="outline" />
+          <ShareWhatsApp text={getInvoiceSummary} label="WhatsApp" size="xs" />
+
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+            title="Print Invoice"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Print</span>
+          </button>
 
           <button
             type="button"

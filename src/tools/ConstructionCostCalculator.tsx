@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { 
-  Check, RotateCcw, MapPin, Building2, Layers, 
-  Settings, Users, Download, Share2, 
+  RotateCcw, MapPin, Building2, Layers, 
+  Settings, Users, Download, 
   ArrowLeft, ArrowRight, Calendar, 
   ChevronRight, Sliders, AlertCircle, CheckSquare, Square
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
+import { downloadPdfReport, type ReportTableConfig } from '../utils/pdf';
+import { ShareWhatsApp, CopyButton } from '../components/common';
 import {
   LOCATION_DATABASE,
   PROJECT_TYPE_MULTIPLIERS,
@@ -30,7 +31,6 @@ import {
 export default function ConstructionCostCalculator() {
   // Step navigation: 1-7
   const [step, setStep] = useState<number>(1);
-  const [copied, setCopied] = useState<boolean>(false);
   const [activeGanttTab, setActiveGanttTab] = useState<'chart' | 'table'>('chart');
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
 
@@ -544,9 +544,9 @@ export default function ConstructionCostCalculator() {
     });
   };
 
-  // Copy brief estimate to clipboard
-  const copyEstimateToClipboard = () => {
-    const text = `Construction Estimate & Timeline Report
+  // Brief estimate text for clipboard and WhatsApp sharing
+  const getEstimateText = () => {
+    return `Construction Estimate & Timeline Report
 ------------------------------------------------
 Project details:
 - Location        : ${cityName}, ${stateName}, ${country}
@@ -568,315 +568,109 @@ Estimated Schedule:
 - Conservative Finished: ${maxProjectDays} Days
 
 Generated on ToolStack India Construction Calculator.`;
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
   };
 
-  // ----------------------------------------------------
-  // PDF EXPORT COMPILER VIA JSPDF
-  // ----------------------------------------------------
+  // Standardized Branded PDF Report Export (Pillar 2)
   const downloadEstimatePDF = () => {
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4'
-    });
-
-    const margin = 15;
-    let y = 15;
-
-    const checkPageBreak = (neededHeight: number) => {
-      if (y + neededHeight > 280) {
-        doc.addPage();
-        y = 15;
+    const tables: ReportTableConfig<any>[] = [
+      {
+        title: 'Detailed Component Estimation (BOQ)',
+        badge: 'BOQ SCHEDULE',
+        columns: [
+          { header: 'Component', dataKey: 'name', width: 65 },
+          { header: 'Calculation Basis', dataKey: 'basis', width: 45 },
+          { header: 'Rate (₹)', dataKey: 'rate', width: 35, align: 'right' as const },
+          { header: 'Amount (₹)', dataKey: 'amount', width: 37, align: 'right' as const },
+        ],
+        rows: costResults.components.filter(c => c.amount > 0).map(c => ({
+          name: c.name,
+          basis: c.basisText,
+          rate: `₹${c.rate.toLocaleString('en-IN')}`,
+          amount: `₹${c.amount.toLocaleString('en-IN')}`,
+        })),
+        totalsRow: [
+          { dataKey: 'name', value: 'Grand Final Construction Cost' },
+          { dataKey: 'amount', value: `₹${costResults.total.toLocaleString('en-IN')}` }
+        ]
+      },
+      {
+        title: 'Approximate Material Quantities',
+        badge: 'MATERIALS INDENT',
+        columns: [
+          { header: 'Material Description', dataKey: 'name', width: 65 },
+          { header: 'Est. Quantity', dataKey: 'qty', width: 35, align: 'right' as const },
+          { header: 'Unit', dataKey: 'unit', width: 22 },
+          { header: 'Average Rate', dataKey: 'rate', width: 30, align: 'right' as const },
+          { header: 'Total Cost (₹)', dataKey: 'amount', width: 30, align: 'right' as const },
+        ],
+        rows: costResults.materials.map(m => ({
+          name: m.name,
+          qty: m.qty.toLocaleString(),
+          unit: m.unit,
+          rate: `₹${m.rate.toLocaleString('en-IN')}`,
+          amount: `₹${m.amount.toLocaleString('en-IN')}`
+        }))
+      },
+      {
+        title: 'Project Timeline & Critical Path Schedule (CPM)',
+        badge: 'CPM TIMELINE',
+        columns: [
+          { header: 'Phase Name', dataKey: 'name', width: 62 },
+          { header: 'Start Day', dataKey: 'start', width: 30 },
+          { header: 'End Day', dataKey: 'end', width: 30 },
+          { header: 'Duration', dataKey: 'dur', width: 30, align: 'right' as const },
+          { header: 'Critical Path', dataKey: 'crit', width: 30, align: 'center' as const }
+        ],
+        rows: TIMELINE_PHASES.map(p => {
+          const cpm = cpmResults[p.id];
+          const isCritical = criticalPathIds.includes(p.id);
+          return {
+            name: p.name,
+            start: cpm ? `Day ${cpm.startDay}` : '-',
+            end: cpm ? `Day ${cpm.endDay}` : '-',
+            dur: cpm ? `${cpm.durationDays} days` : '-',
+            crit: isCritical ? 'YES' : 'NO'
+          };
+        })
       }
-    };
+    ];
 
-    // Header Title
-    doc.setFillColor(30, 41, 59); // Dark slate
-    doc.rect(0, 0, 210, 38, 'F');
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.setTextColor(255, 255, 255);
-    doc.text("CONSTRUCTION ESTIMATE REPORT", margin, 15);
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(200, 220, 240);
-    doc.text(`Professional quantity estimate generated on ${new Date().toLocaleDateString()} | Toolique Architecture Tools`, margin, 21);
-
-    // Grid details
-    y = 48;
-    doc.setTextColor(15, 23, 42); // slate-900
-
-    // General info card
-    doc.setFillColor(248, 250, 252); // slate-50
-    doc.setDrawColor(226, 232, 240); // slate-200
-    doc.roundedRect(margin, y, 180, 52, 2, 2, 'FD');
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.setTextColor(79, 70, 229); // indigo-600
-    doc.text("PROJECT OVERVIEW & INPUTS", margin + 5, y + 6);
-
-    doc.setTextColor(71, 85, 105); // slate-600
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9.5);
-    
-    // Left column
-    doc.text(`Location: ${cityName}, ${stateName}, ${country} (factor: ${getLocationMultiplier()})`, margin + 5, y + 14);
-    doc.text(`Project Type: ${projectType.charAt(0).toUpperCase() + projectType.slice(1)}`, margin + 5, y + 21);
-    doc.text(`Plot Area: ${plotArea} sq.ft | Ground Footprint: ${groundFootprint} sq.ft`, margin + 5, y + 28);
-    doc.text(`Built-up Area: ${totalBuiltUpArea} sq.ft (${floors} Floors + ${hasBasement ? 'Basement' : 'No Basement'})`, margin + 5, y + 35);
-    doc.text(`Quality Grade: ${quality.toUpperCase()} | Structure Type: ${constructionType.toUpperCase()}`, margin + 5, y + 42);
-
-    // Right column
-    doc.text(`Design Complexity: ${complexity.toUpperCase()}`, margin + 95, y + 14);
-    doc.text(`Site Slope / Soil: ${groundSlope.toUpperCase()} / ${soil.toUpperCase()}`, margin + 95, y + 21);
-    doc.text(`Accessibility: ${accessibility.toUpperCase()}`, margin + 95, y + 28);
-    doc.text(`Construction Method: ${constructionMethod.toUpperCase()}`, margin + 95, y + 35);
-    doc.text(`Rooms / Baths: ${rooms} Rooms | ${bathrooms} Bathrooms`, margin + 95, y + 42);
-
-    y += 60;
-
-    // Highlights boxes
-    doc.setFillColor(238, 242, 255); // Indigo-50
-    doc.roundedRect(margin, y, 85, 28, 2, 2, 'F');
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
-    doc.setTextColor(79, 70, 229);
-    doc.text("ESTIMATED CONSTRUCTION COST", margin + 4, y + 6);
-    doc.setFontSize(16);
-    doc.setTextColor(30, 27, 75); // Dark Indigo
-    doc.text(`₹${costResults.total.toLocaleString('en-IN')}`, margin + 4, y + 16);
-    doc.setFontSize(8.5);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(79, 70, 229);
-    doc.text(`Avg. ₹${Math.round(costResults.total / totalBuiltUpArea).toLocaleString('en-IN')} per sq.ft`, margin + 4, y + 23);
-
-    doc.setFillColor(240, 253, 250); // Emerald-50
-    doc.roundedRect(margin + 95, y, 85, 28, 2, 2, 'F');
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
-    doc.setTextColor(13, 148, 136); // Teal-600
-    doc.text("ESTIMATED SCHEDULE TIMELINE", margin + 99, y + 6);
-    doc.setFontSize(15);
-    doc.setTextColor(19, 78, 74);
-    doc.text(`${minMonths} to ${maxMonths} Months`, margin + 99, y + 16);
-    doc.setFontSize(8.5);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(13, 148, 136);
-    doc.text(`Expected Completion: ${totalProjectDays} Days`, margin + 99, y + 23);
-
-    y += 38;
-
-    // Budget Allocation table
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.setTextColor(15, 23, 42);
-    doc.text("COST BREAKDOWN MATRIX", margin, y);
-    y += 4;
-
-    doc.setFillColor(30, 41, 59);
-    doc.rect(margin, y, 180, 7, 'F');
-    doc.setFontSize(8.5);
-    doc.setTextColor(255, 255, 255);
-    doc.text("Category", margin + 3, y + 5);
-    doc.text("Allocation Ratio", margin + 80, y + 5);
-    doc.text("Amount (INR)", margin + 145, y + 5);
-
-    y += 7;
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(51, 65, 85);
-
-    // Row 1
-    doc.text("Core Construction Materials (Cement, Steel, Sand, etc.)", margin + 3, y + 5);
-    doc.text(`${Math.round((costResults.materialCostSplit / costResults.total) * 100)}%`, margin + 80, y + 5);
-    doc.text(`₹${costResults.materialCostSplit.toLocaleString('en-IN')}`, margin + 145, y + 5);
-    doc.line(margin, y + 7, margin + 180, y + 7);
-    
-    // Row 2
-    y += 7;
-    doc.text("Labour & Contractor Execution Charges", margin + 3, y + 5);
-    doc.text(`${Math.round((costResults.laborCostSplit / costResults.total) * 100)}%`, margin + 80, y + 5);
-    doc.text(`₹${costResults.laborCostSplit.toLocaleString('en-IN')}`, margin + 145, y + 5);
-    doc.line(margin, y + 7, margin + 180, y + 7);
-
-    // Row 3
-    y += 7;
-    doc.text("Professional Fees, Approvals & Buffer Escalations", margin + 3, y + 5);
-    doc.text(`${Math.round((costResults.otherCostSplit / costResults.total) * 100)}%`, margin + 80, y + 5);
-    doc.text(`₹${costResults.otherCostSplit.toLocaleString('en-IN')}`, margin + 145, y + 5);
-    doc.line(margin, y + 7, margin + 180, y + 7);
-
-    // Row 4 (GST & Overhead)
-    y += 7;
-    doc.text("Contractor Overhead & GST/Taxes", margin + 3, y + 5);
-    doc.text(`${Math.round(((costResults.overhead + costResults.gst) / costResults.total) * 100)}%`, margin + 80, y + 5);
-    doc.text(`₹${(costResults.overhead + costResults.gst).toLocaleString('en-IN')}`, margin + 145, y + 5);
-    doc.line(margin, y + 7, margin + 180, y + 7);
-
-    // Subtotal Row
-    y += 12;
-    doc.setFont("helvetica", "bold");
-    doc.text("Final Total Budget (Indicative BOQ)", margin + 3, y);
-    doc.text(`₹${costResults.total.toLocaleString('en-IN')}`, margin + 145, y);
-
-    // Page 2 - Components BOQ list
-    doc.addPage();
-    y = 15;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(15, 23, 42);
-    doc.text("DETAILED COMPONENT ESTIMATION (BOQ)", margin, y);
-    y += 6;
-
-    doc.setFillColor(71, 85, 105); // Gray header
-    doc.rect(margin, y, 180, 8, 'F');
-    doc.setFontSize(8.5);
-    doc.setTextColor(255, 255, 255);
-    doc.text("Component", margin + 2, y + 5.5);
-    doc.text("Calculation Basis", margin + 65, y + 5.5);
-    doc.text("Rate (INR)", margin + 128, y + 5.5);
-    doc.text("Amount (INR)", margin + 155, y + 5.5);
-
-    y += 8;
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(51, 65, 85);
-    doc.setFontSize(8);
-
-    costResults.components.forEach(comp => {
-      checkPageBreak(7);
-      if (comp.amount > 0) {
-        doc.text(comp.name, margin + 2, y + 5);
-        doc.text(comp.basisText, margin + 65, y + 5);
-        doc.text(`₹${comp.rate.toLocaleString('en-IN')}`, margin + 128, y + 5);
-        doc.text(`₹${comp.amount.toLocaleString('en-IN')}`, margin + 155, y + 5);
-        doc.line(margin, y + 7, margin + 180, y + 7);
-        y += 7;
-      }
+    downloadPdfReport({
+      title: 'Construction Cost Estimate & Schedule Report',
+      subtitle: `Professional Quantity Estimate & CPM Schedule | ${cityName}, ${stateName}`,
+      category: 'architecture',
+      complianceBadge: 'CPWD & IS NORMS',
+      referenceId: `EST-${Date.now().toString().slice(-6)}`,
+      theme: 'brand',
+      project: {
+        projectName: `${projectType.toUpperCase()} Construction Project`,
+        clientName: 'Owner / Builder',
+        location: `${cityName}, ${stateName}, ${country}`,
+        notes: `Built-up Area: ${totalBuiltUpArea} sq.ft (${floors} Floors) | Quality: ${quality.toUpperCase()} | Structure: ${constructionType.toUpperCase()}`
+      },
+      parameters: [
+        { label: 'Project Type', value: projectType.toUpperCase() },
+        { label: 'Plot Area', value: `${plotArea} sq.ft` },
+        { label: 'Built-up Area', value: `${totalBuiltUpArea} sq.ft` },
+        { label: 'Quality Grade', value: quality.toUpperCase() },
+        { label: 'Structure Type', value: constructionType.toUpperCase() },
+        { label: 'Site Soil / Slope', value: `${soil.toUpperCase()} / ${groundSlope.toUpperCase()}` }
+      ],
+      kpis: [
+        { label: 'Estimated Total Cost', value: `₹${costResults.total.toLocaleString('en-IN')}`, subtext: `₹${Math.round(costResults.total / totalBuiltUpArea).toLocaleString('en-IN')}/sq.ft`, highlight: true },
+        { label: 'Schedule Duration', value: `${minMonths} - ${maxMonths} Mos`, subtext: `${totalProjectDays} Expected Days` },
+        { label: 'Core Materials', value: `₹${costResults.materialCostSplit.toLocaleString('en-IN')}`, subtext: `${Math.round((costResults.materialCostSplit / costResults.total) * 100)}% of budget` },
+        { label: 'Execution & Labour', value: `₹${costResults.laborCostSplit.toLocaleString('en-IN')}`, subtext: `${Math.round((costResults.laborCostSplit / costResults.total) * 100)}% of budget` }
+      ],
+      tables,
+      disclaimers: [
+        'Indicative preliminary estimate based on average regional construction costs and CPWD standards.',
+        'Actual expenses may vary by ±10-15% based on site soil conditions, architectural complexities, and market material price fluctuations.',
+        'Statutory local municipal authority charges, approvals, and utility connection fees should be verified locally.'
+      ],
+      includeSignoff: true,
+      fileName: `Construction_Estimate_${cityName.replace(/\s+/g, '_')}_${Date.now().toString().slice(-4)}.pdf`
     });
-
-    // Add GST & Overheads to page 2 end
-    checkPageBreak(25);
-    y += 5;
-    doc.setFont("helvetica", "bold");
-    doc.text("Subtotal Works:", margin + 65, y);
-    doc.text(`₹${costResults.subtotal.toLocaleString('en-IN')}`, margin + 155, y);
-    y += 5;
-    doc.text(`Contractor Overhead (${customOverhead}%):`, margin + 65, y);
-    doc.text(`₹${costResults.overhead.toLocaleString('en-IN')}`, margin + 155, y);
-    y += 5;
-    doc.text(`GST/Taxes (${customGST ? '18%' : '0%'}):`, margin + 65, y);
-    doc.text(`₹${costResults.gst.toLocaleString('en-IN')}`, margin + 155, y);
-    y += 6;
-    doc.line(margin + 65, y - 1, margin + 180, y - 1);
-    doc.text("Grand Final Construction Cost:", margin + 65, y + 3);
-    doc.text(`₹${costResults.total.toLocaleString('en-IN')}`, margin + 155, y + 3);
-
-    // Page 3 - Material & Scheduling
-    doc.addPage();
-    y = 15;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(15, 23, 42);
-    doc.text("MATERIAL QUANTITIES & TIMELINE SCHEDULING", margin, y);
-    y += 6;
-
-    // Materials Table
-    doc.setFontSize(10);
-    doc.text("Approximate Material Quantities", margin, y + 2);
-    y += 5;
-    doc.setFillColor(13, 148, 136); // Teal header
-    doc.rect(margin, y, 180, 7, 'F');
-    doc.setFontSize(8.5);
-    doc.setTextColor(255, 255, 255);
-    doc.text("Material Description", margin + 2, y + 5);
-    doc.text("Est. Quantity", margin + 70, y + 5);
-    doc.text("Unit", margin + 105, y + 5);
-    doc.text("Average Rate", margin + 130, y + 5);
-    doc.text("Total Cost (INR)", margin + 155, y + 5);
-
-    y += 7;
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(51, 65, 85);
-    doc.setFontSize(8);
-
-    costResults.materials.forEach(mat => {
-      doc.text(mat.name, margin + 2, y + 5);
-      doc.text(mat.qty.toLocaleString(), margin + 70, y + 5);
-      doc.text(mat.unit, margin + 105, y + 5);
-      doc.text(`₹${mat.rate.toLocaleString()}`, margin + 130, y + 5);
-      doc.text(`₹${mat.amount.toLocaleString('en-IN')}`, margin + 155, y + 5);
-      doc.line(margin, y + 7, margin + 180, y + 7);
-      y += 7;
-    });
-
-    // Schedule phases
-    y += 8;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.setTextColor(15, 23, 42);
-    doc.text("Scheduled Phases & Durations (CPM)", margin, y);
-    y += 5;
-
-    doc.setFillColor(30, 41, 59);
-    doc.rect(margin, y, 180, 7, 'F');
-    doc.setFontSize(8);
-    doc.setTextColor(255, 255, 255);
-    doc.text("Phase Name", margin + 2, y + 5);
-    doc.text("Start Day", margin + 80, y + 5);
-    doc.text("End Day", margin + 105, y + 5);
-    doc.text("Duration (Days)", margin + 130, y + 5);
-    doc.text("Critical Path", margin + 158, y + 5);
-
-    y += 7;
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(51, 65, 85);
-    doc.setFontSize(7.5);
-
-    TIMELINE_PHASES.forEach(phase => {
-      const cpm = cpmResults[phase.id];
-      if (cpm) {
-        const isCritical = criticalPathIds.includes(phase.id);
-        doc.text(phase.name, margin + 2, y + 4);
-        doc.text(`Day ${cpm.startDay}`, margin + 80, y + 4);
-        doc.text(`Day ${cpm.endDay}`, margin + 105, y + 4);
-        doc.text(`${cpm.durationDays} days`, margin + 130, y + 4);
-        doc.setFont("helvetica", isCritical ? "bold" : "normal");
-        if (isCritical) {
-          doc.setTextColor(194, 65, 12);
-        } else {
-          doc.setTextColor(100, 100, 100);
-        }
-        doc.text(isCritical ? "YES" : "NO", margin + 158, y + 4);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(51, 65, 85);
-        doc.line(margin, y + 6, margin + 180, y + 6);
-        y += 6;
-      }
-    });
-
-    // Disclaimer & Notes page 3 bottom
-    y += 10;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8.5);
-    doc.setTextColor(194, 65, 12);
-    doc.text("ASSUMPTIONS & GENERAL DISCLAIMER", margin, y);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7);
-    doc.setTextColor(100, 116, 139);
-    y += 4;
-    doc.text("1. Estimates provided are indicative calculations only. Material rates, site complications and local parameters influence actual costs.", margin, y);
-    y += 3.5;
-    doc.text("2. Construction timeline is calculated based on standard sequencing dependencies and assuming standard weather conditions.", margin, y);
-    y += 3.5;
-    doc.text("3. Final architectural and structural drawings with proper detailed Bills of Quantities (BOQ) must be drawn up by an engineer.", margin, y);
-
-    // Save
-    doc.save(`Construction_Estimate_${cityName.replace(/\s+/g, '_')}.pdf`);
   };
 
   return (
@@ -1690,19 +1484,24 @@ Generated on ToolStack India Construction Calculator.`;
               </div>
 
               <div className="flex items-center gap-2">
-                <button
-                  onClick={copyEstimateToClipboard}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-zinc-50 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 text-zinc-650 dark:text-zinc-300 transition duration-200 cursor-pointer active:scale-95"
-                >
-                  {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
-                  <span>{copied ? 'Estimate Copied!' : 'Share Estimate'}</span>
-                </button>
-
+                <ShareWhatsApp
+                  text={getEstimateText}
+                  label="Share WhatsApp"
+                  variant="outline"
+                  size="sm"
+                />
+                <CopyButton
+                  text={getEstimateText}
+                  label="Copy Estimate"
+                  copiedLabel="Estimate Copied!"
+                  variant="secondary"
+                  size="sm"
+                />
                 <button
                   onClick={downloadEstimatePDF}
-                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm hover:shadow-indigo-500/10 transition duration-200 cursor-pointer active:scale-95"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm hover:shadow-indigo-500/10 transition duration-200 cursor-pointer active:scale-95"
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="w-3.5 h-3.5" />
                   <span>Download Report (PDF)</span>
                 </button>
               </div>

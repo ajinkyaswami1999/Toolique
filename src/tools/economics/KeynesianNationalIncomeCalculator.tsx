@@ -454,20 +454,13 @@ export default function KeynesianNationalIncomeCalculator() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 text-left pb-16">
-      {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-xl">
-              <PieChart className="w-5 h-5" />
-            </span>
-            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-              Keynesian National Income & Expenditure Suite
-            </h2>
-          </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-            Solve GDP (Y = C + I + G + NX), Keynesian Cross equilibrium, fiscal multipliers, output gap stimulus, and leakages.
-          </p>
+      {/* Top Action Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+            <PieChart className="w-3.5 h-3.5" />
+            <span>Keynesian Cross &amp; Aggregate Expenditure Framework</span>
+          </span>
         </div>
 
         <div className="flex items-center gap-3 self-end sm:self-center">

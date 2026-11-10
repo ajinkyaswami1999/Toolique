@@ -1,13 +1,37 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
-  Copy, Check, RotateCcw, Plus, Trash2,
-  Printer, MessageCircle, Box,
+  RotateCcw, Plus, Trash2,
+  Printer, Box,
   Layers, ShieldCheck, Download,
   FileText, Truck, Clock
 } from 'lucide-react';
 import { getStoredRates, saveStoredRates, DEFAULT_CIVIL_RATES } from '../data/civilRatesData';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { UnitSwitcher, ShareWhatsApp, CopyButton } from '../components/common';
+import {
+  DRY_VOLUME_FACTOR_CONCRETE,
+  CFT_PER_CUM,
+  CUM_PER_CFT,
+  CUM_PER_BRASS,
+  SQFT_PER_SQM,
+  SQM_PER_SQFT,
+  CEMENT_BAG_VOLUME_M3,
+  CEMENT_BAG_WEIGHT_KG,
+  CEMENT_DENSITY_KG_M3,
+  STEEL_DENSITY_KG_M3,
+  STEEL_REBAR_FACTOR,
+  SAND_DENSITY_KG_M3,
+  AGGREGATE_DENSITY_KG_M3,
+  AGGREGATE_20MM_SPLIT,
+  AGGREGATE_10MM_SPLIT,
+  cumToCft,
+  cftToCum,
+  cftToBrass,
+  wetToDryVolumeConcrete,
+  calculateCementBags,
+  calculateRebarUnitWeight,
+} from '../utils/civilMath';
 
 // -------------------------------------------------------------
 // Structural Elements & Mix Specifications (IS 456:2000)
@@ -82,7 +106,6 @@ export default function RCCCalculator() {
   const [steelPercent, setSteelPercent] = useState<number>(1.0);
   const [steelGrade, setSteelGrade] = useState<string>('Fe 500D'); // Fe 500D standard
   const [includeAdmixture, setIncludeAdmixture] = useState<boolean>(true);
-  const [copied, setCopied] = useState<boolean>(false);
 
   // Material Prices & Rates
   const [prices, setPrices] = useState(getStoredRates());
@@ -242,7 +265,7 @@ export default function RCCCalculator() {
         specDescription = `Lintel & Chajja ${lintelLength}' x ${chajjaProjMm}" Proj (${quantity} Nos)`;
       } else {
         // Direct Volume in cu ft
-        rawWetVolumeM3 = directVolume * 0.0283168;
+        rawWetVolumeM3 = cftToCum(directVolume);
         shutteringAreaSqFt = directVolume * 0.35; // approx 10 sq.m per m3 -> ~0.35 sq.ft per cu.ft
         specDescription = `Direct RCC Volume: ${directVolume} cu.ft`;
       }
@@ -252,39 +275,39 @@ export default function RCCCalculator() {
         const t_m = slabThickMm / 1000;
         rawWetVolumeM3 = slabLength * slabWidth * t_m * quantity;
         const contactSqm = (slabLength * slabWidth + 2 * (slabLength + slabWidth) * t_m) * quantity;
-        shutteringAreaSqFt = contactSqm * 10.7639;
+        shutteringAreaSqFt = contactSqm * SQFT_PER_SQM;
         specDescription = `Slab ${slabLength}m x ${slabWidth}m x ${slabThickMm}mm (${quantity} Nos)`;
       } else if (elementType === 'beam') {
         const w_m = beamWidthMm / 1000;
         const d_m = beamDepthMm / 1000;
         rawWetVolumeM3 = beamLength * w_m * d_m * quantity;
         const contactSqm = (2 * d_m + w_m) * beamLength * quantity;
-        shutteringAreaSqFt = contactSqm * 10.7639;
+        shutteringAreaSqFt = contactSqm * SQFT_PER_SQM;
         specDescription = `Beam ${beamLength}m x ${beamWidthMm}mm x ${beamDepthMm}mm (${quantity} Nos)`;
       } else if (elementType === 'column_rect') {
         const w_m = colWidthMm / 1000;
         const d_m = colDepthMm / 1000;
         rawWetVolumeM3 = w_m * d_m * colHeight * quantity;
         const contactSqm = 2 * (w_m + d_m) * colHeight * quantity;
-        shutteringAreaSqFt = contactSqm * 10.7639;
+        shutteringAreaSqFt = contactSqm * SQFT_PER_SQM;
         specDescription = `Column ${colWidthMm}mm x ${colDepthMm}mm x ${colHeight}m (${quantity} Nos)`;
       } else if (elementType === 'column_round') {
         const r_m = (roundColDiaMm / 1000) / 2;
         rawWetVolumeM3 = Math.PI * Math.pow(r_m, 2) * roundColHeight * quantity;
         const contactSqm = Math.PI * (roundColDiaMm / 1000) * roundColHeight * quantity;
-        shutteringAreaSqFt = contactSqm * 10.7639;
+        shutteringAreaSqFt = contactSqm * SQFT_PER_SQM;
         specDescription = `Circular Column Ø${roundColDiaMm}mm x ${roundColHeight}m (${quantity} Nos)`;
       } else if (elementType === 'footing') {
         const d_m = footingDepthMm / 1000;
         rawWetVolumeM3 = footingLength * footingWidth * d_m * quantity;
         const contactSqm = 2 * (footingLength + footingWidth) * d_m * quantity;
-        shutteringAreaSqFt = contactSqm * 10.7639;
+        shutteringAreaSqFt = contactSqm * SQFT_PER_SQM;
         specDescription = `Footing ${footingLength}m x ${footingWidth}m x ${footingDepthMm}mm (${quantity} Nos)`;
       } else if (elementType === 'retaining_wall') {
         const t_m = wallThickMm / 1000;
         rawWetVolumeM3 = wallLength * wallHeight * t_m * quantity;
         const contactSqm = 2 * (wallLength * wallHeight) * quantity;
-        shutteringAreaSqFt = contactSqm * 10.7639;
+        shutteringAreaSqFt = contactSqm * SQFT_PER_SQM;
         specDescription = `Wall ${wallLength}m x ${wallHeight}m x ${wallThickMm}mm (${quantity} Nos)`;
       } else if (elementType === 'stairs') {
         const t_m = stairTreadMm / 1000;
@@ -297,7 +320,7 @@ export default function RCCCalculator() {
         const waistVol = inclineFlightLen * stairWidth * waist_m;
         rawWetVolumeM3 = (stepsVol + waistVol) * quantity;
         const contactSqm = (inclineFlightLen * stairWidth + stairStepsCount * r_m * stairWidth) * quantity;
-        shutteringAreaSqFt = contactSqm * 10.7639;
+        shutteringAreaSqFt = contactSqm * SQFT_PER_SQM;
         specDescription = `Stairs ${stairStepsCount} Steps (${stairWidth}m flight) (${quantity} Nos)`;
       } else if (elementType === 'lintel_chajja') {
         const w_m = lintelWidthMm / 1000;
@@ -308,20 +331,20 @@ export default function RCCCalculator() {
         const chajjaVol = lintelLength * c_proj_m * c_thick_m;
         rawWetVolumeM3 = (lintelVol + chajjaVol) * quantity;
         const contactSqm = ((2 * d_m + w_m) * lintelLength + lintelLength * c_proj_m) * quantity;
-        shutteringAreaSqFt = contactSqm * 10.7639;
+        shutteringAreaSqFt = contactSqm * SQFT_PER_SQM;
         specDescription = `Lintel & Chajja ${lintelLength}m x ${chajjaProjMm}mm Proj (${quantity} Nos)`;
       } else {
         // Direct Volume in m3
         rawWetVolumeM3 = directVolume;
-        shutteringAreaSqFt = directVolume * (DEFAULT_STEEL_RATIOS.direct_volume.shutteringFactor * 10.7639);
+        shutteringAreaSqFt = directVolume * (DEFAULT_STEEL_RATIOS.direct_volume.shutteringFactor * SQFT_PER_SQM);
         specDescription = `Direct RCC Volume: ${directVolume} m³`;
       }
     }
 
     // Concrete Wet and Dry Volumes
     const wetVolumeWithWastageM3 = rawWetVolumeM3 * (1 + wastagePercent / 100);
-    const dryVolumeM3 = wetVolumeWithWastageM3 * 1.54; // 1.54 IS 456 dry bulkage/void factor
-    const wetVolumeCuFt = wetVolumeWithWastageM3 * 35.3147;
+    const dryVolumeM3 = wetToDryVolumeConcrete(wetVolumeWithWastageM3); // IS 456 void and dry bulkage factor (1.54)
+    const wetVolumeCuFt = cumToCft(wetVolumeWithWastageM3);
 
     // Mix Ratios Calculation
     const activeMix = RCC_MIX_GRADES[mixGrade] || RCC_MIX_GRADES.M20;
@@ -329,23 +352,23 @@ export default function RCCCalculator() {
 
     // 1. Cement Calculation
     const cementVolumeM3 = (activeMix.cement / totalParts) * dryVolumeM3;
-    const cementWeightKg = cementVolumeM3 * 1440; // 1440 kg/m3 density of cement
-    const cementBags = Math.ceil(cementWeightKg / 50);
+    const cementWeightKg = cementVolumeM3 * CEMENT_DENSITY_KG_M3; // 1440 kg/m3 density of cement
+    const cementBags = calculateCementBags(cementVolumeM3);
     const cementTonnes = Number((cementWeightKg / 1000).toFixed(3));
 
     // 2. Sand Calculation
     const sandVolumeM3 = (activeMix.sand / totalParts) * dryVolumeM3;
-    const sandCuFt = sandVolumeM3 * 35.3147;
-    const sandBrass = Number((sandCuFt / 100).toFixed(2));
-    const sandTonnes = Number(((sandVolumeM3 * 1600) / 1000).toFixed(2)); // 1600 kg/m3
+    const sandCuFt = cumToCft(sandVolumeM3);
+    const sandBrass = Number(cftToBrass(sandCuFt).toFixed(2));
+    const sandTonnes = Number(((sandVolumeM3 * SAND_DENSITY_KG_M3) / 1000).toFixed(2));
 
     // 3. Coarse Aggregate Calculation
     const aggVolumeM3 = (activeMix.aggregate / totalParts) * dryVolumeM3;
-    const aggCuFt = aggVolumeM3 * 35.3147;
-    const aggBrass = Number((aggCuFt / 100).toFixed(2));
-    const aggTonnes = Number(((aggVolumeM3 * 1500) / 1000).toFixed(2)); // 1500 kg/m3
-    const agg20mmTonnes = Number((aggTonnes * 0.6).toFixed(2)); // 60% 20mm
-    const agg10mmTonnes = Number((aggTonnes * 0.4).toFixed(2)); // 40% 10mm
+    const aggCuFt = cumToCft(aggVolumeM3);
+    const aggBrass = Number(cftToBrass(aggCuFt).toFixed(2));
+    const aggTonnes = Number(((aggVolumeM3 * AGGREGATE_DENSITY_KG_M3) / 1000).toFixed(2));
+    const agg20mmTonnes = Number((aggTonnes * AGGREGATE_20MM_SPLIT).toFixed(2));
+    const agg10mmTonnes = Number((aggTonnes * AGGREGATE_10MM_SPLIT).toFixed(2));
 
     // 4. Mixing Water
     const waterLiters = Math.round(cementWeightKg * activeMix.waterCementRatio);
@@ -357,7 +380,7 @@ export default function RCCCalculator() {
     // Steel Volume = Concrete Volume * Steel %
     // Steel Weight = Steel Volume * 7850 kg/m3
     const steelVolumeM3 = rawWetVolumeM3 * (steelPercent / 100);
-    const steelWeightKg = Math.round(steelVolumeM3 * 7850);
+    const steelWeightKg = Math.round(steelVolumeM3 * STEEL_DENSITY_KG_M3);
     const steelTonnes = Number((steelWeightKg / 1000).toFixed(3));
     const steelQuintals = Number((steelWeightKg / 100).toFixed(2));
     const bindingWireKg = Math.max(1, Math.round(steelWeightKg * 0.009)); // 9kg per ton
@@ -544,9 +567,9 @@ export default function RCCCalculator() {
     };
   }, [takeoffList]);
 
-  // Copy Summary to Clipboard
-  const copyReport = () => {
-    const text = `*RCC Structural BOQ & Reinforcement Schedule (Toolique)*
+  // Generate BOQ Summary Text for Clipboard
+  const getBOQSummaryText = (): string => {
+    return `*RCC Structural BOQ & Reinforcement Schedule (Toolique)*
 ----------------------------------------
 *Element:* ${activeCalc.specDescription}
 *Concrete Grade:* ${mixGrade} (${RCC_MIX_GRADES[mixGrade]?.name})
@@ -566,14 +589,10 @@ export default function RCCCalculator() {
 *TOTAL ESTIMATED COST: ₹${activeCalc.totalCost.toLocaleString('en-IN')}*
 ----------------------------------------
 Calculated per IS 456:2000 & SP 34 standard civil engineering codes.`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
-  // WhatsApp Share Requisition
-  const handleWhatsAppShare = () => {
+  // WhatsApp Share Requisition Message
+  const getWhatsAppMessage = (): string => {
     let msg = `*🏗️ RCC STRUCTURAL BOQ & PROCUREMENT SCHEDULE*\n`;
     msg += `*Code Standard:* IS 456:2000 & SP 34 Reinforcement Detailing\n\n`;
 
@@ -607,132 +626,182 @@ Calculated per IS 456:2000 & SP 34 standard civil engineering codes.`;
     }
 
     msg += `\n_Generated via Toolique.in RCC Calculator_`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    return msg;
   };
 
-  // Generate Professional PDF RCC BOQ & BBS Report
+  // Generate Professional Standardized PDF RCC BOQ & BBS Report
   const generatePDF = () => {
     try {
-      const doc = new jsPDF();
-      const primaryColor = [79, 70, 229]; // Indigo-600
-      const darkColor = [15, 23, 42]; // Slate-900
-
-      // Header Banner
-      doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.rect(0, 0, 210, 24, 'F');
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(16);
-      doc.setTextColor(255, 255, 255);
-      doc.text('TOOLIQUE RCC STRUCTURAL BOQ & BBS SCHEDULE', 14, 15);
-
-      doc.setFontSize(8.5);
-      doc.setFont('helvetica', 'normal');
-      doc.text('IS 456:2000 & SP 34 Reinforced Cement Concrete Procurement Indent', 14, 21);
-
-      // Meta Info
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFontSize(9);
-      doc.text(`Date: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}`, 14, 32);
-      doc.text(`Doc Ref: RCC-BOQ-${Date.now().toString().slice(-6)}`, 140, 32);
-      doc.text(`Mix Grade: ${mixGrade} (${RCC_MIX_GRADES[mixGrade]?.name}) | Steel: ${steelGrade}`, 14, 38);
-
-      // Summary Box
-      doc.setDrawColor(224, 231, 255);
-      doc.setFillColor(245, 247, 255);
-      doc.roundedRect(14, 44, 182, 36, 3, 3, 'FD');
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text('TOTAL ESTIMATED PROCUREMENT BUDGET', 20, 52);
-
       const displayCost = takeoffList.length > 0 ? takeoffSummary.totalCost : activeCalc.totalCost;
       const displayConcrete = takeoffList.length > 0 ? takeoffSummary.totalConcreteM3 : activeCalc.wetVolumeWithWastageM3;
       const displaySteel = takeoffList.length > 0 ? takeoffSummary.totalSteelKg : activeCalc.steelWeightKg;
       const displaySteelT = takeoffList.length > 0 ? takeoffSummary.totalSteelTonnes : activeCalc.steelTonnes;
       const displayShuttering = takeoffList.length > 0 ? takeoffSummary.totalShutteringSqFt : activeCalc.shutteringAreaSqFt;
 
-      doc.setFontSize(16);
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text(`₹${displayCost.toLocaleString('en-IN')}`, 20, 62);
+      const materialRows = [
+        {
+          item: 'OPC / PPC Cement (50kg bags)',
+          qty: `${activeCalc.cementBags} Bags (${activeCalc.cementTonnes} MT)`,
+          rate: `₹${prices.cement}/bag`,
+          total: `₹${activeCalc.cementCost.toLocaleString('en-IN')}`,
+        },
+        {
+          item: 'Fine Sand (River / M-Sand)',
+          qty: `${activeCalc.sandBrass} Brass (${activeCalc.sandCuFt} cu.ft)`,
+          rate: `₹${prices.sand}/cu.ft`,
+          total: `₹${activeCalc.sandCost.toLocaleString('en-IN')}`,
+        },
+        {
+          item: 'Coarse Aggregate (10mm + 20mm)',
+          qty: `${activeCalc.aggBrass} Brass (${activeCalc.aggCuFt} cu.ft)`,
+          rate: `₹${prices.aggregate}/cu.ft`,
+          total: `₹${activeCalc.aggregateCost.toLocaleString('en-IN')}`,
+        },
+        {
+          item: `TMT Rebar Steel (${steelGrade})`,
+          qty: `${activeCalc.steelWeightKg.toLocaleString()} kg (${activeCalc.steelTonnes} MT)`,
+          rate: `₹${prices.steel}/kg`,
+          total: `₹${activeCalc.steelCost.toLocaleString('en-IN')}`,
+        },
+        {
+          item: 'Shuttering / Formwork Contact Area',
+          qty: `${activeCalc.shutteringAreaSqFt.toLocaleString()} sq.ft (~${activeCalc.shutteringPlySheets} sheets)`,
+          rate: `₹${prices.shuttering}/sq.ft`,
+          total: `₹${activeCalc.shutteringCost.toLocaleString('en-IN')}`,
+        },
+        {
+          item: 'GI Binding Wire (18 Gauge)',
+          qty: `${activeCalc.bindingWireKg} kg (included in BBS)`,
+          rate: 'Site Std',
+          total: '-',
+        },
+        {
+          item: 'PVC / Concrete Cover Blocks',
+          qty: `${activeCalc.coverBlocksCount} Pcs (${DEFAULT_STEEL_RATIOS[elementType]?.clearCoverMm || 20}mm Cover)`,
+          rate: 'Included',
+          total: '-',
+        },
+      ];
 
-      doc.setFontSize(8.5);
-      doc.setTextColor(70, 70, 70);
-      doc.text(`Total Concrete: ${displayConcrete} m³ | Total Steel: ${displaySteel.toLocaleString()} kg (${displaySteelT} MT)`, 20, 70);
-      doc.text(`Shuttering Contact Area: ${displayShuttering.toLocaleString()} sq.ft (~${Math.ceil(displayShuttering / 32)} Plywood Sheets)`, 20, 76);
-
-      // Items Schedule Table
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10.5);
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text('MATERIAL INDENT & BREAKDOWN SCHEDULE', 14, 90);
-      doc.line(14, 92, 196, 92);
-
-      let y = 100;
-      const drawRow = (mat: string, qtyText: string, unitRate: string, total: string, isHeader = false) => {
-        if (isHeader) {
-          doc.setFillColor(240, 240, 245);
-          doc.rect(14, y - 5, 182, 7, 'F');
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(8);
-          doc.setTextColor(80, 80, 80);
-        } else {
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(8.5);
-          doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-        }
-        doc.text(mat, 16, y);
-        doc.text(qtyText, 95, y);
-        doc.text(unitRate, 142, y);
-        doc.text(total, 175, y);
-        if (!isHeader) {
-          doc.setDrawColor(240, 240, 240);
-          doc.line(14, y + 2, 196, y + 2);
-        }
-        y += 8;
-      };
-
-      drawRow('MATERIAL / ITEM DESCRIPTION', 'QUANTITY / PACKAGING', 'UNIT RATE', 'TOTAL (₹)', true);
-      drawRow('OPC / PPC Cement (50kg bags)', `${activeCalc.cementBags} Bags (${activeCalc.cementTonnes} MT)`, `₹${prices.cement}/bag`, `₹${activeCalc.cementCost.toLocaleString('en-IN')}`);
-      drawRow('Fine Sand (River / M-Sand)', `${activeCalc.sandBrass} Brass (${activeCalc.sandCuFt} cu.ft)`, `₹${prices.sand}/cu.ft`, `₹${activeCalc.sandCost.toLocaleString('en-IN')}`);
-      drawRow('Coarse Aggregate (10mm + 20mm)', `${activeCalc.aggBrass} Brass (${activeCalc.aggCuFt} cu.ft)`, `₹${prices.aggregate}/cu.ft`, `₹${activeCalc.aggregateCost.toLocaleString('en-IN')}`);
-      drawRow(`TMT Rebar Steel (${steelGrade})`, `${activeCalc.steelWeightKg.toLocaleString()} kg (${activeCalc.steelTonnes} MT)`, `₹${prices.steel}/kg`, `₹${activeCalc.steelCost.toLocaleString('en-IN')}`);
-      drawRow('Shuttering / Formwork Contact', `${activeCalc.shutteringAreaSqFt.toLocaleString()} sq.ft (~${activeCalc.shutteringPlySheets} sheets)`, `₹${prices.shuttering}/sq.ft`, `₹${activeCalc.shutteringCost.toLocaleString('en-IN')}`);
-      drawRow('GI Binding Wire (18 Gauge)', `${activeCalc.bindingWireKg} kg (included in BBS)`, 'Site Std', '-');
-      drawRow('PVC / Concrete Cover Blocks', `${activeCalc.coverBlocksCount} Pcs (${DEFAULT_STEEL_RATIOS[elementType]?.clearCoverMm || 20}mm Cover)`, 'Included', '-');
       if (includeAdmixture) {
-        drawRow('Waterproofing Admixture', `${activeCalc.admixtureLiters} Liters (200ml/bag)`, `₹${admixtureRate}/L`, `₹${activeCalc.admixtureCost.toLocaleString('en-IN')}`);
+        materialRows.push({
+          item: 'Waterproofing Admixture',
+          qty: `${activeCalc.admixtureLiters} Liters (200ml/bag)`,
+          rate: `₹${admixtureRate}/L`,
+          total: `₹${activeCalc.admixtureCost.toLocaleString('en-IN')}`,
+        });
       }
 
-      // Rebar Size Breakdown
-      y += 6;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
-      doc.text('BAR BENDING SCHEDULE (BBS) DIAMETER ESTIMATE', 14, y);
-      doc.line(14, y + 2, 196, y + 2);
-      y += 8;
+      const bbsRows = [
+        {
+          dia: 'Ø8 mm',
+          app: 'Stirrups, Column Ties & Distribution Bars',
+          kg: `${activeCalc.rebarSplits.dia8mmKg.toLocaleString()} kg`,
+          mt: `${(activeCalc.rebarSplits.dia8mmKg / 1000).toFixed(3)} MT`,
+        },
+        {
+          dia: 'Ø10 mm',
+          app: 'Slab Main / Distribution & Mesh Reinforcement',
+          kg: `${activeCalc.rebarSplits.dia10mmKg.toLocaleString()} kg`,
+          mt: `${(activeCalc.rebarSplits.dia10mmKg / 1000).toFixed(3)} MT`,
+        },
+        {
+          dia: 'Ø12 mm',
+          app: 'Slab Main Rebar, Column Longitudinal & Footing Mat',
+          kg: `${activeCalc.rebarSplits.dia12mmKg.toLocaleString()} kg`,
+          mt: `${(activeCalc.rebarSplits.dia12mmKg / 1000).toFixed(3)} MT`,
+        },
+        {
+          dia: 'Ø16 mm',
+          app: 'Beam Tension / Compression & Column Main Bars',
+          kg: `${activeCalc.rebarSplits.dia16mmKg.toLocaleString()} kg`,
+          mt: `${(activeCalc.rebarSplits.dia16mmKg / 1000).toFixed(3)} MT`,
+        },
+      ];
 
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8.5);
-      doc.text(`• Ø8 mm (Stirrups / Ties / Dist): ${activeCalc.rebarSplits.dia8mmKg} kg`, 16, y);
-      doc.text(`• Ø10 mm (Slab / Mesh Rebar): ${activeCalc.rebarSplits.dia10mmKg} kg`, 110, y);
-      y += 6;
-      doc.text(`• Ø12 mm (Slab / Column / Footing): ${activeCalc.rebarSplits.dia12mmKg} kg`, 16, y);
-      doc.text(`• Ø16 mm (Beam Tension / Column): ${activeCalc.rebarSplits.dia16mmKg} kg`, 110, y);
-      y += 6;
       if (activeCalc.rebarSplits.dia20mmKg > 0) {
-        doc.text(`• Ø20 mm (Heavy Structural Bars): ${activeCalc.rebarSplits.dia20mmKg} kg`, 16, y);
-        y += 6;
+        bbsRows.push({
+          dia: 'Ø20 mm',
+          app: 'Heavy Structural Member & Foundation Columns',
+          kg: `${activeCalc.rebarSplits.dia20mmKg.toLocaleString()} kg`,
+          mt: `${(activeCalc.rebarSplits.dia20mmKg / 1000).toFixed(3)} MT`,
+        });
       }
 
-      // Footer
-      doc.setFontSize(7.5);
-      doc.setTextColor(140, 140, 140);
-      doc.text('Calculated strictly as per Indian Standards IS 456:2000, IS 1786, and SP 34 guidelines.', 14, 280);
-      doc.text('Toolique Civil Engineering Suite • www.toolique.in', 14, 285);
-
-      doc.save(`RCC_BOQ_${elementType}_${Date.now().toString().slice(-4)}.pdf`);
+      downloadPdfReport({
+        title: 'RCC Structural BOQ & Reinforcement Schedule',
+        subtitle: 'IS 456:2000 & SP 34 Reinforced Cement Concrete Procurement Indent',
+        category: 'civil',
+        complianceBadge: 'IS 456 & SP 34 COMPLIANT',
+        referenceId: `RCC-BOQ-${Date.now().toString().slice(-6)}`,
+        theme: 'brand',
+        kpis: [
+          {
+            label: 'Total Estimated Budget',
+            value: `₹${displayCost.toLocaleString('en-IN')}`,
+            subtext: 'Market Material & Formwork Rates',
+            highlight: true,
+          },
+          {
+            label: 'Total Concrete Volume',
+            value: `${displayConcrete} m³`,
+            subtext: `Grade ${mixGrade} (${RCC_MIX_GRADES[mixGrade]?.name || mixGrade})`,
+          },
+          {
+            label: 'TMT Steel Reinforcement',
+            value: `${displaySteel.toLocaleString()} kg`,
+            subtext: `${displaySteelT} MT • ${steelGrade}`,
+          },
+          {
+            label: 'Shuttering Contact Area',
+            value: `${displayShuttering.toLocaleString()} sq.ft`,
+            subtext: `~${Math.ceil(displayShuttering / 32)} Plywood Sheets`,
+          },
+        ],
+        parameters: [
+          { label: 'Structural Member', value: elementType.toUpperCase().replace('_', ' ') },
+          { label: 'Mix Grade Design', value: `${mixGrade} (${RCC_MIX_GRADES[mixGrade]?.name})` },
+          { label: 'Rebar Steel Grade', value: steelGrade },
+          { label: 'Wastage Allowance', value: `${wastagePercent}% Included` },
+          { label: 'Clear Cover', value: `${DEFAULT_STEEL_RATIOS[elementType]?.clearCoverMm || 20} mm (IS 456)` },
+          { label: 'Admixture', value: includeAdmixture ? 'Integral Waterproofing (200ml/bag)' : 'None' },
+        ],
+        tables: [
+          {
+            title: '1. Material Procurement & Indent Schedule',
+            badge: 'SCHEDULE A',
+            columns: [
+              { header: 'Material / Item Description', dataKey: 'item', width: 66 },
+              { header: 'Quantity / Packaging', dataKey: 'qty', width: 48 },
+              { header: 'Unit Rate', dataKey: 'rate', width: 34, align: 'right' },
+              { header: 'Total (₹)', dataKey: 'total', width: 34, align: 'right' },
+            ],
+            rows: materialRows,
+            totalsRow: [
+              { dataKey: 'item', value: 'TOTAL ESTIMATED PROCUREMENT COST' },
+              { dataKey: 'total', value: `₹${displayCost.toLocaleString('en-IN')}` },
+            ],
+          },
+          {
+            title: '2. Bar Bending Schedule (BBS) Diameter Estimates',
+            badge: 'SP 34',
+            columns: [
+              { header: 'Bar Diameter', dataKey: 'dia', width: 32 },
+              { header: 'Standard Structural Application', dataKey: 'app', width: 82 },
+              { header: 'Weight (kg)', dataKey: 'kg', width: 34, align: 'right' },
+              { header: 'Metric Tonnes', dataKey: 'mt', width: 34, align: 'right' },
+            ],
+            rows: bbsRows,
+          },
+        ],
+        disclaimers: [
+          'Calculated strictly per Indian Standards IS 456:2000 (Plain and Reinforced Concrete Code of Practice) and SP 34 (Handbook on Concrete Reinforcement and Detailing).',
+          'Quantities include standard dry-to-wet conversion factor (1.54) and specified wastage allowance. Site verification required for lap lengths, crank bars, and hook deductions.',
+          'Material rates reflect standard regional benchmark averages. Procuring contractors must confirm real-time quotes with local suppliers prior to purchase.',
+        ],
+        includeSignoff: true,
+        fileName: `RCC_BOQ_${elementType}_${Date.now().toString().slice(-4)}.pdf`,
+      });
     } catch (e) {
       alert('Error generating RCC BOQ PDF: ' + e);
     }
@@ -764,29 +833,15 @@ Calculated per IS 456:2000 & SP 34 standard civil engineering codes.`;
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Unit Switcher */}
-          <div className="flex rounded-xl bg-zinc-100 dark:bg-zinc-800 p-0.5 border border-zinc-200 dark:border-zinc-700 text-xs font-bold">
-            <button
-              onClick={() => setUnitMode('metric')}
-              className={`px-3 py-1 rounded-lg transition ${
-                unitMode === 'metric'
-                  ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                  : 'text-zinc-500'
-              }`}
-            >
-              Metric (m/mm)
-            </button>
-            <button
-              onClick={() => setUnitMode('feet')}
-              className={`px-3 py-1 rounded-lg transition ${
-                unitMode === 'feet'
-                  ? 'bg-white dark:bg-zinc-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                  : 'text-zinc-500'
-              }`}
-            >
-              Imperial (ft/in)
-            </button>
-          </div>
+          {/* Unit Switcher Component */}
+          <UnitSwitcher<'metric' | 'feet'>
+            value={unitMode}
+            onChange={setUnitMode}
+            options={[
+              { id: 'metric', label: 'Metric (m/mm)', shortLabel: 'Metric' },
+              { id: 'feet', label: 'Imperial (ft/in)', shortLabel: 'Imperial' },
+            ]}
+          />
 
           <button
             onClick={generatePDF}
@@ -795,13 +850,12 @@ Calculated per IS 456:2000 & SP 34 standard civil engineering codes.`;
             <Printer className="w-3.5 h-3.5" />
             <span>PDF Indent</span>
           </button>
-          <button
-            onClick={handleWhatsAppShare}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition shadow-sm"
-          >
-            <MessageCircle className="w-3.5 h-3.5" />
-            <span>Share Requisition</span>
-          </button>
+
+          <ShareWhatsApp
+            text={getWhatsAppMessage}
+            label="Share Requisition"
+          />
+
           <button
             onClick={handleReset}
             className="p-1.5 rounded-xl text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
@@ -1387,13 +1441,12 @@ Calculated per IS 456:2000 & SP 34 standard civil engineering codes.`;
                 </div>
               </div>
 
-              <button
-                onClick={copyReport}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-sm"
-              >
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied' : 'Copy'}</span>
-              </button>
+              <CopyButton
+                text={getBOQSummaryText}
+                label="Copy"
+                variant="primary"
+                size="sm"
+              />
             </div>
 
             {/* Quick Metrics */}

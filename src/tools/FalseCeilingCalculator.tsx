@@ -1,12 +1,13 @@
 import { useState, useMemo, useEffect } from 'react';
 import { 
-  Palette, Clipboard, Check, RotateCcw, 
+  Palette, RotateCcw, 
   Download, Layers, 
   Eye, Save, Trash2, Plus, Zap,
   ShieldCheck, Lightbulb
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
+import { downloadPdfReport } from '../utils/pdf';
+import { UnitSwitcher, ShareWhatsApp, CopyButton } from '../components/common';
 
 // --- Types & Interfaces ---
 type UnitType = 'feet' | 'meters';
@@ -166,7 +167,6 @@ export default function FalseCeilingCalculator() {
   const [lightColorTemp, setLightColorTemp] = useState<LightColorTemp>('warm_white_3000k');
 
   // Saved quotes & UI feedback
-  const [copied, setCopied] = useState<boolean>(false);
   const [savedQuotes, setSavedQuotes] = useState<SavedCeilingQuote[]>([]);
   const [quoteName, setQuoteName] = useState<string>('My Home False Ceiling');
 
@@ -492,8 +492,8 @@ export default function FalseCeilingCalculator() {
     return roomCalculations.find(r => r.id === blueprintRoomId) || roomCalculations[0];
   }, [roomCalculations, blueprintRoomId]);
 
-  // Copy Formatted Text Quote
-  const handleCopyQuote = () => {
+  // Formatted Text Quote for Clipboard & WhatsApp
+  const getQuoteText = () => {
     const text = `========================================
 TOOLIQUE ARCHITECTURAL FALSE CEILING BOQ
 ========================================
@@ -526,158 +526,125 @@ ${includeGst ? `5. GST @ 18%                      : ₹${projectSummary.gstAmoun
 ESTIMATED GRAND TOTAL : ₹${projectSummary.finalGrandTotal.toLocaleString('en-IN')}
 ========================================
 Generated via Toolique India (https://toolique.in)`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    return text;
   };
 
-  // Export PDF BOQ
+  // Export Standardized Branded PDF BOQ (Pillar 2)
   const handleExportPdf = () => {
-    try {
-      const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.getWidth();
+    const roomRows = roomCalculations.map(r => ({
+      room: r.name,
+      spec: `${r.length}x${r.width} ${unit === 'feet' ? 'ft' : 'm'} (${r.system.category.toUpperCase()})`,
+      tier: r.complexityConfig.name.split(' ')[0],
+      lighting: `${r.numDownlights}D + ${r.numCobSpots}S ${r.includeCoveLight ? `+ ${r.coveLengthRft} Rft Cove` : ''}`,
+      cost: `₹${r.roomTotalCost.toLocaleString('en-IN')}`
+    }));
 
-      // Header Banner
-      doc.setFillColor(219, 39, 119); // Pink / Rose Accent
-      doc.rect(0, 0, pageWidth, 28, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(18);
-      doc.text('FALSE CEILING & LIGHTING ESTIMATE', 14, 18);
+    const hardwareRows = [
+      { item: 'Gypsum Boards (12.5mm, 6x4 ft)', qty: `${projectSummary.gypsumBoardsCount} Sheets`, notes: 'Saint-Gobain Gyproc / USG Boral' },
+      { item: 'GI Perimeter Channels (12 ft)', qty: `${projectSummary.perimeterChannelsCount} Nos`, notes: 'Perimeter support' },
+      { item: 'GI Ceiling Sections (12 ft)', qty: `${projectSummary.ceilingSectionsCount} Nos`, notes: 'Primary runners' },
+      { item: 'Intermediate Channels & Angles', qty: `${projectSummary.intermediateChannelsCount} Nos`, notes: 'Hanger suspension' },
+      { item: 'Drywall Screws & Rawl Plugs', qty: `${projectSummary.drywallScrewsBox} Boxes / ${projectSummary.rawlPlugsPkt} Pkts`, notes: 'Fasteners' },
+      { item: 'Jointing Compound & Paper Tape', qty: `${projectSummary.jointCompoundBags} Bags (25kg)`, notes: 'Joint flush coat' },
+      { item: 'LED Cove Lighting Strips', qty: `${projectSummary.totalCoveRft} Rft`, notes: '12V/24V Warm/Neutral' },
+      { item: 'SMPS Power Drivers (5A/10A)', qty: `${projectSummary.totalSmpsDrivers} Units`, notes: 'Constant voltage' },
+      { item: 'Recessed LED Downlights & Spots', qty: `${projectSummary.totalDownlights} DL / ${projectSummary.totalCobSpots} COB`, notes: 'Ceiling punch' }
+    ];
 
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Generated on ${new Date().toLocaleDateString('en-IN')} | Toolique India`, pageWidth - 14, 18, { align: 'right' });
+    const boqRows = [
+      { desc: 'False Ceiling Boarding, GI Channels & Framing', qty: `${projectSummary.totalNetAreaSqFt} sq ft`, total: `₹${projectSummary.totalCivilCeilingCost.toLocaleString('en-IN')}` },
+      { desc: 'Electrical Fixtures (LED Cove, Downlights, COB Spots, SMPS)', qty: 'Lump sum', total: `₹${projectSummary.totalElectricalCost.toLocaleString('en-IN')}` },
+      { desc: 'Ceiling Surface Painting (Primer + 2 Coats Emulsion)', qty: `${projectSummary.totalNetAreaSqFt} sq ft`, total: `₹${projectSummary.totalPaintCost.toLocaleString('en-IN')}` },
+      { desc: `Contractor Supervision & Overhead Margin (${contractorMarginPct}%)`, qty: `${contractorMarginPct}%`, total: `₹${projectSummary.contractorMargin.toLocaleString('en-IN')}` },
+      ...(includeGst ? [{ desc: 'GST @ 18% on Goods & Services', qty: '18%', total: `₹${projectSummary.gstAmount.toLocaleString('en-IN')}` }] : [])
+    ];
 
-      // Project Info
-      doc.setTextColor(30, 41, 59);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`Project: ${quoteName}`, 14, 38);
-      doc.text(`Total Ceiling Area: ${projectSummary.totalNetAreaSqFt} sq ft | Rooms: ${rooms.length}`, 14, 44);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Total Cove Lighting: ${projectSummary.totalCoveRft} Rft | Total Downlights: ${projectSummary.totalDownlights} Nos`, 14, 50);
-
-      // Section 1: Room Breakdown Table
-      let yPos = 60;
-      doc.setFillColor(243, 244, 246);
-      doc.rect(14, yPos, pageWidth - 28, 7, 'F');
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.text('ROOM NAME', 18, yPos + 5);
-      doc.text('SIZE & SYSTEM', 65, yPos + 5);
-      doc.text('DESIGN TIER', 120, yPos + 5);
-      doc.text('LIGHTS', 155, yPos + 5);
-      doc.text('AMOUNT', 180, yPos + 5);
-      yPos += 12;
-
-      doc.setFont('helvetica', 'normal');
-      roomCalculations.forEach((r, idx) => {
-        if (idx % 2 === 1) {
-          doc.setFillColor(249, 250, 251);
-          doc.rect(14, yPos - 4, pageWidth - 28, 7, 'F');
+    downloadPdfReport({
+      title: 'False Ceiling & Architectural Lighting BOQ',
+      subtitle: `Scope: ${quoteName} | Rooms: ${rooms.length} | Area: ${projectSummary.totalNetAreaSqFt} sq.ft`,
+      category: 'interior',
+      complianceBadge: 'IS 2062 & IS 244',
+      referenceId: `FC-${Date.now().toString().slice(-6)}`,
+      theme: 'brand',
+      project: {
+        projectName: quoteName,
+        clientName: 'Client Requisition',
+        notes: `Rooms: ${rooms.length} | Ceiling Area: ${projectSummary.totalNetAreaSqFt} sq.ft | Cove: ${projectSummary.totalCoveRft} Rft`
+      },
+      parameters: [
+        { label: 'Total Rooms', value: `${rooms.length} Rooms` },
+        { label: 'Carpet Area', value: `${projectSummary.totalFlatAreaSqFt} sq.ft` },
+        { label: 'Ceiling Fascia Area', value: `${projectSummary.totalNetAreaSqFt} sq.ft` },
+        { label: 'Cove Light Length', value: `${projectSummary.totalCoveRft} Rft` },
+        { label: 'Downlights / Spots', value: `${projectSummary.totalDownlights} DL / ${projectSummary.totalCobSpots} COB` },
+        { label: 'Unit System', value: unit === 'meters' ? 'Metric (m, m²)' : 'Imperial (ft, sq.ft)' }
+      ],
+      kpis: [
+        { label: 'Estimated Grand Total', value: `₹${projectSummary.finalGrandTotal.toLocaleString('en-IN')}`, subtext: `Avg ₹${Math.round(projectSummary.finalGrandTotal / (projectSummary.totalFlatAreaSqFt || 1))}/sq.ft`, highlight: true },
+        { label: 'Civil & Framing', value: `₹${projectSummary.totalCivilCeilingCost.toLocaleString('en-IN')}`, subtext: `${projectSummary.gypsumBoardsCount} Boards + GI Channel` },
+        { label: 'Electrical & Fixtures', value: `₹${projectSummary.totalElectricalCost.toLocaleString('en-IN')}`, subtext: `${projectSummary.totalCoveRft} Rft Cove + Lights` },
+        { label: 'Painting Finishing', value: `₹${projectSummary.totalPaintCost.toLocaleString('en-IN')}`, subtext: 'Tractor Emulsion / Royale' }
+      ],
+      tables: [
+        {
+          title: 'Room-by-Room False Ceiling Breakdown',
+          badge: 'ROOM SCHEDULE',
+          columns: [
+            { header: 'Room Name', dataKey: 'room', width: 45 },
+            { header: 'Size & System', dataKey: 'spec', width: 50 },
+            { header: 'Design Tier', dataKey: 'tier', width: 35 },
+            { header: 'Fixtures', dataKey: 'lighting', width: 30 },
+            { header: 'Cost (₹)', dataKey: 'cost', width: 22, align: 'right' as const }
+          ],
+          rows: roomRows,
+          totalsRow: [
+            { dataKey: 'room', value: 'ESTIMATED GRAND TOTAL' },
+            { dataKey: 'cost', value: `₹${projectSummary.finalGrandTotal.toLocaleString('en-IN')}` }
+          ]
+        },
+        {
+          title: 'Key Structural GI Framework & Electrical Quantities',
+          badge: 'MATERIAL INDENT',
+          columns: [
+            { header: 'Material / Hardware Item', dataKey: 'item', width: 85 },
+            { header: 'Required Quantity', dataKey: 'qty', width: 55, align: 'right' as const },
+            { header: 'Technical Specification', dataKey: 'notes', width: 42 }
+          ],
+          rows: hardwareRows
+        },
+        {
+          title: 'Itemized Cost Estimate (BOQ)',
+          badge: 'BOQ BREAKDOWN',
+          columns: [
+            { header: 'Item Description', dataKey: 'desc', width: 85 },
+            { header: 'Quantity Basis', dataKey: 'qty', width: 45 },
+            { header: 'Subtotal (₹)', dataKey: 'total', width: 52, align: 'right' as const }
+          ],
+          rows: boqRows,
+          totalsRow: [
+            { dataKey: 'desc', value: 'FINAL GRAND TOTAL' },
+            { dataKey: 'total', value: `₹${projectSummary.finalGrandTotal.toLocaleString('en-IN')}` }
+          ]
         }
-        doc.text(r.name, 18, yPos);
-        doc.text(`${r.length}x${r.width} ${unit === 'feet' ? 'ft' : 'm'} (${r.system.category.toUpperCase()})`, 65, yPos);
-        doc.text(r.complexityConfig.name.split(' ')[0], 120, yPos);
-        doc.text(`${r.numDownlights}D + ${r.numCobSpots}S`, 155, yPos);
-        doc.text(`₹${r.roomTotalCost.toLocaleString('en-IN')}`, 180, yPos);
-        yPos += 7;
-      });
-
-      // Section 2: Hardware Procurement
-      yPos += 5;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.text('Key Structural GI Framework & Electrical Quantities', 14, yPos);
-      yPos += 6;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.text(`• Gypsum Boards (12.5mm, 6x4 ft): ${projectSummary.gypsumBoardsCount} Sheets`, 18, yPos);
-      yPos += 5;
-      doc.text(`• GI Perimeter Channels (12 ft): ${projectSummary.perimeterChannelsCount} Nos | Ceiling Sections (12 ft): ${projectSummary.ceilingSectionsCount} Nos`, 18, yPos);
-      yPos += 5;
-      doc.text(`• Intermediate Channels: ${projectSummary.intermediateChannelsCount} Nos | Ceiling Angles: ${projectSummary.ceilingAnglesCount} Nos`, 18, yPos);
-      yPos += 5;
-      doc.text(`• LED Cove Lighting Strips: ${projectSummary.totalCoveRft} Rft | 12V SMPS Power Drivers: ${projectSummary.totalSmpsDrivers} Units`, 18, yPos);
-      yPos += 5;
-      doc.text(`• Recessed LED Downlights: ${projectSummary.totalDownlights} Nos | COB Focus Spots: ${projectSummary.totalCobSpots} Nos`, 18, yPos);
-
-      // Section 3: Cost BOQ Table
-      yPos += 10;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.text('Itemized Cost Estimate (BOQ)', 14, yPos);
-      yPos += 6;
-
-      doc.setFillColor(243, 244, 246);
-      doc.rect(14, yPos, pageWidth - 28, 7, 'F');
-      doc.setFontSize(9);
-      doc.text('ITEM DESCRIPTION', 18, yPos + 5);
-      doc.text('QUANTITY', 110, yPos + 5);
-      doc.text('SUBTOTAL (INR)', 165, yPos + 5);
-      yPos += 12;
-
-      const boqRows = [
-        { desc: 'False Ceiling Boarding, GI Channels & Framing', qty: `${projectSummary.totalNetAreaSqFt} sq ft`, total: `₹${projectSummary.totalCivilCeilingCost.toLocaleString('en-IN')}` },
-        { desc: 'Electrical Fixtures (LED Cove, Downlights, COB Spots, SMPS)', qty: 'Lump sum', total: `₹${projectSummary.totalElectricalCost.toLocaleString('en-IN')}` },
-        { desc: 'Ceiling Surface Painting (Primer + 2 Coats Emulsion)', qty: `${projectSummary.totalNetAreaSqFt} sq ft`, total: `₹${projectSummary.totalPaintCost.toLocaleString('en-IN')}` },
-        { desc: `Contractor Supervision & Overhead Margin (${contractorMarginPct}%)`, qty: '-', total: `₹${projectSummary.contractorMargin.toLocaleString('en-IN')}` },
-      ];
-
-      if (includeGst) {
-        boqRows.push({ desc: 'GST @ 18% on Goods & Services', qty: '18%', total: `₹${projectSummary.gstAmount.toLocaleString('en-IN')}` });
-      }
-
-      doc.setFont('helvetica', 'normal');
-      boqRows.forEach((row, i) => {
-        if (i % 2 === 1) {
-          doc.setFillColor(249, 250, 251);
-          doc.rect(14, yPos - 4, pageWidth - 28, 6, 'F');
-        }
-        doc.text(row.desc, 18, yPos);
-        doc.text(row.qty, 110, yPos);
-        doc.text(row.total, 165, yPos);
-        yPos += 6;
-      });
-
-      // Total Callout
-      yPos += 4;
-      doc.setFillColor(219, 39, 119);
-      doc.rect(14, yPos, pageWidth - 28, 10, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.text('ESTIMATED GRAND TOTAL (ALL INCLUSIVE):', 18, yPos + 7);
-      doc.text(`INR ${projectSummary.finalGrandTotal.toLocaleString('en-IN')}`, pageWidth - 18, yPos + 7, { align: 'right' });
-
-      doc.save(`False_Ceiling_Estimate_${quoteName.replace(/\s+/g, '_')}.pdf`);
-    } catch (err) {
-      console.error('PDF export error:', err);
-      alert('Unable to generate PDF. Please use the Copy Quote button.');
-    }
+      ],
+      disclaimers: [
+        'Ceiling heights and soffit level variations must be verified at site prior to GI section fastening.',
+        'Lighting driver wattage, profile depth, and heat dissipation must match LED strip lumens specifications.'
+      ],
+      includeSignoff: true,
+      fileName: `False_Ceiling_Estimate_${quoteName.toLowerCase().replace(/\s+/g, '_')}_${Date.now().toString().slice(-4)}.pdf`
+    });
   };
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-left">
-      {/* Top Header & View Tabs */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-pink-500/10 text-pink-600 dark:text-pink-400">
-              <Palette className="w-5 h-5" />
-            </span>
-            <div>
-              <h2 className="text-base font-bold text-zinc-900 dark:text-white">
-                Architectural False Ceiling & Lighting Design Studio
-              </h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Gyproc Gypsum, POP, PVC, WPC Louvers, structural GI framework BOQ, and 2D lighting blueprint
-              </p>
-            </div>
-          </div>
+      {/* Top Action Toolbar */}
+      <div className="flex flex-wrap justify-between items-center gap-3 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-pink-50 dark:bg-pink-950/40 text-pink-600 dark:text-pink-400 border border-pink-500/20 flex items-center gap-1.5">
+            <Palette className="w-3.5 h-3.5" />
+            <span>IS 2095 Gypsum &amp; GI Framework Specs</span>
+          </span>
         </div>
 
         {/* Action Tabs */}
@@ -741,20 +708,15 @@ Generated via Toolique India (https://toolique.in)`;
                   Global Project Parameters
                 </span>
                 <div className="flex items-center gap-2">
-                  <div className="flex rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5 text-xs font-semibold">
-                    <button
-                      onClick={() => setUnit('feet')}
-                      className={`px-2.5 py-1 rounded-md transition ${unit === 'feet' ? 'bg-white dark:bg-zinc-700 text-pink-600 dark:text-pink-400 shadow-xs' : 'text-zinc-500'}`}
-                    >
-                      Feet (ft)
-                    </button>
-                    <button
-                      onClick={() => setUnit('meters')}
-                      className={`px-2.5 py-1 rounded-md transition ${unit === 'meters' ? 'bg-white dark:bg-zinc-700 text-pink-600 dark:text-pink-400 shadow-xs' : 'text-zinc-500'}`}
-                    >
-                      Meters (m)
-                    </button>
-                  </div>
+                  <UnitSwitcher<UnitType>
+                    value={unit}
+                    onChange={setUnit}
+                    options={[
+                      { id: 'feet', label: 'Feet (ft)', shortLabel: 'ft' },
+                      { id: 'meters', label: 'Meters (m)', shortLabel: 'm' }
+                    ]}
+                    size="xs"
+                  />
                   <button
                     onClick={handleResetAll}
                     title="Reset All Parameters"
@@ -1011,14 +973,20 @@ Generated via Toolique India (https://toolique.in)`;
                 <span className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block">
                   False Ceiling Budget
                 </span>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={handleCopyQuote}
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold transition shadow-xs"
-                  >
-                    {copied ? <Check className="w-3.5 h-3.5" /> : <Clipboard className="w-3.5 h-3.5" />}
-                    <span>{copied ? 'Copied' : 'Copy Quote'}</span>
-                  </button>
+                <div className="flex items-center gap-1.5">
+                  <CopyButton
+                    text={getQuoteText}
+                    label="Copy Quote"
+                    copiedLabel="Copied"
+                    variant="primary"
+                    size="xs"
+                  />
+                  <ShareWhatsApp
+                    text={getQuoteText}
+                    label="WhatsApp"
+                    variant="solid"
+                    size="xs"
+                  />
                   <button
                     onClick={handleExportPdf}
                     className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold transition"
@@ -1531,13 +1499,19 @@ Generated via Toolique India (https://toolique.in)`;
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                onClick={handleCopyQuote}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold transition shadow-xs"
-              >
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Clipboard className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied' : 'Copy Quote'}</span>
-              </button>
+              <CopyButton
+                text={getQuoteText}
+                label="Copy Quote"
+                copiedLabel="Copied"
+                variant="primary"
+                size="xs"
+              />
+              <ShareWhatsApp
+                text={getQuoteText}
+                label="WhatsApp"
+                variant="solid"
+                size="xs"
+              />
               <button
                 onClick={handleExportPdf}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold transition"

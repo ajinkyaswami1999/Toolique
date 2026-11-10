@@ -1,15 +1,18 @@
 import { useState, useMemo } from 'react';
 import {
-  Ruler, Copy, Check, RotateCcw, Building,
-  FileSpreadsheet, FileText, Share2, Layers,
+  Ruler, RotateCcw, Building,
+  FileSpreadsheet, FileText, Layers,
   Compass, Scale, Droplets, ShieldCheck,
   AlertTriangle, CheckCircle2,
   Maximize2
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import SEO from '../components/SEO';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
+import UnitSwitcher from '../components/common/UnitSwitcher';
 
 // -------------------------------------------------------------
 // Engineering Types & Constants (Harmonised 2021 / NBC 2016 / ADA / UK Part M)
@@ -217,9 +220,6 @@ export default function AccessibleRampCalculator() {
   const [kerbHeightMm, setKerbHeightMm] = useState<number>(100); // 100 mm kerb
   const [concreteGrade, setConcreteGrade] = useState<'M20' | 'M25'>('M20');
   const [selectedCity, setSelectedCity] = useState<string>('mumbai');
-
-  // UI state
-  const [copied, setCopied] = useState<boolean>(false);
 
   // Conversion Helpers to Base MM
   const toMmFactor = useMemo(() => {
@@ -502,9 +502,9 @@ export default function AccessibleRampCalculator() {
   };
 
   // 1-Click Clipboard summary
-  const copySummaryReport = () => {
+  const getSummaryText = () => {
     const std = REGULATORY_STANDARDS[standard];
-    const text = `♿ ACCESSIBLE RAMP AUDIT & COMPLIANCE REPORT
+    return `♿ ACCESSIBLE RAMP AUDIT & COMPLIANCE REPORT
 --------------------------------------------------
 Standard: ${std.label} (${std.codeRef})
 Layout Geometry: ${layout.toUpperCase().replace('_', ' ')}
@@ -539,36 +539,17 @@ Slope Ratio: 1:${baseSlopeRatio} (${rampCalc.slopePct.toFixed(2)}% / ${rampCalc.
 - Estimated Project Cost (${rampCalc.cityRates.city}): ₹${Math.round(rampCalc.totalEstimatedCost).toLocaleString('en-IN')}
 
 Generated via ToolStack India Accessible Ramp Engineering Suite.`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
   };
 
-  // WhatsApp Share Handler
-  const shareViaWhatsApp = () => {
-    const summary = `*♿ Accessible Ramp Design & BOQ Estimate*
-*Standard:* ${REGULATORY_STANDARDS[standard].label}
-*Layout:* ${layout.toUpperCase().replace('_', ' ')}
-*Total Rise:* ${totalRiseInput} ${unit} | *Clear Width:* ${rampWidthInput} ${unit}
-*Slope:* 1:${baseSlopeRatio} (${rampCalc.slopePct.toFixed(2)}%)
-*Status:* ${rampCalc.isOverallCompliant ? '✅ COMPLIANT' : '⚠️ NON-COMPLIANT'}
-
-*Key Dimensions:*
-- Flights: ${rampCalc.flightsCount} | Landings: ${rampCalc.totalLandingsCount}
-- Single Run: ${fmt(rampCalc.horizontalRunPerFlightMm)} ${unit}
-- Total Footprint: ${fmt(rampCalc.footprintLengthMm)} × ${fmt(rampCalc.footprintWidthMm)} ${unit}
-
-*Material Takeoff:*
-- Concrete: ${rampCalc.totalWetConcreteM3.toFixed(2)} m³ (${Math.ceil(rampCalc.cementBags)} cement bags)
-- Sand: ${rampCalc.sandBrass.toFixed(2)} Brass | SS304 Rails: ${rampCalc.totalHandrailLengthM.toFixed(1)} RMT
-- Est. Cost (${rampCalc.cityRates.city}): ₹${Math.round(rampCalc.totalEstimatedCost).toLocaleString('en-IN')}
-
-_Calculated on ToolStack India Ramp Engineering Suite_`;
-
-    const url = `https://wa.me/?text=${encodeURIComponent(summary)}`;
-    window.open(url, '_blank');
-  };
+  const getCadNotes = () => `ACCESSIBILITY RAMP GENERAL NOTES (${REGULATORY_STANDARDS[standard].label}):
+1. RAMP SLOPE GRADIENT SHALL NOT EXCEED 1:${baseSlopeRatio} (${rampCalc.slopePct.toFixed(2)}%).
+2. CLEAR PASSAGE WIDTH BETWEEN INNER HANDRAILS SHALL BE MINIMUM ${baseWidthMm} MM.
+3. INTERMEDIATE LEVEL RESTING LANDINGS OF MINIMUM ${rampCalc.landingLenMm} X ${rampCalc.landingWidthMm} MM PROVIDED EVERY ${rampCalc.risePerFlightMm.toFixed(0)} MM OF VERTICAL RISE.
+4. CONTINUOUS STAINLESS STEEL (GRADE 304) DUAL HANDRAILS TO BE INSTALLED AT HEIGHTS OF 900 MM AND 760 MM ABOVE FINISHED RAMP SURFACE.
+5. HANDRAILS MUST EXTEND 300 MM HORIZONTALLY BEYOND TOP AND BOTTOM OF RAMP RUNS WITH ROUNDED DOWNWARD RETURN ENDS.
+6. RAISED EDGE PROTECTION KERB OF MINIMUM ${kerbHeightMm} MM HEIGHT REQUIRED ON ALL EXPOSED EDGES.
+7. TGSI TACTILE HAZARD WARNING STRIPS (300 MM DEPTH) WITH DOMED STUDS SHALL BE INSTALLED 300 MM BEFORE TOP AND BOTTOM LANDINGS.
+8. MAXIMUM PERMISSIBLE CROSS-SLOPE FOR DRAINAGE SHALL BE 1:50 (2.0%).`;
 
   // Multi-Sheet Excel Export
   const exportToExcel = () => {
@@ -626,144 +607,83 @@ _Calculated on ToolStack India Ramp Engineering Suite_`;
     XLSX.writeFile(wb, `Accessible_Ramp_Takeoff_${standard}_${layout}.xlsx`);
   };
 
-  // High-Resolution PDF Compliance Certificate & Report
-  const generatePdfReport = () => {
-    const doc = new jsPDF();
+  // Standardized Branded PDF Compliance Certificate & Report
+  const handleDownloadPDF = () => {
     const std = REGULATORY_STANDARDS[standard];
-
-    // Header Banner
-    doc.setFillColor(30, 41, 59); // Slate-900
-    doc.rect(0, 0, 210, 32, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('ACCESSIBLE RAMP COMPLIANCE & TAKEOFF REPORT', 14, 15);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(148, 163, 184);
-    doc.text(`Standard: ${std.label} | Layout: ${layout.toUpperCase()}`, 14, 23);
-    doc.text(`Generated: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })} | ToolStack India`, 14, 28);
-
-    // Compliance Status Pill
-    if (rampCalc.isOverallCompliant) {
-      doc.setFillColor(16, 185, 129); // Emerald-500
-      doc.roundedRect(145, 10, 50, 14, 3, 3, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'bold');
-      doc.text('100% COMPLIANT', 151, 19);
-    } else {
-      doc.setFillColor(239, 68, 68); // Red-500
-      doc.roundedRect(145, 10, 50, 14, 3, 3, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'bold');
-      doc.text('NON-COMPLIANT', 152, 19);
-    }
-
-    let y = 42;
-
-    // Section 1: Geometric Specifications
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. Geometric Design Parameters', 14, y);
-    y += 6;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-
-    const geomRows = [
-      ['Total Target Rise', `${totalRiseInput} ${unit} (${baseRiseMm.toFixed(0)} mm)`],
-      ['Clear Ramp Passage Width', `${rampWidthInput} ${unit} (${baseWidthMm.toFixed(0)} mm) [Min: ${std.minWidthMm} mm]`],
-      ['Slope Gradient & Ratio', `1:${baseSlopeRatio} (${rampCalc.slopePct.toFixed(2)}% / ${rampCalc.slopeAngleDeg.toFixed(1)}°) [Max: 1:${std.maxSlopeRatio}]`],
-      ['Flights & Landings Configuration', `${rampCalc.flightsCount} Flight(s) with ${rampCalc.intermediateLandingsCount} Intermediate Resting Landing(s)`],
-      ['Single Flight Rise & Run', `Rise: ${fmt(rampCalc.risePerFlightMm, 1)} ${unit} | Run: ${fmt(rampCalc.horizontalRunPerFlightMm, 1)} ${unit}`],
-      ['Landing Dimensions', `${fmt(rampCalc.landingLenMm)} × ${fmt(rampCalc.landingWidthMm)} ${unit} (Accommodates Ø1500mm turning circle)`],
-      ['Total Ramp Footprint (L × W)', `${fmt(rampCalc.footprintLengthMm, 1)} × ${fmt(rampCalc.footprintWidthMm, 1)} ${unit} (${rampCalc.footprintAreaSqFt.toFixed(1)} sq.ft / ${rampCalc.footprintAreaSqM.toFixed(2)} m²)`]
-    ];
-
-    geomRows.forEach(([lbl, val]) => {
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(71, 85, 105);
-      doc.text(lbl + ':', 16, y);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(15, 23, 42);
-      doc.text(val, 85, y);
-      y += 5.5;
+    downloadPdfReport({
+      title: 'Accessible Ramp Compliance & Takeoff Report',
+      subtitle: `Standard: ${std.label} | Layout: ${layout.toUpperCase().replace('_', ' ')}`,
+      category: 'Architecture & Civil Engineering',
+      project: 'ToolStack India Ramp Suite',
+      theme: 'brand',
+      parameters: [
+        { label: 'Standard Code', value: `${std.label} (${std.codeRef})` },
+        { label: 'Layout Configuration', value: layout.toUpperCase().replace('_', ' ') },
+        { label: 'Total Target Rise', value: `${totalRiseInput} ${unit} (${baseRiseMm.toFixed(0)} mm)` },
+        { label: 'Clear Ramp Passage Width', value: `${rampWidthInput} ${unit} (${baseWidthMm.toFixed(0)} mm)` },
+        { label: 'Slope Gradient & Ratio', value: `1:${baseSlopeRatio} (${rampCalc.slopePct.toFixed(2)}% / ${rampCalc.slopeAngleDeg.toFixed(1)}°)` },
+        { label: 'Compliance Status', value: rampCalc.isOverallCompliant ? '100% COMPLIANT' : 'NON-COMPLIANT' },
+        { label: 'Total Footprint', value: `${fmt(rampCalc.footprintLengthMm, 1)} × ${fmt(rampCalc.footprintWidthMm, 1)} ${unit} (${rampCalc.footprintAreaSqFt.toFixed(1)} sq.ft)` },
+        { label: 'Estimated Project Cost', value: `₹${Math.round(rampCalc.totalEstimatedCost).toLocaleString('en-IN')}` },
+      ],
+      tables: [
+        {
+          title: '1. Geometric Design Parameters',
+          columns: [
+            { header: 'Parameter', dataKey: 'lbl' },
+            { header: 'Specification / Limit', dataKey: 'val' },
+          ],
+          rows: [
+            { lbl: 'Total Target Rise', val: `${totalRiseInput} ${unit} (${baseRiseMm.toFixed(0)} mm)` },
+            { lbl: 'Clear Ramp Passage Width', val: `${rampWidthInput} ${unit} (${baseWidthMm.toFixed(0)} mm) [Min: ${std.minWidthMm} mm]` },
+            { lbl: 'Slope Gradient & Ratio', val: `1:${baseSlopeRatio} (${rampCalc.slopePct.toFixed(2)}% / ${rampCalc.slopeAngleDeg.toFixed(1)}°) [Max: 1:${std.maxSlopeRatio}]` },
+            { lbl: 'Flights & Landings Configuration', val: `${rampCalc.flightsCount} Flight(s) with ${rampCalc.intermediateLandingsCount} Intermediate Resting Landing(s)` },
+            { lbl: 'Single Flight Rise & Run', val: `Rise: ${fmt(rampCalc.risePerFlightMm, 1)} ${unit} | Run: ${fmt(rampCalc.horizontalRunPerFlightMm, 1)} ${unit}` },
+            { lbl: 'Landing Dimensions', val: `${fmt(rampCalc.landingLenMm)} × ${fmt(rampCalc.landingWidthMm)} ${unit} (Accommodates Ø1500mm turning circle)` },
+            { lbl: 'Total Ramp Footprint (L × W)', val: `${fmt(rampCalc.footprintLengthMm, 1)} × ${fmt(rampCalc.footprintWidthMm, 1)} ${unit} (${rampCalc.footprintAreaSqFt.toFixed(1)} sq.ft / ${rampCalc.footprintAreaSqM.toFixed(2)} m²)` },
+          ],
+        },
+        {
+          title: '2. Accessibility Code Compliance Audit Matrix',
+          columns: [
+            { header: 'Status', dataKey: 'status', align: 'center' as const },
+            { header: 'Audit Check', dataKey: 'name' },
+            { header: 'Evaluated vs Statutory Requirement', dataKey: 'detail' },
+          ],
+          rows: rampCalc.allAudits.map((audit) => ({
+            status: audit.pass ? 'PASS' : 'FAIL',
+            name: audit.name,
+            detail: `${audit.target} vs ${audit.limit}`,
+          })),
+        },
+        {
+          title: `3. Structural Material Takeoff & Cost Estimate (${rampCalc.cityRates.city})`,
+          columns: [
+            { header: 'Material / Item Description', dataKey: 'item' },
+            { header: 'Quantity & Takeoff Specs', dataKey: 'qty' },
+            { header: 'Cost (INR)', dataKey: 'amount', align: 'right' as const },
+          ],
+          rows: [
+            { item: 'RCC Concrete M20/M25 (150mm slab + kerb)', qty: `${rampCalc.totalWetConcreteM3.toFixed(2)} m³ (${rampCalc.totalWetConcreteCuFt.toFixed(1)} cu.ft)`, amount: `₹${Math.round(rampCalc.costConcrete).toLocaleString('en-IN')}` },
+            { item: 'Cement Bags Required (50 kg)', qty: `${Math.ceil(rampCalc.cementBags)} bags (${(rampCalc.cementWeightKg / 1000).toFixed(2)} Tonnes)`, amount: 'Included' },
+            { item: 'Fine Aggregate (Sand)', qty: `${rampCalc.sandBrass.toFixed(2)} Brass (${rampCalc.sandCuFt.toFixed(1)} CFT / ${rampCalc.sandTonnes.toFixed(2)} T)`, amount: 'Included' },
+            { item: 'Coarse Aggregate (20mm)', qty: `${rampCalc.aggBrass.toFixed(2)} Brass (${rampCalc.aggCuFt.toFixed(1)} CFT)`, amount: 'Included' },
+            { item: 'SS 304 Dual Continuous Handrails', qty: `${rampCalc.totalHandrailLengthM.toFixed(1)} RMT (${(rampCalc.totalHandrailLengthM * 3.28084).toFixed(1)} RFT)`, amount: `₹${Math.round(rampCalc.costHandrails).toLocaleString('en-IN')}` },
+            { item: 'Anti-Skid Ramp Tile / Granite Flooring', qty: `${rampCalc.rampSurfaceAreaSqFt.toFixed(1)} sq.ft (${rampCalc.rampSurfaceAreaSqM.toFixed(2)} m²)`, amount: `₹${Math.round(rampCalc.costFlooring).toLocaleString('en-IN')}` },
+            { item: 'TGSI Tactile Hazard Warning Pavers', qty: `${rampCalc.tactileTilesNeeded} tiles (300×300 mm)`, amount: `₹${Math.round(rampCalc.costTactile).toLocaleString('en-IN')}` },
+          ],
+          totalsRow: [
+            { dataKey: 'item', value: 'TOTAL ESTIMATED DIRECT BUDGET' },
+            { dataKey: 'amount', value: `₹${Math.round(rampCalc.totalEstimatedCost).toLocaleString('en-IN')}` },
+          ],
+        },
+      ],
+      disclaimers: [
+        'Note: This document complies with Harmonised Guidelines 2021 (MoHUA), NBC 2016 Part 3, and ADA 2010 accessibility specifications.',
+        'Material quantities and cost rates are indicative benchmark rates based on local CPWD schedule of rates and prevailing market trends.',
+      ],
+      fileName: `Accessible_Ramp_Compliance_Report_${standard}.pdf`,
     });
-
-    y += 4;
-
-    // Section 2: Statutory Compliance Checklist
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('2. Accessibility Code Compliance Audit Matrix', 14, y);
-    y += 6;
-
-    rampCalc.allAudits.forEach((audit) => {
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(audit.pass ? 16 : 220, audit.pass ? 149 : 38, audit.pass ? 93 : 38);
-      doc.text(audit.pass ? '[PASS]' : '[FAIL]', 16, y);
-
-      doc.setTextColor(15, 23, 42);
-      doc.text(audit.name, 35, y);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(71, 85, 105);
-      doc.text(`${audit.target} vs ${audit.limit}`, 95, y);
-
-      y += 5.5;
-    });
-
-    y += 6;
-
-    // Section 3: Material Takeoff & Cost Estimation
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`3. Structural Material Takeoff & Cost Estimate (${rampCalc.cityRates.city})`, 14, y);
-    y += 6;
-
-    const boqRows = [
-      ['RCC Concrete M20/M25 (150mm slab + kerb)', `${rampCalc.totalWetConcreteM3.toFixed(2)} m³ (${rampCalc.totalWetConcreteCuFt.toFixed(1)} cu.ft)`, `₹${Math.round(rampCalc.costConcrete).toLocaleString('en-IN')}`],
-      ['Cement Bags Required (50 kg)', `${Math.ceil(rampCalc.cementBags)} bags (${(rampCalc.cementWeightKg / 1000).toFixed(2)} Tonnes)`, 'Included'],
-      ['Fine Aggregate (Sand)', `${rampCalc.sandBrass.toFixed(2)} Brass (${rampCalc.sandCuFt.toFixed(1)} CFT / ${rampCalc.sandTonnes.toFixed(2)} T)`, 'Included'],
-      ['Coarse Aggregate (20mm)', `${rampCalc.aggBrass.toFixed(2)} Brass (${rampCalc.aggCuFt.toFixed(1)} CFT)`, 'Included'],
-      ['SS 304 Dual Continuous Handrails', `${rampCalc.totalHandrailLengthM.toFixed(1)} RMT (${(rampCalc.totalHandrailLengthM * 3.28084).toFixed(1)} RFT)`, `₹${Math.round(rampCalc.costHandrails).toLocaleString('en-IN')}`],
-      ['Anti-Skid Ramp Tile / Granite Flooring', `${rampCalc.rampSurfaceAreaSqFt.toFixed(1)} sq.ft (${rampCalc.rampSurfaceAreaSqM.toFixed(2)} m²)`, `₹${Math.round(rampCalc.costFlooring).toLocaleString('en-IN')}`],
-      ['TGSI Tactile Hazard Warning Pavers', `${rampCalc.tactileTilesNeeded} tiles (300×300 mm)`, `₹${Math.round(rampCalc.costTactile).toLocaleString('en-IN')}`],
-      ['TOTAL ESTIMATED DIRECT BUDGET (INR)', '', `₹${Math.round(rampCalc.totalEstimatedCost).toLocaleString('en-IN')}`]
-    ];
-
-    boqRows.forEach(([lbl, qty, amt], idx) => {
-      const isTotal = idx === boqRows.length - 1;
-      if (isTotal) {
-        y += 2;
-        doc.setFillColor(241, 245, 249);
-        doc.rect(14, y - 4, 182, 8, 'F');
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(15, 23, 42);
-      } else {
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(71, 85, 105);
-      }
-      doc.text(lbl, 16, y);
-      doc.text(qty, 125, y);
-      doc.text(amt, 175, y, { align: 'right' });
-      y += 6;
-    });
-
-    // Footer note
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'italic');
-    doc.setTextColor(148, 163, 184);
-    doc.text('Note: This document complies with Harmonised Guidelines 2021 (MoHUA), NBC 2016 Part 3, and ADA 2010 accessibility specifications.', 14, 285);
-
-    doc.save(`Accessible_Ramp_Compliance_Report_${standard}.pdf`);
   };
 
   // Reset function
@@ -805,20 +725,17 @@ _Calculated on ToolStack India Ramp Engineering Suite_`;
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <button
-              onClick={copySummaryReport}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition border border-white/10 shadow-sm"
-            >
-              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-              <span>{copied ? 'Copied Report!' : 'Copy Summary'}</span>
-            </button>
-            <button
-              onClick={shareViaWhatsApp}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm"
-            >
-              <Share2 className="w-4 h-4" />
-              <span>WhatsApp</span>
-            </button>
+            <CopyButton
+              text={getSummaryText}
+              label="Copy Summary"
+              size="sm"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/10"
+            />
+            <ShareWhatsApp
+              text={getSummaryText}
+              label="WhatsApp"
+              size="sm"
+            />
             <button
               onClick={exportToExcel}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition shadow-sm"
@@ -827,7 +744,7 @@ _Calculated on ToolStack India Ramp Engineering Suite_`;
               <span>Excel (.xlsx)</span>
             </button>
             <button
-              onClick={generatePdfReport}
+              onClick={handleDownloadPDF}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-sm"
             >
               <FileText className="w-4 h-4" />
@@ -964,21 +881,17 @@ _Calculated on ToolStack India Ramp Engineering Suite_`;
                   <label className="block text-xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1">
                     Measurement Unit
                   </label>
-                  <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg">
-                    {(['mm', 'm', 'in', 'ft'] as const).map((u) => (
-                      <button
-                        key={u}
-                        onClick={() => handleUnitChange(u)}
-                        className={`flex-1 py-1 rounded-md text-xs font-bold transition uppercase ${
-                          unit === u
-                            ? 'bg-white dark:bg-zinc-700 text-indigo-600 dark:text-white shadow-sm'
-                            : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
-                        }`}
-                      >
-                        {u}
-                      </button>
-                    ))}
-                  </div>
+                  <UnitSwitcher<UnitType>
+                    value={unit}
+                    onChange={handleUnitChange}
+                    options={[
+                      { id: 'mm', label: 'Millimeters', shortLabel: 'MM' },
+                      { id: 'm', label: 'Meters', shortLabel: 'M' },
+                      { id: 'in', label: 'Inches', shortLabel: 'IN' },
+                      { id: 'ft', label: 'Feet', shortLabel: 'FT' },
+                    ]}
+                    size="sm"
+                  />
                 </div>
               </div>
 
@@ -1780,25 +1693,12 @@ _Calculated on ToolStack India Ramp Engineering Suite_`;
                   <FileText className="w-4 h-4 text-indigo-500" />
                   <span>CAD Drawing Specification Notes</span>
                 </h3>
-                <button
-                  onClick={() => {
-                    const notes = `ACCESSIBILITY RAMP GENERAL NOTES (${REGULATORY_STANDARDS[standard].label}):
-1. RAMP SLOPE GRADIENT SHALL NOT EXCEED 1:${baseSlopeRatio} (${rampCalc.slopePct.toFixed(2)}%).
-2. CLEAR PASSAGE WIDTH BETWEEN INNER HANDRAILS SHALL BE MINIMUM ${baseWidthMm} MM.
-3. INTERMEDIATE LEVEL RESTING LANDINGS OF MINIMUM ${rampCalc.landingLenMm} X ${rampCalc.landingWidthMm} MM PROVIDED EVERY ${rampCalc.risePerFlightMm.toFixed(0)} MM OF VERTICAL RISE.
-4. CONTINUOUS STAINLESS STEEL (GRADE 304) DUAL HANDRAILS TO BE INSTALLED AT HEIGHTS OF 900 MM AND 760 MM ABOVE FINISHED RAMP SURFACE.
-5. HANDRAILS MUST EXTEND 300 MM HORIZONTALLY BEYOND TOP AND BOTTOM OF RAMP RUNS WITH ROUNDED DOWNWARD RETURN ENDS.
-6. RAISED EDGE PROTECTION KERB OF MINIMUM ${kerbHeightMm} MM HEIGHT REQUIRED ON ALL EXPOSED EDGES.
-7. TGSI TACTILE HAZARD WARNING STRIPS (300 MM DEPTH) WITH DOMED STUDS SHALL BE INSTALLED 300 MM BEFORE TOP AND BOTTOM LANDINGS.
-8. MAXIMUM PERMISSIBLE CROSS-SLOPE FOR DRAINAGE SHALL BE 1:50 (2.0%).`;
-                    navigator.clipboard.writeText(notes);
-                    alert('CAD General Notes copied to clipboard!');
-                  }}
-                  className="text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 flex items-center gap-1"
-                >
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>Copy CAD Notes</span>
-                </button>
+                <CopyButton
+                  text={getCadNotes}
+                  label="Copy CAD Notes"
+                  variant="outline"
+                  size="xs"
+                />
               </div>
 
               <div className="p-4 bg-zinc-950 text-emerald-400 font-mono text-[11px] rounded-xl leading-relaxed overflow-x-auto border border-zinc-800">

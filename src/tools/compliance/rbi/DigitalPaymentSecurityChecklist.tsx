@@ -247,20 +247,13 @@ ${DIGITAL_PAYMENT_CONTROLS.map(c => `[${controlStatus[c.id].toUpperCase()}] ${c.
 
   return (
     <div className="space-y-8">
-      {/* Top Banner */}
-      <div className="saas-card bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/20 p-5 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded-lg">
-            <CreditCard className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-              RBI Digital Payment Security Controls (MD-DPSC) Checklist
-            </h2>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Audit payment gateways, UPI switches, mobile banking apps, and card tokenization against RBI 2021 master directives.
-            </p>
-          </div>
+      {/* Top Action Toolbar */}
+      <div className="saas-card bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/20 p-4 rounded-xl flex flex-wrap items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
+            <CreditCard className="w-3.5 h-3.5" />
+            <span>RBI MD-DPSC 2021 &bull; Tokenization &amp; Mobile Banking Security</span>
+          </span>
         </div>
         <div className="flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20">
           <ShieldCheck className="w-4 h-4" />

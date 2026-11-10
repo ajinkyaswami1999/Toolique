@@ -1,8 +1,6 @@
 import { useState, useMemo } from 'react';
 import { 
   Package, 
-  Copy, 
-  Check, 
   Download, 
   Sparkles, 
   PieChart, 
@@ -14,7 +12,9 @@ import {
   ShieldCheck, 
   AlertTriangle
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
 
 // --- Multi-Currency Configurations ---
 interface CurrencyConfig {
@@ -260,9 +260,6 @@ export default function PackagingCostCalculator() {
   const [productRetailPrice, setProductRetailPrice] = useState<number>(currency.defaultRetailPrice);
   const [monthlyShipmentVolume, setMonthlyShipmentVolume] = useState<number>(150);
 
-  // UI States
-  const [copied, setCopied] = useState<boolean>(false);
-
   // --- Currency Change Handler ---
   const handleCurrencyChange = (newKey: string) => {
     const newCurr = CURRENCIES[newKey];
@@ -443,10 +440,10 @@ export default function PackagingCostCalculator() {
     return `${currency.symbol}${val.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`;
   };
 
-  // --- Copy Packaging BOM ---
-  const handleCopyBOM = () => {
+  // --- Packaging BOM Text for Clipboard & Sharing ---
+  const getPackagingBomText = () => {
     const c = calculations;
-    const summary = `=== 3D PRINT PACKAGING BILL OF MATERIALS (BOM) ===
+    return `=== 3D PRINT PACKAGING BILL OF MATERIALS (BOM) ===
 Generated via Toolique Packaging Cost Engine
 
 [CONTAINER & BOX]
@@ -480,92 +477,12 @@ Monthly Materials Spend: ${fmt(c.monthlyPackagingMaterials)}
 Monthly Packaging Labor: ${fmt(c.monthlyLaborExpense)} (${c.monthlyPackingHours.toFixed(1)} hrs)
 Monthly Bubble Wrap Needed: ${c.monthlyBubbleWrapMeters.toFixed(0)} meters
 ==================================================`;
-
-    navigator.clipboard.writeText(summary);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   // --- Professional Commercial PDF Export ---
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
     const c = calculations;
     const currSym = currency.symbol;
-
-    // Header Banner
-    doc.setFillColor(15, 23, 42); // slate-900
-    doc.rect(0, 0, 210, 30, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(15);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3D PRINT PRODUCT PACKAGING & BOM COST REPORT', 14, 13);
-
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(203, 213, 225);
-    doc.text(`Packaging Spec: ${selectedPresetId.toUpperCase()} | Box Dimensions: ${boxLengthCm}x${boxWidthCm}x${boxHeightCm}cm | Currency: ${currency.code}`, 14, 20);
-    doc.text(`Generated: ${new Date().toLocaleDateString()} | Toolique E-Commerce Logistics Suite | Toolique.in`, 14, 25);
-
-    // Section 1: Executive KPI Cards
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(14, 36, 182, 36, 3, 3, 'F');
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(14, 36, 182, 36, 3, 3, 'S');
-
-    // KPI 1: Unit Packaging Cost
-    doc.setTextColor(71, 85, 105);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('UNIT PACKAGING COST', 20, 44);
-    doc.setFontSize(14);
-    doc.setTextColor(15, 23, 42);
-    doc.text(`${currSym}${c.totalPackagingCost.toFixed(2)}`, 20, 52);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Materials: ${currSym}${c.totalMaterialCost.toFixed(2)} | Labor: ${currSym}${c.laborCost.toFixed(2)}`, 20, 58);
-
-    // KPI 2: % of Retail Price
-    doc.setTextColor(71, 85, 105);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('% OF RETAIL PRICE', 80, 44);
-    doc.setFontSize(14);
-    doc.setTextColor(79, 70, 229); // indigo
-    doc.text(`${c.packagingPctOfRetail.toFixed(1)}%`, 80, 52);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Retail Price: ${currSym}${productRetailPrice.toFixed(2)}`, 80, 58);
-
-    // KPI 3: Volumetric Shipping Weight
-    doc.setTextColor(71, 85, 105);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('VOLUMETRIC WEIGHT', 140, 44);
-    doc.setFontSize(14);
-    doc.setTextColor(c.isVolumetricPenalty ? 220 : 16, c.isVolumetricPenalty ? 38 : 185, c.isVolumetricPenalty ? 38 : 129);
-    doc.text(`${c.volumetricWeightGrams.toFixed(0)} g`, 140, 52);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Actual Weight: ${actualPartWeightGrams} g`, 140, 58);
-
-    // Section 2: Detailed Itemized Packaging BOM Table
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(10.5);
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. ITEMIZED PACKAGING MATERIAL BILL OF MATERIALS (BOM)', 14, 80);
-
-    let y = 86;
-    doc.setFillColor(241, 245, 249);
-    doc.rect(14, y, 182, 7, 'F');
-    doc.setFontSize(8);
-    doc.setTextColor(51, 65, 85);
-    doc.text('Component Item', 18, y + 5);
-    doc.text('Specification / Usage Quantity', 75, y + 5);
-    doc.text('Unit Cost', 165, y + 5);
 
     const bomRows = [
       { name: 'Outer Shipper / Box', spec: `${boxLengthCm}x${boxWidthCm}x${boxHeightCm} cm Corrugated Carton`, cost: `${currSym}${c.boxCost.toFixed(2)}` },
@@ -579,90 +496,62 @@ Monthly Bubble Wrap Needed: ${c.monthlyBubbleWrapMeters.toFixed(0)} meters
       { name: 'Packing & Assembly Labor', spec: `${packingMinutes} mins @ ${currSym}${packerHourlyWage}/hr`, cost: `${currSym}${c.laborCost.toFixed(2)}` },
     ];
 
-    y += 7;
-    bomRows.forEach((r, idx) => {
-      doc.setFillColor(idx % 2 === 0 ? 255 : 248, idx % 2 === 0 ? 255 : 250, idx % 2 === 0 ? 255 : 252);
-      doc.rect(14, y, 182, 6.5, 'F');
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(30, 41, 59);
-      doc.text(r.name, 18, y + 4.5);
-      doc.setTextColor(100, 116, 139);
-      doc.text(r.spec, 75, y + 4.5);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(15, 23, 42);
-      doc.text(r.cost, 165, y + 4.5);
-      y += 6.5;
+    const bulkRows = c.procurementTiers.map(tier => ({
+      tier: tier.label,
+      discount: `${tier.discountPct}%`,
+      unit: `${currSym}${tier.unitCost.toFixed(2)}`,
+      batch: `${currSym}${tier.orderTotal.toFixed(0)}`,
+      savings: `${currSym}${tier.annualSavingsAtCurrentRunrate.toFixed(0)}/yr`,
+    }));
+
+    downloadPdfReport({
+      title: '3D Print Product Packaging & BOM Cost Report',
+      subtitle: `Packaging Spec: ${selectedPresetId.toUpperCase()} | Box: ${boxLengthCm}x${boxWidthCm}x${boxHeightCm}cm | Currency: ${currency.code}`,
+      category: 'E-Commerce Packaging Logistics',
+      project: 'Toolique Packaging Logistics Engine',
+      theme: 'brand',
+      parameters: [
+        { label: 'Packaging Specification', value: selectedPresetId.toUpperCase() },
+        { label: 'Box Outer Dimensions', value: `${boxLengthCm} × ${boxWidthCm} × ${boxHeightCm} cm` },
+        { label: 'Unit Packaging Cost', value: `${currSym}${c.totalPackagingCost.toFixed(2)}` },
+        { label: 'Packaging Material Cost', value: `${currSym}${c.totalMaterialCost.toFixed(2)}` },
+        { label: 'Packing Labor Cost', value: `${currSym}${c.laborCost.toFixed(2)}` },
+        { label: '% of Product Retail Price', value: `${c.packagingPctOfRetail.toFixed(1)}%` },
+        { label: 'Volumetric Shipping Weight', value: `${c.volumetricWeightGrams.toFixed(0)} g (Actual: ${actualPartWeightGrams} g)` },
+        { label: 'Monthly Shipment Volume', value: `${c.monthlyShipments} orders/mo` },
+      ],
+      tables: [
+        {
+          title: '1. Itemized Packaging Material Bill of Materials (BOM)',
+          columns: [
+            { header: 'Component Item', dataKey: 'name' },
+            { header: 'Specification / Usage Quantity', dataKey: 'spec' },
+            { header: 'Unit Cost', dataKey: 'cost', align: 'right' as const },
+          ],
+          rows: bomRows,
+          totalsRow: [
+            { dataKey: 'name', value: 'TOTAL LANDED PACKAGING COST' },
+            { dataKey: 'cost', value: `${currSym}${c.totalPackagingCost.toFixed(2)}` },
+          ],
+        },
+        {
+          title: '2. Bulk Procurement Volume Savings Analysis',
+          columns: [
+            { header: 'Order Tier', dataKey: 'tier' },
+            { header: 'Discount', dataKey: 'discount', align: 'center' as const },
+            { header: 'Unit Cost', dataKey: 'unit', align: 'right' as const },
+            { header: 'Batch Total', dataKey: 'batch', align: 'right' as const },
+            { header: 'Annual Savings', dataKey: 'savings', align: 'right' as const },
+          ],
+          rows: bulkRows,
+        },
+      ],
+      disclaimers: [
+        'Toolique E-Commerce & 3D Print Packaging Logistics Modeler. All calculations client-side.',
+        'Volumetric weight calculations follow standard IATA air courier factor (L×W×H / 5000).',
+      ],
+      fileName: `3D_Print_Packaging_BOM_${Date.now()}.pdf`,
     });
-
-    // Subtotal Row
-    doc.setFillColor(224, 231, 255);
-    doc.rect(14, y, 182, 8, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(67, 56, 202);
-    doc.text('TOTAL LANDED PACKAGING COST PER ORDER', 18, y + 5.5);
-    doc.text(`${currSym}${c.totalPackagingCost.toFixed(2)}`, 165, y + 5.5);
-
-    // Section 3: Monthly Fulfillment Forecast
-    y += 16;
-    doc.setFontSize(10.5);
-    doc.setTextColor(15, 23, 42);
-    doc.text(`2. MONTHLY FULFILLMENT FORECAST (${c.monthlyShipments} ORDERS/MO)`, 14, y);
-
-    y += 6;
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(14, y, 182, 28, 2, 2, 'F');
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(14, y, 182, 28, 2, 2, 'S');
-
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(51, 65, 85);
-    doc.text(`Monthly Packaging Material Cost: ${currSym}${c.monthlyPackagingMaterials.toFixed(2)}`, 20, y + 7);
-    doc.text(`Monthly Packing Labor Cost: ${currSym}${c.monthlyLaborExpense.toFixed(2)} (${c.monthlyPackingHours.toFixed(1)} hrs)`, 20, y + 14);
-    doc.text(`Total Monthly Packaging Spend: ${currSym}${c.monthlyTotalPackagingBudget.toFixed(2)}`, 20, y + 21);
-
-    doc.text(`Total Bubble Wrap Rolls: ${c.monthlyBubbleWrapMeters.toFixed(0)} meters`, 110, y + 7);
-    doc.text(`Total Sealing Tape: ${c.monthlyTapeMeters.toFixed(0)} meters`, 110, y + 14);
-    doc.text(`Total Boxes Consumed: ${c.monthlyShipments} cartons`, 110, y + 21);
-
-    // Section 4: Bulk Procurement Savings Table
-    y += 36;
-    doc.setFontSize(10.5);
-    doc.setTextColor(15, 23, 42);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3. BULK PROCUREMENT VOLUME SAVINGS ANALYSIS', 14, y);
-
-    y += 6;
-    doc.setFillColor(241, 245, 249);
-    doc.rect(14, y, 182, 7, 'F');
-    doc.setFontSize(7.5);
-    doc.setTextColor(51, 65, 85);
-    doc.text('Order Tier', 18, y + 5);
-    doc.text('Discount', 65, y + 5);
-    doc.text('Unit Cost', 95, y + 5);
-    doc.text('Batch Total', 125, y + 5);
-    doc.text('Annual Savings (at current volume)', 150, y + 5);
-
-    y += 7;
-    c.procurementTiers.forEach((tier, i) => {
-      doc.setFillColor(i % 2 === 0 ? 255 : 248, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 252);
-      doc.rect(14, y, 182, 6, 'F');
-      doc.setFont('helvetica', i === 2 ? 'bold' : 'normal');
-      doc.setTextColor(i === 2 ? 16 : 51, i === 2 ? 185 : 65, i === 2 ? 129 : 85);
-      doc.text(tier.label, 18, y + 4.2);
-      doc.text(`${tier.discountPct}%`, 65, y + 4.2);
-      doc.text(`${currSym}${tier.unitCost.toFixed(2)}`, 95, y + 4.2);
-      doc.text(`${currSym}${tier.orderTotal.toFixed(0)}`, 125, y + 4.2);
-      doc.text(`${currSym}${tier.annualSavingsAtCurrentRunrate.toFixed(0)}/yr`, 150, y + 4.2);
-      y += 6;
-    });
-
-    // Footer
-    doc.setFontSize(7.5);
-    doc.setTextColor(148, 163, 184);
-    doc.text('Toolique E-Commerce & 3D Print Packaging Logistics Modeler. All calculations client-side.', 14, 285);
-
-    doc.save(`3D_Print_Packaging_BOM_${Date.now()}.pdf`);
   };
 
   const c = calculations;
@@ -678,23 +567,16 @@ Monthly Bubble Wrap Needed: ${c.monthlyBubbleWrapMeters.toFixed(0)} meters
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-left pb-12">
-      {/* Top Banner & Multi-Currency Switcher */}
-      <div className="saas-card p-5 bg-gradient-to-r from-zinc-50 via-indigo-50/20 to-zinc-50 dark:from-zinc-900/90 dark:via-indigo-950/20 dark:to-zinc-900/90 border border-zinc-200/80 dark:border-zinc-800/80 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/25">
-            <Package className="w-6 h-6" />
-          </div>
-          <div>
-            <h2 className="text-lg font-black text-zinc-900 dark:text-white tracking-tight flex items-center gap-2">
-              Packaging & Fulfillment BOM Modeler
-              <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                LOGISTICS & UNBOXING
-              </span>
-            </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              Itemized boxes, bubble wraps, logo stickers, thank-you cards, desiccants, volumetric weights, and bulk savings.
-            </p>
-          </div>
+      {/* Top Action & Currency Toolbar */}
+      <div className="saas-card p-4 bg-gradient-to-r from-zinc-50 via-indigo-50/20 to-zinc-50 dark:from-zinc-900/90 dark:via-indigo-950/20 dark:to-zinc-900/90 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+            <Package className="w-3.5 h-3.5" />
+            <span>Itemized Packaging BOM &amp; Volumetric Weight</span>
+          </span>
+          <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+            LOGISTICS &amp; UNBOXING
+          </span>
         </div>
 
         {/* Currency Switcher */}
@@ -789,13 +671,16 @@ Monthly Bubble Wrap Needed: ${c.monthlyBubbleWrapMeters.toFixed(0)} meters
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleCopyBOM}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition cursor-pointer border border-zinc-200/60 dark:border-zinc-700"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-indigo-500" />}
-            <span>{copied ? 'Copied BOM' : 'Copy Packaging BOM'}</span>
-          </button>
+          <CopyButton
+            text={getPackagingBomText}
+            label="Copy Packaging BOM"
+            size="sm"
+          />
+          <ShareWhatsApp
+            text={getPackagingBomText}
+            label="WhatsApp"
+            size="sm"
+          />
           <button
             onClick={handleDownloadPDF}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-650 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition cursor-pointer border border-indigo-200/80 dark:border-indigo-800/80"

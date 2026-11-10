@@ -1,13 +1,15 @@
 import { useState, useMemo } from 'react';
 import {
-  Printer, Copy, Check, RotateCcw,
+  Printer, RotateCcw,
   Sparkles, CheckCircle2,
   FileSpreadsheet, FileText, Info, Wrench,
   TrendingDown, DollarSign,
   Leaf, Scale, Sliders
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
 
 // ============================================================================
 // Types & Engineering Constants
@@ -259,9 +261,6 @@ export default function PurgeWasteCalculator() {
   const [towerDepthMm, setTowerDepthMm] = useState<number>(25);
   const [towerLayersPct, setTowerLayersPct] = useState<number>(65); // % of total layers with swaps
 
-  // Copy feedback
-  const [copied, setCopied] = useState<boolean>(false);
-
   // Active Material Configuration
   const material = FILAMENT_MATERIALS[selectedMaterial];
 
@@ -415,8 +414,8 @@ export default function PurgeWasteCalculator() {
   };
 
   // Copy Summary Report
-  const copyReport = () => {
-    const report = `=====================================================
+  const getPurgeReportText = () => {
+    return `=====================================================
 TOOLIQUE 3D PRINT PURGE WASTE & COST AUDIT
 Material: ${material.name} | Density: ${material.density} g/cm³
 =====================================================
@@ -450,114 +449,97 @@ Material: ${material.name} | Density: ${material.density} g/cm³
 
 =====================================================
 Generated with Toolique 3D Print Studio.`;
-
-    navigator.clipboard.writeText(report);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
-  // Export PDF Report
-  const exportPDF = () => {
-    const doc = new jsPDF();
-    const margin = 14;
-    let y = 18;
-
-    doc.setFillColor(99, 102, 241);
-    doc.rect(0, 0, 210, 24, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3D PRINT PURGE WASTE & MULTI-COLOR COST REPORT', margin, 12);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Generated: ${new Date().toLocaleDateString()} | Material: ${material.name}`, margin, 18);
-
-    y = 34;
-    doc.setTextColor(30, 41, 59);
-
-    // Section 1: Core Parameters
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. PRINT & MULTI-COLOR PARAMETERS', margin, y);
-    y += 6;
-
+  // Standardized Branded PDF Report
+  const handleDownloadPDF = () => {
     const data1 = [
-      ['Model Net Mass (Single)', `${modelNetGrams} g`],
-      ['Batch Quantity on Plate', `${batchQuantity} Units`],
-      ['Total Filament Swaps', `${swaps} Swaps`],
-      ['Average Flush Volume', `${avgFlushMm3} mm³ (Multiplier: ${flushMultiplier}x)`],
-      ['Flush into Infill / Support', `${flushIntoInfill ? 'Enabled' : 'Disabled'} / ${flushIntoSupport ? 'Enabled' : 'Disabled'}`],
-      ['Prime Tower Status', primeTowerEnabled ? `Active (${towerWidthMm}x${towerDepthMm} mm)` : 'Disabled'],
-      ['Filament Unit Rate', `${currencySymbol}${costPerKg} / kg`]
+      { param: 'Model Net Mass (Single)', value: `${modelNetGrams} g` },
+      { param: 'Batch Quantity on Plate', value: `${batchQuantity} Units` },
+      { param: 'Total Filament Swaps', value: `${swaps} Swaps` },
+      { param: 'Average Flush Volume', value: `${avgFlushMm3} mm³ (Multiplier: ${flushMultiplier}x)` },
+      { param: 'Flush into Infill / Support', value: `${flushIntoInfill ? 'Enabled' : 'Disabled'} / ${flushIntoSupport ? 'Enabled' : 'Disabled'}` },
+      { param: 'Prime Tower Status', value: primeTowerEnabled ? `Active (${towerWidthMm}x${towerDepthMm} mm)` : 'Disabled' },
+      { param: 'Filament Unit Rate', value: `${currencySymbol}${costPerKg} / kg` },
     ];
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    data1.forEach(([label, val]) => {
-      doc.setFont('helvetica', 'bold');
-      doc.text(label, margin, y);
-      doc.setFont('helvetica', 'normal');
-      doc.text(val, margin + 70, y);
-      y += 5;
-    });
-
-    // Section 2: Calculated Waste
-    y += 4;
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('2. PURGE PLASTIC MASS & FINANCIAL LOSS', margin, y);
-    y += 6;
 
     const data2 = [
-      ['Poop Chute Discharge Mass', `${calc.netPoopGrams} g (${(calc.netPoopGrams / 1000).toFixed(2)} kg)`],
-      ['Prime Tower Solid Mass', `${calc.primeTowerGrams} g`],
-      ['Total Purged Waste Mass', `${calc.totalWasteGrams} g (${calc.totalWasteKg} kg)`],
-      ['Useful Model Plastic Mass', `${calc.totalModelNetGrams} g`],
-      ['Waste-to-Model Ratio', `${calc.wasteToModelRatioPct}%`],
-      ['Total Wasted Expense', `${currencySymbol}${calc.totalWasteCost}`],
-      ['Useful Model Expense', `${currencySymbol}${calc.usefulModelCost}`],
-      ['Total Print Spool Cost', `${currencySymbol}${calc.totalPrintSpoolCost}`],
-      ['Time Overhead from Swaps', calc.swapTimeFormatted]
+      { metric: 'Poop Chute Discharge Mass', value: `${calc.netPoopGrams} g (${(calc.netPoopGrams / 1000).toFixed(2)} kg)` },
+      { metric: 'Prime Tower Solid Mass', value: `${calc.primeTowerGrams} g` },
+      { metric: 'Total Purged Waste Mass', value: `${calc.totalWasteGrams} g (${calc.totalWasteKg} kg)` },
+      { metric: 'Useful Model Plastic Mass', value: `${calc.totalModelNetGrams} g` },
+      { metric: 'Waste-to-Model Ratio', value: `${calc.wasteToModelRatioPct}%` },
+      { metric: 'Total Wasted Expense', value: `${currencySymbol}${calc.totalWasteCost}` },
+      { metric: 'Useful Model Expense', value: `${currencySymbol}${calc.usefulModelCost}` },
+      { metric: 'Total Print Spool Cost', value: `${currencySymbol}${calc.totalPrintSpoolCost}` },
+      { metric: 'Time Overhead from Swaps', value: calc.swapTimeFormatted },
     ];
 
-    data2.forEach(([label, val]) => {
-      doc.setFont('helvetica', 'bold');
-      doc.text(label, margin, y);
-      doc.setFont('helvetica', 'normal');
-      doc.text(val, margin + 70, y);
-      y += 5;
+    const batchRows = calc.batchScales.map((b) => ({
+      qty: `${b.qty} units`,
+      modelMass: `${b.modelGrams} g`,
+      wasteUnit: `${b.wastePerPieceGrams} g/pc`,
+      ratio: `${b.wasteRatioPct}%`,
+      costUnit: `${currencySymbol}${b.costPerPiece}`,
+      savings: `${b.savingsVsSinglePct}% Saved`,
+    }));
+
+    downloadPdfReport({
+      title: '3D Print Purge Waste & Multi-Color Cost Report',
+      subtitle: `Material: ${material.name} | Density: ${material.density} g/cm³`,
+      category: '3D Printing Waste & Slicing Optimization',
+      project: 'Toolique 3D Print Studio',
+      theme: 'brand',
+      parameters: [
+        { label: 'Material', value: material.name },
+        { label: 'Total Filament Swaps', value: `${swaps} swaps` },
+        { label: 'Model Mass', value: `${modelNetGrams} g (${batchQuantity} units)` },
+        { label: 'Total Waste Mass', value: `${calc.totalWasteGrams} g (${calc.totalWasteKg} kg)` },
+        { label: 'Waste Ratio', value: `${calc.wasteToModelRatioPct}% of model` },
+        { label: 'Monetary Waste Loss', value: `${currencySymbol}${calc.totalWasteCost}` },
+        { label: 'Total Spool Cost', value: `${currencySymbol}${calc.totalPrintSpoolCost}` },
+        { label: 'CO2e Carbon Footprint', value: `${calc.carbonFootprintWasteKg} kg CO2e` },
+      ],
+      tables: [
+        {
+          title: '1. Print & Multi-Color Parameters',
+          columns: [
+            { header: 'Parameter', dataKey: 'param' },
+            { header: 'Specification', dataKey: 'value', align: 'right' as const },
+          ],
+          rows: data1,
+        },
+        {
+          title: '2. Purge Plastic Mass & Financial Breakdown',
+          columns: [
+            { header: 'Metric', dataKey: 'metric' },
+            { header: 'Value', dataKey: 'value', align: 'right' as const },
+          ],
+          rows: data2,
+          totalsRow: [
+            { dataKey: 'metric', value: 'TOTAL PRINT SPOOL COST' },
+            { dataKey: 'value', value: `${currencySymbol}${calc.totalPrintSpoolCost}` },
+          ],
+        },
+        {
+          title: '3. Batch Printing Waste Reduction Schedule',
+          columns: [
+            { header: 'Batch Qty', dataKey: 'qty' },
+            { header: 'Model Mass', dataKey: 'modelMass', align: 'right' as const },
+            { header: 'Waste / Unit', dataKey: 'wasteUnit', align: 'right' as const },
+            { header: 'Waste %', dataKey: 'ratio', align: 'center' as const },
+            { header: 'Cost / Unit', dataKey: 'costUnit', align: 'right' as const },
+            { header: 'Savings', dataKey: 'savings', align: 'right' as const },
+          ],
+          rows: batchRows,
+        },
+      ],
+      disclaimers: [
+        'Toolique 3D Print Studio • Bambu Lab AMS / Prusa MMU3 / Voron ERCF Optimization Engine.',
+        'Flush volumes may vary based on pigment transition contrast and nozzle temperature.',
+      ],
+      fileName: `Purge-Waste-Report-${Date.now()}.pdf`,
     });
-
-    // Section 3: Batch Scaling Analysis
-    y += 4;
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3. BATCH PRINTING WASTE REDUCTION SCHEDULE', margin, y);
-    y += 6;
-
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Batch Qty | Model Mass | Waste / Unit | Waste Ratio | Cost / Unit | Waste Savings', margin, y);
-    y += 4;
-    doc.line(margin, y, 196, y);
-    y += 4;
-
-    doc.setFont('helvetica', 'normal');
-    calc.batchScales.forEach((b) => {
-      doc.text(
-        `${b.qty} units  |  ${b.modelGrams}g  |  ${b.wastePerPieceGrams}g/pc  |  ${b.wasteRatioPct}%  |  ${currencySymbol}${b.costPerPiece}  |  ${b.savingsVsSinglePct}% Saved`,
-        margin,
-        y
-      );
-      y += 4.5;
-    });
-
-    // Footer
-    doc.setFontSize(7.5);
-    doc.setTextColor(148, 163, 184);
-    doc.text('Toolique 3D Print Studio • Bambu Lab AMS / Prusa MMU3 / Voron ERCF Optimization Engine', margin, 285);
-
-    doc.save(`Purge-Waste-Report-${Date.now()}.pdf`);
   };
 
   // Export Excel
@@ -620,17 +602,20 @@ Generated with Toolique 3D Print Studio.`;
 
           {/* Quick Export & Action Buttons */}
           <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={copyReport}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 text-xs font-bold transition shadow-xs cursor-pointer"
-              title="Copy Summary Report"
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? 'Copied!' : 'Copy'}</span>
-            </button>
+            <CopyButton
+              text={getPurgeReportText}
+              label="Copy"
+              size="sm"
+            />
+
+            <ShareWhatsApp
+              text={getPurgeReportText}
+              label="WhatsApp"
+              size="sm"
+            />
 
             <button
-              onClick={exportPDF}
+              onClick={handleDownloadPDF}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-md shadow-indigo-600/20 cursor-pointer"
               title="Export Professional PDF Report"
             >

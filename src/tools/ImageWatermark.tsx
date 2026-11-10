@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   Type,
-  Upload,
   Download,
   RotateCcw,
   Image as ImageIcon,
@@ -17,6 +16,7 @@ import {
   X
 } from 'lucide-react';
 import JSZip from 'jszip';
+import { FileDropzone } from '../components/common';
 
 type Position = 'tl' | 'tc' | 'tr' | 'ml' | 'cc' | 'mr' | 'bl' | 'bc' | 'br' | 'tile';
 
@@ -90,7 +90,6 @@ export default function ImageWatermark() {
     percent: 0,
   });
   const [error, setError] = useState<string | null>(null);
-  const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'content' | 'style' | 'position'>('content');
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -1123,64 +1122,33 @@ export default function ImageWatermark() {
           />
 
           {images.length === 0 ? (
-            /* Upload Dropzone when no images are loaded */
-            <div
-              onDragOver={(e) => {
-                e.preventDefault();
-                setIsDragOver(true);
-              }}
-              onDragLeave={() => setIsDragOver(false)}
-              onDrop={(e) => {
-                e.preventDefault();
-                setIsDragOver(false);
-                if (e.dataTransfer.files) handleIncomingFiles(e.dataTransfer.files);
-              }}
-              className={`border-2 border-dashed rounded-3xl p-12 transition-all duration-200 text-center relative ${
-                isDragOver
-                  ? 'border-indigo-500 bg-indigo-50/60 dark:bg-indigo-950/20 scale-[1.005]'
-                  : 'border-zinc-300 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-700 bg-white dark:bg-zinc-900/40'
-              }`}
-            >
-              <div className="max-w-md mx-auto space-y-4">
-                <div className="mx-auto w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-xs">
-                  <Upload className="w-7 h-7" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-zinc-900 dark:text-white">
-                    Drop single or multiple photos to watermark
-                  </h3>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                    Supports PNG, JPG, WebP, GIF, SVG, and AVIF &bull; Paste from clipboard with <kbd className="px-1 py-0.5 text-[10px] bg-zinc-100 dark:bg-zinc-800 border rounded">Ctrl+V</kbd>
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-center gap-3 pt-2 flex-wrap">
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="saas-button-primary text-xs py-2 px-4 flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <ImageIcon className="w-3.5 h-3.5" />
-                    <span>Select Photos</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => folderInputRef.current?.click()}
-                    className="saas-button-secondary text-xs py-2 px-4 flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <FolderUp className="w-3.5 h-3.5" />
-                    <span>Upload Folder</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleLoadSampleImages}
-                    className="saas-button-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer"
-                    title="Load 3 sample test photos"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                    <span>Try Samples</span>
-                  </button>
-                </div>
+            <div className="space-y-4">
+              <FileDropzone
+                accept="image/*,.heic,.heif,.svg,.bmp,.webp,.gif,.png,.jpg,.jpeg"
+                multiple
+                onFilesSelected={(files) => handleIncomingFiles(files)}
+                title="Drop single or multiple photos to watermark"
+                description="Supports PNG, JPG, WebP, GIF, SVG, and AVIF • Paste from clipboard with Ctrl+V"
+                colorTheme="indigo"
+              />
+              <div className="flex items-center justify-center gap-3 pt-1 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => folderInputRef.current?.click()}
+                  className="saas-button-secondary text-xs py-2 px-4 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <FolderUp className="w-3.5 h-3.5" />
+                  <span>Upload Folder</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleLoadSampleImages}
+                  className="saas-button-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer"
+                  title="Load 3 sample test photos"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                  <span>Try Samples</span>
+                </button>
               </div>
             </div>
           ) : (

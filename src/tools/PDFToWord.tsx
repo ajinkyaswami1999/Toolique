@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useRef, useMemo, useCallback } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
 import {
   FileText,
-  Upload,
   Download,
   AlertCircle,
   Loader2,
@@ -82,7 +83,6 @@ export default function PDFToWord() {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [isDragging, setIsDragging] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'preview' | 'html' | 'pages'>('preview');
   const [selectedPreviewPage, setSelectedPreviewPage] = useState<number>(1);
 
@@ -180,50 +180,6 @@ export default function PDFToWord() {
       }
     } finally {
       setIsProcessing(false);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploaded = e.target.files?.[0];
-    if (uploaded) {
-      if (uploaded.type !== 'application/pdf' && !uploaded.name.toLowerCase().endsWith('.pdf')) {
-        setError('Please select a valid PDF file (.pdf format only).');
-        return;
-      }
-      setFile(uploaded);
-      setConvertedPages([]);
-      setOutputBlob(null);
-      loadPdfDocument(uploaded);
-    }
-  };
-
-  // Drag & drop handlers
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    const droppedFile = e.dataTransfer.files?.[0];
-    if (droppedFile) {
-      if (droppedFile.type !== 'application/pdf' && !droppedFile.name.toLowerCase().endsWith('.pdf')) {
-        setError('Please drop a valid PDF file (.pdf format only).');
-        return;
-      }
-      setFile(droppedFile);
-      setConvertedPages([]);
-      setOutputBlob(null);
-      loadPdfDocument(droppedFile);
     }
   };
 
@@ -656,34 +612,21 @@ export default function PDFToWord() {
             </div>
 
             {!file ? (
-              <div
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-                className={`relative border-2 border-dashed rounded-2xl p-7 text-center transition-all cursor-pointer group ${
-                  isDragging
-                    ? 'border-indigo-500 bg-indigo-500/10 dark:bg-indigo-500/20 scale-[0.99]'
-                    : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 hover:border-indigo-500/60 hover:bg-indigo-500/5'
-                }`}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf,application/pdf"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-                <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                  <Upload className="w-6 h-6" />
-                </div>
-                <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200">
-                  Drop PDF file here or <span className="text-indigo-600 dark:text-indigo-400">browse</span>
-                </p>
-                <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">
-                  Convert reports, contracts, essays, and manuals into Word (.doc)
-                </p>
-              </div>
+              <FileDropzone
+                accept=".pdf,application/pdf"
+                onFilesSelected={(files) => {
+                  const dropped = files[0];
+                  if (dropped) {
+                    setFile(dropped);
+                    setConvertedPages([]);
+                    setOutputBlob(null);
+                    loadPdfDocument(dropped);
+                  }
+                }}
+                title="Drop PDF file here or browse"
+                description="Convert reports, contracts, essays, and manuals into Word (.doc)"
+                colorTheme="indigo"
+              />
             ) : (
               <div className="p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60 space-y-2">
                 <div className="flex items-start justify-between gap-2">
@@ -1315,13 +1258,13 @@ export default function PDFToWord() {
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                   <button
                     onClick={handleDownloadWordDoc}
                     className="p-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-indigo-500/20 transition cursor-pointer"
                   >
                     <Download className="w-4 h-4" />
-                    <span>Download Word Document (.doc)</span>
+                    <span>Download Word (.doc)</span>
                   </button>
 
                   <button
@@ -1329,7 +1272,7 @@ export default function PDFToWord() {
                     className="p-3.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-850 dark:hover:bg-zinc-750 text-zinc-800 dark:text-zinc-200 font-bold text-xs flex items-center justify-center gap-2 border border-zinc-200/60 dark:border-zinc-700 transition cursor-pointer"
                   >
                     <FileCode className="w-4 h-4 text-indigo-500" />
-                    <span>Save as Word HTML (.htm)</span>
+                    <span>Save Word HTML (.htm)</span>
                   </button>
 
                   <button
@@ -1339,6 +1282,11 @@ export default function PDFToWord() {
                     {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-amber-500" />}
                     <span>{copied ? 'Copied HTML!' : 'Copy to Clipboard'}</span>
                   </button>
+
+                  <ShareWhatsApp
+                    text={`I just converted "${file?.name || 'my PDF'}" to an editable Word document with Toolique!`}
+                    className="p-3.5 rounded-2xl justify-center"
+                  />
                 </div>
               </div>
             )}

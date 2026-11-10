@@ -264,30 +264,21 @@ Organization: ${orgName}`;
 
   return (
     <div className="space-y-6">
-      {/* Statutory Banner */}
-      <div className="bg-gradient-to-r from-red-500/10 via-amber-500/10 to-blue-500/10 border border-red-500/20 dark:border-red-500/30 rounded-2xl p-5 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 bg-red-600 text-white rounded-xl shadow-md shrink-0">
-              <ShieldAlert className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                Indian Cybersecurity & Evidence Mandates
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 border border-red-300 dark:border-red-800">
-                  IT Act Sec 70B & BSA Sec 63
-                </span>
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                Calculate the strict 6-hour CERT-In incident deadline, verify 180-day log retention compliance with NPL NTP, and generate court-admissible Section 65B electronic evidence certificates.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
-            <span className="text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 font-mono">
-              IST: {currentTime.toLocaleTimeString('en-IN')}
-            </span>
-          </div>
+      {/* Statutory Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-gradient-to-r from-red-500/10 via-amber-500/10 to-blue-500/10 border border-red-500/20 dark:border-red-500/30 rounded-2xl shadow-xs">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-500/20 flex items-center gap-1.5">
+            <ShieldAlert className="w-3.5 h-3.5" />
+            <span>IT Act Sec 70B (6-Hour Window) &amp; BSA Sec 63</span>
+          </span>
+          <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+            180-Day NPL NTP Log Verification
+          </span>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-xs text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 font-mono">
+            IST: {currentTime.toLocaleTimeString('en-IN')}
+          </span>
         </div>
       </div>
 

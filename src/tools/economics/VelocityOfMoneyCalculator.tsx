@@ -296,20 +296,13 @@ export default function VelocityOfMoneyCalculator() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 text-left pb-16">
-      {/* Header Card */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 rounded-xl">
-              <RefreshCw className="w-5 h-5" />
-            </span>
-            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-              Velocity of Money (M × V = P × Y) & Quantity Theory Suite
-            </h2>
-          </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-            Calculate money circulation turnover speed (V = PY/M), Cambridge cash balance (k = 1/V), dynamic inflation rates, and monetary targeting rules.
-          </p>
+      {/* Top Action Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-500/20 flex items-center gap-1.5">
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>Quantity Theory &amp; Fisher-Friedman Equation</span>
+          </span>
         </div>
 
         <div className="flex items-center gap-3 self-end sm:self-center">

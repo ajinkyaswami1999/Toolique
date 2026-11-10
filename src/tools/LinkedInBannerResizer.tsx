@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
 import { Upload, Download, RotateCw, Image as ImageIcon } from 'lucide-react';
 
 export default function LinkedInBannerResizer() {
@@ -13,16 +15,9 @@ export default function LinkedInBannerResizer() {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const TARGET_WIDTH = 1584;
   const TARGET_HEIGHT = 396;
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    loadImage(file);
-  };
 
   const loadImage = (file: File) => {
     const reader = new FileReader();
@@ -33,18 +28,6 @@ export default function LinkedInBannerResizer() {
       }
     };
     reader.readAsDataURL(file);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      loadImage(file);
-    }
   };
 
   // Render to canvas
@@ -130,23 +113,15 @@ export default function LinkedInBannerResizer() {
         </h3>
 
         {!imageSrc ? (
-          <div
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl p-10 text-center hover:border-indigo-500/50 transition cursor-pointer group bg-zinc-50/50 dark:bg-zinc-950/20"
-          >
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              accept="image/*"
-              className="hidden"
-            />
-            <Upload className="w-10 h-10 text-zinc-400 dark:text-zinc-650 mx-auto mb-3 group-hover:scale-110 transition" />
-            <p className="text-sm font-bold text-zinc-700 dark:text-zinc-250">Drag & Drop Banner Image</p>
-            <p className="text-xs text-zinc-450 mt-1">or click to browse local files</p>
-          </div>
+          <FileDropzone
+            accept="image/*"
+            onFilesSelected={(files) => {
+              if (files[0]) loadImage(files[0]);
+            }}
+            title="Drag & Drop Banner Image"
+            description="Standard 1584 × 396 px (4:1) professional cover format • PNG, JPG, WebP"
+            colorTheme="indigo"
+          />
         ) : (
           <div className="space-y-4">
             {/* Fit mode selector */}
@@ -268,7 +243,7 @@ export default function LinkedInBannerResizer() {
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 pt-4">
+            <div className="flex flex-wrap gap-3 pt-4">
               <button
                 onClick={resetAll}
                 className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-650 dark:text-zinc-400 text-xs font-bold hover:bg-zinc-50 dark:hover:bg-zinc-900 transition cursor-pointer"
@@ -283,6 +258,10 @@ export default function LinkedInBannerResizer() {
                 <Download className="w-4.5 h-4.5" />
                 <span>Download Banner</span>
               </button>
+              <ShareWhatsApp
+                text="I just created a professional LinkedIn profile banner using Toolique!"
+                className="px-4 py-2.5"
+              />
             </div>
 
             <div className="pt-2 text-center">

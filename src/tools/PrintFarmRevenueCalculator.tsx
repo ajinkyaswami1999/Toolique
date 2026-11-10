@@ -3,8 +3,6 @@ import {
   Printer, 
   Clock, 
   Layers, 
-  Copy, 
-  Check, 
   Download, 
   Sparkles, 
   Sliders, 
@@ -16,7 +14,9 @@ import {
   Factory, 
   Calendar
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
 
 // --- Multi-Currency Configurations ---
 interface CurrencyConfig {
@@ -209,7 +209,6 @@ export default function PrintFarmRevenueCalculator() {
   const [monthlyFacilityRent, setMonthlyFacilityRent] = useState<number>(0); // Rent / shop overhead
 
   // UI States
-  const [copied, setCopied] = useState<boolean>(false);
   const [showAdvancedOpex, setShowAdvancedOpex] = useState<boolean>(false);
 
   // --- Currency Change Handler ---
@@ -440,10 +439,10 @@ export default function PrintFarmRevenueCalculator() {
     return `${currency.symbol}${val.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`;
   };
 
-  // --- Copy Executive Summary ---
-  const handleCopyPitch = () => {
+  // --- Executive Summary Text for Clipboard & Sharing ---
+  const getPitchSummary = () => {
     const c = calculations;
-    const summary = `=== 3D PRINT FARM FINANCIAL & CAPACITY PROJECTION ===
+    return `=== 3D PRINT FARM FINANCIAL & CAPACITY PROJECTION ===
 Generated via Toolique Manufacturing Farm Engine
 
 [FLEET ARCHITECTURE]
@@ -471,93 +470,12 @@ Estimated Capital Payback: ${c.capexPaybackMonths.toFixed(1)} months
 Monthly Revenue / Printer: ${fmt(c.revenuePerPrinterMonthly)}
 Annual Return on Capital (ROIC): ${c.returnOnCapitalAnnual.toFixed(0)}%
 =====================================================`;
-
-    navigator.clipboard.writeText(summary);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   // --- Professional Commercial PDF Export ---
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
     const c = calculations;
     const currSym = currency.symbol;
-
-    // Banner
-    doc.setFillColor(15, 23, 42); // slate-900
-    doc.rect(0, 0, 210, 30, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(15);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3D PRINT FARM CAPACITY & FINANCIAL PROJECTION REPORT', 14, 13);
-
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(203, 213, 225);
-    doc.text(`Fleet Size: ${printerCount} Printers | Model: ${pricingMode === 'job' ? 'E-Commerce / Unit Production' : 'B2B Hourly Machine Lease'} | Currency: ${currency.code}`, 14, 20);
-    doc.text(`Generated: ${new Date().toLocaleDateString()} | Toolique Manufacturing Intelligence | Toolique.in`, 14, 25);
-
-    // Section 1: Executive KPI Summary Box
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(14, 36, 182, 36, 3, 3, 'F');
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(14, 36, 182, 36, 3, 3, 'S');
-
-    // KPI 1: Monthly Revenue
-    doc.setTextColor(71, 85, 105);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('MONTHLY REVENUE', 20, 44);
-    doc.setFontSize(14);
-    doc.setTextColor(15, 23, 42);
-    doc.text(`${currSym}${Math.round(c.monthlyGrossRevenue).toLocaleString()}`, 20, 52);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Annual: ${currSym}${Math.round(c.yearlyGrossRevenue).toLocaleString()}`, 20, 58);
-
-    // KPI 2: Net Operating Profit
-    doc.setTextColor(71, 85, 105);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('MONTHLY NET PROFIT', 80, 44);
-    doc.setFontSize(14);
-    doc.setTextColor(16, 185, 129); // emerald
-    doc.text(`${currSym}${Math.round(c.monthlyNetProfit).toLocaleString()}`, 80, 52);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Net Margin: ${c.netMarginPercent.toFixed(1)}%`, 80, 58);
-
-    // KPI 3: Fleet Throughput
-    doc.setTextColor(71, 85, 105);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('MONTHLY THROUGHPUT', 140, 44);
-    doc.setFontSize(14);
-    doc.setTextColor(79, 70, 229); // indigo
-    doc.text(`${Math.round(c.monthlyCompletedParts).toLocaleString()} Units`, 140, 52);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Filament: ${c.monthlyFilamentKg.toFixed(1)} kg/mo`, 140, 58);
-
-    // Section 2: Financial Time Horizon Matrix
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(10.5);
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. TIME HORIZON FINANCIAL STATEMENT', 14, 80);
-
-    let y = 86;
-    doc.setFillColor(241, 245, 249);
-    doc.rect(14, y, 182, 7, 'F');
-    doc.setFontSize(8);
-    doc.setTextColor(51, 65, 85);
-    doc.text('Financial Metric', 18, y + 5);
-    doc.text('Daily Run-Rate', 85, y + 5);
-    doc.text('Monthly (30 Days)', 125, y + 5);
-    doc.text('Annual Forecast (365 Days)', 160, y + 5);
 
     const horizonRows = [
       { name: 'Gross Revenue', d: `${currSym}${c.dailyGrossRevenue.toFixed(0)}`, m: `${currSym}${c.monthlyGrossRevenue.toFixed(0)}`, a: `${currSym}${c.yearlyGrossRevenue.toFixed(0)}` },
@@ -568,114 +486,82 @@ Annual Return on Capital (ROIC): ${c.returnOnCapitalAnnual.toFixed(0)}%
       { name: 'Marketplace / Gateway Fees', d: `-${currSym}${c.dailyMarketplaceFees.toFixed(0)}`, m: `-${currSym}${c.monthlyMarketplaceFees.toFixed(0)}`, a: `-${currSym}${c.yearlyMarketplaceFees.toFixed(0)}` },
     ];
 
-    y += 7;
-    horizonRows.forEach((r, idx) => {
-      doc.setFillColor(idx % 2 === 0 ? 255 : 248, idx % 2 === 0 ? 255 : 250, idx % 2 === 0 ? 255 : 252);
-      doc.rect(14, y, 182, 6.5, 'F');
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(30, 41, 59);
-      doc.text(r.name, 18, y + 4.5);
-      doc.setTextColor(71, 85, 105);
-      doc.text(r.d, 85, y + 4.5);
-      doc.text(r.m, 125, y + 4.5);
-      doc.text(r.a, 160, y + 4.5);
-      y += 6.5;
+    const scalingRows = c.scalingTiers.map((tier) => ({
+      printers: `${tier.printers} Machines`,
+      sales: `${currSym}${Math.round(tier.monthlyRevenue).toLocaleString()}`,
+      profit: `${currSym}${Math.round(tier.monthlyNetProfit).toLocaleString()}`,
+      filament: `${tier.monthlyFilamentKg} kg`,
+      payback: `${tier.paybackMonths} mo`,
+    }));
+
+    downloadPdfReport({
+      title: '3D Print Farm Capacity & Financial Projection Report',
+      subtitle: `Fleet: ${printerCount} Printers | Model: ${pricingMode === 'job' ? 'E-Commerce / Unit Production' : 'B2B Hourly Machine Lease'} | Currency: ${currency.code}`,
+      category: 'Additive Manufacturing Industrial Analytics',
+      project: 'Toolique Manufacturing Intelligence',
+      theme: 'brand',
+      parameters: [
+        { label: 'Fleet Size', value: `${printerCount} Printers` },
+        { label: 'Pricing Model', value: pricingMode === 'job' ? 'Unit Production / E-Comm' : 'B2B Hourly Lease' },
+        { label: 'Monthly Revenue', value: `${currSym}${Math.round(c.monthlyGrossRevenue).toLocaleString()}` },
+        { label: 'Monthly Net Profit', value: `${currSym}${Math.round(c.monthlyNetProfit).toLocaleString()}` },
+        { label: 'Net Profit Margin', value: `${c.netMarginPercent.toFixed(1)}%` },
+        { label: 'Monthly Part Output', value: `${Math.round(c.monthlyCompletedParts).toLocaleString()} Units` },
+        { label: 'Fleet Hardware CAPEX', value: `${currSym}${c.totalFleetCapex.toLocaleString()}` },
+        { label: 'Payback Period', value: `${c.capexPaybackMonths.toFixed(1)} Months` },
+        { label: 'Annual ROIC', value: `${c.returnOnCapitalAnnual.toFixed(0)}%` },
+      ],
+      tables: [
+        {
+          title: '1. Time Horizon Financial Statement',
+          columns: [
+            { header: 'Financial Metric', dataKey: 'name' },
+            { header: 'Daily Run-Rate', dataKey: 'd', align: 'right' as const },
+            { header: 'Monthly (30 Days)', dataKey: 'm', align: 'right' as const },
+            { header: 'Annual Forecast (365 Days)', dataKey: 'a', align: 'right' as const },
+          ],
+          rows: horizonRows,
+          totalsRow: [
+            { dataKey: 'name', value: 'NET OPERATING PROFIT' },
+            { dataKey: 'd', value: `${currSym}${c.dailyNetProfit.toFixed(0)}` },
+            { dataKey: 'm', value: `${currSym}${c.monthlyNetProfit.toFixed(0)}` },
+            { dataKey: 'a', value: `${currSym}${c.yearlyNetProfit.toFixed(0)}` },
+          ],
+        },
+        {
+          title: '2. Fleet Expansion & Capacity Scaling Matrix',
+          columns: [
+            { header: 'Printers', dataKey: 'printers' },
+            { header: 'Monthly Sales', dataKey: 'sales', align: 'right' as const },
+            { header: 'Monthly Net Profit', dataKey: 'profit', align: 'right' as const },
+            { header: 'Filament (kg)', dataKey: 'filament', align: 'right' as const },
+            { header: 'Payback', dataKey: 'payback', align: 'right' as const },
+          ],
+          rows: scalingRows,
+        },
+      ],
+      disclaimers: [
+        'Toolique Industrial Micro-Factory Financial Modeler. All figures computed client-side.',
+        'Projections do not constitute guaranteed investment returns; subject to machine downtime and market demand fluctuations.',
+      ],
+      fileName: `3D_Print_Farm_Financial_Forecast_${Date.now()}.pdf`,
     });
-
-    // Net Profit Highlight Row
-    doc.setFillColor(224, 231, 255);
-    doc.rect(14, y, 182, 8, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(67, 56, 202);
-    doc.text('NET OPERATING PROFIT', 18, y + 5.5);
-    doc.text(`${currSym}${c.dailyNetProfit.toFixed(0)}`, 85, y + 5.5);
-    doc.text(`${currSym}${c.monthlyNetProfit.toFixed(0)}`, 125, y + 5.5);
-    doc.text(`${currSym}${c.yearlyNetProfit.toFixed(0)}`, 160, y + 5.5);
-
-    // Section 3: Fleet Capital & Operational Economics
-    y += 16;
-    doc.setFontSize(10.5);
-    doc.setTextColor(15, 23, 42);
-    doc.text('2. FLEET CAPEX & OPERATIONAL PRODUCTIVITY', 14, y);
-
-    y += 6;
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(14, y, 182, 28, 2, 2, 'F');
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(14, y, 182, 28, 2, 2, 'S');
-
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(51, 65, 85);
-    doc.text(`Fleet Hardware CAPEX: ${currSym}${c.totalFleetCapex.toLocaleString()}`, 20, y + 7);
-    doc.text(`Capital Payback Period: ${c.capexPaybackMonths.toFixed(1)} Months`, 20, y + 14);
-    doc.text(`Annual Return on Capital (ROIC): ${c.returnOnCapitalAnnual.toFixed(0)}%`, 20, y + 21);
-
-    doc.text(`Monthly Revenue / Printer: ${currSym}${c.revenuePerPrinterMonthly.toFixed(0)}`, 105, y + 7);
-    doc.text(`Monthly Net Profit / Printer: ${currSym}${c.netProfitPerPrinterMonthly.toFixed(0)}`, 105, y + 14);
-    doc.text(`Effective Fleet Runtime: ${c.effectiveActiveHoursDaily.toFixed(1)} hrs/day`, 105, y + 21);
-
-    // Section 4: Fleet Scaling Table
-    y += 36;
-    doc.setFontSize(10.5);
-    doc.setTextColor(15, 23, 42);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3. FLEET EXPANSION & CAPACITY SCALING MATRIX', 14, y);
-
-    y += 6;
-    doc.setFillColor(241, 245, 249);
-    doc.rect(14, y, 182, 7, 'F');
-    doc.setFontSize(7.5);
-    doc.setTextColor(51, 65, 85);
-    doc.text('Printers', 18, y + 5);
-    doc.text('Monthly Sales', 50, y + 5);
-    doc.text('Monthly Net Profit', 90, y + 5);
-    doc.text('Filament (kg)', 135, y + 5);
-    doc.text('Payback', 170, y + 5);
-
-    y += 7;
-    c.scalingTiers.forEach((tier, i) => {
-      doc.setFillColor(i % 2 === 0 ? 255 : 248, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 252);
-      doc.rect(14, y, 182, 6, 'F');
-      doc.setFont('helvetica', tier.printers === printerCount ? 'bold' : 'normal');
-      doc.setTextColor(tier.printers === printerCount ? 79 : 51, tier.printers === printerCount ? 70 : 65, tier.printers === printerCount ? 229 : 85);
-      doc.text(`${tier.printers} Machines`, 18, y + 4.2);
-      doc.text(`${currSym}${Math.round(tier.monthlyRevenue).toLocaleString()}`, 50, y + 4.2);
-      doc.text(`${currSym}${Math.round(tier.monthlyNetProfit).toLocaleString()}`, 90, y + 4.2);
-      doc.text(`${tier.monthlyFilamentKg} kg`, 135, y + 4.2);
-      doc.text(`${tier.paybackMonths} mo`, 170, y + 4.2);
-      y += 6;
-    });
-
-    // Footer
-    doc.setFontSize(7.5);
-    doc.setTextColor(148, 163, 184);
-    doc.text('Toolique Industrial Micro-Factory Financial Modeler. All figures computed client-side.', 14, 285);
-
-    doc.save(`3D_Print_Farm_Financial_Forecast_${Date.now()}.pdf`);
   };
 
   const c = calculations;
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-left pb-12">
-      {/* Top Banner & Multi-Currency Switcher */}
-      <div className="saas-card p-5 bg-gradient-to-r from-zinc-50 via-indigo-50/20 to-zinc-50 dark:from-zinc-900/90 dark:via-indigo-950/20 dark:to-zinc-900/90 border border-zinc-200/80 dark:border-zinc-800/80 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/25">
-            <Factory className="w-6 h-6" />
-          </div>
-          <div>
-            <h2 className="text-lg font-black text-zinc-900 dark:text-white tracking-tight flex items-center gap-2">
-              Print Farm Fleet & Revenue Modeler
-              <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                CAPACITY & OPEX
-              </span>
-            </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              Multi-printer throughput forecasts, unit COGS, power consumption, labor wages, and CAPEX payback metrics.
-            </p>
-          </div>
+      {/* Top Action & Currency Toolbar */}
+      <div className="saas-card p-4 bg-gradient-to-r from-zinc-50 via-indigo-50/20 to-zinc-50 dark:from-zinc-900/90 dark:via-indigo-950/20 dark:to-zinc-900/90 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+            <Factory className="w-3.5 h-3.5" />
+            <span>Fleet Throughput &amp; CAPEX Payback Modeler</span>
+          </span>
+          <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+            CAPACITY &amp; OPEX
+          </span>
         </div>
 
         {/* Currency Switcher */}
@@ -759,13 +645,16 @@ Annual Return on Capital (ROIC): ${c.returnOnCapitalAnnual.toFixed(0)}%
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleCopyPitch}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition cursor-pointer border border-zinc-200/60 dark:border-zinc-700"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-indigo-500" />}
-            <span>{copied ? 'Copied Pitch' : 'Copy Pitch Summary'}</span>
-          </button>
+          <CopyButton
+            text={getPitchSummary}
+            label="Copy Pitch Summary"
+            size="sm"
+          />
+          <ShareWhatsApp
+            text={getPitchSummary}
+            label="WhatsApp"
+            size="sm"
+          />
           <button
             onClick={handleDownloadPDF}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-650 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition cursor-pointer border border-indigo-200/80 dark:border-indigo-800/80"

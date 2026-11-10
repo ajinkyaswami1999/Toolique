@@ -11,6 +11,7 @@ import HowToUse from '../components/HowToUse';
 import RelatedTools from '../components/RelatedTools';
 import WorkflowModal from '../components/WorkflowModal';
 import SEO from '../components/SEO';
+import ToolErrorBoundary from '../components/ToolErrorBoundary';
 import { saveRecentlyUsedTool } from '../utils/indexedDB';
 
 // Import all 31 tools
@@ -1206,14 +1207,20 @@ export default function ToolPage({ overrideSlug }: ToolPageProps = {}) {
       {/* Main Tool Container (Immediate User Interaction) */}
       <section className="mt-6">
         {ActiveToolComponent ? (
-          <Suspense fallback={
-            <div className="p-12 saas-card flex flex-col items-center justify-center space-y-4">
-              <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Loading tool...</p>
-            </div>
-          }>
-            <ActiveToolComponent />
-          </Suspense>
+          <ToolErrorBoundary
+            toolId={tool.id}
+            toolName={tool.name}
+            resetKey={tool.id}
+          >
+            <Suspense fallback={
+              <div className="p-12 saas-card flex flex-col items-center justify-center space-y-4">
+                <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Loading tool...</p>
+              </div>
+            }>
+              <ActiveToolComponent />
+            </Suspense>
+          </ToolErrorBoundary>
         ) : (
           <div className="p-8 text-center rounded-2xl bg-zinc-900 border border-zinc-800">
             Component not implemented yet: {tool.id}

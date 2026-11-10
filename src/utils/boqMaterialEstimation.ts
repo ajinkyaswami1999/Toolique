@@ -1,6 +1,22 @@
 // Indian Construction Material Estimation Engine for BOQ Line Items
 // Compliant with IS 456:2000, IS 1786:2008, IS 1200, and CPWD DSR Specifications
 
+import {
+  DRY_VOLUME_FACTOR_CONCRETE,
+  DRY_VOLUME_FACTOR_MORTAR,
+  DRY_VOLUME_FACTOR_PLASTER,
+  CFT_PER_CUM,
+  CFT_PER_BRASS,
+  CEMENT_BAG_VOLUME_M3,
+  CEMENT_BAG_WEIGHT_KG,
+  STEEL_REBAR_FACTOR,
+  cumToCft,
+  cftToCum,
+  cftToBrass,
+  calculateCementBags,
+  calculateRebarWeight,
+} from './civilMath';
+
 // -------------------------------------------------------------
 // 1. Concrete / PCC / RCC Material Estimator
 // -------------------------------------------------------------
@@ -27,10 +43,10 @@ export function estimateConcreteMaterials(
   steelRatioKgPerCum: number = 80 // typical standard density: 80 kg/m3 for slabs/beams, 130 kg/m3 for columns/footings
 ): ConcreteMaterialResult {
   // Convert to cubic meters (CUM) for calculations
-  const volCum = unit === 'cft' ? volume / 35.3147 : volume;
+  const volCum = unit === 'cft' ? volume / CFT_PER_CUM : volume;
 
   // Dry volume of concrete is taken as 1.54 times the wet volume (IS 456 standard)
-  const dryVol = volCum * 1.54;
+  const dryVol = volCum * DRY_VOLUME_FACTOR_CONCRETE;
 
   let cementPart = 1;
   let sandPart = 1.5;
@@ -71,14 +87,14 @@ export function estimateConcreteMaterials(
   const aggregateM3 = dryVol * (aggregatePart / sumParts);
 
   // 1 bag of cement = 50kg = 0.03472 m3 (Density: 1440 kg/m3)
-  const cementBags = cementM3 / 0.03472;
-  const cementKg = cementBags * 50;
+  const cementBags = calculateCementBags(cementM3);
+  const cementKg = cementBags * CEMENT_BAG_WEIGHT_KG;
 
   // Convert sand and aggregate to CFT (1 m3 = 35.3147 cft) & Brass (1 Brass = 100 cft)
-  const sandCft = sandM3 * 35.3147;
-  const sandBrass = sandCft / 100;
-  const aggregateCft = aggregateM3 * 35.3147;
-  const aggregateBrass = aggregateCft / 100;
+  const sandCft = cumToCft(sandM3);
+  const sandBrass = cftToBrass(sandCft);
+  const aggregateCft = cumToCft(aggregateM3);
+  const aggregateBrass = cftToBrass(aggregateCft);
 
   // Standard Indian coarse aggregate grading: 60% 20mm + 40% 10mm
   const aggregate20mmCft = aggregateCft * 0.60;
@@ -92,8 +108,8 @@ export function estimateConcreteMaterials(
   const steelTonnes = steelKg / 1000;
 
   return {
-    cementBags: Math.ceil(cementBags),
-    cementKg: Math.round(cementKg),
+    cementBags,
+    cementKg,
     sandCft: Number(sandCft.toFixed(2)),
     sandBrass: Number(sandBrass.toFixed(3)),
     sandM3: Number(sandM3.toFixed(3)),
@@ -213,8 +229,8 @@ export function estimatePlasterMaterials(
   const thicknessM = thicknessMm / 1000;
 
   const wetMortarVol = areaSqm * thicknessM;
-  // Plaster has wastage + shrinkage dry factor of 1.33 + 0.02 (filling uneven joints) = 1.35
-  const dryMortarVol = wetMortarVol * 1.35;
+  // Plaster has wastage + shrinkage dry factor: 1.33 for dry shrinkage + 20% for filling uneven brick joints & frogs = 1.33 * 1.20 ≈ 1.60
+  const dryMortarVol = wetMortarVol * 1.60;
 
   let cementPart = 1;
   let sandPart = 4;
@@ -251,6 +267,7 @@ export function estimatePlasterMaterials(
 export interface FlooringMaterialResult {
   tileCount: number;
   tileBoxes: number;
+  totalTileAreaSqft: number;
   adhesiveBags20kg: number;
   groutKg: number;
   beddingCementBags: number;
@@ -260,8 +277,8 @@ export interface FlooringMaterialResult {
 export function estimateFlooringMaterials(
   area: number,
   unit: 'sqm' | 'sqft',
-  tileLengthFeet: number = 2,
-  tileWidthFeet: number = 2,
+  tileLengthOrType: number | string = 2,
+  tileWidthOrWastage: number = 2,
   wastagePercent: number = 8,
   tilesPerBox: number = 4,
   beddingType: 'adhesive' | 'cement_mortar' = 'adhesive'
@@ -269,9 +286,29 @@ export function estimateFlooringMaterials(
   const areaSqft = unit === 'sqm' ? area * 10.7639 : area;
   const areaSqm = unit === 'sqft' ? area / 10.7639 : area;
 
-  const singleTileAreaSqft = (tileLengthFeet || 2) * (tileWidthFeet || 2);
+  let lenFt = 2;
+  let widFt = 2;
+  let wastePct = wastagePercent;
+
+  if (typeof tileLengthOrType === 'string') {
+    // Preset string e.g. '600x600_vitrified'
+    if (tileLengthOrType.includes('600x600')) {
+      lenFt = 2; widFt = 2;
+    } else if (tileLengthOrType.includes('300x300')) {
+      lenFt = 1; widFt = 1;
+    } else if (tileLengthOrType.includes('1200x600')) {
+      lenFt = 4; widFt = 2;
+    }
+    wastePct = typeof tileWidthOrWastage === 'number' ? tileWidthOrWastage : 5;
+  } else {
+    lenFt = tileLengthOrType || 2;
+    widFt = tileWidthOrWastage || 2;
+  }
+
+  const singleTileAreaSqft = (lenFt || 2) * (widFt || 2);
   const rawTileCount = areaSqft / (singleTileAreaSqft > 0 ? singleTileAreaSqft : 4);
-  const tileCountWithWastage = rawTileCount * (1 + wastagePercent / 100);
+  const tileCountWithWastage = rawTileCount * (1 + wastePct / 100);
+  const totalTileAreaSqft = areaSqft * (1 + wastePct / 100);
 
   const tileBoxes = tileCountWithWastage / (tilesPerBox > 0 ? tilesPerBox : 4);
 
@@ -297,6 +334,7 @@ export function estimateFlooringMaterials(
   return {
     tileCount: Math.ceil(tileCountWithWastage),
     tileBoxes: Math.ceil(tileBoxes),
+    totalTileAreaSqft: Number(totalTileAreaSqft.toFixed(2)),
     adhesiveBags20kg: Math.ceil(adhesiveBags),
     groutKg: Number(totalGroutKg.toFixed(1)),
     beddingCementBags: Math.ceil(beddingCementBags),
@@ -317,9 +355,11 @@ export interface PaintingMaterialResult {
 export function estimatePaintingMaterials(
   area: number,
   unit: 'sqm' | 'sqft',
-  numCoats: number = 2
+  paintTypeOrCoats: number | string = 2,
+  numCoatsParam: number = 2
 ): PaintingMaterialResult {
   const areaSqft = unit === 'sqm' ? area * 10.7639 : area;
+  const numCoats = typeof paintTypeOrCoats === 'number' ? paintTypeOrCoats : (numCoatsParam || 2);
 
   // Wall putty coverage: approx 16 sqft/kg for 2 coats
   const puttyKg = areaSqft / 16;
@@ -343,14 +383,35 @@ export function estimatePaintingMaterials(
 // -------------------------------------------------------------
 // 6. Reinforcement Steel Weight Estimator (IS 1786 Standard)
 // -------------------------------------------------------------
+export interface SteelWeightResult {
+  diameterMm: number;
+  lengthMetres: number;
+  count: number;
+  unitWeightKgPerM: number;
+  weightKg: number;
+  weightTonnes: number;
+}
+
+export function estimateSteelWeight(
+  diameterMm: number,
+  lengthMetres: number,
+  count: number = 1
+): SteelWeightResult {
+  const res = calculateRebarWeight(diameterMm, lengthMetres, count, STEEL_REBAR_FACTOR);
+  return {
+    diameterMm,
+    lengthMetres,
+    count,
+    unitWeightKgPerM: res.unitWeightKgPerM,
+    weightKg: res.weightKg,
+    weightTonnes: res.weightTonnes,
+  };
+}
+
 export function estimateSteelWeightKg(
   diameterMm: number,
   lengthMetres: number,
   count: number = 1
 ): number {
-  if (diameterMm <= 0 || lengthMetres <= 0 || count <= 0) return 0;
-  // IS 1786 formula: D^2 / 162.2 kg/m
-  const unitWeight = (diameterMm * diameterMm) / 162.2;
-  const totalWeight = unitWeight * lengthMetres * count;
-  return Number(totalWeight.toFixed(2));
+  return estimateSteelWeight(diameterMm, lengthMetres, count).weightKg;
 }

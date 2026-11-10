@@ -6,9 +6,10 @@ import {
   Plus, Layers, PieChart, Sliders,
   Sparkles, Check, Box, X
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import SEO from '../components/SEO';
+import { downloadPdfReport } from '../utils/pdf';
+import { ShareWhatsApp, CopyButton } from '../components/common';
 import {
   estimateConcreteMaterials,
   estimateBrickworkMaterials,
@@ -2326,12 +2327,6 @@ export default function AdvancedBOQCalculator() {
     window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
   };
 
-  const handleCopyWhatsAppQuote = () => {
-    const text = generateWhatsAppQuote();
-    navigator.clipboard.writeText(text);
-    showToast('WhatsApp quote copied to clipboard!');
-  };
-
   // Excel (.xlsx) Multi-Sheet Exporter
   const handleExportExcel = () => {
     if (!activeProject) return;
@@ -2454,106 +2449,71 @@ export default function AdvancedBOQCalculator() {
     showToast('Excel workbook exported successfully!');
   };
 
-  // PDF Exporter
+  // PDF Exporter (Pillar 2 Standardized Branded Engine)
   const handleExportPDF = () => {
     if (!activeProject) return;
 
-    const doc = new jsPDF();
-    let currentY = 20;
-
-    doc.setFontSize(18);
-    doc.text('Bill of Quantities (BOQ) & Cost Estimate', 14, currentY);
-    currentY += 8;
-
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text('Prepared as per CPWD DSR & IS 1200 Measurement Standards', 14, currentY);
-    doc.setTextColor(0);
-    currentY += 10;
-
-    doc.setDrawColor(200);
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(14, currentY, 182, 32, 3, 3, 'FD');
-
-    doc.setFontSize(9);
-    doc.text(`Project Name: ${activeProject.name}`, 18, currentY + 7);
-    doc.text(`Client Name: ${activeProject.client}`, 110, currentY + 7);
-
-    doc.text(`Location: ${activeProject.location}, ${activeProject.city}`, 18, currentY + 14);
-    doc.text(`Date: ${activeProject.startDate}`, 110, currentY + 14);
-
-    doc.text(`Built-up Area: ${totalFloorAreaSqft.toLocaleString()} sq.ft`, 18, currentY + 21);
-    doc.text(`Cost / Sq.Ft: Rs ${totalFloorAreaSqft > 0 ? (summaryTotals.grandTotal / totalFloorAreaSqft).toFixed(2) : '0'}/sqft`, 110, currentY + 21);
-
-    doc.text(`Type: ${activeProject.projectType.toUpperCase()}`, 18, currentY + 28);
-    doc.text(`GST / Margin: ${(activeProject.gstPercent ?? 18)}% GST / ${(activeProject.contractorMarginPercent ?? 15)}% Margin`, 110, currentY + 28);
-
-    currentY += 38;
-
-    doc.setFontSize(11);
-    doc.text('Cost Breakdown Summary:', 14, currentY);
-    currentY += 6;
-
-    doc.setFontSize(8.5);
-    doc.text(`Material Base: Rs ${summaryTotals.materialTotal.toLocaleString('en-IN')}`, 14, currentY);
-    doc.text(`Labour Wages: Rs ${summaryTotals.labourTotal.toLocaleString('en-IN')}`, 75, currentY);
-    doc.text(`Equipment & Transit: Rs ${(summaryTotals.equipmentTotal + summaryTotals.transportTotal).toLocaleString('en-IN')}`, 135, currentY);
-    currentY += 5;
-
-    doc.text(`Contractor Margin: Rs ${summaryTotals.marginTotal.toLocaleString('en-IN')}`, 14, currentY);
-    doc.text(`GST Tax (18%): Rs ${summaryTotals.gstTotal.toLocaleString('en-IN')}`, 75, currentY);
-    doc.text(`Contingency (3%): Rs ${summaryTotals.contingencyTotal.toLocaleString('en-IN')}`, 135, currentY);
-    currentY += 7;
-
-    doc.setFontSize(13);
-    doc.setTextColor(16, 185, 129);
-    doc.text(`GRAND TOTAL ESTIMATE: Rs ${summaryTotals.grandTotal.toLocaleString('en-IN')}`, 14, currentY);
-    doc.setTextColor(0);
-    currentY += 12;
-
-    doc.setFontSize(10);
-    doc.text('Detailed BOQ Line Items Schedule:', 14, currentY);
-    currentY += 6;
-
-    doc.setFontSize(7.5);
-    doc.setFillColor(241, 245, 249);
-    doc.rect(14, currentY - 4, 182, 6, 'F');
-    doc.text('Code', 16, currentY);
-    doc.text('Description', 36, currentY);
-    doc.text('Unit', 105, currentY);
-    doc.text('Net Qty', 125, currentY);
-    doc.text('Final Rate', 148, currentY);
-    doc.text('Amount (Rs)', 175, currentY);
-    currentY += 4;
-    doc.line(14, currentY, 196, currentY);
-    currentY += 4;
-
-    activeProject.items.forEach(item => {
-      if (currentY > 275) {
-        doc.addPage();
-        currentY = 20;
-      }
-      doc.text(item.code, 16, currentY);
-      doc.text(item.description.substring(0, 38), 36, currentY);
-      doc.text(item.unit, 105, currentY);
-      doc.text(item.netQty.toFixed(2), 125, currentY);
-      doc.text(item.finalRate.toFixed(2), 148, currentY);
-      doc.text(item.totalAmount.toFixed(2), 175, currentY);
-      currentY += 5.5;
+    downloadPdfReport({
+      title: 'Bill of Quantities (BOQ) & Cost Estimate',
+      subtitle: 'Prepared as per CPWD DSR & IS 1200 Measurement Standards',
+      category: 'civil',
+      complianceBadge: 'CPWD DSR & IS 1200',
+      referenceId: `BOQ-${activeProject.id.slice(-6).toUpperCase()}`,
+      theme: 'emerald',
+      project: {
+        projectName: activeProject.name,
+        clientName: activeProject.client,
+        location: `${activeProject.location}, ${activeProject.city}`,
+        date: activeProject.startDate,
+        notes: `Built-up Area: ${totalFloorAreaSqft.toLocaleString()} sq.ft | Type: ${activeProject.projectType.toUpperCase()}`
+      },
+      parameters: [
+        { label: 'Built-up Area', value: `${totalFloorAreaSqft.toLocaleString()} sq.ft` },
+        { label: 'Cost / Sq.Ft', value: `₹${totalFloorAreaSqft > 0 ? (summaryTotals.grandTotal / totalFloorAreaSqft).toFixed(2) : '0'} / sq.ft` },
+        { label: 'GST Tax', value: `${activeProject.gstPercent ?? 18}%` },
+        { label: 'Contractor Margin', value: `${activeProject.contractorMarginPercent ?? 15}%` },
+        { label: 'Contingency', value: `${activeProject.contingencyPercent ?? 3}%` },
+        { label: 'Project Type', value: activeProject.projectType.toUpperCase() }
+      ],
+      kpis: [
+        { label: 'Grand Total Estimate', value: `₹${summaryTotals.grandTotal.toLocaleString('en-IN')}`, subtext: `₹${totalFloorAreaSqft > 0 ? (summaryTotals.grandTotal / totalFloorAreaSqft).toFixed(2) : '0'}/sq.ft`, highlight: true },
+        { label: 'Materials Total', value: `₹${summaryTotals.materialTotal.toLocaleString('en-IN')}`, subtext: 'Base Procurement' },
+        { label: 'Labour Wages', value: `₹${summaryTotals.labourTotal.toLocaleString('en-IN')}`, subtext: 'Execution Force' },
+        { label: 'Contractor & Tax', value: `₹${(summaryTotals.marginTotal + summaryTotals.gstTotal).toLocaleString('en-IN')}`, subtext: 'Margin & GST 18%' }
+      ],
+      tables: [
+        {
+          title: 'Detailed BOQ Line Items Schedule',
+          badge: 'IS 1200 MEASUREMENT',
+          columns: [
+            { header: 'Code', dataKey: 'code', width: 28 },
+            { header: 'Description', dataKey: 'desc', width: 68 },
+            { header: 'Unit', dataKey: 'unit', width: 20 },
+            { header: 'Net Qty', dataKey: 'qty', width: 22, align: 'right' as const },
+            { header: 'Rate (₹)', dataKey: 'rate', width: 22, align: 'right' as const },
+            { header: 'Amount (₹)', dataKey: 'amount', width: 28, align: 'right' as const }
+          ],
+          rows: activeProject.items.map(item => ({
+            code: item.code,
+            desc: item.description,
+            unit: item.unit,
+            qty: item.netQty.toFixed(2),
+            rate: `₹${item.finalRate.toFixed(2)}`,
+            amount: `₹${item.totalAmount.toFixed(2)}`
+          })),
+          totalsRow: [
+            { dataKey: 'desc', value: 'GRAND TOTAL BOQ ESTIMATE' },
+            { dataKey: 'amount', value: `₹${summaryTotals.grandTotal.toLocaleString('en-IN')}` }
+          ]
+        }
+      ],
+      disclaimers: [
+        'This Bill of Quantities (BOQ) represents a standard engineering estimate based on CPWD/DSR norms.',
+        'Structural details, soil strata variations, and market material price changes must be verified at site by a licensed engineer.'
+      ],
+      includeSignoff: true,
+      fileName: `${activeProject.name.replace(/\s+/g, '_')}_BOQ_Estimate.pdf`
     });
-
-    if (currentY > 260) {
-      doc.addPage();
-      currentY = 20;
-    }
-    currentY += 10;
-    doc.setFontSize(7);
-    doc.setTextColor(120);
-    doc.text('Disclaimer: This Bill of Quantities (BOQ) represents a standard engineering estimate based on CPWD/DSR norms.', 14, currentY);
-    currentY += 3.5;
-    doc.text('Structural details, soil strata variations, and market material price changes must be verified at site by a licensed engineer.', 14, currentY);
-
-    doc.save(`${activeProject.name.replace(/\s+/g, '_')}_BOQ_Estimate.pdf`);
     showToast('PDF BOQ Report downloaded!');
   };
 
@@ -3992,20 +3952,18 @@ export default function AdvancedBOQCalculator() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={handleCopyWhatsAppQuote}
-                  className="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold rounded-xl transition flex items-center gap-1.5"
-                >
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>Copy Text</span>
-                </button>
-                <button
-                  onClick={handleShareWhatsApp}
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black rounded-xl transition shadow-lg shadow-emerald-600/30 flex items-center gap-1.5"
-                >
-                  <Share2 className="w-3.5 h-3.5" />
-                  <span>Share on WhatsApp</span>
-                </button>
+                <CopyButton
+                  text={generateWhatsAppQuote}
+                  label="Copy Text"
+                  variant="secondary"
+                  size="sm"
+                />
+                <ShareWhatsApp
+                  text={generateWhatsAppQuote}
+                  label="Share on WhatsApp"
+                  variant="solid"
+                  size="sm"
+                />
               </div>
             </div>
 

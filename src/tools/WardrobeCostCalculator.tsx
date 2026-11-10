@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
 import { 
-  Palette, Clipboard, Check, RotateCcw, 
+  Palette, RotateCcw, 
   Download, Layers, Sliders, Shield, Sparkles, 
   Shirt, Grid, Eye, Save, Trash2
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp, UnitSwitcher } from '../components/common';
 
 // --- Type Definitions ---
 type WardrobeLayout = 'straight' | 'l_shaped' | 'with_dresser' | 'walk_in';
@@ -64,7 +65,6 @@ export default function WardrobeCostCalculator() {
   const [customSqFtRateOffset, setCustomSqFtRateOffset] = useState<number>(0);
 
   // UI state
-  const [copied, setCopied] = useState<boolean>(false);
   const [savedQuotes, setSavedQuotes] = useState<SavedQuote[]>([]);
   const [quoteName, setQuoteName] = useState<string>('Master Bedroom Wardrobe');
 
@@ -183,8 +183,8 @@ export default function WardrobeCostCalculator() {
     includeGst
   ]);
 
-  // Copy Detailed Text Quote
-  const handleCopyQuote = () => {
+  // Detailed Text Quote for Copy & WhatsApp
+  const getQuoteText = () => {
     let text = `MODULAR WARDROBE COST ESTIMATION & BOQ\n`;
     text += `=========================================\n`;
     text += `Project: ${quoteName}\n`;
@@ -214,65 +214,75 @@ export default function WardrobeCostCalculator() {
     text += `GRAND TOTAL ESTIMATE: ₹${calculations.grandTotal.toLocaleString()} (₹${calculations.effectiveRatePerSqFt}/sq ft)\n`;
     text += `=========================================\n`;
     text += `Generated on Toolique Modular Interior Studio.`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    return text;
   };
 
-  // Download PDF Quotation
+  // Standardized Branded PDF Quotation (Pillar 2)
   const handleDownloadPDF = () => {
-    try {
-      const doc = new jsPDF();
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(16);
-      doc.text('Toolique Modular Interior — Wardrobe Quotation', 14, 18);
+    const rows = [
+      { item: 'Main Cabinetry & Shutters', area: `${calculations.mainCabinetAreaSqFt} sq.ft`, rate: `Base Rate`, amount: `₹${calculations.mainCabinetCost.toLocaleString('en-IN')}` },
+      ...(includeLoft ? [{ item: 'Overhead Storage Lofts', area: `${calculations.loftAreaSqFt} sq.ft`, rate: `Loft Spec`, amount: `₹${calculations.loftCabinetCost.toLocaleString('en-IN')}` }] : []),
+      { item: `Internal Soft-Close Drawers (${drawerCount} nos)`, area: `${drawerCount} units`, rate: `₹2,200/unit`, amount: `₹${calculations.drawerCost.toLocaleString('en-IN')}` },
+      ...(includeTrouserRack ? [{ item: 'Pull-out Trouser Organizer', area: '1 unit', rate: 'Accessory', amount: `₹${calculations.trouserRackCost.toLocaleString('en-IN')}` }] : []),
+      ...(includeJewelryTray ? [{ item: 'Velvet Jewelry/Watch Tray', area: '1 unit', rate: 'Accessory', amount: `₹${calculations.jewelryTrayCost.toLocaleString('en-IN')}` }] : []),
+      ...(includeHydraulicLift ? [{ item: 'High-Reach Hydraulic Wardrobe Lift', area: '1 unit', rate: 'Hardware', amount: `₹${calculations.hydraulicLiftCost.toLocaleString('en-IN')}` }] : []),
+      ...(includeLedSensorLights ? [{ item: 'Auto Motion-Sensor LED Strips', area: 'Full run', rate: 'Electrical', amount: `₹${calculations.ledSensorCost.toLocaleString('en-IN')}` }] : []),
+      ...(includeDigitalSafe ? [{ item: 'Integrated Digital Locker', area: '1 unit', rate: 'Security', amount: `₹${calculations.digitalSafeCost.toLocaleString('en-IN')}` }] : []),
+      ...(includeMirrorShutter ? [{ item: 'Dressing Mirror Shutter Inlay', area: '1 shutter', rate: 'Glazing', amount: `₹${calculations.mirrorShutterCost.toLocaleString('en-IN')}` }] : []),
+      { item: 'Factory Edge-Banding & On-Site Installation (12%)', area: 'Fitting & PUR', rate: '12%', amount: `₹${calculations.laborAndInstallationCost.toLocaleString('en-IN')}` },
+      ...(includeGst ? [{ item: 'GST on Modular Works (18%)', area: 'Statutory', rate: '18%', amount: `₹${calculations.gstAmount.toLocaleString('en-IN')}` }] : [])
+    ];
 
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Project Quote: ${quoteName} | Date: ${new Date().toLocaleDateString('en-IN')}`, 14, 25);
-
-      let y = 35;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('1. Design Specifications & Materials', 14, y);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`• Dimensions: ${width} ft Width × ${height} ft Height (Depth: ${depthInches} inches)`, 16, y); y += 6;
-      doc.text(`• Overhead Storage Loft: ${includeLoft ? `YES (${loftHeight} ft)` : 'None'}`, 16, y); y += 6;
-      doc.text(`• Door Mechanism: ${doorMechanism.replace(/_/g, ' ').toUpperCase()}`, 16, y); y += 6;
-      doc.text(`• Core Carcass: ${coreMaterial.replace(/_/g, ' ').toUpperCase()}`, 16, y); y += 6;
-      doc.text(`• Exterior Finish: ${finishType.replace(/_/g, ' ').toUpperCase()}`, 16, y); y += 6;
-      doc.text(`• Hardware Brand: ${hardwareBrand.replace(/_/g, ' ').toUpperCase()}`, 16, y); y += 10;
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('2. Bill of Quantities & Cost Breakdown', 14, y);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`• Main Cabinetry (${calculations.mainCabinetAreaSqFt} sq ft): INR ${calculations.mainCabinetCost.toLocaleString()}`, 16, y); y += 6;
-      if (includeLoft) {
-        doc.text(`• Overhead Loft (${calculations.loftAreaSqFt} sq ft): INR ${calculations.loftCabinetCost.toLocaleString()}`, 16, y); y += 6;
-      }
-      doc.text(`• Soft-Close Drawers (${drawerCount} units): INR ${calculations.drawerCost.toLocaleString()}`, 16, y); y += 6;
-      doc.text(`• Internal Accessories & LED Lighting: INR ${(calculations.totalAccessoriesCost - calculations.drawerCost).toLocaleString()}`, 16, y); y += 6;
-      doc.text(`• Factory Edge-Banding & Installation (12%): INR ${calculations.laborAndInstallationCost.toLocaleString()}`, 16, y); y += 6;
-      if (includeGst) {
-        doc.text(`• GST (18%): INR ${calculations.gstAmount.toLocaleString()}`, 16, y); y += 6;
-      }
-      y += 4;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text(`GRAND TOTAL: INR ${calculations.grandTotal.toLocaleString()} (Approx. INR ${calculations.effectiveRatePerSqFt}/sq ft)`, 16, y);
-
-      doc.save(`wardrobe-quote-${quoteName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
-    } catch (e) {
-      console.error(e);
-    }
+    downloadPdfReport({
+      title: 'Modular Wardrobe Cost Estimation & BOQ',
+      subtitle: `Scope: ${quoteName} | Door Type: ${doorMechanism.replace(/_/g, ' ').toUpperCase()}`,
+      category: 'interior',
+      complianceBadge: 'IS 710 & IS 2046',
+      referenceId: `WDB-${Date.now().toString().slice(-6)}`,
+      theme: 'brand',
+      project: {
+        projectName: quoteName,
+        clientName: 'Client Requisition',
+        notes: `Core: ${coreMaterial.replace(/_/g, ' ')} | Finish: ${finishType.replace(/_/g, ' ')} | Hardware: ${hardwareBrand.replace(/_/g, ' ')}`
+      },
+      kpis: [
+        { label: 'Grand Total', value: `₹${calculations.grandTotal.toLocaleString('en-IN')}`, highlight: true },
+        { label: 'Total Facade Area', value: `${calculations.totalAreaSqFt} sq.ft` },
+        { label: 'Effective Rate', value: `₹${calculations.effectiveRatePerSqFt}/sq.ft` },
+        { label: 'Main Cabinet', value: `₹${calculations.mainCabinetCost.toLocaleString('en-IN')}` }
+      ],
+      parameters: [
+        { label: 'Dimensions', value: `${width} ft Width × ${height} ft Height (Depth: ${depthInches}")` },
+        { label: 'Overhead Loft', value: includeLoft ? `Yes (${loftHeight} ft Height)` : 'None' },
+        { label: 'Door Mechanism', value: doorMechanism.replace(/_/g, ' ').toUpperCase() },
+        { label: 'Core Board', value: coreMaterial.replace(/_/g, ' ').toUpperCase() },
+        { label: 'Exterior Finish', value: finishType.replace(/_/g, ' ').toUpperCase() },
+        { label: 'Hardware Brand', value: hardwareBrand.replace(/_/g, ' ').toUpperCase() },
+      ],
+      tables: [
+        {
+          title: 'Bill of Quantities (BOQ) & Itemized Estimate',
+          columns: [
+            { header: 'Item Description', dataKey: 'item' },
+            { header: 'Scope / Qty', dataKey: 'area' },
+            { header: 'Rate Spec', dataKey: 'rate' },
+            { header: 'Amount (INR)', dataKey: 'amount', align: 'right' },
+          ],
+          rows,
+          totalsRow: [
+            { dataKey: 'item', value: 'Grand Total' },
+            { dataKey: 'amount', value: `₹${calculations.grandTotal.toLocaleString('en-IN')}` },
+          ],
+        }
+      ],
+      disclaimers: [
+        'All carcass panels factory pre-grooved and edged with hot-melt 2mm PVC/PUR edge bands.',
+        'Final dimensions and drawer runouts are subject to onsite laser survey and civil plumb check.',
+        'Warranty adheres to manufacturer standards (Hettich / Blum / Hafele warranty for fittings).'
+      ],
+      includeSignoff: true,
+      fileName: `wardrobe-quote-${quoteName.toLowerCase().replace(/\s+/g, '-')}.pdf`
+    });
   };
 
   // Save Quote to local storage
@@ -328,45 +338,24 @@ export default function WardrobeCostCalculator() {
 
   return (
     <div className="space-y-8">
-      {/* TOP HEADER CONTROLS & QUICK PRESETS */}
+      {/* TOP CONTROLS & QUICK PRESETS */}
       <div className="saas-card p-6 space-y-4 text-left">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-zinc-200/60 dark:border-zinc-800/60">
-          <div>
-            <h2 className="text-base font-black text-zinc-900 dark:text-white flex items-center gap-2">
-              <Palette className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              <span>Modular Wardrobe Cost & Interior Engineering Studio</span>
-            </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-0.5">
-              Accurate carcass ply grading, sliding track mechanisms, premium finishes, and itemized contractor BOQ
-            </p>
+        <div className="flex flex-wrap justify-between items-center gap-4 pb-4 border-b border-zinc-200/60 dark:border-zinc-800/60">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+              <Palette className="w-3.5 h-3.5" />
+              <span>IS 710 BWP &amp; HDHMR Specs</span>
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Unit Switcher */}
-            <div className="flex p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
-              <button
-                type="button"
-                onClick={() => setUnit('feet')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  unit === 'feet'
-                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
-                }`}
-              >
-                Feet (ft)
-              </button>
-              <button
-                type="button"
-                onClick={() => setUnit('meters')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  unit === 'meters'
-                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
-                }`}
-              >
-                Meters (m)
-              </button>
-            </div>
+            <UnitSwitcher<'feet' | 'meters'>
+              value={unit}
+              onChange={setUnit}
+              preset="meters-feet"
+              size="sm"
+            />
 
             <button
               type="button"
@@ -699,19 +688,13 @@ export default function WardrobeCostCalculator() {
                 </span>
               </div>
 
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={handleCopyQuote}
-                  className="px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-zinc-200 transition flex items-center gap-1.5 cursor-pointer"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Clipboard className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy'}</span>
-                </button>
+              <div className="flex items-center gap-2">
+                <CopyButton text={getQuoteText} label="Copy Quote" copiedLabel="Copied" size="xs" variant="secondary" />
+                <ShareWhatsApp text={getQuoteText} label="WhatsApp" size="xs" variant="solid" />
                 <button
                   type="button"
                   onClick={handleDownloadPDF}
-                  className="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-600/20"
+                  className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-600/20"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>PDF Quote</span>

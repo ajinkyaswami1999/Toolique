@@ -79,13 +79,15 @@ export function solveQuadratic(a: number, b: number, c: number): QuadraticResult
   } else if (discriminant === 0) {
     steps.push("Since D = 0, the roots are real and equal.");
     steps.push(`Formula: x = -b / 2a`);
-    const r = -b / (2 * a);
+    const rRaw = -b / (2 * a);
+    const r = rRaw === 0 ? 0 : rRaw;
     steps.push(`x = -(${b}) / (2 * ${a}) = ${r.toFixed(4)}`);
-    roots.push({ real: r, imag: 0 }, { real: r, imag: 0 });
+    roots.push({ real: r, imag: 0 });
   } else {
     steps.push("Since D < 0, the roots are complex conjugate pairs.");
     steps.push(`Formula: x = (-b ± i√|D|) / 2a`);
-    const realPart = -b / (2 * a);
+    const rawReal = -b / (2 * a);
+    const realPart = rawReal === 0 ? 0 : rawReal;
     const imagPart = Math.sqrt(-discriminant) / (2 * a);
     steps.push(`Real Part = -(${b}) / (2 * ${a}) = ${realPart.toFixed(4)}`);
     steps.push(`Imaginary Part = √${-discriminant} / (2 * ${a}) = ${imagPart.toFixed(4)}`);
@@ -537,4 +539,29 @@ export function pointToLineDistance(p: Point, A: number, B: number, C: number): 
   const den = Math.sqrt(A * A + B * B);
   if (den === 0) return 0;
   return Math.abs(A * p.x + B * p.y + C) / den;
+}
+
+// 8. Trigonometry Evaluation Functions
+export interface TrigResult {
+  sin: number;
+  cos: number;
+  tan: number | null;
+}
+
+export function calculateTrig(angle: number, unit: 'deg' | 'rad' = 'deg'): TrigResult {
+  const rad = unit === 'deg' ? (angle * Math.PI) / 180 : angle;
+  let sinVal = Math.sin(rad);
+  let cosVal = Math.cos(rad);
+
+  // Clean precision for exact angles (multiples of 90 deg / PI/2)
+  if (Math.abs(cosVal) < 1e-15) cosVal = 0;
+  if (Math.abs(sinVal) < 1e-15) sinVal = 0;
+
+  const tanVal = cosVal === 0 ? null : sinVal / cosVal;
+
+  return {
+    sin: sinVal,
+    cos: cosVal,
+    tan: tanVal !== null ? (Math.abs(tanVal) < 1e-15 ? 0 : tanVal) : null,
+  };
 }

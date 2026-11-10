@@ -1346,20 +1346,15 @@ export default function TestCaseGenerator() {
     <div className="space-y-6">
       {/* --- TOP CONTROL BAR & RUN STATS --- */}
       <div className="saas-card p-5 space-y-4">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-base font-black text-zinc-900 dark:text-white flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                <span>Enterprise QA Test Case & Execution Studio</span>
-              </h2>
-              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
-                Live Execution
-              </span>
-            </div>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-              Design, execute, and export comprehensive multi-dimension QA test suites. Runs 100% locally in your browser.
-            </p>
+        <div className="flex flex-wrap justify-between items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>IEEE 829 &amp; ISTQB Standards</span>
+            </span>
+            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+              Live In-Browser Execution
+            </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">

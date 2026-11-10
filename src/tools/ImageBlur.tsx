@@ -10,7 +10,6 @@ import {
   Sliders,
   Trash2,
   FolderUp,
-  CheckCircle2,
   X,
   Eye,
   EyeOff,
@@ -21,6 +20,7 @@ import {
   Split
 } from 'lucide-react';
 import JSZip from 'jszip';
+import { FileDropzone } from '../components/common';
 
 export type BlurMode = 'full' | 'selective' | 'invert';
 export type BlurAlgorithm = 'gaussian' | 'pixelate';
@@ -213,7 +213,6 @@ export default function ImageBlur() {
   const [showOriginal, setShowOriginal] = useState<boolean>(false);
   const [showRegionOverlay, setShowRegionOverlay] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -605,35 +604,7 @@ export default function ImageBlur() {
 
       {/* State A: Zero Images Loaded - Frictionless Dropzone */}
       {images.length === 0 ? (
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragOver(true);
-          }}
-          onDragLeave={() => setIsDragOver(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragOver(false);
-            if (e.dataTransfer.files) {
-              handleIncomingFiles(e.dataTransfer.files);
-            }
-          }}
-          className={`relative border-2 border-dashed rounded-3xl p-10 md:p-14 text-center transition-all duration-300 ${
-            isDragOver
-              ? 'border-indigo-500 bg-indigo-500/5 dark:bg-indigo-950/20 scale-[0.99]'
-              : 'border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-zinc-400 dark:hover:border-zinc-700'
-          }`}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              if (e.target.files) handleIncomingFiles(e.target.files);
-            }}
-          />
+        <div className="space-y-4">
           <input
             ref={folderInputRef}
             type="file"
@@ -647,60 +618,33 @@ export default function ImageBlur() {
             }}
           />
 
-          <div className="max-w-xl mx-auto flex flex-col items-center">
-            <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 mb-5 shadow-inner">
-              <Layers className="w-10 h-10" />
-            </div>
+          <FileDropzone
+            accept="image/*"
+            multiple
+            onFilesSelected={(files) => handleIncomingFiles(files)}
+            title="Drop Photos to Blur or Redact in Bulk"
+            description="Batch apply Gaussian blur or pixelate mosaic censorship to multiple photos simultaneously. 100% private in your browser."
+            colorTheme="indigo"
+          />
 
-            <h2 className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-              Drop Photos to Blur or Redact in Bulk
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 mb-6">
-              Batch apply Gaussian blur or pixelate mosaic censorship to multiple photos simultaneously. 100% private in your browser.
-            </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => folderInputRef.current?.click()}
+              className="px-4 py-2 rounded-xl border border-zinc-250 dark:border-zinc-750 bg-zinc-100 dark:bg-zinc-800/80 text-zinc-800 dark:text-zinc-200 font-semibold text-xs hover:bg-zinc-200 dark:hover:bg-zinc-700 transition flex items-center gap-2 cursor-pointer"
+            >
+              <FolderUp className="w-4 h-4" />
+              <span>Upload Folder</span>
+            </button>
 
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="saas-button-primary px-5 py-2.5 flex items-center gap-2"
-              >
-                <Upload className="w-4 h-4" />
-                <span>Select Images</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => folderInputRef.current?.click()}
-                className="px-4 py-2.5 rounded-xl border border-zinc-250 dark:border-zinc-750 bg-zinc-100 dark:bg-zinc-800/80 text-zinc-800 dark:text-zinc-200 font-semibold text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition flex items-center gap-2"
-              >
-                <FolderUp className="w-4 h-4" />
-                <span>Upload Folder</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleLoadSampleImages}
-                className="px-4 py-2.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 font-semibold text-sm hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition flex items-center gap-2"
-              >
-                <Sparkles className="w-4 h-4 text-indigo-500" />
-                <span>Load 3 Samples</span>
-              </button>
-            </div>
-
-            <div className="mt-6 flex items-center gap-4 text-xs text-zinc-400 dark:text-zinc-500">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                Paste from Clipboard (Ctrl+V)
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1.5">
-                <Shield className="w-3.5 h-3.5 text-indigo-500" />
-                Zero Server Uploads
-              </span>
-              <span>•</span>
-              <span>PNG, JPG, WebP, SVG</span>
-            </div>
+            <button
+              type="button"
+              onClick={handleLoadSampleImages}
+              className="px-4 py-2 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 font-semibold text-xs hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition flex items-center gap-2 cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-indigo-500" />
+              <span>Load 3 Samples</span>
+            </button>
           </div>
         </div>
       ) : (

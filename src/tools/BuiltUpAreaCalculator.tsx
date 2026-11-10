@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react';
 import { 
-  Building2, Copy, Check, Download, Plus, Trash2, 
+  Building2, Download, Plus, Trash2, 
   Sparkles, Layers, Ruler, Calculator, 
   Info, ShieldCheck, Landmark, ArrowRightLeft, FileSpreadsheet,
   Grid, CopyPlus
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp, UnitSwitcher } from '../components/common';
 
 // --- Types & Interfaces ---
 export type AreaUnit = 'sqft' | 'sqm' | 'sqyd';
@@ -234,7 +235,6 @@ export default function BuiltUpAreaCalculator() {
   const [revWallSharePct, setRevWallSharePct] = useState<number>(13); // 13% of BUA
 
   // UI state
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'blueprint' | 'financials' | 'standards'>('blueprint');
   const [hoveredRoomId, setHoveredRoomId] = useState<string | null>(null);
 
@@ -535,10 +535,10 @@ export default function BuiltUpAreaCalculator() {
     };
   }, [calculationResults, costPerUnitRate, toSqFtMultiplier]);
 
-  // Copy Architectural Schedule Summary
-  const copyAuditReport = () => {
+  // Detailed Text Report for Copy & WhatsApp
+  const getAuditReportText = () => {
     const res = calculationResults;
-    const text = `=====================================================
+    return `=====================================================
 TOOLIQUE ARCHITECTURAL BUILT-UP AREA SCHEDULE
 =====================================================
 Calculation Standard   : IS 3861:2002 & RERA Real Estate Act 2016
@@ -574,10 +574,6 @@ Estimated Civil Construction Cost: ₹${financialEstimates.totalCivilCost.toLoca
 
 Generated via Toolique Architecture Suite (https://toolique.in)
 =====================================================`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
   };
 
   // Export CSV Room Schedule
@@ -613,127 +609,103 @@ Generated via Toolique Architecture Suite (https://toolique.in)
     document.body.removeChild(link);
   };
 
-  // Export Professional PDF Certificate
+  // Standardized Branded PDF Certificate (Pillar 2)
   const exportPDF = () => {
-    try {
-      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      const res = calculationResults;
-      const fin = financialEstimates;
+    const res = calculationResults;
+    const fin = financialEstimates;
 
-      doc.setFillColor(30, 41, 59);
-      doc.rect(0, 0, 210, 28, 'F');
+    const roomRows = rooms.slice(0, 15).map((room, idx) => {
+      const rowArea = (room.width * room.length * room.count);
+      return {
+        idx: `${idx + 1}`,
+        name: `${room.name} ${room.count > 1 ? `(${room.count}x)` : ''}`,
+        category: room.category.toUpperCase(),
+        dims: `${room.width} × ${room.length} ${dimUnitLabel}`,
+        area: `${rowArea.toFixed(1)} ${unitLabel}`
+      };
+    });
 
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
-      doc.text('ARCHITECTURAL BUILT-UP AREA AUDIT', 14, 12);
-      
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Standardized Measurement Certificate (IS 3861:2002 & RERA Compliance)', 14, 18);
-      doc.text(`Generated: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })} | Toolique.in`, 14, 23);
+    const spatialRows = [
+      { item: 'RERA Net Usable Carpet Area', area: `${res.totalReraCarpet.toFixed(1)} ${unitLabel}`, ratio: `${res.floorEfficiencyRatio.toFixed(1)}% Usable` },
+      { item: 'Balconies & Projections', area: `${res.totalBalcony.toFixed(1)} ${unitLabel}`, ratio: `${res.balconyRatio.toFixed(1)}%` },
+      { item: 'Structural Wall Footprint', area: `${res.totalWallArea.toFixed(1)} ${unitLabel}`, ratio: `${res.wallAreaRatio.toFixed(1)}%` },
+      { item: 'Shafts, Ducts & Columns', area: `${res.shaftDuctArea.toFixed(1)} ${unitLabel}`, ratio: 'Core Structure' },
+      { item: 'Gross Built-Up Area (BUA)', area: `${res.totalGrossBuiltUp.toFixed(1)} ${unitLabel}`, ratio: '100% Plinth' },
+      { item: `Super Built-Up Area (${commonLoadingPct}% Loading)`, area: `${res.superBuiltUpArea.toFixed(1)} ${unitLabel}`, ratio: 'Saleable' }
+    ];
 
-      doc.setFillColor(248, 250, 252);
-      doc.roundedRect(14, 34, 182, 38, 3, 3, 'F');
-      doc.setDrawColor(226, 232, 240);
-      doc.roundedRect(14, 34, 182, 38, 3, 3, 'S');
+    const materialRows = [
+      { head: 'Civil Construction Plinth Budget', rate: `₹${costPerUnitRate}/${unitLabel}`, amount: `₹${fin.totalCivilCost.toLocaleString('en-IN')}` },
+      { head: 'Equivalent Net Carpet Rate', rate: 'Derived', amount: `₹${fin.effectiveCarpetRate.toLocaleString(undefined, { maximumFractionDigits: 0 })} / ${unitLabel}` },
+      { head: 'Structural Cement (50kg bags)', rate: '~0.4 bags/sq.ft', amount: `${fin.cementBags.toLocaleString()} Bags` },
+      { head: 'Fe500D TMT Reinforcement Steel', rate: '~3.8 kg/sq.ft', amount: `${fin.steelKg.toLocaleString()} kg (~${(fin.steelKg / 1000).toFixed(2)} MT)` },
+      { head: 'Masonry Wall Units (Bricks / AAC)', rate: 'IS 3861 Spec', amount: `${fin.bricksCount.toLocaleString()} units` }
+    ];
 
-      doc.setTextColor(15, 23, 42);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text('TOTAL GROSS BUILT-UP (BUA)', 20, 42);
-      doc.setFontSize(16);
-      doc.setTextColor(79, 70, 229);
-      doc.text(`${res.totalGrossBuiltUp.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${unitLabel}`, 20, 50);
-
-      doc.setTextColor(15, 23, 42);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text('RERA USABLE CARPET', 85, 42);
-      doc.setFontSize(14);
-      doc.setTextColor(16, 185, 129);
-      doc.text(`${res.totalReraCarpet.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${unitLabel}`, 85, 50);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 116, 139);
-      doc.text(`Efficiency: ${res.floorEfficiencyRatio.toFixed(1)}%`, 85, 55);
-
-      doc.setTextColor(15, 23, 42);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text('WALLS + BALCONIES', 145, 42);
-      doc.setFontSize(14);
-      doc.setTextColor(245, 158, 11);
-      doc.text(`${(res.totalWallArea + res.totalBalcony).toLocaleString(undefined, { maximumFractionDigits: 1 })} ${unitLabel}`, 145, 50);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 116, 139);
-      doc.text(`Walls: ${res.wallAreaRatio.toFixed(1)}% | Balc: ${res.balconyRatio.toFixed(1)}%`, 145, 55);
-
-      doc.setTextColor(30, 41, 59);
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.text('1. Wall Thickness & Structural Envelope Specifications', 14, 80);
-
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`• Selected Construction Preset: ${WALL_PRESETS.find(w => w.id === selectedWallPreset)?.name || 'Custom Specification'}`, 16, 87);
-      doc.text(`• External Perimeter Wall Width: ${currentExtWallInches} inches (${(currentExtWallInches * 25.4).toFixed(0)} mm)`, 16, 93);
-      doc.text(`• Internal Partition Wall Width: ${currentIntWallInches} inches (${(currentIntWallInches * 25.4).toFixed(0)} mm)`, 16, 99);
-      doc.text(`• Multi-Floor Multiplier: ${floorsCount} Level(s) | Balcony Municipal Treatment: ${balconyBylawFactor}% inclusion`, 16, 105);
-
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.text('2. Architectural Room & Spatial Schedule', 14, 118);
-
-      let startY = 125;
-      doc.setFillColor(241, 245, 249);
-      doc.rect(14, startY, 182, 7, 'F');
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(71, 85, 105);
-      doc.text('SPACE / ROOM', 18, startY + 5);
-      doc.text('CLASSIFICATION', 80, startY + 5);
-      doc.text('DIMENSIONS (W x L)', 125, startY + 5);
-      doc.text(`AREA (${unitLabel.toUpperCase()})`, 165, startY + 5);
-
-      startY += 8;
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(30, 41, 59);
-
-      rooms.slice(0, 12).forEach((room, idx) => {
-        const rowArea = (room.width * room.length * room.count);
-        doc.text(`${idx + 1}. ${room.name} ${room.count > 1 ? `(${room.count}x)` : ''}`, 18, startY + (idx * 6));
-        doc.text(room.category.toUpperCase(), 80, startY + (idx * 6));
-        doc.text(`${room.width} x ${room.length} ${dimUnitLabel}`, 125, startY + (idx * 6));
-        doc.text(`${rowArea.toFixed(1)} ${unitLabel}`, 165, startY + (idx * 6));
-      });
-
-      const nextSectionY = startY + (Math.min(rooms.length, 12) * 6) + 12;
-
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(30, 41, 59);
-      doc.text('3. Civil Construction & Material Thumb-rules', 14, nextSectionY);
-
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`• Estimated Total Civil Cost: Rs. ${fin.totalCivilCost.toLocaleString()} (@ Rs. ${costPerUnitRate}/${unitLabel} Plinth Rate)`, 16, nextSectionY + 7);
-      doc.text(`• Effective Cost per RERA Net Carpet Area: Rs. ${fin.effectiveCarpetRate.toLocaleString(undefined, { maximumFractionDigits: 0 })} / ${unitLabel}`, 16, nextSectionY + 13);
-      doc.text(`• Structural Cement Estimate: ~${fin.cementBags.toLocaleString()} Bags (50kg OPC/PPC 43/53 Grade)`, 16, nextSectionY + 19);
-      doc.text(`• Fe500D TMT Reinforcement Steel: ~${fin.steelKg.toLocaleString()} kg (~${(fin.steelKg / 1000).toFixed(2)} Metric Tonnes)`, 16, nextSectionY + 25);
-      doc.text(`• Masonry Wall Units (Bricks/AAC Blocks): ~${fin.bricksCount.toLocaleString()} units`, 16, nextSectionY + 31);
-
-      doc.setDrawColor(203, 213, 225);
-      doc.line(14, 280, 196, 280);
-      doc.setFontSize(7.5);
-      doc.setTextColor(148, 163, 184);
-      doc.text('Toolique Architecture & Civil Calculations Suite • Free Instant Client-Side Computation Tool • toolique.in', 14, 285);
-
-      doc.save(`BuiltUp_Area_Audit_Certificate_${Date.now()}.pdf`);
-    } catch (e) {
-      console.error('PDF Generation Error', e);
-    }
+    downloadPdfReport({
+      title: 'Architectural Built-Up Area Audit',
+      subtitle: 'Standardized Measurement Certificate (IS 3861:2002 & RERA Compliance)',
+      category: 'civil',
+      complianceBadge: 'IS 3861:2002 & RERA 2016',
+      referenceId: `BUA-${Date.now().toString().slice(-6)}`,
+      theme: 'brand',
+      project: {
+        projectName: 'Built-Up Area & Carpet Measurement Certificate',
+        notes: `Preset: ${WALL_PRESETS.find(w => w.id === selectedWallPreset)?.name || 'Custom Specification'} | Floors: ${floorsCount}`
+      },
+      kpis: [
+        { label: 'Gross Built-Up (BUA)', value: `${res.totalGrossBuiltUp.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${unitLabel}`, highlight: true },
+        { label: 'RERA Net Carpet', value: `${res.totalReraCarpet.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${unitLabel}` },
+        { label: 'Carpet Efficiency', value: `${res.floorEfficiencyRatio.toFixed(1)}%` },
+        { label: 'Walls + Balconies', value: `${(res.totalWallArea + res.totalBalcony).toLocaleString(undefined, { maximumFractionDigits: 1 })} ${unitLabel}` }
+      ],
+      parameters: [
+        { label: 'Measurement Unit', value: unitLabel.toUpperCase() },
+        { label: 'Floor Levels', value: `${floorsCount} Level(s)` },
+        { label: 'Wall Construction', value: WALL_PRESETS.find(w => w.id === selectedWallPreset)?.name || 'Custom' },
+        { label: 'External Envelope Wall', value: `${currentExtWallInches} inches (${(currentExtWallInches * 25.4).toFixed(0)} mm)` },
+        { label: 'Internal Partition Wall', value: `${currentIntWallInches} inches (${(currentIntWallInches * 25.4).toFixed(0)} mm)` },
+        { label: 'Balcony Municipal Factor', value: `${balconyBylawFactor}% Inclusion` }
+      ],
+      tables: [
+        {
+          title: '1. Spatial Distribution & Area Classification',
+          columns: [
+            { header: 'Spatial Classification', dataKey: 'item' },
+            { header: `Area (${unitLabel.toUpperCase()})`, dataKey: 'area', align: 'right' },
+            { header: 'Proportion / Ratio', dataKey: 'ratio' }
+          ],
+          rows: spatialRows
+        },
+        {
+          title: '2. Room & Spatial Inventory Schedule',
+          columns: [
+            { header: '#', dataKey: 'idx' },
+            { header: 'Space / Room', dataKey: 'name' },
+            { header: 'Category', dataKey: 'category' },
+            { header: 'Dimensions (W × L)', dataKey: 'dims' },
+            { header: `Total (${unitLabel.toUpperCase()})`, dataKey: 'area', align: 'right' }
+          ],
+          rows: roomRows
+        },
+        {
+          title: '3. Civil Financials & Material Thumb-rules',
+          columns: [
+            { header: 'Item / Material Head', dataKey: 'head' },
+            { header: 'Thumb-rule Rate', dataKey: 'rate' },
+            { header: 'Quantum / Budget', dataKey: 'amount', align: 'right' }
+          ],
+          rows: materialRows
+        }
+      ],
+      disclaimers: [
+        'Built-up area measures up to the outer finished face of exterior perimeter walls in compliance with IS 3861:2002.',
+        'Net usable carpet area complies with Real Estate (Regulation & Development) Act 2016 provisions.',
+        'Civil material estimations are based on CPWD thumb-rules and structural analysis of RCC framed construction.'
+      ],
+      includeSignoff: true,
+      fileName: `BuiltUp_Area_Audit_Certificate_${Date.now()}.pdf`
+    });
   };
 
   return (
@@ -749,34 +721,23 @@ Generated via Toolique Architecture Suite (https://toolique.in)
 
           {/* Unit Switcher & Quick Actions */}
           <div className="flex flex-wrap items-center gap-3">
-            <div className="bg-zinc-100/80 dark:bg-zinc-850/80 p-1 rounded-xl border border-zinc-200/60 dark:border-zinc-800 flex items-center">
-              {(['sqft', 'sqm', 'sqyd'] as AreaUnit[]).map(u => (
-                <button
-                  key={u}
-                  type="button"
-                  onClick={() => setUnit(u)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                    unit === u
-                      ? 'bg-white dark:bg-zinc-900 text-indigo-650 dark:text-indigo-400 shadow-xs border border-zinc-200/50 dark:border-zinc-700/50'
-                      : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                  }`}
-                >
-                  {u === 'sqft' ? 'Sq. Ft' : u === 'sqm' ? 'Sq. Meters' : 'Sq. Yards'}
-                </button>
-              ))}
-            </div>
+            <UnitSwitcher<AreaUnit>
+              value={unit}
+              onChange={setUnit}
+              options={[
+                { id: 'sqft', label: 'Sq. Ft', shortLabel: 'sq.ft' },
+                { id: 'sqm', label: 'Sq. Meters', shortLabel: 'sq.m' },
+                { id: 'sqyd', label: 'Sq. Yards', shortLabel: 'sq.yd' },
+              ]}
+              size="sm"
+            />
 
-            <button
-              onClick={copyAuditReport}
-              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-wider transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
-            >
-              {copiedReport ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedReport ? 'Copied' : 'Copy Audit'}</span>
-            </button>
+            <CopyButton text={getAuditReportText} label="Copy Audit" copiedLabel="Copied" size="xs" variant="primary" />
+            <ShareWhatsApp text={getAuditReportText} label="WhatsApp" size="xs" variant="solid" />
 
             <button
               onClick={exportPDF}
-              className="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-black uppercase tracking-wider transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-black uppercase tracking-wider transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
               title="Download Architectural Certificate"
             >
               <Download className="w-3.5 h-3.5" />

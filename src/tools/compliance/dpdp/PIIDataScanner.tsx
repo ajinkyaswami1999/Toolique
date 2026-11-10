@@ -254,23 +254,16 @@ export default function PIIDataScanner() {
   return (
     <div className="space-y-6">
       {/* Top Advisory Banner */}
-      <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-indigo-500/10 border border-blue-500/20 dark:border-blue-500/30 rounded-2xl p-5 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 bg-blue-600 text-white rounded-xl shadow-md shrink-0">
-              <ShieldAlert className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                Client-Side PII & Aadhaar Data Scanner
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-                  100% In-Browser Sandbox
-                </span>
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                Scan logs, JSON, CSV, or database snippets for Indian personal data: Aadhaar (with official Verhoeff D5 check), PAN, Passport, Voter ID, phone numbers, and payment cards.
-              </p>
-            </div>
+      <div className="bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-indigo-500/10 border border-blue-500/20 dark:border-blue-500/30 rounded-2xl p-4 shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center gap-1.5">
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>Verhoeff &amp; Luhn In-Browser Algorithms</span>
+            </span>
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+              100% Client-Side Sandbox &bull; Zero Server Transfer
+            </span>
           </div>
           <button
             onClick={() => setInputText(SAMPLE_PAYLOAD)}

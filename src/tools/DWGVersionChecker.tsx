@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { Copy, Check, Upload, FileText, Monitor, Info, Database } from 'lucide-react';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { downloadPdfReport } from '../utils/pdf/reportGenerator';
+import { Upload, FileText, Monitor, Info, Database, Download } from 'lucide-react';
 
 interface VersionMeta {
   name: string;
@@ -115,8 +119,6 @@ export default function DWGVersionChecker() {
   const [fileSize, setFileSize] = useState<string | null>(null);
   const [hexDump, setHexDump] = useState<string[]>(['41', '43', '31', '30', '33', '32', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00']);
   const [asciiDump, setAsciiDump] = useState<string[]>(['A', 'C', '1', '0', '3', '2', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.']);
-  const [copied, setCopied] = useState(false);
-  const [isDragOver, setIsDragOver] = useState(false);
 
   const cleanHeader = headerCode.toUpperCase().trim();
   const meta = versionDatabase[cleanHeader];
@@ -178,11 +180,46 @@ export default function DWGVersionChecker() {
     setAsciiDump(ascii);
   };
 
-  const copyReport = () => {
-    const text = `DWG File Version Audit\nFile: ${fileName || 'Manual Input'}\nHeader Signature: ${headerCode}\nAutoCAD Version: ${meta ? meta.name : 'Unknown'}\nRelease Date: ${meta ? meta.released : 'N/A'}`;
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const getDwgReport = () => {
+    return `DWG File Version Audit\nFile: ${fileName || 'Manual Input'}\nHeader Signature: ${headerCode}\nAutoCAD Version: ${meta ? meta.name : 'Unknown'}\nRelease Date: ${meta ? meta.released : 'N/A'}`;
+  };
+
+  const handleDownloadPdf = () => {
+    downloadPdfReport({
+      title: `DWG Header Audit: ${fileName || 'CAD File'}`,
+      category: 'CAD & Engineering Analysis',
+      project: 'Toolique CAD Tools',
+      theme: 'amber',
+      summaryCards: [
+        { label: 'Header Signature', value: headerCode },
+        { label: 'AutoCAD Version', value: meta ? meta.name : 'Unknown' },
+        { label: 'Format ID', value: meta ? meta.dwgFormat : 'N/A' },
+        { label: 'File Size', value: fileSize || 'Manual Entry' }
+      ],
+      tables: [
+        {
+          title: 'Version & Compatibility Analysis',
+          headers: ['Metric', 'Value'],
+          rows: [
+            ['File Name', fileName || 'Manual Input'],
+            ['Header Signature Code', cleanHeader],
+            ['Matched CAD Version', meta ? meta.name : 'Unknown / Non-standard Header'],
+            ['Release Year', meta ? meta.released : 'N/A'],
+            ['Format Generation', meta ? meta.dwgFormat : 'N/A'],
+            ['Technical Details', meta ? meta.desc : 'No record found for this signature']
+          ]
+        },
+        {
+          title: 'Binary Header Hex Dump (First 16 Bytes)',
+          headers: ['Byte Offset', 'Hex Value', 'ASCII Character'],
+          rows: hexDump.map((h, i) => [String(i).padStart(2, '0'), h, asciiDump[i] || ''])
+        }
+      ],
+      disclaimers: [
+        'DWG binary header decoded client-side using JavaScript DataView byte parsing.',
+        'Zero CAD files are uploaded to external servers.'
+      ]
+    });
   };
 
   return (
@@ -196,43 +233,15 @@ export default function DWGVersionChecker() {
             <span>Upload Drawing File</span>
           </h3>
 
-          <div
-            onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
-            onDragLeave={() => setIsDragOver(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setIsDragOver(false);
-              const file = e.dataTransfer.files?.[0];
-              if (file) handleFileUpload(file);
+          <FileDropzone
+            accept=".dwg,.dxf"
+            onFilesSelected={(files) => {
+              if (files[0]) handleFileUpload(files[0]);
             }}
-            className={`border-2 border-dashed rounded-xl p-8 text-center transition cursor-pointer flex flex-col items-center justify-center space-y-3 ${
-              isDragOver ? 'border-indigo-500 bg-indigo-500/5' : 'border-zinc-200 hover:border-indigo-400 dark:border-zinc-800'
-            }`}
-          >
-            <div className="w-12 h-12 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-              <Upload className="w-6 h-6 animate-bounce" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold">Drag & Drop your DWG file here</p>
-              <p className="text-xs text-zinc-400 mt-1">or click to browse local folders</p>
-            </div>
-            <input
-              type="file"
-              accept=".dwg"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleFileUpload(file);
-              }}
-              className="hidden"
-              id="dwg-upload-input"
-            />
-            <label
-              htmlFor="dwg-upload-input"
-              className="px-4 py-2 bg-indigo-650 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold mt-2 shadow-sm transition"
-            >
-              Choose File
-            </label>
-          </div>
+            title="Drag & Drop your DWG / DXF file here"
+            description="Read internal AutoCAD binary header signature (AC1032, AC1027, etc.)"
+            colorTheme="amber"
+          />
 
           {fileName && (
             <div className="flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/50 dark:border-zinc-700/50 rounded-xl">
@@ -314,12 +323,21 @@ export default function DWGVersionChecker() {
         {/* Version Match Card */}
         <div className="saas-card p-6 flex flex-col justify-between h-full space-y-6">
           <div>
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
               <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Audit Status</span>
-              <button onClick={copyReport} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold">
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied' : 'Copy'}</span>
-              </button>
+              <div className="flex items-center gap-1.5">
+                <CopyButton text={getDwgReport()} label="Copy" className="text-[11px] py-1 px-2.5" />
+                <ShareWhatsApp text={getDwgReport()} className="text-[11px] py-1 px-2.5" />
+                <button
+                  type="button"
+                  onClick={handleDownloadPdf}
+                  className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer transition shadow-xs"
+                  title="Download PDF audit report"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>PDF</span>
+                </button>
+              </div>
             </div>
 
             {meta ? (

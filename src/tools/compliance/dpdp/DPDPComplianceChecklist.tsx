@@ -295,25 +295,18 @@ If your grievance is not resolved satisfactorily, you hold the statutory right t
   return (
     <div className="space-y-6">
       {/* Statutory Banner */}
-      <div className="bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-teal-500/10 border border-blue-500/20 dark:border-blue-500/30 rounded-2xl p-5 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 bg-blue-600 text-white rounded-xl shadow-md shrink-0">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                DPDP Act 2023 Statutory Readiness & SDF Evaluator
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-300 dark:border-blue-800">
-                  Act No. 22 of 2023
-                </span>
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                Evaluate enterprise compliance across the 8 statutory pillars, determine Significant Data Fiduciary (SDF) obligations under Section 10, simulate Section 33 statutory financial penalties, and generate Section 5 compliant consent notices.
-              </p>
-            </div>
+      <div className="bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-teal-500/10 border border-blue-500/20 dark:border-blue-500/30 rounded-2xl p-4 shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>DPDP Act 2023 (Act No. 22 of 2023) Framework</span>
+            </span>
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-300 dark:border-blue-800">
+              8 Statutory Pillars &bull; Section 10 SDF Evaluator
+            </span>
           </div>
-          <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <span className={`text-xs font-bold px-3 py-1.5 rounded-xl border ${auditScore.badgeBg}`}>
               {auditScore.percentage}% Complete • {auditScore.status}
             </span>

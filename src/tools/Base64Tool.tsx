@@ -1,6 +1,7 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
 import {
-  Copy, Check, Trash2, Download, Upload,
+  Copy, Check, Trash2, Download,
   ArrowLeftRight, RefreshCw, Shield,
   AlertCircle, FileCheck, Layers
 } from 'lucide-react';
@@ -148,7 +149,6 @@ export default function Base64Tool() {
     base64: string;
     dataUri: string;
   } | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // --- BASE64 TO FILE STATE ---
   const [decodeInput, setDecodeInput] = useState<string>('');
@@ -253,13 +253,6 @@ export default function Base64Tool() {
       });
     };
     reader.readAsArrayBuffer(file);
-  };
-
-  const handleFileDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      processFile(e.dataTransfer.files[0]);
-    }
   };
 
   // ----------------------------------------------------
@@ -643,32 +636,15 @@ export default function Base64Tool() {
       {/* ========================================================================= */}
       {activeTab === 'file-to-base64' && (
         <div className="space-y-6">
-          <div
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={handleFileDrop}
-            onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-400 p-8 rounded-2xl bg-zinc-50/60 dark:bg-zinc-900/40 text-center cursor-pointer transition-all duration-200 group"
-          >
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={(e) => e.target.files?.[0] && processFile(e.target.files[0])}
-              className="hidden"
-            />
-            <div className="max-w-md mx-auto space-y-3">
-              <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
-                <Upload className="w-7 h-7" />
-              </div>
-              <div>
-                <h3 className="text-sm font-extrabold text-zinc-900 dark:text-white">
-                  Drop any file here or click to browse
-                </h3>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-1">
-                  Supports Images (PNG, JPG, SVG, WebP, GIF), PDFs, Audio, Video, Fonts, and Binary files up to 50MB.
-                </p>
-              </div>
-            </div>
-          </div>
+          <FileDropzone
+            accept="*/*"
+            onFilesSelected={(files) => {
+              if (files[0]) processFile(files[0]);
+            }}
+            title="Drop any file here or click to browse"
+            description="Supports Images (PNG, JPG, SVG, WebP, GIF), PDFs, Audio, Video, Fonts, and Binary files up to 50MB"
+            colorTheme="indigo"
+          />
 
           {uploadedFile && (
             <div className="saas-card p-6 space-y-5">

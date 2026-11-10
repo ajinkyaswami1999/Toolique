@@ -211,24 +211,17 @@ Account Holder`;
 
   return (
     <div className="space-y-8">
-      {/* Top Banner */}
-      <div className="saas-card bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/20 p-5 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded-lg">
-            <Clock className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-              RBI Transaction Reversal SLA & ₹100/Day Compensation Calculator
-            </h2>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Compute statutory turnaround deadlines and ₹100/day customer compensation under RBI Circular DPSS.CO.PD No.629.
-            </p>
-          </div>
+      {/* Top Action Toolbar */}
+      <div className="saas-card bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/20 p-4 rounded-xl flex flex-wrap items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5" />
+            <span>RBI Circular DPSS.CO.PD No.629 Statutory SLA</span>
+          </span>
         </div>
         <div className="flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20">
           <ShieldCheck className="w-4 h-4" />
-          <span>RBI Circular Mandated</span>
+          <span>&inr;100/Day Customer Compensation Mandate</span>
         </div>
       </div>
 

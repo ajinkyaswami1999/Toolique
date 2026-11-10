@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
+import { downloadPdfReport } from '../utils/pdf/reportGenerator';
 import {
   FileText,
   Download,
@@ -85,8 +89,6 @@ export default function PDFMetadataViewer() {
   const [isSavingEdit, setIsSavingEdit] = useState<boolean>(false);
   const [editedDownloadBlob, setEditedDownloadBlob] = useState<{ blob: Blob; url: string; filename: string } | null>(null);
 
-  // Drag state
-  const [isDragging, setIsDragging] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Clean up blob URLs
@@ -286,30 +288,70 @@ export default function PDFMetadataViewer() {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploaded = e.target.files?.[0];
-    if (uploaded) {
-      if (uploaded.type !== 'application/pdf' && !uploaded.name.toLowerCase().endsWith('.pdf')) {
-        setError('Please upload a valid PDF document (.pdf file only).');
-        return;
-      }
-      setFile(uploaded);
-      inspectPdf(uploaded);
-    }
+  const getPdfSummary = () => {
+    if (!metadata || !file) return '';
+    return [
+      `=== PDF Metadata Audit: ${file.name} ===`,
+      `File Size: ${(metadata.fileSize / (1024 * 1024)).toFixed(2)} MB`,
+      `Pages: ${metadata.pageCount}`,
+      `PDF Version: v${metadata.pdfVersion}`,
+      `Title: ${metadata.title || 'N/A'}`,
+      `Author: ${metadata.author || 'N/A'}`,
+      `Subject: ${metadata.subject || 'N/A'}`,
+      `Producer: ${metadata.producer || 'N/A'}`,
+      `Creator: ${metadata.creator || 'N/A'}`,
+      `Creation Date: ${metadata.creationDate || 'N/A'}`,
+      `Encrypted: ${metadata.isEncrypted ? 'Yes' : 'No'}`
+    ].join('\n');
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const dropped = e.dataTransfer.files?.[0];
-    if (dropped) {
-      if (dropped.type !== 'application/pdf' && !dropped.name.toLowerCase().endsWith('.pdf')) {
-        setError('Please drop a valid PDF document (.pdf format).');
-        return;
-      }
-      setFile(dropped);
-      inspectPdf(dropped);
-    }
+  const handleDownloadPdfReport = () => {
+    if (!metadata || !file) return;
+    downloadPdfReport({
+      title: `PDF Metadata Audit: ${file.name}`,
+      category: 'PDF Document Analysis',
+      project: 'Toolique Document Tools',
+      theme: 'rose',
+      summaryCards: [
+        { label: 'File Size', value: `${(metadata.fileSize / (1024 * 1024)).toFixed(2)} MB` },
+        { label: 'Page Count', value: `${metadata.pageCount} Pages` },
+        { label: 'PDF Version', value: `v${metadata.pdfVersion}` },
+        { label: 'Fast Web View', value: metadata.isLinearized ? 'Yes (Linearized)' : 'No' }
+      ],
+      tables: [
+        {
+          title: 'Document Properties',
+          headers: ['Property', 'Value'],
+          rows: [
+            ['File Name', file.name],
+            ['Title', metadata.title || 'N/A'],
+            ['Author', metadata.author || 'N/A'],
+            ['Subject', metadata.subject || 'N/A'],
+            ['Keywords', metadata.keywords.join(', ') || 'N/A'],
+            ['Creator Application', metadata.creator || 'N/A'],
+            ['PDF Producer', metadata.producer || 'N/A'],
+            ['Creation Date', metadata.creationDate || 'N/A'],
+            ['Modification Date', metadata.modificationDate || 'N/A'],
+            ['Encrypted / Password Protected', metadata.isEncrypted ? 'Yes' : 'No']
+          ]
+        },
+        {
+          title: 'Page Geometry Sample',
+          headers: ['Page #', 'Dimensions (pt)', 'Dimensions (mm)', 'Orientation', 'Paper Size'],
+          rows: metadata.pages.slice(0, 20).map(p => [
+            String(p.pageNumber),
+            `${p.widthPt.toFixed(1)} × ${p.heightPt.toFixed(1)}`,
+            `${p.widthMm.toFixed(1)} × ${p.heightMm.toFixed(1)}`,
+            p.orientation,
+            p.paperSizeName
+          ])
+        }
+      ],
+      disclaimers: [
+        'Document analyzed 100% locally in browser memory using PDF.js and pdf-lib.',
+        'Zero document contents were transmitted over the network.'
+      ]
+    });
   };
 
   const handleReset = () => {
@@ -487,53 +529,19 @@ export default function PDFMetadataViewer() {
 
       {/* Drag & Drop Upload Zone (When No File Loaded) */}
       {!file && (
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
+        <FileDropzone
+          accept=".pdf,application/pdf"
+          onFilesSelected={(files) => {
+            const dropped = files[0];
+            if (dropped) {
+              setFile(dropped);
+              inspectPdf(dropped);
+            }
           }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-          className={`saas-card relative border-2 border-dashed p-10 sm:p-14 text-center transition-all ${
-            isDragging
-              ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 scale-[0.99]'
-              : 'border-zinc-250 dark:border-zinc-800 hover:border-indigo-400/80 bg-zinc-50/40 dark:bg-zinc-900/30'
-          }`}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf,application/pdf"
-            onChange={handleFileChange}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-            aria-label="Upload PDF file to inspect metadata"
-          />
-
-          <div className="max-w-md mx-auto space-y-4 pointer-events-none">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-sm">
-              <FileText className="w-8 h-8" />
-            </div>
-
-            <div className="space-y-1.5">
-              <p className="text-base font-bold text-zinc-900 dark:text-white">
-                Drop your PDF here or <span className="text-indigo-600 dark:text-indigo-400 underline">browse</span>
-              </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Inspect author, software producer, creation dates, page geometry, and XMP XML
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Title & Author</span>
-              <span>•</span>
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Producer & Creator</span>
-              <span>•</span>
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Page Dimensions</span>
-              <span>•</span>
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Edit & Sanitize</span>
-            </div>
-          </div>
-        </div>
+          title="Drop your PDF here or browse"
+          description="Inspect author, software producer, creation dates, page geometry, and XMP XML"
+          colorTheme="indigo"
+        />
       )}
 
       {/* Loading Progress State */}
@@ -610,7 +618,21 @@ export default function PDFMetadataViewer() {
 
             {/* Quick Actions & Reset */}
             <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <CopyButton text={getPdfSummary()} label="Copy Summary" />
+              <ShareWhatsApp text={getPdfSummary()} />
+
               <button
+                type="button"
+                onClick={handleDownloadPdfReport}
+                className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+                title="Download branded PDF metadata audit report"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>PDF Audit</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={handleExportJSON}
                 className="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-1.5 transition cursor-pointer"
                 title="Export metadata as JSON"
@@ -620,6 +642,7 @@ export default function PDFMetadataViewer() {
               </button>
 
               <button
+                type="button"
                 onClick={handleExportCSV}
                 className="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-1.5 transition cursor-pointer"
                 title="Export metadata table as CSV"
@@ -629,6 +652,7 @@ export default function PDFMetadataViewer() {
               </button>
 
               <button
+                type="button"
                 onClick={handleReset}
                 className="px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 flex items-center gap-1.5 transition cursor-pointer"
                 title="Inspect another file"

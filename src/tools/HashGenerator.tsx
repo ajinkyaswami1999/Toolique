@@ -1,4 +1,7 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
 import {
   KeyRound,
   Copy,
@@ -6,7 +9,6 @@ import {
   FileText,
   UploadCloud,
   ShieldCheck,
-  RefreshCw,
   Download,
   Search,
   Eye,
@@ -255,7 +257,6 @@ export default function HashGenerator() {
   });
 
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const [copyAllStatus, setCopyAllStatus] = useState<boolean>(false);
 
   // Helper to get active Uint8Array payload
   const currentBytes = useMemo<Uint8Array>(() => {
@@ -289,13 +290,6 @@ export default function HashGenerator() {
       setIsProcessingFile(false);
     };
     reader.readAsArrayBuffer(selectedFile);
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFileChange(e.dataTransfer.files[0]);
-    }
   };
 
   // Compute Hashes Reactively
@@ -523,8 +517,8 @@ export default function HashGenerator() {
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  // Copy All Hashes as Formatted Text
-  const handleCopyAll = () => {
+  // Get All Hashes as Formatted Text
+  const getAllHashesFormatted = () => {
     const sourceLabel = activeTab === 'file' ? (file ? file.name : 'Uploaded File') : `String ("${textInput.slice(0, 24)}...")`;
     const lines = [
       `# Toolique India - Cryptographic Checksums`,
@@ -539,9 +533,7 @@ export default function HashGenerator() {
       lines.push(`${item.name}: ${formatOutput(item.rawHex)}`);
     });
 
-    navigator.clipboard.writeText(lines.join('\n'));
-    setCopyAllStatus(true);
-    setTimeout(() => setCopyAllStatus(false), 2000);
+    return lines.join('\n');
   };
 
   // Download Checksum File
@@ -607,17 +599,12 @@ export default function HashGenerator() {
 
         {/* Global Action Chips */}
         <div className="flex items-center gap-2 flex-wrap">
-          <button
-            onClick={handleCopyAll}
-            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-pastel-indigo/30 hover:bg-pastel-indigo/60 text-indigo-800 dark:text-indigo-300 border border-pastel-indigo/50 transition flex items-center gap-1.5"
-          >
-            {copyAllStatus ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copyAllStatus ? 'All Copied!' : 'Copy All Hashes'}</span>
-          </button>
+          <CopyButton text={getAllHashesFormatted()} label="Copy All Hashes" />
+          <ShareWhatsApp text={getAllHashesFormatted()} />
 
           <button
             onClick={handleDownloadChecksumFile}
-            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-lg text-xs font-bold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition flex items-center gap-1.5 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Download .txt</span>
@@ -694,40 +681,15 @@ export default function HashGenerator() {
             {/* FILE MODE */}
             {activeTab === 'file' && (
               <div className="space-y-4">
-                <div
-                  onDrop={handleDrop}
-                  onDragOver={(e) => e.preventDefault()}
-                  className="border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-400 rounded-2xl p-6 text-center transition cursor-pointer bg-zinc-50/50 dark:bg-zinc-900/30"
-                  onClick={() => document.getElementById('file-upload-input')?.click()}
-                >
-                  <input
-                    id="file-upload-input"
-                    type="file"
-                    className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        handleFileChange(e.target.files[0]);
-                      }
-                    }}
-                  />
-                  <div className="flex flex-col items-center justify-center space-y-2">
-                    <div className="w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-950/60 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                      {isProcessingFile ? (
-                        <RefreshCw className="w-6 h-6 animate-spin" />
-                      ) : (
-                        <UploadCloud className="w-6 h-6" />
-                      )}
-                    </div>
-                    <div className="space-y-0.5">
-                      <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
-                        {isProcessingFile ? 'Computing checksums from binary...' : 'Click or drag file here'}
-                      </p>
-                      <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
-                        Executable, ZIP, PDF, Image, ISO, or Document up to 200MB
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <FileDropzone
+                  accept="*/*"
+                  onFilesSelected={(files) => {
+                    if (files[0]) handleFileChange(files[0]);
+                  }}
+                  title={isProcessingFile ? "Computing checksums from binary..." : "Click or drag file here"}
+                  description="Executable, ZIP, PDF, Image, ISO, or Document up to 200MB"
+                  colorTheme="indigo"
+                />
 
                 {fileError && (
                   <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-2">

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
 import {
   FileImage,
-  Upload,
   Download,
   CheckCircle2,
   AlertCircle,
@@ -87,7 +87,6 @@ export default function PDFToImage() {
   const [copiedPageNum, setCopiedPageNum] = useState<number | null>(null);
 
   // Refs
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const cancelConversionRef = useRef<boolean>(false);
   const bgThumbAbortRef = useRef<boolean>(false);
 
@@ -291,18 +290,6 @@ export default function PDFToImage() {
       setIsProcessing(false);
       setProgressStatus('');
     }
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploadedFile = e.target.files?.[0];
-    if (uploadedFile) {
-      if (uploadedFile.type !== 'application/pdf' && !uploadedFile.name.toLowerCase().endsWith('.pdf')) {
-        setError('Please upload a valid .pdf document.');
-        return;
-      }
-      loadPdfFile(uploadedFile);
-    }
-    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   // Instant Sample PDF synthesis in browser memory for 1-click trial
@@ -744,7 +731,6 @@ export default function PDFToImage() {
     setError(null);
     setStatusMessage(null);
     setProgressPercent(0);
-    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   // Summary Metrics
@@ -858,65 +844,26 @@ export default function PDFToImage() {
       {/* MAIN WORKSPACE: Upload Dropzone (When Empty) or Config + Previews (When Loaded) */}
       {!file ? (
         <div className="p-8 sm:p-12 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm text-center">
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-              e.preventDefault();
-              const f = e.dataTransfer.files?.[0];
-              if (f) {
-                if (f.type !== 'application/pdf' && !f.name.toLowerCase().endsWith('.pdf')) {
-                  setError('Please drop a valid .pdf file.');
-                  return;
-                }
-                loadPdfFile(f);
-              }
+          <FileDropzone
+            accept=".pdf,application/pdf"
+            onFilesSelected={(files) => {
+              const f = files[0];
+              if (f) loadPdfFile(f);
             }}
-            className="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-500 rounded-3xl p-8 sm:p-12 transition group cursor-pointer bg-slate-50/50 dark:bg-slate-950/20 hover:bg-teal-500/5 dark:hover:bg-teal-500/5"
-          >
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-teal-500/10 dark:bg-teal-950/50 border border-teal-500/20 flex items-center justify-center text-teal-600 dark:text-teal-400 group-hover:scale-110 transition-transform shadow-md shadow-teal-500/10">
-              <Upload className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1">
-              Select or Drop PDF Document
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-6 leading-relaxed">
-              Convert every page or custom ranges into crystal-clear PNG, JPG, or WebP images with customizable DPI resolution. Optimized for large documents up to 500MB.
-            </p>
+            title="Select or Drop PDF Document"
+            description="Convert every page or custom ranges into crystal-clear PNG, JPG, or WebP images with customizable DPI resolution"
+            colorTheme="emerald"
+          />
 
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  fileInputRef.current?.click();
-                }}
-                className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md shadow-teal-500/20 transition flex items-center gap-2 cursor-pointer"
-              >
-                <FileImage className="w-4 h-4" />
-                <span>Choose PDF File</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleLoadSamplePdf();
-                }}
-                className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs border border-slate-300 dark:border-slate-700 transition flex items-center gap-2 cursor-pointer"
-              >
-                <Zap className="w-4 h-4 text-amber-500" />
-                <span>Try with Sample PDF</span>
-              </button>
-            </div>
-
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-              accept=".pdf,application/pdf"
-              className="hidden"
-            />
+          <div className="flex justify-center mt-4">
+            <button
+              type="button"
+              onClick={handleLoadSamplePdf}
+              className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs border border-slate-300 dark:border-slate-700 transition flex items-center gap-2 cursor-pointer shadow-xs"
+            >
+              <Zap className="w-4 h-4 text-amber-500" />
+              <span>Try with Sample PDF</span>
+            </button>
           </div>
 
           <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">

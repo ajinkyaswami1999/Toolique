@@ -1,10 +1,15 @@
 import { useState, useEffect, useMemo } from 'react';
 import { 
-  Copy, Check, Info, Building2, Trash2, Plus, 
+  Info, Building2, Trash2, Plus, 
   Printer, Download, Sparkles, Sliders, ArrowRightLeft,
-  MapPin, Loader2, CheckCircle2, AlertCircle
+  MapPin, Loader2, CheckCircle2, AlertCircle, Compass,
+  Layers, Shield, BookOpen, ChevronRight, HelpCircle,
+  Eye, Check, Copy, ArrowUpRight, TrendingUp, Maximize2,
+  Columns, Grid, ArrowDown, ArrowUp, BarChart3, Ruler,
+  Building, Landmark, Coins, FileCheck
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp } from '../components/common';
 import { INDIAN_STATES_FSI_DATA, type CityZoneRegulation } from '../data/indiaFsiRegulations';
 import { detectUserIndianLocation } from '../utils/indianLocationFsiResolver';
 
@@ -12,6 +17,8 @@ import { detectUserIndianLocation } from '../utils/indianLocationFsiResolver';
 type UnitType = 'sqft' | 'sqm' | 'sqyd' | 'acre' | 'hectare' | 'cent' | 'guntha' | 'bigha';
 type BuildingType = 'residential' | 'commercial' | 'mixed_use' | 'industrial' | 'institutional';
 type ReverseMode = 'max_builtup' | 'required_plot' | 'calculate_fsi' | 'calculate_coverage' | 'remaining_fsi';
+type VisualTab = 'plot_plan' | 'elevation' | 'fsi_graph';
+type KnowledgeTab = 'fsi_vs_far' | 'gross_vs_net' | 'fsi_exclusions' | 'road_width' | 'udcpr_stack';
 
 interface FloorRow {
   id: string;
@@ -29,56 +36,83 @@ interface HistoryItem {
   timestamp: string;
 }
 
+// Popular Quick Indian Cities
+const POPULAR_CITIES = [
+  { stateId: 'maharashtra', cityId: 'pune', name: 'Pune (PMC/PCMC)', fsi: 1.80, authority: 'PMC UDCPR' },
+  { stateId: 'maharashtra', cityId: 'mumbai', name: 'Mumbai (BMC)', fsi: 2.50, authority: 'MCGM DCPR 2034' },
+  { stateId: 'karnataka', cityId: 'bengaluru', name: 'Bengaluru', fsi: 2.25, authority: 'BBMP RMP 2031' },
+  { stateId: 'delhi', cityId: 'delhi_central', name: 'Delhi NCR', fsi: 2.00, authority: 'DDA MPD 2021' },
+  { stateId: 'telangana', cityId: 'hyderabad', name: 'Hyderabad', fsi: 3.50, authority: 'GHMC GO 168' },
+  { stateId: 'gujarat', cityId: 'ahmedabad', name: 'Ahmedabad', fsi: 2.70, authority: 'AUDA / AMC GDCR' },
+  { stateId: 'tamil_nadu', cityId: 'chennai', name: 'Chennai', fsi: 2.00, authority: 'CMDA CDR' },
+];
+
 export default function FARFSICalculator() {
   // 1. Calculator Modes Toggles
-  const [calcMode, setCalcMode] = useState<'forward' | 'reverse'>('forward');
-  const [isProfessional, setIsProfessional] = useState<boolean>(false);
+  const [calcMode, setCalcMode] = useState<'forward' | 'udcpr_stack' | 'reverse'>('forward');
+  const [isProfessional, setIsProfessional] = useState<boolean>(true);
   const [unit, setUnit] = useState<UnitType>('sqft');
   const lengthUnit = (unit === 'sqm' || unit === 'hectare') ? 'm' : 'ft';
 
   // 2. Core Inputs
-  const [plotArea, setPlotArea] = useState<number>(2000);
+  const [plotArea, setPlotArea] = useState<number>(2400); // 40x60 plot
   const [permissibleFsi, setPermissibleFsi] = useState<number>(2.0);
   const [groundCoverage, setGroundCoverage] = useState<number>(50); // %
   const [avgFloorHeight, setAvgFloorHeight] = useState<number>(3.0); // meters or 10 ft
   const [roadWidth, setRoadWidth] = useState<number>(12); // meters or 40 ft
   const [plotWidth, setPlotWidth] = useState<number>(40); // ft or meters
-  const [plotDepth, setPlotDepth] = useState<number>(50); // ft or meters
+  const [plotDepth, setPlotDepth] = useState<number>(60); // ft or meters
   const [buildingType, setBuildingType] = useState<BuildingType>('residential');
   const [devZone, setDevZone] = useState<string>('residential_zone');
 
   // Setbacks (Professional Mode)
-  const [setbackFront, setSetbackFront] = useState<number>(3); // ft or meters
-  const [setbackRear, setSetbackRear] = useState<number>(3);
-  const [setbackLeft, setSetbackLeft] = useState<number>(2);
-  const [setbackRight, setSetbackRight] = useState<number>(2);
+  const [setbackFront, setSetbackFront] = useState<number>(10); // ft or meters
+  const [setbackRear, setSetbackRear] = useState<number>(8);
+  const [setbackLeft, setSetbackLeft] = useState<number>(5);
+  const [setbackRight, setSetbackRight] = useState<number>(5);
 
-  // 3. Floor Area Planner List
+  // 3. Municipal UDCPR / DCPR Stack State
+  const [baseFsi, setBaseFsi] = useState<number>(1.10);
+  const [enablePremiumFsi, setEnablePremiumFsi] = useState<boolean>(true);
+  const [premiumFsiValue, setPremiumFsiValue] = useState<number>(0.30);
+  const [readyReckonerLandRate, setReadyReckonerLandRate] = useState<number>(4500); // INR per sqft
+  const [enableTdr, setEnableTdr] = useState<boolean>(true);
+  const [tdrFsiValue, setTdrFsiValue] = useState<number>(0.40);
+  const [enableAncillaryFungible, setEnableAncillaryFungible] = useState<boolean>(true);
+  const [ancillaryPercentage, setAncillaryPercentage] = useState<number>(35); // 35% for residential, 50% for commercial
+  const [isTodZone, setIsTodZone] = useState<boolean>(false); // Transit Oriented Development corridor (+0.5 FSI)
+
+  // 4. Visual Studio & Knowledge Tabs
+  const [activeVisualTab, setActiveVisualTab] = useState<VisualTab>('plot_plan');
+  const [activeKnowledgeTab, setActiveKnowledgeTab] = useState<KnowledgeTab>('fsi_vs_far');
+  const [showKnowledgeModal, setShowKnowledgeModal] = useState<boolean>(false);
+
+  // 5. Floor Area Planner List
   const [plannedFloors, setPlannedFloors] = useState<FloorRow[]>([
-    { id: '1', name: 'Ground Floor', area: 1000 },
-    { id: '2', name: 'First Floor', area: 1000 },
-    { id: '3', name: 'Second Floor', area: 1000 },
-    { id: '4', name: 'Third Floor', area: 1000 }
+    { id: '1', name: 'Ground Floor (Parking/Lobby)', area: 1000 },
+    { id: '2', name: 'First Floor', area: 1200 },
+    { id: '3', name: 'Second Floor', area: 1200 },
+    { id: '4', name: 'Third Floor', area: 1200 }
   ]);
   const numFloors = plannedFloors.length;
 
-  // 4. Reverse Calculator Inputs
+  // 6. Reverse Calculator Inputs
   const [revMode, setRevMode] = useState<ReverseMode>('max_builtup');
-  const [revDesiredFloorArea, setRevDesiredFloorArea] = useState<string>('4000');
-  const [revPlotArea, setRevPlotArea] = useState<string>('2000');
+  const [revDesiredFloorArea, setRevDesiredFloorArea] = useState<string>('4800');
+  const [revPlotArea, setRevPlotArea] = useState<string>('2400');
   const [revFsi, setRevFsi] = useState<string>('2.0');
-  const [revFootprint, setRevFootprint] = useState<string>('1000');
-  const [revPlannedArea, setRevPlannedArea] = useState<string>('3000');
+  const [revFootprint, setRevFootprint] = useState<string>('1200');
+  const [revPlannedArea, setRevPlannedArea] = useState<string>('3600');
 
-  // 5. Scenario Comparison Inputs
+  // 7. Scenario Comparison Inputs
   const [enableComparison, setEnableComparison] = useState<boolean>(false);
   const [compFsiA, setCompFsiA] = useState<string>('1.5');
   const [compFsiB, setCompFsiB] = useState<string>('2.0');
   const [compFsiC, setCompFsiC] = useState<string>('2.5');
 
-  // 6. Location Presets State
+  // 8. Location Presets State
   const [statePreset, setStatePreset] = useState<string>('maharashtra');
-  const [cityPreset, setCityPreset] = useState<string>('mumbai');
+  const [cityPreset, setCityPreset] = useState<string>('pune');
   const [zonePreset, setZonePreset] = useState<string>('residential');
   const [isDetectingLocation, setIsDetectingLocation] = useState<boolean>(false);
   const [locationMessage, setLocationMessage] = useState<{
@@ -87,6 +121,7 @@ export default function FARFSICalculator() {
     details?: string;
   } | null>(null);
 
+  // Location Detector
   const handleDetectLocation = async (autoApply: boolean = true) => {
     setIsDetectingLocation(true);
     setLocationMessage(null);
@@ -103,6 +138,7 @@ export default function FARFSICalculator() {
         const reg = z[zonePreset] || z['residential'];
         if (reg) {
           setPermissibleFsi(reg.fsi);
+          setBaseFsi(Number((reg.fsi * 0.6).toFixed(2)));
           appliedFsiText = ` • Auto-applied FSI: ${reg.fsi}`;
         }
       }
@@ -150,8 +186,6 @@ export default function FARFSICalculator() {
   }, [selectedCity]);
 
   // Utility states
-  const [copiedLink, setCopiedLink] = useState<boolean>(false);
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [historyList, setHistoryList] = useState<HistoryItem[]>([]);
   const [newHistoryName, setNewHistoryName] = useState<string>('My Plot Plan');
 
@@ -175,8 +209,6 @@ export default function FARFSICalculator() {
     if (newUnit === unit) return;
     const oldFactor = conversionFactors[unit];
     const newFactor = conversionFactors[newUnit];
-    
-    // Scale plot area safely
     const baseSqft = plotArea * oldFactor;
     setPlotArea(Number((baseSqft / newFactor).toFixed(2)));
     setUnit(newUnit);
@@ -185,8 +217,13 @@ export default function FARFSICalculator() {
   // Load calculation history and URL parameters on mount
   useEffect(() => {
     const cached = localStorage.getItem('toolique_far_hist');
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (cached) setHistoryList(JSON.parse(cached));
+    if (cached) {
+      try {
+        setHistoryList(JSON.parse(cached));
+      } catch {
+        // ignore parse error
+      }
+    }
 
     const params = new URLSearchParams(window.location.search);
     const urlPlotArea = params.get('plotArea');
@@ -194,17 +231,31 @@ export default function FARFSICalculator() {
     const urlMode = params.get('mode');
     const urlUnit = params.get('unit');
     
-    if (urlPlotArea) setPlotArea(parseFloat(urlPlotArea) || 2000);
+    if (urlPlotArea) setPlotArea(parseFloat(urlPlotArea) || 2400);
     if (urlFsi) setPermissibleFsi(parseFloat(urlFsi) || 2.0);
-    if (urlMode === 'forward' || urlMode === 'reverse') setCalcMode(urlMode as 'forward' | 'reverse');
+    if (urlMode === 'forward' || urlMode === 'reverse' || urlMode === 'udcpr_stack') {
+      setCalcMode(urlMode as 'forward' | 'reverse' | 'udcpr_stack');
+    }
     if (urlUnit) setUnit(urlUnit as UnitType);
   }, []);
 
-  // Load FSI preset into the calculator
+  // Apply FSI preset into the calculator
   const applyPreset = () => {
     if (activePreset) {
       setPermissibleFsi(activePreset.fsi);
+      setBaseFsi(Number((activePreset.fsi * 0.6).toFixed(2)));
+      setPremiumFsiValue(Number((activePreset.fsi * 0.2).toFixed(2)));
+      setTdrFsiValue(Number((activePreset.fsi * 0.2).toFixed(2)));
     }
+  };
+
+  const handleQuickCitySelect = (city: typeof POPULAR_CITIES[0]) => {
+    setStatePreset(city.stateId);
+    setCityPreset(city.cityId);
+    setPermissibleFsi(city.fsi);
+    setBaseFsi(Number((city.fsi * 0.6).toFixed(2)));
+    setPremiumFsiValue(Number((city.fsi * 0.2).toFixed(2)));
+    setTdrFsiValue(Number((city.fsi * 0.2).toFixed(2)));
   };
 
   // --- Dynamic Core Calculations ---
@@ -212,23 +263,91 @@ export default function FARFSICalculator() {
     const areaFactor = conversionFactors[unit];
     const plotAreaSqft = plotArea * areaFactor;
 
+    // Road width restrictions & Height Check (Model Building Bye-laws 2016)
+    // Hmax = 1.5 * (Road Width + Front Setback)
+    const isMetric = unit === 'sqm' || unit === 'hectare';
+    const roadWidthMeters = isMetric ? roadWidth : roadWidth * 0.3048;
+    const frontSetbackMeters = isMetric ? setbackFront : setbackFront * 0.3048;
+    const maxPermissibleHeightMeters = Number((1.5 * (roadWidthMeters + frontSetbackMeters)).toFixed(1));
+    const maxPermissibleHeightFeet = Number((maxPermissibleHeightMeters * 3.28084).toFixed(1));
+
+    // Road width tiered FSI ceiling guidelines (UDCPR standard benchmarks)
+    let roadWidthFsiCeiling = 1.10;
+    let roadWidthAdvisory = 'Road < 9.0m: Standard Base FSI only (No TDR or Premium FSI allowed)';
+    if (roadWidthMeters >= 30.0) {
+      roadWidthFsiCeiling = 3.50;
+      roadWidthAdvisory = 'Road ≥ 30m: High-density transit corridor (Maximum FSI & TOD incentives enabled)';
+    } else if (roadWidthMeters >= 24.0) {
+      roadWidthFsiCeiling = 3.00;
+      roadWidthAdvisory = 'Road 24m–30m: Full TDR loading + Premium FSI allowed';
+    } else if (roadWidthMeters >= 18.0) {
+      roadWidthFsiCeiling = 2.50;
+      roadWidthAdvisory = 'Road 18m–24m: Commercial and high-rise apartment clearance tier';
+    } else if (roadWidthMeters >= 12.0) {
+      roadWidthFsiCeiling = 2.20;
+      roadWidthAdvisory = 'Road 12m–18m: Standard urban arterial road with moderate TDR potential';
+    } else if (roadWidthMeters >= 9.0) {
+      roadWidthFsiCeiling = 1.80;
+      roadWidthAdvisory = 'Road 9m–12m: Base FSI + Limited Premium FSI allowed';
+    }
+
     // Footprint constraints under setbacks
     let setbackReductionFactor = 1.0;
     let setbackLimitAreaSqft = Infinity;
+    let netBuildableWidth = plotWidth;
+    let netBuildableDepth = plotDepth;
+
     if (isProfessional && plotWidth > 0 && plotDepth > 0) {
-      const netWidth = Math.max(0, plotWidth - setbackLeft - setbackRight);
-      const netDepth = Math.max(0, plotDepth - setbackFront - setbackRear);
-      const buildableAreaRect = netWidth * netDepth;
+      netBuildableWidth = Math.max(0, plotWidth - setbackLeft - setbackRight);
+      netBuildableDepth = Math.max(0, plotDepth - setbackFront - setbackRear);
+      const buildableAreaRect = netBuildableWidth * netBuildableDepth;
       const nominalArea = plotWidth * plotDepth;
       if (nominalArea > 0) {
         setbackReductionFactor = buildableAreaRect / nominalArea;
       }
-      const isMetric = unit === 'sqm' || unit === 'hectare';
       setbackLimitAreaSqft = isMetric ? (buildableAreaRect * conversionFactors['sqm']) : buildableAreaRect;
     }
 
     // Built-up capacities
-    const permissibleBuiltUpSqft = plotAreaSqft * permissibleFsi;
+    let effectivePermissibleFsi = permissibleFsi;
+
+    // If in UDCPR Municipal Stack Mode, recalculate permissible FSI from stack components
+    let totalStackFsi = baseFsi;
+    let premiumFsiAreaSqft = 0;
+    let premiumFsiCostInr = 0;
+    let tdrFsiAreaSqft = 0;
+    let ancillaryFsiAreaSqft = 0;
+    let totalGrossConstructionSqft = 0;
+
+    if (calcMode === 'udcpr_stack') {
+      let stackSum = baseFsi;
+      if (enablePremiumFsi) {
+        stackSum += premiumFsiValue;
+        premiumFsiAreaSqft = plotAreaSqft * premiumFsiValue;
+        // Premium FSI cost in Maharashtra/UDCPR is typically 35% of land Ready Reckoner rate
+        premiumFsiCostInr = premiumFsiAreaSqft * (readyReckonerLandRate * 0.35);
+      }
+      if (enableTdr) {
+        stackSum += tdrFsiValue;
+        tdrFsiAreaSqft = plotAreaSqft * tdrFsiValue;
+      }
+      if (isTodZone) {
+        stackSum += 0.50; // Transit oriented bonus
+      }
+      totalStackFsi = Number(stackSum.toFixed(2));
+      effectivePermissibleFsi = totalStackFsi;
+
+      // Ancillary/Fungible FSI (e.g. 35% on permissible BUA)
+      const basePermissibleBua = plotAreaSqft * effectivePermissibleFsi;
+      if (enableAncillaryFungible) {
+        ancillaryFsiAreaSqft = basePermissibleBua * (ancillaryPercentage / 100);
+        totalGrossConstructionSqft = basePermissibleBua + ancillaryFsiAreaSqft;
+      } else {
+        totalGrossConstructionSqft = basePermissibleBua;
+      }
+    }
+
+    const permissibleBuiltUpSqft = plotAreaSqft * effectivePermissibleFsi;
     const maxGroundFootprintSqft = isProfessional && plotWidth > 0 && plotDepth > 0
       ? Math.min(plotAreaSqft * (groundCoverage / 100), setbackLimitAreaSqft)
       : plotAreaSqft * (groundCoverage / 100);
@@ -239,18 +358,27 @@ export default function FARFSICalculator() {
     const remainingBuiltUpSqft = permissibleBuiltUpSqft - totalPlannedBuiltUpSqft;
     const fsiUtilizationPercentage = permissibleBuiltUpSqft > 0 ? (totalPlannedBuiltUpSqft / permissibleBuiltUpSqft) * 100 : 0;
 
+    // Building Height Check (based on planned floors)
+    const floorHeightMeters = isMetric ? avgFloorHeight : avgFloorHeight * 0.3048;
+    const totalProposedHeightMeters = Number((plannedFloors.length * floorHeightMeters).toFixed(1));
+    const totalProposedHeightFeet = Number((totalProposedHeightMeters * 3.28084).toFixed(1));
+    const isHeightCompliant = totalProposedHeightMeters <= maxPermissibleHeightMeters;
+
     // Status indicators
-    let statusLabel = 'Low utilization';
+    let statusLabel = 'Compliant (Safe)';
     let statusColor = 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20';
     if (fsiUtilizationPercentage > 100) {
-      statusLabel = 'Limit Exceeded';
+      statusLabel = 'Exceeds Statutory Ceiling';
       statusColor = 'text-rose-500 bg-rose-500/10 border-rose-500/20';
     } else if (fsiUtilizationPercentage >= 90) {
-      statusLabel = 'Near Limit';
+      statusLabel = 'Near Threshold (Optimal)';
       statusColor = 'text-amber-500 bg-amber-500/10 border-amber-500/20';
     } else if (fsiUtilizationPercentage >= 50) {
-      statusLabel = 'Moderate utilization';
-      statusColor = 'text-indigo-650 bg-indigo-500/10 border-indigo-500/20';
+      statusLabel = 'Balanced Utilization';
+      statusColor = 'text-indigo-600 bg-indigo-500/10 border-indigo-500/20';
+    } else {
+      statusLabel = 'Under-Utilized Capacity';
+      statusColor = 'text-sky-500 bg-sky-500/10 border-sky-500/20';
     }
 
     return {
@@ -260,7 +388,24 @@ export default function FARFSICalculator() {
       utilizedFsi: Number(utilizedFsi.toFixed(3)),
       remainingBuiltUp: remainingBuiltUpSqft / areaFactor,
       fsiUtilizationPercentage: Number(fsiUtilizationPercentage.toFixed(1)),
+      effectivePermissibleFsi,
       setbackReductionFactor,
+      netBuildableWidth,
+      netBuildableDepth,
+      roadWidthMeters,
+      roadWidthFsiCeiling,
+      roadWidthAdvisory,
+      maxPermissibleHeightMeters,
+      maxPermissibleHeightFeet,
+      totalProposedHeightMeters,
+      totalProposedHeightFeet,
+      isHeightCompliant,
+      totalStackFsi,
+      premiumFsiArea: premiumFsiAreaSqft / areaFactor,
+      premiumFsiCostInr,
+      tdrFsiArea: tdrFsiAreaSqft / areaFactor,
+      ancillaryFsiArea: ancillaryFsiAreaSqft / areaFactor,
+      totalGrossConstruction: totalGrossConstructionSqft / areaFactor,
       statusLabel,
       statusColor
     };
@@ -277,7 +422,19 @@ export default function FARFSICalculator() {
     setbackRear,
     setbackLeft,
     setbackRight,
-    conversionFactors
+    conversionFactors,
+    roadWidth,
+    avgFloorHeight,
+    calcMode,
+    baseFsi,
+    enablePremiumFsi,
+    premiumFsiValue,
+    readyReckonerLandRate,
+    enableTdr,
+    tdrFsiValue,
+    enableAncillaryFungible,
+    ancillaryPercentage,
+    isTodZone
   ]);
 
   // --- Dynamic Floor Management ---
@@ -306,8 +463,6 @@ export default function FARFSICalculator() {
     setPlannedFloors(plannedFloors.map(f => f.id === id ? { ...f, area: val } : f));
   };
 
-
-  // Sync floor elements when modifying floors input number
   const handleFloorsCountChange = (val: number) => {
     const target = Math.max(1, Math.min(30, val));
     if (target > plannedFloors.length) {
@@ -377,7 +532,7 @@ export default function FARFSICalculator() {
       name: newHistoryName,
       plotArea,
       unit,
-      fsi: permissibleFsi,
+      fsi: calculations.effectivePermissibleFsi,
       floorsCount: plannedFloors.length,
       timestamp: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })
     };
@@ -395,111 +550,121 @@ export default function FARFSICalculator() {
   };
 
   // --- Copy, PDF, and Print actions ---
-  const copyResultsText = () => {
+  const getResultsText = () => {
     const unitLabel = unit === 'sqft' ? 'sq ft' : 'sq m';
-    const text = `FAR / FSI Planning Audit (Toolique.in)
-----------------------------------------------
-Plot Area            : ${plotArea} ${unitLabel}
-Permissible FSI/FAR  : ${permissibleFsi}
-Ground Coverage Limit: ${groundCoverage}%
-Planned Floor Levels : ${plannedFloors.length}
-----------------------------------------------
-Max Permissible Area : ${calculations.permissibleBuiltUp.toFixed(2)} ${unitLabel}
-Planned built-up Area: ${calculations.totalPlannedBuiltUp.toFixed(2)} ${unitLabel}
-Utilized FSI/FAR     : ${calculations.utilizedFsi}
-FSI Utilization %    : ${calculations.fsiUtilizationPercentage}%
-Remaining Capacity   : ${calculations.remainingBuiltUp.toFixed(2)} ${unitLabel}
-----------------------------------------------
-Status Audit         : ${calculations.statusLabel}`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
+    return `FAR / FSI Statutory Planning Audit (Toolique.in)
+--------------------------------------------------
+Location / Authority : ${selectedCity.name}, ${selectedState.name} (${activePreset?.authority || 'Municipal Body'})
+Plot Area            : ${plotArea.toLocaleString()} ${unitLabel}
+Permissible FSI/FAR  : ${calculations.effectivePermissibleFsi} (${calculations.effectivePermissibleFsi * 100}% FAR)
+Ground Coverage Limit: ${groundCoverage}% (Max: ${calculations.maxGroundFootprint.toFixed(1)} ${unitLabel})
+Road Width           : ${roadWidth} ${lengthUnit} (Max Height: ${calculations.maxPermissibleHeightMeters}m / ${calculations.maxPermissibleHeightFeet}ft)
+--------------------------------------------------
+Proposed Floors      : ${plannedFloors.length} Levels
+Proposed Building Ht : ${calculations.totalProposedHeightMeters}m (${calculations.isHeightCompliant ? 'Compliant' : 'Exceeds Road Limit'})
+Max Permissible BUA  : ${calculations.permissibleBuiltUp.toFixed(1)} ${unitLabel}
+Planned Built-up Area: ${calculations.totalPlannedBuiltUp.toFixed(1)} ${unitLabel}
+Utilized FSI/FAR     : ${calculations.utilizedFsi} (${calculations.fsiUtilizationPercentage}% Consumed)
+Remaining Capacity   : ${calculations.remainingBuiltUp.toFixed(1)} ${unitLabel}
+--------------------------------------------------
+Status Compliance    : ${calculations.statusLabel}`;
   };
 
   const exportCSV = () => {
-    const headers = ['Floor Level', 'Planned Area (sq ft/m)'];
-    const rows = plannedFloors.map(f => [f.name, f.area]);
+    const headers = ['Floor Level', `Planned Area (${unit})`, `Coverage % of Plot`];
+    const rows = plannedFloors.map(f => [
+      f.name, 
+      f.area, 
+      plotArea > 0 ? ((f.area / plotArea) * 100).toFixed(1) : 0
+    ]);
     const csvContent = "data:text/csv;charset=utf-8,"
       + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
     
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `FAR_FSI_Amortization_FloorPlan_${Date.now()}.csv`);
+    link.setAttribute("download", `FSI_FloorSchedule_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   const handlePrint = () => {
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>FAR / FSI Clearance Invoice - Toolique</title>
-          <style>
-            body { font-family: sans-serif; padding: 40px; color: #333; }
-            h2 { border-bottom: 2px solid #555; padding-bottom: 10px; }
-            .row { display: flex; justify-content: space-between; margin: 12px 0; font-size: 14px; }
-            .total { font-weight: bold; font-size: 1.1em; border-top: 1px solid #333; padding-top: 10px; }
-          </style>
-        </head>
-        <body>
-          <h2>FAR / FSI CLEARANCE PLAN</h2>
-          <div class="row"><span>Plot Area</span><span>${plotArea} ${unit}</span></div>
-          <div class="row"><span>Permissible FSI</span><span>${permissibleFsi}</span></div>
-          <div class="row"><span>Ground Coverage Limit</span><span>${groundCoverage}%</span></div>
-          <div class="row"><span>Planned Floors Count</span><span>${plannedFloors.length} levels</span></div>
-          <div class="row total"><span>Max Permissible Area</span><span>${calculations.permissibleBuiltUp.toFixed(2)} ${unit}</span></div>
-          <div class="row"><span>Utilized FSI/FAR</span><span>${calculations.utilizedFsi}</span></div>
-          <div class="row"><span>FSI Utilization %</span><span>${calculations.fsiUtilizationPercentage}%</span></div>
-          <script>window.print(); window.close();</script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+    window.print();
   };
 
+  // Standardized Branded PDF Audit Report (Pillar 2)
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFillColor(79, 70, 229);
-    doc.rect(0, 0, 210, 38, 'F');
+    const floorRows = plannedFloors.map((f, i) => ({
+      level: f.name || `Floor ${i + 1}`,
+      planned: `${f.area} ${unit}`,
+      coverage: `${plotArea > 0 ? ((f.area / plotArea) * 100).toFixed(1) : 0}%`
+    }));
 
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text('FAR / FSI DEVELOPMENT PLAN', 15, 22);
-    doc.setFontSize(10);
-    doc.text('Zoning Regulation Audit — Toolique.in', 15, 30);
+    const summaryRows = [
+      { metric: 'Plot Area (Cadastral)', value: `${plotArea} ${unit}`, note: 'Net Buildable Area' },
+      { metric: 'Statutory Permissible FSI', value: `${calculations.effectivePermissibleFsi}`, note: activePreset?.doc || 'Municipal Master Plan' },
+      { metric: 'Maximum Permissible BUA', value: `${calculations.permissibleBuiltUp.toFixed(1)} ${unit}`, note: 'Statutory Zoning Cap' },
+      { metric: 'Ground Coverage Footprint', value: `${groundCoverage}% (${calculations.maxGroundFootprint.toFixed(1)} ${unit})`, note: 'Ground Slab Boundary' },
+      { metric: 'Front Road Width', value: `${roadWidth} ${lengthUnit}`, note: `Max Height: ${calculations.maxPermissibleHeightMeters}m` },
+      { metric: 'Proposed Floors & Height', value: `${plannedFloors.length} Floors (${calculations.totalProposedHeightMeters}m)`, note: calculations.isHeightCompliant ? 'Within Road Height Limit' : 'Exceeds Road Ratio' },
+      { metric: 'Total Proposed Built-Up Area', value: `${calculations.totalPlannedBuiltUp.toFixed(1)} ${unit}`, note: `${calculations.fsiUtilizationPercentage}% Consumed` },
+      { metric: 'Remaining FSI Balance', value: `${calculations.remainingBuiltUp.toFixed(1)} ${unit}`, note: calculations.remainingBuiltUp >= 0 ? 'Within By-laws' : 'Exceeds Permissible Limit' },
+    ];
 
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(12);
-    doc.text('Site Regulation Parameters', 15, 52);
-
-    doc.setFontSize(10);
-    doc.text(`Plot Area: ${plotArea} ${unit}`, 15, 60);
-    doc.text(`Permissible FSI limit: ${permissibleFsi}`, 15, 66);
-    doc.text(`Ground Coverage limit: ${groundCoverage}%`, 15, 72);
-    doc.text(`Building Type: ${buildingType.toUpperCase()}`, 15, 78);
-    
-    if (isProfessional) {
-      doc.text(`Road Width constraint: ${roadWidth}m`, 15, 84);
-      doc.text(`Setbacks: Front ${setbackFront}m | Rear ${setbackRear}m | Sides ${setbackLeft}m / ${setbackRight}m`, 15, 90);
-    }
-
-    doc.line(15, 96, 195, 96);
-    
-    doc.setFontSize(12);
-    doc.text('Development Potential Summary', 15, 106);
-    
-    doc.setFontSize(10);
-    doc.text(`Max Permissible Builtup Area: ${calculations.permissibleBuiltUp.toFixed(2)} ${unit}`, 15, 114);
-    doc.text(`Total Proposed Area: ${calculations.totalPlannedBuiltUp.toFixed(2)} ${unit}`, 15, 120);
-    doc.text(`Actual FSI Utilized: ${calculations.utilizedFsi}`, 15, 126);
-    doc.text(`FSI Utilization status: ${calculations.statusLabel} (${calculations.fsiUtilizationPercentage}%)`, 15, 132);
-
-    doc.save(`FAR_FSI_Audit_Report_${Date.now()}.pdf`);
+    downloadPdfReport({
+      title: 'FAR / FSI Statutory Clearance & Development Audit',
+      subtitle: `Plot: ${plotArea} ${unit} | Permissible FSI: ${calculations.effectivePermissibleFsi} | Location: ${selectedCity.name}, ${selectedState.name}`,
+      category: 'civil',
+      complianceBadge: 'NBC 2016 & State UDCPR / DCPR',
+      referenceId: `FSI-${Date.now().toString().slice(-6)}`,
+      theme: 'brand',
+      project: {
+        projectName: `${selectedCity.name} Zoning & FSI Clearance Analysis`,
+        notes: `Building Type: ${buildingType.toUpperCase()} | Authority: ${activePreset?.authority || 'Town Planning Authority'} | Status: ${calculations.statusLabel}`
+      },
+      kpis: [
+        { label: 'Max Permissible Area', value: `${calculations.permissibleBuiltUp.toFixed(1)} ${unit}`, highlight: true },
+        { label: 'Proposed Built-Up', value: `${calculations.totalPlannedBuiltUp.toFixed(1)} ${unit}` },
+        { label: 'FSI Utilization', value: `${calculations.fsiUtilizationPercentage}%` },
+        { label: 'Remaining Capacity', value: `${calculations.remainingBuiltUp.toFixed(1)} ${unit}`, highlight: calculations.remainingBuiltUp < 0 }
+      ],
+      parameters: [
+        { label: 'Plot Area', value: `${plotArea} ${unit}` },
+        { label: 'Permissible FSI Limit', value: `${calculations.effectivePermissibleFsi}` },
+        { label: 'Ground Coverage Limit', value: `${groundCoverage}%` },
+        { label: 'Building Classification', value: buildingType.toUpperCase() },
+        { label: 'Front Road Width', value: `${roadWidth} ${lengthUnit}` },
+        { label: 'Front / Rear Setbacks', value: `${setbackFront} ${lengthUnit} / ${setbackRear} ${lengthUnit}` },
+      ],
+      tables: [
+        {
+          title: '1. Development Potential & FSI Clearance Audit',
+          columns: [
+            { header: 'Metric', dataKey: 'metric' },
+            { header: 'Value', dataKey: 'value', align: 'right' as const },
+            { header: 'Regulatory Reference', dataKey: 'note' }
+          ],
+          rows: summaryRows
+        },
+        ...(floorRows.length > 0 ? [{
+          title: '2. Floor-by-Floor Construction Schedule',
+          columns: [
+            { header: 'Level', dataKey: 'level' },
+            { header: 'Planned Area', dataKey: 'planned', align: 'right' as const },
+            { header: 'Footprint Ratio', dataKey: 'coverage' }
+          ],
+          rows: floorRows
+        }] : [])
+      ],
+      disclaimers: [
+        'FAR / FSI calculations adhere to Model Building Bye-Laws 2016 and local town planning authority master plans (UDCPR / DCPR 2034).',
+        'Permissible ground coverage, road width multipliers, and premium/purchasable TDR FSI are subject to municipal verification.',
+        'Basement, parking podiums, and service shafts may be exempt under specific state development control regulations.'
+      ],
+      includeSignoff: true,
+      fileName: `FAR_FSI_Audit_Report_${Date.now()}.pdf`
+    });
   };
 
   const getShareLink = () => {
@@ -514,81 +679,85 @@ Status Audit         : ${calculations.statusLabel}`;
   return (
     <div className="space-y-8 max-w-6xl mx-auto text-left">
       
-      {/* Top Banner Widget */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-zinc-50 dark:bg-zinc-900/40 p-4 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-650 dark:text-indigo-400">
-            <Building2 className="w-5 h-5" />
+      {/* =========================================================================
+          MUNICIPAL CODEBOOK & STATUTORY CITY PRESET RIBBON (No duplicate H1/H2)
+          ========================================================================= */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-lg border border-indigo-500/20 space-y-3">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 shrink-0">
+              <Landmark className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-bold text-white tracking-wide">
+                  Active Regulations: <span className="text-indigo-300 font-extrabold">{selectedCity.name}</span>
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[10px] font-mono font-black uppercase">
+                  {activePreset?.doc || 'UDCPR 2020 / NBC 2016'}
+                </span>
+                <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-[10px] font-mono font-bold">
+                  Baseline FSI: {activePreset?.fsi || permissibleFsi}
+                </span>
+              </div>
+              <p className="text-[11px] text-zinc-400 font-medium mt-0.5">
+                Authority: {activePreset?.authority || 'Town Planning Department'} • Verified: {activePreset?.verified || '2026'}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-extrabold text-zinc-900 dark:text-white text-sm">Zoning & Development Planner</h3>
-            <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">Verify Floor Area Ratio (FAR) and Ground Coverage clearances</p>
+
+          <div className="flex items-center gap-2 self-stretch md:self-auto justify-end shrink-0">
+            <button
+              type="button"
+              onClick={() => handleDetectLocation(true)}
+              disabled={isDetectingLocation}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-sm cursor-pointer disabled:opacity-60"
+              title="Auto-detect current city and load statutory FSI regulations"
+            >
+              {isDetectingLocation ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <MapPin className="w-3.5 h-3.5 text-amber-300" />
+              )}
+              <span>{isDetectingLocation ? 'Detecting...' : 'Detect My City'}</span>
+            </button>
+            <CopyButton text={getShareLink} label="Share" copiedLabel="Copied" size="xs" variant="secondary" />
           </div>
         </div>
 
-        {/* Share scenario */}
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(getShareLink());
-            setCopiedLink(true);
-            setTimeout(() => setCopiedLink(false), 2000);
-          }}
-          className="text-[10px] font-bold text-indigo-700 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm"
-        >
-          {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-          <span>{copiedLink ? 'Link Copied' : 'Share Scenario'}</span>
-        </button>
-      </div>
-
-      {/* CORE WORKSPACE TABS & QUICK DETECT */}
-      <div className="space-y-3 border-b border-zinc-200 dark:border-zinc-800 pb-3">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <div className="flex flex-wrap gap-2">
+        {/* Quick Popular City Selector Pills */}
+        <div className="pt-2 border-t border-indigo-500/20 flex flex-wrap items-center gap-1.5 text-xs">
+          <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider mr-1">
+            Quick Cities:
+          </span>
+          {POPULAR_CITIES.map((c) => (
             <button
-              onClick={() => setCalcMode('forward')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
-                calcMode === 'forward' ? 'bg-indigo-600 text-white shadow-md' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
+              key={c.name}
+              type="button"
+              onClick={() => handleQuickCitySelect(c)}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer border ${
+                cityPreset === c.cityId 
+                  ? 'bg-indigo-500 text-white border-indigo-400 shadow-xs' 
+                  : 'bg-white/5 hover:bg-white/10 text-indigo-200 border-white/10'
               }`}
             >
-              Forward FSI Planner
+              {c.name} (FSI {c.fsi})
             </button>
-            <button
-              onClick={() => setCalcMode('reverse')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
-                calcMode === 'reverse' ? 'bg-indigo-600 text-white shadow-md' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
-              }`}
-            >
-              Reverse FSI Planners
-            </button>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => handleDetectLocation(true)}
-            disabled={isDetectingLocation}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800 text-xs font-bold transition shadow-xs active:scale-[0.98] cursor-pointer disabled:opacity-60"
-            title="Auto-detect current city and load statutory FSI regulations"
-          >
-            {isDetectingLocation ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600 dark:text-indigo-400" />
-            ) : (
-              <MapPin className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-            )}
-            <span>{isDetectingLocation ? 'Detecting Location...' : 'Detect My Location'}</span>
-          </button>
+          ))}
         </div>
 
+        {/* Location Detection Alert Notification */}
         {locationMessage && (
           <div className={`p-3 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs transition-all ${
             locationMessage.type === 'success'
-              ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200'
-              : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200'
+              ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-200'
+              : 'bg-rose-950/60 border-rose-500/40 text-rose-200'
           }`}>
             <div className="flex items-center gap-2">
               {locationMessage.type === 'success' ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               ) : (
-                <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+                <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
               )}
               <div>
                 <span className="font-bold">{locationMessage.text}</span>
@@ -601,39 +770,230 @@ Status Audit         : ${calculations.statusLabel}`;
               <button
                 type="button"
                 onClick={applyPreset}
-                className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-xl transition shrink-0 cursor-pointer shadow-xs self-start sm:self-auto"
+                className="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[11px] rounded-xl transition shrink-0 cursor-pointer shadow-xs self-start sm:self-auto"
               >
-                Apply FSI ({activePreset.fsi})
+                Apply Regulation FSI ({activePreset.fsi})
               </button>
             )}
           </div>
         )}
       </div>
 
-      {/* TWO COLUMN INTERACTION LAYER */}
+      {/* =========================================================================
+          MODE SELECTOR BAR (Forward vs UDCPR Stack vs Reverse)
+          ========================================================================= */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-3">
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setCalcMode('forward')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+              calcMode === 'forward' 
+                ? 'bg-indigo-600 text-white shadow-md' 
+                : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
+            }`}
+          >
+            <Compass className="w-3.5 h-3.5" />
+            <span>1. Standard Forward Planner</span>
+          </button>
+          <button
+            onClick={() => setCalcMode('udcpr_stack')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+              calcMode === 'udcpr_stack' 
+                ? 'bg-indigo-600 text-white shadow-md' 
+                : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 text-amber-300" />
+            <span>2. Municipal UDCPR / DCPR Stack</span>
+          </button>
+          <button
+            onClick={() => setCalcMode('reverse')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+              calcMode === 'reverse' 
+                ? 'bg-indigo-600 text-white shadow-md' 
+                : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-650 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800'
+            }`}
+          >
+            <ArrowRightLeft className="w-3.5 h-3.5" />
+            <span>3. Reverse Plot / FSI Solver</span>
+          </button>
+        </div>
+
+        {/* Knowledge Guide Toggle Pill */}
+        <button
+          onClick={() => setShowKnowledgeModal(!showKnowledgeModal)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/30 text-xs font-bold transition cursor-pointer"
+        >
+          <BookOpen className="w-3.5 h-3.5 text-amber-500" />
+          <span>FSI Rules & Knowledge Base</span>
+        </button>
+      </div>
+
+      {/* =========================================================================
+          INTERACTIVE KNOWLEDGE HUB (Explainers, Definitions & Bylaws)
+          ========================================================================= */}
+      {showKnowledgeModal && (
+        <div className="p-6 rounded-3xl bg-zinc-50 dark:bg-zinc-900 border border-amber-500/30 shadow-lg space-y-4 animate-fadeIn">
+          <div className="flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800 pb-3">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                <BookOpen className="w-4 h-4" />
+              </div>
+              <h3 className="font-black text-zinc-900 dark:text-white text-sm">
+                Indian Architectural FSI Masterclass & Statutory Rules
+              </h3>
+            </div>
+            <button
+              onClick={() => setShowKnowledgeModal(false)}
+              className="text-xs font-bold text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200"
+            >
+              ✕ Close Guide
+            </button>
+          </div>
+
+          {/* Sub-Tabs */}
+          <div className="flex flex-wrap gap-2 text-xs">
+            <button
+              onClick={() => setActiveKnowledgeTab('fsi_vs_far')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                activeKnowledgeTab === 'fsi_vs_far' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'
+              }`}
+            >
+              FSI vs FAR
+            </button>
+            <button
+              onClick={() => setActiveKnowledgeTab('udcpr_stack')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                activeKnowledgeTab === 'udcpr_stack' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'
+              }`}
+            >
+              Base + Premium + TDR Stack
+            </button>
+            <button
+              onClick={() => setActiveKnowledgeTab('road_width')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                activeKnowledgeTab === 'road_width' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'
+              }`}
+            >
+              Road Width Slabs
+            </button>
+            <button
+              onClick={() => setActiveKnowledgeTab('fsi_exclusions')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                activeKnowledgeTab === 'fsi_exclusions' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'
+              }`}
+            >
+              Free of FSI (Exclusions)
+            </button>
+            <button
+              onClick={() => setActiveKnowledgeTab('gross_vs_net')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                activeKnowledgeTab === 'gross_vs_net' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'
+              }`}
+            >
+              Gross vs Net Plot
+            </button>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-white dark:bg-zinc-950/60 border border-zinc-200/80 dark:border-zinc-800/80 text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
+            {activeKnowledgeTab === 'fsi_vs_far' && (
+              <div className="space-y-2">
+                <h4 className="font-bold text-indigo-600 dark:text-indigo-400">What is the difference between FSI and FAR?</h4>
+                <p>
+                  Mathematically, <strong>FSI (Floor Space Index)</strong> and <strong>FAR (Floor Area Ratio)</strong> are identical. FSI is expressed as a decimal ratio (e.g., <strong>2.0</strong> in Mumbai, Pune, Bengaluru), whereas FAR is expressed as a percentage (e.g., <strong>200%</strong> in Delhi, Noida, Haryana).
+                </p>
+                <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 font-mono text-[11px]">
+                  FSI = Total Built-up Area across all floors / Net Plot Area<br />
+                  FAR (%) = (Total Built-up Area / Net Plot Area) × 100
+                </div>
+              </div>
+            )}
+
+            {activeKnowledgeTab === 'udcpr_stack' && (
+              <div className="space-y-2">
+                <h4 className="font-bold text-indigo-600 dark:text-indigo-400">How the Indian Statutory FSI Stack Works (UDCPR / DCPR 2034)</h4>
+                <p>
+                  In major cities like Pune (PMC/PCMC) and Mumbai, permissible construction is NOT just a single number. It is built in 4 legal layers:
+                </p>
+                <ol className="list-decimal pl-4 space-y-1">
+                  <li><strong>Base FSI</strong>: Automatic statutory entitlement (typically 1.10 for residential non-congested). Free of charge.</li>
+                  <li><strong>Premium FSI</strong>: Additional FSI (0.30–0.50) purchased directly from the municipal corporation at 35% of the land Ready Reckoner rate.</li>
+                  <li><strong>TDR (Transferable Development Rights)</strong>: Market certificates (0.40–1.40) generated from road widening or reservations, loaded onto the plot subject to road width limits.</li>
+                  <li><strong>Ancillary / Fungible FSI</strong>: A 35% bonus area granted for enclosed balconies, cupboards, and lift lobbies without consuming regular FSI.</li>
+                </ol>
+              </div>
+            )}
+
+            {activeKnowledgeTab === 'road_width' && (
+              <div className="space-y-2">
+                <h4 className="font-bold text-indigo-600 dark:text-indigo-400">Road Width Determines FSI & Building Height</h4>
+                <p>
+                  Under Indian urban planning bylaws (NBC 2016 & UDCPR Table 6A), road width directly dictates your maximum potential:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 font-mono text-[11px]">
+                  <div className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-900">Road &lt; 9m: Max FSI 1.10 (No TDR allowed)</div>
+                  <div className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-900">Road 9m–12m: Max FSI 1.80 (Base 1.1 + Prem 0.3 + TDR 0.4)</div>
+                  <div className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-900">Road 12m–18m: Max FSI 2.20 (Base 1.1 + Prem 0.5 + TDR 0.6)</div>
+                  <div className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-900">Road ≥ 30m: Max FSI 3.00 to 3.50 (Transit Oriented TOD)</div>
+                </div>
+              </div>
+            )}
+
+            {activeKnowledgeTab === 'fsi_exclusions' && (
+              <div className="space-y-2">
+                <h4 className="font-bold text-indigo-600 dark:text-indigo-400">What is "Free of FSI" (Exempted from FSI Limits)?</h4>
+                <p>
+                  The following structural spaces do NOT count against your permissible FSI under most municipal codes:
+                </p>
+                <ul className="list-disc pl-4 space-y-1">
+                  <li>Basements dedicated exclusively to vehicular car parking or building utilities (substations, pumps).</li>
+                  <li>Open-to-sky podium parking floors and stilt parking floors with minimum 2.4m clearance.</li>
+                  <li>Staircase flights, lift shafts, fire escape towers, and mid-landing lobbies.</li>
+                  <li>Refuge areas required by fire safety codes in buildings over 24 meters in height.</li>
+                  <li>Rooftop solar plant structures, architectural parapet walls, and overhead water tanks.</li>
+                </ul>
+              </div>
+            )}
+
+            {activeKnowledgeTab === 'gross_vs_net' && (
+              <div className="space-y-2">
+                <h4 className="font-bold text-indigo-600 dark:text-indigo-400">Gross Plot Area vs Net Plot Area</h4>
+                <p>
+                  FSI calculations are legally performed on the <strong>Net Plot Area</strong>. If a portion of your land falls under municipal Development Plan (DP) road widening or public amenity reservation, that surrendered land area is deducted from the gross plot. The municipality issues <strong>TDR Certificates (FSI Credit)</strong> in exchange for the surrendered land, which can be loaded back on the remaining plot.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          MAIN INTERACTIVE WORKSPACE (Two-Column Layout)
+          ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* LEFT COLUMN: CALCULATOR INPUTS */}
+        {/* =======================================================================
+            LEFT COLUMN: CALCULATOR INPUT CONTROLS
+            ======================================================================= */}
         <div className="lg:col-span-5 space-y-6">
           
-          {/* FORWARD CALCULATION MODE PANEL */}
+          {/* 1. FORWARD CALCULATION MODE */}
           {calcMode === 'forward' && (
-            <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-5">
-              <div className="flex justify-between items-center border-b border-zinc-150 dark:border-zinc-850 pb-3">
-                <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-200 uppercase tracking-wider flex items-center gap-1.5">
+            <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs space-y-5">
+              <div className="flex justify-between items-center border-b border-zinc-150 dark:border-zinc-800 pb-3">
+                <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-indigo-500" />
-                  <span>Forward Parameters</span>
+                  <span>Forward Plot Parameters</span>
                 </h3>
                 
-                {/* Simple vs Professional toggle switch */}
-                <label className="flex items-center gap-1 text-[10px] font-bold text-zinc-450 cursor-pointer">
+                <label className="flex items-center gap-1 text-[11px] font-bold text-zinc-500 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={isProfessional}
                     onChange={(e) => setIsProfessional(e.target.checked)}
-                    className="rounded border-zinc-300 text-indigo-650"
+                    className="rounded border-zinc-300 text-indigo-600"
                   />
-                  <span>Professional Mode</span>
+                  <span>CAD Setbacks</span>
                 </label>
               </div>
 
@@ -644,15 +1004,15 @@ Status Audit         : ${calculations.statusLabel}`;
                   <select
                     value={unit}
                     onChange={(e) => handleUnitSwitch(e.target.value as UnitType)}
-                    className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-850 text-[10px] font-bold bg-transparent text-zinc-550"
+                    className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 text-[10px] font-bold bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300"
                   >
-                    <option value="sqft">Sq. Feet</option>
-                    <option value="sqm">Sq. Meters</option>
-                    <option value="sqyd">Sq. Yards</option>
+                    <option value="sqft">Sq. Feet (sq ft)</option>
+                    <option value="sqm">Sq. Meters (sq m)</option>
+                    <option value="sqyd">Sq. Yards (Gaj)</option>
                     <option value="acre">Acres</option>
                     <option value="hectare">Hectares</option>
-                    <option value="cent">Cents</option>
-                    <option value="guntha">Gunthas</option>
+                    <option value="cent">Cents (South India)</option>
+                    <option value="guntha">Gunthas (MH/KA)</option>
                     <option value="bigha">Bigha</option>
                   </select>
                 </div>
@@ -660,180 +1020,133 @@ Status Audit         : ${calculations.statusLabel}`;
                   type="number"
                   value={plotArea}
                   onChange={(e) => setPlotArea(Math.max(0, parseFloat(e.target.value) || 0))}
-                  className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono text-xs font-bold focus:outline-none"
+                  className="w-full px-3 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 />
-                {unit === 'bigha' && (
-                  <p className="text-[9px] text-zinc-500 dark:text-zinc-400 font-medium italic mt-1 leading-normal">
-                    ℹ️ Bigha conversion standard is set to {(conversionFactors.bigha).toLocaleString()} sq ft based on the {selectedState.name} preset.
-                  </p>
-                )}
               </div>
 
-              {/* Permissible FSI Index */}
+              {/* Permissible FSI Index Slider */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-bold text-zinc-400 uppercase">Permissible FAR / FSI</label>
-                  <input
-                    type="number"
-                    step="0.05"
-                    value={permissibleFsi}
-                    onChange={(e) => setPermissibleFsi(Math.max(0.1, parseFloat(e.target.value) || 0))}
-                    className="w-20 px-2 py-1 text-right text-xs font-bold border border-zinc-200 dark:border-zinc-850 bg-zinc-50/50 dark:bg-zinc-950 focus:outline-none rounded-lg"
-                  />
+                  <label className="text-[10px] font-bold text-zinc-400 uppercase">Permissible FSI Index</label>
+                  <div className="flex items-center gap-1.5">
+                    <input
+                      type="number"
+                      step="0.05"
+                      value={permissibleFsi}
+                      onChange={(e) => setPermissibleFsi(Math.max(0.1, parseFloat(e.target.value) || 0))}
+                      className="w-20 px-2 py-1 text-right text-xs font-bold border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 rounded-lg font-mono"
+                    />
+                    <span className="text-[11px] text-zinc-400 font-bold">({permissibleFsi * 100}% FAR)</span>
+                  </div>
                 </div>
                 <input
                   type="range"
                   min="0.5"
-                  max="5"
-                  step="0.1"
+                  max="5.0"
+                  step="0.05"
                   value={permissibleFsi}
                   onChange={(e) => setPermissibleFsi(parseFloat(e.target.value))}
-                  className="w-full h-1 bg-zinc-250 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-650"
+                  className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                 />
               </div>
 
               {/* Ground Coverage % */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-bold text-zinc-400 uppercase">Ground Coverage limit (%)</label>
-                  <input
-                    type="number"
-                    value={groundCoverage}
-                    onChange={(e) => setGroundCoverage(Math.min(100, Math.max(1, parseInt(e.target.value) || 0)))}
-                    className="w-16 px-2 py-1 text-right text-xs font-bold border border-zinc-200 dark:border-zinc-850 bg-zinc-50/50 dark:bg-zinc-950 focus:outline-none rounded-lg"
-                  />
+                  <label className="text-[10px] font-bold text-zinc-400 uppercase">Ground Coverage Limit (%)</label>
+                  <span className="font-mono text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                    {groundCoverage}% ({Math.round(calculations.maxGroundFootprint)} {unit})
+                  </span>
                 </div>
                 <input
                   type="range"
-                  min="10"
+                  min="15"
                   max="100"
                   step="5"
                   value={groundCoverage}
                   onChange={(e) => setGroundCoverage(parseInt(e.target.value))}
-                  className="w-full h-1 bg-zinc-250 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-650"
+                  className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                 />
               </div>
 
-              {/* Floors Stack count */}
+              {/* Road Width Input */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-bold text-zinc-400 uppercase">Planned Floor Levels</label>
-                  <input
-                    type="number"
-                    value={numFloors}
-                    onChange={(e) => handleFloorsCountChange(parseInt(e.target.value) || 1)}
-                    className="w-16 px-2 py-1 text-right text-xs font-bold border border-zinc-200 dark:border-zinc-850 bg-zinc-50/50 dark:bg-zinc-950 focus:outline-none rounded-lg"
-                  />
+                  <label className="text-[10px] font-bold text-zinc-400 uppercase">
+                    Front Road Width ({lengthUnit})
+                  </label>
+                  <span className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                    Max Ht: {calculations.maxPermissibleHeightMeters}m ({calculations.maxPermissibleHeightFeet}ft)
+                  </span>
                 </div>
+                <input
+                  type="number"
+                  value={roadWidth}
+                  onChange={(e) => setRoadWidth(Math.max(1, parseFloat(e.target.value) || 0))}
+                  className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 font-mono text-xs font-bold"
+                />
+                <p className="text-[10px] text-zinc-500 dark:text-zinc-400">
+                  ℹ️ {calculations.roadWidthAdvisory}
+                </p>
               </div>
 
-              {/* Professional fields stack */}
+              {/* Setbacks & Plot Geometry (CAD Mode) */}
               {isProfessional && (
-                <div className="p-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-zinc-850 space-y-4 pt-4 border-t">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Road Width ({lengthUnit})</label>
-                      <input
-                        type="number"
-                        value={roadWidth}
-                        onChange={(e) => setRoadWidth(Math.max(1, parseFloat(e.target.value) || 0))}
-                        className="w-full px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-850 rounded text-xs font-mono font-bold"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Building Type</label>
-                      <select
-                        value={buildingType}
-                        onChange={(e) => setBuildingType(e.target.value as BuildingType)}
-                        className="w-full p-2 border border-zinc-200 dark:border-zinc-850 rounded text-[10px] font-bold"
-                      >
-                        <option value="residential">Residential</option>
-                        <option value="commercial">Commercial</option>
-                        <option value="mixed_use">Mixed Use</option>
-                        <option value="industrial">Industrial</option>
-                        <option value="institutional">Institutional</option>
-                      </select>
-                    </div>
+                <div className="p-4 rounded-2xl bg-zinc-50/70 dark:bg-zinc-950/40 border border-zinc-200/80 dark:border-zinc-800/80 space-y-3 pt-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-black uppercase text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                      <Ruler className="w-3.5 h-3.5" /> Plot Geometry & Setbacks ({lengthUnit})
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Plot Width ({lengthUnit})</label>
+                      <label className="text-[9px] font-bold uppercase text-zinc-400">Plot Width ({lengthUnit})</label>
                       <input
                         type="number"
                         value={plotWidth}
                         onChange={(e) => {
                           const val = Math.max(1, parseFloat(e.target.value) || 0);
                           setPlotWidth(val);
-                          if (isProfessional && plotDepth > 0) {
-                            setPlotArea(val * plotDepth);
-                          }
+                          if (plotDepth > 0) setPlotArea(val * plotDepth);
                         }}
-                        className="w-full px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-850 rounded text-xs font-mono font-bold"
+                        className="w-full px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-mono font-bold"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Plot Depth ({lengthUnit})</label>
+                      <label className="text-[9px] font-bold uppercase text-zinc-400">Plot Depth ({lengthUnit})</label>
                       <input
                         type="number"
                         value={plotDepth}
                         onChange={(e) => {
                           const val = Math.max(1, parseFloat(e.target.value) || 0);
                           setPlotDepth(val);
-                          if (isProfessional && plotWidth > 0) {
-                            setPlotArea(plotWidth * val);
-                          }
+                          if (plotWidth > 0) setPlotArea(plotWidth * val);
                         }}
-                        className="w-full px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-850 rounded text-xs font-mono font-bold"
+                        className="w-full px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-mono font-bold"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Avg Floor Height ({lengthUnit})</label>
-                      <input
-                        type="number"
-                        step="0.1"
-                        value={avgFloorHeight}
-                        onChange={(e) => setAvgFloorHeight(Math.max(1, parseFloat(e.target.value) || 3.0))}
-                        className="w-full px-2.5 py-1.5 border border-zinc-200 dark:border-zinc-850 rounded text-xs font-mono font-bold"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-[9px] font-black uppercase text-zinc-400">Development Zone</label>
-                      <select
-                        value={devZone}
-                        onChange={(e) => setDevZone(e.target.value)}
-                        className="w-full p-2 border border-zinc-200 dark:border-zinc-850 rounded text-[10px] font-bold"
-                      >
-                        <option value="residential_zone">Residential Zone</option>
-                        <option value="commercial_zone">Commercial Zone</option>
-                        <option value="mixed_use_zone">Mixed Use Zone</option>
-                        <option value="industrial_zone">Industrial Zone</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Setbacks */}
+                  {/* 4 Setback Margins */}
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase text-zinc-400 block">Setbacks Clearance Guidelines ({lengthUnit})</label>
-                    <div className="grid grid-cols-4 gap-2">
+                    <label className="text-[9px] font-bold uppercase text-zinc-400 block">Mandatory Setbacks ({lengthUnit})</label>
+                    <div className="grid grid-cols-4 gap-2 text-center">
                       <div className="space-y-0.5">
                         <span className="text-[8px] text-zinc-400 uppercase block">Front</span>
-                        <input type="number" value={setbackFront} onChange={(e) => setSetbackFront(Math.max(0, parseFloat(e.target.value) || 0))} className="w-full p-1 border text-center text-xs font-mono" />
+                        <input type="number" value={setbackFront} onChange={(e) => setSetbackFront(Math.max(0, parseFloat(e.target.value) || 0))} className="w-full p-1.5 border rounded-lg text-center text-xs font-mono font-bold" />
                       </div>
                       <div className="space-y-0.5">
                         <span className="text-[8px] text-zinc-400 uppercase block">Rear</span>
-                        <input type="number" value={setbackRear} onChange={(e) => setSetbackRear(Math.max(0, parseFloat(e.target.value) || 0))} className="w-full p-1 border text-center text-xs font-mono" />
+                        <input type="number" value={setbackRear} onChange={(e) => setSetbackRear(Math.max(0, parseFloat(e.target.value) || 0))} className="w-full p-1.5 border rounded-lg text-center text-xs font-mono font-bold" />
                       </div>
                       <div className="space-y-0.5">
                         <span className="text-[8px] text-zinc-400 uppercase block">Left</span>
-                        <input type="number" value={setbackLeft} onChange={(e) => setSetbackLeft(Math.max(0, parseFloat(e.target.value) || 0))} className="w-full p-1 border text-center text-xs font-mono" />
+                        <input type="number" value={setbackLeft} onChange={(e) => setSetbackLeft(Math.max(0, parseFloat(e.target.value) || 0))} className="w-full p-1.5 border rounded-lg text-center text-xs font-mono font-bold" />
                       </div>
                       <div className="space-y-0.5">
                         <span className="text-[8px] text-zinc-400 uppercase block">Right</span>
-                        <input type="number" value={setbackRight} onChange={(e) => setSetbackRight(Math.max(0, parseFloat(e.target.value) || 0))} className="w-full p-1 border text-center text-xs font-mono" />
+                        <input type="number" value={setbackRight} onChange={(e) => setSetbackRight(Math.max(0, parseFloat(e.target.value) || 0))} className="w-full p-1.5 border rounded-lg text-center text-xs font-mono font-bold" />
                       </div>
                     </div>
                   </div>
@@ -842,24 +1155,165 @@ Status Audit         : ${calculations.statusLabel}`;
             </div>
           )}
 
-          {/* REVERSE CALCULATION MODE PANEL */}
+          {/* 2. MUNICIPAL UDCPR / DCPR STACK MODE */}
+          {calcMode === 'udcpr_stack' && (
+            <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs space-y-5 animate-fadeIn">
+              <div className="flex justify-between items-center border-b border-zinc-150 dark:border-zinc-800 pb-3">
+                <div>
+                  <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                    <Layers className="w-4 h-4 text-indigo-500" />
+                    <span>Municipal FSI Composition Stack</span>
+                  </h3>
+                  <p className="text-[10px] text-zinc-500 mt-0.5">Base + Premium FSI + TDR + Fungible Ancillary Area</p>
+                </div>
+                <span className="font-mono font-black text-sm text-indigo-600 dark:text-indigo-400">
+                  Total FSI: {calculations.totalStackFsi}
+                </span>
+              </div>
+
+              {/* Layer 1: Base FSI */}
+              <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200/60 dark:border-blue-800/40 space-y-2">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-bold text-blue-900 dark:text-blue-200 flex items-center gap-1">
+                    <Shield className="w-3.5 h-3.5 text-blue-500" /> 1. Statutory Base FSI (Free)
+                  </span>
+                  <span className="font-mono font-black text-blue-700 dark:text-blue-300">{baseFsi}</span>
+                </div>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="2.5"
+                  step="0.05"
+                  value={baseFsi}
+                  onChange={(e) => setBaseFsi(parseFloat(e.target.value))}
+                  className="w-full h-1.5 bg-blue-200 dark:bg-blue-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                />
+              </div>
+
+              {/* Layer 2: Premium FSI */}
+              <div className="p-3.5 rounded-2xl bg-purple-50/60 dark:bg-purple-950/20 border border-purple-200/60 dark:border-purple-800/40 space-y-2.5">
+                <div className="flex justify-between items-center text-xs">
+                  <label className="font-bold text-purple-900 dark:text-purple-200 flex items-center gap-1 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={enablePremiumFsi}
+                      onChange={(e) => setEnablePremiumFsi(e.target.checked)}
+                      className="rounded text-purple-600"
+                    />
+                    <span>2. Paid Premium FSI</span>
+                  </label>
+                  {enablePremiumFsi && (
+                    <span className="font-mono font-black text-purple-700 dark:text-purple-300">+{premiumFsiValue}</span>
+                  )}
+                </div>
+                {enablePremiumFsi && (
+                  <div className="space-y-2 pt-1 text-xs">
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="0.8"
+                      step="0.05"
+                      value={premiumFsiValue}
+                      onChange={(e) => setPremiumFsiValue(parseFloat(e.target.value))}
+                      className="w-full h-1.5 bg-purple-200 dark:bg-purple-800 rounded-lg appearance-none cursor-pointer accent-purple-600"
+                    />
+                    <div className="flex justify-between text-[11px] text-zinc-500">
+                      <span>Ready Reckoner Land Rate:</span>
+                      <span className="font-mono font-bold text-zinc-700 dark:text-zinc-300">₹{readyReckonerLandRate}/sqft</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white dark:bg-zinc-900 border border-purple-200/80 text-[11px] flex justify-between font-mono">
+                      <span>Premium FSI Fee (35% ASR):</span>
+                      <span className="font-bold text-purple-700 dark:text-purple-400">
+                        ₹{Math.round(calculations.premiumFsiCostInr).toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Layer 3: TDR (Transferable Development Rights) */}
+              <div className="p-3.5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-800/40 space-y-2">
+                <div className="flex justify-between items-center text-xs">
+                  <label className="font-bold text-amber-900 dark:text-amber-200 flex items-center gap-1 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={enableTdr}
+                      onChange={(e) => setEnableTdr(e.target.checked)}
+                      className="rounded text-amber-600"
+                    />
+                    <span>3. TDR Loading Potential</span>
+                  </label>
+                  {enableTdr && (
+                    <span className="font-mono font-black text-amber-700 dark:text-amber-300">+{tdrFsiValue}</span>
+                  )}
+                </div>
+                {enableTdr && (
+                  <div className="space-y-1 pt-1 text-xs">
+                    <input
+                      type="range"
+                      min="0.1"
+                      max="1.4"
+                      step="0.05"
+                      value={tdrFsiValue}
+                      onChange={(e) => setTdrFsiValue(parseFloat(e.target.value))}
+                      className="w-full h-1.5 bg-amber-200 dark:bg-amber-800 rounded-lg appearance-none cursor-pointer accent-amber-600"
+                    />
+                    <div className="flex justify-between text-[10px] text-zinc-500">
+                      <span>Purchasable TDR Capacity:</span>
+                      <span className="font-mono font-bold">{Math.round(calculations.tdrFsiArea).toLocaleString()} {unit}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Layer 4: Ancillary Fungible Bonus & TOD */}
+              <div className="p-3.5 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-800/40 space-y-2 text-xs">
+                <div className="flex justify-between items-center">
+                  <label className="font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-1 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={enableAncillaryFungible}
+                      onChange={(e) => setEnableAncillaryFungible(e.target.checked)}
+                      className="rounded text-emerald-600"
+                    />
+                    <span>4. Ancillary / Fungible FSI ({ancillaryPercentage}%)</span>
+                  </label>
+                  <span className="font-mono font-bold text-emerald-700 dark:text-emerald-300">
+                    +{Math.round(calculations.ancillaryFsiArea).toLocaleString()} {unit}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 pt-1">
+                  <label className="flex items-center gap-1 text-[11px] font-bold text-zinc-600 dark:text-zinc-300 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={isTodZone}
+                      onChange={(e) => setIsTodZone(e.target.checked)}
+                      className="rounded text-indigo-600"
+                    />
+                    <span>Transit-Oriented Corridor (TOD +0.50 FSI Bonus)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 3. REVERSE CALCULATION MODE */}
           {calcMode === 'reverse' && (
-            <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-5">
-              <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-200 uppercase tracking-wider flex items-center gap-1.5 border-b border-zinc-150 dark:border-zinc-850 pb-2">
-                <Sparkles className="w-4 h-4 text-indigo-500" />
-                <span>Reverse Mode</span>
+            <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs space-y-5 animate-fadeIn">
+              <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5 border-b border-zinc-150 dark:border-zinc-800 pb-2">
+                <ArrowRightLeft className="w-4 h-4 text-indigo-500" />
+                <span>Reverse Planning Equation</span>
               </h3>
 
-              {/* Reverse planners selector */}
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">Target Equation</label>
                 <select
                   value={revMode}
                   onChange={(e) => setRevMode(e.target.value as ReverseMode)}
-                  className="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-bold bg-transparent text-zinc-700 dark:text-zinc-350"
+                  className="w-full p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-bold bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300"
                 >
                   <option value="max_builtup">Mode 1 — Max Floor Area (from FSI)</option>
-                  <option value="required_plot">Mode 2 — Required Plot (from desired area)</option>
+                  <option value="required_plot">Mode 2 — Required Plot (from desired BUA)</option>
                   <option value="calculate_fsi">Mode 3 — Calculate FSI (from plot + floors)</option>
                   <option value="calculate_coverage">Mode 4 — Ground Coverage (from footprint)</option>
                   <option value="remaining_fsi">Mode 5 — Remaining FSI (from used area)</option>
@@ -870,601 +1324,531 @@ Status Audit         : ${calculations.statusLabel}`;
               <div className="space-y-3 pt-2">
                 {(revMode === 'max_builtup' || revMode === 'calculate_fsi' || revMode === 'calculate_coverage' || revMode === 'remaining_fsi') && (
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-zinc-450 block">Plot Area (sq ft/m)</label>
-                    <input type="number" value={revPlotArea} onChange={(e) => setRevPlotArea(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs focus:outline-none" />
+                    <label className="text-[10px] font-bold text-zinc-400 block uppercase">Plot Area ({unit})</label>
+                    <input type="number" value={revPlotArea} onChange={(e) => setRevPlotArea(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs font-bold focus:outline-none" />
                   </div>
                 )}
 
                 {(revMode === 'max_builtup' || revMode === 'required_plot' || revMode === 'remaining_fsi') && (
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-zinc-450 block">Permissible FSI Index</label>
-                    <input type="number" value={revFsi} onChange={(e) => setRevFsi(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs focus:outline-none" />
+                    <label className="text-[10px] font-bold text-zinc-400 block uppercase">Permissible FSI Index</label>
+                    <input type="number" value={revFsi} onChange={(e) => setRevFsi(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs font-bold focus:outline-none" />
                   </div>
                 )}
 
                 {revMode === 'required_plot' && (
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-zinc-450 block">Desired Floor Area (sq ft/m)</label>
-                    <input type="number" value={revDesiredFloorArea} onChange={(e) => setRevDesiredFloorArea(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs focus:outline-none" />
+                    <label className="text-[10px] font-bold text-zinc-400 block uppercase">Desired Floor Area ({unit})</label>
+                    <input type="number" value={revDesiredFloorArea} onChange={(e) => setRevDesiredFloorArea(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs font-bold focus:outline-none" />
                   </div>
                 )}
 
                 {revMode === 'calculate_coverage' && (
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-zinc-450 block">Ground Footprint (sq ft/m)</label>
-                    <input type="number" value={revFootprint} onChange={(e) => setRevFootprint(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs focus:outline-none" />
+                    <label className="text-[10px] font-bold text-zinc-400 block uppercase">Ground Footprint ({unit})</label>
+                    <input type="number" value={revFootprint} onChange={(e) => setRevFootprint(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs font-bold focus:outline-none" />
                   </div>
                 )}
 
                 {(revMode === 'calculate_fsi' || revMode === 'remaining_fsi') && (
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-zinc-450 block">Planned Floor Area (sq ft/m)</label>
-                    <input type="number" value={revPlannedArea} onChange={(e) => setRevPlannedArea(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs focus:outline-none" />
+                    <label className="text-[10px] font-bold text-zinc-400 block uppercase">Planned Floor Area ({unit})</label>
+                    <input type="number" value={revPlannedArea} onChange={(e) => setRevPlannedArea(e.target.value)} className="w-full p-2.5 border rounded-xl font-mono text-xs font-bold focus:outline-none" />
                   </div>
                 )}
               </div>
 
-              {/* Reverse calculation results */}
-              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-200 dark:border-zinc-850 flex justify-between items-center">
+              {/* Reverse calculation results card */}
+              <div className="p-4 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 flex justify-between items-center">
                 <div>
-                  <span className="text-[9px] font-black uppercase text-zinc-400 block tracking-wider">Calculated Value</span>
-                  <div className="text-base font-black text-indigo-650 dark:text-indigo-400 mt-1 font-mono">
+                  <span className="text-[9px] font-black uppercase text-indigo-500 block tracking-wider">Calculated Value</span>
+                  <div className="text-base font-black text-indigo-700 dark:text-indigo-300 mt-1 font-mono">
                     {revMode === 'max_builtup' && `Max Area: ${reverseCalculations.maxPermissibleArea.toLocaleString()} ${unit}`}
-                    {revMode === 'required_plot' && `Required Plot: ${reverseCalculations.requiredPlotArea.toLocaleString()} ${unit}`}
+                    {revMode === 'required_plot' && `Required Plot: ${Math.round(reverseCalculations.requiredPlotArea).toLocaleString()} ${unit}`}
                     {revMode === 'calculate_fsi' && `Actual FSI: ${reverseCalculations.actualFsi.toFixed(3)}`}
                     {revMode === 'calculate_coverage' && `Actual Coverage: ${reverseCalculations.actualGroundCoverage.toFixed(1)}%`}
-                    {revMode === 'remaining_fsi' && `Remaining FSI: ${reverseCalculations.remainingFsi.toFixed(3)} (Capacity: ${reverseCalculations.remainingBuiltUpArea.toLocaleString()} ${unit})`}
+                    {revMode === 'remaining_fsi' && `Remaining FSI: ${reverseCalculations.remainingFsi.toFixed(3)} (${Math.round(reverseCalculations.remainingBuiltUpArea).toLocaleString()} ${unit})`}
                   </div>
                 </div>
               </div>
             </div>
           )}
-        </div>
 
-        {/* RIGHT COLUMN: CORE SUMMARY RESULTS DASHBOARD */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="p-6 rounded-3xl bg-zinc-950 text-white shadow-xl space-y-6">
-            <div className="flex justify-between items-center border-b border-zinc-850 pb-4">
-              <div>
-                <span className="text-[9px] font-black uppercase text-zinc-450 tracking-wider block">Clearance status audit</span>
-                <h3 className="text-sm font-black text-indigo-400 mt-0.5">Development potential</h3>
-              </div>
-              <button
-                onClick={copyResultsText}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-350 hover:bg-zinc-850 hover:text-white transition"
+          {/* Location Presets Drawer */}
+          <div className="p-5 rounded-3xl bg-zinc-50/60 dark:bg-zinc-900/20 border border-zinc-200/80 dark:border-zinc-800/80 space-y-3">
+            <span className="text-[10px] font-black uppercase text-zinc-400 tracking-wider block">
+              Administrative Zoning Presets
+            </span>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <select
+                value={statePreset}
+                onChange={(e) => {
+                  const newStateId = e.target.value;
+                  setStatePreset(newStateId);
+                  const sObj = INDIAN_STATES_FSI_DATA.find(s => s.id === newStateId);
+                  if (sObj && sObj.cities.length > 0) {
+                    setCityPreset(sObj.cities[0].id);
+                  }
+                }}
+                className="p-2 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-xs font-bold"
               >
-                {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedReport ? 'Copied' : 'Copy Plan'}</span>
-              </button>
+                {INDIAN_STATES_FSI_DATA.map((s) => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
+                ))}
+              </select>
+
+              <select
+                value={cityPreset}
+                onChange={(e) => setCityPreset(e.target.value)}
+                className="p-2 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-xs font-bold"
+              >
+                {selectedState.cities.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
             </div>
 
-            {/* FSI meter utilization */}
+            {activePreset && (
+              <div className="pt-2 border-t border-zinc-200/60 dark:border-zinc-800/60 flex items-center justify-between text-[11px]">
+                <span className="text-zinc-500">{activePreset.authority}</span>
+                <button
+                  type="button"
+                  onClick={applyPreset}
+                  className="px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-200/60 cursor-pointer"
+                >
+                  Set FSI {activePreset.fsi}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* =======================================================================
+            RIGHT COLUMN: DASHBOARD AUDIT & 2D VISUAL CAD STUDIO
+            ======================================================================= */}
+        <div className="lg:col-span-7 space-y-6">
+          
+          {/* CORE CLEARANCE RESULTS AUDIT CARD */}
+          <div className="p-6 rounded-3xl bg-zinc-950 text-white shadow-xl space-y-6 border border-zinc-850">
+            <div className="flex justify-between items-center border-b border-zinc-850 pb-4">
+              <div>
+                <span className="text-[10px] font-black uppercase text-indigo-400 tracking-wider block">
+                  Statutory Clearance Audit
+                </span>
+                <h3 className="text-base font-black text-white mt-0.5 flex items-center gap-2">
+                  <span>Development Potential</span>
+                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black border ${calculations.statusColor}`}>
+                    {calculations.statusLabel}
+                  </span>
+                </h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <CopyButton text={getResultsText} label="Copy Plan" copiedLabel="Copied" size="xs" variant="secondary" />
+                <ShareWhatsApp text={getResultsText} label="WhatsApp" size="xs" variant="solid" />
+              </div>
+            </div>
+
+            {/* FSI Meter Utilization Progress Bar */}
             <div className="space-y-2">
-              <div className="flex justify-between text-xs font-bold text-zinc-400">
-                <span>Used FAR/FSI: {calculations.utilizedFsi} / {permissibleFsi}</span>
-                <span className={`px-2 py-0.5 rounded-full text-[9px] font-black ${calculations.statusColor}`}>
-                  {calculations.statusLabel} ({calculations.fsiUtilizationPercentage}%)
+              <div className="flex justify-between text-xs font-bold text-zinc-300">
+                <span>Consumed: {calculations.utilizedFsi} / {calculations.effectivePermissibleFsi} FSI</span>
+                <span className="font-mono font-bold text-indigo-400">
+                  {calculations.fsiUtilizationPercentage}% Consumed
                 </span>
               </div>
-              <div className="w-full h-3 bg-zinc-900 rounded-full overflow-hidden border border-zinc-850">
+              <div className="w-full h-3 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
                 <div
-                  className={`h-full transition-all duration-300 ${calculations.utilizedFsi > permissibleFsi ? 'bg-rose-500' : calculations.fsiUtilizationPercentage >= 90 ? 'bg-amber-500' : 'bg-indigo-650'}`}
+                  className={`h-full transition-all duration-300 ${
+                    calculations.utilizedFsi > calculations.effectivePermissibleFsi 
+                      ? 'bg-rose-500' 
+                      : calculations.fsiUtilizationPercentage >= 90 
+                        ? 'bg-amber-400' 
+                        : 'bg-indigo-500'
+                  }`}
                   style={{ width: `${Math.min(100, calculations.fsiUtilizationPercentage)}%` }}
                 />
               </div>
             </div>
 
-            {/* Calculations Breakdown Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-left pt-2">
-              <div className="bg-zinc-900/50 p-3.5 rounded-xl border border-zinc-850/40">
-                <span className="text-[9px] text-zinc-400 font-extrabold uppercase block">Max Permitted</span>
-                <span className="text-sm font-black font-mono text-white mt-1 block">{Math.round(calculations.permissibleBuiltUp).toLocaleString()} {unit}</span>
+            {/* 4-KPI Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-left">
+              <div className="bg-zinc-900/60 p-3.5 rounded-2xl border border-zinc-800/80">
+                <span className="text-[9px] text-zinc-400 font-bold uppercase block">Max Permissible BUA</span>
+                <span className="text-sm font-black font-mono text-white mt-1 block">
+                  {Math.round(calculations.permissibleBuiltUp).toLocaleString()} {unit}
+                </span>
               </div>
-              <div className="bg-zinc-900/50 p-3.5 rounded-xl border border-zinc-850/40">
-                <span className="text-[9px] text-zinc-400 font-extrabold uppercase block">Planned Area</span>
-                <span className="text-sm font-black font-mono text-indigo-400 mt-1 block">{Math.round(calculations.totalPlannedBuiltUp).toLocaleString()} {unit}</span>
+              <div className="bg-zinc-900/60 p-3.5 rounded-2xl border border-zinc-800/80">
+                <span className="text-[9px] text-zinc-400 font-bold uppercase block">Planned BUA</span>
+                <span className="text-sm font-black font-mono text-indigo-400 mt-1 block">
+                  {Math.round(calculations.totalPlannedBuiltUp).toLocaleString()} {unit}
+                </span>
               </div>
-              <div className="bg-zinc-900/50 p-3.5 rounded-xl border border-zinc-850/40">
-                <span className="text-[9px] text-zinc-400 font-extrabold uppercase block">Max Footprint</span>
-                <span className="text-sm font-black font-mono text-zinc-300 mt-1 block">{Math.round(calculations.maxGroundFootprint).toLocaleString()} {unit}</span>
+              <div className="bg-zinc-900/60 p-3.5 rounded-2xl border border-zinc-800/80">
+                <span className="text-[9px] text-zinc-400 font-bold uppercase block">Max Ground Footprint</span>
+                <span className="text-sm font-black font-mono text-zinc-300 mt-1 block">
+                  {Math.round(calculations.maxGroundFootprint).toLocaleString()} {unit}
+                </span>
               </div>
-              <div className="bg-zinc-900/50 p-3.5 rounded-xl border border-zinc-850/40">
-                <span className="text-[9px] text-zinc-400 font-extrabold uppercase block">Remaining Area</span>
-                <span className={`text-sm font-black font-mono mt-1 block ${calculations.remainingBuiltUp < 0 ? 'text-rose-500' : 'text-emerald-500'}`}>{Math.round(calculations.remainingBuiltUp).toLocaleString()} {unit}</span>
+              <div className="bg-zinc-900/60 p-3.5 rounded-2xl border border-zinc-800/80">
+                <span className="text-[9px] text-zinc-400 font-bold uppercase block">Balance Capacity</span>
+                <span className={`text-sm font-black font-mono mt-1 block ${calculations.remainingBuiltUp < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                  {Math.round(calculations.remainingBuiltUp).toLocaleString()} {unit}
+                </span>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* SVG INTERACTIVE SETBACK & FLOORS VISUALIZATION */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        {/* SVG Plot Representation */}
-        <div className="md:col-span-6 p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
-          <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b border-zinc-150 dark:border-zinc-850 pb-2">Plot Boundary & Setbacks</h3>
-          
-          <div className="w-full h-56 bg-zinc-50/50 dark:bg-zinc-950/20 rounded-2xl flex items-center justify-center p-4">
-            <svg className="w-48 h-48" viewBox="0 0 100 100">
-              {/* Outer plot border */}
-              <rect x="2" y="2" width="96" height="96" fill="none" stroke="#666" strokeWidth="1" strokeDasharray="2 2" />
-              {/* Setbacks clearance area */}
-              {isProfessional ? (
-                <rect 
-                  x={Math.min(40, 2 + setbackLeft)} 
-                  y={Math.min(40, 2 + setbackFront)} 
-                  width={Math.max(10, 96 - setbackLeft - setbackRight)} 
-                  height={Math.max(10, 96 - setbackFront - setbackRear)} 
-                  fill="#4f46e5" 
-                  fillOpacity="0.1" 
-                  stroke="#4f46e5" 
-                  strokeWidth="0.8" 
-                />
-              ) : (
-                <rect 
-                  x="15" 
-                  y="15" 
-                  width="70" 
-                  height="70" 
-                  fill="#4f46e5" 
-                  fillOpacity="0.1" 
-                  stroke="#4f46e5" 
-                  strokeWidth="0.8" 
-                />
-              )}
-              {/* Building Footprint area */}
-              <rect 
-                x="25" 
-                y="25" 
-                width={70 * (groundCoverage / 100)} 
-                height="30" 
-                fill="#818cf8" 
-                fillOpacity="0.4" 
-                stroke="#6366f1" 
-                strokeWidth="1.2" 
-              />
-              <text x="50" y="55" textAnchor="middle" fontSize="5" className="fill-zinc-400 font-sans font-bold">Planned Footprint</text>
-            </svg>
-          </div>
-        </div>
+          {/* =====================================================================
+              2D VISUAL STUDIO (Interactive CAD Plot Plan, Elevation & Graph)
+              ===================================================================== */}
+          <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-150 dark:border-zinc-800 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                  <Maximize2 className="w-4 h-4" />
+                </div>
+                <h3 className="font-black text-zinc-900 dark:text-white text-xs uppercase tracking-wider">
+                  2D Architectural Visualizer & Graph
+                </h3>
+              </div>
 
-        {/* SVG Vertical Floors Stack */}
-        <div className="md:col-span-6 p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
-          <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b border-zinc-150 dark:border-zinc-850 pb-2">Vertical Floors Stack</h3>
-          
-          <div className="w-full h-56 bg-zinc-50/50 dark:bg-zinc-950/20 rounded-2xl flex items-center justify-center p-4">
-            <svg className="w-48 h-48" viewBox="0 0 100 100">
-              {/* Ground Soil level */}
-              <line x1="2" y1="90" x2="98" y2="90" stroke="#888" strokeWidth="2" />
-              {/* Floors boxes loop */}
-              {Array.from({ length: Math.min(10, plannedFloors.length) }).map((_, idx) => {
-                const floorY = 90 - (idx + 1) * 8;
-                return (
-                  <g key={idx}>
-                    <rect 
-                      x="25" 
-                      y={floorY} 
-                      width="50" 
-                      height="7.5" 
-                      fill="url(#floorGrad)" 
-                      stroke="#4f46e5" 
-                      strokeWidth="0.8" 
-                    />
-                    <text x="50" y={floorY + 5.5} textAnchor="middle" fontSize="3.5" className="fill-white font-sans font-bold">Lvl {idx + 1}</text>
-                  </g>
-                );
-              })}
-              {plannedFloors.length > 10 && (
-                <text x="50" y="5" textAnchor="middle" fontSize="4.5" className="fill-indigo-650 font-bold font-mono">+ {plannedFloors.length - 10} More levels</text>
-              )}
-              <defs>
-                <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#818cf8" />
-                  <stop offset="100%" stopColor="#4f46e5" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-        </div>
-      </div>
+              {/* Visual Studio Sub-tabs */}
+              <div className="flex rounded-xl bg-zinc-100 dark:bg-zinc-800 p-0.5 text-xs font-bold">
+                <button
+                  type="button"
+                  onClick={() => setActiveVisualTab('plot_plan')}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    activeVisualTab === 'plot_plan' ? 'bg-white dark:bg-zinc-700 text-indigo-600 dark:text-white shadow-xs' : 'text-zinc-500'
+                  }`}
+                >
+                  Top Plot CAD
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveVisualTab('elevation')}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    activeVisualTab === 'elevation' ? 'bg-white dark:bg-zinc-700 text-indigo-600 dark:text-white shadow-xs' : 'text-zinc-500'
+                  }`}
+                >
+                  Elevation Stack
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveVisualTab('fsi_graph')}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    activeVisualTab === 'fsi_graph' ? 'bg-white dark:bg-zinc-700 text-indigo-600 dark:text-white shadow-xs' : 'text-zinc-500'
+                  }`}
+                >
+                  FSI Breakdown Graph
+                </button>
+              </div>
+            </div>
 
-      {/* FLOOR AREA PLANNER TABLE */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-150 dark:border-zinc-850 pb-3">
-          <div className="space-y-1">
-            <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-              <Sliders className="w-4 h-4 text-indigo-500" />
-              <span>Floor Area Planner (DCPR clearances)</span>
-            </h3>
-            <p className="text-[10px] text-zinc-450 dark:text-zinc-500 font-medium">Verify custom planned areas per level to check utilization cap</p>
-          </div>
-          <button
-            onClick={addFloor}
-            className="px-3 py-1.5 bg-indigo-500/10 text-indigo-650 text-[10px] font-extrabold rounded-lg flex items-center gap-1 border border-indigo-500/20"
-          >
-            <Plus className="w-3.5 h-3.5" /> Add Floor
-          </button>
-        </div>
+            {/* TAB 1: 2D PLOT PLAN & SETBACK BLUEPRINT */}
+            {activeVisualTab === 'plot_plan' && (
+              <div className="space-y-3">
+                <div className="w-full h-72 bg-slate-950 rounded-2xl flex items-center justify-center p-3 relative overflow-hidden border border-zinc-800">
+                  <svg className="w-full h-full" viewBox="0 0 500 320">
+                    <defs>
+                      <pattern id="cadGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" strokeWidth="0.5" />
+                      </pattern>
+                      <pattern id="setbackHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                        <line x1="0" y1="0" x2="0" y2="8" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.3" />
+                      </pattern>
+                    </defs>
 
-        {/* Planned floors layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2 max-h-72 overflow-y-auto pr-2">
-            {plannedFloors.map((floor) => (
-              <div key={floor.id} className="flex justify-between items-center gap-3 p-3 rounded-2xl bg-zinc-50/50 dark:bg-zinc-950/20 border border-zinc-150 dark:border-zinc-850">
-                <input
-                  type="text"
-                  value={floor.name}
-                  onChange={(e) => {
-                    const updated = plannedFloors.map(f => f.id === floor.id ? { ...f, name: e.target.value } : f);
-                    setPlannedFloors(updated);
-                  }}
-                  className="bg-transparent font-bold text-xs text-zinc-800 dark:text-white focus:outline-none border-b border-transparent focus:border-indigo-500"
-                />
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    value={floor.area}
-                    onChange={(e) => updateFloorArea(floor.id, Math.max(0, parseInt(e.target.value) || 0))}
-                    className="w-24 px-2 py-1 text-right text-xs font-bold border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg focus:outline-none font-mono"
-                  />
-                  <span className="text-[9px] font-bold text-zinc-400">{unit}</span>
-                  <button onClick={() => removeFloor(floor.id)} className="text-rose-500 p-1 hover:bg-rose-50 rounded" title="Delete Floor">
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                    {/* Background Grid */}
+                    <rect width="500" height="320" fill="url(#cadGrid)" />
+
+                    {/* 1. Road fronting the property */}
+                    <rect x="0" y="0" width="500" height="45" fill="#1e293b" />
+                    <line x1="0" y1="22.5" x2="500" y2="22.5" stroke="#f8fafc" strokeWidth="1.5" strokeDasharray="6 6" strokeOpacity="0.7" />
+                    <text x="250" y="15" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#94a3b8">
+                      ↑ {roadWidth} {lengthUnit} WIDE MUNICIPAL ACCESS ROAD (Road Centerline) ↑
+                    </text>
+
+                    {/* 2. Cadastral Plot Boundary (x: 50, y: 55, w: 400, h: 250) */}
+                    <rect x="50" y="55" width="400" height="250" fill="#0f172a" stroke="#64748b" strokeWidth="2" strokeDasharray="4 2" />
+                    <text x="50" y="50" fontSize="9" fontWeight="bold" fill="#94a3b8">Plot Boundary: {plotWidth} {lengthUnit} × {plotDepth} {lengthUnit} ({plotArea.toLocaleString()} {unit})</text>
+
+                    {/* 3. Mandatory Setbacks (Shaded orange hatch) */}
+                    {/* Front Setback */}
+                    <rect x="50" y="55" width="400" height="40" fill="url(#setbackHatch)" />
+                    <text x="250" y="80" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#f59e0b">Front Setback: {setbackFront} {lengthUnit}</text>
+
+                    {/* Rear Setback */}
+                    <rect x="50" y="265" width="400" height="40" fill="url(#setbackHatch)" />
+                    <text x="250" y="290" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#f59e0b">Rear Setback: {setbackRear} {lengthUnit}</text>
+
+                    {/* Left Setback */}
+                    <rect x="50" y="95" width="35" height="170" fill="url(#setbackHatch)" />
+                    <text x="67" y="180" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#f59e0b" transform="rotate(-90 67 180)">Left: {setbackLeft} {lengthUnit}</text>
+
+                    {/* Right Setback */}
+                    <rect x="415" y="95" width="35" height="170" fill="url(#setbackHatch)" />
+                    <text x="432" y="180" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#f59e0b" transform="rotate(90 432 180)">Right: {setbackRight} {lengthUnit}</text>
+
+                    {/* 4. Buildable Footprint Envelope (x: 85, y: 95, w: 330, h: 170) */}
+                    <rect x="85" y="95" width="330" height="170" fill="#4f46e5" fillOpacity="0.25" stroke="#6366f1" strokeWidth="2" rx="4" />
+                    
+                    {/* Center Footprint Badge */}
+                    <rect x="150" y="150" width="200" height="50" fill="#1e1b4b" stroke="#818cf8" strokeWidth="1" rx="8" />
+                    <text x="250" y="170" textAnchor="middle" fontSize="11" fontWeight="900" fill="#a5b4fc">
+                      NET BUILDABLE FOOTPRINT
+                    </text>
+                    <text x="250" y="188" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#e0e7ff">
+                      Max: {Math.round(calculations.maxGroundFootprint).toLocaleString()} {unit} ({groundCoverage}% Coverage)
+                    </text>
+                  </svg>
+                </div>
+                <div className="flex justify-between items-center text-[11px] text-zinc-500 px-1">
+                  <span>📐 Yellow Shading = Open Setback Buffer</span>
+                  <span>🟦 Cyan/Indigo = Permissible Ground Slab Boundary</span>
                 </div>
               </div>
-            ))}
+            )}
+
+            {/* TAB 2: 2D VERTICAL ELEVATION & HEIGHT SECTION */}
+            {activeVisualTab === 'elevation' && (
+              <div className="space-y-3">
+                <div className="w-full h-72 bg-slate-950 rounded-2xl flex items-center justify-center p-3 relative overflow-hidden border border-zinc-800">
+                  <svg className="w-full h-full" viewBox="0 0 460 320">
+                    <defs>
+                      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#090d16" />
+                        <stop offset="100%" stopColor="#0f172a" />
+                      </linearGradient>
+                      <linearGradient id="floorGradBlue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#6366f1" />
+                        <stop offset="100%" stopColor="#4338ca" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* Sky Background */}
+                    <rect width="460" height="320" fill="url(#skyGrad)" />
+
+                    {/* Street Level datum line */}
+                    <line x1="20" y1="280" x2="440" y2="280" stroke="#64748b" strokeWidth="2" />
+                    <text x="30" y="295" fontSize="9" fontWeight="bold" fill="#94a3b8">±0.00m Road Level</text>
+
+                    {/* Road Width Height Restriction Ceiling */}
+                    <line x1="80" y1="80" x2="380" y2="80" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 4" />
+                    <text x="230" y="74" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#f87171">
+                      MAX STATUTORY HEIGHT CEILING: {calculations.maxPermissibleHeightMeters}m ({calculations.maxPermissibleHeightFeet}ft)
+                    </text>
+
+                    {/* Stacked Building Floors */}
+                    {plannedFloors.slice(0, 8).map((floor, idx) => {
+                      const floorH = Math.min(24, Math.max(14, 180 / Math.max(1, plannedFloors.length)));
+                      const floorY = 275 - (idx + 1) * floorH;
+                      return (
+                        <g key={floor.id}>
+                          <rect
+                            x="130"
+                            y={floorY}
+                            width="200"
+                            height={floorH - 2}
+                            fill="url(#floorGradBlue)"
+                            stroke="#818cf8"
+                            strokeWidth="1"
+                            rx="3"
+                          />
+                          {/* Window slits */}
+                          <rect x="150" y={floorY + 4} width="20" height={floorH - 10} fill="#bae6fd" fillOpacity="0.8" rx="1" />
+                          <rect x="180" y={floorY + 4} width="20" height={floorH - 10} fill="#bae6fd" fillOpacity="0.8" rx="1" />
+                          <rect x="260" y={floorY + 4} width="20" height={floorH - 10} fill="#bae6fd" fillOpacity="0.8" rx="1" />
+                          <rect x="290" y={floorY + 4} width="20" height={floorH - 10} fill="#bae6fd" fillOpacity="0.8" rx="1" />
+                          
+                          <text x="230" y={floorY + floorH / 2 + 3} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#ffffff">
+                            {floor.name} ({floor.area} {unit})
+                          </text>
+                        </g>
+                      );
+                    })}
+
+                    {/* Rooftop Parapet / Water Tank cabin */}
+                    {plannedFloors.length > 0 && (
+                      <g>
+                        <rect x="210" y={275 - plannedFloors.length * Math.min(24, Math.max(14, 180 / Math.max(1, plannedFloors.length))) - 15} width="40" height="15" fill="#312e81" stroke="#818cf8" strokeWidth="1" />
+                        <text x="230" y={275 - plannedFloors.length * Math.min(24, Math.max(14, 180 / Math.max(1, plannedFloors.length))) - 4} textAnchor="middle" fontSize="7" fill="#c7d2fe">MUMTY</text>
+                      </g>
+                    )}
+
+                    {/* Total Height Dimension Callout */}
+                    <line x1="350" y1="280" x2="350" y2={275 - plannedFloors.length * Math.min(24, Math.max(14, 180 / Math.max(1, plannedFloors.length)))} stroke="#e2e8f0" strokeWidth="1.5" />
+                    <text x="360" y="200" fontSize="10" fontWeight="bold" fill="#38bdf8">
+                      Ht: {calculations.totalProposedHeightMeters}m ({calculations.totalProposedHeightFeet}ft)
+                    </text>
+                  </svg>
+                </div>
+                <div className="flex justify-between items-center text-[11px] px-1">
+                  <span className={calculations.isHeightCompliant ? 'text-emerald-500 font-bold' : 'text-rose-500 font-bold'}>
+                    {calculations.isHeightCompliant ? '✓ Height within Safe Road Width Ratio' : '⚠️ Exceeds Permissible Road Width Ratio'}
+                  </span>
+                  <span className="text-zinc-400 font-mono">
+                    Proposed: {calculations.totalProposedHeightMeters}m / Max: {calculations.maxPermissibleHeightMeters}m
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 3: FSI BREAKDOWN GRAPH */}
+            {activeVisualTab === 'fsi_graph' && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/40 border border-zinc-200 dark:border-zinc-800 space-y-4">
+                  <span className="text-[10px] font-black uppercase text-zinc-400 tracking-wider block">
+                    FSI Layer Composition Breakdown
+                  </span>
+                  
+                  {/* Visual Multi-Layer Stack Bar */}
+                  <div className="w-full h-8 rounded-xl overflow-hidden flex border border-zinc-300 dark:border-zinc-700 font-mono text-[10px] font-black text-white text-center leading-8">
+                    <div style={{ width: `${(baseFsi / Math.max(3.0, calculations.effectivePermissibleFsi)) * 100}%` }} className="bg-blue-600 truncate px-1">
+                      Base {baseFsi}
+                    </div>
+                    {enablePremiumFsi && (
+                      <div style={{ width: `${(premiumFsiValue / Math.max(3.0, calculations.effectivePermissibleFsi)) * 100}%` }} className="bg-purple-600 truncate px-1">
+                        Prem {premiumFsiValue}
+                      </div>
+                    )}
+                    {enableTdr && (
+                      <div style={{ width: `${(tdrFsiValue / Math.max(3.0, calculations.effectivePermissibleFsi)) * 100}%` }} className="bg-amber-600 truncate px-1">
+                        TDR {tdrFsiValue}
+                      </div>
+                    )}
+                    {isTodZone && (
+                      <div style={{ width: `${(0.5 / Math.max(3.0, calculations.effectivePermissibleFsi)) * 100}%` }} className="bg-emerald-600 truncate px-1">
+                        TOD 0.5
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Itemized Stack Cards */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                    <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
+                      <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 uppercase block">1. Base FSI</span>
+                      <span className="font-mono font-bold text-blue-950 dark:text-blue-200 mt-0.5 block">{baseFsi} FSI</span>
+                      <span className="text-[10px] text-zinc-400">{Math.round(plotArea * baseFsi).toLocaleString()} {unit}</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800">
+                      <span className="text-[9px] font-bold text-purple-600 dark:text-purple-400 uppercase block">2. Premium FSI</span>
+                      <span className="font-mono font-bold text-purple-950 dark:text-purple-200 mt-0.5 block">
+                        {enablePremiumFsi ? `+${premiumFsiValue} FSI` : 'Disabled'}
+                      </span>
+                      <span className="text-[10px] text-zinc-400">{Math.round(calculations.premiumFsiArea).toLocaleString()} {unit}</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800">
+                      <span className="text-[9px] font-bold text-amber-600 dark:text-amber-400 uppercase block">3. TDR Potential</span>
+                      <span className="font-mono font-bold text-amber-950 dark:text-amber-200 mt-0.5 block">
+                        {enableTdr ? `+${tdrFsiValue} FSI` : 'Disabled'}
+                      </span>
+                      <span className="text-[10px] text-zinc-400">{Math.round(calculations.tdrFsiArea).toLocaleString()} {unit}</span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800">
+                      <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase block">4. Total Gross BUA</span>
+                      <span className="font-mono font-bold text-emerald-950 dark:text-emerald-200 mt-0.5 block">
+                        {Math.round(calculations.totalGrossConstruction).toLocaleString()} {unit}
+                      </span>
+                      <span className="text-[10px] text-zinc-400">Incl. Fungible Area</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Planned summary indicators */}
-          <div className="p-5 rounded-3xl bg-zinc-50/40 dark:bg-zinc-950/10 border border-zinc-200 dark:border-zinc-850 space-y-4">
-            <span className="text-[10px] font-black uppercase text-zinc-400 tracking-wider">Utilization statistics</span>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-3 bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-850 rounded-xl">
-                <span className="text-[9px] text-zinc-400 font-extrabold uppercase">Utilized Area</span>
-                <div className="text-base font-black font-mono text-zinc-850 dark:text-zinc-150 mt-1">{Math.round(calculations.totalPlannedBuiltUp).toLocaleString()} {unit}</div>
-              </div>
-              <div className="p-3 bg-white dark:bg-zinc-900 border border-zinc-150 dark:border-zinc-850 rounded-xl">
-                <span className="text-[9px] text-zinc-400 font-extrabold uppercase">Utilization %</span>
-                <div className={`text-base font-black font-mono mt-1 ${calculations.utilizedFsi > permissibleFsi ? 'text-rose-500' : 'text-emerald-500'}`}>{calculations.fsiUtilizationPercentage}%</div>
-              </div>
-            </div>
-
-            <div className="space-y-2 text-xs border-t border-zinc-200 dark:border-zinc-800 pt-3 text-zinc-550">
-              <div className="flex justify-between">
-                <span>Maximum Allowed Area:</span>
-                <span className="font-bold text-zinc-800 dark:text-zinc-200">{Math.round(calculations.permissibleBuiltUp).toLocaleString()} {unit}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Remaining built-up capacity:</span>
-                <span className={`font-bold ${calculations.remainingBuiltUp < 0 ? 'text-rose-500' : 'text-emerald-500'}`}>{Math.round(calculations.remainingBuiltUp).toLocaleString()} {unit}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* LOCATION PRESETS MANAGER */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-5">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-150 dark:border-zinc-850 pb-3">
-          <div>
-            <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block">
-              Pan-India Master Plan & Bye-Laws FSI Presets
-            </h3>
-            <p className="text-[11px] text-zinc-450 dark:text-zinc-500 font-medium mt-0.5">
-              Instant regulatory indexes covering all 28 Indian States & Union Territories
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => handleDetectLocation(false)}
-              disabled={isDetectingLocation}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800 text-xs font-bold transition shadow-xs active:scale-[0.98] cursor-pointer disabled:opacity-60"
-              title="Auto-detect current city and state using GPS"
-            >
-              {isDetectingLocation ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600 dark:text-indigo-400" />
-              ) : (
-                <MapPin className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-              )}
-              <span>{isDetectingLocation ? 'Detecting Location...' : 'Detect My Location'}</span>
-            </button>
-            <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-650 dark:text-indigo-400 border border-indigo-500/20">
-              {INDIAN_STATES_FSI_DATA.length} States & UTs • {INDIAN_STATES_FSI_DATA.reduce((acc, s) => acc + s.cities.length, 0)} Cities
-            </span>
-          </div>
-        </div>
-
-        {locationMessage && (
-          <div className={`p-3 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs transition-all ${
-            locationMessage.type === 'success'
-              ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200'
-              : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60 text-rose-900 dark:text-rose-200'
-          }`}>
-            <div className="flex items-center gap-2">
-              {locationMessage.type === 'success' ? (
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              ) : (
-                <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
-              )}
+          {/* =====================================================================
+              FLOOR AREA PLANNER (Custom Floor Schedule)
+              ===================================================================== */}
+          <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-150 dark:border-zinc-800 pb-3">
               <div>
-                <span className="font-bold">{locationMessage.text}</span>
-                {locationMessage.details && (
-                  <span className="text-[11px] opacity-85 ml-2 block sm:inline">({locationMessage.details})</span>
-                )}
+                <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                  <Sliders className="w-4 h-4 text-indigo-500" />
+                  <span>Floor Schedule & Level Planner</span>
+                </h3>
+                <p className="text-[10px] text-zinc-450 dark:text-zinc-500 font-medium">Add or customize levels to match architectural designs</p>
               </div>
-            </div>
-            {locationMessage.type === 'success' && activePreset && (
               <button
-                type="button"
-                onClick={applyPreset}
-                className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-xl transition shrink-0 cursor-pointer shadow-xs self-start sm:self-auto"
+                onClick={addFloor}
+                className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 text-xs font-bold rounded-xl flex items-center gap-1 border border-indigo-200 dark:border-indigo-800 cursor-pointer"
               >
-                Apply FSI ({activePreset.fsi})
+                <Plus className="w-3.5 h-3.5" /> Add Floor
               </button>
-            )}
-          </div>
-        )}
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-black uppercase text-zinc-400">Select State / UT</label>
-            <select
-              value={statePreset}
-              onChange={(e) => {
-                const newStateId = e.target.value;
-                setStatePreset(newStateId);
-                const sObj = INDIAN_STATES_FSI_DATA.find(s => s.id === newStateId);
-                if (sObj && sObj.cities.length > 0) {
-                  setCityPreset(sObj.cities[0].id);
-                }
-              }}
-              className="w-full p-2.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-            >
-              {INDIAN_STATES_FSI_DATA.map((s) => (
-                <option key={s.id} value={s.id} className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">
-                  {s.name} ({s.cities.length} {s.cities.length === 1 ? 'city' : 'cities'})
-                </option>
-              ))}
-            </select>
-          </div>
+            </div>
 
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-black uppercase text-zinc-400">Select City / Region</label>
-            <select
-              value={cityPreset}
-              onChange={(e) => setCityPreset(e.target.value)}
-              className="w-full p-2.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-            >
-              {selectedState.cities.map((c) => (
-                <option key={c.id} value={c.id} className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">
-                  {c.name}
-                </option>
+            <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+              {plannedFloors.map((floor) => (
+                <div key={floor.id} className="flex justify-between items-center gap-3 p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-950/30 border border-zinc-200/60 dark:border-zinc-800/60 text-xs">
+                  <input
+                    type="text"
+                    value={floor.name}
+                    onChange={(e) => {
+                      const updated = plannedFloors.map(f => f.id === floor.id ? { ...f, name: e.target.value } : f);
+                      setPlannedFloors(updated);
+                    }}
+                    className="bg-transparent font-bold text-zinc-800 dark:text-white focus:outline-none border-b border-transparent focus:border-indigo-500"
+                  />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={floor.area}
+                      onChange={(e) => updateFloorArea(floor.id, Math.max(0, parseInt(e.target.value) || 0))}
+                      className="w-24 px-2 py-1 text-right text-xs font-bold border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg focus:outline-none font-mono"
+                    />
+                    <span className="text-[10px] font-bold text-zinc-400">{unit}</span>
+                    <button onClick={() => removeFloor(floor.id)} className="text-rose-500 p-1 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded cursor-pointer" title="Delete">
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
               ))}
-            </select>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-[10px] font-black uppercase text-zinc-400">Select Land Use Zone</label>
-            <select
-              value={zonePreset}
-              onChange={(e) => setZonePreset(e.target.value)}
-              className="w-full p-2.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-            >
-              {availableZones.map((z) => (
-                <option key={z.id} value={z.id} className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">
-                  {z.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="self-end">
-            <button
-              type="button"
-              onClick={applyPreset}
-              className="w-full py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs rounded-xl shadow-md shadow-indigo-600/20 transition active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <Sparkles className="w-4 h-4 text-amber-300 fill-amber-300 shrink-0" />
-              <span className="truncate">Apply Regulation FSI ({activePreset?.fsi || '—'})</span>
-            </button>
+            </div>
           </div>
         </div>
-
-        {activePreset && (
-          <div className="p-4 rounded-2xl bg-zinc-50/80 dark:bg-zinc-950/40 border border-zinc-200/80 dark:border-zinc-800/80 text-xs text-zinc-700 dark:text-zinc-300 space-y-2.5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-              <div className="bg-white dark:bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
-                <span className="text-[9px] font-extrabold text-zinc-400 uppercase block">Municipal Authority</span>
-                <span className="font-bold text-xs text-zinc-900 dark:text-white mt-0.5 block">{activePreset.authority}</span>
-              </div>
-              <div className="bg-white dark:bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
-                <span className="text-[9px] font-extrabold text-zinc-400 uppercase block">Governing Codebook</span>
-                <span className="font-bold text-xs text-indigo-650 dark:text-indigo-400 mt-0.5 block">{activePreset.doc}</span>
-              </div>
-              <div className="bg-white dark:bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
-                <span className="text-[9px] font-extrabold text-zinc-400 uppercase block">Prescribed Baseline FSI</span>
-                <span className="font-mono font-black text-sm text-emerald-600 dark:text-emerald-400 mt-0.5 block">{activePreset.fsi}</span>
-              </div>
-              <div className="bg-white dark:bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
-                <span className="text-[9px] font-extrabold text-zinc-400 uppercase block">Verification Date</span>
-                <span className="font-bold text-xs text-zinc-600 dark:text-zinc-400 mt-0.5 block">{activePreset.verified}</span>
-              </div>
-            </div>
-            {activePreset.notes && (
-              <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 text-[11px] leading-relaxed flex items-start gap-2">
-                <Info className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
-                <span><strong>Special Regulatory Note:</strong> {activePreset.notes}</span>
-              </div>
-            )}
-          </div>
-        )}
       </div>
 
-      {/* SCENARIO COMPARISON PANEL */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
-        <div className="flex justify-between items-center border-b border-zinc-150 dark:border-zinc-850 pb-2">
+      {/* =========================================================================
+          BOTTOM DOCK: DELIVERABLES, PDF EXPORT & AUDIT ACTIONS
+          ========================================================================= */}
+      <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs space-y-4">
+        <div className="flex justify-between items-center border-b border-zinc-150 dark:border-zinc-800 pb-2">
           <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-            <Sliders className="w-4 h-4 text-indigo-500" />
-            <span>Scenario Comparison Desk</span>
+            <FileCheck className="w-4 h-4 text-indigo-500" />
+            <span>Generate Certified Clearance Deliverables</span>
           </h3>
-          <label className="flex items-center gap-1.5 text-xs font-bold text-zinc-650 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={enableComparison}
-              onChange={(e) => setEnableComparison(e.target.checked)}
-              className="rounded border-zinc-300 text-indigo-650"
-            />
-            <span>Enable Comparison</span>
-          </label>
+          <span className="text-[10px] font-bold text-zinc-400">NBC 2016 Compliant</span>
         </div>
-
-        {enableComparison && (
-          <div className="space-y-6 animate-fadeIn">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-4 rounded-2xl border border-zinc-200 dark:border-zinc-850 space-y-3 bg-zinc-50/50 dark:bg-zinc-950/20">
-                <div className="text-xs font-bold text-zinc-800">Scenario A Parameters</div>
-                <div>
-                  <label className="text-[9px] text-zinc-400 font-bold block uppercase">Permissible FSI</label>
-                  <input type="number" step="0.1" value={compFsiA} onChange={(e) => setCompFsiA(e.target.value)} className="w-full p-2 border border-zinc-200 dark:border-zinc-800 rounded text-xs font-mono font-bold" />
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl border border-zinc-200 dark:border-zinc-850 space-y-3 bg-zinc-50/50 dark:bg-zinc-950/20">
-                <div className="text-xs font-bold text-zinc-800">Scenario B Parameters</div>
-                <div>
-                  <label className="text-[9px] text-zinc-400 font-bold block uppercase">Permissible FSI</label>
-                  <input type="number" step="0.1" value={compFsiB} onChange={(e) => setCompFsiB(e.target.value)} className="w-full p-2 border border-zinc-200 dark:border-zinc-800 rounded text-xs font-mono font-bold" />
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl border border-zinc-200 dark:border-zinc-850 space-y-3 bg-zinc-50/50 dark:bg-zinc-950/20">
-                <div className="text-xs font-bold text-zinc-800">Scenario C Parameters</div>
-                <div>
-                  <label className="text-[9px] text-zinc-400 font-bold block uppercase">Permissible FSI</label>
-                  <input type="number" step="0.1" value={compFsiC} onChange={(e) => setCompFsiC(e.target.value)} className="w-full p-2 border border-zinc-200 dark:border-zinc-800 rounded text-xs font-mono font-bold" />
-                </div>
-              </div>
-            </div>
-
-            {/* Comparison results side by side layout */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-3 text-xs font-mono">
-              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-150 dark:border-zinc-850 space-y-2">
-                <div className="font-extrabold uppercase text-zinc-400">Scenario A Results</div>
-                <div>Max built-up Area: {comparisonResults.scenarioA.maxBuiltUp.toLocaleString()} {unit}</div>
-                <div>Ground footprint: {comparisonResults.scenarioA.footprint.toLocaleString()} {unit}</div>
-                <div>Estimated Floors: {comparisonResults.scenarioA.estFloors} levels</div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-150 dark:border-zinc-850 space-y-2">
-                <div className="font-extrabold uppercase text-zinc-400">Scenario B Results</div>
-                <div>Max built-up Area: {comparisonResults.scenarioB.maxBuiltUp.toLocaleString()} {unit}</div>
-                <div>Ground footprint: {comparisonResults.scenarioB.footprint.toLocaleString()} {unit}</div>
-                <div>Estimated Floors: {comparisonResults.scenarioB.estFloors} levels</div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-150 dark:border-zinc-850 space-y-2">
-                <div className="font-extrabold uppercase text-zinc-400">Scenario C Results</div>
-                <div>Max built-up Area: {comparisonResults.scenarioC.maxBuiltUp.toLocaleString()} {unit}</div>
-                <div>Ground footprint: {comparisonResults.scenarioC.footprint.toLocaleString()} {unit}</div>
-                <div>Estimated Floors: {comparisonResults.scenarioC.estFloors} levels</div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* EXPORTS DOCK ACTIONS */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
-        <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b border-zinc-150 dark:border-zinc-850 pb-2">Export Building Reports</h3>
-        <div className="flex flex-wrap gap-3">
-          <button
-            onClick={copyResultsText}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
-          >
-            {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedReport ? 'Report Copied' : 'Copy Audit Summary'}</span>
-          </button>
+        
+        <div className="flex flex-wrap items-center gap-3">
+          <CopyButton text={getResultsText} label="Copy Audit Summary" copiedLabel="Copied" size="sm" variant="secondary" />
+          <ShareWhatsApp text={getResultsText} label="WhatsApp Audit" size="sm" variant="solid" />
           <button
             onClick={exportCSV}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
+            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer"
           >
             <ArrowRightLeft className="w-3.5 h-3.5" />
-            <span>Download Floor CSV</span>
+            <span>Download CSV Floor Schedule</span>
           </button>
           <button
             onClick={handlePrint}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
+            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             <span>Print Report</span>
           </button>
           <button
             onClick={handleDownloadPDF}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
+            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-md shadow-indigo-600/20 cursor-pointer transition"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Download PDF</span>
+            <span>Download Certified PDF Report</span>
           </button>
         </div>
-      </div>
-
-      {/* CALCULATION HISTORY */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
-        <div className="flex justify-between items-center border-b border-zinc-150 dark:border-zinc-850 pb-2">
-          <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block">Local Calculation History</h3>
-          <div className="flex gap-2 items-center">
-            <input
-              type="text"
-              value={newHistoryName}
-              onChange={(e) => setNewHistoryName(e.target.value)}
-              className="px-2 py-1 border rounded text-xs focus:outline-none"
-              placeholder="Name this scenario..."
-            />
-            <button
-              onClick={saveCalculationToHistory}
-              className="px-3 py-1 bg-indigo-650 text-white text-[10px] font-bold rounded"
-            >
-              Save Current
-            </button>
-          </div>
-        </div>
-
-        {historyList.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {historyList.map((item) => (
-              <div key={item.id} className="p-3.5 rounded-2xl border border-zinc-150 dark:border-zinc-850 bg-zinc-50/50 dark:bg-zinc-950/20 text-xs flex justify-between items-start">
-                <div className="space-y-1">
-                  <div className="font-extrabold text-zinc-800 dark:text-zinc-200">{item.name}</div>
-                  <div className="text-[10px] text-zinc-450 dark:text-zinc-500">
-                    Plot: {item.plotArea} {item.unit} | FSI: {item.fsi}
-                  </div>
-                  <div className="text-[9px] text-zinc-400">{item.timestamp}</div>
-                </div>
-                <button onClick={() => deleteHistoryItem(item.id)} className="text-rose-500 hover:underline text-[10px]">Delete</button>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-xs text-zinc-450 italic text-center py-4">No saved scenarios yet.</p>
-        )}
-      </div>
-
-      {/* Explainer / Informational bylaws notice */}
-      <div className="p-5 rounded-3xl bg-zinc-50/40 dark:bg-zinc-900/10 border border-zinc-200 dark:border-zinc-800/80 space-y-4">
-        <h4 className="text-xs font-black text-zinc-900 dark:text-zinc-250 uppercase tracking-wider flex items-center gap-1.5 border-b border-zinc-150 dark:border-zinc-850 pb-2">
-          <Info className="w-4 h-4 text-indigo-505" />
-          <span>What This Calculator Does NOT Determine</span>
-        </h4>
-        <p className="text-xs leading-relaxed text-zinc-550 dark:text-zinc-400">
-          ⚠️ <strong>Crucial Bylaws Notice:</strong> Floor Area Ratio (FAR) and Floor Space Index (FSI) restrictions represent only a single layer of municipal planning compliance. Actual building permissions and legal approvability depend on several other overlapping metrics:
-        </p>
-        <ul className="list-disc pl-5 text-xs text-zinc-500 space-y-1.5 leading-relaxed">
-          <li><strong>Setbacks Clearance</strong>: Mandatory open boundaries left vacant on the front, rear, and side limits of the building.</li>
-          <li><strong>Road Width limits</strong>: Many municipal authorities tie the permissible height and FSI directly to the front road width.</li>
-          <li><strong>Zoning classifications</strong>: Commercial, Residential, mixed-use, agricultural, and industrial land allocations have unique density rules.</li>
-          <li><strong>Height limits & Aviation clearances</strong>: Close proximity to airports or defense installations can strictly limit the height regardless of available FSI.</li>
-        </ul>
       </div>
     </div>
   );

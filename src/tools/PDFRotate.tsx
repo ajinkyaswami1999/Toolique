@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
 import {
   FileText,
   Download,
@@ -71,8 +74,6 @@ export default function PDFRotate() {
   const [previewModalPage, setPreviewModalPage] = useState<number | null>(null);
   const [modalZoom, setModalZoom] = useState<number>(100);
 
-  // Drag State
-  const [isDragging, setIsDragging] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Clean up blob URLs when component unmounts or new blob is generated
@@ -226,32 +227,6 @@ export default function PDFRotate() {
     } finally {
       setIsLoading(false);
       setLoadingProgress({ current: 0, total: 0, text: '' });
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploaded = e.target.files?.[0];
-    if (uploaded) {
-      if (uploaded.type !== 'application/pdf' && !uploaded.name.toLowerCase().endsWith('.pdf')) {
-        setError('Please upload a valid PDF document (.pdf file only).');
-        return;
-      }
-      setFile(uploaded);
-      loadPdf(uploaded);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const dropped = e.dataTransfer.files?.[0];
-    if (dropped) {
-      if (dropped.type !== 'application/pdf' && !dropped.name.toLowerCase().endsWith('.pdf')) {
-        setError('Please drop a valid PDF document (.pdf format).');
-        return;
-      }
-      setFile(dropped);
-      loadPdf(dropped);
     }
   };
 
@@ -544,53 +519,19 @@ export default function PDFRotate() {
 
       {/* Upload Zone (When No File Loaded) */}
       {!file && !isPasswordProtected && (
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
+        <FileDropzone
+          accept=".pdf,application/pdf"
+          onFilesSelected={(files) => {
+            const dropped = files[0];
+            if (dropped) {
+              setFile(dropped);
+              loadPdf(dropped);
+            }
           }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-          className={`saas-card relative border-2 border-dashed p-10 sm:p-14 text-center transition-all ${
-            isDragging
-              ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20 scale-[0.99]'
-              : 'border-zinc-250 dark:border-zinc-800 hover:border-indigo-400/80 bg-zinc-50/40 dark:bg-zinc-900/30'
-          }`}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf,application/pdf"
-            onChange={handleFileChange}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-            aria-label="Upload PDF document to rotate"
-          />
-
-          <div className="max-w-md mx-auto space-y-4 pointer-events-none">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-sm">
-              <RotateCw className="w-8 h-8" />
-            </div>
-
-            <div className="space-y-1.5">
-              <p className="text-base font-bold text-zinc-900 dark:text-white">
-                Drop your PDF here or <span className="text-indigo-600 dark:text-indigo-400 underline">browse</span>
-              </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Supports single-page & multi-page documents • Instant visual rotation
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">90° CW & CCW</span>
-              <span>•</span>
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">180° Flip</span>
-              <span>•</span>
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Odd/Even Filter</span>
-              <span>•</span>
-              <span className="px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800/60">Lossless Output</span>
-            </div>
-          </div>
-        </div>
+          title="Drop your PDF here or browse"
+          description="Supports single-page & multi-page documents • Instant visual rotation"
+          colorTheme="indigo"
+        />
       )}
 
       {/* Loading Progress State */}
@@ -1049,6 +990,14 @@ export default function PDFRotate() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
+                  <CopyButton
+                    text={`Rotated PDF: ${file?.name || 'Document'} (${pages.length} pages, ${(successBlob.size / (1024 * 1024)).toFixed(2)} MB)`}
+                    label="Copy Details"
+                  />
+                  <ShareWhatsApp
+                    text={`I just permanently rotated pages in "${file?.name || 'my PDF'}" using Toolique PDF Studio!`}
+                  />
+
                   <button
                     onClick={handleOpenInNewTab}
                     className="px-3.5 py-2 rounded-xl bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700 text-xs font-bold flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-750 transition cursor-pointer"

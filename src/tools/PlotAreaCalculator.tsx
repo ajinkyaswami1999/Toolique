@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
 import { 
-  Clipboard, Check, Building, DollarSign, 
+  Building, DollarSign, 
   Shield, Download, Plus, Trash2, 
   Info, MapPin, Compass, AlertCircle, Save
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp, UnitSwitcher } from '../components/common';
 import { INDIAN_STATES_FSI_DATA } from '../data/indiaFsiRegulations';
 
 // --- Shape Types ---
@@ -97,7 +98,6 @@ export default function PlotAreaCalculator() {
   const [wireStrandsCount, setWireStrandsCount] = useState<number>(4);
 
   // UI state
-  const [copied, setCopied] = useState<boolean>(false);
   const [savedPlots, setSavedPlots] = useState<SavedPlot[]>([]);
   const [plotSaveName, setPlotSaveName] = useState<string>('My Survey Plot');
 
@@ -389,8 +389,8 @@ export default function PlotAreaCalculator() {
     targetFsi
   ]);
 
-  // Copy Full Survey Summary
-  const handleCopyReport = () => {
+  // Detailed Text Report for Copy & WhatsApp
+  const getReportText = () => {
     let report = `PLOT & LAND AREA SURVEY REPORT\n`;
     report += `=====================================\n`;
     report += `Shape: ${shape.toUpperCase()} | Unit: ${dimUnit.toUpperCase()}\n`;
@@ -420,77 +420,83 @@ export default function PlotAreaCalculator() {
     report += `CONSTRUCTION CLEARANCE POTENTIAL:\n`;
     report += `• Max Ground Footprint (${groundCoveragePercent}%): ${Math.round(financialEstimates.maxGroundFootprintSqFt).toLocaleString()} sq ft\n`;
     report += `• Permissible Built-Up Area (FAR ${targetFsi}): ${Math.round(financialEstimates.permissibleBuiltUpSqFt).toLocaleString()} sq ft (~${financialEstimates.potentialFloors} Floors)\n`;
-
-    navigator.clipboard.writeText(report);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    return report;
   };
 
-  // Download PDF Survey Report
+  // Standardized Branded PDF Survey Certificate (Pillar 2)
   const handleDownloadPDF = () => {
-    try {
-      const doc = new jsPDF();
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(16);
-      doc.text('Toolique — Plot & Land Area Survey Report', 14, 18);
+    const conversionRows = [
+      { unit: 'Square Feet (sq.ft)', value: `${conversions.sqft.toLocaleString()} sq.ft`, factor: 'Base Dimension' },
+      { unit: 'Square Yards (Gaj)', value: `${conversions.sqyd.toLocaleString()} sq.yd`, factor: '1 sq.yd = 9 sq.ft' },
+      { unit: 'Square Meters (m²)', value: `${conversions.sqm.toLocaleString()} m²`, factor: '1 m² = 10.7639 sq.ft' },
+      { unit: 'Acres', value: `${conversions.acres} ac`, factor: '1 Acre = 43,560 sq.ft' },
+      { unit: 'Hectares', value: `${conversions.hectares} ha`, factor: '1 Ha = 2.471 Acres' },
+      { unit: `Guntha / Cent`, value: `${conversions.guntha} Guntha / ${conversions.cent} Cent`, factor: 'Regional Standard' },
+      { unit: `Bigha (${selectedState.name})`, value: `${conversions.bigha} Bigha (${conversions.biswa} Biswa)`, factor: 'State Revenue Standard' },
+      { unit: 'Kanal / Marla', value: `${conversions.kanal} Kanal (${conversions.marla} Marla)`, factor: 'North India Standard' },
+    ];
 
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Generated: ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} | State Reference: ${selectedState.name}`, 14, 25);
+    const financialRows = [
+      { head: 'Estimated Market Land Valuation', rate: `₹${ratePerUnit}/${rateUnitType}`, amount: `₹${Math.round(financialEstimates.totalLandValue).toLocaleString('en-IN')}` },
+      { head: `Stamp Duty (${stampDutyPercent}%)`, rate: `${stampDutyPercent}% State Levy`, amount: `₹${Math.round(financialEstimates.stampDutyAmount).toLocaleString('en-IN')}` },
+      { head: 'Total Acquisition Investment', rate: 'Land + Duty', amount: `₹${Math.round(financialEstimates.totalAcquisitionCost).toLocaleString('en-IN')}` },
+      { head: `Boundary Fencing (${wireStrandsCount} Strands)`, rate: `₹${fenceCostPerFt}/ft (${financialEstimates.postsCount} posts)`, amount: `₹${Math.round(financialEstimates.totalFencingCost).toLocaleString('en-IN')}` },
+      { head: `Permissible Ground Footprint (${groundCoveragePercent}%)`, rate: `${groundCoveragePercent}% Coverage`, amount: `${Math.round(financialEstimates.maxGroundFootprintSqFt).toLocaleString()} sq.ft` },
+      { head: `Permissible Built-Up Area (FAR ${targetFsi})`, rate: `FAR ${targetFsi}`, amount: `${Math.round(financialEstimates.permissibleBuiltUpSqFt).toLocaleString()} sq.ft` },
+    ];
 
-      // Section 1: Plot Details
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('1. Plot Geometry & Boundary Dimensions', 14, 35);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      let y = 43;
-      doc.text(`Shape Type: ${shape.toUpperCase()}`, 16, y); y += 6;
-      geometryResult.subBreakdown.forEach(b => {
-        doc.text(`${b.label}: ${b.value}`, 16, y);
-        y += 6;
-      });
-      doc.text(`Boundary Perimeter: ${geometryResult.perimeterFt.toFixed(1)} Feet (${(geometryResult.perimeterFt * 0.3048).toFixed(1)} Meters)`, 16, y);
-      y += 10;
-
-      // Section 2: Conversions
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('2. Land Area Conversions', 14, y);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`• Square Feet: ${conversions.sqft.toLocaleString()} sq ft`, 16, y); y += 6;
-      doc.text(`• Square Yards (Gaj): ${conversions.sqyd.toLocaleString()} sq yd`, 16, y); y += 6;
-      doc.text(`• Square Meters: ${conversions.sqm.toLocaleString()} m²`, 16, y); y += 6;
-      doc.text(`• Acres: ${conversions.acres} Acres`, 16, y); y += 6;
-      doc.text(`• Hectares: ${conversions.hectares} Hectares`, 16, y); y += 6;
-      doc.text(`• Guntha: ${conversions.guntha} Gunthas`, 16, y); y += 6;
-      doc.text(`• Cent: ${conversions.cent} Cents | Ground: ${conversions.ground} Grounds`, 16, y); y += 6;
-      doc.text(`• Bigha (${selectedState.name}): ${conversions.bigha} Bigha | Biswa: ${conversions.biswa}`, 16, y); y += 6;
-      doc.text(`• Kanal: ${conversions.kanal} | Marla: ${conversions.marla}`, 16, y); y += 10;
-
-      // Section 3: Financial Valuation
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('3. Valuation & Construction Potential', 14, y);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`• Estimated Market Land Value: INR ${Math.round(financialEstimates.totalLandValue).toLocaleString()}`, 16, y); y += 6;
-      doc.text(`• Stamp Duty (${stampDutyPercent}%): INR ${Math.round(financialEstimates.stampDutyAmount).toLocaleString()}`, 16, y); y += 6;
-      doc.text(`• Total Land Acquisition Cost: INR ${Math.round(financialEstimates.totalAcquisitionCost).toLocaleString()}`, 16, y); y += 6;
-      doc.text(`• Boundary Fencing Cost: INR ${Math.round(financialEstimates.totalFencingCost).toLocaleString()} (${financialEstimates.postsCount} posts, ${financialEstimates.totalWireLengthFt} ft wire)`, 16, y); y += 6;
-      doc.text(`• Max Permissible Ground Footprint (${groundCoveragePercent}%): ${Math.round(financialEstimates.maxGroundFootprintSqFt).toLocaleString()} sq ft`, 16, y); y += 6;
-      doc.text(`• Total Built-up Capacity (FSI ${targetFsi}): ${Math.round(financialEstimates.permissibleBuiltUpSqFt).toLocaleString()} sq ft`, 16, y);
-
-      doc.save(`plot-area-survey-${shape}.pdf`);
-    } catch (err) {
-      console.error(err);
-    }
+    downloadPdfReport({
+      title: 'Plot & Land Area Survey Certificate',
+      subtitle: `Geometry: ${shape.toUpperCase()} | State: ${selectedState.name} | Perimeter: ${geometryResult.perimeterFt.toFixed(1)} ft`,
+      category: 'civil',
+      complianceBadge: 'Pan-India Revenue Standards',
+      referenceId: `PLT-${Date.now().toString().slice(-6)}`,
+      theme: 'brand',
+      project: {
+        projectName: plotSaveName,
+        notes: `Shape: ${shape.toUpperCase()} | Perimeter: ${geometryResult.perimeterFt.toFixed(1)} ft (${(geometryResult.perimeterFt * 0.3048).toFixed(1)} m)`
+      },
+      kpis: [
+        { label: 'Square Feet', value: `${conversions.sqft.toLocaleString()} sq.ft`, highlight: true },
+        { label: 'Square Yards (Gaj)', value: `${conversions.sqyd.toLocaleString()} sq.yd` },
+        { label: 'Square Meters', value: `${conversions.sqm.toLocaleString()} m²` },
+        { label: 'Market Valuation', value: `₹${Math.round(financialEstimates.totalLandValue).toLocaleString('en-IN')}`, highlight: true }
+      ],
+      parameters: [
+        { label: 'Geometry Shape', value: shape.toUpperCase() },
+        { label: 'Input Dimension Unit', value: dimUnit.toUpperCase() },
+        { label: 'State Reference', value: selectedState.name },
+        { label: 'Boundary Perimeter', value: `${geometryResult.perimeterFt.toFixed(1)} ft` },
+        ...geometryResult.subBreakdown.map(b => ({ label: b.label, value: b.value }))
+      ],
+      tables: [
+        {
+          title: '1. Pan-India Regional Land Conversions',
+          columns: [
+            { header: 'Land Unit', dataKey: 'unit' },
+            { header: 'Calculated Area', dataKey: 'value', align: 'right' },
+            { header: 'Conversion Standard', dataKey: 'factor' }
+          ],
+          rows: conversionRows
+        },
+        {
+          title: '2. Valuation & Construction Potential Takeoff',
+          columns: [
+            { header: 'Assessment Head', dataKey: 'head' },
+            { header: 'Applicable Rate / Metric', dataKey: 'rate' },
+            { header: 'Amount / Capacity', dataKey: 'amount', align: 'right' }
+          ],
+          rows: financialRows
+        }
+      ],
+      disclaimers: [
+        'Regional land measurements (Bigha, Biswa, Guntha, Ground) follow respective State Revenue Department gazettes.',
+        'Permissible built-up areas and ground coverage are advisory estimates subject to municipal master plan and road width.',
+        'Market valuation does not include registration, mutation, or local authority development charges.'
+      ],
+      includeSignoff: true,
+      fileName: `plot-area-survey-${shape}.pdf`
+    });
   };
 
   // Save current plot to local storage history
@@ -544,56 +550,28 @@ export default function PlotAreaCalculator() {
 
   return (
     <div className="space-y-8">
-      {/* HEADER CONTROLS & QUICK PRESETS */}
+      {/* TOP CONTROLS & QUICK PRESETS */}
       <div className="saas-card p-6 space-y-4 text-left">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-zinc-200/60 dark:border-zinc-800/60">
-          <div>
-            <h2 className="text-base font-black text-zinc-900 dark:text-white flex items-center gap-2">
-              <Compass className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              <span>Plot Geometry & Land Measurement Studio</span>
-            </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-0.5">
-              Precision surveyor formulas, Pan-India regional land units, and site valuation engine
-            </p>
+        <div className="flex flex-wrap justify-between items-center gap-4 pb-4 border-b border-zinc-200/60 dark:border-zinc-800/60">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+              <Compass className="w-3.5 h-3.5" />
+              <span>Pan-India Land Survey Standards</span>
+            </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Dimension Unit Toggle */}
-            <div className="flex p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
-              <button
-                type="button"
-                onClick={() => setDimUnit('ft')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  dimUnit === 'ft'
-                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
-                }`}
-              >
-                Feet (ft)
-              </button>
-              <button
-                type="button"
-                onClick={() => setDimUnit('m')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  dimUnit === 'm'
-                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
-                }`}
-              >
-                Meters (m)
-              </button>
-              <button
-                type="button"
-                onClick={() => setDimUnit('yd')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  dimUnit === 'yd'
-                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
-                }`}
-              >
-                Yards (Gaj)
-              </button>
-            </div>
+            <UnitSwitcher<DimensionUnit>
+              value={dimUnit}
+              onChange={setDimUnit}
+              options={[
+                { id: 'ft', label: 'Feet (ft)', shortLabel: 'ft' },
+                { id: 'm', label: 'Meters (m)', shortLabel: 'm' },
+                { id: 'yd', label: 'Yards (yd)', shortLabel: 'yd' },
+              ]}
+              size="sm"
+            />
 
             {/* State Selection */}
             <div className="flex items-center gap-1.5">
@@ -1138,19 +1116,13 @@ export default function PlotAreaCalculator() {
                 </div>
               </div>
 
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={handleCopyReport}
-                  className="px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-zinc-200 transition flex items-center gap-1.5 cursor-pointer"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Clipboard className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy Report'}</span>
-                </button>
+              <div className="flex items-center gap-2">
+                <CopyButton text={getReportText} label="Copy Report" copiedLabel="Copied" size="xs" variant="secondary" />
+                <ShareWhatsApp text={getReportText} label="WhatsApp" size="xs" variant="solid" />
                 <button
                   type="button"
                   onClick={handleDownloadPDF}
-                  className="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-600/20"
+                  className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-600/20"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>PDF Survey</span>

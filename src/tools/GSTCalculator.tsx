@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Percent, Copy, Check, FileText, Download, Printer, History, Trash2, Sparkles, ChevronDown } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { Percent, FileText, Download, Printer, History, Trash2, Sparkles, ChevronDown } from 'lucide-react';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
 
 // --- Interfaces ---
 type TransactionType = 'intra' | 'inter';
@@ -33,8 +35,6 @@ export default function GSTCalculator() {
   const [discountValue, setDiscountValue] = useState<string>('10');
 
   // Utility states
-  const [copiedText, setCopiedText] = useState<boolean>(false);
-  const [copiedInvoice, setCopiedInvoice] = useState<boolean>(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -207,9 +207,9 @@ export default function GSTCalculator() {
     return '₹' + val.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
-  // Copy standard text report
-  const copyResultsText = () => {
-    const text = `GST Calculation Report (Toolique.in)
+  // Get standard text report
+  const getResultsText = () => {
+    return `GST Calculation Report (Toolique.in)
 ---------------------------------------
 Mode: ${calcMode === 'add' ? 'Add GST (+)' : 'Remove GST (-)'}
 GST Rate: ${calculations.gstRate}%
@@ -220,25 +220,17 @@ Total GST: ${formatINR(calculations.totalGst)}
 ${transactionType === 'intra' ? `CGST @ ${(calculations.gstRate / 2)}%: ${formatINR(calculations.cgst)}\nSGST @ ${(calculations.gstRate / 2)}%: ${formatINR(calculations.sgst)}` : `IGST @ ${calculations.gstRate}%: ${formatINR(calculations.igst)}`}
 ---------------------------------------
 Grand Total: ${formatINR(calculations.grandTotal)}`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedText(true);
-    setTimeout(() => setCopiedText(false), 2000);
   };
 
-  // Copy Invoice-Style text box
-  const copyInvoiceText = () => {
-    const text = `GST CALCULATION
+  // Get Invoice-Style text box
+  const getInvoiceText = () => {
+    return `GST CALCULATION
 Taxable Amount     : ${formatINR(calculations.taxableValue)}
 ${transactionType === 'intra' ? `CGST @ ${(calculations.gstRate / 2)}%        : ${formatINR(calculations.cgst)}\nSGST @ ${(calculations.gstRate / 2)}%        : ${formatINR(calculations.sgst)}` : `IGST @ ${calculations.gstRate}%        : ${formatINR(calculations.igst)}`}
 ---------------------------
 Total GST          : ${formatINR(calculations.totalGst)}
 Grand Total        : ${formatINR(calculations.grandTotal)}
 ---------------------------`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedInvoice(true);
-    setTimeout(() => setCopiedInvoice(false), 2000);
   };
 
   // Print Invoice View
@@ -284,80 +276,80 @@ Grand Total        : ${formatINR(calculations.grandTotal)}
     printWindow.document.close();
   };
 
-  // Download Invoice PDF via jsPDF
+  // Standardized Branded PDF Invoice
   const handleDownloadPDF = () => {
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4'
+    const rows = [];
+    if (enableAdvanced) {
+      rows.push({
+        item: 'Subtotal (Quantity x Price)',
+        rate: '-',
+        amount: formatINR(calculations.subtotal),
+      });
+      rows.push({
+        item: 'Discount Deducted',
+        rate: '-',
+        amount: `-${formatINR(calculations.discountAmount)}`,
+      });
+    }
+    rows.push({
+      item: 'Taxable Value (Base Price)',
+      rate: '-',
+      amount: formatINR(calculations.taxableValue),
     });
 
-    doc.setFont('helvetica', 'normal');
-
-    // Title banner
-    doc.setFillColor(79, 70, 229); // Indigo banner
-    doc.rect(0, 0, 210, 40, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text('GST CALCULATION REPORT', 15, 25);
-    doc.setFontSize(10);
-    doc.text('Generated via Toolique.in', 15, 32);
-
-    // Metadata
-    doc.setTextColor(50, 50, 50);
-    doc.setFontSize(12);
-    doc.text('Calculation Summary', 15, 55);
-    
-    doc.setFontSize(10);
-    doc.text(`Date/Time: ${new Date().toLocaleString('en-IN')}`, 15, 63);
-    doc.text(`Taxation Scheme: Indian GST Slabs`, 15, 69);
-    doc.text(`Transaction Type: ${transactionType === 'intra' ? 'Intra-State (CGST + SGST)' : 'Inter-State (IGST)'}`, 15, 75);
-    doc.text(`Calculation Mode: ${calcMode === 'add' ? 'Add GST (+)' : 'Remove GST (-)'}`, 15, 81);
-
-    // Draw table border
-    doc.setDrawColor(200, 200, 200);
-    doc.line(15, 90, 195, 90);
-
-    let currentY = 100;
-    
-    // Table content lines helper
-    const drawRow = (label: string, value: string, isHeader = false) => {
-      doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
-      doc.text(label, 15, currentY);
-      doc.text(value, 150, currentY);
-      currentY += 8;
-    };
-
-    if (enableAdvanced) {
-      drawRow('Subtotal (Quantity x Price)', formatINR(calculations.subtotal));
-      drawRow('Discount Deducted', `-${formatINR(calculations.discountAmount)}`);
-    }
-    
-    drawRow('Taxable Value (Base Price)', formatINR(calculations.taxableValue));
-    
     if (transactionType === 'intra') {
-      drawRow(`CGST @ ${(calculations.gstRate / 2)}%`, formatINR(calculations.cgst));
-      drawRow(`SGST @ ${(calculations.gstRate / 2)}%`, formatINR(calculations.sgst));
+      rows.push({
+        item: 'CGST',
+        rate: `${calculations.gstRate / 2}%`,
+        amount: formatINR(calculations.cgst),
+      });
+      rows.push({
+        item: 'SGST',
+        rate: `${calculations.gstRate / 2}%`,
+        amount: formatINR(calculations.sgst),
+      });
     } else {
-      drawRow(`IGST @ ${calculations.gstRate}%`, formatINR(calculations.igst));
+      rows.push({
+        item: 'IGST',
+        rate: `${calculations.gstRate}%`,
+        amount: formatINR(calculations.igst),
+      });
     }
 
-    doc.line(15, currentY - 3, 195, currentY - 3);
-    currentY += 4;
-    
-    drawRow('Grand Total (Inclusive of Tax)', formatINR(calculations.grandTotal), true);
-
-    // Draw border line
-    doc.line(15, currentY, 195, currentY);
-
-    // Disclaimer
-    doc.setFont('helvetica', 'italic');
-    doc.setFontSize(8);
-    doc.setTextColor(120, 120, 120);
-    doc.text('Disclaimer: GST rules and rates are subject to updates. This calculator is for estimation', 15, currentY + 15);
-    doc.text('and calculations purposes only and does not constitute official legal tax advice.', 15, currentY + 19);
-
-    doc.save(`GST_Invoice_Report_${Date.now()}.pdf`);
+    downloadPdfReport({
+      title: 'GST Calculation Report',
+      subtitle: `Transaction: ${transactionType === 'intra' ? 'Intra-State (CGST + SGST)' : 'Inter-State (IGST)'} | Mode: ${calcMode === 'add' ? 'Add GST (+)' : 'Remove GST (-)'}`,
+      category: 'Finance & Taxation',
+      project: 'Toolique Financial Suite',
+      theme: 'emerald',
+      parameters: [
+        { label: 'Calculation Mode', value: calcMode === 'add' ? 'Add GST (+)' : 'Remove GST (-)' },
+        { label: 'GST Rate Slab', value: `${calculations.gstRate}%` },
+        { label: 'Transaction Type', value: transactionType === 'intra' ? 'Intra-State (CGST + SGST)' : 'Inter-State (IGST)' },
+        { label: 'Taxable Base Amount', value: formatINR(calculations.taxableValue) },
+        { label: 'Total GST Amount', value: formatINR(calculations.totalGst) },
+        { label: 'Grand Total (Inc. Tax)', value: formatINR(calculations.grandTotal) },
+      ],
+      tables: [
+        {
+          title: 'Tax Invoice Itemization',
+          columns: [
+            { header: 'Particulars', dataKey: 'item' },
+            { header: 'Rate', dataKey: 'rate', align: 'center' as const },
+            { header: 'Amount', dataKey: 'amount', align: 'right' as const },
+          ],
+          rows,
+          totalsRow: [
+            { dataKey: 'item', value: 'GRAND TOTAL (INCLUSIVE OF GST)' },
+            { dataKey: 'amount', value: formatINR(calculations.grandTotal) },
+          ],
+        },
+      ],
+      disclaimers: [
+        'Disclaimer: GST rules and rates are subject to updates. This calculator is for estimation and calculations purposes only and does not constitute official legal tax advice.',
+      ],
+      fileName: `GST_Invoice_Report_${Date.now()}.pdf`,
+    });
   };
 
   // Generate URL parameters share link
@@ -386,17 +378,19 @@ Grand Total        : ${formatINR(calculations.grandTotal)}
         </div>
 
         {/* Share Button Link */}
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(getShareLink());
-            setCopiedText(true);
-            setTimeout(() => setCopiedText(false), 2000);
-          }}
-          className="text-[10px] font-bold text-indigo-700 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm"
-        >
-          {copiedText ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-          <span>{copiedText ? 'Link Copied' : 'Share Scenario'}</span>
-        </button>
+        <div className="flex items-center gap-1.5">
+          <CopyButton
+            text={getShareLink}
+            label="Share Scenario"
+            size="xs"
+            variant="outline"
+          />
+          <ShareWhatsApp
+            text={getShareLink}
+            label="WhatsApp"
+            size="xs"
+          />
+        </div>
       </div>
 
       {/* TWO COLUMN WORKSPACE LAYOUT */}
@@ -635,13 +629,12 @@ Grand Total        : ${formatINR(calculations.grandTotal)}
                 <span className="text-[9px] font-black uppercase text-zinc-450 tracking-wider">GST TAX SLOTS</span>
                 <h3 className="text-sm font-black text-indigo-400 mt-0.5">Split breakdown</h3>
               </div>
-              <button
-                onClick={copyResultsText}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-350 hover:bg-zinc-850 hover:text-white transition"
-              >
-                {copiedText ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedText ? 'Copied' : 'Copy splits'}</span>
-              </button>
+              <CopyButton
+                text={getResultsText}
+                label="Copy splits"
+                size="xs"
+                variant="secondary"
+              />
             </div>
 
             {/* Calculations Breakdown Grid */}
@@ -715,14 +708,12 @@ Grand Total        : ${formatINR(calculations.grandTotal)}
                 <FileText className="w-4 h-4 text-indigo-500" />
                 <span>Invoice receipt breakdown</span>
               </h3>
-              <div className="flex gap-2">
-                <button
-                  onClick={copyInvoiceText}
-                  className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-400 hover:text-zinc-550 transition-colors"
-                  title="Copy Invoice text"
-                >
-                  {copiedInvoice ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                </button>
+              <div className="flex items-center gap-2">
+                <CopyButton
+                  text={getInvoiceText}
+                  size="xs"
+                  variant="ghost"
+                />
                 <button
                   onClick={handlePrint}
                   className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-400 hover:text-zinc-550 transition-colors"

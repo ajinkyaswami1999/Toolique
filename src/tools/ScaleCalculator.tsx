@@ -1,8 +1,6 @@
 import { useState, useMemo } from 'react';
 import { 
   Maximize2, 
-  Copy, 
-  Check, 
   Info, 
   Lock, 
   Unlock, 
@@ -17,7 +15,10 @@ import {
   Maximize, 
   Grid 
 } from 'lucide-react';
-import jsPDF from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
+import UnitSwitcher from '../components/common/UnitSwitcher';
 
 // --- Types & Data ---
 
@@ -122,9 +123,6 @@ export default function ScaleCalculator() {
   const [customBedX, setCustomBedX] = useState<number>(200);
   const [customBedY, setCustomBedY] = useState<number>(200);
   const [customBedZ, setCustomBedZ] = useState<number>(200);
-
-  // Copy Feedback
-  const [copied, setCopied] = useState<boolean>(false);
 
   // Sync uniform scale to non-uniform states when locked
   const handleUniformScaleChange = (newPct: number) => {
@@ -279,7 +277,7 @@ export default function ScaleCalculator() {
   }, [selectedBedId, customBedX, customBedY, customBedZ, origX, origY, origZ, unit, dimCalculations]);
 
   // Copy Results to Clipboard
-  const handleCopy = () => {
+  const getScaleSummaryText = () => {
     let lines: string[] = [];
     if (activeTab === 'dimensions') {
       lines = [
@@ -313,100 +311,79 @@ export default function ScaleCalculator() {
         `Fits on Build Plate: ${bedCalculations.isOverallFit ? 'YES (Fits inside volume)' : 'NO (Exceeds build volume)'}`
       ];
     }
-
-    navigator.clipboard.writeText(lines.join('\n'));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    return lines.join('\n');
   };
 
-  // Export PDF Technical Spec Sheet
+  // Export Standardized Branded PDF Technical Spec Sheet
   const handleExportPDF = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-
-    // Header Banner
-    doc.setFillColor(79, 70, 229); // Indigo 600
-    doc.rect(0, 0, pageWidth, 24, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3D MODEL & MINIATURE SCALE CONVERSION REPORT', 14, 15);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Generated: ${new Date().toLocaleDateString()} | Toolique 3D Suite`, pageWidth - 14, 15, { align: 'right' });
-
-    let y = 35;
-    doc.setTextColor(30, 41, 59);
-
-    // Section 1: Dimensions
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. Bounding Box & Slicer Percentage Conversion', 14, y);
-    y += 7;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Original Bounding Box: ${origX} × ${origY} × ${origZ} ${unit}`, 14, y);
-    doc.text(`Unit: ${unit.toUpperCase()}`, 120, y);
-    y += 5;
-    doc.text(`Slicer Percentage: X: ${(dimCalculations.sFactorX * 100).toFixed(1)}% | Y: ${(dimCalculations.sFactorY * 100).toFixed(1)}% | Z: ${(dimCalculations.sFactorZ * 100).toFixed(1)}%`, 14, y);
-    y += 5;
-    doc.text(`Scaled Output (${unit}): ${dimCalculations.scaledX.toFixed(2)} × ${dimCalculations.scaledY.toFixed(2)} × ${dimCalculations.scaledZ.toFixed(2)} ${unit}`, 14, y);
-    doc.text(`Scaled Output (mm): ${dimCalculations.scaledX_mm.toFixed(1)} × ${dimCalculations.scaledY_mm.toFixed(1)} × ${dimCalculations.scaledZ_mm.toFixed(1)} mm`, 120, y);
-    y += 9;
-
-    // Section 2: Square-Cube Physical Law
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('2. Physical Multiplier & Square-Cube Law', 14, y);
-    y += 7;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Linear Scale Factor: ${dimCalculations.avgLinearMultiplier.toFixed(3)}x`, 14, y);
-    doc.text(`Surface Area Multiplier (s²): ${dimCalculations.areaMultiplier.toFixed(3)}x (${(dimCalculations.areaMultiplier * 100).toFixed(1)}%)`, 120, y);
-    y += 5;
-    doc.text(`Volume / Mass Multiplier (s³): ${dimCalculations.volumeMultiplier.toFixed(4)}x (${(dimCalculations.volumeMultiplier * 100).toFixed(2)}%)`, 14, y);
-    doc.text(`Projected Net Part Mass: ${dimCalculations.estimatedWeightGrams.toFixed(1)} g (from ${origWeightGrams}g original)`, 120, y);
-    y += 9;
-
-    // Section 3: Miniature Scales
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3. Tabletop & Miniature Cross-Scale Comparison', 14, y);
-    y += 7;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Source Scale: ${miniCalculations.srcPreset.name}`, 14, y);
-    doc.text(`Target Scale: ${miniCalculations.tgtPreset.name}`, 120, y);
-    y += 5;
-    doc.text(`Slicer Input Setting: ${miniCalculations.slicerScalePct.toFixed(2)}% (${miniCalculations.crossScaleMultiplier.toFixed(4)}x multiplier)`, 14, y);
-    y += 5;
-    doc.text(`Source Height (${sourceModelHeightMm} mm) -> Converted Height: ${miniCalculations.convertedHeightMm.toFixed(1)} mm`, 14, y);
-    y += 9;
-
-    // Section 4: Build Plate Compatibility
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('4. 3D Printer Build Volume Fit', 14, y);
-    y += 7;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Build Volume: ${bedCalculations.bedX} × ${bedCalculations.bedY} × ${bedCalculations.bedZ} mm`, 14, y);
-    doc.text(`Max Fit Scale: ${bedCalculations.maxUniformFitPct.toFixed(1)}%`, 120, y);
-    y += 5;
-    doc.text(`Compatibility: ${bedCalculations.isOverallFit ? 'Model fits comfortably inside build volume.' : 'WARNING: Model exceeds printer dimensions!'}`, 14, y);
-    y += 12;
-
-    // Footer
-    doc.setFontSize(8);
-    doc.setTextColor(100, 116, 139);
-    doc.text('Toolique 3D Suite • Fast client-side scaling calculations for FDM & SLA 3D printing.', 14, 285);
-
-    doc.save('3D_Model_Scale_Report.pdf');
+    downloadPdfReport({
+      title: '3D Model & Miniature Scale Conversion Report',
+      subtitle: `Bounding Box: ${origX} × ${origY} × ${origZ} ${unit} | Unit: ${unit.toUpperCase()}`,
+      category: '3D Modeling & Additive Scale Analytics',
+      project: 'Toolique 3D Suite',
+      theme: 'brand',
+      parameters: [
+        { label: 'Original Dimensions', value: `${origX} × ${origY} × ${origZ} ${unit}` },
+        { label: 'Slicer Percentage', value: `X: ${(dimCalculations.sFactorX * 100).toFixed(1)}% | Y: ${(dimCalculations.sFactorY * 100).toFixed(1)}% | Z: ${(dimCalculations.sFactorZ * 100).toFixed(1)}%` },
+        { label: 'Scaled Output Dimensions', value: `${dimCalculations.scaledX.toFixed(2)} × ${dimCalculations.scaledY.toFixed(2)} × ${dimCalculations.scaledZ.toFixed(2)} ${unit}` },
+        { label: 'Linear Scale Factor', value: `${dimCalculations.avgLinearMultiplier.toFixed(3)}x` },
+        { label: 'Surface Area Multiplier', value: `${dimCalculations.areaMultiplier.toFixed(3)}x (${(dimCalculations.areaMultiplier * 100).toFixed(1)}%)` },
+        { label: 'Volume / Mass Multiplier', value: `${dimCalculations.volumeMultiplier.toFixed(4)}x (${(dimCalculations.volumeMultiplier * 100).toFixed(2)}%)` },
+        { label: 'Estimated Scaled Weight', value: `${dimCalculations.estimatedWeightGrams.toFixed(1)} g (Orig: ${origWeightGrams} g)` },
+        { label: 'Build Plate Fit', value: bedCalculations.isOverallFit ? 'Fits Build Volume' : 'Exceeds Build Volume' },
+      ],
+      tables: [
+        {
+          title: '1. Bounding Box & Slicer Percentage Conversion',
+          columns: [
+            { header: 'Metric', dataKey: 'metric' },
+            { header: 'Dimension / Value', dataKey: 'val', align: 'right' as const },
+          ],
+          rows: [
+            { metric: 'Original Bounding Box', val: `${origX} × ${origY} × ${origZ} ${unit}` },
+            { metric: 'Slicer X Factor', val: `${(dimCalculations.sFactorX * 100).toFixed(1)}%` },
+            { metric: 'Slicer Y Factor', val: `${(dimCalculations.sFactorY * 100).toFixed(1)}%` },
+            { metric: 'Slicer Z Factor', val: `${(dimCalculations.sFactorZ * 100).toFixed(1)}%` },
+            { metric: `Scaled Dimensions (${unit})`, val: `${dimCalculations.scaledX.toFixed(2)} × ${dimCalculations.scaledY.toFixed(2)} × ${dimCalculations.scaledZ.toFixed(2)} ${unit}` },
+            { metric: 'Scaled Dimensions (mm)', val: `${dimCalculations.scaledX_mm.toFixed(1)} × ${dimCalculations.scaledY_mm.toFixed(1)} × ${dimCalculations.scaledZ_mm.toFixed(1)} mm` },
+          ],
+        },
+        {
+          title: '2. Physical Multiplier & Square-Cube Law Impact',
+          columns: [
+            { header: 'Physical Property', dataKey: 'prop' },
+            { header: 'Scaling Impact & Multiplier', dataKey: 'val', align: 'right' as const },
+          ],
+          rows: [
+            { prop: 'Linear Scale Multiplier', val: `${dimCalculations.avgLinearMultiplier.toFixed(3)}x` },
+            { prop: 'Surface Area Multiplier (s²)', val: `${dimCalculations.areaMultiplier.toFixed(3)}x (${(dimCalculations.areaMultiplier * 100).toFixed(1)}%)` },
+            { prop: 'Volume & Mass Multiplier (s³)', val: `${dimCalculations.volumeMultiplier.toFixed(4)}x (${(dimCalculations.volumeMultiplier * 100).toFixed(2)}%)` },
+            { prop: 'Estimated Scaled Model Mass', val: `${dimCalculations.estimatedWeightGrams.toFixed(1)} g` },
+            { prop: 'Thin-Wall Risk Benchmark', val: `${dimCalculations.thinWallSampleMm.toFixed(2)} mm nominal` },
+          ],
+        },
+        {
+          title: '3. Tabletop & Miniature Cross-Scale Specs',
+          columns: [
+            { header: 'Scale Parameter', dataKey: 'param' },
+            { header: 'Specification', dataKey: 'val', align: 'right' as const },
+          ],
+          rows: [
+            { param: 'Source Preset Scale', val: miniCalculations.srcPreset.name },
+            { param: 'Target Preset Scale', val: miniCalculations.tgtPreset.name },
+            { param: 'Slicer Rescaling Percentage', val: `${miniCalculations.slicerScalePct.toFixed(2)}% (${miniCalculations.crossScaleMultiplier.toFixed(4)}x)` },
+            { param: `Source Height (${sourceModelHeightMm} mm) -> Converted`, val: `${miniCalculations.convertedHeightMm.toFixed(1)} mm` },
+            { param: 'Printer Build Volume', val: `${bedCalculations.bedX} × ${bedCalculations.bedY} × ${bedCalculations.bedZ} mm` },
+            { param: 'Max Fit Scale on Plate', val: `${bedCalculations.maxUniformFitPct.toFixed(1)}%` },
+          ],
+        },
+      ],
+      disclaimers: [
+        'Toolique 3D Suite • Fast client-side scaling calculations for FDM & SLA 3D printing.',
+        'Rescaling models with fine detail below nozzle diameter (0.4mm) may result in sliced wall dropouts.',
+      ],
+      fileName: '3D_Model_Scale_Report.pdf',
+    });
   };
 
   return (
@@ -453,19 +430,16 @@ export default function ScaleCalculator() {
         {/* Global Unit Selector */}
         <div className="flex items-center gap-2 pr-2">
           <span className="text-[11px] font-bold text-zinc-500 uppercase">Unit:</span>
-          {(['mm', 'cm', 'in'] as const).map(u => (
-            <button
-              key={u}
-              onClick={() => setUnit(u)}
-              className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
-                unit === u
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700'
-              }`}
-            >
-              {u}
-            </button>
-          ))}
+          <UnitSwitcher<'mm' | 'cm' | 'in'>
+            value={unit}
+            onChange={setUnit}
+            options={[
+              { id: 'mm', label: 'Millimeters', shortLabel: 'MM' },
+              { id: 'cm', label: 'Centimeters', shortLabel: 'CM' },
+              { id: 'in', label: 'Inches', shortLabel: 'IN' },
+            ]}
+            size="sm"
+          />
         </div>
       </div>
 
@@ -699,13 +673,12 @@ export default function ScaleCalculator() {
                     Scaled Bounding Box
                   </h3>
                 </div>
-                <button
-                  onClick={handleCopy}
-                  className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy'}</span>
-                </button>
+                <CopyButton
+                  text={getScaleSummaryText}
+                  label="Copy"
+                  size="xs"
+                  variant="ghost"
+                />
               </div>
 
               <div className="space-y-3">
@@ -810,9 +783,15 @@ export default function ScaleCalculator() {
 
             {/* Export & Actions */}
             <div className="flex gap-2">
+              <ShareWhatsApp
+                text={getScaleSummaryText}
+                label="WhatsApp"
+                size="md"
+                className="w-1/3 justify-center"
+              />
               <button
                 onClick={handleExportPDF}
-                className="w-full py-2.5 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                className="w-2/3 py-2.5 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Download className="w-4 h-4" />
                 Download PDF Spec Sheet

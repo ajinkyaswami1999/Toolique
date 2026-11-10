@@ -160,24 +160,14 @@ export default function PrivacyPolicyChecklist() {
 
   return (
     <div className="space-y-6">
-      {/* Banner */}
-      <div className="bg-gradient-to-r from-blue-500/10 via-teal-500/10 to-indigo-500/10 border border-blue-500/20 dark:border-blue-500/30 rounded-2xl p-5 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 bg-blue-600 text-white rounded-xl shadow-md shrink-0">
-              <FileText className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                DPDP Privacy Policy Statutory Clause Auditor
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-300 dark:border-blue-800">
-                  DPDP Act 2023 Mandatory Disclosures
-                </span>
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                Audit your corporate Privacy Policy against the 12 mandatory statutory clauses required under the DPDP Act 2023, identify compliance gaps, and generate legal clauses.
-              </p>
-            </div>
+      {/* Top Action Toolbar */}
+      <div className="bg-gradient-to-r from-blue-500/10 via-teal-500/10 to-indigo-500/10 border border-blue-500/20 dark:border-blue-500/30 rounded-2xl p-4 shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5" />
+              <span>DPDP Act 2023 Mandatory Disclosures (12 Statutory Clauses)</span>
+            </span>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <span className={`text-xs font-bold px-3 py-1.5 rounded-xl border ${scoreData.badgeClass}`}>

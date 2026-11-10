@@ -1,9 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import {
-  TrendingUp, Copy, Check, Download, Share2, Sparkles,
+  TrendingUp, Download, Sparkles,
   Percent, BarChart2, Scale
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp } from '../components/common';
 
 // --- Indian Currency Formatting Helpers ---
 function formatIndianCurrencyAbbr(value: number): string {
@@ -137,9 +138,6 @@ export default function CAGRCalculator() {
   ]);
 
   // UI state
-  const [copied, setCopied] = useState<boolean>(false);
-  const [copiedTable, setCopiedTable] = useState<boolean>(false);
-  const [shareCopied, setShareCopied] = useState<boolean>(false);
   const [activeScheduleView, setActiveScheduleView] = useState<'yearly' | 'chart'>('chart');
   const [hoveredScheduleIndex, setHoveredScheduleIndex] = useState<number | null>(null);
 
@@ -439,8 +437,8 @@ export default function CAGRCalculator() {
     };
   }, [multiPoints]);
 
-  // Copy Summary Report to Clipboard
-  const copyFormattedSummary = () => {
+  // Generate Summary Text for Copy & Share
+  const getSummaryText = () => {
     let report = '';
     if (activeTab === 'point-to-point') {
       report = `📊 CAGR Investment Report — Toolique (https://www.toolique.in/calculators/cagr-calculator)
@@ -497,26 +495,21 @@ Max Drawdown   : ${multiYearResults?.maxDrawdown.toFixed(2)}%
 Arithmetic Avg : ${multiYearResults?.arithmeticAverage.toFixed(2)}% p.a.
 --------------------------------------------------`;
     }
-
-    navigator.clipboard.writeText(report);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    return report;
   };
 
-  // Copy Year-by-Year Table to Clipboard
-  const copyYearlyTable = () => {
+  // Generate Year-by-Year CSV content
+  const getYearlyCsv = () => {
     const schedule = activeTab === 'forward-projector' ? forwardResults.schedule : pointResults.yearlySchedule;
     let csv = 'Year,Beginning Balance (INR),Gain in Year (INR),Ending Balance (INR),Multiple,Real Value (INR)\n';
     schedule.forEach(s => {
       csv += `${s.yearLabel},${Math.round(s.value - s.gain)},${Math.round(s.gain)},${Math.round(s.value)},${s.multiple.toFixed(2)}x,${Math.round(s.realValue)}\n`;
     });
-    navigator.clipboard.writeText(csv);
-    setCopiedTable(true);
-    setTimeout(() => setCopiedTable(false), 2000);
+    return csv;
   };
 
   // Share link with URL params
-  const handleShareLink = () => {
+  const getShareLink = () => {
     const url = new URL(window.location.origin + '/calculators/cagr-calculator');
     url.searchParams.set('tab', activeTab);
     url.searchParams.set('initial', initialValue.toString());
@@ -524,143 +517,70 @@ Arithmetic Avg : ${multiYearResults?.arithmeticAverage.toFixed(2)}% p.a.
     url.searchParams.set('years', years.toString());
     url.searchParams.set('inf', inflationRate.toString());
     url.searchParams.set('tax', taxRegime);
-
-    navigator.clipboard.writeText(url.toString());
-    setShareCopied(true);
-    setTimeout(() => setShareCopied(false), 2000);
+    return url.toString();
   };
 
   // ----------------------------------------------------
-  // GENERATE PROFESSIONAL PDF REPORT (jspdf)
+  // GENERATE PROFESSIONAL PDF REPORT (Standard Engine)
   // ----------------------------------------------------
-  const generatePdfReport = () => {
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4'
+  const handleDownloadPDF = () => {
+    const schedule = activeTab === 'forward-projector' ? forwardResults.schedule : pointResults.yearlySchedule;
+    const scheduleRows = schedule.slice(0, 20).map((s) => ({
+      year: s.yearLabel,
+      beg: `₹${Math.round(s.value - s.gain).toLocaleString('en-IN')}`,
+      gain: `₹${Math.round(s.gain).toLocaleString('en-IN')}`,
+      end: `₹${Math.round(s.value).toLocaleString('en-IN')}`,
+      multiple: `${s.multiple.toFixed(2)}x`,
+      real: `₹${Math.round(s.realValue).toLocaleString('en-IN')}`,
+    }));
+
+    downloadPdfReport({
+      title: 'Compound Annual Growth Rate (CAGR) Analysis Report',
+      subtitle: `Initial: ₹${Math.round(initialValue).toLocaleString('en-IN')} -> Final: ₹${Math.round(finalValue).toLocaleString('en-IN')} over ${effectiveTenureYears.toFixed(1)} Years`,
+      category: 'Investment Compounding & Wealth Analytics',
+      project: 'Toolique Financial Suite',
+      theme: 'emerald',
+      parameters: [
+        { label: 'Initial Principal', value: `₹${Math.round(initialValue).toLocaleString('en-IN')}` },
+        { label: 'Final Valuation', value: `₹${Math.round(finalValue).toLocaleString('en-IN')}` },
+        { label: 'Compounding Tenure', value: `${effectiveTenureYears.toFixed(2)} Years` },
+        { label: 'CAGR (Annualized)', value: `${pointResults.cagrPercent.toFixed(2)}% p.a.` },
+        { label: 'Absolute Return', value: `${pointResults.absoluteReturn.toFixed(2)}%` },
+        { label: 'Net Profit Created', value: `₹${Math.round(pointResults.totalProfit).toLocaleString('en-IN')}` },
+        { label: 'Real CAGR (Inflation Adj)', value: `${pointResults.realCagrPercent.toFixed(2)}%` },
+        { label: 'Wealth Growth Multiple', value: `${pointResults.wealthMultiple.toFixed(2)}x` },
+        { label: 'Rule of 72 Doubling Time', value: `~${pointResults.doublingYears.toFixed(1)} Years` },
+        { label: 'Post-Tax Valuation', value: `₹${Math.round(pointResults.postTaxValue).toLocaleString('en-IN')}` },
+      ],
+      tables: [
+        {
+          title: 'Year-by-Year Growth Progression',
+          columns: [
+            { header: 'Period', dataKey: 'year' },
+            { header: 'Opening Value', dataKey: 'beg', align: 'right' as const },
+            { header: 'Year Gain', dataKey: 'gain', align: 'right' as const },
+            { header: 'Closing Value', dataKey: 'end', align: 'right' as const },
+            { header: 'Multiple', dataKey: 'multiple', align: 'center' as const },
+            { header: 'Real Value', dataKey: 'real', align: 'right' as const },
+          ],
+          rows: scheduleRows,
+          totalsRow: [
+            { dataKey: 'year', value: 'FINAL VALUATION' },
+            { dataKey: 'beg', value: `₹${Math.round(initialValue).toLocaleString('en-IN')}` },
+            { dataKey: 'gain', value: `₹${Math.round(pointResults.totalProfit).toLocaleString('en-IN')}` },
+            { dataKey: 'end', value: `₹${Math.round(finalValue).toLocaleString('en-IN')}` },
+            { dataKey: 'multiple', value: `${pointResults.wealthMultiple.toFixed(2)}x` },
+            { dataKey: 'real', value: `₹${Math.round(pointResults.realPurchasingPower).toLocaleString('en-IN')}` },
+          ],
+        },
+      ],
+      disclaimers: [
+        'CAGR represents smoothed geometric compounding and does not reflect intra-period volatility or drawdowns.',
+        'Inflation-adjusted real returns assume a constant inflation rate compounding over the tenure.',
+        'Tax computation estimates apply standard capital gains rules (LTCG / slab rates) for Indian financial jurisdictions.',
+      ],
+      fileName: `CAGR_Report_${Math.round(initialValue)}_to_${Math.round(finalValue)}_${Date.now()}.pdf`,
     });
-
-    const primaryColor: [number, number, number] = [79, 70, 229]; // Indigo
-    const darkColor: [number, number, number] = [15, 23, 42]; // Slate 900
-    const grayColor: [number, number, number] = [100, 116, 139]; // Slate 500
-
-    // Header Banner
-    doc.setFillColor(...primaryColor);
-    doc.rect(0, 0, 210, 28, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(18);
-    doc.text('Toolique Financial Studio', 14, 14);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
-    doc.text('Compound Annual Growth Rate (CAGR) Analysis Report', 14, 21);
-    doc.text(`Generated: ${new Date().toLocaleDateString('en-IN')}`, 196, 21, { align: 'right' });
-
-    // Executive Summary Box
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(14, 35, 182, 38, 3, 3, 'FD');
-
-    doc.setTextColor(...darkColor);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(12);
-    doc.text('Executive Investment Overview', 20, 44);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.setTextColor(...grayColor);
-    doc.text(`Initial Principal: Rs. ${Math.round(initialValue).toLocaleString('en-IN')}`, 20, 52);
-    doc.text(`Final Valuation: Rs. ${Math.round(finalValue).toLocaleString('en-IN')}`, 20, 59);
-    doc.text(`Duration: ${effectiveTenureYears.toFixed(2)} Years`, 20, 66);
-
-    // Primary CAGR Callout
-    doc.setFillColor(238, 242, 255);
-    doc.roundedRect(120, 40, 70, 28, 2, 2, 'FD');
-    doc.setTextColor(...primaryColor);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.text('Annual Compounded Rate', 155, 48, { align: 'center' });
-    doc.setFontSize(16);
-    doc.text(`${pointResults.cagrPercent.toFixed(2)}% p.a.`, 155, 58, { align: 'center' });
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`(${pointResults.wealthMultiple.toFixed(2)}x Growth Multiple)`, 155, 64, { align: 'center' });
-
-    // Key Performance Metrics Table
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(...darkColor);
-    doc.text('Key Performance & Return Metrics', 14, 82);
-
-    const metricsData = [
-      ['Metric Name', 'Calculated Value', 'Analytical Context'],
-      ['Compound Annual Growth (CAGR)', `${pointResults.cagrPercent.toFixed(2)}%`, 'Geometric mean annualized compounding growth'],
-      ['Absolute Total Return', `${pointResults.absoluteReturn.toFixed(2)}%`, 'Point-to-point unannualized profit ratio'],
-      ['Net Capital Gain', `Rs. ${Math.round(pointResults.totalProfit).toLocaleString('en-IN')}`, 'Total monetary wealth created'],
-      ['Real Inflation-Adjusted CAGR', `${pointResults.realCagrPercent.toFixed(2)}%`, `Adjusted for ${inflationRate}% annual inflation`],
-      ['Purchasing Power Equivalent', `Rs. ${Math.round(pointResults.realPurchasingPower).toLocaleString('en-IN')}`, "True economic value in today's money"],
-      ['Rule of 72 Doubling Time', `~${pointResults.doublingYears.toFixed(1)} Years`, 'Estimated time required to 2x initial principal'],
-      ['Rule of 114 Tripling Time', `~${pointResults.triplingYears.toFixed(1)} Years`, 'Estimated time required to 3x initial principal'],
-      ['Post-Tax In-Hand Value', `Rs. ${Math.round(pointResults.postTaxValue).toLocaleString('en-IN')}`, `${taxRegime === 'equity-ltcg' ? '12.5% LTCG (>1.25L)' : taxRegime === 'debt-slab' ? '30% Slab' : 'Exempt'}`]
-    ];
-
-    let startY = 88;
-    metricsData.forEach((row, idx) => {
-      const isHeader = idx === 0;
-      doc.setFillColor(isHeader ? 241 : (idx % 2 === 0 ? 255 : 248), isHeader ? 245 : (idx % 2 === 0 ? 255 : 250), isHeader ? 249 : 252);
-      doc.rect(14, startY, 182, 7, 'F');
-
-      doc.setFont('helvetica', isHeader ? 'bold' : 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(isHeader ? 15 : 51, isHeader ? 23 : 65, isHeader ? 42 : 85);
-
-      doc.text(row[0], 18, startY + 5);
-      doc.text(row[1], 85, startY + 5);
-      doc.text(row[2], 130, startY + 5);
-
-      startY += 7;
-    });
-
-    // Benchmark Comparison Table
-    startY += 8;
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(...darkColor);
-    doc.text('Asset Class Benchmark Performance Over Same Horizon', 14, startY);
-
-    startY += 6;
-    const benchHeader = ['Asset Class', 'Benchmark CAGR', 'Estimated Value on Rs. ' + formatIndianCurrencyAbbr(initialValue)];
-    doc.setFillColor(241, 245, 249);
-    doc.rect(14, startY, 182, 7, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.text(benchHeader[0], 18, startY + 5);
-    doc.text(benchHeader[1], 85, startY + 5);
-    doc.text(benchHeader[2], 130, startY + 5);
-    startY += 7;
-
-    ASSET_BENCHMARKS.forEach((bm, i) => {
-      const bVal = initialValue * Math.pow(1 + bm.cagr / 100, effectiveTenureYears);
-      doc.setFillColor(i % 2 === 0 ? 255 : 248, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 252);
-      doc.rect(14, startY, 182, 6.5, 'F');
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(51, 65, 85);
-
-      doc.text(bm.name, 18, startY + 4.5);
-      doc.text(`${bm.cagr}% p.a.`, 85, startY + 4.5);
-      doc.text(`Rs. ${Math.round(bVal).toLocaleString('en-IN')}`, 130, startY + 4.5);
-      startY += 6.5;
-    });
-
-    // Footer
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.setTextColor(148, 163, 184);
-    doc.text('Toolique India · Free Financial Tools & Investment Calculators · https://www.toolique.in/calculators/cagr-calculator', 105, 287, { align: 'center' });
-
-    doc.save(`CAGR_Report_${Math.round(initialValue)}_to_${Math.round(finalValue)}.pdf`);
   };
 
   return (
@@ -690,31 +610,15 @@ Arithmetic Avg : ${multiYearResults?.arithmeticAverage.toFixed(2)}% p.a.
         </div>
 
         <div className="flex items-center gap-2">
+          <CopyButton text={getSummaryText} label="Copy Summary" size="xs" variant="outline" />
+          <ShareWhatsApp text={getShareLink} label="WhatsApp" size="xs" />
           <button
-            onClick={copyFormattedSummary}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:border-indigo-400 dark:hover:border-indigo-600 transition shadow-xs cursor-pointer"
-            title="Copy Text Summary"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-indigo-500" />}
-            <span>{copied ? 'Copied' : 'Copy Summary'}</span>
-          </button>
-
-          <button
-            onClick={generatePdfReport}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:border-indigo-400 dark:hover:border-indigo-600 transition shadow-xs cursor-pointer"
+            onClick={handleDownloadPDF}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:border-emerald-400 dark:hover:border-emerald-600 transition shadow-xs cursor-pointer"
             title="Download PDF Investment Report"
           >
-            <Download className="w-3.5 h-3.5 text-indigo-500" />
+            <Download className="w-3.5 h-3.5 text-emerald-500" />
             <span>PDF Report</span>
-          </button>
-
-          <button
-            onClick={handleShareLink}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:border-indigo-400 dark:hover:border-indigo-600 transition shadow-xs cursor-pointer"
-            title="Share Calculation Link"
-          >
-            {shareCopied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5 text-indigo-500" />}
-            <span>{shareCopied ? 'Link Copied' : 'Share'}</span>
           </button>
         </div>
       </div>
@@ -1130,13 +1034,7 @@ Arithmetic Avg : ${multiYearResults?.arithmeticAverage.toFixed(2)}% p.a.
                   </div>
 
                   {activeScheduleView === 'yearly' && (
-                    <button
-                      onClick={copyYearlyTable}
-                      className="px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-800 text-[11px] font-bold text-zinc-600 dark:text-zinc-400 hover:border-indigo-400 transition"
-                      title="Copy CSV to Clipboard"
-                    >
-                      {copiedTable ? 'Copied' : 'Export CSV'}
-                    </button>
+                    <CopyButton text={getYearlyCsv} label="Export CSV" size="xs" variant="outline" />
                   )}
                 </div>
               </div>

@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-  Settings, Copy, Check, Trash2, Plus, Download, Save,
+  Settings, Check, Trash2, Plus, Download, Save,
   FileText, AlertTriangle, Printer, Sparkles, Sliders, RefreshCw, Layers,
-  Zap, Clock, MessageCircle, TrendingUp,
+  Zap, Clock, TrendingUp,
   Package, Box, Upload
 } from 'lucide-react';
 import { calculate3DPrintCosts } from '../utils/threeDCalc';
@@ -11,8 +11,10 @@ import type {
   CostCalculatorInputs, CostCalculatorOutputs, CalculatorSettings,
   HistoryItem, CustomCostItem, FilamentSlot
 } from '../utils/threeDCalc';
-import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
 
 const DEFAULT_SETTINGS: CalculatorSettings = {
   filamentPrice: 1350,
@@ -194,7 +196,6 @@ export default function ThreeDPrintingCostCalculator() {
   const [settingsForm, setSettingsForm] = useState<CalculatorSettings>({ ...settings });
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [activeEstimateId, setActiveEstimateId] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [currency, setCurrency] = useState(settings.currencySymbol || '₹');
 
@@ -740,8 +741,7 @@ export default function ThreeDPrintingCostCalculator() {
   };
 
   // WhatsApp Quotation Message
-  const handleShareWhatsApp = () => {
-    const quoteText = `*3D PRINTING QUOTATION* 🏷️
+  const getWhatsAppQuote = () => `*3D PRINTING QUOTATION* 🏷️
 *Project:* ${name} (${category})
 ${customerName ? `*Client:* ${customerName}\n` : ''}*Quantity:* ${batchQuantity} unit(s)
 *Print Technology:* ${printTechnology === 'resin' ? 'Resin SLA / MSLA' : 'FDM Multi-Material'}
@@ -756,13 +756,8 @@ ${discount > 0 ? `• Discount Applied: ${discount}%\n` : ''}
 
 Generated via *Toolique 3D Print Studio* (www.toolique.in)`;
 
-    const encoded = encodeURIComponent(quoteText);
-    window.open(`https://wa.me/?text=${encoded}`, '_blank');
-  };
-
   // Copy Summary text
-  const handleCopyReport = () => {
-    const text = `--- 3D PRINTING QUOTE & COST REPORT: ${name} ---
+  const getQuoteReportText = () => `--- 3D PRINTING QUOTE & COST REPORT: ${name} ---
 Category: ${category}
 Technology: ${printTechnology.toUpperCase()}
 Batch Quantity: ${batchQuantity} unit(s)
@@ -784,144 +779,99 @@ Estimated Net Profit: ${currency}${outputs.profitAmount.toFixed(2)} (${profitMar
 Unit Metrics: ${currency}${outputs.pricePerGram.toFixed(2)}/g | ${currency}${outputs.pricePerPrintHour.toFixed(2)}/print-hour
 Calculated on Toolique (www.toolique.in/3d-printing-tools/3d-printing-cost-calculator)`;
 
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  // Export Professional PDF
+  // Export Professional Branded PDF
   const handleExportPDF = () => {
     try {
-      const doc = new jsPDF();
-      const primaryColor = [79, 70, 229]; // Indigo
-      const darkColor = [24, 24, 27]; // Zinc 900
-
-      // Header Banner
-      doc.setFillColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.rect(0, 0, 210, 38, 'F');
-
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(20);
-      doc.text(studioName || 'TOOLIQUE 3D PRINT STUDIO', 14, 20);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.text('Commercial 3D Printing Quotation & Specification Sheet', 14, 28);
-      if (studioGstin) doc.text(`GSTIN: ${studioGstin}`, 14, 34);
-
-      // Metadata block
-      doc.setTextColor(100, 100, 100);
-      doc.setFontSize(9);
-      doc.text(`Date: ${new Date().toLocaleDateString()}`, 145, 18);
-      doc.text(`Quote Ref: TQ-${Date.now().toString().slice(-6)}`, 145, 25);
-      doc.text(`Valid For: 15 Days`, 145, 32);
-
-      // Client & Project Box
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.text('PROJECT & CLIENT DETAILS', 14, 48);
-      doc.setDrawColor(220, 220, 220);
-      doc.line(14, 51, 196, 51);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.text(`Part Name: ${name}`, 14, 58);
-      doc.text(`Category: ${category}`, 14, 64);
-      doc.text(`Technology: ${printTechnology === 'resin' ? 'Resin SLA / MSLA' : 'FDM Multi-Material'}`, 14, 70);
-      doc.text(`Batch Quantity: ${batchQuantity} unit(s)`, 14, 76);
-
-      if (customerName) doc.text(`Customer: ${customerName}`, 110, 58);
-      if (clientContact) doc.text(`Contact: ${clientContact}`, 110, 64);
-      doc.text(`Print Duration: ${printDuration} hrs/unit`, 110, 70);
-      doc.text(`Material Usage: ${outputs.totalFilamentGrams.toFixed(1)}g total`, 110, 76);
-
-      // Financial Highlight Box
-      doc.setFillColor(245, 247, 255);
-      doc.roundedRect(14, 84, 182, 28, 3, 3, 'F');
-      doc.setDrawColor(199, 210, 254);
-      doc.roundedRect(14, 84, 182, 28, 3, 3, 'S');
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text('TOTAL QUOTATION VALUE', 20, 93);
-      doc.setFontSize(18);
-      doc.text(`${currency}${outputs.finalSellingPrice.toFixed(2)}`, 20, 104);
-
-      doc.setFontSize(9);
-      doc.setTextColor(80, 80, 80);
-      doc.text(`Unit Price: ${currency}${outputs.unitSellingPrice.toFixed(2)}/unit`, 110, 94);
-      doc.text(`Inclusive of: Materials, Finishing, Packaging & GST (${gst}%)`, 110, 102);
-
-      // Line Items Table
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.text('ITEMIZED COST SCHEDULE', 14, 122);
-      doc.line(14, 125, 196, 125);
-
-      let y = 133;
-      const drawRow = (desc: string, qtyText: string, rateText: string, totalText: string, isHeader = false) => {
-        if (isHeader) {
-          doc.setFillColor(240, 240, 245);
-          doc.rect(14, y - 5, 182, 7, 'F');
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(8);
-          doc.setTextColor(80, 80, 80);
-        } else {
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(9);
-          doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-        }
-        doc.text(desc, 16, y);
-        doc.text(qtyText, 110, y);
-        doc.text(rateText, 140, y);
-        doc.text(totalText, 175, y);
-        if (!isHeader) {
-          doc.setDrawColor(240, 240, 240);
-          doc.line(14, y + 2, 196, y + 2);
-        }
-        y += 8;
-      };
-
-      drawRow('DESCRIPTION / COST CENTER', 'QTY / BASIS', 'UNIT RATE', 'TOTAL', true);
-      drawRow('Raw Polymer Material & Consumables', `${outputs.totalFilamentGrams.toFixed(0)}g`, '-', `${currency}${outputs.materialCost.toFixed(2)}`);
-      drawRow('Machine Run-Time & Power Utility', `${(printDuration * batchQuantity).toFixed(1)} hrs`, `${currency}${(outputs.machineCost / printDuration).toFixed(2)}/hr`, `${currency}${(outputs.electricityCost + outputs.machineCost).toFixed(2)}`);
-      drawRow('Slicing, Calibration & Finishing Labor', `${(designTime + slicingTime + postProcessingTime + packingTime).toFixed(1)} hrs`, `${currency}${labourRate}/hr`, `${currency}${outputs.labourCost.toFixed(2)}`);
-      drawRow('Custom Hardware & Protective Packaging', `${batchQuantity} set(s)`, '-', `${currency}${(outputs.extraMaterialCost + outputs.customCostTotal).toFixed(2)}`);
-      drawRow('Commercial Margin & Studio Markup', `${profitMargin}% margin`, '-', `${currency}${outputs.profitAmount.toFixed(2)}`);
-      drawRow(`Goods & Services Tax (GST ${gst}%)`, 'Statutory Tax', '-', `${currency}${outputs.gstAmount.toFixed(2)}`);
+      const rows = [
+        {
+          desc: 'Raw Polymer Material & Consumables',
+          basis: `${outputs.totalFilamentGrams.toFixed(0)}g`,
+          rate: '-',
+          total: `${currency}${outputs.materialCost.toFixed(2)}`,
+        },
+        {
+          desc: 'Machine Run-Time & Power Utility',
+          basis: `${(printDuration * batchQuantity).toFixed(1)} hrs`,
+          rate: `${currency}${(outputs.machineCost / printDuration).toFixed(2)}/hr`,
+          total: `${currency}${(outputs.electricityCost + outputs.machineCost).toFixed(2)}`,
+        },
+        {
+          desc: 'Slicing, Calibration & Finishing Labor',
+          basis: `${(designTime + slicingTime + postProcessingTime + packingTime).toFixed(1)} hrs`,
+          rate: `${currency}${labourRate}/hr`,
+          total: `${currency}${outputs.labourCost.toFixed(2)}`,
+        },
+        {
+          desc: 'Custom Hardware & Protective Packaging',
+          basis: `${batchQuantity} set(s)`,
+          rate: '-',
+          total: `${currency}${(outputs.extraMaterialCost + outputs.customCostTotal).toFixed(2)}`,
+        },
+        {
+          desc: 'Commercial Margin & Studio Markup',
+          basis: `${profitMargin}% margin`,
+          rate: '-',
+          total: `${currency}${outputs.profitAmount.toFixed(2)}`,
+        },
+        {
+          desc: `Goods & Services Tax (GST ${gst}%)`,
+          basis: 'Statutory Tax',
+          rate: '-',
+          total: `${currency}${outputs.gstAmount.toFixed(2)}`,
+        },
+      ];
 
       if (discount > 0) {
-        drawRow(`Volume Discount Applied (${discount}%)`, 'Discount', '-', `- ${currency}${outputs.discountAmount.toFixed(2)}`);
+        rows.push({
+          desc: `Volume Discount Applied (${discount}%)`,
+          basis: 'Discount',
+          rate: '-',
+          total: `- ${currency}${outputs.discountAmount.toFixed(2)}`,
+        });
       }
 
-      // Terms & Conditions
-      y += 8;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.text('TERMS & MANUFACTURING SPECIFICATIONS', 14, y);
-      doc.setDrawColor(220, 220, 220);
-      doc.line(14, y + 2, 196, y + 2);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(100, 100, 100);
-      doc.text(`1. ${invoiceTerms}`, 14, y);
-      y += 5;
-      doc.text('2. 3D printed parts have layer lines characteristic of additive manufacturing.', 14, y);
-      y += 5;
-      doc.text('3. Standard dimensional tolerance: ±0.2mm for FDM, ±0.05mm for SLA.', 14, y);
-
-      // Footer
-      doc.setFontSize(7);
-      doc.setTextColor(150, 150, 150);
-      doc.text('Generated with Toolique 3D Print Studio (www.toolique.in) • All estimates valid for 15 days.', 14, 285);
-
-      doc.save(`${(name || '3D_Print').replace(/[^a-zA-Z0-9]/g, '_')}_Quotation.pdf`);
+      downloadPdfReport({
+        title: studioName || 'Commercial 3D Printing Quotation',
+        subtitle: `Quotation & Specification Sheet | Ref: TQ-${Date.now().toString().slice(-6)}`,
+        category: '3D Printing & Additive Manufacturing',
+        project: name || '3D Print Project',
+        theme: 'brand',
+        parameters: [
+          { label: 'Part Name', value: name },
+          { label: 'Category', value: category },
+          { label: 'Technology', value: printTechnology === 'resin' ? 'Resin SLA / MSLA' : 'FDM Multi-Material' },
+          { label: 'Batch Quantity', value: `${batchQuantity} unit(s)` },
+          ...(customerName ? [{ label: 'Customer', value: customerName }] : []),
+          ...(clientContact ? [{ label: 'Contact', value: clientContact }] : []),
+          { label: 'Print Duration', value: `${printDuration} hrs/unit` },
+          { label: 'Material Usage', value: `${outputs.totalFilamentGrams.toFixed(1)}g total` },
+          { label: 'Unit Price', value: `${currency}${outputs.unitSellingPrice.toFixed(2)}/unit` },
+          { label: 'Total Order Value', value: `${currency}${outputs.finalSellingPrice.toFixed(2)}` },
+        ],
+        tables: [
+          {
+            title: 'Itemized Cost Schedule',
+            columns: [
+              { header: 'Description / Cost Center', dataKey: 'desc' },
+              { header: 'Qty / Basis', dataKey: 'basis' },
+              { header: 'Unit Rate', dataKey: 'rate' },
+              { header: 'Total', dataKey: 'total', align: 'right' as const },
+            ],
+            rows,
+            totalsRow: [
+              { dataKey: 'desc', value: 'FINAL SELLING PRICE' },
+              { dataKey: 'total', value: `${currency}${outputs.finalSellingPrice.toFixed(2)}` },
+            ],
+          },
+        ],
+        disclaimers: [
+          `Terms: ${invoiceTerms}`,
+          '3D printed parts have layer lines characteristic of additive manufacturing.',
+          'Standard dimensional tolerance: ±0.2mm for FDM, ±0.05mm for SLA.',
+          'Quotation valid for 15 days from issuance date.',
+        ],
+        fileName: `${(name || '3D_Print').replace(/[^a-zA-Z0-9]/g, '_')}_Quotation.pdf`,
+      });
     } catch (e) {
       alert('Error creating PDF report: ' + e);
     }
@@ -2034,13 +1984,12 @@ Calculated on Toolique (www.toolique.in/3d-printing-tools/3d-printing-cost-calcu
 
               {/* Action Buttons */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <button
-                  onClick={handleShareWhatsApp}
-                  className="py-2.5 px-4 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center gap-2 cursor-pointer shadow-xs transition"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Share Quote on WhatsApp</span>
-                </button>
+                <ShareWhatsApp
+                  text={getWhatsAppQuote}
+                  label="Share Quote on WhatsApp"
+                  size="md"
+                  className="w-full justify-center"
+                />
 
                 <button
                   onClick={handleExportPDF}
@@ -2186,21 +2135,20 @@ Calculated on Toolique (www.toolique.in/3d-printing-tools/3d-printing-cost-calcu
                 <span>{saveSuccess ? 'Saved!' : (activeEstimateId ? 'Update' : 'Save Quote')}</span>
               </button>
 
-              <button
-                onClick={handleCopyReport}
-                className="saas-button-secondary py-2 text-xs flex items-center justify-center gap-1.5 cursor-pointer w-full"
-              >
-                {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied' : 'Copy Quote'}</span>
-              </button>
+              <CopyButton
+                text={getQuoteReportText}
+                label="Copy Quote"
+                variant="secondary"
+                size="sm"
+                className="w-full justify-center"
+              />
 
-              <button
-                onClick={handleShareWhatsApp}
-                className="col-span-full py-2.5 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center gap-2 cursor-pointer shadow-xs transition"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Send WhatsApp Quote to Client</span>
-              </button>
+              <ShareWhatsApp
+                text={getWhatsAppQuote}
+                label="Send WhatsApp Quote to Client"
+                size="md"
+                className="col-span-full w-full justify-center"
+              />
 
               <button
                 onClick={handleExportPDF}

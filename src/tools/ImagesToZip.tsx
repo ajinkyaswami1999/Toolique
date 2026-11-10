@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import {
   Archive,
-  Upload,
   Download,
   RotateCcw,
   CheckCircle2,
@@ -24,6 +23,7 @@ import {
   HardDrive
 } from 'lucide-react';
 import JSZip from 'jszip';
+import { FileDropzone } from '../components/common';
 
 interface ImageFileItem {
   id: string;
@@ -88,7 +88,6 @@ export default function ImagesToZip() {
     durationMs: number;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const [previewItem, setPreviewItem] = useState<ImageFileItem | null>(null);
   const [activeTab, setActiveTab] = useState<'queue' | 'settings'>('queue');
   const [sortOrder, setSortOrder] = useState<'name' | 'size' | 'custom'>('custom');
@@ -553,6 +552,19 @@ export default function ImagesToZip() {
 
   return (
     <div className="space-y-6 text-left">
+      {/* Privacy & Speed Trust Banner */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/20 border border-indigo-200/50 dark:border-indigo-800/40 text-xs text-indigo-900 dark:text-indigo-200">
+        <div className="flex items-center gap-2">
+          <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="font-semibold">100% Client-Side Privacy:</span>
+          <span className="text-indigo-700/80 dark:text-indigo-300/80">Photos never leave your device. Processed locally in browser memory with zero upload limits.</span>
+        </div>
+        <div className="flex items-center gap-2 font-mono text-[11px] text-indigo-600 dark:text-indigo-400">
+          <span className="px-2 py-0.5 rounded-md bg-white dark:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-700/50">⚡ Web Worker Zip</span>
+          <span className="px-2 py-0.5 rounded-md bg-white dark:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-700/50">🛡️ Zero Cloud Storage</span>
+        </div>
+      </div>
+
       {/* Main Grid: Settings & Actions Sidebar vs File Queue */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Archive Configuration & Package Button (4 Cols) */}
@@ -952,25 +964,7 @@ export default function ImagesToZip() {
           )}
 
           {/* Dropzone Upload Area */}
-          <div
-            onDragOver={(e) => {
-              e.preventDefault();
-              setIsDragOver(true);
-            }}
-            onDragLeave={() => setIsDragOver(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setIsDragOver(false);
-              if (e.dataTransfer.files) {
-                handleIncomingFiles(e.dataTransfer.files);
-              }
-            }}
-            className={`border-2 border-dashed rounded-3xl p-8 transition-all duration-200 text-center relative ${
-              isDragOver
-                ? 'border-indigo-500 bg-indigo-50/60 dark:bg-indigo-950/20 scale-[1.005]'
-                : 'border-zinc-300 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-700 bg-white dark:bg-zinc-900/40'
-            }`}
-          >
+          <div className="space-y-4">
             <input
               ref={fileInputRef}
               type="file"
@@ -993,49 +987,34 @@ export default function ImagesToZip() {
               }}
               className="hidden"
             />
-
-            <div className="max-w-md mx-auto space-y-3">
-              <div className="mx-auto w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-xs">
-                <Upload className="w-7 h-7" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-white">
-                  Drop images here, or choose from files
-                </h3>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                  Supports PNG, JPG, WebP, GIF, SVG, AVIF, BMP, and TIFF &bull; Paste with <kbd className="px-1 py-0.5 text-[10px] bg-zinc-100 dark:bg-zinc-800 border rounded">Ctrl+V</kbd>
-                </p>
-              </div>
-
-              <div className="flex items-center justify-center gap-3 pt-2">
+            <FileDropzone
+              accept="image/*,.heic,.heif,.svg,.bmp,.ico,.tif,.tiff,.webp,.gif,.png,.jpg,.jpeg"
+              multiple
+              onFilesSelected={(files) => handleIncomingFiles(files)}
+              title="Drop images here, or choose from files"
+              description="Supports PNG, JPG, WebP, GIF, SVG, AVIF, BMP, and TIFF • Paste with Ctrl+V"
+              colorTheme="indigo"
+            />
+            <div className="flex items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => folderInputRef.current?.click()}
+                className="saas-button-secondary text-xs py-2 px-4 flex items-center gap-1.5 cursor-pointer"
+              >
+                <FolderUp className="w-3.5 h-3.5" />
+                <span>Upload Folder</span>
+              </button>
+              {files.length === 0 && (
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="saas-button-primary text-xs py-2 px-4 flex items-center gap-1.5 cursor-pointer"
+                  onClick={handleLoadSampleImages}
+                  className="saas-button-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer"
+                  title="Load 3 sample test images"
                 >
-                  <ImageIcon className="w-3.5 h-3.5" />
-                  <span>Select Images</span>
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                  <span>Try Samples</span>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => folderInputRef.current?.click()}
-                  className="saas-button-secondary text-xs py-2 px-4 flex items-center gap-1.5 cursor-pointer"
-                >
-                  <FolderUp className="w-3.5 h-3.5" />
-                  <span>Upload Folder</span>
-                </button>
-                {files.length === 0 && (
-                  <button
-                    type="button"
-                    onClick={handleLoadSampleImages}
-                    className="saas-button-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer"
-                    title="Load 3 sample test images"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                    <span>Try Samples</span>
-                  </button>
-                )}
-              </div>
+              )}
             </div>
           </div>
 

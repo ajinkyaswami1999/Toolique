@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import { 
-  Wallet, Copy, Check, Info, Printer, Download, Sparkles
+  Wallet, Info, Printer, Download, Sparkles
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp } from '../components/common';
 
 // --- Interfaces & Types ---
 type UnitType = 'monthly' | 'annual';
@@ -208,10 +209,6 @@ export default function InHandSalaryCalculator() {
   // 8. Growth & Increment Simulator State
   const [incrementPct, setIncrementPct] = useState<number>(12);
   const [projectionYears, setProjectionYears] = useState<number>(5);
-
-  // UI state
-  const [copiedLink, setCopiedLink] = useState<boolean>(false);
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
 
   // --- Preset Manager ---
   useEffect(() => {
@@ -510,8 +507,8 @@ export default function InHandSalaryCalculator() {
   }, [annualCTC, calculations.grossAnnual, incrementPct, projectionYears, mode]);
 
   // --- Action exports handlers ---
-  const copyBreakupText = () => {
-    const text = `Salary Take-Home breakups (Toolique.in)
+  const getBreakupText = () => {
+    return `Salary Take-Home breakups (Toolique.in)
 ---------------------------------------------
 Annual CTC           : ₹${annualCTC.toLocaleString('en-IN')}
 Gross annual         : ₹${calculations.grossAnnual.toLocaleString('en-IN')}
@@ -521,10 +518,6 @@ Estimated TDS Tax    : ₹${calculations.annualTax.toLocaleString('en-IN')}
 ---------------------------------------------
 ESTIMATED IN-HAND    : ₹${Math.round(calculations.netMonthly).toLocaleString('en-IN')}/month
 ---------------------------------------------`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
   };
 
   const handlePrint = () => {
@@ -556,39 +549,61 @@ ESTIMATED IN-HAND    : ₹${Math.round(calculations.netMonthly).toLocaleString('
   };
 
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFillColor(13, 148, 136); // Teal theme accent
-    doc.rect(0, 0, 210, 38, 'F');
+    const hraAnnual = calculations.basicAnnual * (hraPct / 100);
+    const hraMonthly = hraAnnual / 12;
+    const specialAllowanceAnnual = Math.max(0, calculations.grossAnnual - calculations.basicAnnual - hraAnnual);
+    const componentRows = [
+      { item: 'Basic Salary (Monthly / Annual)', monthly: `₹${Math.round(calculations.basicMonthly).toLocaleString('en-IN')}`, annual: `₹${Math.round(calculations.basicAnnual).toLocaleString('en-IN')}` },
+      { item: 'House Rent Allowance (HRA)', monthly: `₹${Math.round(hraMonthly).toLocaleString('en-IN')}`, annual: `₹${Math.round(hraAnnual).toLocaleString('en-IN')}` },
+      { item: 'Special Allowance', monthly: `₹${Math.round(specialAllowanceAnnual / 12).toLocaleString('en-IN')}`, annual: `₹${Math.round(specialAllowanceAnnual).toLocaleString('en-IN')}` },
+      { item: 'Gross Cash Earnings', monthly: `₹${Math.round(calculations.grossAnnual / 12).toLocaleString('en-IN')}`, annual: `₹${Math.round(calculations.grossAnnual).toLocaleString('en-IN')}` },
+      { item: 'Employee EPF (12%)', monthly: `₹${Math.round(calculations.pfMonthly).toLocaleString('en-IN')}`, annual: `₹${Math.round(calculations.pfAnnual).toLocaleString('en-IN')}` },
+      { item: 'Professional Tax (PT)', monthly: `₹${Math.round(calculations.ptMonthly).toLocaleString('en-IN')}`, annual: `₹${Math.round(calculations.ptAnnual).toLocaleString('en-IN')}` },
+      { item: 'Estimated Income Tax TDS', monthly: `₹${Math.round(calculations.monthlyTDS).toLocaleString('en-IN')}`, annual: `₹${Math.round(calculations.annualTax).toLocaleString('en-IN')}` },
+      { item: 'Net Take-Home Salary', monthly: `₹${Math.round(calculations.netMonthly).toLocaleString('en-IN')}`, annual: `₹${Math.round(calculations.netAnnual).toLocaleString('en-IN')}` },
+    ];
 
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text('IN-HAND SALARY REPORT', 15, 22);
-    doc.setFontSize(10);
-    doc.text('CTC Structure & Net Take-Home — Toolique.in', 15, 30);
-
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(12);
-    doc.text('Compensation parameters', 15, 52);
-
-    doc.setFontSize(10);
-    doc.text(`Salary Offering Mode: ${mode.toUpperCase().replace(/_/g, ' ')}`, 15, 60);
-    doc.text(`Financial Year: ${fy}`, 15, 66);
-    doc.text(`Tax Regime Scheme: ${taxRegime.toUpperCase()}`, 15, 72);
-    doc.text(`State jurisdiction: ${stateCode.toUpperCase()}`, 15, 78);
-
-    doc.line(15, 84, 195, 84);
-
-    doc.setFontSize(12);
-    doc.text('Take-Home Breakup Breakdown', 15, 94);
-
-    doc.setFontSize(10);
-    doc.text(`Annual gross cash pay: Rs. ${calculations.grossAnnual.toLocaleString('en-IN')}`, 15, 102);
-    doc.text(`Monthly EPF contribution: Rs. ${calculations.pfMonthly.toLocaleString('en-IN')}`, 15, 108);
-    doc.text(`State Professional Tax: Rs. ${calculations.ptMonthly.toLocaleString('en-IN')}`, 15, 114);
-    doc.text(`Estimated Income Tax TDS: Rs. ${calculations.monthlyTDS.toLocaleString('en-IN')}`, 15, 120);
-    doc.text(`Final Net Take-Home: Rs. ${Math.round(calculations.netMonthly).toLocaleString('en-IN')}/mo`, 15, 126);
-
-    doc.save(`Salary_Audit_Report_${Date.now()}.pdf`);
+    downloadPdfReport({
+      title: 'In-Hand Salary & Compensation Audit Report',
+      subtitle: `${fy} | ${taxRegime.toUpperCase()} Tax Regime | Annual CTC: ₹${annualCTC.toLocaleString('en-IN')}`,
+      category: 'Payroll & Income Tax Compensation',
+      project: 'Toolique Financial Suite',
+      theme: 'emerald',
+      parameters: [
+        { label: 'Financial Year', value: fy },
+        { label: 'Tax Regime', value: `${taxRegime.toUpperCase()} Regime` },
+        { label: 'Annual Cost to Company (CTC)', value: `₹${annualCTC.toLocaleString('en-IN')}` },
+        { label: 'Gross Annual Earnings', value: `₹${calculations.grossAnnual.toLocaleString('en-IN')}` },
+        { label: 'Net Monthly Take-Home', value: `₹${Math.round(calculations.netMonthly).toLocaleString('en-IN')}/mo` },
+        { label: 'Net Annual Take-Home', value: `₹${Math.round(calculations.netAnnual).toLocaleString('en-IN')}` },
+        { label: 'Employee PF (Annual)', value: `₹${calculations.pfAnnual.toLocaleString('en-IN')}` },
+        { label: 'State Professional Tax', value: `₹${calculations.ptAnnual.toLocaleString('en-IN')}` },
+        { label: 'Total Annual Income Tax (TDS)', value: `₹${calculations.annualTax.toLocaleString('en-IN')}` },
+        { label: 'Effective Tax Rate', value: `${((calculations.annualTax / Math.max(1, calculations.grossAnnual)) * 100).toFixed(1)}%` },
+      ],
+      tables: [
+        {
+          title: 'Salary Component Breakup',
+          columns: [
+            { header: 'Compensation Component', dataKey: 'item' },
+            { header: 'Monthly Amount', dataKey: 'monthly', align: 'right' as const },
+            { header: 'Annual Amount', dataKey: 'annual', align: 'right' as const },
+          ],
+          rows: componentRows,
+          totalsRow: [
+            { dataKey: 'item', value: 'FINAL TAKE-HOME' },
+            { dataKey: 'monthly', value: `₹${Math.round(calculations.netMonthly).toLocaleString('en-IN')}/mo` },
+            { dataKey: 'annual', value: `₹${Math.round(calculations.netAnnual).toLocaleString('en-IN')}` },
+          ],
+        },
+      ],
+      disclaimers: [
+        'Salary structure and PF deduction limits depend on company policy and EPFO statutory guidelines.',
+        'Income tax calculations include standard deductions and 4% Health & Education Cess under Section 115BAC / old regime.',
+        'Professional tax rates reflect the state jurisdiction selected.',
+      ],
+      fileName: `Salary_Breakup_Report_${Date.now()}.pdf`,
+    });
   };
 
   const getShareLink = () => {
@@ -635,17 +650,8 @@ ESTIMATED IN-HAND    : ₹${Math.round(calculations.netMonthly).toLocaleString('
             ))}
           </div>
 
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(getShareLink());
-              setCopiedLink(true);
-              setTimeout(() => setCopiedLink(false), 2000);
-            }}
-            className="text-[9px] font-bold text-teal-700 dark:text-teal-400 bg-teal-500/10 border border-teal-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm"
-          >
-            {copiedLink ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-            <span>{copiedLink ? 'Link Copied' : 'Share Scenario'}</span>
-          </button>
+          <CopyButton text={getShareLink} label="Share Scenario" size="xs" variant="outline" />
+          <ShareWhatsApp text={getShareLink} label="WhatsApp" size="xs" />
         </div>
       </div>
 
@@ -1020,13 +1026,8 @@ ESTIMATED IN-HAND    : ₹${Math.round(calculations.netMonthly).toLocaleString('
                   </button>
                 </div>
 
-                <button
-                  onClick={copyBreakupText}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-350 hover:bg-zinc-850 hover:text-white transition"
-                >
-                  {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedReport ? 'Copied' : 'Copy'}</span>
-                </button>
+                <CopyButton text={getBreakupText} label="Copy" size="xs" variant="secondary" />
+                <ShareWhatsApp text={getBreakupText} label="WhatsApp" size="xs" />
               </div>
             </div>
 
@@ -1350,13 +1351,8 @@ ESTIMATED IN-HAND    : ₹${Math.round(calculations.netMonthly).toLocaleString('
       <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
         <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b border-zinc-150 dark:border-zinc-850 pb-2">Export Compensation Plans</h3>
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={copyBreakupText}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
-          >
-            {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedReport ? 'Report Copied' : 'Copy Salary Breakup'}</span>
-          </button>
+          <CopyButton text={getBreakupText} label="Copy Salary Breakup" />
+          <ShareWhatsApp text={getBreakupText} label="Share on WhatsApp" />
           <button
             onClick={handlePrint}
             className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"

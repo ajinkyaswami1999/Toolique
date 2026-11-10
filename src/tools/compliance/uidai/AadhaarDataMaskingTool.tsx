@@ -142,20 +142,13 @@ INSERT INTO kyc_verifications (user_id, full_name, aadhaar_no, status) VALUES
 
   return (
     <div className="space-y-8">
-      {/* Top Banner */}
-      <div className="saas-card bg-amber-500/5 dark:bg-amber-500/10 border-amber-500/20 p-5 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-amber-500/20 text-amber-700 dark:text-amber-300 rounded-lg">
-            <Fingerprint className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-              UIDAI Statutory Aadhaar Data Masking & Redaction Engine
-            </h2>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Generate statutory XXXX-XXXX-1234 masked formats with Dihedral D5 Verhoeff checksum validation. Zero server retention.
-            </p>
-          </div>
+      {/* Top Action Toolbar */}
+      <div className="saas-card bg-amber-500/5 dark:bg-amber-500/10 border-amber-500/20 p-4 rounded-xl flex flex-wrap items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-500/20 flex items-center gap-1.5">
+            <Fingerprint className="w-3.5 h-3.5" />
+            <span>UIDAI Statutory Masking &bull; Verhoeff D5 Checksum Verification</span>
+          </span>
         </div>
         <div className="flex items-center gap-2 text-xs font-medium text-amber-700 dark:text-amber-300 bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/20">
           <ShieldCheck className="w-4 h-4" />

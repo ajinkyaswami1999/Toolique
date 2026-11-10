@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
 import { 
-  Palette, Clipboard, Check, RotateCcw, 
+  Palette, RotateCcw, 
   Download, Layers, Sparkles, 
   Grid, Eye, Save, Trash2, Package, Plus
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { UnitSwitcher, ShareWhatsApp, CopyButton } from '../components/common';
 
 // --- Type Definitions ---
 type UnitType = 'feet' | 'meters';
@@ -215,7 +216,6 @@ export default function FlooringCostCalculator() {
   const [includeGst, setIncludeGst] = useState<boolean>(true);
 
   // UI state
-  const [copied, setCopied] = useState<boolean>(false);
   const [savedQuotes, setSavedQuotes] = useState<SavedFlooringQuote[]>([]);
   const [quoteName, setQuoteName] = useState<string>('My Home Flooring Project');
 
@@ -342,8 +342,8 @@ export default function FlooringCostCalculator() {
     includeOldFloorDemolition, demolitionRateSqFt, includeGst
   ]);
 
-  // Copy Full Material & BOQ Report
-  const handleCopyReport = () => {
+  // Format Full Material & BOQ Report for Clipboard and WhatsApp
+  const getReportText = () => {
     let report = `FLOORING PROJECT ESTIMATE & MATERIAL BOQ\n`;
     report += `==========================================\n`;
     report += `Project: ${quoteName}\n`;
@@ -379,71 +379,75 @@ export default function FlooringCostCalculator() {
     report += `GRAND TOTAL BUDGET: ₹${calculations.grandTotal.toLocaleString()} (₹${calculations.effectiveRatePerSqFt}/sq ft)\n`;
     report += `==========================================\n`;
     report += `Generated on Toolique Interior Studio.`;
-
-    navigator.clipboard.writeText(report);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    return report;
   };
 
-  // Download PDF Estimate
+  // Standardized Branded PDF Estimate (Pillar 2)
   const handleDownloadPDF = () => {
-    try {
-      const doc = new jsPDF();
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(16);
-      doc.text('Toolique — Flooring Cost Estimate & BOQ', 14, 18);
+    const isCustom = activeMaterial.id === 'custom_material';
+    const matRate = isCustom ? customMatRate : activeMaterial.materialCostSqFt;
+    const labRate = isCustom ? customLabRate : activeMaterial.laborCostSqFt;
+    const polishRate = isCustom ? customPolishRate : activeMaterial.polishingCostSqFt;
 
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Project: ${quoteName} | Date: ${new Date().toLocaleDateString('en-IN')}`, 14, 25);
+    const rows = [
+      { item: `Material Supply (${activeMaterial.name})`, qty: `${calculations.grossMaterialAreaSqFt} sq.ft (${calculations.tileBoxesCount} boxes)`, rate: `₹${matRate}/sq.ft`, amount: `₹${calculations.materialCostTotal.toLocaleString('en-IN')}` },
+      { item: 'Installation & Laying Labour', qty: `${calculations.netAreaSqFt} sq.ft`, rate: `₹${labRate}/sq.ft`, amount: `₹${calculations.laborLayingCostTotal.toLocaleString('en-IN')}` },
+      ...(calculations.polishingCostTotal > 0 ? [{ item: 'Diamond Polishing & Crystallization', qty: `${calculations.netAreaSqFt} sq.ft`, rate: `₹${polishRate}/sq.ft`, amount: `₹${calculations.polishingCostTotal.toLocaleString('en-IN')}` }] : []),
+      ...(calculations.adhesiveGroutCost > 0 ? [{ item: 'Tile Adhesive & Epoxy Grout', qty: 'Lump-sum', rate: 'Standard', amount: `₹${calculations.adhesiveGroutCost.toLocaleString('en-IN')}` }] : []),
+      ...(calculations.cementSandCost > 0 ? [{ item: `Cement & Sand Bedding (${calculations.cementBagsCount} Bags)`, qty: 'Bed Mortar', rate: 'CPWD', amount: `₹${calculations.cementSandCost.toLocaleString('en-IN')}` }] : []),
+      ...(includeOldFloorDemolition ? [{ item: 'Old Floor Demolition & Debris Disposal', qty: `${calculations.netAreaSqFt} sq.ft`, rate: '₹18/sq.ft', amount: `₹${calculations.demolitionCost.toLocaleString('en-IN')}` }] : []),
+      ...(includeGst ? [{ item: 'GST Tax on Works (18%)', qty: '18%', rate: 'Applicable', amount: `₹${calculations.gstAmount.toLocaleString('en-IN')}` }] : [])
+    ];
 
-      let y = 35;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('1. Scope & Area Specifications', 14, y);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`• Material: ${activeMaterial.name}`, 16, y); y += 6;
-      doc.text(`• Laying Pattern: ${pattern.replace(/_/g, ' ').toUpperCase()} (Wastage: ${wastagePercentage}%)`, 16, y); y += 6;
-      doc.text(`• Net Carpet Area: ${calculations.netAreaSqFt} Sq. Ft (${(calculations.netAreaSqFt * 0.092903).toFixed(1)} Sq. Meters)`, 16, y); y += 6;
-      doc.text(`• Wall Skirting: ${calculations.skirtingAreaSqFt} Sq. Ft (${totalPerimeterFt} Linear Feet)`, 16, y); y += 6;
-      doc.text(`• Gross Material Required: ${calculations.grossMaterialAreaSqFt} Sq. Ft (${calculations.tileBoxesCount} Boxes)`, 16, y); y += 10;
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('2. Itemized Bill of Quantities (BOQ)', 14, y);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`• Material Supply Cost: INR ${calculations.materialCostTotal.toLocaleString()}`, 16, y); y += 6;
-      doc.text(`• Installation & Laying Labor: INR ${calculations.laborLayingCostTotal.toLocaleString()}`, 16, y); y += 6;
-      if (calculations.polishingCostTotal > 0) {
-        doc.text(`• Diamond Polishing & Crystallization: INR ${calculations.polishingCostTotal.toLocaleString()}`, 16, y); y += 6;
-      }
-      if (calculations.adhesiveGroutCost > 0) {
-        doc.text(`• Tile Adhesive & Epoxy Grout: INR ${calculations.adhesiveGroutCost.toLocaleString()}`, 16, y); y += 6;
-      }
-      if (calculations.cementSandCost > 0) {
-        doc.text(`• Cement Sand Bedding: INR ${calculations.cementSandCost.toLocaleString()}`, 16, y); y += 6;
-      }
-      if (includeOldFloorDemolition) {
-        doc.text(`• Demolition & Debris Disposal: INR ${calculations.demolitionCost.toLocaleString()}`, 16, y); y += 6;
-      }
-      if (includeGst) {
-        doc.text(`• GST (18%): INR ${calculations.gstAmount.toLocaleString()}`, 16, y); y += 6;
-      }
-      y += 4;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text(`GRAND TOTAL ESTIMATE: INR ${calculations.grandTotal.toLocaleString()} (~INR ${calculations.effectiveRatePerSqFt}/sq ft)`, 16, y);
-
-      doc.save(`flooring-estimate-${quoteName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
-    } catch (e) {
-      console.error(e);
-    }
+    downloadPdfReport({
+      title: 'Flooring Cost Estimate & BOQ Takeoff',
+      subtitle: `Scope: ${quoteName} | Pattern: ${pattern.replace(/_/g, ' ').toUpperCase()}`,
+      category: 'interior',
+      complianceBadge: 'IS 1443 & IS 13712',
+      referenceId: `FLR-${Date.now().toString().slice(-6)}`,
+      theme: 'amber',
+      project: {
+        projectName: quoteName,
+        clientName: 'Client Requisition',
+        notes: `Material: ${activeMaterial.name} | Layout: ${pattern.replace(/_/g, ' ')} | Wastage: ${wastagePercentage}%`
+      },
+      parameters: [
+        { label: 'Flooring Material', value: activeMaterial.name },
+        { label: 'Laying Pattern', value: pattern.replace(/_/g, ' ').toUpperCase() },
+        { label: 'Wastage Buffer', value: `${wastagePercentage}%` },
+        { label: 'Wall Skirting', value: `${calculations.skirtingAreaSqFt} sq.ft (${totalPerimeterFt} ft)` },
+        { label: 'Unit System', value: unit === 'meters' ? 'Metric (m, m²)' : 'Imperial (ft, sq.ft)' }
+      ],
+      kpis: [
+        { label: 'Grand Total Cost', value: `₹${calculations.grandTotal.toLocaleString('en-IN')}`, subtext: `~₹${calculations.effectiveRatePerSqFt}/sq.ft`, highlight: true },
+        { label: 'Gross Material Req.', value: `${calculations.grossMaterialAreaSqFt} sq.ft`, subtext: `${calculations.tileBoxesCount} Boxes` },
+        { label: 'Net Carpet Area', value: `${calculations.netAreaSqFt} sq.ft`, subtext: `${(calculations.netAreaSqFt * 0.092903).toFixed(1)} m²` },
+        { label: 'Skirting Perimeter', value: `${totalPerimeterFt} ft`, subtext: `${calculations.skirtingAreaSqFt} sq.ft border` }
+      ],
+      tables: [
+        {
+          title: 'Itemized Flooring BOQ Schedule',
+          badge: 'CPWD / IS 1443',
+          columns: [
+            { header: 'Item Description', dataKey: 'item', width: 70 },
+            { header: 'Quantity', dataKey: 'qty', width: 45 },
+            { header: 'Unit Rate', dataKey: 'rate', width: 32, align: 'right' as const },
+            { header: 'Amount (₹)', dataKey: 'amount', width: 35, align: 'right' as const }
+          ],
+          rows,
+          totalsRow: [
+            { dataKey: 'item', value: 'GRAND TOTAL BUDGET' },
+            { dataKey: 'amount', value: `₹${calculations.grandTotal.toLocaleString('en-IN')}` }
+          ]
+        }
+      ],
+      disclaimers: [
+        'Tile batch shade variations and tile calibre tolerance must be inspected prior to box unpacking.',
+        'Wastage margins are indicative and should increase for diagonal or herringbone intricate patterns.'
+      ],
+      includeSignoff: true,
+      fileName: `Flooring_Estimate_${quoteName.toLowerCase().replace(/\s+/g, '_')}_${Date.now().toString().slice(-4)}.pdf`
+    });
   };
 
   // Save Quote to history
@@ -497,45 +501,27 @@ export default function FlooringCostCalculator() {
 
   return (
     <div className="space-y-8">
-      {/* HEADER CONTROLS & HOME PRESETS */}
+      {/* TOP CONTROLS & HOME PRESETS */}
       <div className="saas-card p-6 space-y-4 text-left">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-zinc-200/60 dark:border-zinc-800/60">
-          <div>
-            <h2 className="text-base font-black text-zinc-900 dark:text-white flex items-center gap-2">
-              <Palette className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              <span>Flooring Cost & Material Engineering Studio</span>
-            </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-0.5">
-              Accurate tile packaging, Indian & Italian marble diamond polishing, mortar bedding, and itemized contractor BOQ
-            </p>
+        <div className="flex flex-wrap justify-between items-center gap-4 pb-4 border-b border-zinc-200/60 dark:border-zinc-800/60">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+              <Palette className="w-3.5 h-3.5" />
+              <span>IS 1443 &amp; CPWD Specifications</span>
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Unit Switcher */}
-            <div className="flex p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
-              <button
-                type="button"
-                onClick={() => setUnit('feet')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  unit === 'feet'
-                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
-                }`}
-              >
-                Sq. Feet
-              </button>
-              <button
-                type="button"
-                onClick={() => setUnit('meters')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  unit === 'meters'
-                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
-                }`}
-              >
-                Sq. Meters
-              </button>
-            </div>
+            <UnitSwitcher<UnitType>
+              value={unit}
+              onChange={setUnit}
+              options={[
+                { id: 'feet', label: 'Sq. Feet', shortLabel: 'sq.ft' },
+                { id: 'meters', label: 'Sq. Meters', shortLabel: 'm²' }
+              ]}
+              size="sm"
+            />
 
             <button
               type="button"
@@ -862,14 +848,19 @@ export default function FlooringCostCalculator() {
               </div>
 
               <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={handleCopyReport}
-                  className="px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-zinc-200 transition flex items-center gap-1.5 cursor-pointer"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Clipboard className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy'}</span>
-                </button>
+                <CopyButton
+                  text={getReportText}
+                  label="Copy"
+                  copiedLabel="Copied"
+                  variant="secondary"
+                  size="sm"
+                />
+                <ShareWhatsApp
+                  text={getReportText}
+                  label="WhatsApp"
+                  variant="solid"
+                  size="sm"
+                />
                 <button
                   type="button"
                   onClick={handleDownloadPDF}

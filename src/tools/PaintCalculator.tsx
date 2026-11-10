@@ -1,12 +1,13 @@
 import { useState, useMemo, useEffect } from 'react';
 import { 
-  Compass, Clipboard, Check, RotateCcw, 
+  Compass, RotateCcw, 
   Download, Layers, Sparkles, 
   Eye, Save, Trash2, Plus, TrendingUp,
   ShieldCheck, Info, Paintbrush
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
+import { downloadPdfReport } from '../utils/pdf';
+import { UnitSwitcher, ShareWhatsApp, CopyButton } from '../components/common';
 
 // --- Types & Interfaces ---
 type UnitType = 'feet' | 'meters';
@@ -563,7 +564,6 @@ export default function PaintCalculator() {
   const [laborRatePerSqFt, setLaborRatePerSqFt] = useState<number>(14); // ₹14/sq ft
 
   // Saved quotes & UI feedback
-  const [copied, setCopied] = useState<boolean>(false);
   const [savedQuotes, setSavedQuotes] = useState<SavedPaintQuote[]>([]);
   const [quoteName, setQuoteName] = useState<string>('My Home Painting');
 
@@ -910,8 +910,8 @@ export default function PaintCalculator() {
     return roomCalculations.find(r => r.id === visualizerRoomId) || roomCalculations[0];
   }, [roomCalculations, visualizerRoomId]);
 
-  // Copy Formatted BOQ Report to Clipboard
-  const handleCopyReport = () => {
+  // Formatted BOQ Report for Clipboard and WhatsApp
+  const getReportText = () => {
     const text = `========================================
 TOOLIQUE ADVANCED PAINT & BOQ ESTIMATOR
 ========================================
@@ -947,148 +947,112 @@ ${includeGst ? `7. GST @ 18%                                    : ₹${computedS
 ESTIMATED GRAND TOTAL : ₹${computedSummary.finalGrandTotal.toLocaleString('en-IN')}
 ========================================
 Generated via Toolique India (https://toolique.in)`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    return text;
   };
 
-  // Export PDF BOQ
+  // Export Standardized Branded PDF BOQ (Pillar 2)
   const handleExportPdf = () => {
-    try {
-      const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.getWidth();
+    const roomRows = roomCalculations.map(r => ({
+      room: r.name,
+      dims: `${r.length}x${r.width}x${r.height} ${unit === 'feet' ? 'ft' : 'm'}`,
+      gross: `${r.grossWallAreaSqFt + r.ceilingAreaSqFt} sq ft`,
+      deductions: `-${r.totalDeductionsSqFt} sq ft`,
+      net: `${r.totalNetPaintAreaSqFt} sq ft`
+    }));
 
-      // Header Banner
-      doc.setFillColor(30, 58, 138); // Indigo / Navy
-      doc.rect(0, 0, pageWidth, 28, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(18);
-      doc.text('PAINTING BOQ & MATERIAL ESTIMATE', 14, 18);
+    const matRows = [
+      { item: `Topcoat Paint (${selectedProduct.brand} - ${selectedProduct.name})`, qty: `${computedSummary.totalPaintLitersWithBuffer} L`, pack: `[20L: ${computedSummary.paintCans20L}] [10L: ${computedSummary.paintCans10L}] [4L: ${computedSummary.paintCans4L}] [1L: ${computedSummary.paintCans1L}]` },
+      { item: 'Wall Putty (Acrylic / Polymer Base)', qty: `${computedSummary.puttyKgRequired} Kg`, pack: `[40kg: ${computedSummary.puttyBags40Kg}] [5kg: ${computedSummary.puttyPacks5Kg}]` },
+      { item: 'Primer (Water / Solvent Thinnable)', qty: `${computedSummary.primerLitersRequired} L`, pack: 'Sealer Primer' },
+      { item: 'Consumables & Sundries', qty: `${computedSummary.sandingPaperCount} Emery + ${computedSummary.maskingTapeRolls} Tape`, pack: 'Plastic sheets & rollers' }
+    ];
 
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Generated on ${new Date().toLocaleDateString('en-IN')} | Toolique India`, pageWidth - 14, 18, { align: 'right' });
+    const boqRows = [
+      { desc: `Finish Topcoat Paint (${selectedProduct.brand} 2 Coats)`, qty: `${computedSummary.totalPaintLitersWithBuffer} L`, rate: `₹${selectedProduct.pricePerLiter}/L`, cost: `₹${computedSummary.topcoatCost.toLocaleString('en-IN')}` },
+      { desc: 'Wall Putty Application (2 Coats)', qty: `${computedSummary.puttyKgRequired} Kg`, rate: `₹${puttyPricePerKg}/Kg`, cost: `₹${computedSummary.puttyCost.toLocaleString('en-IN')}` },
+      { desc: 'Primer Coat Application', qty: `${computedSummary.primerLitersRequired} L`, rate: `₹${primerPricePerLiter}/L`, cost: `₹${computedSummary.primerCost.toLocaleString('en-IN')}` },
+      { desc: 'Masking & Sanding Consumables', qty: 'Lump sum', rate: 'Standard', cost: `₹${computedSummary.consumablesCost.toLocaleString('en-IN')}` },
+      { desc: `Skilled Painting Labour & Surface Prep`, qty: `${computedSummary.totalNetPaintAreaSqFt} sq ft`, rate: `₹${computedSummary.effectiveLaborRate}/sq ft`, cost: `₹${computedSummary.totalLaborCost.toLocaleString('en-IN')}` },
+      { desc: `Contractor Overhead & Supervision Margin (${contractorMarginPct}%)`, qty: `${contractorMarginPct}%`, rate: 'Overhead', cost: `₹${computedSummary.contractorMargin.toLocaleString('en-IN')}` },
+      ...(includeGst ? [{ desc: 'GST on Material & Works @ 18%', qty: '18%', rate: 'Tax', cost: `₹${computedSummary.gstAmount.toLocaleString('en-IN')}` }] : [])
+    ];
 
-      // Project Info Box
-      doc.setTextColor(30, 41, 59);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`Project: ${quoteName}`, 14, 38);
-      doc.text(`Brand & Product: ${selectedProduct.brand} - ${selectedProduct.name}`, 14, 44);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Process: ${processType.replace('_', ' ').toUpperCase()} | Sheen: ${selectedProduct.sheen}`, 14, 50);
-      doc.text(`Net Paint Area: ${computedSummary.totalNetPaintAreaSqFt} sq ft | Finish Paint: ${computedSummary.totalPaintLitersWithBuffer} L`, 14, 56);
-
-      // Section 1: Room Breakdown Table
-      doc.setFillColor(243, 244, 246);
-      doc.rect(14, 62, pageWidth - 28, 7, 'F');
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9);
-      doc.text('ROOM NAME', 18, 67);
-      doc.text('DIMENSIONS (LxWxH)', 65, 67);
-      doc.text('GROSS AREA', 115, 67);
-      doc.text('DEDUCTIONS', 145, 67);
-      doc.text('NET AREA', 175, 67);
-
-      let yPos = 75;
-      doc.setFont('helvetica', 'normal');
-      roomCalculations.forEach((r, idx) => {
-        if (idx % 2 === 1) {
-          doc.setFillColor(249, 250, 251);
-          doc.rect(14, yPos - 5, pageWidth - 28, 7, 'F');
+    downloadPdfReport({
+      title: 'Painting BOQ & Material Takeoff Estimate',
+      subtitle: `Scope: ${quoteName} | Brand: ${selectedProduct.brand} (${selectedProduct.name})`,
+      category: 'interior',
+      complianceBadge: 'IS 15489 & IS 5410',
+      referenceId: `PNT-${Date.now().toString().slice(-6)}`,
+      theme: 'brand',
+      project: {
+        projectName: quoteName,
+        clientName: 'Client Requisition',
+        notes: `Product: ${selectedProduct.brand} ${selectedProduct.name} | Sheen: ${selectedProduct.sheen} | Process: ${processType.replace('_', ' ').toUpperCase()}`
+      },
+      parameters: [
+        { label: 'Paint Brand & Product', value: `${selectedProduct.brand} - ${selectedProduct.name}` },
+        { label: 'Surface Process', value: processType.replace('_', ' ').toUpperCase() },
+        { label: 'Total Rooms', value: `${rooms.length} Rooms` },
+        { label: 'Net Paint Area', value: `${computedSummary.totalNetPaintAreaSqFt} sq.ft` },
+        { label: 'Finish Paint Required', value: `${computedSummary.totalPaintLitersWithBuffer} Liters` },
+        { label: 'Unit System', value: unit === 'meters' ? 'Metric (m, m²)' : 'Imperial (ft, sq.ft)' }
+      ],
+      kpis: [
+        { label: 'Grand Total Cost', value: `₹${computedSummary.finalGrandTotal.toLocaleString('en-IN')}`, subtext: `Avg ₹${(computedSummary.finalGrandTotal / (computedSummary.totalNetPaintAreaSqFt || 1)).toFixed(1)}/sq.ft`, highlight: true },
+        { label: 'Finish Paint', value: `${computedSummary.totalPaintLitersWithBuffer} L`, subtext: `${selectedProduct.brand} (${selectedProduct.sheen})` },
+        { label: 'Wall Putty', value: `${computedSummary.puttyKgRequired} Kg`, subtext: `${computedSummary.puttyBags40Kg} Bags @ 40kg` },
+        { label: 'Wall Primer', value: `${computedSummary.primerLitersRequired} L`, subtext: 'Surface Sealer' }
+      ],
+      tables: [
+        {
+          title: 'Room-by-Room Surface Area Breakdown',
+          badge: 'ROOM SCHEDULE',
+          columns: [
+            { header: 'Room Name', dataKey: 'room', width: 45 },
+            { header: 'Dimensions (LxWxH)', dataKey: 'dims', width: 50 },
+            { header: 'Gross Area', dataKey: 'gross', width: 30 },
+            { header: 'Deductions', dataKey: 'deductions', width: 28 },
+            { header: 'Net Area', dataKey: 'net', width: 29, align: 'right' as const }
+          ],
+          rows: roomRows,
+          totalsRow: [
+            { dataKey: 'room', value: 'TOTAL NET PAINT AREA' },
+            { dataKey: 'net', value: `${computedSummary.totalNetPaintAreaSqFt} sq ft` }
+          ]
+        },
+        {
+          title: 'Required Material Procurement & Packaging Splits',
+          badge: 'MATERIAL INDENT',
+          columns: [
+            { header: 'Material Description', dataKey: 'item', width: 75 },
+            { header: 'Quantity Needed', dataKey: 'qty', width: 42, align: 'right' as const },
+            { header: 'Standard Packaging Cans / Bags', dataKey: 'pack', width: 65 }
+          ],
+          rows: matRows
+        },
+        {
+          title: 'Itemized Cost Estimate (BOQ)',
+          badge: 'BOQ BREAKDOWN',
+          columns: [
+            { header: 'Description of Work / Material', dataKey: 'desc', width: 75 },
+            { header: 'Quantity', dataKey: 'qty', width: 35 },
+            { header: 'Unit Rate', dataKey: 'rate', width: 35, align: 'right' as const },
+            { header: 'Amount (₹)', dataKey: 'cost', width: 37, align: 'right' as const }
+          ],
+          rows: boqRows,
+          totalsRow: [
+            { dataKey: 'desc', value: 'ESTIMATED GRAND TOTAL' },
+            { dataKey: 'cost', value: `₹${computedSummary.finalGrandTotal.toLocaleString('en-IN')}` }
+          ]
         }
-        doc.text(r.name, 18, yPos);
-        doc.text(`${r.length} x ${r.width} x ${r.height} ${unit === 'feet' ? 'ft' : 'm'}`, 65, yPos);
-        doc.text(`${r.grossWallAreaSqFt + r.ceilingAreaSqFt} sq ft`, 115, yPos);
-        doc.text(`-${r.totalDeductionsSqFt} sq ft`, 145, yPos);
-        doc.text(`${r.totalNetPaintAreaSqFt} sq ft`, 175, yPos);
-        yPos += 7;
-      });
-
-      // Section 2: Materials Packaging
-      yPos += 5;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.text('Required Material Procurement Splits', 14, yPos);
-      yPos += 6;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9);
-      doc.text(`• Finish Topcoat (${selectedProduct.brand}): ${computedSummary.totalPaintLitersWithBuffer} Liters`, 18, yPos);
-      yPos += 5;
-      doc.text(`   Packaging: ${computedSummary.paintCans20L} x 20L Drum, ${computedSummary.paintCans10L} x 10L Bucket, ${computedSummary.paintCans4L} x 4L Can, ${computedSummary.paintCans1L} x 1L Tin`, 22, yPos);
-      yPos += 6;
-      doc.text(`• Acrylic Wall Putty: ${computedSummary.puttyKgRequired} Kg (${computedSummary.puttyBags40Kg} Bags of 40kg + ${computedSummary.puttyPacks5Kg} Packs of 5kg)`, 18, yPos);
-      yPos += 5;
-      doc.text(`• Interior Wall Primer: ${computedSummary.primerLitersRequired} Liters (${computedSummary.primerCans20L} x 20L Drum, ${computedSummary.primerCans10L} x 10L Bucket, ${computedSummary.primerCans4L} x 4L Can, ${computedSummary.primerCans1L} x 1L Tin)`, 18, yPos);
-      yPos += 5;
-      doc.text(`• Sanding Emery Paper & Masking: ${computedSummary.sandingPaperCount} Sheets + ${computedSummary.maskingTapeRolls} Masking Rolls`, 18, yPos);
-
-      // Section 3: Cost BOQ Table
-      yPos += 10;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.text('Itemized Cost Estimate (BOQ)', 14, yPos);
-      yPos += 6;
-
-      doc.setFillColor(243, 244, 246);
-      doc.rect(14, yPos, pageWidth - 28, 7, 'F');
-      doc.setFontSize(9);
-      doc.text('ITEM DESCRIPTION', 18, yPos + 5);
-      doc.text('QTY / UNIT', 110, yPos + 5);
-      doc.text('UNIT RATE (INR)', 145, yPos + 5);
-      doc.text('TOTAL (INR)', 175, yPos + 5);
-      yPos += 12;
-
-      const boqRows = [
-        { desc: `Topcoat Paint (${selectedProduct.name})`, qty: `${computedSummary.totalPaintLitersWithBuffer} L`, rate: `₹${selectedProduct.pricePerLiter}`, total: `₹${computedSummary.topcoatCost.toLocaleString('en-IN')}` },
-        { desc: 'Acrylic Wall Putty (2 Coats)', qty: `${computedSummary.puttyKgRequired} Kg`, rate: `₹${puttyPricePerKg}`, total: `₹${computedSummary.puttyCost.toLocaleString('en-IN')}` },
-        { desc: 'Water-Thinnable Wall Primer', qty: `${computedSummary.primerLitersRequired} L`, rate: `₹${primerPricePerLiter}`, total: `₹${computedSummary.primerCost.toLocaleString('en-IN')}` },
-        { desc: 'Consumables (Masking Tape, Sandpaper, Sheets)', qty: 'Lump sum', rate: '-', total: `₹${computedSummary.consumablesCost.toLocaleString('en-IN')}` },
-        { desc: 'Skilled Painting Labor & Sanding Prep', qty: `${computedSummary.totalNetPaintAreaSqFt} sq ft`, rate: `₹${computedSummary.effectiveLaborRate}/sq ft`, total: `₹${computedSummary.totalLaborCost.toLocaleString('en-IN')}` },
-        { desc: `Contractor Margin / Contingency (${contractorMarginPct}%)`, qty: '-', rate: '-', total: `₹${computedSummary.contractorMargin.toLocaleString('en-IN')}` },
-      ];
-
-      if (includeGst) {
-        boqRows.push({ desc: 'GST @ 18% on Goods & Services', qty: '18%', rate: '-', total: `₹${computedSummary.gstAmount.toLocaleString('en-IN')}` });
-      }
-
-      doc.setFont('helvetica', 'normal');
-      boqRows.forEach((row, i) => {
-        if (i % 2 === 1) {
-          doc.setFillColor(249, 250, 251);
-          doc.rect(14, yPos - 4, pageWidth - 28, 6, 'F');
-        }
-        doc.text(row.desc, 18, yPos);
-        doc.text(row.qty, 110, yPos);
-        doc.text(row.rate, 145, yPos);
-        doc.text(row.total, 175, yPos);
-        yPos += 6;
-      });
-
-      // Total Callout
-      yPos += 4;
-      doc.setFillColor(30, 58, 138);
-      doc.rect(14, yPos, pageWidth - 28, 10, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.text('ESTIMATED GRAND TOTAL (ALL INCLUSIVE):', 18, yPos + 7);
-      doc.text(`INR ${computedSummary.finalGrandTotal.toLocaleString('en-IN')}`, pageWidth - 18, yPos + 7, { align: 'right' });
-
-      // Footer
-      doc.setTextColor(100, 116, 139);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Note: Actual paint coverage may vary ±10% based on wall substrate roughness and application method.', 14, 285);
-
-      doc.save(`Painting_Estimate_${selectedProduct.brand.replace(/\s+/g, '_')}.pdf`);
-    } catch (err) {
-      console.error('PDF export error:', err);
-      alert('Unable to generate PDF. Please use the Copy Report button.');
-    }
+      ],
+      disclaimers: [
+        'Wall moisture content should not exceed 12% prior to applying acrylic putty and primer coats.',
+        'Spreading rate / coverage varies depending on surface porosity, roughness, and painter application method.'
+      ],
+      includeSignoff: true,
+      fileName: `Painting_BOQ_Estimate_${quoteName.toLowerCase().replace(/\s+/g, '_')}_${Date.now().toString().slice(-4)}.pdf`
+    });
   };
 
   // Filtered Historical Trends Data
@@ -1102,22 +1066,13 @@ Generated via Toolique India (https://toolique.in)`;
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-left">
-      {/* Top Header & View Tabs */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-              <Paintbrush className="w-5 h-5" />
-            </span>
-            <div>
-              <h2 className="text-base font-bold text-zinc-900 dark:text-white">
-                Architectural Paint Estimator & Indian Brand Price Trends Studio
-              </h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Multi-room wall & ceiling paint BOQ, undercoats solver, and 5-year historical pricing engine
-              </p>
-            </div>
-          </div>
+      {/* Top Action Toolbar */}
+      <div className="flex flex-wrap justify-between items-center gap-3 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+            <Paintbrush className="w-3.5 h-3.5" />
+            <span>IS 15489 Paint &amp; Primer Coverage Standards</span>
+          </span>
         </div>
 
         {/* Action Tabs */}
@@ -1181,20 +1136,15 @@ Generated via Toolique India (https://toolique.in)`;
                   1. Brand Selection & Surface Process
                 </span>
                 <div className="flex items-center gap-2">
-                  <div className="flex rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5 text-xs font-semibold">
-                    <button
-                      onClick={() => setUnit('feet')}
-                      className={`px-2.5 py-1 rounded-md transition ${unit === 'feet' ? 'bg-white dark:bg-zinc-700 text-indigo-600 dark:text-indigo-400 shadow-xs' : 'text-zinc-500'}`}
-                    >
-                      Feet (ft)
-                    </button>
-                    <button
-                      onClick={() => setUnit('meters')}
-                      className={`px-2.5 py-1 rounded-md transition ${unit === 'meters' ? 'bg-white dark:bg-zinc-700 text-indigo-600 dark:text-indigo-400 shadow-xs' : 'text-zinc-500'}`}
-                    >
-                      Meters (m)
-                    </button>
-                  </div>
+                  <UnitSwitcher<UnitType>
+                    value={unit}
+                    onChange={setUnit}
+                    options={[
+                      { id: 'feet', label: 'Feet (ft)', shortLabel: 'ft' },
+                      { id: 'meters', label: 'Meters (m)', shortLabel: 'm' }
+                    ]}
+                    size="xs"
+                  />
                   <button
                     onClick={handleResetAll}
                     title="Reset All Parameters"
@@ -1523,14 +1473,20 @@ Generated via Toolique India (https://toolique.in)`;
                 <span className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest block">
                   Estimated Painting Budget
                 </span>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={handleCopyReport}
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-xs"
-                  >
-                    {copied ? <Check className="w-3.5 h-3.5" /> : <Clipboard className="w-3.5 h-3.5" />}
-                    <span>{copied ? 'Copied' : 'Copy Quote'}</span>
-                  </button>
+                <div className="flex items-center gap-1.5">
+                  <CopyButton
+                    text={getReportText}
+                    label="Copy Quote"
+                    copiedLabel="Copied"
+                    variant="primary"
+                    size="xs"
+                  />
+                  <ShareWhatsApp
+                    text={getReportText}
+                    label="WhatsApp"
+                    variant="solid"
+                    size="xs"
+                  />
                   <button
                     onClick={handleExportPdf}
                     className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold transition"
@@ -2174,13 +2130,19 @@ Generated via Toolique India (https://toolique.in)`;
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                onClick={handleCopyReport}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-xs"
-              >
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Clipboard className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied' : 'Copy Quote'}</span>
-              </button>
+              <CopyButton
+                text={getReportText}
+                label="Copy Quote"
+                copiedLabel="Copied"
+                variant="primary"
+                size="xs"
+              />
+              <ShareWhatsApp
+                text={getReportText}
+                label="WhatsApp"
+                variant="solid"
+                size="xs"
+              />
               <button
                 onClick={handleExportPdf}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold transition"

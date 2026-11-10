@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
 import {
   Upload, Download, RotateCw, RotateCcw, Image as ImageIcon,
   Sparkles, Copy, Check, Eye, Layers, Type,
@@ -326,7 +328,6 @@ export default function YouTubeThumbnailResizer() {
   // Refs
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // ----------------------------------------------------
   // CLIPBOARD PASTE LISTENER
@@ -371,20 +372,6 @@ export default function YouTubeThumbnailResizer() {
       setIsLoadingImage(false);
     };
     reader.readAsDataURL(file);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    loadImageFromFile(file);
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      loadImageFromFile(file);
-    }
   };
 
   // Extract Thumbnail from YouTube URL or Video ID
@@ -970,34 +957,15 @@ export default function YouTubeThumbnailResizer() {
 
               {/* Tab 1: File Upload / Drag & Drop */}
               {inputMode === 'upload' && (
-                <div
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={handleDrop}
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl p-8 text-center hover:border-indigo-500/60 transition cursor-pointer group bg-zinc-50/50 dark:bg-zinc-950/20"
-                >
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    accept="image/*"
-                    className="hidden"
-                  />
-                  <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-500 group-hover:scale-110 transition">
-                    <Upload className="w-7 h-7" />
-                  </div>
-                  <p className="text-sm font-bold text-zinc-800 dark:text-zinc-200">
-                    Drag & Drop Thumbnail Image
-                  </p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                    or click to browse local files (PNG, JPG, WEBP)
-                  </p>
-                  <div className="mt-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-200/60 dark:bg-zinc-800 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
-                    <span>Pro-tip: Hit</span>
-                    <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-zinc-700 border border-zinc-300 dark:border-zinc-600 text-[10px] font-mono shadow-xs">Ctrl+V</kbd>
-                    <span>to paste screenshot</span>
-                  </div>
-                </div>
+                <FileDropzone
+                  accept="image/*"
+                  onFilesSelected={(files) => {
+                    if (files[0]) loadImageFromFile(files[0]);
+                  }}
+                  title="Drag & Drop Thumbnail Image"
+                  description="or click to browse local files (PNG, JPG, WEBP) • Paste screenshot with Ctrl+V"
+                  colorTheme="indigo"
+                />
               )}
 
               {/* Tab 2: YouTube Video Thumbnail Fetcher */}
@@ -1851,7 +1819,7 @@ export default function YouTubeThumbnailResizer() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center gap-2 pt-1">
+                <div className="flex flex-wrap items-center gap-2 pt-1">
                   <button
                     onClick={copyImageToClipboard}
                     className="px-3.5 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:border-indigo-400 text-xs font-bold transition cursor-pointer flex items-center gap-1.5"
@@ -1868,6 +1836,11 @@ export default function YouTubeThumbnailResizer() {
                     <Download className="w-4 h-4" />
                     <span>Download Thumbnail ({targetWidth}×{targetHeight})</span>
                   </button>
+
+                  <ShareWhatsApp
+                    text={`I just optimized a YouTube thumbnail (${targetWidth}×${targetHeight}) with CTR preview using Toolique!`}
+                    className="px-3.5 py-3"
+                  />
                 </div>
               </div>
             </div>

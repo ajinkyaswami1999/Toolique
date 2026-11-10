@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { Check, Download, Share2, Info, AlertCircle, Sparkles } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { Info, AlertCircle, Sparkles } from 'lucide-react';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp } from '../components/common';
 
 // --- Indian Currency Formatting Helper ---
 function formatIndianCurrencyAbbr(value: number): string {
@@ -39,7 +40,6 @@ export default function SIPCalculator() {
   const [inflationRate, setInflationRate] = useState<number>(6);
 
   // UI state
-  const [copied, setCopied] = useState<boolean>(false);
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [showSchedule, setShowSchedule] = useState<boolean>(false);
   const [hoveredYearIndex, setHoveredYearIndex] = useState<number | null>(null);
@@ -268,12 +268,6 @@ export default function SIPCalculator() {
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
   };
 
-  const copyShareLink = () => {
-    navigator.clipboard.writeText(getShareLink());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   // CSV Data Exporter
   const exportToCSV = () => {
     const headers = ['Year', 'Monthly SIP', 'Annual Investment', 'Total Invested', 'Estimated Returns', 'Total Corpus', 'Cumulative Gain %'];
@@ -297,166 +291,66 @@ export default function SIPCalculator() {
     document.body.removeChild(link);
   };
 
-  // PDF estimate builder via jsPDF
+  // PDF estimate builder via standard branded PDF engine
   const exportToPDF = () => {
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4'
+    const scheduleRows = results.yearlySchedule.map((row) => ({
+      year: `Year ${row.year}`,
+      monthly: formatIndianCurrencyExact(row.monthlySIP),
+      annual: formatIndianCurrencyExact(row.annualInvestment),
+      invested: formatIndianCurrencyExact(row.totalInvested),
+      returns: formatIndianCurrencyExact(row.estimatedReturns),
+      corpus: formatIndianCurrencyExact(row.totalCorpus),
+    }));
+
+    downloadPdfReport({
+      title: 'SIP Wealth Planning & Growth Report',
+      subtitle: `${mode === 'returns' ? 'Systematic Investment Plan' : 'Target Goal Plan'} | ${years} Years Tenure @ ${expectedReturn}% p.a.`,
+      category: 'Mutual Funds & Wealth Management',
+      project: 'Toolique Financial Suite',
+      theme: 'emerald',
+      parameters: [
+        { label: 'Plan Mode', value: mode === 'returns' ? 'Growth (SIP Returns)' : 'Target Goal' },
+        { label: 'Starting Investment', value: `${formatIndianCurrencyExact(mode === 'returns' ? monthlySIP : results.requiredStartingSIP)} (${frequency})` },
+        { label: 'Investment Tenure', value: `${years} Years` },
+        { label: 'Expected Annual Return', value: `${expectedReturn}% p.a.` },
+        { label: 'Annual Step-Up', value: `${stepUp}%` },
+        { label: 'Initial Lump Sum', value: formatIndianCurrencyExact(lumpSum) },
+        { label: 'Assumed Inflation', value: `${inflationRate}%` },
+        { label: 'Total Capital Invested', value: formatIndianCurrencyExact(results.totalInvested) },
+        { label: 'Estimated Wealth Gain', value: formatIndianCurrencyExact(results.estimatedReturns) },
+        { label: 'Projected Maturity Value', value: formatIndianCurrencyExact(results.maturityValue) },
+        { label: 'Inflation Adjusted (PV)', value: formatIndianCurrencyExact(results.inflationAdjustedPV) },
+        { label: 'Wealth Multiplier', value: `${(results.maturityValue / Math.max(1, results.totalInvested)).toFixed(2)}x` },
+      ],
+      tables: [
+        {
+          title: 'Yearly Wealth Accumulation Schedule',
+          columns: [
+            { header: 'Period', dataKey: 'year' },
+            { header: 'SIP Amount', dataKey: 'monthly', align: 'right' as const },
+            { header: 'Annual Deposit', dataKey: 'annual', align: 'right' as const },
+            { header: 'Total Invested', dataKey: 'invested', align: 'right' as const },
+            { header: 'Est. Gain', dataKey: 'returns', align: 'right' as const },
+            { header: 'Corpus Balance', dataKey: 'corpus', align: 'right' as const },
+          ],
+          rows: scheduleRows,
+          totalsRow: [
+            { dataKey: 'year', value: 'FINAL SUMMARY' },
+            { dataKey: 'monthly', value: '-' },
+            { dataKey: 'annual', value: '-' },
+            { dataKey: 'invested', value: formatIndianCurrencyExact(results.totalInvested) },
+            { dataKey: 'returns', value: formatIndianCurrencyExact(results.estimatedReturns) },
+            { dataKey: 'corpus', value: formatIndianCurrencyExact(results.maturityValue) },
+          ],
+        },
+      ],
+      disclaimers: [
+        'Mutual fund investments are subject to market risks. Read all scheme related documents carefully.',
+        'Calculations are illustrative estimates based on compounding formulas with steady returns.',
+        'Actual returns vary over market cycles and economic conditions.',
+      ],
+      fileName: `SIP_Wealth_Report_${years}Y_${Date.now()}.pdf`,
     });
-
-    const margin = 15;
-    let y = 15;
-
-    // Header Banner
-    doc.setFillColor(15, 23, 42); // dark-slate
-    doc.rect(0, 0, 210, 38, 'F');
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(20);
-    doc.setTextColor(255, 255, 255);
-    doc.text('SIP WEALTH PLANNING REPORT', margin, 15);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.setTextColor(148, 163, 184);
-    doc.text(`Generated on ${new Date().toLocaleDateString()} | Toolique Wealth Management Suite`, margin, 22);
-
-    y = 50;
-
-    // Left Column: Investment Inputs
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(margin, y, 85, 68, 2, 2, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(79, 70, 229);
-    doc.text('INVESTMENT INPUTS', margin + 5, y + 8);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9.5);
-    doc.setTextColor(51, 65, 85);
-    doc.text(`Starting SIP: ${formatIndianCurrencyExact(mode === 'returns' ? monthlySIP : results.requiredStartingSIP)} (${frequency})`, margin + 5, y + 18);
-    doc.text(`Investment Tenure: ${years} Years`, margin + 5, y + 26);
-    doc.text(`Expected Annual Return: ${expectedReturn}%`, margin + 5, y + 34);
-    doc.text(`Annual Step-Up: ${stepUp}%`, margin + 5, y + 42);
-    doc.text(`Initial Lump Sum: ${formatIndianCurrencyExact(lumpSum)}`, margin + 5, y + 50);
-    doc.text(`Inflation Indexer: ${inflationRate}%`, margin + 5, y + 58);
-
-    // Right Column: Value Projection Summary
-    doc.setFillColor(240, 253, 250);
-    doc.roundedRect(margin + 90, y, 90, 68, 2, 2, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(13, 148, 136);
-    doc.text('WEALTH ACCUMULATION SUMMARY', margin + 95, y + 8);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9.5);
-    doc.setTextColor(15, 23, 42);
-    doc.text(`Total Investment: ${formatIndianCurrencyExact(results.totalInvested)}`, margin + 95, y + 18);
-    doc.text(`Est. Wealth Gains: ${formatIndianCurrencyExact(results.estimatedReturns)}`, margin + 95, y + 26);
-    doc.text(`Nominal Future Value: ${formatIndianCurrencyExact(results.maturityValue)}`, margin + 95, y + 34);
-    doc.text(`Inflation Adjusted (PV): ${formatIndianCurrencyExact(results.inflationAdjustedPV)}`, margin + 95, y + 42);
-    doc.text(`Wealth Multiplier: ${(results.maturityValue / results.totalInvested).toFixed(2)}x`, margin + 95, y + 50);
-
-    y = 130;
-
-    // Yearly Snapshot Table
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(15, 23, 42);
-    doc.text('YEARLY WEALTH GROWTH TIMELINE', margin, y);
-
-    y += 6;
-    doc.setFillColor(226, 232, 240);
-    doc.rect(margin, y, 180, 7, 'F');
-    doc.setFontSize(8.5);
-    doc.setTextColor(71, 85, 105);
-    doc.text('Year', margin + 3, y + 5);
-    doc.text('Monthly SIP', margin + 20, y + 5);
-    doc.text('Ann. Invested', margin + 50, y + 5);
-    doc.text('Total Invested', margin + 85, y + 5);
-    doc.text('Est. Returns', margin + 120, y + 5);
-    doc.text('Future Value', margin + 155, y + 5);
-
-    y += 7;
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(51, 65, 85);
-
-    results.yearlySchedule.slice(0, 15).forEach((row) => {
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
-      }
-      doc.text(`Yr ${row.year}`, margin + 3, y + 5);
-      doc.text(formatIndianCurrencyExact(row.monthlySIP), margin + 20, y + 5);
-      doc.text(formatIndianCurrencyExact(row.annualInvestment), margin + 50, y + 5);
-      doc.text(formatIndianCurrencyExact(row.totalInvested), margin + 85, y + 5);
-      doc.text(formatIndianCurrencyExact(row.estimatedReturns), margin + 120, y + 5);
-      doc.text(formatIndianCurrencyExact(row.totalCorpus), margin + 155, y + 5);
-      doc.setDrawColor(241, 245, 249);
-      doc.line(margin, y + 7, margin + 180, y + 7);
-      y += 8;
-    });
-
-    if (results.yearlySchedule.length > 15) {
-      doc.addPage();
-      y = 20;
-      doc.setFont('helvetica', 'bold');
-      doc.text('YEARLY WEALTH GROWTH TIMELINE (CONTINUED)', margin, y);
-      y += 8;
-      
-      doc.setFillColor(226, 232, 240);
-      doc.rect(margin, y, 180, 7, 'F');
-      doc.setFontSize(8.5);
-      doc.setTextColor(71, 85, 105);
-      doc.text('Year', margin + 3, y + 5);
-      doc.text('Monthly SIP', margin + 20, y + 5);
-      doc.text('Ann. Invested', margin + 50, y + 5);
-      doc.text('Total Invested', margin + 85, y + 5);
-      doc.text('Est. Returns', margin + 120, y + 5);
-      doc.text('Future Value', margin + 155, y + 5);
-      
-      y += 7;
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(51, 65, 85);
-
-      results.yearlySchedule.slice(15).forEach((row) => {
-        if (y > 270) {
-          doc.addPage();
-          y = 20;
-        }
-        doc.text(`Yr ${row.year}`, margin + 3, y + 5);
-        doc.text(formatIndianCurrencyExact(row.monthlySIP), margin + 20, y + 5);
-        doc.text(formatIndianCurrencyExact(row.annualInvestment), margin + 50, y + 5);
-        doc.text(formatIndianCurrencyExact(row.totalInvested), margin + 85, y + 5);
-        doc.text(formatIndianCurrencyExact(row.estimatedReturns), margin + 120, y + 5);
-        doc.text(formatIndianCurrencyExact(row.totalCorpus), margin + 155, y + 5);
-        doc.setDrawColor(241, 245, 249);
-        doc.line(margin, y + 7, margin + 180, y + 7);
-        y += 8;
-      });
-    }
-
-    // Disclaimer
-    y += 10;
-    if (y > 260) {
-      doc.addPage();
-      y = 20;
-    }
-    doc.setFillColor(254, 243, 199);
-    doc.roundedRect(margin, y, 180, 16, 1, 1, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8.5);
-    doc.setTextColor(146, 64, 14);
-    doc.text('IMPORTANT DISCLAIMER:', margin + 4, y + 6);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7.5);
-    doc.setTextColor(180, 83, 9);
-    doc.text('These calculations are illustrative estimates based on the assumptions entered. Mutual fund investments are market-linked', margin + 4, y + 10);
-    doc.text('and actual returns may vary. This report does not constitute official investment advice or guaranteed results.', margin + 4, y + 13);
-
-    doc.save(`Toolique_SIP_Wealth_Report_${years}Y.pdf`);
   };
 
   // Interactive line graph tooltip hover calculator
@@ -781,19 +675,13 @@ export default function SIPCalculator() {
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={copyShareLink}
-                  className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-850 hover:text-indigo-400 transition"
-                  title="Share Calculation scenario"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
-                </button>
+                <CopyButton text={getShareLink} label="Share" size="xs" variant="secondary" />
+                <ShareWhatsApp text={getShareLink} label="WhatsApp" size="xs" />
                 <button
                   onClick={exportToPDF}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-850 hover:text-indigo-400 transition text-xs font-extrabold"
+                  className="px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-zinc-850 hover:text-emerald-400 transition text-xs font-semibold text-zinc-300"
                 >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>PDF</span>
+                  Download PDF
                 </button>
               </div>
             </div>

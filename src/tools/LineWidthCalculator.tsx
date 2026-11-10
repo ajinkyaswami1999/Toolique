@@ -1,8 +1,10 @@
 import { useState, useMemo } from 'react';
 import { 
-  Printer, Copy, Check, Download, Sparkles, Sliders, Boxes
+  Printer, Download, Sparkles, Sliders, Boxes
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
 
 // --- Preset Definitions ---
 interface NozzlePreset {
@@ -80,7 +82,6 @@ export default function LineWidthCalculator() {
 
   // UI States
   const [activeTab, setActiveTab] = useState<'slicer' | 'bead' | 'thinwall' | 'gcode'>('slicer');
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   // Current material object
   const currentMaterial = useMemo(() => {
@@ -169,13 +170,6 @@ export default function LineWidthCalculator() {
     };
   }, [nozzleDiameter, layerHeight, currentGoal, hotendFlowLimit, printSpeed, targetWallThickness]);
 
-  // Copy helper
-  const copyToClipboard = (text: string, key: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedKey(key);
-    setTimeout(() => setCopiedKey(null), 2000);
-  };
-
   // Export Bambu Studio / OrcaSlicer Configuration String
   const getOrcaConfigText = () => {
     return `# ----------------------------------------------------
@@ -193,128 +187,67 @@ internal_solid_infill_line_width = ${calculations.bottomSolidInfillWidth}
 # Hotend Flow Limit: ${hotendFlowLimit} mm3/s -> Max Speed: ${calculations.maxSafeSpeed} mm/s`;
   };
 
-  // Export PDF Calibration Certificate
+  // Export Standardized Branded PDF Calibration Certificate
   const exportPDF = () => {
     try {
-      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
       const c = calculations;
-
-      // Header Banner
-      doc.setFillColor(30, 41, 59);
-      doc.rect(0, 0, 210, 28, 'F');
-
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
-      doc.text('3D PRINT LINE WIDTH & EXTRUSION CALIBRATION', 14, 12);
-      
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Nozzle: ${nozzleDiameter}mm | Layer Height: ${layerHeight}mm | Material: ${currentMaterial.name}`, 14, 18);
-      doc.text(`Generated: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })} | Toolique.in`, 14, 23);
-
-      // Section 1: KPI Cards
-      doc.setFillColor(248, 250, 252);
-      doc.roundedRect(14, 34, 182, 38, 3, 3, 'F');
-      doc.setDrawColor(226, 232, 240);
-      doc.roundedRect(14, 34, 182, 38, 3, 3, 'S');
-
-      doc.setTextColor(15, 23, 42);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text('RECOMMENDED DEFAULT WIDTH', 20, 42);
-      doc.setFontSize(16);
-      doc.setTextColor(79, 70, 229);
-      doc.text(`${c.defaultWidth} mm`, 20, 50);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 116, 139);
-      doc.text(`Ratio: ${(c.defaultWidth / nozzleDiameter * 100).toFixed(0)}% of Nozzle`, 20, 56);
-
-      doc.setTextColor(15, 23, 42);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text('BEAD ASPECT RATIO (W/H)', 85, 42);
-      doc.setFontSize(14);
-      doc.setTextColor(16, 185, 129);
-      doc.text(`${c.defaultAspect} : 1`, 85, 50);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 116, 139);
-      doc.text(c.squishStatus.split('(')[0], 85, 56);
-
-      doc.setTextColor(15, 23, 42);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text('MAX SPEED (AT FLOW LIMIT)', 145, 42);
-      doc.setFontSize(14);
-      doc.setTextColor(245, 158, 11);
-      doc.text(`${c.maxSafeSpeed} mm/s`, 145, 50);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 116, 139);
-      doc.text(`Flow: ${hotendFlowLimit} mm3/s Max`, 145, 56);
-
-      // Section 2: Complete Slicer Feature Table
-      doc.setTextColor(30, 41, 59);
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.text('1. Complete Slicer Line Width Specifications', 14, 82);
-
-      let startY = 88;
-      doc.setFillColor(241, 245, 249);
-      doc.rect(14, startY, 182, 7, 'F');
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(71, 85, 105);
-      doc.text('SLICER FEATURE', 18, startY + 5);
-      doc.text('LINE WIDTH', 75, startY + 5);
-      doc.text('% OF NOZZLE', 115, startY + 5);
-      doc.text('PRIMARY ENGINEERING PURPOSE', 145, startY + 5);
-
-      startY += 8;
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(30, 41, 59);
-
       const rows = [
-        ['Default Line Width', `${c.defaultWidth} mm`, `${(c.defaultWidth/nozzleDiameter*100).toFixed(0)}%`, 'General baseline extrusion'],
-        ['First Layer (Bed Adhesion)', `${c.firstLayerWidth} mm`, `${(c.firstLayerWidth/nozzleDiameter*100).toFixed(0)}%`, 'Max bed contact area & squish'],
-        ['Outer / External Wall', `${c.outerPerimeterWidth} mm`, `${(c.outerPerimeterWidth/nozzleDiameter*100).toFixed(0)}%`, 'Dimensional precision & surface'],
-        ['Inner / Structural Walls', `${c.innerPerimeterWidth} mm`, `${(c.innerPerimeterWidth/nozzleDiameter*100).toFixed(0)}%`, 'Maximum shear & tensile load'],
-        ['Top Solid Infill', `${c.topSolidInfillWidth} mm`, `${(c.topSolidInfillWidth/nozzleDiameter*100).toFixed(0)}%`, 'Smooth ironing finish'],
-        ['Sparse Infill', `${c.sparseInfillWidth} mm`, `${(c.sparseInfillWidth/nozzleDiameter*100).toFixed(0)}%`, 'Speed & structural support'],
-        ['Support Interface', `${c.supportWidth} mm`, `${(c.supportWidth/nozzleDiameter*100).toFixed(0)}%`, 'Clean breakaway without marks']
+        { feature: 'Default Line Width', width: `${c.defaultWidth} mm`, ratio: `${(c.defaultWidth/nozzleDiameter*100).toFixed(0)}%`, purpose: 'General baseline extrusion' },
+        { feature: 'First Layer (Bed Adhesion)', width: `${c.firstLayerWidth} mm`, ratio: `${(c.firstLayerWidth/nozzleDiameter*100).toFixed(0)}%`, purpose: 'Max bed contact area & squish' },
+        { feature: 'Outer / External Wall', width: `${c.outerPerimeterWidth} mm`, ratio: `${(c.outerPerimeterWidth/nozzleDiameter*100).toFixed(0)}%`, purpose: 'Dimensional precision & surface' },
+        { feature: 'Inner / Structural Walls', width: `${c.innerPerimeterWidth} mm`, ratio: `${(c.innerPerimeterWidth/nozzleDiameter*100).toFixed(0)}%`, purpose: 'Maximum shear & tensile load' },
+        { feature: 'Top Solid Infill', width: `${c.topSolidInfillWidth} mm`, ratio: `${(c.topSolidInfillWidth/nozzleDiameter*100).toFixed(0)}%`, purpose: 'Smooth ironing finish' },
+        { feature: 'Sparse Infill', width: `${c.sparseInfillWidth} mm`, ratio: `${(c.sparseInfillWidth/nozzleDiameter*100).toFixed(0)}%`, purpose: 'Speed & structural support' },
+        { feature: 'Support Interface', width: `${c.supportWidth} mm`, ratio: `${(c.supportWidth/nozzleDiameter*100).toFixed(0)}%`, purpose: 'Clean breakaway without marks' },
       ];
 
-      rows.forEach((r, idx) => {
-        doc.text(r[0], 18, startY + (idx * 6.5));
-        doc.text(r[1], 75, startY + (idx * 6.5));
-        doc.text(r[2], 115, startY + (idx * 6.5));
-        doc.text(r[3], 145, startY + (idx * 6.5));
+      downloadPdfReport({
+        title: '3D Print Line Width & Extrusion Calibration',
+        subtitle: `Nozzle: ${nozzleDiameter}mm | Layer: ${layerHeight}mm | Material: ${currentMaterial.name}`,
+        category: '3D Printing Extrusion Bead Physics',
+        project: 'Toolique Extrusion Engineering Suite',
+        theme: 'brand',
+        parameters: [
+          { label: 'Nozzle Bore Diameter', value: `${nozzleDiameter} mm` },
+          { label: 'Layer Height', value: `${layerHeight} mm` },
+          { label: 'Extrusion Profile', value: currentGoal.name },
+          { label: 'Filament Material', value: currentMaterial.name },
+          { label: 'Recommended Default Width', value: `${c.defaultWidth} mm` },
+          { label: 'Bead Aspect Ratio (W/H)', value: `${c.defaultAspect}:1 (${c.squishStatus.split('(')[0].trim()})` },
+          { label: 'Max Safe Speed at Flow Limit', value: `${c.maxSafeSpeed} mm/s (Limit: ${hotendFlowLimit} mm³/s)` },
+          { label: 'Target Wall Thickness', value: `${targetWallThickness} mm (${c.integerPerimeters} perimeters @ ${c.tunedLineWidth} mm)` },
+        ],
+        tables: [
+          {
+            title: '1. Complete Slicer Line Width Specifications',
+            columns: [
+              { header: 'Slicer Feature', dataKey: 'feature' },
+              { header: 'Line Width', dataKey: 'width', align: 'right' as const },
+              { header: '% of Nozzle', dataKey: 'ratio', align: 'center' as const },
+              { header: 'Primary Engineering Purpose', dataKey: 'purpose' },
+            ],
+            rows,
+          },
+          {
+            title: '2. Thin Wall Zero-Gap-Fill Calibration Parameters',
+            columns: [
+              { header: 'Parameter', dataKey: 'param' },
+              { header: 'Calibrated Value', dataKey: 'val', align: 'right' as const },
+            ],
+            rows: [
+              { param: 'Target Wall Thickness', val: `${targetWallThickness} mm` },
+              { param: 'Exact Perimeter Loop Count', val: `${c.integerPerimeters} loops` },
+              { param: 'Tuned Line Width (Zero Gap-Fill)', val: `${c.tunedLineWidth} mm` },
+              { param: 'Flat Contact Bonding Width', val: `${c.contactWidth} mm` },
+            ],
+          },
+        ],
+        disclaimers: [
+          'Toolique 3D Printing Engineering Suite • Slicer Calibration Tool • toolique.in',
+          'Actual flow rates depend on extruder gear grip, melt-zone temperature, and polymer viscosity.',
+        ],
+        fileName: `Line_Width_Calibration_${nozzleDiameter}mm_${Date.now()}.pdf`,
       });
-
-      // Section 3: Thin Wall Tuning
-      const sec3Y = startY + (rows.length * 6.5) + 10;
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(30, 41, 59);
-      doc.text('2. Thin Wall Zero-Gap-Fill Calibration', 14, sec3Y);
-
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`• Target Wall Thickness: ${targetWallThickness} mm`, 16, sec3Y + 7);
-      doc.text(`• Exact Perimeter Count: ${c.integerPerimeters} continuous perimeter loops`, 16, sec3Y + 13);
-      doc.text(`• Tuned Line Width (Zero Gap-Fill): ${c.tunedLineWidth} mm (vs ${c.defaultWidth}mm default)`, 16, sec3Y + 19);
-      doc.text(`• Flat Contact Bonding Area: ${c.contactWidth} mm width per extrusion trace`, 16, sec3Y + 25);
-
-      // Footer
-      doc.setDrawColor(203, 213, 225);
-      doc.line(14, 280, 196, 280);
-      doc.setFontSize(7.5);
-      doc.setTextColor(148, 163, 184);
-      doc.text('Toolique 3D Printing Engineering Suite • Slicer Calibration Tool • toolique.in', 14, 285);
-
-      doc.save(`Line_Width_Calibration_${nozzleDiameter}mm_${Date.now()}.pdf`);
     } catch (e) {
       console.error('PDF Generation Error', e);
     }
@@ -331,15 +264,17 @@ internal_solid_infill_line_width = ${calculations.bottomSolidInfillWidth}
             <span>Slicer Extrusion Bead Physics & Layer Bonding Engine</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => copyToClipboard(getOrcaConfigText(), 'orca')}
-              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-wider transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"
-            >
-              {copiedKey === 'orca' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedKey === 'orca' ? 'Copied' : 'Copy Slicer Config'}</span>
-            </button>
-
+          <div className="flex flex-wrap items-center gap-2">
+            <CopyButton
+              text={getOrcaConfigText}
+              label="Copy Slicer Config"
+              size="sm"
+            />
+            <ShareWhatsApp
+              text={getOrcaConfigText}
+              label="WhatsApp"
+              size="sm"
+            />
             <button
               onClick={exportPDF}
               className="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-black uppercase tracking-wider transition-all shadow-xs flex items-center gap-1.5 cursor-pointer"

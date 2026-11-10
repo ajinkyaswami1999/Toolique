@@ -60,29 +60,38 @@ export interface CostCalculatorInputs {
   labourRate: number; // hourly rate
 
   // Extra Material & Shipping Cost
-  paintCost: number;
-  glueCost: number;
-  sandpaperCost: number;
-  screwsMagnetsCost: number;
-  packagingBoxCost: number;
-  bubbleWrapCost: number;
-  labelStickerCost: number;
-  courierHandlingCost: number;
+  paintCost?: number;
+  glueCost?: number;
+  sandpaperCost?: number;
+  screwsMagnetsCost?: number;
+  packagingBoxCost?: number;
+  bubbleWrapCost?: number;
+  labelStickerCost?: number;
+  courierHandlingCost?: number;
 
   // Custom Cost Fields
-  customCosts: CustomCostItem[];
+  customCosts?: CustomCostItem[];
 
   // Batch Quantity
-  batchQuantity: number; // e.g. 1
+  batchQuantity?: number; // e.g. 1
 
   // Business Cost & Margins
-  platformCommission: number; // %
-  paymentGateway: number; // %
-  gst: number; // %
-  marketingCost: number; // %
-  miscellaneousCost: number; // flat cost (e.g. 50)
-  discount: number; // %
-  profitMargin: number; // %
+  platformCommission?: number; // %
+  paymentGateway?: number; // %
+  gst?: number; // %
+  marketingCost?: number; // %
+  miscellaneousCost?: number; // flat cost (e.g. 50)
+  discount?: number; // %
+  profitMargin?: number; // %
+
+  // Additional aliases / integration parameters
+  orderQuantity?: number;
+  packingMaterialsCost?: number;
+  shippingCost?: number;
+  transactionFeePercentage?: number;
+  gstPercentage?: number;
+  profitMarginPercentage?: number;
+  riskBufferPercentage?: number;
 }
 
 export interface BatchTier {
@@ -160,6 +169,13 @@ export interface CostCalculatorOutputs {
 
   // Machine ROI
   roi: MachineRoiOutput;
+
+  // Aliases & Convenience Fields
+  powerCost: number;
+  totalCost: number;
+  sellingPrice: number;
+  costPerUnit: number;
+  resinConsumablesCost: number;
 }
 
 export interface CalculatorSettings {
@@ -195,55 +211,70 @@ export interface HistoryItem {
  * batch quantity scaling, and print farm ROI modeling.
  */
 export function calculate3DPrintCosts(inputs: CostCalculatorInputs): CostCalculatorOutputs {
-  const qty = Math.max(inputs.batchQuantity || 1, 1);
+  const qty = Math.max(inputs.orderQuantity ?? inputs.batchQuantity ?? 1, 1);
   const isResin = inputs.printTechnology === 'resin';
 
   // 1. Material Cost Calculation
   let materialCost = 0;
   let totalFilamentGrams = 0;
   const filamentSlotsBreakdown: { name: string; cost: number; weight: number }[] = [];
+  let resinConsumablesCost = 0;
 
   if (isResin) {
     // Resin / SLA Mode
     // Resin cost = (volume in ml / 1000) * price per liter
-    const resinCost = (inputs.resinVolumeMl / 1000) * inputs.resinPricePerLiter;
+    const resinCost = ((inputs.resinVolumeMl || 0) / 1000) * (inputs.resinPricePerLiter || 0);
     // Wash & Cure consumables
-    const washAndPpeCost = inputs.washCostPerBatch + inputs.fepWearCostPerJob + inputs.ppeCostPerJob;
+    const washAndPpeCost = (inputs.washCostPerBatch || 0) + (inputs.fepWearCostPerJob || 0) + (inputs.ppeCostPerJob || 0);
+    resinConsumablesCost = washAndPpeCost;
     materialCost = resinCost + washAndPpeCost;
-    totalFilamentGrams = inputs.resinVolumeMl * (inputs.resinDensity || 1.1);
+    totalFilamentGrams = (inputs.resinVolumeMl || 0) * (inputs.resinDensity || 1.1);
     filamentSlotsBreakdown.push({
-      name: `${inputs.resinType || 'Standard Resin'} (${inputs.resinVolumeMl}ml)`,
+      name: `${inputs.resinType || 'Standard Resin'} (${inputs.resinVolumeMl || 0}ml)`,
       cost: resinCost,
       weight: totalFilamentGrams
     });
   } else {
     // FDM Mode
     if (inputs.filamentSlots && inputs.filamentSlots.length > 0) {
-      const wastageMultiplier = 1 + (inputs.filamentWastage + (inputs.amsPurgeMultiplier || 0)) / 100;
+      const wastageMultiplier = 1 + ((inputs.filamentWastage || 0) + (inputs.amsPurgeMultiplier || 0)) / 100;
       inputs.filamentSlots.forEach((slot) => {
-        const slotWeightWithWaste = slot.weightGrams * wastageMultiplier;
-        const slotCost = (slotWeightWithWaste / 1000) * slot.pricePerKg;
+        const slotWeightWithWaste = (slot.weightGrams || 0) * wastageMultiplier;
+        const slotCost = (slotWeightWithWaste / 1000) * (slot.pricePerKg || 0);
         materialCost += slotCost;
-        totalFilamentGrams += slot.weightGrams;
+        totalFilamentGrams += (slot.weightGrams || 0);
         filamentSlotsBreakdown.push({
           name: slot.name || `${slot.materialType} Slot`,
           cost: slotCost,
-          weight: slot.weightGrams
+          weight: slot.weightGrams || 0
         });
       });
 
+      // Add support material wastage if specified
+      if ((inputs.supportUsed || 0) > 0) {
+        const avgPrice = inputs.filamentSlots.reduce((sum, s) => sum + (s.pricePerKg || 0), 0) / inputs.filamentSlots.length;
+        const supportCost = ((inputs.supportUsed || 0) / 1000) * avgPrice;
+        materialCost += supportCost;
+        totalFilamentGrams += (inputs.supportUsed || 0);
+        filamentSlotsBreakdown.push({
+          name: 'Support Material',
+          cost: supportCost,
+          weight: inputs.supportUsed || 0
+        });
+      }
+
       // Add failed print wastage if specified
-      if (inputs.failedWastage > 0) {
-        const avgPrice = inputs.filamentSlots.reduce((sum, s) => sum + s.pricePerKg, 0) / inputs.filamentSlots.length;
-        const failCost = (inputs.failedWastage / 1000) * avgPrice;
+      if ((inputs.failedWastage || 0) > 0) {
+        const avgPrice = inputs.filamentSlots.reduce((sum, s) => sum + (s.pricePerKg || 0), 0) / inputs.filamentSlots.length;
+        const failCost = ((inputs.failedWastage || 0) / 1000) * avgPrice;
         materialCost += failCost;
-        totalFilamentGrams += inputs.failedWastage;
+        totalFilamentGrams += (inputs.failedWastage || 0);
       }
     } else {
       // Single spool fallback
-      const totalWeight = inputs.filamentUsed + inputs.supportUsed + inputs.failedWastage;
-      const wastageMultiplier = 1 + inputs.filamentWastage / 100;
-      materialCost = (totalWeight * wastageMultiplier / 1000) * inputs.filamentPrice;
+      const totalWeight = (inputs.filamentUsed || 0) + (inputs.supportUsed || 0) + (inputs.failedWastage || 0);
+      const wastageMultiplier = 1 + (inputs.filamentWastage || 0) / 100;
+      materialCost = (totalWeight * wastageMultiplier / 1000) * (inputs.filamentPrice || 0);
       totalFilamentGrams = totalWeight;
       filamentSlotsBreakdown.push({
         name: 'Primary Filament',
@@ -255,50 +286,50 @@ export function calculate3DPrintCosts(inputs: CostCalculatorInputs): CostCalcula
 
   // 2. Electricity Cost Calculation
   // Power (kWh) = (Watts * Duration) / 1000
-  let totalWatts = inputs.printerWattage;
-  let effectiveDuration = inputs.printDuration;
+  let totalWatts = inputs.printerWattage || 0;
+  let effectiveDuration = inputs.printDuration || 0;
   let electricityCost = 0;
-  if (isResin && inputs.cureTimeMinutes > 0) {
+  if (isResin && (inputs.cureTimeMinutes || 0) > 0) {
     // Add UV Curing Station power (assume 60W for curing time)
-    const curingHours = inputs.cureTimeMinutes / 60;
+    const curingHours = (inputs.cureTimeMinutes || 0) / 60;
     const curingKwh = (60 * curingHours) / 1000;
-    const printerKwh = (inputs.printerWattage * inputs.printDuration) / 1000;
+    const printerKwh = ((inputs.printerWattage || 0) * (inputs.printDuration || 0)) / 1000;
     const totalKwh = printerKwh + curingKwh;
-    electricityCost = totalKwh * inputs.electricityUnitCost;
+    electricityCost = totalKwh * (inputs.electricityUnitCost || 0);
   } else {
-    electricityCost = (effectiveDuration * totalWatts * inputs.electricityUnitCost) / 1000;
+    electricityCost = (effectiveDuration * totalWatts * (inputs.electricityUnitCost || 0)) / 1000;
   }
 
   // 3. Machine Depreciation & Maintenance
-  const machineWearCost = effectiveDuration * inputs.machineWearCost;
-  const maintenanceCost = effectiveDuration * inputs.maintenanceCost;
+  const machineWearCost = effectiveDuration * (inputs.machineWearCost || 0);
+  const maintenanceCost = effectiveDuration * (inputs.maintenanceCost || 0);
   const machineCost = machineWearCost + maintenanceCost;
 
   // 4. Labour Cost (Separated into Fixed Setup vs Variable Per Unit)
   // Fixed setup (design + slicing) amortizes over batch quantity
-  const fixedLabourHours = inputs.designTime + inputs.slicingTime;
-  const setupLabourCost = fixedLabourHours * inputs.labourRate;
+  const fixedLabourHours = (inputs.designTime || 0) + (inputs.slicingTime || 0);
+  const setupLabourCost = fixedLabourHours * (inputs.labourRate || 0);
 
   // Variable labour (post processing + painting + packing) scales with quantity
-  const variableLabourHours = inputs.postProcessingTime + inputs.paintingTime + inputs.packingTime;
-  const variableLabourCost = variableLabourHours * inputs.labourRate;
+  const variableLabourHours = (inputs.postProcessingTime || 0) + (inputs.paintingTime || 0) + (inputs.packingTime || 0);
+  const variableLabourCost = variableLabourHours * (inputs.labourRate || 0);
 
   const labourCost = setupLabourCost + (variableLabourCost * qty);
 
   // 5. Extra Materials & Packaging Cost (Scaled by batch quantity)
   const extraMaterialPerUnit =
-    inputs.paintCost +
-    inputs.glueCost +
-    inputs.sandpaperCost +
-    inputs.screwsMagnetsCost +
-    inputs.packagingBoxCost +
-    inputs.bubbleWrapCost +
-    inputs.labelStickerCost +
-    inputs.courierHandlingCost;
+    (inputs.paintCost || 0) +
+    (inputs.glueCost || 0) +
+    (inputs.sandpaperCost || 0) +
+    (inputs.screwsMagnetsCost || 0) +
+    (inputs.packagingBoxCost || inputs.packingMaterialsCost || 0) +
+    (inputs.bubbleWrapCost || 0) +
+    (inputs.labelStickerCost || 0) +
+    (inputs.courierHandlingCost || inputs.shippingCost || 0);
   const extraMaterialCost = extraMaterialPerUnit * qty;
 
   // 6. Custom Accessories
-  const customCostTotal = inputs.customCosts.reduce((acc, curr) => acc + curr.cost, 0) * qty;
+  const customCostTotal = (inputs.customCosts || []).reduce((acc, curr) => acc + (curr.cost || 0), 0) * qty;
 
   // 7. Total Production Cost (For the full batch)
   // Variable costs scale by qty, fixed costs stay fixed
@@ -308,28 +339,34 @@ export function calculate3DPrintCosts(inputs: CostCalculatorInputs): CostCalcula
     machineCost +
     variableLabourCost +
     extraMaterialPerUnit +
-    (inputs.customCosts.reduce((acc, curr) => acc + curr.cost, 0));
+    ((inputs.customCosts || []).reduce((acc, curr) => acc + (curr.cost || 0), 0));
 
-  const totalProductionCost = (totalVariableCostPerUnit * qty) + setupLabourCost + inputs.miscellaneousCost;
+  const totalProductionCost = (totalVariableCostPerUnit * qty) + setupLabourCost + (inputs.miscellaneousCost || 0);
   const unitProductionCost = totalProductionCost / qty;
 
   // 8. Profit Calculation
-  const profitAmount = totalProductionCost * (inputs.profitMargin / 100);
+  const profitMargin = inputs.profitMargin ?? inputs.profitMarginPercentage ?? 0;
+  const profitAmount = totalProductionCost * (profitMargin / 100);
 
   // 9. Business Overheads & Merchant Fees
+  const platformComm = inputs.platformCommission ?? inputs.transactionFeePercentage ?? 0;
+  const paymentGw = inputs.paymentGateway || 0;
+  const marketing = inputs.marketingCost || 0;
+  const gstRate = inputs.gst ?? inputs.gstPercentage ?? 0;
+
   const overheadsBase = totalProductionCost + profitAmount;
-  const platformCommissionAmount = overheadsBase * (inputs.platformCommission / 100);
-  const paymentGatewayAmount = overheadsBase * (inputs.paymentGateway / 100);
-  const marketingCostAmount = overheadsBase * (inputs.marketingCost / 100);
+  const platformCommissionAmount = overheadsBase * (platformComm / 100);
+  const paymentGatewayAmount = overheadsBase * (paymentGw / 100);
+  const marketingCostAmount = overheadsBase * (marketing / 100);
   const businessOverhead = platformCommissionAmount + paymentGatewayAmount + marketingCostAmount;
 
   // 10. Suggested Selling Price before GST & Taxes
   const subtotalBeforeGst = overheadsBase + businessOverhead;
-  const gstAmount = subtotalBeforeGst * (inputs.gst / 100);
+  const gstAmount = subtotalBeforeGst * (gstRate / 100);
   const suggestedSellingPrice = subtotalBeforeGst + gstAmount;
 
   // 11. Discount Deductions
-  const discountAmount = suggestedSellingPrice * (inputs.discount / 100);
+  const discountAmount = suggestedSellingPrice * ((inputs.discount || 0) / 100);
   const finalSellingPrice = Math.max(suggestedSellingPrice - discountAmount, 0);
 
   // Unit metrics for batch
@@ -346,20 +383,20 @@ export function calculate3DPrintCosts(inputs: CostCalculatorInputs): CostCalcula
   // 13. Smart Pricing Tiers (Minimum, Recommended, Premium)
   // Minimum: 0% profit margin
   const minBase = totalProductionCost;
-  const minOverheads = minBase * ((inputs.platformCommission + inputs.paymentGateway + inputs.marketingCost) / 100);
+  const minOverheads = minBase * (((inputs.platformCommission || 0) + (inputs.paymentGateway || 0) + (inputs.marketingCost || 0)) / 100);
   const minSubtotal = minBase + minOverheads;
-  const minSellingPrice = minSubtotal + (minSubtotal * (inputs.gst / 100));
+  const minSellingPrice = minSubtotal + (minSubtotal * ((inputs.gst || 0) / 100));
 
   // Recommended: User's set profit margin
   const recSellingPrice = finalSellingPrice;
 
   // Premium: Higher profit margin (e.g. 55% or 1.6x)
-  const premiumMargin = Math.max(inputs.profitMargin * 1.5, 50);
+  const premiumMargin = Math.max((inputs.profitMargin || 0) * 1.5, 50);
   const premiumProfit = totalProductionCost * (premiumMargin / 100);
   const premiumBase = totalProductionCost + premiumProfit;
-  const premiumOverheads = premiumBase * ((inputs.platformCommission + inputs.paymentGateway + inputs.marketingCost) / 100);
+  const premiumOverheads = premiumBase * (((inputs.platformCommission || 0) + (inputs.paymentGateway || 0) + (inputs.marketingCost || 0)) / 100);
   const premiumSubtotal = premiumBase + premiumOverheads;
-  const premiumSellingPrice = premiumSubtotal + (premiumSubtotal * (inputs.gst / 100));
+  const premiumSellingPrice = premiumSubtotal + (premiumSubtotal * ((inputs.gst || 0) / 100));
 
   // 14. Psychological / Charm Pricing
   const rounded49 = Math.max(Math.round((unitSellingPrice - 49) / 100) * 100 + 49, 49);
@@ -461,6 +498,11 @@ export function calculate3DPrintCosts(inputs: CostCalculatorInputs): CostCalcula
     rounded49,
     rounded99,
     rounded95,
-    roi
+    roi,
+    powerCost: electricityCost,
+    totalCost: totalProductionCost,
+    sellingPrice: finalSellingPrice,
+    costPerUnit: unitProductionCost,
+    resinConsumablesCost
   };
 }

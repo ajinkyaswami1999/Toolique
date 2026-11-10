@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
 import {
-  QrCode, Upload, Copy, Check, RotateCcw, ExternalLink,
+  QrCode, Copy, Check, RotateCcw, ExternalLink,
   Camera, Video, Link as LinkIcon, CreditCard,
   MapPin, Calendar, Download,
   Sparkles, AlertCircle, Eye, EyeOff, History, Trash2
@@ -289,11 +292,9 @@ export default function QRScannerImage() {
   const [isTorchOn, setIsTorchOn] = useState<boolean>(false);
 
   // UI helpers
-  const [copied, setCopied] = useState<boolean>(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [scanHistory, setScanHistory] = useState<ScanHistoryItem[]>([]);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   // References
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -306,10 +307,7 @@ export default function QRScannerImage() {
   const copyToClipboard = (text: string, fieldId: string = 'main') => {
     if (!text) return;
     navigator.clipboard.writeText(text);
-    if (fieldId === 'main') {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } else {
+    if (fieldId !== 'main') {
       setCopiedField(fieldId);
       setTimeout(() => setCopiedField(null), 2000);
     }
@@ -729,64 +727,45 @@ export default function QRScannerImage() {
         <div className="lg:col-span-7 space-y-5">
           {/* TAB 1: UPLOAD & DRAG DROP */}
           {activeTab === 'upload' && (
-            <div
-              onDragOver={(e) => {
-                e.preventDefault();
-                setIsDragging(true);
-              }}
-              onDragLeave={() => setIsDragging(false)}
-              onDrop={(e) => {
-                e.preventDefault();
-                setIsDragging(false);
-                const file = e.dataTransfer.files?.[0];
-                if (file) processImageFile(file);
-              }}
-              className={`p-8 rounded-3xl border-2 border-dashed transition-all duration-300 flex flex-col items-center justify-center min-h-[380px] bg-white dark:bg-zinc-900 ${
-                isDragging
-                  ? 'border-indigo-500 bg-indigo-50/20 dark:bg-indigo-950/20'
-                  : 'border-zinc-300 dark:border-zinc-800 hover:border-indigo-400'
-              }`}
-            >
-              <input
-                type="file"
-                id="qr-file-input"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) processImageFile(file);
-                }}
-              />
-
+            <div>
               {!imageSrc ? (
-                <label htmlFor="qr-file-input" className="flex flex-col items-center cursor-pointer text-center space-y-4">
-                  <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-inner">
-                    <Upload className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-sm text-zinc-900 dark:text-white">
-                      Drop an image here or <span className="text-indigo-600 dark:text-indigo-400 underline">Browse Files</span>
-                    </h4>
-                    <p className="text-xs text-zinc-450 dark:text-zinc-500 mt-1">
-                      Supports PNG, JPG, JPEG, WebP, SVG, and screenshot paste (<kbd className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-[10px] font-mono">Ctrl + V</kbd>)
-                    </p>
-                  </div>
-                </label>
+                <FileDropzone
+                  accept="image/*"
+                  onFilesSelected={(files) => {
+                    const file = files[0];
+                    if (file) processImageFile(file);
+                  }}
+                  title="Drop an image here or browse files"
+                  description="Supports PNG, JPG, JPEG, WebP, SVG, and screenshot paste (Ctrl + V)"
+                  colorTheme="indigo"
+                />
               ) : (
-                <div className="w-full space-y-4 flex flex-col items-center">
-                  <div className="flex items-center justify-between w-full px-2 text-xs font-bold text-zinc-500 border-b border-zinc-100 dark:border-zinc-800 pb-2">
-                    <span className="truncate max-w-xs">{fileName || 'Loaded Image'}</span>
-                    <label htmlFor="qr-file-input" className="text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer">
-                      Upload Another
-                    </label>
-                  </div>
+                <div className="p-8 rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xs">
+                  <input
+                    type="file"
+                    id="qr-file-input"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) processImageFile(file);
+                    }}
+                  />
+                  <div className="w-full space-y-4 flex flex-col items-center">
+                    <div className="flex items-center justify-between w-full px-2 text-xs font-bold text-zinc-500 border-b border-zinc-100 dark:border-zinc-800 pb-2">
+                      <span className="truncate max-w-xs">{fileName || 'Loaded Image'}</span>
+                      <label htmlFor="qr-file-input" className="text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer">
+                        Upload Another
+                      </label>
+                    </div>
 
-                  {/* Image Preview with Bounding Box Overlay */}
-                  <div className="relative max-w-full rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-950/5 p-2 flex items-center justify-center">
-                    <canvas
-                      ref={visualCanvasRef}
-                      className="max-h-[320px] max-w-full object-contain rounded-xl"
-                    />
+                    {/* Image Preview with Bounding Box Overlay */}
+                    <div className="relative max-w-full rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-950/5 p-2 flex items-center justify-center">
+                      <canvas
+                        ref={visualCanvasRef}
+                        className="max-h-[320px] max-w-full object-contain rounded-xl"
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -977,13 +956,10 @@ export default function QRScannerImage() {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => copyToClipboard(parsedResult.raw, 'main')}
-                  className="px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold hover:bg-indigo-100 transition flex items-center gap-1.5 cursor-pointer"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy All'}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <CopyButton text={parsedResult.raw} label="Copy All" />
+                  <ShareWhatsApp text={parsedResult.raw} />
+                </div>
               </div>
 
               {/* 1. UPI PAYMENT CARD */}

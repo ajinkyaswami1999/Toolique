@@ -1,7 +1,9 @@
 import { 
-  Cpu, Eye, EyeOff, ShieldCheck, Check, Copy, Printer, Download
+  Cpu, Eye, EyeOff, ShieldCheck, Printer, Download
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
+import { downloadPdfReport } from '../utils/pdf/reportGenerator';
 
 import { useState, useEffect, useMemo } from 'react';
 
@@ -63,10 +65,6 @@ export default function JWTDecoder() {
   // Compare Mode State
   const [tokenA, setTokenA] = useState<string>(SAMPLE_JWT_HS256);
   const [tokenB, setTokenB] = useState<string>(SAMPLE_JWT_RS256);
-
-  // Copy status indicators
-  const [copiedToken, setCopiedToken] = useState<boolean>(false);
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
 
   // Helper Base64url Encoder/Decoders
   const base64UrlEncode = (str: string) => {
@@ -407,20 +405,16 @@ export default function JWTDecoder() {
   }, [tokenInput]);
 
   // --- Exporters ---
-  const copyReport = () => {
-    if (!tokenStructure) return;
-    const text = `JWT Audit Debug Report (Toolique)
+  const getReportText = () => {
+    if (!tokenStructure) return '';
+    return `JWT Audit Debug Report (Toolique)
 ----------------------------------------------
 Header          : ${JSON.stringify(tokenStructure.header, null, 2)}
 Algorithm       : ${tokenStructure.header?.alg || 'none'}
-Expiration      : ${new Date(tokenStructure.payload?.exp * 1000).toLocaleString('en-IN')}
+Expiration      : ${tokenStructure.payload?.exp ? new Date(tokenStructure.payload.exp * 1000).toLocaleString('en-IN') : 'None'}
 ----------------------------------------------
 Security Score  : ${securityAnalysis?.score || 0} / 100
 Issues Detected : ${securityAnalysis?.issues.length || 0}`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
   };
 
   const handlePrint = () => {
@@ -450,28 +444,43 @@ Issues Detected : ${securityAnalysis?.issues.length || 0}`;
   };
 
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFillColor(15, 23, 42); // slate-900 theme color
-    doc.rect(0, 0, 210, 38, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text('JWT COMPILATION AUDIT REPORT', 15, 22);
-    doc.setFontSize(10);
-    doc.text('Decoded Payload and Cryptographic Signature Claims — Toolique.in', 15, 30);
-
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(12);
-    doc.text('Token Headers metadata', 15, 52);
-    doc.setFontSize(9);
-    doc.text(JSON.stringify(tokenStructure?.header || {}, null, 2), 15, 60);
-
-    doc.setFontSize(12);
-    doc.text('Decoded Payload claims', 15, 110);
-    doc.setFontSize(9);
-    doc.text(JSON.stringify(tokenStructure?.payload || {}, null, 2), 15, 118);
-
-    doc.save(`JWT_Debug_Sheet_${Date.now()}.pdf`);
+    if (!tokenStructure) return;
+    downloadPdfReport({
+      title: 'JWT Security & Claims Audit Report',
+      category: 'Developer & Security Tools',
+      project: 'Toolique Dev Studio',
+      theme: 'indigo',
+      summaryCards: [
+        { label: 'Algorithm', value: tokenStructure.header?.alg || 'None' },
+        { label: 'Security Score', value: `${securityAnalysis?.score || 0} / 100` },
+        { label: 'Status', value: tokenStructure.payload?.exp && tokenStructure.payload.exp < Math.floor(Date.now() / 1000) ? 'Expired' : 'Active / Valid' },
+        { label: 'Token Length', value: `${tokenInput.length} chars` }
+      ],
+      tables: [
+        {
+          title: 'Header & Security Parameters',
+          headers: ['Property', 'Value'],
+          rows: [
+            ['Algorithm (alg)', tokenStructure.header?.alg || 'none'],
+            ['Type (typ)', tokenStructure.header?.typ || 'JWT'],
+            ['Key ID (kid)', tokenStructure.header?.kid || 'N/A'],
+            ['Security Grade', `${securityAnalysis?.score || 0} / 100 (${securityAnalysis?.issues.length || 0} alerts)`]
+          ]
+        },
+        {
+          title: 'Payload Claims Breakdown',
+          headers: ['Claim', 'Value'],
+          rows: Object.entries(tokenStructure.payload || {}).map(([k, v]) => [
+            k,
+            typeof v === 'object' ? JSON.stringify(v) : String(v)
+          ])
+        }
+      ],
+      disclaimers: [
+        'JWT tokens and cryptographic secrets are analyzed 100% in local browser memory.',
+        'Zero token payloads or secrets are transmitted to external servers.'
+      ]
+    });
   };
 
   return (
@@ -740,16 +749,7 @@ Issues Detected : ${securityAnalysis?.issues.length || 0}`;
           <div className="lg:col-span-7 p-6 rounded-3xl bg-zinc-950 text-white shadow-xl space-y-4 font-mono">
             <div className="flex justify-between items-center border-b pb-2">
               <span className="text-[10px] font-bold text-teal-300 uppercase block">Live Generated Token Output</span>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(generatedJWT);
-                  setCopiedToken(true);
-                  setTimeout(() => setCopiedToken(false), 2000);
-                }}
-                className="text-xs text-zinc-350 hover:text-white"
-              >
-                {copiedToken ? 'Copied' : 'Copy'}
-              </button>
+              <CopyButton text={generatedJWT} label="Copy" className="text-xs py-1 px-2.5" />
             </div>
             <div className="text-xs break-all leading-normal select-all">
               {generatedJWT}
@@ -871,26 +871,21 @@ Issues Detected : ${securityAnalysis?.issues.length || 0}`;
       <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
         <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b pb-2">Export Debug Audits</h3>
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={copyReport}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50"
-          >
-            {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedReport ? 'Report Copied' : 'Copy Debug Summary'}</span>
-          </button>
+          <CopyButton text={getReportText()} label="Copy Debug Summary" />
+          <ShareWhatsApp text={getReportText()} />
           <button
             onClick={handlePrint}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50"
+            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             <span>Print Debug Sheet</span>
           </button>
           <button
             onClick={handleDownloadPDF}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50"
+            className="px-4 py-2 bg-indigo-650 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Download PDF Report</span>
+            <span>Download Branded PDF</span>
           </button>
         </div>
       </div>

@@ -139,23 +139,16 @@ Grievance Officer: Designated under Section 13 of the DPDP Act.`;
   return (
     <div className="space-y-6">
       {/* Banner */}
-      <div className="bg-gradient-to-r from-red-500/10 via-amber-500/10 to-blue-500/10 border border-red-500/20 dark:border-red-500/30 rounded-2xl p-5 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 bg-red-600 text-white rounded-xl shadow-md shrink-0">
-              <ShieldAlert className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                DPDP Data Breach Risk & Statutory Notice Generator
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 border border-red-300 dark:border-red-800">
-                  Section 8(6) & Section 33
-                </span>
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                Evaluate personal data breach severity, simulate Section 33 statutory financial penalty liability (up to ₹250 Crores), and generate mandatory notifications for the Data Protection Board of India (DPBI) and affected Data Principals.
-              </p>
-            </div>
+      <div className="bg-gradient-to-r from-red-500/10 via-amber-500/10 to-blue-500/10 border border-red-500/20 dark:border-red-500/30 rounded-2xl p-4 shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-500/20 flex items-center gap-1.5">
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>DPDP Act Section 8(6) &amp; Section 33 Liability Modeler</span>
+            </span>
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 border border-red-300 dark:border-red-800">
+              Statutory DPBI Notice Format
+            </span>
           </div>
         </div>
       </div>

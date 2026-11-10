@@ -1,11 +1,12 @@
 import { useState, useMemo } from 'react';
 import {
-  Compass, Copy, Check, RotateCcw,
+  Compass, RotateCcw,
   Layers, ShieldCheck, AlertTriangle, CheckCircle2,
   FileSpreadsheet, FileText, Info, Wrench, Grid,
   Eye, Sparkles, Building2
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp, UnitSwitcher } from '../components/common';
 import * as XLSX from 'xlsx';
 
 // ============================================================================
@@ -313,7 +314,6 @@ export default function StaircaseCalculator() {
   const [hoveredStep, setHoveredStep] = useState<number | null>(null);
   const [showBlueprintGrid, setShowBlueprintGrid] = useState<boolean>(true);
   const [showHeadroomRay, setShowHeadroomRay] = useState<boolean>(true);
-  const [copied, setCopied] = useState<boolean>(false);
 
   // Active Building Code rules
   const activeCode = BUILDING_CODES[selectedCode];
@@ -685,8 +685,8 @@ export default function StaircaseCalculator() {
     applyPreset('indian_res_10ft');
   };
 
-  const copyReport = () => {
-    const reportText = `=====================================================
+  const getReportText = () => {
+    return `=====================================================
 TOOLIQUE STAIRCASE GEOMETRY & COMPLIANCE REPORT
 Generated: ${new Date().toLocaleDateString()} | Unit: ${unit.toUpperCase()}
 =====================================================
@@ -737,114 +737,113 @@ Generated: ${new Date().toLocaleDateString()} | Unit: ${unit.toUpperCase()}
 =====================================================
 Calculated with Toolique India Staircase Studio.
 Complies with NBC 2016 / IRC / IBC / UK Part K.`;
-
-    navigator.clipboard.writeText(reportText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
   };
 
-  // PDF Export
+  const getCutListText = () => {
+    return geo.stepPoints.map(p => `Step ${p.stepNum}: Rise=${geo.actualRiserMm.toFixed(1)}mm, Y=${p.stepRiseY.toFixed(1)}mm, X=${p.stepRunX.toFixed(1)}mm`).join('\n');
+  };
+
+  // Standardized Branded PDF Export (Pillar 2)
   const exportPDF = () => {
-    const doc = new jsPDF();
-    const margin = 14;
-    let y = 18;
-
-    // Header
-    doc.setFillColor(79, 70, 229);
-    doc.rect(0, 0, 210, 24, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('TOOLIQUE ARCHITECTURAL STAIRCASE REPORT', margin, 12);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Generated: ${new Date().toLocaleDateString()} | Code: ${activeCode.name}`, margin, 18);
-
-    y = 34;
-    doc.setTextColor(30, 41, 59);
-
-    // Section 1: Core Geometry
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. STAIRCASE GEOMETRIC DIMENSIONS', margin, y);
-    y += 6;
-
-    const geoData = [
-      ['Configuration Type', stairType.toUpperCase()],
-      ['Total Floor Rise (H)', `${formatDim(totalRiseMm, unit)} (${(totalRiseMm / 304.8).toFixed(2)} ft)`],
-      ['Number of Risers', `${geo.numRisers} Risers`],
-      ['Actual Riser Height (R)', `${formatDim(geo.actualRiserMm, unit)} (${toFractionInches(geo.actualRiserMm / 25.4)})`],
-      ['Number of Treads', `${geo.numTreads} Treads`],
-      ['Actual Tread Depth (T)', `${formatDim(geo.actualTreadMm, unit)} (${toFractionInches(geo.actualTreadMm / 25.4)})`],
-      ['Total Horizontal Run', `${formatDim(geo.totalRunMm, unit)} (${(geo.totalRunMm / 304.8).toFixed(2)} ft)`],
-      ['Stringer Hypotenuse', `${formatDim(geo.stringerLengthMm, unit)} (${(geo.stringerLengthMm / 304.8).toFixed(2)} ft)`],
-      ['Stair Incline Pitch', `${geo.pitchAngleDeg.toFixed(1)}°`],
-      ['Headroom Clearance', `${formatDim(geo.headroomClearanceMm, unit)} (${geo.headroomPass ? 'PASS' : 'FAIL'})`],
-      ['Blondel Index (2R+T)', `${formatDim(geo.blondelMm, unit)} (Score: ${geo.comfortScorePct}%)`]
+    const geoRows = [
+      { param: 'Configuration Architecture', value: stairType.toUpperCase(), note: 'Structural Form' },
+      { param: 'Total Floor Rise (H)', value: `${formatDim(totalRiseMm, unit)} (${(totalRiseMm / 304.8).toFixed(2)} ft)`, note: 'Floor to finished floor' },
+      { param: 'Number of Risers', value: `${geo.numRisers} Risers`, note: 'Even rise distribution' },
+      { param: 'Actual Riser Height (R)', value: `${formatDim(geo.actualRiserMm, unit)} (${toFractionInches(geo.actualRiserMm / 25.4)})`, note: 'Vertical rise / step' },
+      { param: 'Number of Treads', value: `${geo.numTreads} Treads`, note: 'Going steps' },
+      { param: 'Actual Tread Depth (T)', value: `${formatDim(geo.actualTreadMm, unit)} (${toFractionInches(geo.actualTreadMm / 25.4)})`, note: 'Horizontal going' },
+      { param: 'Total Horizontal Run', value: `${formatDim(geo.totalRunMm, unit)} (${(geo.totalRunMm / 304.8).toFixed(2)} ft)`, note: 'Floor footprint run' },
+      { param: 'Stringer Hypotenuse', value: `${formatDim(geo.stringerLengthMm, unit)} (${(geo.stringerLengthMm / 304.8).toFixed(2)} ft)`, note: 'Incline length' },
+      { param: 'Stair Pitch Angle', value: `${geo.pitchAngleDeg.toFixed(1)}°`, note: geo.pitchAngleDeg <= 38 ? 'Ideal Walkable' : 'Steep' },
+      { param: 'Continuous Headroom Clearance', value: formatDim(geo.headroomClearanceMm, unit), note: geo.headroomPass ? 'PASS' : 'VIOLATION' },
+      { param: "Blondel's Index (2R+T)", value: `${formatDim(geo.blondelMm, unit)} (${geo.comfortScorePct}% Score)`, note: 'Ideal: 600 - 640 mm' },
     ];
 
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    geoData.forEach(([label, val]) => {
-      doc.setFont('helvetica', 'bold');
-      doc.text(label, margin, y);
-      doc.setFont('helvetica', 'normal');
-      doc.text(val, margin + 70, y);
-      y += 5;
-    });
+    const codeRows = compliance.checks.slice(0, 8).map(c => ({
+      rule: c.name,
+      status: c.passed ? 'PASSED' : 'VIOLATION',
+      actual: c.actual,
+      limit: c.limit
+    }));
 
-    // Section 2: Code Compliance
-    y += 4;
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('2. BUILDING CODE COMPLIANCE AUDIT', margin, y);
-    y += 6;
-
-    compliance.checks.slice(0, 6).forEach((c) => {
-      doc.setFontSize(8.5);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(c.passed ? 22 : 220, c.passed ? 101 : 38, c.passed ? 52 : 38);
-      doc.text(`[${c.passed ? 'PASS' : 'FAIL'}] ${c.name}:`, margin, y);
-      doc.setTextColor(51, 65, 85);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Actual: ${c.actual} | Limit: ${c.limit}`, margin + 65, y);
-      y += 5;
-    });
-
-    // Section 3: Material Takeoff (BOQ)
-    y += 4;
-    doc.setTextColor(30, 41, 59);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3. MATERIAL ESTIMATOR & BILL OF QUANTITIES (RCC)', margin, y);
-    y += 6;
-
-    const boqData = [
-      ['Total Concrete Volume', `${boq.totalConcreteM3} m³ (${boq.totalConcreteCuFt} cu.ft)`],
-      ['Cement Bags (50kg)', `${boq.cementBags} Bags (M20 Grade)`],
-      ['Fine Sand (River/M-Sand)', `${boq.sandM3} m³ (${boq.sandTons} Tonnes)`],
-      ['20mm Coarse Aggregate', `${boq.aggregateM3} m³ (${boq.aggregateTons} Tonnes)`],
-      ['Steel Rebar (Fe500)', `${boq.rebarKg} kg`],
-      ['Formwork Shuttering Ply', `${boq.totalFormworkM2} m² (${boq.totalFormworkSqFt} sq.ft)`],
-      ['Granite / Tile Cladding', `${boq.totalCladdingM2} m² (+10% wastage)`],
-      ['Total Estimated Cost', `${currencySymbol}${boq.totalRccCost.toLocaleString()}`]
+    const boqRows = [
+      { item: 'Total Concrete Volume', qty: `${boq.totalConcreteM3} m³ (${boq.totalConcreteCuFt} cu.ft)`, rate: 'Grade M20/M25', cost: `₹${(boq.totalConcreteM3 * 4500).toLocaleString('en-IN')}` },
+      { item: 'Cement (50kg Bags)', qty: `${boq.cementBags} Bags`, rate: 'OPC / PPC 53', cost: `₹${(boq.cementBags * 380).toLocaleString('en-IN')}` },
+      { item: 'River Sand / M-Sand', qty: `${boq.sandM3} m³ (${boq.sandTons} MT)`, rate: 'Zone II', cost: `₹${(boq.sandM3 * 1800).toLocaleString('en-IN')}` },
+      { item: '20mm Coarse Aggregate', qty: `${boq.aggregateM3} m³ (${boq.aggregateTons} MT)`, rate: 'Graded Blue Metal', cost: `₹${(boq.aggregateM3 * 1400).toLocaleString('en-IN')}` },
+      { item: 'Steel Rebar (Fe500D)', qty: `${boq.rebarKg} kg`, rate: 'TMT Reinforcement', cost: `₹${(boq.rebarKg * 68).toLocaleString('en-IN')}` },
+      { item: 'Shuttering / Formwork Ply', qty: `${boq.totalFormworkM2} m² (${boq.totalFormworkSqFt} sq.ft)`, rate: 'Film-Faced Shuttering', cost: `₹${(boq.totalFormworkM2 * 450).toLocaleString('en-IN')}` },
+      { item: 'Tread & Riser Cladding Finish', qty: `${boq.totalCladdingM2} m²`, rate: 'Granite / Tiles (+10%)', cost: `₹${(boq.totalCladdingM2 * 1200).toLocaleString('en-IN')}` },
     ];
 
-    doc.setFontSize(9);
-    boqData.forEach(([label, val]) => {
-      doc.setFont('helvetica', 'bold');
-      doc.text(label, margin, y);
-      doc.setFont('helvetica', 'normal');
-      doc.text(val, margin + 70, y);
-      y += 5;
+    downloadPdfReport({
+      title: 'Architectural Staircase Engineering Report',
+      subtitle: `Form: ${stairType.replace('_', ' ').toUpperCase()} | Standard: ${activeCode.name} | Unit: ${unit.toUpperCase()}`,
+      category: 'civil',
+      complianceBadge: activeCode.name,
+      referenceId: `STR-${Date.now().toString().slice(-6)}`,
+      theme: 'brand',
+      project: {
+        projectName: 'Staircase Geometry & Engineering Schedule',
+        notes: `Total Rise: ${formatDim(totalRiseMm, unit)} | Pitch: ${geo.pitchAngleDeg.toFixed(1)}° | Score: ${geo.comfortScorePct}%`
+      },
+      kpis: [
+        { label: 'Actual Riser (R)', value: formatDim(geo.actualRiserMm, unit), highlight: true },
+        { label: 'Actual Tread (T)', value: formatDim(geo.actualTreadMm, unit) },
+        { label: 'Stair Pitch', value: `${geo.pitchAngleDeg.toFixed(1)}°` },
+        { label: 'Comfort Score', value: `${geo.comfortScorePct}%`, highlight: true }
+      ],
+      parameters: [
+        { label: 'Building Code Standard', value: activeCode.name },
+        { label: 'Stair Configuration', value: stairType.toUpperCase() },
+        { label: 'Total Floor Rise', value: formatDim(totalRiseMm, unit) },
+        { label: 'Clear Stairway Width', value: formatDim(stairWidthMm, unit) },
+        { label: 'Ceiling Opening Length', value: formatDim(ceilingOpenMm, unit) },
+        { label: 'Upper Slab Thickness', value: formatDim(slabThickMm, unit) },
+      ],
+      tables: [
+        {
+          title: '1. Geometric Dimensions & Stairway Parameters',
+          columns: [
+            { header: 'Parameter', dataKey: 'param' },
+            { header: 'Dimension', dataKey: 'value', align: 'right' as const },
+            { header: 'Design Note', dataKey: 'note' }
+          ],
+          rows: geoRows
+        },
+        {
+          title: '2. Building Code Compliance Audit',
+          columns: [
+            { header: 'Code Requirement', dataKey: 'rule' },
+            { header: 'Audit Status', dataKey: 'status' },
+            { header: 'Actual Value', dataKey: 'actual' },
+            { header: 'Prescribed Code Limit', dataKey: 'limit' }
+          ],
+          rows: codeRows
+        },
+        {
+          title: '3. Bill of Quantities (RCC & Finishing Materials)',
+          columns: [
+            { header: 'Item Description', dataKey: 'item' },
+            { header: 'Estimated Quantum', dataKey: 'qty' },
+            { header: 'Specification Rate', dataKey: 'rate' },
+            { header: 'Budget (INR)', dataKey: 'cost', align: 'right' as const }
+          ],
+          rows: boqRows,
+          totalsRow: [
+            { dataKey: 'item', value: 'Total Estimated Cost' },
+            { dataKey: 'cost', value: `${currencySymbol}${boq.totalRccCost.toLocaleString('en-IN')}` }
+          ]
+        }
+      ],
+      disclaimers: [
+        'Calculated in accordance with NBC 2016 / IRC / IBC / UK Part K staircase safety standards.',
+        'Headroom clearance must be maintained perpendicularly from the pitch line to the overhead obstruction.',
+        'Carpenter stringer cut cuts must deduct finished tread plank thickness from the bottom riser cut.'
+      ],
+      includeSignoff: true,
+      fileName: `Staircase-Engineering-Report-${Date.now()}.pdf`
     });
-
-    // Footer
-    doc.setFontSize(7.5);
-    doc.setTextColor(148, 163, 184);
-    doc.text('Toolique India Engineering Studio • Conforms to NBC 2016 / IRC 2024 / UK Part K Standards', margin, 285);
-
-    doc.save(`Staircase-Engineering-Report-${Date.now()}.pdf`);
   };
 
   // Excel Export
@@ -922,14 +921,8 @@ Complies with NBC 2016 / IRC / IBC / UK Part K.`;
 
           {/* Quick Export & Reset Buttons */}
           <div className="flex flex-wrap items-center gap-2">
-            <button
-              onClick={copyReport}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 text-xs font-bold transition shadow-xs cursor-pointer"
-              title="Copy Summary Report"
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? 'Copied!' : 'Copy'}</span>
-            </button>
+            <CopyButton text={getReportText} label="Copy" copiedLabel="Copied!" size="xs" variant="secondary" />
+            <ShareWhatsApp text={getReportText} label="WhatsApp" size="xs" variant="solid" />
 
             <button
               onClick={exportPDF}
@@ -988,21 +981,18 @@ Complies with NBC 2016 / IRC / IBC / UK Part K.`;
             <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1">
               Unit System
             </label>
-            <div className="grid grid-cols-5 gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800/80 text-[11px] font-bold">
-              {(['mm', 'cm', 'm', 'in', 'ft'] as UnitType[]).map((u) => (
-                <button
-                  key={u}
-                  onClick={() => setUnit(u)}
-                  className={`py-1 rounded-lg transition-all ${
-                    unit === u
-                      ? 'bg-white dark:bg-zinc-700 text-indigo-600 dark:text-indigo-400 shadow-xs'
-                      : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
-                  }`}
-                >
-                  {u}
-                </button>
-              ))}
-            </div>
+            <UnitSwitcher<UnitType>
+              value={unit}
+              onChange={setUnit}
+              options={[
+                { id: 'mm', label: 'mm', shortLabel: 'mm' },
+                { id: 'cm', label: 'cm', shortLabel: 'cm' },
+                { id: 'm', label: 'm', shortLabel: 'm' },
+                { id: 'in', label: 'in', shortLabel: 'in' },
+                { id: 'ft', label: 'ft', shortLabel: 'ft' },
+              ]}
+              size="xs"
+            />
           </div>
 
           {/* Staircase Type */}
@@ -1866,17 +1856,7 @@ Complies with NBC 2016 / IRC / IBC / UK Part K.`;
                   </p>
                 </div>
 
-                <button
-                  onClick={() => {
-                    const cutText = geo.stepPoints.map(p => `Step ${p.stepNum}: Rise=${geo.actualRiserMm.toFixed(1)}mm, Y=${p.stepRiseY.toFixed(1)}mm, X=${p.stepRunX.toFixed(1)}mm`).join('\n');
-                    navigator.clipboard.writeText(cutText);
-                    setCopied(true);
-                    setTimeout(() => setCopied(false), 2000);
-                  }}
-                  className="px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-xs font-bold text-zinc-700 dark:text-zinc-200 transition"
-                >
-                  {copied ? 'Copied Cut-List!' : 'Copy Cut-List'}
-                </button>
+                <CopyButton text={getCutListText} label="Copy Cut-List" copiedLabel="Copied Cut-List!" size="xs" variant="secondary" />
               </div>
 
               {/* Essential Carpentry Guidelines */}

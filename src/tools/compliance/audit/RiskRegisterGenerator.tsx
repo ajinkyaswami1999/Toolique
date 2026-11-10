@@ -154,20 +154,13 @@ ${risks.map((r, idx) => `[Risk #${idx + 1}]
 
   return (
     <div className="space-y-8">
-      {/* Top Banner */}
-      <div className="saas-card bg-purple-500/5 dark:bg-purple-500/10 border-purple-500/20 p-5 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-purple-500/20 text-purple-700 dark:text-purple-300 rounded-lg">
-            <ShieldAlert className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-              Enterprise 5×5 Risk Matrix & Statutory Risk Register Studio
-            </h2>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Score inherent and residual risks under ISO 31000 / ISO 27005 and generate printable risk registers with heatmaps.
-            </p>
-          </div>
+      {/* Top Action Toolbar */}
+      <div className="saas-card bg-purple-500/5 dark:bg-purple-500/10 border-purple-500/20 p-4 rounded-xl flex flex-wrap items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-500/20 flex items-center gap-1.5">
+            <ShieldAlert className="w-3.5 h-3.5" />
+            <span>ISO 31000 / ISO 27005 5&times;5 Risk Matrix</span>
+          </span>
         </div>
         <div className="flex items-center gap-2 text-xs font-medium text-purple-700 dark:text-purple-300 bg-purple-500/10 px-3 py-1.5 rounded-full border border-purple-500/20">
           <ShieldCheck className="w-4 h-4" />

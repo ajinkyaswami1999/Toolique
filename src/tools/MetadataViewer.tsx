@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { FileDropzone } from '../components/common/FileDropzone';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
+import { downloadPdfReport } from '../utils/pdf/reportGenerator';
 import {
   Table,
   Upload,
@@ -7,9 +11,7 @@ import {
   MapPin,
   Sliders,
   ShieldAlert,
-  CheckCircle2,
   Download,
-  Copy,
   Trash2,
   FolderUp,
   ExternalLink,
@@ -570,9 +572,7 @@ export default function MetadataViewer() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<'overview' | 'exposure' | 'camera' | 'gps' | 'raw'>('overview');
   const [searchTag, setSearchTag] = useState<string>('');
-  const [copySuccess, setCopySuccess] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const folderInputRef = useRef<HTMLInputElement>(null);
@@ -878,10 +878,10 @@ export default function MetadataViewer() {
     setError(null);
   };
 
-  // Copy structured metadata summary to clipboard
-  const handleCopySummary = () => {
-    if (!activeItem) return;
-    const lines = [
+  // Get structured metadata summary text
+  const getMetadataSummary = () => {
+    if (!activeItem) return '';
+    return [
       `=== Image Metadata Report: ${activeItem.name} ===`,
       `Dimensions: ${activeItem.width} × ${activeItem.height} px (${activeItem.aspectRatio}, ${activeItem.megapixels})`,
       `File Size: ${activeItem.sizeFormatted} (${activeItem.sizeBytes} bytes)`,
@@ -898,10 +898,52 @@ export default function MetadataViewer() {
       `\n--- Full Tag Dump ---`,
       ...Object.entries(activeItem.rawTags).map(([k, v]) => `${k}: ${v}`),
     ].filter(Boolean).join('\n');
+  };
 
-    navigator.clipboard.writeText(lines);
-    setCopySuccess(true);
-    setTimeout(() => setCopySuccess(false), 2000);
+  // Download metadata as Branded PDF Report
+  const handleDownloadPdf = () => {
+    if (!activeItem) return;
+    downloadPdfReport({
+      title: `EXIF Metadata Report: ${activeItem.name}`,
+      category: 'Digital Imaging & Forensics',
+      project: 'Toolique Image Studio',
+      theme: 'indigo',
+      summaryCards: [
+        { label: 'File Size', value: activeItem.sizeFormatted },
+        { label: 'Dimensions', value: `${activeItem.width} × ${activeItem.height} px` },
+        { label: 'Camera / Sensor', value: activeItem.make ? `${activeItem.make} ${activeItem.model || ''}` : 'N/A' },
+        { label: 'Location / GPS', value: activeItem.hasGps ? `${activeItem.latitude?.toFixed(4)}, ${activeItem.longitude?.toFixed(4)}` : 'None embedded' }
+      ],
+      tables: [
+        {
+          title: 'Core Image Attributes',
+          headers: ['Property', 'Value'],
+          rows: [
+            ['File Name', activeItem.name],
+            ['MIME Type', activeItem.mimeType],
+            ['Aspect Ratio', activeItem.aspectRatio],
+            ['Megapixels', activeItem.megapixels],
+            ['Date Created', activeItem.dateTimeOriginal || 'N/A'],
+            ['Camera Make & Model', activeItem.make ? `${activeItem.make} ${activeItem.model || ''}` : 'N/A'],
+            ['Lens Model', activeItem.lensModel || 'N/A'],
+            ['Focal Length', activeItem.focalLength || 'N/A'],
+            ['Aperture', activeItem.fNumber || 'N/A'],
+            ['Shutter Speed', activeItem.exposureTime || 'N/A'],
+            ['ISO Speed', activeItem.iso ? String(activeItem.iso) : 'N/A'],
+            ['GPS Coordinates', activeItem.hasGps ? `${activeItem.latitude}, ${activeItem.longitude} (Alt: ${activeItem.altitude || 'N/A'})` : 'N/A']
+          ]
+        },
+        ...(Object.keys(activeItem.rawTags).length > 0 ? [{
+          title: 'Raw EXIF Header Dump',
+          headers: ['EXIF Tag', 'Value'],
+          rows: Object.entries(activeItem.rawTags).slice(0, 40).map(([k, v]) => [k, String(v)])
+        }] : [])
+      ],
+      disclaimers: [
+        'EXIF metadata is parsed locally on your device directly from binary tags.',
+        'Zero images or metadata are uploaded to external servers.'
+      ]
+    });
   };
 
   // Download metadata as JSON file
@@ -1031,35 +1073,7 @@ export default function MetadataViewer() {
 
       {/* State A: Zero Images Loaded - Drag & Drop Intake */}
       {images.length === 0 ? (
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragOver(true);
-          }}
-          onDragLeave={() => setIsDragOver(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragOver(false);
-            if (e.dataTransfer.files) {
-              handleIncomingFiles(e.dataTransfer.files);
-            }
-          }}
-          className={`relative border-2 border-dashed rounded-3xl p-10 md:p-14 text-center transition-all duration-300 ${
-            isDragOver
-              ? 'border-indigo-500 bg-indigo-500/5 dark:bg-indigo-950/20 scale-[0.99]'
-              : 'border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-900/50 hover:border-zinc-400 dark:hover:border-zinc-700'
-          }`}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              if (e.target.files) handleIncomingFiles(e.target.files);
-            }}
-          />
+        <div className="space-y-4">
           <input
             ref={folderInputRef}
             type="file"
@@ -1073,60 +1087,33 @@ export default function MetadataViewer() {
             }}
           />
 
-          <div className="max-w-xl mx-auto flex flex-col items-center">
-            <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 mb-5 shadow-inner">
-              <Camera className="w-10 h-10" />
-            </div>
+          <FileDropzone
+            accept="image/*"
+            multiple
+            onFilesSelected={(files) => handleIncomingFiles(files)}
+            title="Drop Photos to Inspect EXIF & Metadata"
+            description="Read camera makes, lens models, shutter speed, aperture, ISO, and embedded GPS geolocation headers locally in your browser. Supports JPG, PNG, WEBP, TIFF, HEIC • Paste (Ctrl+V)"
+            colorTheme="indigo"
+          />
 
-            <h2 className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-              Drop Photos to Inspect EXIF & Metadata
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 mb-6">
-              Read camera makes, lens models, shutter speed, aperture, ISO, and embedded GPS geolocation headers locally in your browser.
-            </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => folderInputRef.current?.click()}
+              className="px-4 py-2.5 rounded-xl border border-zinc-250 dark:border-zinc-750 bg-zinc-100 dark:bg-zinc-800/80 text-zinc-800 dark:text-zinc-200 font-semibold text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition flex items-center gap-2 cursor-pointer"
+            >
+              <FolderUp className="w-4 h-4" />
+              <span>Upload Folder</span>
+            </button>
 
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="saas-button-primary px-5 py-2.5 flex items-center gap-2"
-              >
-                <Upload className="w-4 h-4" />
-                <span>Select Images</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => folderInputRef.current?.click()}
-                className="px-4 py-2.5 rounded-xl border border-zinc-250 dark:border-zinc-750 bg-zinc-100 dark:bg-zinc-800/80 text-zinc-800 dark:text-zinc-200 font-semibold text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 transition flex items-center gap-2"
-              >
-                <FolderUp className="w-4 h-4" />
-                <span>Upload Folder</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleLoadSampleImages}
-                className="px-4 py-2.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 font-semibold text-sm hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition flex items-center gap-2"
-              >
-                <Sparkles className="w-4 h-4 text-indigo-500" />
-                <span>Load 3 Pro Samples</span>
-              </button>
-            </div>
-
-            <div className="mt-6 flex items-center gap-4 text-xs text-zinc-400 dark:text-zinc-500">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                Paste (Ctrl+V)
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-indigo-500" />
-                GPS Geolocation Decoder
-              </span>
-              <span>•</span>
-              <span>100% Client-Side Privacy</span>
-            </div>
+            <button
+              type="button"
+              onClick={handleLoadSampleImages}
+              className="px-4 py-2.5 rounded-xl border border-indigo-200 dark:border-indigo-900/40 bg-indigo-50/50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300 font-semibold text-sm hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition flex items-center gap-2 cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-indigo-500" />
+              <span>Load 3 Pro Samples</span>
+            </button>
           </div>
         </div>
       ) : (
@@ -1161,19 +1148,23 @@ export default function MetadataViewer() {
                 <span>Add More</span>
               </button>
 
+              <CopyButton text={getMetadataSummary()} label="Copy Summary" />
+              <ShareWhatsApp text={getMetadataSummary()} />
+
               <button
                 type="button"
-                onClick={handleCopySummary}
-                className="px-3 py-1.5 rounded-lg border border-zinc-250 dark:border-zinc-750 bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs font-semibold hover:bg-zinc-200 dark:hover:bg-zinc-700 transition flex items-center gap-1.5"
+                onClick={handleDownloadPdf}
+                className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer shadow-xs"
+                title="Download formatted PDF metadata report"
               >
-                {copySuccess ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copySuccess ? 'Copied!' : 'Copy Summary'}</span>
+                <Download className="w-3.5 h-3.5" />
+                <span>PDF Report</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleDownloadJson}
-                className="px-3 py-1.5 rounded-lg bg-zinc-800 dark:bg-zinc-700 hover:bg-zinc-900 text-white text-xs font-semibold transition flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-lg bg-zinc-800 dark:bg-zinc-700 hover:bg-zinc-900 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>JSON</span>
@@ -1182,7 +1173,7 @@ export default function MetadataViewer() {
               <button
                 type="button"
                 onClick={handleDownloadCsv}
-                className="px-3 py-1.5 rounded-lg bg-zinc-800 dark:bg-zinc-700 hover:bg-zinc-900 text-white text-xs font-semibold transition flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-lg bg-zinc-800 dark:bg-zinc-700 hover:bg-zinc-900 text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>CSV</span>

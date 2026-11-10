@@ -84,10 +84,42 @@ Calculated according to Real Estate Regulation Act (RERA) criteria.`;
     setLoadingRatio(25);
   };
 
+  const spaceEfficiency = results.superBuiltupArea > 0
+    ? Math.round((results.reraCarpet / results.superBuiltupArea) * 100)
+    : 0;
+
   const areaUnit = unit === 'feet' ? 'sq ft' : 'sq m';
 
+  const PRESETS = [
+    { label: '1 BHK (650 sq ft)', super: 650, carpet: 440 },
+    { label: '2 BHK (1,100 sq ft)', super: 1100, carpet: 750 },
+    { label: '3 BHK (1,600 sq ft)', super: 1600, carpet: 1100 },
+    { label: '4 BHK (2,400 sq ft)', super: 2400, carpet: 1650 },
+  ];
+
   return (
-    <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6 text-left">
+    <div className="max-w-4xl mx-auto space-y-6 text-left">
+      {/* Quick Presets Bar */}
+      <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 text-xs">
+        <span className="font-semibold text-slate-500 dark:text-slate-400">Popular Flat Presets:</span>
+        {PRESETS.map((p) => (
+          <button
+            key={p.label}
+            onClick={() => {
+              if (inputType === 'carpet') {
+                setInputValue(unit === 'feet' ? p.carpet : Math.round(p.carpet * 0.0929));
+              } else {
+                setInputValue(unit === 'feet' ? p.super : Math.round(p.super * 0.0929));
+              }
+            }}
+            className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-violet-400 text-slate-700 dark:text-slate-300 font-medium transition shadow-xs"
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
       {/* Input Panel */}
       <div className="md:col-span-7 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-4">
         <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800/60 pb-3">
@@ -280,6 +312,12 @@ Calculated according to Real Estate Regulation Act (RERA) criteria.`;
                   {results.superBuiltupArea.toLocaleString()} {areaUnit}
                 </span>
               </div>
+              <div className="flex justify-between items-center text-xs pt-2 border-t border-slate-100 dark:border-slate-800/60">
+                <span className="text-slate-500 dark:text-slate-400 font-semibold">Space Efficiency</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[11px] font-mono">
+                  {spaceEfficiency}% {spaceEfficiency >= 70 ? '(High)' : spaceEfficiency >= 60 ? '(Good)' : '(Low)'}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -289,6 +327,7 @@ Calculated according to Real Estate Regulation Act (RERA) criteria.`;
             Under RERA, developers must quote the Carpet Area instead of Super Built-Up area. Loading factor represents common amenities (lifts, staircases, lobbies) shared proportionally.
           </p>
         </div>
+      </div>
       </div>
     </div>
   );

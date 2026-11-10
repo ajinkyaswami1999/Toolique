@@ -6,7 +6,22 @@ import {
 } from 'lucide-react';
 import { getStoredRates, saveStoredRates, DEFAULT_CIVIL_RATES } from '../data/civilRatesData';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import {
+  DRY_VOLUME_FACTOR_CONCRETE,
+  CFT_PER_CUM,
+  CUM_PER_CFT,
+  CUM_PER_BRASS,
+  SQFT_PER_SQM,
+  CEMENT_BAG_VOLUME_M3,
+  CEMENT_BAG_WEIGHT_KG,
+  AGGREGATE_20MM_SPLIT,
+  AGGREGATE_10MM_SPLIT,
+  cumToCft,
+  cftToBrass,
+  wetToDryVolumeConcrete,
+  calculateCementBags,
+} from '../utils/civilMath';
 
 // Structural Elements Definition
 export type ElementType = 'slab' | 'footing' | 'column_rect' | 'column_round' | 'beam' | 'wall' | 'stairs' | 'direct';
@@ -173,12 +188,12 @@ export default function ConcreteCalculator() {
       if (directVolUnit === 'm3') {
         rawWetVolumeM3 = directVol;
       } else if (directVolUnit === 'cuft') {
-        rawWetVolumeM3 = directVol * 0.0283168;
+        rawWetVolumeM3 = directVol * CUM_PER_CFT;
       } else {
         // Brass: 1 Brass = 100 cu ft = 2.83168 m3
-        rawWetVolumeM3 = directVol * 2.83168;
+        rawWetVolumeM3 = directVol * CUM_PER_BRASS;
       }
-      shutteringAreaSqFt = rawWetVolumeM3 * 35.3147 * 0.8; // estimated
+      shutteringAreaSqFt = cumToCft(rawWetVolumeM3) * 0.8; // estimated
     } else if (unit === 'ft') {
       // Imperial Mode
       if (elementType === 'slab') {
@@ -233,23 +248,23 @@ export default function ConcreteCalculator() {
       // Metric Mode (m, cm)
       if (elementType === 'slab') {
         rawWetVolumeM3 = length * width * (thickness / 100);
-        shutteringAreaSqFt = ((length * width) + (2 * (length + width) * (thickness / 100))) * 10.7639;
+        shutteringAreaSqFt = ((length * width) + (2 * (length + width) * (thickness / 100))) * SQFT_PER_SQM;
       } else if (elementType === 'footing') {
         rawWetVolumeM3 = length * width * depth * quantity;
-        shutteringAreaSqFt = 2 * (length + width) * depth * quantity * 10.7639;
+        shutteringAreaSqFt = 2 * (length + width) * depth * quantity * SQFT_PER_SQM;
       } else if (elementType === 'column_rect') {
         rawWetVolumeM3 = (length / 100) * (width / 100) * height * quantity;
-        shutteringAreaSqFt = 2 * ((length / 100) + (width / 100)) * height * quantity * 10.7639;
+        shutteringAreaSqFt = 2 * ((length / 100) + (width / 100)) * height * quantity * SQFT_PER_SQM;
       } else if (elementType === 'column_round') {
         const r_m = (diameter / 100) / 2;
         rawWetVolumeM3 = Math.PI * Math.pow(r_m, 2) * height * quantity;
-        shutteringAreaSqFt = Math.PI * (diameter / 100) * height * quantity * 10.7639;
+        shutteringAreaSqFt = Math.PI * (diameter / 100) * height * quantity * SQFT_PER_SQM;
       } else if (elementType === 'beam') {
         rawWetVolumeM3 = length * (width / 100) * (depth / 100) * quantity;
-        shutteringAreaSqFt = ((2 * (depth / 100)) + (width / 100)) * length * quantity * 10.7639;
+        shutteringAreaSqFt = ((2 * (depth / 100)) + (width / 100)) * length * quantity * SQFT_PER_SQM;
       } else if (elementType === 'wall') {
         rawWetVolumeM3 = length * height * (thickness / 100) * quantity;
-        shutteringAreaSqFt = 2 * (length * height) * quantity * 10.7639;
+        shutteringAreaSqFt = 2 * (length * height) * quantity * SQFT_PER_SQM;
       } else if (elementType === 'stairs') {
         const w_m = width;
         const t_m = stepTread / 100;
@@ -261,18 +276,18 @@ export default function ConcreteCalculator() {
         const inclinedFlightLength = Math.sqrt(Math.pow(totalHorizontal, 2) + Math.pow(totalVertical, 2));
         const waistVol = inclinedFlightLength * w_m * waist_m;
         rawWetVolumeM3 = (stepsVol + waistVol) * quantity;
-        shutteringAreaSqFt = ((inclinedFlightLength * w_m) + (stepCount * r_m * w_m)) * 10.7639;
+        shutteringAreaSqFt = ((inclinedFlightLength * w_m) + (stepCount * r_m * w_m)) * SQFT_PER_SQM;
       }
     }
 
     // 2. Add Wastage Buffer
     const wetVolumeM3 = rawWetVolumeM3 * (1 + wastage / 100);
-    const wetVolumeCuFt = wetVolumeM3 * 35.3147;
-    const wetVolumeBrass = wetVolumeCuFt / 100;
+    const wetVolumeCuFt = cumToCft(wetVolumeM3);
+    const wetVolumeBrass = cftToBrass(wetVolumeCuFt);
 
-    // 3. Dry Volume (1.54 shrinkage multiplier for voids compensation)
-    const dryVolumeM3 = wetVolumeM3 * 1.54;
-    const dryVolumeCuFt = dryVolumeM3 * 35.3147;
+    // 3. Dry Volume (1.54 shrinkage multiplier for voids compensation per IS 456)
+    const dryVolumeM3 = wetToDryVolumeConcrete(wetVolumeM3);
+    const dryVolumeCuFt = cumToCft(dryVolumeM3);
 
     // 4. Mix Proportion Partitions
     const ratio = MIX_RATIOS[mix] || MIX_RATIOS.M20;
@@ -284,23 +299,23 @@ export default function ConcreteCalculator() {
 
     // 5. Quantity Breakdown
     // 1 Bag Cement = 50kg = 0.03472 m3
-    const cementBags = Math.ceil(cementVolM3 / 0.03472);
-    const cementWeightKg = cementBags * 50;
+    const cementBags = calculateCementBags(cementVolM3);
+    const cementWeightKg = cementBags * CEMENT_BAG_WEIGHT_KG;
     const cementWeightTonnes = cementWeightKg / 1000;
 
     // Sand: CuFt, Brass, and Weight in Tonnes (density ~1600 kg/m3 = 1.6 tonnes/m3)
-    const sandCuFt = Number((sandVolM3 * 35.3147).toFixed(2));
-    const sandBrass = Number((sandCuFt / 100).toFixed(2));
+    const sandCuFt = Number(cumToCft(sandVolM3).toFixed(2));
+    const sandBrass = Number(cftToBrass(sandCuFt).toFixed(2));
     const sandTonnes = Number((sandVolM3 * 1.6).toFixed(2));
 
     // Aggregate: CuFt, Brass, and Weight in Tonnes (density ~1500 kg/m3 = 1.5 tonnes/m3)
-    const aggCuFt = Number((aggVolM3 * 35.3147).toFixed(2));
-    const aggBrass = Number((aggCuFt / 100).toFixed(2));
+    const aggCuFt = Number(cumToCft(aggVolM3).toFixed(2));
+    const aggBrass = Number(cftToBrass(aggCuFt).toFixed(2));
     const aggTonnes = Number((aggVolM3 * 1.5).toFixed(2));
 
     // Aggregate Split (60% 20mm + 40% 10mm)
-    const agg20mmCuFt = Number((aggCuFt * 0.6).toFixed(2));
-    const agg10mmCuFt = Number((aggCuFt * 0.4).toFixed(2));
+    const agg20mmCuFt = Number((aggCuFt * AGGREGATE_20MM_SPLIT).toFixed(2));
+    const agg10mmCuFt = Number((aggCuFt * AGGREGATE_10MM_SPLIT).toFixed(2));
 
     // Water Requirement (~24 liters per bag of cement)
     const waterLiters = Math.round(cementBags * ratio.waterRatio);
@@ -450,122 +465,134 @@ Calculated via Toolique Civil Engineering Studio.`;
   // Export PDF BOQ Sheet
   const handleExportPDF = () => {
     try {
-      const doc = new jsPDF();
-      const primaryColor = [79, 70, 229]; // Indigo
-      const darkColor = [24, 24, 27];
+      const materialRows = [
+        {
+          item: 'OPC / PPC Cement (50kg bags)',
+          qty: `${results.cementBags} Bags (${results.cementWeightTonnes} T)`,
+          rate: `₹${prices.cement}/bag`,
+          total: `₹${results.cementCost.toLocaleString('en-IN')}`,
+        },
+        {
+          item: 'Fine Sand (River / M-Sand)',
+          qty: `${results.sandCuFt} cu.ft (${results.sandBrass} Brass)`,
+          rate: `₹${prices.sand}/cu.ft`,
+          total: `₹${results.sandCost.toLocaleString('en-IN')}`,
+        },
+        {
+          item: 'Coarse Aggregate (10mm + 20mm)',
+          qty: `${results.aggCuFt} cu.ft (${results.aggBrass} Brass)`,
+          rate: `₹${prices.aggregate}/cu.ft`,
+          total: `₹${results.aggregateCost.toLocaleString('en-IN')}`,
+        },
+        {
+          item: 'Mixing & Curing Water',
+          qty: `~${results.waterLiters} Liters`,
+          rate: 'Standard Tanker',
+          total: `₹${results.waterCost}`,
+        },
+      ];
 
-      // Header Banner
-      doc.setFillColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.rect(0, 0, 210, 36, 'F');
-
-      doc.setTextColor(255, 255, 255);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(18);
-      doc.text('CONCRETE MATERIAL INDENT & BOQ', 14, 20);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8.5);
-      doc.text('Civil Engineering Material Quantity Takeoff & Cost Schedule', 14, 28);
-
-      // Metadata
-      doc.setTextColor(80, 80, 80);
-      doc.setFontSize(9);
-      doc.text(`Date: ${new Date().toLocaleDateString()}`, 145, 18);
-      doc.text(`Ref: CC-${Date.now().toString().slice(-6)}`, 145, 25);
-      doc.text(`Mix: ${MIX_RATIOS[mix].name}`, 145, 32);
-
-      // Project Box
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10.5);
-      doc.text('PROJECT & SPECIFICATION DETAILS', 14, 46);
-      doc.setDrawColor(220, 220, 220);
-      doc.line(14, 48, 196, 48);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8.5);
-      doc.text(`Project Name: ${projectName}`, 14, 55);
-      doc.text(`Client / Contractor: ${clientName}`, 14, 61);
-      doc.text(`Structural Member: ${elementType.toUpperCase()} (Qty: ${quantity})`, 14, 67);
-      doc.text(`Mix Grade: ${MIX_RATIOS[mix].name} (Strength: ${MIX_RATIOS[mix].strengthMpa} MPa)`, 14, 73);
-
-      doc.text(`Wet Volume: ${results.wetVolumeM3} m³ (${results.wetVolumeCuFt} cu.ft / ${results.wetVolumeBrass} Brass)`, 110, 55);
-      doc.text(`Dry Volume: ${results.dryVolumeM3} m³ (${results.dryVolumeCuFt} cu.ft)`, 110, 61);
-      doc.text(`Wastage Allowance: ${wastage}%`, 110, 67);
-      doc.text(`Shuttering Contact Area: ${results.shutteringAreaSqFt} sq.ft`, 110, 73);
-
-      // Total Value Banner
-      doc.setFillColor(245, 247, 255);
-      doc.roundedRect(14, 80, 182, 22, 2.5, 2.5, 'F');
-      doc.setDrawColor(199, 210, 254);
-      doc.roundedRect(14, 80, 182, 22, 2.5, 2.5, 'S');
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8.5);
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text('TOTAL ESTIMATED PROCUREMENT COST', 20, 88);
-      doc.setFontSize(16);
-      doc.text(`₹${results.totalCost.toLocaleString('en-IN')}`, 20, 97);
-
-      doc.setFontSize(8.5);
-      doc.setTextColor(80, 80, 80);
-      doc.text(`Materials Subtotal: ₹${results.materialSubtotal.toLocaleString('en-IN')}`, 110, 89);
-      if (includeSteel) doc.text(`Steel Reinforcement (${results.steelWeightKg} kg): ₹${results.steelCost.toLocaleString('en-IN')}`, 110, 96);
-
-      // Line Items Table
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10.5);
-      doc.text('MATERIAL INDENT SCHEDULE', 14, 112);
-      doc.line(14, 114, 196, 114);
-
-      let y = 122;
-      const drawRow = (mat: string, qtyText: string, unitRate: string, total: string, isHeader = false) => {
-        if (isHeader) {
-          doc.setFillColor(240, 240, 245);
-          doc.rect(14, y - 5, 182, 7, 'F');
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(8);
-          doc.setTextColor(80, 80, 80);
-        } else {
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(8.5);
-          doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-        }
-        doc.text(mat, 16, y);
-        doc.text(qtyText, 95, y);
-        doc.text(unitRate, 140, y);
-        doc.text(total, 175, y);
-        if (!isHeader) {
-          doc.setDrawColor(240, 240, 240);
-          doc.line(14, y + 2, 196, y + 2);
-        }
-        y += 8;
-      };
-
-      drawRow('MATERIAL DESCRIPTION', 'QUANTITY / PACKAGING', 'UNIT RATE', 'TOTAL', true);
-      drawRow('OPC / PPC Cement (50kg bags)', `${results.cementBags} Bags (${results.cementWeightTonnes} T)`, `₹${prices.cement}/bag`, `₹${results.cementCost.toLocaleString('en-IN')}`);
-      drawRow('Fine Sand (River / M-Sand)', `${results.sandCuFt} cu.ft (${results.sandBrass} Brass)`, `₹${prices.sand}/cu.ft`, `₹${results.sandCost.toLocaleString('en-IN')}`);
-      drawRow('Coarse Aggregate (10mm + 20mm)', `${results.aggCuFt} cu.ft (${results.aggBrass} Brass)`, `₹${prices.aggregate}/cu.ft`, `₹${results.aggregateCost.toLocaleString('en-IN')}`);
-      drawRow('Mixing & Curing Water', `~${results.waterLiters} Liters`, 'Standard Tanker', `₹${results.waterCost}`);
-      
       if (includeAdmixture) {
-        drawRow('Integral Waterproofing Admixture', `${results.admixtureLiters} Liters`, `₹${admixtureRate}/L`, `₹${results.admixtureCost.toLocaleString('en-IN')}`);
+        materialRows.push({
+          item: 'Integral Waterproofing Admixture',
+          qty: `${results.admixtureLiters} Liters`,
+          rate: `₹${admixtureRate}/L`,
+          total: `₹${results.admixtureCost.toLocaleString('en-IN')}`,
+        });
       }
 
       if (includeSteel) {
-        drawRow('TMT Rebar Steel (Fe500/550)', `${results.steelWeightKg} kg (${results.steelTonnes} T)`, `₹${prices.steel}/kg`, `₹${results.steelCost.toLocaleString('en-IN')}`);
-        drawRow('GI Binding Wire', `${results.bindingWireKg} kg`, 'Included', '-');
+        materialRows.push(
+          {
+            item: 'TMT Rebar Steel (Fe500/550)',
+            qty: `${results.steelWeightKg} kg (${results.steelTonnes} T)`,
+            rate: `₹${prices.steel}/kg`,
+            total: `₹${results.steelCost.toLocaleString('en-IN')}`,
+          },
+          {
+            item: 'GI Binding Wire (18 Gauge)',
+            qty: `${results.bindingWireKg} kg`,
+            rate: 'Site Std',
+            total: 'Included',
+          }
+        );
       }
 
-      drawRow('Formwork / Shuttering Supply', `${results.shutteringAreaSqFt} sq.ft contact`, `₹${prices.shuttering}/sq.ft`, `₹${results.shutteringCost.toLocaleString('en-IN')}`);
+      materialRows.push({
+        item: 'Formwork / Shuttering Supply',
+        qty: `${results.shutteringAreaSqFt} sq.ft contact`,
+        rate: `₹${prices.shuttering}/sq.ft`,
+        total: `₹${results.shutteringCost.toLocaleString('en-IN')}`,
+      });
 
-      // Footer
-      doc.setFontSize(7.5);
-      doc.setTextColor(150, 150, 150);
-      doc.text('Calculated strictly as per IS 456 & IS 10262 guidelines on Toolique (www.toolique.in). All material weights are site estimates.', 14, 285);
-
-      doc.save(`Concrete_BOQ_${elementType}_${Date.now().toString().slice(-4)}.pdf`);
+      downloadPdfReport({
+        title: 'Concrete Material Indent & BOQ Schedule',
+        subtitle: 'Civil Engineering Material Quantity Takeoff & Procurement Budget',
+        category: 'civil',
+        complianceBadge: 'IS 456 & IS 10262 COMPLIANT',
+        referenceId: `CC-${Date.now().toString().slice(-6)}`,
+        theme: 'brand',
+        project: {
+          projectName: projectName || 'Residential / Commercial Structure',
+          clientName: clientName || 'Site Engineer / Contractor',
+          location: 'Site Location',
+          engineer: 'Project In-charge',
+        },
+        kpis: [
+          {
+            label: 'Total Estimated Cost',
+            value: `₹${results.totalCost.toLocaleString('en-IN')}`,
+            subtext: 'Materials, Steel & Formwork',
+            highlight: true,
+          },
+          {
+            label: 'Wet Concrete Volume',
+            value: `${results.wetVolumeM3} m³`,
+            subtext: `${results.wetVolumeCuFt} cu.ft (${results.wetVolumeBrass} Brass)`,
+          },
+          {
+            label: 'Dry Material Volume',
+            value: `${results.dryVolumeM3} m³`,
+            subtext: `1.54 Dry Factor • ${wastage}% Wastage`,
+          },
+          {
+            label: 'Shuttering Contact Area',
+            value: `${results.shutteringAreaSqFt} sq.ft`,
+            subtext: `Supply & Erection Area`,
+          },
+        ],
+        parameters: [
+          { label: 'Structural Member', value: `${elementType.toUpperCase()} (Qty: ${quantity})` },
+          { label: 'Mix Grade Design', value: `${MIX_RATIOS[mix].name} (${MIX_RATIOS[mix].strengthMpa} MPa)` },
+          { label: 'Wastage Factor', value: `${wastage}% Included` },
+          { label: 'Steel Reinforcement', value: includeSteel ? `${results.steelWeightKg} kg (${results.steelTonnes} MT)` : 'PCC (Unreinforced)' },
+          { label: 'Integral Admixture', value: includeAdmixture ? `${results.admixtureLiters} L Included` : 'None' },
+        ],
+        tables: [
+          {
+            title: 'Material Indent & Bill of Quantities',
+            badge: 'IS 10262 MIX',
+            columns: [
+              { header: 'Material Description', dataKey: 'item', width: 66 },
+              { header: 'Quantity / Packaging', dataKey: 'qty', width: 48 },
+              { header: 'Unit Rate', dataKey: 'rate', width: 34, align: 'right' },
+              { header: 'Total (₹)', dataKey: 'total', width: 34, align: 'right' },
+            ],
+            rows: materialRows,
+            totalsRow: [
+              { dataKey: 'item', value: 'TOTAL PROCUREMENT ESTIMATE' },
+              { dataKey: 'total', value: `₹${results.totalCost.toLocaleString('en-IN')}` },
+            ],
+          },
+        ],
+        disclaimers: [
+          'Calculated strictly per Indian Standards IS 456 (Code of Practice for Plain and Reinforced Concrete) and IS 10262 (Guidelines for Concrete Mix Design Proportioning).',
+          'Quantities incorporate dry mix expansion factor (1.54) and specified site wastage. Field batching by volume should account for sand bulking when river sand is damp.',
+          'Unit prices reflect stored regional benchmarks. Confirm quotes with verified ready-mix or raw material suppliers before dispatch.',
+        ],
+        includeSignoff: true,
+        fileName: `Concrete_BOQ_${elementType}_${Date.now().toString().slice(-4)}.pdf`,
+      });
     } catch (e) {
       alert('Error generating PDF: ' + e);
     }

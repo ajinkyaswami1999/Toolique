@@ -136,24 +136,17 @@ export default function PersonalDataMaskingTool() {
 
   return (
     <div className="space-y-6">
-      {/* Banner */}
-      <div className="bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-500/20 dark:border-emerald-500/30 rounded-2xl p-5 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 bg-emerald-600 text-white rounded-xl shadow-md shrink-0">
-              <Lock className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                Personal Data Masking & Anonymization Tool
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-                  Zero Server Transfer
-                </span>
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
-                Sanitize logs, databases, JSON files, or user records with statutory masking rules for Aadhaar (XXXX-XXXX-1234), PAN, phone numbers, emails, and payment cards.
-              </p>
-            </div>
+      {/* Top Action Toolbar */}
+      <div className="bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-blue-500/10 border border-emerald-500/20 dark:border-emerald-500/30 rounded-2xl p-4 shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5" />
+              <span>Statutory Masking Engine (Aadhaar &bull; PAN &bull; Card Redaction)</span>
+            </span>
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+              100% In-Browser &bull; Zero Server Transfer
+            </span>
           </div>
           <button
             onClick={() => setInputText(SAMPLE_TEXT)}

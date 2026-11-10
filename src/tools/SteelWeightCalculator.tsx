@@ -1,13 +1,14 @@
 import { useState, useMemo } from 'react';
 import {
-  Copy, Check, RotateCcw, Plus, Trash2,
-  Printer, MessageCircle,
+  RotateCcw, Plus, Trash2,
+  Printer,
   Layers, ShieldCheck, Download,
   FileText
 } from 'lucide-react';
 import { getStoredRates, saveStoredRates } from '../data/civilRatesData';
 import MaterialTrendGraph from '../components/MaterialTrendGraph';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { ShareWhatsApp, CopyButton } from '../components/common';
 
 // -------------------------------------------------------------
 // Steel Types & Grades Definitions
@@ -194,7 +195,6 @@ export default function SteelWeightCalculator() {
   const [ratePerKg, setRatePerKg] = useState<number>(() => getStoredRates().steel || 68);
   const [gstPercent, setGstPercent] = useState<number>(18); // 18% GST standard on steel in India
   const [wastageBuffer, setWastageBuffer] = useState<number>(3); // 3% cutting / scrap buffer
-  const [copied, setCopied] = useState<boolean>(false);
 
   // Shape Specific States
   const [tmtDia, setTmtDia] = useState<number>(12);
@@ -521,8 +521,8 @@ export default function SteelWeightCalculator() {
   }, [takeoffList]);
 
   // Copy Summary to Clipboard
-  const copyReport = () => {
-    const text = `*Steel Weight & Procurement Estimate (Toolique)*
+  const getCopyText = () => {
+    return `*Steel Weight & Procurement Estimate (Toolique)*
 ----------------------------------------
 *Item / Section:* ${activeCalc.specDescription}
 *Steel Grade:* ${selectedGrade.name} (${selectedGrade.standard})
@@ -536,14 +536,10 @@ export default function SteelWeightCalculator() {
 *Estimated Total Cost:* ₹${activeCalc.totalEstimatedCost.toLocaleString('en-IN')}
 ----------------------------------------
 Calculated via Toolique Steel Weight Calculator (IS 1786 / IS 2062 Compliant)`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   // WhatsApp Requisition Share
-  const handleWhatsAppShare = () => {
+  const getWhatsAppMessage = () => {
     let msg = `*🏗️ STEEL REQUISITION & CUTTING SCHEDULE*\n`;
     msg += `*Source:* Toolique Civil Engineering Suite (IS 1786 / IS 2062)\n\n`;
 
@@ -571,123 +567,91 @@ Calculated via Toolique Steel Weight Calculator (IS 1786 / IS 2062 Compliant)`;
     }
 
     msg += `\n_Generated via Toolique.in_`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    return msg;
   };
 
-  // Generate Professional PDF Steel Requisition & Cutting Schedule
+  // Generate Professional Standardized PDF Steel Requisition & Cutting Schedule (Pillar 2)
   const generatePDF = () => {
-    try {
-      const doc = new jsPDF();
-      const primaryColor = [13, 148, 136]; // Teal-600
-      const darkColor = [15, 23, 42]; // Slate-900
+    const displayKg = takeoffList.length > 0 ? takeoffSummary.totalKg : activeCalc.totalWeightKg;
+    const displayTonnes = takeoffList.length > 0 ? takeoffSummary.totalTonnes : activeCalc.totalWeightTonnes;
+    const displayCost = takeoffList.length > 0 ? takeoffSummary.totalCost : activeCalc.totalEstimatedCost;
 
-      // Header Banner
-      doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.rect(0, 0, 210, 24, 'F');
+    const rows = takeoffList.length > 0
+      ? takeoffList.map(it => ({
+          desc: it.specs,
+          length: it.lengthDisplay,
+          qty: `${it.quantity} Pcs`,
+          weight: `${it.totalWeightKg.toLocaleString()} kg`,
+          cost: `₹${it.cost.toLocaleString('en-IN')}`
+        }))
+      : [{
+          desc: activeCalc.specDescription,
+          length: `${length} ${lengthUnit}`,
+          qty: `${activeCalc.actualQty} Pcs`,
+          weight: `${activeCalc.totalWeightKg.toLocaleString()} kg`,
+          cost: `₹${activeCalc.totalEstimatedCost.toLocaleString('en-IN')}`
+        }];
 
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(16);
-      doc.setTextColor(255, 255, 255);
-      doc.text('TOOLIQUE STRUCTURAL STEEL REQUISITION', 14, 15);
-
-      doc.setFontSize(8.5);
-      doc.setFont('helvetica', 'normal');
-      doc.text('IS 1786 / IS 2062 / IS 808 Bar Bending & Material Takeoff', 14, 21);
-
-      // Meta info
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.setFontSize(9);
-      doc.text(`Date: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}`, 14, 32);
-      doc.text(`Doc Ref: TMT-REQ-${Date.now().toString().slice(-6)}`, 140, 32);
-
-      // Active Section / Requisition Summary Block
-      doc.setDrawColor(204, 251, 241);
-      doc.setFillColor(240, 253, 250);
-      doc.roundedRect(14, 38, 182, 38, 3, 3, 'FD');
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(9.5);
-      doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-      doc.text('TOTAL STEEL WEIGHT & COST SUMMARY', 20, 46);
-
-      const displayKg = takeoffList.length > 0 ? takeoffSummary.totalKg : activeCalc.totalWeightKg;
-      const displayTonnes = takeoffList.length > 0 ? takeoffSummary.totalTonnes : activeCalc.totalWeightTonnes;
-      const displayCost = takeoffList.length > 0 ? takeoffSummary.totalCost : activeCalc.totalEstimatedCost;
-
-      doc.setFontSize(18);
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text(`${displayKg.toLocaleString()} kg (${displayTonnes} MT)`, 20, 56);
-
-      doc.setFontSize(9);
-      doc.setTextColor(70, 70, 70);
-      doc.text(`Estimated Procurement Budget: ₹${displayCost.toLocaleString('en-IN')}`, 20, 64);
-      doc.text(`Standard Steel Base Rate: ₹${ratePerKg}/kg | GST: ${gstPercent}% | Buffer: ${wastageBuffer}%`, 20, 70);
-
-      // Items Table
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10.5);
-      doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
-      doc.text('STEEL SECTION CUTTING & INDENT SCHEDULE', 14, 86);
-      doc.line(14, 88, 196, 88);
-
-      let y = 96;
-      const drawRow = (desc: string, lengthText: string, qtyText: string, weightText: string, costText: string, isHeader = false) => {
-        if (isHeader) {
-          doc.setFillColor(240, 240, 245);
-          doc.rect(14, y - 5, 182, 7, 'F');
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(8);
-          doc.setTextColor(80, 80, 80);
-        } else {
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(8.5);
-          doc.setTextColor(darkColor[0], darkColor[1], darkColor[2]);
+    downloadPdfReport({
+      title: 'Structural Steel Requisition & Cutting Schedule',
+      subtitle: 'Compliant with IS 1786, IS 2062, IS 808 Bar Bending & Material Takeoff',
+      category: 'civil',
+      complianceBadge: 'IS 1786 & IS 2062 COMPLIANT',
+      referenceId: `TMT-${Date.now().toString().slice(-6)}`,
+      theme: 'emerald',
+      project: {
+        projectName: 'Steel Reinforcement & Structural Takeoff',
+        clientName: 'Owner / Builder',
+        notes: `Base Rate: ₹${ratePerKg}/kg | GST: ${gstPercent}% | Buffer: ${wastageBuffer}%`
+      },
+      parameters: [
+        { label: 'Steel Grade', value: selectedGrade.name },
+        { label: 'Base Rate', value: `₹${ratePerKg} / kg` },
+        { label: 'Wastage Buffer', value: `${wastageBuffer}%` },
+        { label: 'GST Tax', value: `${gstPercent}%` }
+      ],
+      kpis: [
+        { label: 'Total Steel Weight', value: `${displayKg.toLocaleString()} kg`, subtext: `${displayTonnes} MT`, highlight: true },
+        { label: 'Quintals', value: `${(displayKg / 100).toFixed(2)} Q`, subtext: `${(displayKg * 2.20462).toFixed(0)} lbs` },
+        { label: 'Total Estimated Cost', value: `₹${displayCost.toLocaleString('en-IN')}`, subtext: `incl. GST & Buffer`, highlight: true },
+        { label: 'Schedule Items', value: `${takeoffList.length > 0 ? takeoffList.length : 1} Line Items`, subtext: 'Ready for Purchase Order' }
+      ],
+      tables: [
+        {
+          title: 'Steel Section Cutting & Indent Schedule',
+          badge: 'IS 1786 / IS 2062',
+          columns: [
+            { header: 'Section Specification', dataKey: 'desc', width: 62 },
+            { header: 'Length', dataKey: 'length', width: 28 },
+            { header: 'Quantity', dataKey: 'qty', width: 26, align: 'right' },
+            { header: 'Weight (kg)', dataKey: 'weight', width: 32, align: 'right' },
+            { header: 'Est. Cost (₹)', dataKey: 'cost', width: 34, align: 'right' }
+          ],
+          rows,
+          totalsRow: [
+            { dataKey: 'desc', value: 'TOTAL STEEL INDENT' },
+            { dataKey: 'weight', value: `${displayKg.toLocaleString()} kg` },
+            { dataKey: 'cost', value: `₹${displayCost.toLocaleString('en-IN')}` }
+          ]
         }
-        doc.text(desc, 16, y);
-        doc.text(lengthText, 85, y);
-        doc.text(qtyText, 115, y);
-        doc.text(weightText, 140, y);
-        doc.text(costText, 172, y);
-
-        if (!isHeader) {
-          doc.setDrawColor(240, 240, 240);
-          doc.line(14, y + 2, 196, y + 2);
+      ],
+      sections: [
+        {
+          title: 'Indian Standard Tolerances & Rolling Margins (IS 1786)',
+          bullets: [
+            'Nominal Mass Tolerance: ±7% for dia <= 10mm; ±5% for dia 10mm to 16mm; ±3% for dia > 16mm.',
+            'Standard Bar Length: 12 meters (40 feet) per commercial rolling mill bundle.',
+            'Bending Deductions per SP 34: 45° bend = 1d deduction; 90° bend = 2d deduction; 135° hook = 3d deduction.'
+          ]
         }
-        y += 8;
-      };
-
-      drawRow('SECTION SPECIFICATION', 'LENGTH', 'QTY (PCS)', 'WEIGHT (KG)', 'EST. COST (₹)', true);
-
-      if (takeoffList.length > 0) {
-        takeoffList.forEach((it) => {
-          drawRow(
-            it.specs.substring(0, 32),
-            it.lengthDisplay,
-            `${it.quantity}`,
-            `${it.totalWeightKg.toLocaleString()} kg`,
-            `₹${it.cost.toLocaleString('en-IN')}`
-          );
-        });
-      } else {
-        drawRow(
-          activeCalc.specDescription.substring(0, 32),
-          `${length} ${lengthUnit}`,
-          `${activeCalc.actualQty}`,
-          `${activeCalc.totalWeightKg.toLocaleString()} kg`,
-          `₹${activeCalc.totalEstimatedCost.toLocaleString('en-IN')}`
-        );
-      }
-
-      // Footer Notes
-      doc.setFontSize(7.5);
-      doc.setTextColor(140, 140, 140);
-      doc.text('Calculated strictly as per Indian Standards (IS 1786 for TMT, IS 2062 for Mild Steel, IS 808 for Structural Sections).', 14, 280);
-      doc.text('Toolique Civil & Structural Suite • www.toolique.in', 14, 285);
-
-      doc.save(`Steel_Requisition_${Date.now().toString().slice(-4)}.pdf`);
-    } catch (e) {
-      alert('Error generating Steel Requisition PDF: ' + e);
-    }
+      ],
+      disclaimers: [
+        'Calculated strictly as per Indian Standards (IS 1786 for TMT rebars, IS 2062 for structural steel, IS 808 for structural sections).',
+        'Rolling margins and transport spillage must be verified against actual factory test certificates (MTC).'
+      ],
+      includeSignoff: true,
+      fileName: `Steel_Requisition_${Date.now().toString().slice(-4)}.pdf`
+    });
   };
 
   const handleReset = () => {
@@ -724,13 +688,12 @@ Calculated via Toolique Steel Weight Calculator (IS 1786 / IS 2062 Compliant)`;
             <Printer className="w-3.5 h-3.5" />
             <span>PDF Indent</span>
           </button>
-          <button
-            onClick={handleWhatsAppShare}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition shadow-sm"
-          >
-            <MessageCircle className="w-3.5 h-3.5" />
-            <span>Share Requisition</span>
-          </button>
+          <ShareWhatsApp
+            text={getWhatsAppMessage}
+            label="Share Requisition"
+            variant="solid"
+            size="sm"
+          />
           <button
             onClick={handleReset}
             className="p-1.5 rounded-xl text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
@@ -1523,13 +1486,13 @@ Calculated via Toolique Steel Weight Calculator (IS 1786 / IS 2062 Compliant)`;
                 </div>
               </div>
 
-              <button
-                onClick={copyReport}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition shadow-sm"
-              >
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied' : 'Copy'}</span>
-              </button>
+              <CopyButton
+                text={getCopyText}
+                label="Copy"
+                copiedLabel="Copied"
+                variant="primary"
+                size="xs"
+              />
             </div>
 
             {/* Metric Conversions Pills */}

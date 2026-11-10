@@ -1,9 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import { 
-  Compass, Plus, Trash2, Clipboard, Check, RotateCcw, 
+  Compass, Plus, Trash2, RotateCcw, 
   Download, Grid, Eye, Save, DollarSign, Building
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp, UnitSwitcher } from '../components/common';
 
 // --- Type Definitions ---
 type UnitSystem = 'feet' | 'meters';
@@ -116,7 +117,6 @@ export default function RoomAreaCalculator() {
   ]);
 
   // UI state
-  const [copied, setCopied] = useState<boolean>(false);
   const [savedPlans, setSavedPlans] = useState<SavedFloorPlan[]>([]);
   const [planName, setPlanName] = useState<string>('My 2 BHK Floor Plan');
 
@@ -213,8 +213,8 @@ export default function RoomAreaCalculator() {
     registrationRatePercent, includeGst
   ]);
 
-  // Copy Full RERA & Budget Report
-  const handleCopyReport = () => {
+  // Detailed Text Report for Copy & WhatsApp
+  const getReportText = () => {
     let report = `RERA FLOOR PLAN AREA CERTIFICATE & VALUATION\n`;
     report += `==============================================\n`;
     report += `Project Plan: ${planName}\n`;
@@ -244,73 +244,109 @@ export default function RoomAreaCalculator() {
     report += `• Interior Fit-out & Turnkey Budget: ₹${calculations.totalInteriorFitoutCost.toLocaleString()} (@ ₹${interiorFitoutRatePerSqFt}/sq ft carpet)\n`;
     report += `==============================================\n`;
     report += `Generated on Toolique Architecture Studio.`;
-
-    navigator.clipboard.writeText(report);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    return report;
   };
 
-  // Download PDF Architectural Certificate
+  // Standardized Branded PDF Architectural Certificate (Pillar 2)
   const handleDownloadPDF = () => {
-    try {
-      const doc = new jsPDF();
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(16);
-      doc.text('Toolique — RERA Area Certificate & Valuation', 14, 18);
+    const roomRows = rooms.map((r) => {
+      const areaSqFt = (r.length * r.width * (unit === 'meters' ? 10.7639 : 1)).toFixed(1);
+      const areaSqM = (Number(areaSqFt) * 0.092903).toFixed(1);
+      return {
+        room: r.name,
+        type: r.type.replace(/_/g, ' ').toUpperCase(),
+        dims: `${r.length} × ${r.width} ${unit}`,
+        sqft: `${areaSqFt} sq.ft`,
+        sqm: `${areaSqM} m²`
+      };
+    });
 
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Layout Plan: ${planName} | Date: ${new Date().toLocaleDateString('en-IN')}`, 14, 25);
+    const metricRows = [
+      { metric: 'RERA Net Usable Carpet Area', area: `${calculations.netUsableCarpetSqFt.toLocaleString()} sq.ft`, share: `${calculations.carpetEfficiencyPercent}%` },
+      { metric: 'Balconies, Verandahs & Utilities', area: `${calculations.totalBalconiesAndUtilitiesSqFt.toLocaleString()} sq.ft`, share: 'Exclusive' },
+      { metric: 'Internal & External Structural Walls', area: `${calculations.internalWallAreaSqFt.toLocaleString()} sq.ft`, share: 'Plinth' },
+      { metric: 'Total Built-up Plinth Area', area: `${calculations.builtupAreaSqFt.toLocaleString()} sq.ft`, share: '100% Plinth' },
+      { metric: `Super Built-up Area (${loadingPercentage}% Loading)`, area: `${calculations.superBuiltupAreaSqFt.toLocaleString()} sq.ft`, share: 'Saleable' }
+    ];
 
-      let y = 35;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('1. Room-by-Room Area Inventory', 14, y);
-      y += 8;
+    const financialRows = [
+      { item: 'Base Property Cost (Super Area)', rate: `₹${propertyRatePerSqFt}/sq.ft`, amount: `₹${calculations.basePropertyCost.toLocaleString('en-IN')}` },
+      { item: 'Effective Carpet Space Rate', rate: 'Derived Carpet', amount: `₹${calculations.effectiveCarpetRatePerSqFt.toLocaleString('en-IN')}/sq.ft` },
+      { item: `Government Stamp Duty (${stampDutyPercent}%)`, rate: `${stampDutyPercent}% State Levy`, amount: `₹${calculations.stampDutyAmount.toLocaleString('en-IN')}` },
+      { item: 'Registration Charges (1%)', rate: '1.0% Fixed', amount: `₹${calculations.registrationAmount.toLocaleString('en-IN')}` },
+      ...(includeGst ? [{ item: 'GST on Construction (5%)', rate: '5% RERA Affordable', amount: `₹${calculations.gstAmount.toLocaleString('en-IN')}` }] : []),
+      { item: 'Interior Fit-out & Woodwork Budget', rate: `₹${interiorFitoutRatePerSqFt}/sq.ft carpet`, amount: `₹${calculations.totalInteriorFitoutCost.toLocaleString('en-IN')}` }
+    ];
 
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      rooms.forEach((r) => {
-        const a = (r.length * r.width * (unit === 'meters' ? 10.7639 : 1)).toFixed(1);
-        doc.text(`• ${r.name}: ${r.length} x ${r.width} ${unit} (${a} sq ft) — ${r.type.replace(/_/g, ' ')}`, 16, y);
-        y += 6;
-      });
-      y += 4;
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('2. Official RERA & NBC Area Classification', 14, y);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`• RERA Net Carpet Area: ${calculations.netUsableCarpetSqFt.toLocaleString()} Sq. Ft (${(calculations.netUsableCarpetSqFt * 0.092903).toFixed(1)} Sq. M)`, 16, y); y += 6;
-      doc.text(`• Balconies, Verandahs & Utilities: ${calculations.totalBalconiesAndUtilitiesSqFt} Sq. Ft`, 16, y); y += 6;
-      doc.text(`• Internal & External Wall Thickness Area: ${calculations.internalWallAreaSqFt} Sq. Ft`, 16, y); y += 6;
-      doc.text(`• Total Built-up Area: ${calculations.builtupAreaSqFt.toLocaleString()} Sq. Ft`, 16, y); y += 6;
-      doc.text(`• Super Built-up Area (${loadingPercentage}% Loading): ${calculations.superBuiltupAreaSqFt.toLocaleString()} Sq. Ft`, 16, y); y += 6;
-      doc.text(`• Usable Carpet Efficiency: ${calculations.carpetEfficiencyPercent}%`, 16, y); y += 10;
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
-      doc.text('3. Property Valuation & Acquisition Outflow', 14, y);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10);
-      doc.text(`• Base Property Cost: INR ${calculations.basePropertyCost.toLocaleString()} (@ INR ${propertyRatePerSqFt}/sq ft)`, 16, y); y += 6;
-      doc.text(`• Effective Carpet Rate: INR ${calculations.effectiveCarpetRatePerSqFt.toLocaleString()}/sq ft usable space`, 16, y); y += 6;
-      doc.text(`• Stamp Duty (${stampDutyPercent}%) + Reg (1%): INR ${(calculations.stampDutyAmount + calculations.registrationAmount).toLocaleString()}`, 16, y); y += 6;
-      if (includeGst) {
-        doc.text(`• GST (5%): INR ${calculations.gstAmount.toLocaleString()}`, 16, y); y += 6;
-      }
-      doc.text(`• Total Acquisition Outflow: INR ${calculations.totalPurchaseOutflow.toLocaleString()}`, 16, y); y += 6;
-      doc.text(`• Estimated Interior Fit-out Budget: INR ${calculations.totalInteriorFitoutCost.toLocaleString()}`, 16, y);
-
-      doc.save(`rera-area-plan-${planName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
-    } catch (e) {
-      console.error(e);
-    }
+    downloadPdfReport({
+      title: 'RERA Area Certificate & Property Valuation',
+      subtitle: `Layout: ${planName} | Efficiency: ${calculations.carpetEfficiencyPercent}% | Rooms: ${rooms.length}`,
+      category: 'interior',
+      complianceBadge: 'RERA 2016 & NBC 2016',
+      referenceId: `RERA-${Date.now().toString().slice(-6)}`,
+      theme: 'brand',
+      project: {
+        projectName: planName,
+        clientName: 'Property Buyer / Developer',
+        notes: `RERA Carpet: ${calculations.netUsableCarpetSqFt} sq.ft | Super Area: ${calculations.superBuiltupAreaSqFt} sq.ft | Loading: ${loadingPercentage}%`
+      },
+      kpis: [
+        { label: 'RERA Carpet Area', value: `${calculations.netUsableCarpetSqFt.toLocaleString()} sq.ft`, highlight: true },
+        { label: 'Super Built-up', value: `${calculations.superBuiltupAreaSqFt.toLocaleString()} sq.ft` },
+        { label: 'Total Purchase Outflow', value: `₹${calculations.totalPurchaseOutflow.toLocaleString('en-IN')}`, highlight: true },
+        { label: 'Carpet Efficiency', value: `${calculations.carpetEfficiencyPercent}%` }
+      ],
+      parameters: [
+        { label: 'Unit System', value: unit.toUpperCase() },
+        { label: 'Rooms Count', value: `${rooms.length} Spaces` },
+        { label: 'Wall Thickness', value: `${wallThicknessInches} inches` },
+        { label: 'Common Loading', value: `${loadingPercentage}%` },
+        { label: 'Property Rate', value: `₹${propertyRatePerSqFt}/sq.ft` },
+        { label: 'Interior Rate', value: `₹${interiorFitoutRatePerSqFt}/sq.ft carpet` }
+      ],
+      tables: [
+        {
+          title: '1. Room-by-Room Area Inventory',
+          columns: [
+            { header: 'Room Name', dataKey: 'room' },
+            { header: 'Type / Purpose', dataKey: 'type' },
+            { header: 'Dimensions', dataKey: 'dims' },
+            { header: 'Area (Sq.Ft)', dataKey: 'sqft', align: 'right' },
+            { header: 'Area (m²)', dataKey: 'sqm', align: 'right' }
+          ],
+          rows: roomRows
+        },
+        {
+          title: '2. Official RERA & NBC Area Classification',
+          columns: [
+            { header: 'Area Category', dataKey: 'metric' },
+            { header: 'Measurement (Sq.Ft)', dataKey: 'area', align: 'right' },
+            { header: 'Ratio / Classification', dataKey: 'share' }
+          ],
+          rows: metricRows
+        },
+        {
+          title: '3. Property Valuation & Acquisition Outflow',
+          columns: [
+            { header: 'Valuation Head', dataKey: 'item' },
+            { header: 'Applicable Rate', dataKey: 'rate' },
+            { header: 'Payable Amount (INR)', dataKey: 'amount', align: 'right' }
+          ],
+          rows: financialRows,
+          totalsRow: [
+            { dataKey: 'item', value: 'Total Acquisition Outflow' },
+            { dataKey: 'amount', value: `₹${calculations.totalPurchaseOutflow.toLocaleString('en-IN')}` }
+          ]
+        }
+      ],
+      disclaimers: [
+        'RERA Carpet Area is calculated strictly in accordance with Real Estate (Regulation and Development) Act, 2016.',
+        'Net usable area includes rooms and toilets but excludes external walls, common shafts, and open service verandas.',
+        'Stamp duty, registration, and statutory levies are subject to state revenue revisions.'
+      ],
+      includeSignoff: true,
+      fileName: `rera-area-plan-${planName.toLowerCase().replace(/\s+/g, '-')}.pdf`
+    });
   };
 
   // Save Plan to history
@@ -369,45 +405,24 @@ export default function RoomAreaCalculator() {
 
   return (
     <div className="space-y-8">
-      {/* HEADER CONTROLS & APARTMENT PRESETS */}
+      {/* TOP CONTROLS & APARTMENT PRESETS */}
       <div className="saas-card p-6 space-y-4 text-left">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-zinc-200/60 dark:border-zinc-800/60">
-          <div>
-            <h2 className="text-base font-black text-zinc-900 dark:text-white flex items-center gap-2">
-              <Compass className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              <span>Room Area, RERA Carpet & Layout Planning Studio</span>
-            </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium mt-0.5">
-              Multi-room architectural floor plan builder, RERA Carpet vs Built-up vs Super Built-up area breakdown & property costs
-            </p>
+        <div className="flex flex-wrap justify-between items-center gap-4 pb-4 border-b border-zinc-200/60 dark:border-zinc-800/60">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+              <Compass className="w-3.5 h-3.5" />
+              <span>RERA Carpet &amp; NBC Floor Area Standards</span>
+            </span>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Unit Switcher */}
-            <div className="flex p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl border border-zinc-200/60 dark:border-zinc-800/60">
-              <button
-                type="button"
-                onClick={() => setUnit('feet')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  unit === 'feet'
-                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
-                }`}
-              >
-                Feet (ft)
-              </button>
-              <button
-                type="button"
-                onClick={() => setUnit('meters')}
-                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                  unit === 'meters'
-                    ? 'bg-white dark:bg-zinc-800 text-indigo-600 dark:text-indigo-400 shadow-sm'
-                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'
-                }`}
-              >
-                Meters (m)
-              </button>
-            </div>
+            <UnitSwitcher<UnitSystem>
+              value={unit}
+              onChange={setUnit}
+              preset="meters-feet"
+              size="sm"
+            />
 
             <button
               type="button"
@@ -644,19 +659,13 @@ export default function RoomAreaCalculator() {
                 </span>
               </div>
 
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={handleCopyReport}
-                  className="px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-zinc-200 transition flex items-center gap-1.5 cursor-pointer"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Clipboard className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy'}</span>
-                </button>
+              <div className="flex items-center gap-2">
+                <CopyButton text={getReportText} label="Copy Certificate" copiedLabel="Copied" size="xs" variant="secondary" />
+                <ShareWhatsApp text={getReportText} label="WhatsApp" size="xs" variant="solid" />
                 <button
                   type="button"
                   onClick={handleDownloadPDF}
-                  className="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-600/20"
+                  className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-indigo-600/20"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>PDF Report</span>

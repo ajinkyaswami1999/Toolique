@@ -372,13 +372,10 @@ export default function InflationRateCalculator() {
       <div className="p-4 sm:p-5 rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400">
-              <Flame className="w-5 h-5" />
+            <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-500/20 flex items-center gap-1.5">
+              <Flame className="w-3.5 h-3.5" />
+              <span>CPI &amp; Laspeyres Price Index Standard</span>
             </span>
-            <div>
-              <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">Consumer Inflation & Purchasing Power Suite</h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">CPI Index Shifts, Laspeyres Multi-Category Baskets & Real Wage Adjustments</p>
-            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">

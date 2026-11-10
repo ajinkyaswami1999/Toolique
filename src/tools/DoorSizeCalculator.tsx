@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
 import { 
-  DoorClosed, Copy, Check, RotateCcw, Download, 
+  DoorClosed, RotateCcw, Download, 
   ShieldCheck, Accessibility, Compass, 
   Sparkles, Save, Trash2, Eye, Flame, 
   CheckCircle2, AlertTriangle
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp, UnitSwitcher } from '../components/common';
 
 // --- Type Definitions ---
 export type UnitType = 'mm' | 'cm' | 'in' | 'ft';
@@ -289,7 +290,6 @@ export default function DoorSizeCalculator() {
   const [visualizerMode, setVisualizerMode] = useState<'elevation' | 'floor_plan'>('elevation');
   const [activeTheme, setActiveTheme] = useState<VisualizerTheme>('teak_wood');
   const [activeTab, setActiveTab] = useState<'dimensions' | 'egress_code' | 'hardware' | 'schedule'>('dimensions');
-  const [copied, setCopied] = useState<boolean>(false);
 
   // 6. Door Schedule List
   const [doorSchedule, setDoorSchedule] = useState<DoorScheduleItem[]>([]);
@@ -489,10 +489,10 @@ export default function DoorSizeCalculator() {
     } catch {}
   };
 
-  // Copy Egress & Framing Schedule to Clipboard
-  const copyAudit = () => {
+  // Copy Egress & Framing Schedule to Clipboard & WhatsApp
+  const getAuditText = () => {
     const occ = OCCUPANCY_CONFIG[occupancy];
-    const text = `🚪 ARCHITECTURAL DOOR FRAMING & EGRESS AUDIT (Toolique Studio)
+    return `🚪 ARCHITECTURAL DOOR FRAMING & EGRESS AUDIT (Toolique Studio)
 --------------------------------------------------
 Door Tag / Location       : ${doorTag} (${doorLocation})
 Occupancy Classification  : ${occ.name} (${occ.codeGroup})
@@ -517,154 +517,84 @@ Door Configuration Style  : ${doorStyle.toUpperCase().replace('_', ' ')} (${door
 • Est. Leaf Weight & Hinges: ~${calculations.estimatedLeafWeightKg} kg (${calculations.recommendedHingeCount}x ${calculations.hingeSize})
 --------------------------------------------------
 Certified under NBC 2016 Part 4 Fire & Life Safety & IBC/NFPA 101 Guidelines.`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
-  // Generate PDF Architectural Door Schedule Certificate
+  // Standardized Branded PDF Door Schedule Certificate (Pillar 2)
   const generatePdfSchedule = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-
-    // Brand Header
-    doc.setFillColor(15, 23, 42); // slate-900
-    doc.rect(0, 0, pageWidth, 38, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(18);
-    doc.setFont('helvetica', 'bold');
-    doc.text('TOOLIQUE ARCHITECTURAL SUITE', 14, 18);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(203, 213, 225);
-    doc.text('Architectural Door Schedule & Egress Compliance Certificate', 14, 25);
-    doc.text(`NBC 2016 / IBC / ADA Certified | Generated: ${new Date().toLocaleDateString('en-IN')}`, 14, 31);
-
-    // Section 1: Egress & Occupancy Specifications
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(15, 23, 42);
-    doc.text('1. Occupancy & Life Safety Analysis', 14, 48);
-
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(51, 65, 85);
-
     const occ = OCCUPANCY_CONFIG[occupancy];
-    const specs = [
-      ['Current Door Tag / ID', `${doorTag} — ${doorLocation}`],
-      ['Occupancy Class', `${occ.name} (${occ.codeGroup})`],
-      ['Occupant Load Capacity', `${occupantLoad} Persons (Fire Sprinklers: ${hasSprinklers ? 'Present' : 'None'})`],
-      ['Required Egress Width', `${calculations.codeRequiredEgressWidthMm} mm (${calculations.minExitsRequired} Exit Doors Minimum)`],
-      ['ADA Accessibility Check', calculations.isAdaCompliant ? 'COMPLIANT (Passage >= 813mm / 32 in)' : 'NON-COMPLIANT'],
-      ['Panic Exit Hardware', calculations.isPanicBarRequired ? 'MANDATORY (Outward Opening Panic Bar)' : 'Standard Leverset'],
-      ['Fire Resistance Rating', fireRating]
-    ];
 
-    let yPos = 55;
-    specs.forEach(([label, value]) => {
-      doc.setFont('helvetica', 'bold');
-      doc.text(`${label}:`, 14, yPos);
-      doc.setFont('helvetica', 'normal');
-      doc.text(value, 65, yPos);
-      yPos += 5.5;
-    });
-
-    // Section 2: Framing & Dimensional Matrix
-    yPos += 3;
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(15, 23, 42);
-    doc.text('2. Architectural Framing & Structural Opening Schedule', 14, yPos);
-
-    yPos += 6;
-    doc.setFillColor(241, 245, 249);
-    doc.rect(14, yPos, pageWidth - 28, 7, 'F');
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(30, 41, 59);
-    doc.text('Dimension Parameter', 18, yPos + 5);
-    doc.text('Metric (mm)', 105, yPos + 5);
-    doc.text('Imperial (Inches / Feet)', pageWidth - 20, yPos + 5, { align: 'right' });
-
-    yPos += 7;
     const framingRows = [
-      ['Clear Usable Opening (Width × Height)', `${calculations.providedClearWidthMm} × ${calculations.providedClearHeightMm} mm`, `${(calculations.providedClearWidthMm / 25.4).toFixed(1)}" × ${(calculations.providedClearHeightMm / 25.4).toFixed(1)}"`],
-      ['Door Shutter Leaf Dimensions', `${calculations.shutterWidthMm} × ${calculations.shutterHeightMm} mm`, `${(calculations.shutterWidthMm / 25.4).toFixed(1)}" × ${(calculations.shutterHeightMm / 25.4).toFixed(1)}"`],
-      ['Frame Outer Size (Chowkhat Outer)', `${calculations.frameOuterWidthMm} × ${calculations.frameOuterHeightMm} mm`, `${(calculations.frameOuterWidthMm / 25.4).toFixed(1)}" × ${(calculations.frameOuterHeightMm / 25.4).toFixed(1)}"`],
-      ['Structural Rough Opening (Masonry / Lintel)', `${calculations.roughOpeningWidthMm} × ${calculations.roughOpeningHeightMm} mm`, `${(calculations.roughOpeningWidthMm / 25.4).toFixed(1)}" × ${(calculations.roughOpeningHeightMm / 25.4).toFixed(1)}"`],
-      ['Chowkhat Frame & Rebate', `${frameThicknessMm}mm Frame, ${rebateDepthMm}mm Rebate`, `${(frameThicknessMm / 25.4).toFixed(2)}" / ${(rebateDepthMm / 25.4).toFixed(2)}"`],
-      ['Hardware Specification', `${calculations.recommendedHingeCount}x ${calculations.hingeSize}`, `~${calculations.estimatedLeafWeightKg} kg Leaf Weight`]
+      { param: 'Clear Usable Opening', metric: `${calculations.providedClearWidthMm} × ${calculations.providedClearHeightMm} mm`, imperial: `${(calculations.providedClearWidthMm / 25.4).toFixed(1)}" × ${(calculations.providedClearHeightMm / 25.4).toFixed(1)}"` },
+      { param: 'Door Shutter Leaf Size', metric: `${calculations.shutterWidthMm} × ${calculations.shutterHeightMm} mm`, imperial: `${(calculations.shutterWidthMm / 25.4).toFixed(1)}" × ${(calculations.shutterHeightMm / 25.4).toFixed(1)}"` },
+      { param: 'Frame Outer Dimensions (Chowkhat)', metric: `${calculations.frameOuterWidthMm} × ${calculations.frameOuterHeightMm} mm`, imperial: `${(calculations.frameOuterWidthMm / 25.4).toFixed(1)}" × ${(calculations.frameOuterHeightMm / 25.4).toFixed(1)}"` },
+      { param: 'Structural Rough Opening (Masonry / Lintel)', metric: `${calculations.roughOpeningWidthMm} × ${calculations.roughOpeningHeightMm} mm`, imperial: `${(calculations.roughOpeningWidthMm / 25.4).toFixed(1)}" × ${(calculations.roughOpeningHeightMm / 25.4).toFixed(1)}"` },
+      { param: 'Chowkhat Frame & Rebate', metric: `${frameThicknessMm}mm Frame, ${rebateDepthMm}mm Rebate`, imperial: `${(frameThicknessMm / 25.4).toFixed(2)}" / ${(rebateDepthMm / 25.4).toFixed(2)}"` },
+      { param: 'Hardware & Leaf Load', metric: `${calculations.recommendedHingeCount}x ${calculations.hingeSize}`, imperial: `~${calculations.estimatedLeafWeightKg} kg Leaf Weight` }
     ];
 
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(51, 65, 85);
+    const scheduleRows = doorSchedule.slice(0, 10).map((item) => ({
+      tag: item.tag,
+      location: item.location,
+      clear: `${item.clearWidthMm} × ${item.clearHeightMm} mm`,
+      rough: `${item.roughWidthMm} × ${item.roughHeightMm} mm`,
+      material: item.material.replace('_', ' ').toUpperCase()
+    }));
 
-    framingRows.forEach(([param, metric, imperial], idx) => {
-      if (idx % 2 === 1) {
-        doc.setFillColor(248, 250, 252);
-        doc.rect(14, yPos, pageWidth - 28, 6.5, 'F');
-      }
-      doc.text(param, 18, yPos + 4.5);
-      doc.text(metric, 105, yPos + 4.5);
-      doc.text(imperial, pageWidth - 20, yPos + 4.5, { align: 'right' });
-      yPos += 6.5;
+    downloadPdfReport({
+      title: 'Architectural Door Schedule & Egress Audit',
+      subtitle: `Door Tag: ${doorTag} (${doorLocation}) | Occupancy: ${occ.name} (${occ.codeGroup})`,
+      category: 'civil',
+      complianceBadge: 'NBC 2016 Part 4 & ADA',
+      referenceId: `DOR-${doorTag}-${Date.now().toString().slice(-4)}`,
+      theme: 'brand',
+      project: {
+        projectName: `Door Schedule — ${doorTag}`,
+        notes: `Style: ${doorStyle.replace('_', ' ').toUpperCase()} | Material: ${doorMaterial.replace('_', ' ').toUpperCase()} | Fire Rating: ${fireRating}`
+      },
+      kpis: [
+        { label: 'Clear Walkthrough', value: `${formatUnit(calculations.providedClearWidthMm)} × ${formatUnit(calculations.providedClearHeightMm)} ${unit}`, highlight: true },
+        { label: 'Rough Masonry Opening', value: `${formatUnit(calculations.roughOpeningWidthMm)} × ${formatUnit(calculations.roughOpeningHeightMm)} ${unit}` },
+        { label: 'ADA Compliance', value: calculations.isAdaCompliant ? 'PASS' : 'FAIL', highlight: !calculations.isAdaCompliant },
+        { label: 'Panic Exit Hardware', value: calculations.isPanicBarRequired ? 'MANDATORY' : 'STANDARD' }
+      ],
+      parameters: [
+        { label: 'Door Tag & Location', value: `${doorTag} — ${doorLocation}` },
+        { label: 'Occupancy Classification', value: `${occ.name} (${occ.codeGroup})` },
+        { label: 'Occupant Load Capacity', value: `${occupantLoad} Persons (${hasSprinklers ? 'Sprinklers Present' : 'No Sprinklers'})` },
+        { label: 'Code Required Egress Width', value: `${calculations.codeRequiredEgressWidthMm} mm (${calculations.minExitsRequired} Exit Doors Min)` },
+        { label: 'Swing & Fire Rating', value: `${swingDirection.replace('_', ' ')} | ${fireRating}` },
+        { label: 'Vision Panel', value: hasVisionPanel ? 'Included' : 'None' }
+      ],
+      tables: [
+        {
+          title: '1. Architectural Framing & Structural Opening Schedule',
+          columns: [
+            { header: 'Dimension Parameter', dataKey: 'param' },
+            { header: 'Metric (mm)', dataKey: 'metric' },
+            { header: 'Imperial (Inches / Feet)', dataKey: 'imperial', align: 'right' as const }
+          ],
+          rows: framingRows
+        },
+        ...(scheduleRows.length > 0 ? [{
+          title: `2. Project Door Schedule (${doorSchedule.length} Doors)`,
+          columns: [
+            { header: 'Tag', dataKey: 'tag' },
+            { header: 'Location', dataKey: 'location' },
+            { header: 'Clear Size (mm)', dataKey: 'clear' },
+            { header: 'Rough Size (mm)', dataKey: 'rough' },
+            { header: 'Material / Style', dataKey: 'material', align: 'right' as const }
+          ],
+          rows: scheduleRows
+        }] : [])
+      ],
+      disclaimers: [
+        'Calculations adhere to NBC 2016 Part 4 Section 4.3 (Means of Egress) and IS 4021 (Timber Door Framing Standards).',
+        'Minimum clear opening dimensions must be maintained without reduction by door leaf thickness or projection handles.',
+        'Rough opening includes 10-15mm plumb expansion shim gap around perimeter chowkhat.'
+      ],
+      includeSignoff: true,
+      fileName: `Door_Schedule_${doorTag}_${Date.now().toString().slice(-6)}.pdf`
     });
-
-    // Section 3: Saved Project Door Schedule (If Available)
-    if (doorSchedule.length > 0) {
-      yPos += 6;
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(15, 23, 42);
-      doc.text(`3. Complete Project Door Schedule (${doorSchedule.length} Doors)`, 14, yPos);
-
-      yPos += 5;
-      doc.setFillColor(241, 245, 249);
-      doc.rect(14, yPos, pageWidth - 28, 6, 'F');
-      doc.setFontSize(7.5);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Tag', 18, yPos + 4);
-      doc.text('Location', 35, yPos + 4);
-      doc.text('Clear Size (mm)', 90, yPos + 4);
-      doc.text('Rough Size (mm)', 130, yPos + 4);
-      doc.text('Material / Style', pageWidth - 20, yPos + 4, { align: 'right' });
-
-      yPos += 6;
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(7);
-
-      doorSchedule.slice(0, 8).forEach((item, i) => {
-        if (i % 2 === 1) {
-          doc.setFillColor(248, 250, 252);
-          doc.rect(14, yPos, pageWidth - 28, 5.5, 'F');
-        }
-        doc.text(item.tag, 18, yPos + 4);
-        doc.text(item.location.slice(0, 24), 35, yPos + 4);
-        doc.text(`${item.clearWidthMm} × ${item.clearHeightMm}`, 90, yPos + 4);
-        doc.text(`${item.roughWidthMm} × ${item.roughHeightMm}`, 130, yPos + 4);
-        doc.text(`${item.style.replace('_', ' ')}`, pageWidth - 20, yPos + 4, { align: 'right' });
-        yPos += 5.5;
-      });
-    }
-
-    // Footer
-    yPos = 270;
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.setTextColor(15, 23, 42);
-    doc.text('National Building Code Compliance Statement:', 14, yPos);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7);
-    doc.setTextColor(100, 116, 139);
-    doc.text('• Calculations adhere to NBC 2016 Part 4 Section 4.3 (Means of Egress) and IS 4021 (Timber Door Framing Standards).', 14, yPos + 4);
-    doc.text('• Minimum clear opening dimensions must be maintained without reduction by door leaf thickness or projection handles.', 14, yPos + 8);
-
-    doc.save(`Toolique_Door_Schedule_${doorTag}_${Date.now().toString().slice(-6)}.pdf`);
   };
 
   const currentTheme = THEMES[activeTheme];
@@ -771,21 +701,17 @@ Certified under NBC 2016 Part 4 Fire & Life Safety & IBC/NFPA 101 Guidelines.`;
                   Clear Opening & Framing Parameters
                 </h3>
                 <div className="flex items-center gap-2">
-                  <div className="flex rounded-lg bg-slate-100 dark:bg-slate-800 p-0.5 text-xs font-bold">
-                    {(['mm', 'cm', 'in', 'ft'] as UnitType[]).map((u) => (
-                      <button
-                        key={u}
-                        onClick={() => setUnit(u)}
-                        className={`px-2 py-1 rounded-md transition ${
-                          unit === u 
-                            ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-white shadow-xs' 
-                            : 'text-slate-655 dark:text-slate-400'
-                        }`}
-                      >
-                        {u.toUpperCase()}
-                      </button>
-                    ))}
-                  </div>
+                  <UnitSwitcher<UnitType>
+                    value={unit}
+                    onChange={setUnit}
+                    options={[
+                      { id: 'mm', label: 'MM', shortLabel: 'mm' },
+                      { id: 'cm', label: 'CM', shortLabel: 'cm' },
+                      { id: 'in', label: 'IN', shortLabel: 'in' },
+                      { id: 'ft', label: 'FT', shortLabel: 'ft' },
+                    ]}
+                    size="sm"
+                  />
                   <button
                     onClick={handleReset}
                     className="p-1.5 rounded-lg text-slate-655 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
@@ -1422,13 +1348,8 @@ Certified under NBC 2016 Part 4 Fire & Life Safety & IBC/NFPA 101 Guidelines.`;
                 Certified Door Schedule
               </span>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={copyAudit}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-sm"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copied ? 'Copied' : 'Copy Audit'}</span>
-                </button>
+                <CopyButton text={getAuditText} label="Copy Audit" copiedLabel="Copied" size="xs" variant="primary" />
+                <ShareWhatsApp text={getAuditText} label="WhatsApp" size="xs" variant="solid" />
                 <button
                   onClick={generatePdfSchedule}
                   className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition shadow-sm"

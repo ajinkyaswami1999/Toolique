@@ -2,7 +2,9 @@ import { useState, useMemo, useEffect } from 'react';
 import { 
   Shield, Copy, Check, Download, Play, RefreshCw
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
+import { downloadPdfReport } from '../utils/pdf/reportGenerator';
 
 // --- Interfaces & Types ---
 interface AuditRuleResult {
@@ -109,7 +111,6 @@ export default function WebsiteSeoAudit() {
 
   // Copier state variables
   const [copiedFixId, setCopiedFixId] = useState<string | null>(null);
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [testFixtureResult, setTestFixtureResult] = useState<string | null>(null);
 
   const scanStepsLabels = [
@@ -1068,49 +1069,56 @@ export default function WebsiteSeoAudit() {
 
   const handleDownloadPDF = () => {
     if (!auditState.scanReport) return;
-    const doc = new jsPDF();
-    doc.setFillColor(15, 23, 42);
-    doc.rect(0, 0, 210, 42, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text('SEO INTELLIGENCE AUDIT SHEET', 15, 25);
-    doc.setFontSize(10);
-    doc.text(`Audited URL: ${auditState.scanReport.url} — Generated locally via Toolique.in`, 15, 34);
-
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(14);
-    doc.text(`Overall SEO Health Rating: ${auditState.scanReport.score} / 100`, 15, 60);
-
-    doc.text('Category Performance Index:', 15, 85);
-    doc.text(`- Technical SEO : ${auditState.scanReport.subscores.technical}%`, 15, 93);
-    doc.text(`- On-Page SEO   : ${auditState.scanReport.subscores.onpage}%`, 15, 101);
-    doc.text(`- Performance   : ${auditState.scanReport.subscores.performance}%`, 15, 109);
-    doc.text(`- Security      : ${auditState.scanReport.subscores.security}%`, 15, 117);
-
-    doc.text('Top Prioritized Fix Actions:', 15, 135);
-    let y = 143;
-    prioritizedFixes.forEach((fix: any) => {
-      doc.text(`- [Priority ${fix.priorityScore}] ${fix.title}`, 15, y);
-      y += 8;
+    const report = auditState.scanReport;
+    downloadPdfReport({
+      title: 'SEO Intelligence & Health Audit Report',
+      category: 'Digital Marketing & Web Optimization',
+      project: 'Toolique SEO Suite',
+      theme: 'emerald',
+      summaryCards: [
+        { label: 'Overall SEO Score', value: `${report.score} / 100` },
+        { label: 'Technical SEO', value: `${report.subscores.technical}%` },
+        { label: 'On-Page SEO', value: `${report.subscores.onpage}%` },
+        { label: 'Performance', value: `${report.subscores.performance}%` }
+      ],
+      tables: [
+        {
+          title: 'Category Performance Index',
+          headers: ['Category', 'Score / Status'],
+          rows: [
+            ['Audited Target URL', report.url],
+            ['Technical Index', `${report.subscores.technical}%`],
+            ['On-Page SEO Score', `${report.subscores.onpage}%`],
+            ['Core Performance', `${report.subscores.performance}%`],
+            ['Security & Headers', `${report.subscores.security}%`],
+            ['Total Rules Audited', `${report.rules.length} checks (${report.rules.filter(r => r.severity === 'pass').length} passed, ${report.rules.filter(r => r.severity === 'error').length} errors)`]
+          ]
+        },
+        {
+          title: 'High-Priority Optimization Actions',
+          headers: ['Priority Impact', 'Issue / Remediation Item'],
+          rows: prioritizedFixes.slice(0, 15).map((fix: any) => [
+            `Priority ${fix.priorityScore}`,
+            fix.title
+          ])
+        }
+      ],
+      disclaimers: [
+        'SEO metrics evaluated directly against Google Lighthouse & W3C markup best practices.',
+        'Zero crawl data is stored or distributed to third parties.'
+      ]
     });
-
-    doc.save(`SEO_Intelligence_Sheet_${Date.now()}.pdf`);
   };
 
-  const copySummaryReport = () => {
-    if (!auditState.scanReport) return;
-    const text = `SEO Intelligence Audit Summary
+  const getSummaryText = () => {
+    if (!auditState.scanReport) return '';
+    return `SEO Intelligence Audit Summary
 ----------------------------------------------
 Overall Score   : ${auditState.scanReport.score}/100
 Scan Target     : ${auditState.scanReport.url}
 ----------------------------------------------
 Top Priority Fixes:
 ${prioritizedFixes.map((f: any) => `- [Priority ${f.priorityScore}] ${f.title}`).join('\n')}`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
   };
 
   const filteredRules = useMemo(() => {
@@ -1785,19 +1793,15 @@ ${prioritizedFixes.map((f: any) => `- [Priority ${f.priorityScore}] ${f.title}`)
             <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b pb-2">Export SEO Audit Report</h3>
             
             <div className="flex flex-wrap gap-3">
+              <CopyButton text={getSummaryText()} label="Copy Summary Checklist" />
+              <ShareWhatsApp text={getSummaryText()} />
               <button
-                onClick={copySummaryReport}
-                className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50"
-              >
-                {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedReport ? 'Report Copied' : 'Copy Summary Checklist'}</span>
-              </button>
-              <button
+                type="button"
                 onClick={handleDownloadPDF}
-                className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50"
+                className="px-4 py-2 bg-emerald-650 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <Download className="w-3.5 h-3.5" />
-                <span>Download PDF Report</span>
+                <span>Download Branded PDF</span>
               </button>
             </div>
           </div>

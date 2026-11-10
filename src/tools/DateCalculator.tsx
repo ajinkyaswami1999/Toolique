@@ -1,9 +1,11 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
+import { CopyButton } from '../components/common/CopyButton';
+import { ShareWhatsApp } from '../components/common/ShareWhatsApp';
+import { downloadPdfReport } from '../utils/pdf/reportGenerator';
 import { 
-  Calendar, ArrowRightLeft, Download, Printer, 
-  Sparkles, Copy, Check, Trash
+  Calendar, Download, Printer, 
+  Sparkles, Trash
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 
 // --- Types & Interfaces ---
 type CalcMode = 'diff' | 'arithmetic' | 'working_days' | 'age' | 'countdown' | 'weekday' | 'sla_deadline' | 'range_generator';
@@ -109,10 +111,6 @@ export default function DateCalculator({ initialMode }: { initialMode?: string }
   // Natural language state
   const [naturalText, setNaturalText] = useState<string>('');
   const [naturalParsedMessage, setNaturalParsedMessage] = useState<string>('');
-
-  // UI state
-  const [copiedLink, setCopiedLink] = useState<boolean>(false);
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
 
   // Parse natural language queries
   const parseNaturalLanguage = () => {
@@ -517,7 +515,7 @@ export default function DateCalculator({ initialMode }: { initialMode?: string }
   };
 
   // --- Export Actions Handlers ---
-  const copyFormattedReport = () => {
+  const getFormattedReport = () => {
     let text = '';
     if (mode === 'diff' && differenceResults) {
       text = `Date Difference Audit Report (Toolique)
@@ -541,11 +539,10 @@ As Of Date      : ${ageAsOfStr}
 Age             : ${ageResults.years} Years, ${ageResults.months} Months, ${ageResults.days} Days
 Total Days Alive: ${ageResults.totalDaysAlive} Days
 Next Birthday   : ${ageResults.daysUntilBday} Days remaining (Age turning ${ageResults.nextAge})`;
+    } else {
+      text = `Date Calculation Report (Toolique)\nMode: ${mode}\nStart Date: ${startDateStr}`;
     }
-
-    navigator.clipboard.writeText(text);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
+    return text;
   };
 
   const handlePrint = () => {
@@ -578,29 +575,47 @@ Next Birthday   : ${ageResults.daysUntilBday} Days remaining (Age turning ${ageR
   };
 
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFillColor(15, 23, 42); // slate-900 theme color
-    doc.rect(0, 0, 210, 38, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text('DATE PLANNING AUDIT REPORT', 15, 22);
-    doc.setFontSize(10);
-    doc.text('Working Days & Calendar Planning — Toolique.in', 15, 30);
-
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(12);
-    doc.text('Calculated Parameters', 15, 52);
-
-    doc.setFontSize(10);
-    doc.text(`Start Date: ${startDateStr}`, 15, 60);
-    if (mode === 'diff' && differenceResults) {
-      doc.text(`End Date: ${endDateStr}`, 15, 66);
-      doc.text(`Total calendar difference: ${differenceResults.totalDays} Days`, 15, 72);
-      doc.text(`Working days: ${differenceResults.workingDays} Days`, 15, 78);
-    }
-
-    doc.save(`Date_Calculations_Report_${Date.now()}.pdf`);
+    downloadPdfReport({
+      title: 'Date Planning & Calendar Audit',
+      category: 'Productivity & Planning Tools',
+      project: 'Toolique Office Suite',
+      theme: 'emerald',
+      summaryCards: [
+        { label: 'Mode', value: mode.toUpperCase() },
+        { label: 'Start Date', value: startDateStr },
+        { label: 'End / Target Date', value: mode === 'diff' ? endDateStr : `${offsetValue} ${offsetUnit}` },
+        { label: 'Total Calendar Days', value: differenceResults ? `${differenceResults.totalDays} Days` : 'N/A' }
+      ],
+      tables: [
+        {
+          title: 'Schedule & Milestone Breakdown',
+          headers: ['Metric', 'Value'],
+          rows: [
+            ['Mode', mode === 'diff' ? 'Difference Between Dates' : mode === 'arithmetic' ? 'Add / Subtract Time' : mode === 'working_days' ? 'Business Days Calculator' : 'Age & Life Milestones'],
+            ['Start Date', startDateStr],
+            ['End Date', endDateStr || 'N/A'],
+            ...(differenceResults ? [
+              ['Total Calendar Days', `${differenceResults.totalDays} days`],
+              ['Working Days (Excl. Weekends)', `${differenceResults.workingDays} days`],
+              ['Weekend Days', `${differenceResults.weekendDays} days`],
+              ['Weeks & Days', `${differenceResults.totalWeeks} weeks and ${differenceResults.remainingWeeksDays} days`],
+              ['Full Months & Days', `${differenceResults.months} months, ${differenceResults.days} days`],
+              ['Total Hours', `${(differenceResults.totalDays * 24).toLocaleString()} hrs`],
+              ['Total Minutes', `${(differenceResults.totalDays * 1440).toLocaleString()} mins`]
+            ] : []),
+            ...(ageResults ? [
+              ['Age (Y/M/D)', `${ageResults.years}y ${ageResults.months}m ${ageResults.days}d`],
+              ['Total Days Alive', `${ageResults.totalDaysAlive} days`],
+              ['Next Birthday', `In ${ageResults.daysUntilBday} days (turning ${ageResults.nextAge})`]
+            ] : [])
+          ]
+        }
+      ],
+      disclaimers: [
+        'Calculations account for standard calendar rules and leap years.',
+        'Zero dates or personal records are transmitted to external servers.'
+      ]
+    });
   };
 
   const getShareLink = () => {
@@ -626,17 +641,10 @@ Next Birthday   : ${ageResults.daysUntilBday} Days remaining (Age turning ${ageR
           </div>
         </div>
 
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(getShareLink());
-            setCopiedLink(true);
-            setTimeout(() => setCopiedLink(false), 2000);
-          }}
-          className="text-[9px] font-bold text-slate-700 dark:text-slate-400 bg-slate-500/10 border border-slate-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm"
-        >
-          {copiedLink ? <Check className="w-3 h-3 text-emerald-500" /> : <ArrowRightLeft className="w-3 h-3" />}
-          <span>{copiedLink ? 'Link Copied' : 'Share Scenario'}</span>
-        </button>
+        <div className="flex items-center gap-1.5">
+          <CopyButton text={getShareLink()} label="Share Scenario" className="text-[9px] py-1.5 px-3" />
+          <ShareWhatsApp text={`Check out this date calculation scenario: ${getShareLink()}`} className="text-[9px] py-1.5 px-3" />
+        </div>
       </div>
 
       {/* CORE WORKSPACE TABS */}
@@ -1000,14 +1008,9 @@ Next Birthday   : ${ageResults.daysUntilBday} Days remaining (Age turning ${ageR
                 <h3 className="text-sm font-black text-teal-400 mt-0.5">Date calculator outputs</h3>
               </div>
               
-              <div className="flex gap-2">
-                <button
-                  onClick={copyFormattedReport}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-350 hover:bg-zinc-850 hover:text-white transition"
-                >
-                  {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedReport ? 'Copied' : 'Copy'}</span>
-                </button>
+              <div className="flex items-center gap-1.5">
+                <CopyButton text={getFormattedReport()} label="Copy" className="text-xs py-1.5 px-3" />
+                <ShareWhatsApp text={getFormattedReport()} className="text-xs py-1.5 px-3" />
               </div>
             </div>
 
@@ -1217,26 +1220,21 @@ Next Birthday   : ${ageResults.daysUntilBday} Days remaining (Age turning ${ageR
       <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
         <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b border-zinc-150 dark:border-zinc-850 pb-2">Export Date Audits</h3>
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={copyFormattedReport}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
-          >
-            {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedReport ? 'Report Copied' : 'Copy Difference Summary'}</span>
-          </button>
+          <CopyButton text={getFormattedReport()} label="Copy Summary" />
+          <ShareWhatsApp text={getFormattedReport()} />
           <button
             onClick={handlePrint}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
+            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             <span>Print Report</span>
           </button>
           <button
             onClick={handleDownloadPDF}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
+            className="px-4 py-2 bg-emerald-650 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shadow-xs"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Download PDF Report</span>
+            <span>Download Branded PDF</span>
           </button>
         </div>
       </div>

@@ -3,8 +3,6 @@ import {
   TrendingUp, 
   Clock, 
   Layers, 
-  Copy, 
-  Check, 
   Download, 
   Sparkles, 
   Sliders, 
@@ -15,7 +13,9 @@ import {
   Coins, 
   Boxes
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
 
 // --- Multi-Currency Configs ---
 interface CurrencyConfig {
@@ -313,7 +313,6 @@ export default function PrintProfitCalculator() {
   const [batchQuantity, setBatchQuantity] = useState<number>(50);
 
   // UI States
-  const [copied, setCopied] = useState<boolean>(false);
   const [showAdvancedOverheads, setShowAdvancedOverheads] = useState<boolean>(false);
 
   // --- Currency Change Handler ---
@@ -555,10 +554,10 @@ export default function PrintProfitCalculator() {
     return `${currency.symbol}${val.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`;
   };
 
-  // --- Copy Quote to Clipboard ---
-  const handleCopyQuote = () => {
+  // --- Quote Text for Clipboard & Sharing ---
+  const getQuoteText = () => {
     const c = calculations;
-    const quoteText = `--- 3D PRINT COMMERCIAL QUOTE & PROFIT BREAKDOWN ---
+    return `--- 3D PRINT COMMERCIAL QUOTE & PROFIT BREAKDOWN ---
 Generated via Toolique Print Profit Engine
 
 [PROJECT SPECIFICATIONS]
@@ -591,92 +590,12 @@ Total Batch Net Profit: ${fmt(c.batchTotalNetProfit)}
 Total Filament: ${c.batchTotalFilamentKg} kg (${c.batchSpoolsRequired} spools)
 Total Machine Time: ${c.batchTotalPrintHours.toFixed(1)} hrs (~${c.batchTotalPrintDays} days)
 ---------------------------------------------`;
-
-    navigator.clipboard.writeText(quoteText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
   };
 
   // --- Professional Commercial PDF Export ---
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
     const c = calculations;
     const currSym = currency.symbol;
-
-    // Header Banner
-    doc.setFillColor(15, 23, 42); // slate-900
-    doc.rect(0, 0, 210, 30, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3D PRINT COMMERCIAL COSTING & PROFIT REPORT', 14, 13);
-    
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(203, 213, 225);
-    doc.text(`Platform: ${activePreset.name} | Currency: ${currency.code} | Date: ${new Date().toLocaleDateString()}`, 14, 20);
-    doc.text(`Toolique Manufacturing Intelligence Suite | Toolique.in`, 14, 25);
-
-    // Section 1: Executive KPI Cards
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(14, 36, 182, 36, 3, 3, 'F');
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(14, 36, 182, 36, 3, 3, 'S');
-
-    // KPI 1: Retail Price
-    doc.setTextColor(71, 85, 105);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('SELLING PRICE', 20, 44);
-    doc.setFontSize(14);
-    doc.setTextColor(15, 23, 42);
-    doc.text(`${currSym}${sellingPrice.toFixed(2)}`, 20, 52);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 116, 139);
-    doc.text(`COGS: ${currSym}${c.totalUnitCOGS.toFixed(2)}`, 20, 58);
-
-    // KPI 2: Net Profit
-    doc.setTextColor(71, 85, 105);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('NET PROFIT / UNIT', 80, 44);
-    doc.setFontSize(14);
-    doc.setTextColor(16, 185, 129); // emerald-600
-    doc.text(`${currSym}${c.netProfit.toFixed(2)}`, 80, 52);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 116, 139);
-    doc.text(`ROI: ${c.roiPercent.toFixed(0)}% on cost`, 80, 58);
-
-    // KPI 3: Net Margin %
-    doc.setTextColor(71, 85, 105);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('NET MARGIN', 140, 44);
-    doc.setFontSize(14);
-    doc.setTextColor(79, 70, 229); // indigo-600
-    doc.text(`${c.netMarginPercent.toFixed(1)}%`, 140, 52);
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 116, 139);
-    doc.text(`Markup: ${c.markupMultiplier.toFixed(2)}x`, 140, 58);
-
-    // Section 2: Detailed Cost Itemization Table
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. ITEMIZED UNIT MANUFACTURING COGS BREAKDOWN', 14, 82);
-
-    let y = 88;
-    doc.setFillColor(241, 245, 249);
-    doc.rect(14, y, 182, 7, 'F');
-    doc.setFontSize(8);
-    doc.setTextColor(51, 65, 85);
-    doc.text('Cost Component', 18, y + 5);
-    doc.text('Parameters / Details', 75, y + 5);
-    doc.text('Amount', 165, y + 5);
 
     const costRows = [
       { name: 'Raw Material (Filament)', detail: `${partWeightGrams}g + ${wasteScrapPercent}% waste @ ${currSym}${spoolPrice}/spool`, val: `${currSym}${c.materialCost.toFixed(2)}` },
@@ -687,88 +606,78 @@ Total Machine Time: ${c.batchTotalPrintHours.toFixed(1)} hrs (~${c.batchTotalPri
       { name: 'Scrap & Failure Buffer', detail: `${failureRiskPercent}% reprint risk contingency`, val: `${currSym}${c.failureBufferCost.toFixed(2)}` },
     ];
 
-    y += 7;
-    costRows.forEach((row, i) => {
-      doc.setFillColor(i % 2 === 0 ? 255 : 248, i % 2 === 0 ? 255 : 250, i % 2 === 0 ? 255 : 252);
-      doc.rect(14, y, 182, 7, 'F');
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(30, 41, 59);
-      doc.text(row.name, 18, y + 5);
-      doc.setTextColor(100, 116, 139);
-      doc.text(row.detail, 75, y + 5);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(15, 23, 42);
-      doc.text(row.val, 165, y + 5);
-      y += 7;
-    });
-
-    // Subtotal Row
-    doc.setFillColor(224, 231, 255);
-    doc.rect(14, y, 182, 8, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(67, 56, 202);
-    doc.text('TOTAL DIRECT UNIT COGS', 18, y + 5.5);
-    doc.text(`${currSym}${c.totalUnitCOGS.toFixed(2)}`, 165, y + 5.5);
-
-    // Section 3: Marketplace Platform Deductions
-    y += 16;
-    doc.setFontSize(11);
-    doc.setTextColor(15, 23, 42);
-    doc.text('2. PLATFORM DEDUCTIONS & NET DISBURSEMENT', 14, y);
-
-    y += 6;
     const feeRows = [
-      { name: `Platform Commission (${platformFeePercent}%)`, val: `${currSym}${(c.grossCustomerPaid * platformFeePercent / 100).toFixed(2)}` },
-      { name: `Payment Gateway Fee (${paymentGatewayPercent}% + ${currSym}${fixedGatewayFee.toFixed(2)})`, val: `${currSym}${(c.grossCustomerPaid * paymentGatewayPercent / 100 + fixedGatewayFee).toFixed(2)}` },
-      { name: `Fixed Listing & Insertion Fee`, val: `${currSym}${fixedListingFee.toFixed(2)}` },
-      { name: `Total Deductions Taken by Platform`, val: `-${currSym}${c.totalPlatformFees.toFixed(2)}` },
-      { name: `Net Payout Disbursed to Maker`, val: `${currSym}${c.netRevenueReceived.toFixed(2)}` }
+      { name: `Platform Commission (${platformFeePercent}%)`, detail: 'Marketplace standard fee', val: `${currSym}${(c.grossCustomerPaid * platformFeePercent / 100).toFixed(2)}` },
+      { name: `Payment Gateway Fee (${paymentGatewayPercent}% + ${currSym}${fixedGatewayFee.toFixed(2)})`, detail: 'Processing fee', val: `${currSym}${(c.grossCustomerPaid * paymentGatewayPercent / 100 + fixedGatewayFee).toFixed(2)}` },
+      { name: 'Fixed Listing & Insertion Fee', detail: 'Per unit / listing', val: `${currSym}${fixedListingFee.toFixed(2)}` },
+      { name: 'Total Platform Deductions', detail: 'Cumulative platform deductions', val: `-${currSym}${c.totalPlatformFees.toFixed(2)}` },
+      { name: 'Net Payout Disbursed to Maker', detail: 'Gross minus fees', val: `${currSym}${c.netRevenueReceived.toFixed(2)}` },
     ];
 
-    feeRows.forEach((r, idx) => {
-      doc.setFillColor(idx === 3 ? 254 : (idx === 4 ? 236 : (idx % 2 === 0 ? 255 : 248)), idx === 3 ? 242 : (idx === 4 ? 253 : 250), idx === 3 ? 242 : (idx === 4 ? 245 : 252));
-      doc.rect(14, y, 182, 6.5, 'F');
-      doc.setFont('helvetica', idx >= 3 ? 'bold' : 'normal');
-      doc.setTextColor(idx === 3 ? 220 : (idx === 4 ? 16 : 30), idx === 3 ? 38 : (idx === 4 ? 185 : 41), idx === 3 ? 38 : (idx === 4 ? 129 : 59));
-      doc.text(r.name, 18, y + 4.5);
-      doc.text(r.val, 165, y + 4.5);
-      y += 6.5;
+    downloadPdfReport({
+      title: '3D Print Commercial Costing & Profit Report',
+      subtitle: `Platform: ${activePreset.name} | Currency: ${currency.code}`,
+      category: '3D Printing Financial Analytics',
+      project: 'Toolique Manufacturing Intelligence',
+      theme: 'brand',
+      parameters: [
+        { label: 'Platform Preset', value: activePreset.name },
+        { label: 'Retail Selling Price', value: `${currSym}${sellingPrice.toFixed(2)}` },
+        { label: 'Total Unit COGS', value: `${currSym}${c.totalUnitCOGS.toFixed(2)}` },
+        { label: 'Net Profit / Unit', value: `${currSym}${c.netProfit.toFixed(2)}` },
+        { label: 'Net Margin', value: `${c.netMarginPercent.toFixed(1)}%` },
+        { label: 'ROI on Cost', value: `${c.roiPercent.toFixed(0)}%` },
+        { label: 'Markup Multiplier', value: `${c.markupMultiplier.toFixed(2)}x` },
+        { label: 'Print Farm Hourly Return', value: `${currSym}${c.hourlyEarnings.toFixed(2)}/hr` },
+      ],
+      tables: [
+        {
+          title: '1. Itemized Unit Manufacturing COGS Breakdown',
+          columns: [
+            { header: 'Cost Component', dataKey: 'name' },
+            { header: 'Parameters / Details', dataKey: 'detail' },
+            { header: 'Amount', dataKey: 'val', align: 'right' as const },
+          ],
+          rows: costRows,
+          totalsRow: [
+            { dataKey: 'name', value: 'TOTAL DIRECT UNIT COGS' },
+            { dataKey: 'val', value: `${currSym}${c.totalUnitCOGS.toFixed(2)}` },
+          ],
+        },
+        {
+          title: '2. Platform Deductions & Net Disbursement',
+          columns: [
+            { header: 'Fee Component', dataKey: 'name' },
+            { header: 'Description', dataKey: 'detail' },
+            { header: 'Amount', dataKey: 'val', align: 'right' as const },
+          ],
+          rows: feeRows,
+        },
+        {
+          title: `3. Commercial Batch Production Forecast (${c.batchTotalUnits} Units)`,
+          columns: [
+            { header: 'Metric', dataKey: 'name' },
+            { header: 'Batch Forecast Value', dataKey: 'val', align: 'right' as const },
+          ],
+          rows: [
+            { name: 'Total Gross Revenue', val: `${currSym}${c.batchTotalRevenue.toFixed(2)}` },
+            { name: 'Total Manufacturing Cost (COGS)', val: `${currSym}${c.batchTotalCOGS.toFixed(2)}` },
+            { name: 'Total Marketplace Fees', val: `${currSym}${c.batchTotalPlatformFees.toFixed(2)}` },
+            { name: 'Total Filament Required', val: `${c.batchTotalFilamentKg} kg (${c.batchSpoolsRequired} spools)` },
+            { name: 'Total Machine Runtime', val: `${c.batchTotalPrintHours.toFixed(1)} hrs (~${c.batchTotalPrintDays} days)` },
+          ],
+          totalsRow: [
+            { dataKey: 'name', value: 'NET BATCH TAKE-HOME PROFIT' },
+            { dataKey: 'val', value: `${currSym}${c.batchTotalNetProfit.toFixed(2)}` },
+          ],
+        },
+      ],
+      disclaimers: [
+        'Generated strictly in client sandbox. Verified 3D Print Financial Engineering Standard.',
+        'Estimates subject to variations in material waste, ambient electricity rates, and platform fee policies.',
+      ],
+      fileName: `3D_Print_Profit_Quote_${Date.now()}.pdf`,
     });
-
-    // Section 4: Batch Economics & Farm Scaling
-    y += 14;
-    doc.setFontSize(11);
-    doc.setTextColor(15, 23, 42);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`3. COMMERCIAL BATCH PRODUCTION FORECAST (${c.batchTotalUnits} UNITS)`, 14, y);
-
-    y += 6;
-    doc.setFillColor(248, 250, 252);
-    doc.roundedRect(14, y, 182, 28, 2, 2, 'F');
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(14, y, 182, 28, 2, 2, 'S');
-
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(51, 65, 85);
-    doc.text(`Total Gross Revenue: ${currSym}${c.batchTotalRevenue.toFixed(2)}`, 20, y + 7);
-    doc.text(`Total Manufacturing Cost: ${currSym}${c.batchTotalCOGS.toFixed(2)}`, 20, y + 14);
-    doc.text(`Total Marketplace Fees: ${currSym}${c.batchTotalPlatformFees.toFixed(2)}`, 20, y + 21);
-
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(16, 185, 129);
-    doc.text(`NET BATCH TAKE-HOME: ${currSym}${c.batchTotalNetProfit.toFixed(2)}`, 105, y + 7);
-    doc.setTextColor(71, 85, 105);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Total Print Time: ${c.batchTotalPrintHours.toFixed(1)} hrs (~${c.batchTotalPrintDays} days)`, 105, y + 14);
-    doc.text(`Raw Material: ${c.batchTotalFilamentKg} kg (${c.batchSpoolsRequired} spools)`, 105, y + 21);
-
-    // Footer
-    doc.setFontSize(7.5);
-    doc.setTextColor(148, 163, 184);
-    doc.text('Generated strictly in client sandbox. Verified 3D Print Financial Engineering Standard.', 14, 285);
-
-    doc.save(`3D_Print_Profit_Quote_${Date.now()}.pdf`);
   };
 
   const c = calculations;
@@ -786,23 +695,16 @@ Total Machine Time: ${c.batchTotalPrintHours.toFixed(1)} hrs (~${c.batchTotalPri
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 text-left pb-12">
-      {/* Top Header & Preset Tool Bar */}
-      <div className="saas-card p-5 bg-gradient-to-r from-zinc-50 via-indigo-50/20 to-zinc-50 dark:from-zinc-900/90 dark:via-indigo-950/20 dark:to-zinc-900/90 border border-zinc-200/80 dark:border-zinc-800/80 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/25">
-            <Coins className="w-6 h-6" />
-          </div>
-          <div>
-            <h2 className="text-lg font-black text-zinc-900 dark:text-white tracking-tight flex items-center gap-2">
-              Print Profit & Commercial Quote Engine
-              <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                PRO E-COMMERCE
-              </span>
-            </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              Precise COGS, marketplace commissions (Etsy/Shopify/Amazon), target margin reverse pricing & batch forecasts.
-            </p>
-          </div>
+      {/* Top Preset & Action Bar */}
+      <div className="saas-card p-4 bg-gradient-to-r from-zinc-50 via-indigo-50/20 to-zinc-50 dark:from-zinc-900/90 dark:via-indigo-950/20 dark:to-zinc-900/90 border border-zinc-200/80 dark:border-zinc-800/80 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1.5">
+            <Coins className="w-3.5 h-3.5" />
+            <span>Multi-Tier COGS &amp; Marketplace Fee Standards</span>
+          </span>
+          <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+            PRO E-COMMERCE
+          </span>
         </div>
 
         {/* Currency Switcher */}
@@ -864,13 +766,16 @@ Total Machine Time: ${c.batchTotalPrintHours.toFixed(1)} hrs (~${c.batchTotalPri
 
         {/* Quick Actions */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleCopyQuote}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition cursor-pointer border border-zinc-200/60 dark:border-zinc-700"
-          >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-indigo-500" />}
-            <span>{copied ? 'Copied Quote' : 'Copy Quote'}</span>
-          </button>
+          <CopyButton
+            text={getQuoteText}
+            label="Copy Quote"
+            size="sm"
+          />
+          <ShareWhatsApp
+            text={getQuoteText}
+            label="WhatsApp"
+            size="sm"
+          />
           <button
             onClick={handleDownloadPDF}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-650 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition cursor-pointer border border-indigo-200/80 dark:border-indigo-800/80"

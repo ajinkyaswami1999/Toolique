@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import { 
-  Wallet, Copy, Check, Info, Printer, Download, Sparkles, ArrowRightLeft
+  Wallet, Info, Printer, Download, Sparkles, ArrowRightLeft
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp } from '../components/common';
 
 // --- Interfaces & Types ---
 type SubscriberType = 'government' | 'corporate' | 'citizen';
@@ -62,10 +63,6 @@ export default function NPSCalculator() {
   // 6. Tax Benefits Module inputs
   const [annualSalary, setAnnualSalary] = useState<number>(1200000); // 12 LPA
   const [taxSlabPct, setTaxSlabPct] = useState<number>(30); // 30% slab rate
-
-  // UI state
-  const [copiedLink, setCopiedLink] = useState<boolean>(false);
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
 
   // --- Two-Way Synchronization of Contributions ---
   const handleContributionChange = (val: number, type: 'monthly' | 'annual') => {
@@ -367,8 +364,8 @@ export default function NPSCalculator() {
   }, [monthlyContribution, taxSlabPct, annualSalary, subscriber]);
 
   // --- Export Actions handlers ---
-  const copyBreakupReport = () => {
-    const text = `National Pension System Planning Audit (Toolique)
+  const getReportText = () => {
+    return `National Pension System Planning Audit (Toolique)
 ----------------------------------------------
 Subscriber Category : ${subscriber.toUpperCase()}
 NPS Account Tier    : ${tier === 'tier1' ? 'Tier I (Retirement)' : 'Tier II (Voluntary)'}
@@ -385,10 +382,6 @@ ESTIMATED PENSION   : ₹${calculations.netPension.toLocaleString('en-IN')}/mont
 Inflation-Adjusted Present Value:
 - Corpus Worth Today: ₹${calculations.pvCorpus.toLocaleString('en-IN')}
 - Pension Worth Today: ₹${calculations.pvPension.toLocaleString('en-IN')}/mo`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
   };
 
   const exportCSV = () => {
@@ -435,38 +428,58 @@ Inflation-Adjusted Present Value:
   };
 
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFillColor(30, 41, 59); // Slate-800 theme color
-    doc.rect(0, 0, 210, 38, 'F');
+    const projectionRows = calculations.yearByYear.slice(0, 25).map((r) => ({
+      age: `Age ${r.age}`,
+      annualContribution: `₹${r.annualContribution.toLocaleString('en-IN')}`,
+      totalInvested: `₹${r.totalInvested.toLocaleString('en-IN')}`,
+      estimatedCorpus: `₹${r.estimatedCorpus.toLocaleString('en-IN')}`,
+    }));
 
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text('NATIONAL PENSION SYSTEM PLAN', 15, 22);
-    doc.setFontSize(10);
-    doc.text('PFRDA Compliance & Retirement Audit — Toolique.in', 15, 30);
-
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(12);
-    doc.text('Investment assumptions', 15, 52);
-
-    doc.setFontSize(10);
-    doc.text(`Current Age: ${currentAge} years | Target Retirement: ${retirementAge} years`, 15, 60);
-    doc.text(`Starting monthly investment: Rs. ${monthlyContribution.toLocaleString('en-IN')}/mo`, 15, 66);
-    doc.text(`Annual step-up increment: ${stepUpPct}%`, 15, 72);
-    doc.text(`Expected asset return: ${expectedReturns}% p.a.`, 15, 78);
-
-    doc.line(15, 84, 195, 84);
-
-    doc.setFontSize(12);
-    doc.text('Maturity Wealth Splits', 15, 94);
-
-    doc.setFontSize(10);
-    doc.text(`Total Projected Corpus: Rs. ${calculations.projectedCorpus.toLocaleString('en-IN')}`, 15, 102);
-    doc.text(`Tax-Free Lump Sum (withdrawable): Rs. ${calculations.lumpSumCorpus.toLocaleString('en-IN')}`, 15, 108);
-    doc.text(`Annuity Balance (for pension): Rs. ${calculations.annuityCorpus.toLocaleString('en-IN')}`, 15, 114);
-    doc.text(`Guaranteed Monthly Pension: Rs. ${calculations.netPension.toLocaleString('en-IN')}/mo`, 15, 120);
-
-    doc.save(`NPS_Retirement_Report_${Date.now()}.pdf`);
+    downloadPdfReport({
+      title: 'National Pension System (NPS) Retirement Plan',
+      subtitle: `${subscriber.toUpperCase()} | Age ${currentAge} to ${retirementAge} (${calculations.investmentYears} Years) | Return: ${expectedReturns}% p.a.`,
+      category: 'PFRDA Retirement Planning',
+      project: 'Toolique Financial Suite',
+      theme: 'emerald',
+      parameters: [
+        { label: 'Subscriber Category', value: subscriber.toUpperCase() },
+        { label: 'Account Tier', value: tier === 'tier1' ? 'Tier I (Retirement)' : 'Tier II (Voluntary)' },
+        { label: 'Current / Retirement Age', value: `${currentAge} / ${retirementAge} Years` },
+        { label: 'Starting Contribution', value: `₹${monthlyContribution.toLocaleString('en-IN')}/mo` },
+        { label: 'Annual Step-Up', value: `${stepUpPct}%` },
+        { label: 'Expected Return', value: `${expectedReturns}% p.a.` },
+        { label: 'Total Invested Capital', value: `₹${calculations.totalInvested.toLocaleString('en-IN')}` },
+        { label: 'Projected Retirement Corpus', value: `₹${calculations.projectedCorpus.toLocaleString('en-IN')}` },
+        { label: 'Tax-Free Lump Sum (60%)', value: `₹${calculations.lumpSumCorpus.toLocaleString('en-IN')}` },
+        { label: 'Annuity Value (40%)', value: `₹${calculations.annuityCorpus.toLocaleString('en-IN')}` },
+        { label: 'Estimated Monthly Pension', value: `₹${calculations.netPension.toLocaleString('en-IN')}/mo` },
+        { label: 'Inflation Adjusted (PV)', value: `₹${calculations.pvCorpus.toLocaleString('en-IN')}` },
+      ],
+      tables: [
+        {
+          title: 'Yearly Accumulation Projections',
+          columns: [
+            { header: 'Subscriber Age', dataKey: 'age' },
+            { header: 'Annual Contribution', dataKey: 'annualContribution', align: 'right' as const },
+            { header: 'Total Invested', dataKey: 'totalInvested', align: 'right' as const },
+            { header: 'Projected Corpus', dataKey: 'estimatedCorpus', align: 'right' as const },
+          ],
+          rows: projectionRows,
+          totalsRow: [
+            { dataKey: 'age', value: 'FINAL RETIREMENT' },
+            { dataKey: 'annualContribution', value: '-' },
+            { dataKey: 'totalInvested', value: `₹${calculations.totalInvested.toLocaleString('en-IN')}` },
+            { dataKey: 'estimatedCorpus', value: `₹${calculations.projectedCorpus.toLocaleString('en-IN')}` },
+          ],
+        },
+      ],
+      disclaimers: [
+        'National Pension System (NPS) is regulated by PFRDA under Ministry of Finance, Govt. of India.',
+        'Normal exit at retirement age permits up to 60% tax-free lump sum and a minimum 40% mandatory annuity purchase.',
+        'Calculations assume a constant compounding growth rate for illustration; market returns will fluctuate.',
+      ],
+      fileName: `NPS_Retirement_Plan_${Date.now()}.pdf`,
+    });
   };
 
   const getShareLink = () => {
@@ -495,17 +508,8 @@ Inflation-Adjusted Present Value:
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(getShareLink());
-              setCopiedLink(true);
-              setTimeout(() => setCopiedLink(false), 2000);
-            }}
-            className="text-[9px] font-bold text-slate-700 dark:text-slate-400 bg-slate-500/10 border border-slate-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm"
-          >
-            {copiedLink ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-            <span>{copiedLink ? 'Link Copied' : 'Share Plan'}</span>
-          </button>
+          <CopyButton text={getShareLink} label="Share Plan" size="xs" variant="outline" />
+          <ShareWhatsApp text={getShareLink} label="WhatsApp" size="xs" />
         </div>
       </div>
 
@@ -798,13 +802,10 @@ Inflation-Adjusted Present Value:
                 <span className="text-[9px] font-black uppercase text-slate-450 tracking-wider block">Estimated retirement wealth projection</span>
                 <h3 className="text-sm font-black text-indigo-400 mt-0.5">Maturity summary</h3>
               </div>
-              <button
-                onClick={copyBreakupReport}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-350 hover:bg-slate-750 hover:text-white transition"
-              >
-                {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedReport ? 'Copied' : 'Copy Plan'}</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <CopyButton text={getReportText} label="Copy Plan" size="xs" variant="secondary" />
+                <ShareWhatsApp text={getReportText} label="WhatsApp" size="xs" />
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -1116,13 +1117,8 @@ Inflation-Adjusted Present Value:
       <div className="p-6 rounded-3xl bg-white dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_1px_3px_rgba(0,0,0,0.02)] space-y-4">
         <h3 className="text-xs font-black text-zinc-900 dark:text-white uppercase tracking-wider block border-b border-zinc-150 dark:border-zinc-850 pb-2">Export Retirement Plans</h3>
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={copyBreakupReport}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"
-          >
-            {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedReport ? 'Report Copied' : 'Copy Maturity Breakup'}</span>
-          </button>
+          <CopyButton text={getReportText} label="Copy Maturity Breakup" />
+          <ShareWhatsApp text={getReportText} label="Share on WhatsApp" />
           <button
             onClick={exportCSV}
             className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 text-xs font-bold rounded-xl flex items-center gap-1.5 hover:bg-zinc-50 dark:hover:bg-zinc-900"

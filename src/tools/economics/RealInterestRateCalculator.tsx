@@ -312,20 +312,13 @@ export default function RealInterestRateCalculator() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 text-left pb-16">
-      {/* Header Card */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 rounded-xl">
-              <Percent className="w-5 h-5" />
-            </span>
-            <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-              Fisher Equation & Real Interest Rate Suite
-            </h2>
-          </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-            Calculate exact inflation-adjusted real yields (r = (1+i)/(1+π) - 1), tax drags, debtor/creditor wealth shifts, and purchasing power compounding.
-          </p>
+      {/* Top Action Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 flex items-center gap-1.5">
+            <Percent className="w-3.5 h-3.5" />
+            <span>Fisher Exact Real Yield Equation</span>
+          </span>
         </div>
 
         <div className="flex items-center gap-3 self-end sm:self-center">

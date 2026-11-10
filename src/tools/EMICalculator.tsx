@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
-import { CreditCard, Copy, Check, Info, FileText, Download, Printer, ArrowRightLeft, Sparkles, ChevronDown, Plus } from 'lucide-react';
-import { jsPDF } from 'jspdf';
+import { CreditCard, Info, FileText, Download, Printer, ArrowRightLeft, Sparkles, ChevronDown, Plus } from 'lucide-react';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
 
 // --- Interfaces ---
 type LoanType = 'home' | 'car' | 'personal' | 'education' | 'custom';
@@ -68,8 +70,6 @@ export default function EMICalculator() {
   const [amortSearch, setAmortSearch] = useState<string>('');
   
   // URL Share & Utility states
-  const [copiedLink, setCopiedLink] = useState<boolean>(false);
-  const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [timelineHoverIndex, setTimelineHoverIndex] = useState<number | null>(null);
 
   // Setup presets on loan type toggle
@@ -471,8 +471,8 @@ export default function EMICalculator() {
     return '₹' + val.toLocaleString('en-IN');
   };
 
-  const copyReportText = () => {
-    const text = `Loan Repayment Amortization Summary (Toolique.in)
+  const getLoanSummaryText = () => {
+    return `Loan Repayment Amortization Summary (Toolique.in)
 ---------------------------------------------
 Loan Category        : ${loanType.toUpperCase()} Loan
 Principal Borrowed   : ${formatINR(calculations.totalPrincipal)}
@@ -485,10 +485,6 @@ Additional Fees/Taxes: ${formatINR(calculations.totalAdditionalCharges)}
 ---------------------------------------------
 Effective Total Cost : ${formatINR(calculations.effectiveTotalCost)}
 ---------------------------------------------`;
-
-    navigator.clipboard.writeText(text);
-    setCopiedReport(true);
-    setTimeout(() => setCopiedReport(false), 2000);
   };
 
   const exportCSV = () => {
@@ -568,56 +564,56 @@ Effective Total Cost : ${formatINR(calculations.effectiveTotalCost)}
   };
 
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    doc.setFillColor(79, 70, 229); // Indigo header
-    doc.rect(0, 0, 210, 38, 'F');
+    const amortRows = calculations.yearlyAmortStandard.map((row) => ({
+      year: `Year ${row.year}`,
+      emi: formatINR(row.emiPaid),
+      principal: formatINR(row.principalPaid),
+      interest: formatINR(row.interestPaid),
+      balance: formatINR(row.balanceRemaining),
+    }));
 
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.text('LOAN REPAYMENT PLANNER', 15, 22);
-    doc.setFontSize(10);
-    doc.text('Detailed Amortization Analysis — Toolique.in', 15, 30);
-
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(12);
-    doc.text('Loan Parameters Summary', 15, 50);
-
-    doc.setFontSize(10);
-    doc.text(`Principal Loan Amount: ${formatINR(calculations.totalPrincipal)}`, 15, 58);
-    doc.text(`Annual Interest Rate: ${interestRate}% p.a.`, 15, 64);
-    doc.text(`Loan Duration: ${tenure} ${tenureType === 'years' ? 'Years' : 'Months'}`, 15, 70);
-    doc.text(`Monthly Base EMI: ${formatINR(calculations.monthlyEmi)}`, 15, 76);
-    doc.text(`Effective Additional Fees/Charges: ${formatINR(calculations.totalAdditionalCharges)}`, 15, 82);
-
-    doc.setDrawColor(200, 200, 200);
-    doc.line(15, 90, 195, 90);
-
-    // Repayment table headers
-    doc.setFont('helvetica', 'bold');
-    doc.text('Year', 15, 98);
-    doc.text('EMI Repaid', 50, 98);
-    doc.text('Principal Paid', 85, 98);
-    doc.text('Interest Paid', 120, 98);
-    doc.text('Balance Remaining', 155, 98);
-
-    doc.setFont('helvetica', 'normal');
-    doc.line(15, 102, 195, 102);
-
-    let currentY = 110;
-    calculations.yearlyAmortStandard.forEach(row => {
-      if (currentY > 270) {
-        doc.addPage();
-        currentY = 20;
-      }
-      doc.text(`Year ${row.year}`, 15, currentY);
-      doc.text(formatINR(row.emiPaid), 50, currentY);
-      doc.text(formatINR(row.principalPaid), 85, currentY);
-      doc.text(formatINR(row.interestPaid), 120, currentY);
-      doc.text(formatINR(row.balanceRemaining), 155, currentY);
-      currentY += 8;
+    downloadPdfReport({
+      title: 'Loan Repayment & Amortization Schedule',
+      subtitle: `${loanType.toUpperCase()} Loan | Rate: ${interestRate}% p.a. | Tenure: ${tenure} ${tenureType === 'years' ? 'Years' : 'Months'}`,
+      category: 'Banking & Loan Financial Analysis',
+      project: 'Toolique Financial Suite',
+      theme: 'brand',
+      parameters: [
+        { label: 'Loan Type', value: `${loanType.toUpperCase()} Loan` },
+        { label: 'Principal Amount', value: formatINR(calculations.totalPrincipal) },
+        { label: 'Annual Interest Rate', value: `${interestRate}% p.a.` },
+        { label: 'Loan Tenure', value: `${tenure} ${tenureType === 'years' ? 'Years' : 'Months'}` },
+        { label: 'Monthly Base EMI', value: `${formatINR(calculations.monthlyEmi)}/mo` },
+        { label: 'Total Interest Payable', value: formatINR(calculations.totalInterest) },
+        { label: 'Additional Fees / GST', value: formatINR(calculations.totalAdditionalCharges) },
+        { label: 'Effective Total Cost', value: formatINR(calculations.effectiveTotalCost) },
+      ],
+      tables: [
+        {
+          title: 'Yearly Loan Amortization Schedule',
+          columns: [
+            { header: 'Year', dataKey: 'year' },
+            { header: 'EMI Paid', dataKey: 'emi', align: 'right' as const },
+            { header: 'Principal Paid', dataKey: 'principal', align: 'right' as const },
+            { header: 'Interest Paid', dataKey: 'interest', align: 'right' as const },
+            { header: 'Balance Remaining', dataKey: 'balance', align: 'right' as const },
+          ],
+          rows: amortRows,
+          totalsRow: [
+            { dataKey: 'year', value: 'TOTAL REPAYMENT' },
+            { dataKey: 'emi', value: formatINR(calculations.totalInterest + calculations.totalPrincipal) },
+            { dataKey: 'principal', value: formatINR(calculations.totalPrincipal) },
+            { dataKey: 'interest', value: formatINR(calculations.totalInterest) },
+            { dataKey: 'balance', value: '₹0.00' },
+          ],
+        },
+      ],
+      disclaimers: [
+        'Calculated based on standard reducing-balance method under Indian banking conventions.',
+        'Actual interest rates and amortizations may differ slightly based on bank-specific reset dates and marginal lending rates (MCLR/RLLR).',
+      ],
+      fileName: `EMI_Loan_Repayment_Schedule_${Date.now()}.pdf`,
     });
-
-    doc.save(`EMI_Loan_Repayment_Schedule_${Date.now()}.pdf`);
   };
 
   const getShareLink = () => {
@@ -643,18 +639,11 @@ Effective Total Cost : ${formatINR(calculations.effectiveTotalCost)}
           </div>
         </div>
 
-        {/* Copy Share link */}
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText(getShareLink());
-            setCopiedLink(true);
-            setTimeout(() => setCopiedLink(false), 2000);
-          }}
-          className="text-[10px] font-bold text-indigo-700 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm"
-        >
-          {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-          <span>{copiedLink ? 'Link Copied' : 'Share Scenario'}</span>
-        </button>
+        {/* Share & WhatsApp */}
+        <div className="flex items-center gap-2">
+          <CopyButton text={getShareLink} label="Share Scenario" size="xs" variant="outline" />
+          <ShareWhatsApp text={getShareLink} label="WhatsApp" size="xs" />
+        </div>
       </div>
 
       {/* LOAN TYPE PRESETS TABS */}
@@ -896,13 +885,10 @@ Effective Total Cost : ${formatINR(calculations.effectiveTotalCost)}
                 <span className="text-[9px] font-black uppercase text-zinc-450 tracking-wider">MONTHLY REPAYMENT LIABILITY</span>
                 <h3 className="text-sm font-black text-indigo-400 mt-0.5">Loan Plan Overview</h3>
               </div>
-              <button
-                onClick={copyReportText}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-350 hover:bg-zinc-850 hover:text-white transition"
-              >
-                {copiedReport ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedReport ? 'Copied' : 'Copy splits'}</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <CopyButton text={getLoanSummaryText} label="Copy splits" size="xs" variant="secondary" />
+                <ShareWhatsApp text={getLoanSummaryText} label="WhatsApp" size="xs" />
+              </div>
             </div>
 
             {/* Monthly EMI Large Badge */}

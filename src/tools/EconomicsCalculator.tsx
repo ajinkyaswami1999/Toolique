@@ -1,13 +1,14 @@
 import { useState, useMemo, useEffect } from 'react';
 import {
-  TrendingUp, Search, Copy, Check, Share2, FileSpreadsheet,
+  TrendingUp, Search, FileSpreadsheet,
   FileText, BookOpen, HelpCircle, Activity,
   Layers, ChevronRight, Sparkles, Globe,
   Calculator, ArrowUpRight, Award
 } from 'lucide-react';
-import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import SEO from '../components/SEO';
+import { downloadPdfReport } from '../utils/pdf';
+import { CopyButton, ShareWhatsApp } from '../components/common';
 
 // -------------------------------------------------------------
 // Calculator IDs & Category Definitions
@@ -320,7 +321,6 @@ export default function EconomicsCalculator() {
   const [selectedCalcId, setSelectedCalcId] = useState<string>('ped');
   const [activeCategory, setActiveCategory] = useState<CalcCategory>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [copied, setCopied] = useState<boolean>(false);
   const [recentCalcs, setRecentCalcs] = useState<string[]>(['ped', 'gdp_growth', 'breakeven', 'inflation_rate']);
 
   // Update recent list in localStorage
@@ -1226,8 +1226,8 @@ export default function EconomicsCalculator() {
   ]);
 
   // Copy Result text
-  const copyReport = () => {
-    const text = `📊 TOOLIQUE ECONOMICS CALCULATOR
+  const getReportText = () => {
+    return `📊 TOOLIQUE ECONOMICS CALCULATOR
 ---------------------------------------------
 Calculator: ${activeCalcMeta.name}
 Category: ${activeCalcMeta.category === 'micro' ? 'Microeconomics' : 'Macroeconomics'}
@@ -1242,15 +1242,11 @@ STEP-BY-STEP CALCULATION:
 ${resultData.steps.join('\n')}
 
 Calculated online at Toolique India (https://www.toolique.in/calculators/economics-calculator)`;
-
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
   };
 
-  // WhatsApp Share
-  const shareWhatsApp = () => {
-    const text = `*📊 Toolique Economics Calculator: ${activeCalcMeta.name}*
+  // WhatsApp Share Text
+  const getWhatsAppText = () => {
+    return `*📊 Toolique Economics Calculator: ${activeCalcMeta.name}*
 *Result:* ${resultData.primaryLabel} = ${resultData.primaryValue}
 *Outcome:* ${resultData.classification}
 *Formula:* ${activeCalcMeta.formulaDisplay}
@@ -1259,8 +1255,6 @@ Calculated online at Toolique India (https://www.toolique.in/calculators/economi
 ${resultData.steps.slice(0, 4).join('\n')}
 
 _Calculate all micro & macro formulas at:_ https://www.toolique.in/calculators/economics-calculator`;
-
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   // Export Excel
@@ -1283,94 +1277,44 @@ _Calculate all micro & macro formulas at:_ https://www.toolique.in/calculators/e
     XLSX.writeFile(wb, `Toolique_${selectedCalcId}_Calculation.xlsx`);
   };
 
-  // Export PDF
+  // Export PDF with Standard Engine
   const exportPdf = () => {
-    const doc = new jsPDF();
+    const stepRows = resultData.steps.map((s, idx) => ({
+      step: `Step ${idx + 1}`,
+      detail: s,
+    }));
 
-    // Header
-    doc.setFillColor(30, 41, 59);
-    doc.rect(0, 0, 210, 32, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('ECONOMICS FORMULA CALCULATION REPORT', 14, 15);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(148, 163, 184);
-    doc.text(`Toolique India • ${activeCalcMeta.name} (${activeCalcMeta.category.toUpperCase()})`, 14, 23);
-    doc.text(`Date: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}`, 14, 28);
-
-    let y = 44;
-
-    // Result Card
-    doc.setFillColor(241, 245, 249);
-    doc.roundedRect(14, y, 182, 28, 3, 3, 'F');
-    doc.setFontSize(10);
-    doc.setTextColor(71, 85, 105);
-    doc.text(resultData.primaryLabel.toUpperCase(), 20, y + 8);
-
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(15, 23, 42);
-    doc.text(resultData.primaryValue, 20, y + 17);
-
-    doc.setFontSize(9);
-    doc.setTextColor(99, 102, 241);
-    doc.text(`Classification: ${resultData.classification}`, 20, y + 24);
-
-    y += 38;
-
-    // Formula definition
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(15, 23, 42);
-    doc.text('1. Economic Concept & Formula', 14, y);
-    y += 6;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(71, 85, 105);
-    doc.text(`Formula: ${activeCalcMeta.formulaDisplay}`, 16, y);
-    y += 5.5;
-
-    const splitDef = doc.splitTextToSize(activeCalcMeta.aeoAnswer, 175);
-    doc.text(splitDef, 16, y);
-    y += splitDef.length * 5 + 4;
-
-    // Steps
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(15, 23, 42);
-    doc.text('2. Step-by-Step Mathematical Solution', 14, y);
-    y += 6;
-
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica', 'normal');
-    resultData.steps.forEach((step) => {
-      doc.setTextColor(15, 23, 42);
-      const splitStep = doc.splitTextToSize(step, 175);
-      doc.text(splitStep, 16, y);
-      y += splitStep.length * 5;
+    downloadPdfReport({
+      title: 'Economics Formula Calculation Report',
+      subtitle: `${activeCalcMeta.name} (${activeCalcMeta.category.toUpperCase()}) | Formula: ${activeCalcMeta.formulaDisplay}`,
+      category: 'Economics & Quantitative Analysis',
+      project: 'Toolique Financial & Academic Suite',
+      theme: 'brand',
+      parameters: [
+        { label: 'Economic Model', value: activeCalcMeta.name },
+        { label: 'Category', value: activeCalcMeta.category === 'micro' ? 'Microeconomics' : 'Macroeconomics' },
+        { label: 'Primary Result', value: `${resultData.primaryLabel}: ${resultData.primaryValue}` },
+        { label: 'Economic Classification', value: resultData.classification },
+        { label: 'Core Formula', value: activeCalcMeta.formulaDisplay },
+        { label: 'Interpretation', value: resultData.interpretation },
+      ],
+      tables: [
+        {
+          title: 'Step-by-Step Mathematical Solution',
+          columns: [
+            { header: 'Sequence', dataKey: 'step' },
+            { header: 'Mathematical Step & Substitution', dataKey: 'detail' },
+          ],
+          rows: stepRows,
+        },
+      ],
+      disclaimers: [
+        'Calculations are based on standard neoclassical and Keynesian economic principles.',
+        'Elasticities and multipliers assume ceteris paribus (all other factors held constant).',
+        'Academic model results are for instructional and analytical estimation.',
+      ],
+      fileName: `Economics_${selectedCalcId}_${Date.now()}.pdf`,
     });
-
-    y += 4;
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3. Economic Interpretation', 14, y);
-    y += 6;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(71, 85, 105);
-    const splitInterp = doc.splitTextToSize(resultData.interpretation, 175);
-    doc.text(splitInterp, 16, y);
-
-    doc.setFontSize(7.5);
-    doc.setTextColor(148, 163, 184);
-    doc.text('Generated via Toolique Economics Calculator Hub • https://www.toolique.in', 14, 285);
-
-    doc.save(`Toolique_Economics_${selectedCalcId}.pdf`);
   };
 
   return (
@@ -1404,32 +1348,20 @@ _Calculate all micro & macro formulas at:_ https://www.toolique.in/calculators/e
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <button
-              onClick={copyReport}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition border border-white/10 shadow-sm"
-            >
-              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-              <span>{copied ? 'Copied!' : 'Copy Result'}</span>
-            </button>
-            <button
-              onClick={shareWhatsApp}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm"
-            >
-              <Share2 className="w-4 h-4" />
-              <span>WhatsApp</span>
-            </button>
+            <CopyButton text={getReportText} label="Copy Result" size="sm" variant="secondary" />
+            <ShareWhatsApp text={getWhatsAppText} label="WhatsApp" size="sm" />
             <button
               onClick={exportExcel}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition shadow-sm cursor-pointer"
             >
-              <FileSpreadsheet className="w-4 h-4" />
+              <FileSpreadsheet className="w-3.5 h-3.5" />
               <span>Excel</span>
             </button>
             <button
               onClick={exportPdf}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-sm cursor-pointer"
             >
-              <FileText className="w-4 h-4" />
+              <FileText className="w-3.5 h-3.5" />
               <span>PDF Report</span>
             </button>
           </div>

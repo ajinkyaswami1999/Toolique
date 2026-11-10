@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { 
   Box, 
-  Upload, 
   Download, 
-  Copy, 
-  Check, 
   Info, 
   RefreshCw, 
   Maximize2, 
@@ -18,7 +15,10 @@ import {
   Package, 
   Sparkles
 } from 'lucide-react';
-import jsPDF from 'jspdf';
+import { downloadPdfReport } from '../utils/pdf';
+import CopyButton from '../components/common/CopyButton';
+import ShareWhatsApp from '../components/common/ShareWhatsApp';
+import FileDropzone from '../components/common/FileDropzone';
 
 // --- Types & Interfaces ---
 
@@ -150,7 +150,6 @@ export default function STLVolumeCalculator() {
   const [meshStats, setMeshStats] = useState<StlMeshStats | null>(null);
   const [isParsing, setIsParsing] = useState<boolean>(false);
   const [parseError, setParseError] = useState<string | null>(null);
-  const [dragActive, setDragActive] = useState<boolean>(false);
 
   // Multi-File Comparison Batch List
   const [batchList, setBatchList] = useState<BatchItem[]>([]);
@@ -168,9 +167,6 @@ export default function STLVolumeCalculator() {
   const [cameraZoom, setCameraZoom] = useState<number>(1.0);
   const isDraggingRef = useRef<boolean>(false);
   const lastMousePosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-
-  // Clipboard Copy State
-  const [copied, setCopied] = useState<boolean>(false);
 
   // Currency Object
   const curObj = useMemo(() => CURRENCIES.find(c => c.code === currency) || CURRENCIES[0], [currency]);
@@ -513,14 +509,6 @@ export default function STLVolumeCalculator() {
       setParseError('Error reading STL file from disk.');
     };
     reader.readAsArrayBuffer(file);
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFileUpload(e.dataTransfer.files[0]);
-    }
   };
 
   // --- Sample Models Generator ---
@@ -941,8 +929,8 @@ export default function STLVolumeCalculator() {
   };
 
   // --- Copy Formatted Results ---
-  const handleCopyResults = () => {
-    if (!meshStats || !scaledStats) return;
+  const getResultsSummary = () => {
+    if (!meshStats || !scaledStats) return '';
     const lines = [
       `=== Toolique STL Volume & Mass Summary ===`,
       `File Name: ${meshStats.fileName}`,
@@ -961,114 +949,91 @@ export default function STLVolumeCalculator() {
       `Parts per ${spoolWeightGrams}g Spool: ${scaledStats.partsPerSpool} units`,
       `Batch (${batchQuantity} pcs) Total: ${curObj.symbol}${scaledStats.batchMaterialCost.toFixed(2)} (${scaledStats.totalBatchWeightKg.toFixed(2)} kg / ${scaledStats.spoolsRequired} spools)`
     ];
-
-    navigator.clipboard.writeText(lines.join('\n'));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    return lines.join('\n');
   };
 
-  // --- Export Technical PDF Report ---
+  // --- Export Standardized Branded PDF Report ---
   const handleExportPDF = () => {
     if (!meshStats || !scaledStats) return;
 
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-
-    // Header Banner
-    doc.setFillColor(79, 70, 229); // Indigo 600
-    doc.rect(0, 0, pageWidth, 24, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('STL VOLUME & 3D PRINT SPECIFICATION REPORT', 14, 15);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Generated: ${new Date().toLocaleDateString()} | Toolique 3D Engine`, pageWidth - 14, 15, { align: 'right' });
-
-    // Section 1: File & Mesh Metadata
-    let y = 34;
-    doc.setTextColor(30, 41, 59);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('1. 3D Model & Mesh Integrity', 14, y);
-    y += 6;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`File Name: ${meshStats.fileName}`, 14, y);
-    doc.text(`Format: ${meshStats.format}`, 110, y);
-    y += 5;
-    doc.text(`Triangle Count: ${meshStats.triangleCount.toLocaleString()}`, 14, y);
-    doc.text(`Watertight Estimate: ${meshStats.isWatertightEstimate ? 'Valid Manifold' : 'Potential Non-Manifold'}`, 110, y);
-    y += 5;
-    doc.text(`Parse Benchmark: ${meshStats.parseTimeMs} ms`, 14, y);
-    doc.text(`Degenerate Facets: ${meshStats.degenerateTriangles}`, 110, y);
-    y += 8;
-
-    // Section 2: Dimensions & Geometry
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('2. Geometric Dimensions & Volume', 14, y);
-    y += 6;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Bounding Box (X × Y × Z): ${scaledStats.dimX.toFixed(1)} × ${scaledStats.dimY.toFixed(1)} × ${scaledStats.dimZ.toFixed(1)} mm`, 14, y);
-    doc.text(`Bounding Box Volume: ${scaledStats.bbVolCm3.toFixed(2)} cm³`, 110, y);
-    y += 5;
-    doc.text(`Solid Mesh Volume: ${scaledStats.solidVolumeCm3.toFixed(2)} cm³ (${scaledStats.volumeMm3.toFixed(0)} mm³)`, 14, y);
-    doc.text(`Packing Density: ${scaledStats.packingDensityPct.toFixed(1)}% of bounding box`, 110, y);
-    y += 5;
-    doc.text(`Total Surface Area: ${scaledStats.surfaceAreaCm2.toFixed(1)} cm²`, 14, y);
-    doc.text(`Scale Multiplier: ${scaleMultiplierPct}%`, 110, y);
-    y += 8;
-
-    // Section 3: Material & Slicing Infill Breakdown
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('3. Material & Slicing Infill Breakdown', 14, y);
-    y += 6;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Material: ${activeMaterial.name}`, 14, y);
-    doc.text(`Density: ${effectiveDensity} g/cm³`, 110, y);
-    y += 5;
-    doc.text(`Slicing Mode: ${isInfillMode ? `Sparse Infill (${infillPct}%)` : '100% Solid Mass'}`, 14, y);
-    doc.text(`Wall Perimeters: ${wallCount} walls (${(nozzleDiameterMm * wallCount).toFixed(1)} mm)`, 110, y);
-    y += 5;
-    doc.text(`Effective Printed Volume: ${scaledStats.effectiveVolumeCm3.toFixed(2)} cm³`, 14, y);
-    doc.text(`Net Part Mass: ${scaledStats.effectiveWeightGrams.toFixed(1)} grams (${scaledStats.weightOz.toFixed(2)} oz)`, 110, y);
-    y += 5;
-    doc.text(`Gross Mass (+${wasteFactorPct}% waste/purge): ${scaledStats.totalWeightWithWasteGrams.toFixed(1)} grams`, 14, y);
-    doc.text(`Yield per ${spoolWeightGrams}g Spool: ${scaledStats.partsPerSpool} parts`, 110, y);
-    y += 8;
-
-    // Section 4: Commercial Production & Cost Summary
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('4. Production & Filament Costing', 14, y);
-    y += 6;
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Spool Price: ${curObj.symbol}${spoolCost.toFixed(2)} / ${spoolWeightGrams}g spool`, 14, y);
-    doc.text(`Unit Material Cost: ${curObj.symbol}${scaledStats.partMaterialCost.toFixed(2)}`, 110, y);
-    y += 5;
-    doc.text(`Batch Quantity: ${batchQuantity} units`, 14, y);
-    doc.text(`Total Batch Filament Mass: ${scaledStats.totalBatchWeightKg.toFixed(2)} kg`, 110, y);
-    y += 5;
-    doc.text(`Spools Required: ${scaledStats.spoolsRequired} roll(s)`, 14, y);
-    doc.text(`Total Batch Raw Material Cost: ${curObj.symbol}${scaledStats.batchMaterialCost.toFixed(2)}`, 110, y);
-    y += 12;
-
-    // Footer
-    doc.setFontSize(8);
-    doc.setTextColor(100, 116, 139);
-    doc.text('Processed 100% client-side in Toolique 3D Engine. No files uploaded to external servers.', 14, 285);
-
-    doc.save(`${meshStats.fileName.replace('.stl', '')}_Volume_Report.pdf`);
+    downloadPdfReport({
+      title: 'STL Volume & 3D Print Specification Report',
+      subtitle: `File: ${meshStats.fileName} | Format: ${meshStats.format} | Scale: ${scaleMultiplierPct}%`,
+      category: '3D Mesh Engineering & Additive Manufacturing',
+      project: 'Toolique 3D Engine',
+      theme: 'brand',
+      parameters: [
+        { label: 'File Name', value: meshStats.fileName },
+        { label: 'Triangle Count', value: meshStats.triangleCount.toLocaleString() },
+        { label: 'Mesh Status', value: meshStats.isWatertightEstimate ? 'Valid Manifold' : 'Potential Non-Manifold' },
+        { label: 'Bounding Box', value: `${scaledStats.dimX.toFixed(1)} × ${scaledStats.dimY.toFixed(1)} × ${scaledStats.dimZ.toFixed(1)} mm` },
+        { label: 'Solid Volume', value: `${scaledStats.solidVolumeCm3.toFixed(2)} cm³ (${scaledStats.volumeMm3.toFixed(0)} mm³)` },
+        { label: 'Surface Area', value: `${scaledStats.surfaceAreaCm2.toFixed(1)} cm²` },
+        { label: 'Material & Density', value: `${activeMaterial.name} (${effectiveDensity} g/cm³)` },
+        { label: 'Effective Printed Mass', value: `${scaledStats.effectiveWeightGrams.toFixed(1)} g` },
+        { label: 'Unit Material Cost', value: `${curObj.symbol}${scaledStats.partMaterialCost.toFixed(2)}` },
+        { label: 'Batch Total Cost', value: `${curObj.symbol}${scaledStats.batchMaterialCost.toFixed(2)} (${batchQuantity} pcs)` },
+      ],
+      tables: [
+        {
+          title: '1. 3D Model & Mesh Integrity',
+          columns: [
+            { header: 'Property', dataKey: 'prop' },
+            { header: 'Specification', dataKey: 'val', align: 'right' as const },
+          ],
+          rows: [
+            { prop: 'File Name', val: meshStats.fileName },
+            { prop: 'File Format', val: meshStats.format },
+            { prop: 'Triangle Count', val: meshStats.triangleCount.toLocaleString() },
+            { prop: 'Watertight Manifold Check', val: meshStats.isWatertightEstimate ? 'Valid Manifold' : 'Potential Non-Manifold' },
+            { prop: 'Degenerate Triangles', val: meshStats.degenerateTriangles.toString() },
+            { prop: 'Parse Benchmark Time', val: `${meshStats.parseTimeMs} ms` },
+          ],
+        },
+        {
+          title: '2. Geometric Dimensions & Volume',
+          columns: [
+            { header: 'Dimension / Metric', dataKey: 'metric' },
+            { header: 'Measured Value', dataKey: 'val', align: 'right' as const },
+          ],
+          rows: [
+            { metric: 'Bounding Box (X × Y × Z)', val: `${scaledStats.dimX.toFixed(1)} × ${scaledStats.dimY.toFixed(1)} × ${scaledStats.dimZ.toFixed(1)} mm` },
+            { metric: 'Bounding Box Volume', val: `${scaledStats.bbVolCm3.toFixed(2)} cm³` },
+            { metric: 'Solid Mesh Volume', val: `${scaledStats.solidVolumeCm3.toFixed(2)} cm³ (${scaledStats.volumeMm3.toFixed(0)} mm³)` },
+            { metric: 'Packing Density Ratio', val: `${scaledStats.packingDensityPct.toFixed(1)}% of bounding box` },
+            { metric: 'Total Surface Area', val: `${scaledStats.surfaceAreaCm2.toFixed(1)} cm²` },
+            { metric: 'Applied Scale Multiplier', val: `${scaleMultiplierPct}%` },
+          ],
+        },
+        {
+          title: '3. Material & Slicing Infill Breakdown',
+          columns: [
+            { header: 'Slicing Parameter', dataKey: 'param' },
+            { header: 'Value', dataKey: 'val', align: 'right' as const },
+          ],
+          rows: [
+            { param: 'Material Selected', val: activeMaterial.name },
+            { param: 'Material Density', val: `${effectiveDensity} g/cm³` },
+            { param: 'Infill Density Mode', val: isInfillMode ? `Sparse Infill (${infillPct}%)` : '100% Solid Mass' },
+            { param: 'Wall Perimeters', val: `${wallCount} walls (${(nozzleDiameterMm * wallCount).toFixed(1)} mm)` },
+            { param: 'Effective Printed Volume', val: `${scaledStats.effectiveVolumeCm3.toFixed(2)} cm³` },
+            { param: 'Net Part Mass', val: `${scaledStats.effectiveWeightGrams.toFixed(1)} g (${scaledStats.weightOz.toFixed(2)} oz)` },
+            { param: `Gross Mass (+${wasteFactorPct}% waste/purge)`, val: `${scaledStats.totalWeightWithWasteGrams.toFixed(1)} g` },
+            { param: `Yield per ${spoolWeightGrams}g Spool`, val: `${scaledStats.partsPerSpool} parts` },
+            { param: 'Unit Raw Material Cost', val: `${curObj.symbol}${scaledStats.partMaterialCost.toFixed(2)}` },
+          ],
+          totalsRow: [
+            { dataKey: 'param', value: `BATCH RAW MATERIAL COST (${batchQuantity} PCS)` },
+            { dataKey: 'val', value: `${curObj.symbol}${scaledStats.batchMaterialCost.toFixed(2)}` },
+          ],
+        },
+      ],
+      disclaimers: [
+        'Processed 100% client-side in Toolique 3D Engine. No files uploaded to external servers.',
+        'Volume and weight approximations assume consistent extrusion width and nominal filament density.',
+      ],
+      fileName: `${meshStats.fileName.replace('.stl', '')}_Volume_Report.pdf`,
+    });
   };
 
   return (
@@ -1122,41 +1087,15 @@ export default function STLVolumeCalculator() {
         {/* Left Column: File Dropzone & 3D Interactive Canvas (7 Cols) */}
         <div className="lg:col-span-7 space-y-6">
           
-          {/* Drag & Drop Upload Zone */}
-          <div
-            onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
-            onDragLeave={() => setDragActive(false)}
-            onDrop={handleDrop}
-            className={`p-6 rounded-2xl border-2 border-dashed transition-all text-center ${
-              dragActive 
-                ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/20' 
-                : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 hover:border-indigo-400'
-            }`}
-          >
-            <input
-              type="file"
+          {/* File Dropzone */}
+          <div>
+            <FileDropzone
               accept=".stl"
-              id="stl-file-input"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  handleFileUpload(e.target.files[0]);
-                }
-              }}
-              className="hidden"
+              maxSizeMB={100}
+              title="Drop your STL file here or browse"
+              subtitle="Supports Binary STL & ASCII STL • 100% Client-Side In-Browser Processing"
+              onFileSelect={handleFileUpload}
             />
-            <label htmlFor="stl-file-input" className="cursor-pointer block space-y-3">
-              <div className="w-12 h-12 mx-auto rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-sm">
-                <Upload className="w-6 h-6" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-zinc-900 dark:text-white">
-                  Drop your STL file here or <span className="text-indigo-600 dark:text-indigo-400 underline">browse</span>
-                </h4>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-                  Supports Binary STL & ASCII STL • 100% Client-Side In-Browser Processing
-                </p>
-              </div>
-            </label>
 
             {isParsing && (
               <div className="mt-3 flex items-center justify-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400">
@@ -1669,13 +1608,16 @@ export default function STLVolumeCalculator() {
               <Package className="w-3.5 h-3.5 text-indigo-500" />
               Add to Batch List
             </button>
-            <button
-              onClick={handleCopyResults}
-              className="px-3.5 py-2 text-xs font-bold rounded-xl bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700 hover:border-indigo-500 transition-colors flex items-center gap-1.5 cursor-pointer"
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-indigo-500" />}
-              <span>{copied ? 'Copied!' : 'Copy Summary'}</span>
-            </button>
+            <CopyButton
+              text={getResultsSummary}
+              label="Copy Summary"
+              size="sm"
+            />
+            <ShareWhatsApp
+              text={getResultsSummary}
+              label="WhatsApp"
+              size="sm"
+            />
             <button
               onClick={handleExportPDF}
               className="px-4 py-2 text-xs font-bold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer"
