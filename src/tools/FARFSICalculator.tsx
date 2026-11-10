@@ -1,12 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { 
-  Info, Building2, Trash2, Plus, 
+  Trash2, Plus, 
   Printer, Download, Sparkles, Sliders, ArrowRightLeft,
   MapPin, Loader2, CheckCircle2, AlertCircle, Compass,
-  Layers, Shield, BookOpen, ChevronRight, HelpCircle,
-  Eye, Check, Copy, ArrowUpRight, TrendingUp, Maximize2,
-  Columns, Grid, ArrowDown, ArrowUp, BarChart3, Ruler,
-  Building, Landmark, Coins, FileCheck
+  Layers, Shield, BookOpen, Maximize2, Ruler,
+  Landmark, FileCheck
 } from 'lucide-react';
 import { downloadPdfReport } from '../utils/pdf';
 import { CopyButton, ShareWhatsApp } from '../components/common';
@@ -24,16 +22,6 @@ interface FloorRow {
   id: string;
   name: string;
   area: number;
-}
-
-interface HistoryItem {
-  id: string;
-  name: string;
-  plotArea: number;
-  unit: UnitType;
-  fsi: number;
-  floorsCount: number;
-  timestamp: string;
 }
 
 // Popular Quick Indian Cities
@@ -58,12 +46,11 @@ export default function FARFSICalculator() {
   const [plotArea, setPlotArea] = useState<number>(2400); // 40x60 plot
   const [permissibleFsi, setPermissibleFsi] = useState<number>(2.0);
   const [groundCoverage, setGroundCoverage] = useState<number>(50); // %
-  const [avgFloorHeight, setAvgFloorHeight] = useState<number>(3.0); // meters or 10 ft
+  const avgFloorHeight = 3.0; // meters or 10 ft
   const [roadWidth, setRoadWidth] = useState<number>(12); // meters or 40 ft
   const [plotWidth, setPlotWidth] = useState<number>(40); // ft or meters
   const [plotDepth, setPlotDepth] = useState<number>(60); // ft or meters
-  const [buildingType, setBuildingType] = useState<BuildingType>('residential');
-  const [devZone, setDevZone] = useState<string>('residential_zone');
+  const buildingType: BuildingType = 'residential';
 
   // Setbacks (Professional Mode)
   const [setbackFront, setSetbackFront] = useState<number>(10); // ft or meters
@@ -75,11 +62,11 @@ export default function FARFSICalculator() {
   const [baseFsi, setBaseFsi] = useState<number>(1.10);
   const [enablePremiumFsi, setEnablePremiumFsi] = useState<boolean>(true);
   const [premiumFsiValue, setPremiumFsiValue] = useState<number>(0.30);
-  const [readyReckonerLandRate, setReadyReckonerLandRate] = useState<number>(4500); // INR per sqft
+  const readyReckonerLandRate = 4500; // INR per sqft
   const [enableTdr, setEnableTdr] = useState<boolean>(true);
   const [tdrFsiValue, setTdrFsiValue] = useState<number>(0.40);
   const [enableAncillaryFungible, setEnableAncillaryFungible] = useState<boolean>(true);
-  const [ancillaryPercentage, setAncillaryPercentage] = useState<number>(35); // 35% for residential, 50% for commercial
+  const ancillaryPercentage = 35; // 35% for residential, 50% for commercial
   const [isTodZone, setIsTodZone] = useState<boolean>(false); // Transit Oriented Development corridor (+0.5 FSI)
 
   // 4. Visual Studio & Knowledge Tabs
@@ -94,7 +81,6 @@ export default function FARFSICalculator() {
     { id: '3', name: 'Second Floor', area: 1200 },
     { id: '4', name: 'Third Floor', area: 1200 }
   ]);
-  const numFloors = plannedFloors.length;
 
   // 6. Reverse Calculator Inputs
   const [revMode, setRevMode] = useState<ReverseMode>('max_builtup');
@@ -104,16 +90,9 @@ export default function FARFSICalculator() {
   const [revFootprint, setRevFootprint] = useState<string>('1200');
   const [revPlannedArea, setRevPlannedArea] = useState<string>('3600');
 
-  // 7. Scenario Comparison Inputs
-  const [enableComparison, setEnableComparison] = useState<boolean>(false);
-  const [compFsiA, setCompFsiA] = useState<string>('1.5');
-  const [compFsiB, setCompFsiB] = useState<string>('2.0');
-  const [compFsiC, setCompFsiC] = useState<string>('2.5');
-
-  // 8. Location Presets State
+  // 7. Location Presets State
   const [statePreset, setStatePreset] = useState<string>('maharashtra');
   const [cityPreset, setCityPreset] = useState<string>('pune');
-  const [zonePreset, setZonePreset] = useState<string>('residential');
   const [isDetectingLocation, setIsDetectingLocation] = useState<boolean>(false);
   const [locationMessage, setLocationMessage] = useState<{
     type: 'success' | 'error';
@@ -135,7 +114,7 @@ export default function FARFSICalculator() {
       let appliedFsiText = '';
       if (cityObj?.zones && autoApply) {
         const z = cityObj.zones as Record<string, CityZoneRegulation | undefined>;
-        const reg = z[zonePreset] || z['residential'];
+        const reg = z['residential'];
         if (reg) {
           setPermissibleFsi(reg.fsi);
           setBaseFsi(Number((reg.fsi * 0.6).toFixed(2)));
@@ -171,23 +150,8 @@ export default function FARFSICalculator() {
 
   const activePreset: CityZoneRegulation | null = useMemo(() => {
     if (!selectedCity || !selectedCity.zones) return null;
-    const z = selectedCity.zones as Record<string, CityZoneRegulation | undefined>;
-    return z[zonePreset] || z['residential'] || null;
-  }, [selectedCity, zonePreset]);
-
-  const availableZones = useMemo(() => {
-    if (!selectedCity || !selectedCity.zones) return [{ id: 'residential', label: 'Residential' }, { id: 'commercial', label: 'Commercial' }];
-    const zonesList: { id: string; label: string }[] = [];
-    if (selectedCity.zones.residential) zonesList.push({ id: 'residential', label: 'Residential' });
-    if (selectedCity.zones.commercial) zonesList.push({ id: 'commercial', label: 'Commercial' });
-    if (selectedCity.zones.mixed_use) zonesList.push({ id: 'mixed_use', label: 'Mixed Use / High-Density' });
-    if (selectedCity.zones.industrial) zonesList.push({ id: 'industrial', label: 'Industrial / Tech Park' });
-    return zonesList;
+    return selectedCity.zones['residential'] || null;
   }, [selectedCity]);
-
-  // Utility states
-  const [historyList, setHistoryList] = useState<HistoryItem[]>([]);
-  const [newHistoryName, setNewHistoryName] = useState<string>('My Plot Plan');
 
   // --- Area Unit Conversion Factor (Relative to sq ft) ---
   const conversionFactors = useMemo((): Record<UnitType, number> => {
@@ -214,16 +178,8 @@ export default function FARFSICalculator() {
     setUnit(newUnit);
   };
 
-  // Load calculation history and URL parameters on mount
+  // Load URL parameters on mount
   useEffect(() => {
-    const cached = localStorage.getItem('toolique_far_hist');
-    if (cached) {
-      try {
-        setHistoryList(JSON.parse(cached));
-      } catch {
-        // ignore parse error
-      }
-    }
 
     const params = new URLSearchParams(window.location.search);
     const urlPlotArea = params.get('plotArea');
@@ -463,25 +419,6 @@ export default function FARFSICalculator() {
     setPlannedFloors(plannedFloors.map(f => f.id === id ? { ...f, area: val } : f));
   };
 
-  const handleFloorsCountChange = (val: number) => {
-    const target = Math.max(1, Math.min(30, val));
-    if (target > plannedFloors.length) {
-      const added: FloorRow[] = [];
-      const defaultArea = plannedFloors.length > 0 ? plannedFloors[plannedFloors.length - 1].area : 1000;
-      for (let i = plannedFloors.length + 1; i <= target; i++) {
-        let name = `${i}th Floor`;
-        if (i === 1) name = 'Ground Floor';
-        else if (i === 2) name = 'First Floor';
-        else if (i === 3) name = 'Second Floor';
-        else if (i === 4) name = 'Third Floor';
-        added.push({ id: `floor_${Date.now()}_${i}`, name, area: defaultArea });
-      }
-      setPlannedFloors([...plannedFloors, ...added]);
-    } else if (target < plannedFloors.length) {
-      setPlannedFloors(plannedFloors.slice(0, target));
-    }
-  };
-
   // --- Reverse Planner calculations ---
   const reverseCalculations = useMemo(() => {
     const fArea = parseFloat(revDesiredFloorArea) || 4000;
@@ -499,55 +436,6 @@ export default function FARFSICalculator() {
       remainingBuiltUpArea: Math.max(0, (pArea * fsiVal) - plannedArea)
     };
   }, [revDesiredFloorArea, revPlotArea, revFsi, revFootprint, revPlannedArea]);
-
-  // --- Multi Scenario comparisons ---
-  const comparisonResults = useMemo(() => {
-    const basePlot = plotArea;
-    const fsiA = parseFloat(compFsiA) || 1.5;
-    const fsiB = parseFloat(compFsiB) || 2.0;
-    const fsiC = parseFloat(compFsiC) || 2.5;
-
-    const computeOutputs = (fsiVal: number) => {
-      const maxBuiltUp = basePlot * fsiVal;
-      const footprint = basePlot * (groundCoverage / 100);
-      const estFloors = Math.ceil(maxBuiltUp / footprint);
-      return {
-        maxBuiltUp: Math.round(maxBuiltUp),
-        footprint: Math.round(footprint),
-        estFloors
-      };
-    };
-
-    return {
-      scenarioA: computeOutputs(fsiA),
-      scenarioB: computeOutputs(fsiB),
-      scenarioC: computeOutputs(fsiC)
-    };
-  }, [plotArea, groundCoverage, compFsiA, compFsiB, compFsiC]);
-
-  // --- History Management ---
-  const saveCalculationToHistory = () => {
-    const newItem: HistoryItem = {
-      id: Date.now().toString(),
-      name: newHistoryName,
-      plotArea,
-      unit,
-      fsi: calculations.effectivePermissibleFsi,
-      floorsCount: plannedFloors.length,
-      timestamp: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })
-    };
-
-    const updated = [newItem, ...historyList].slice(0, 10);
-    setHistoryList(updated);
-    localStorage.setItem('toolique_far_hist', JSON.stringify(updated));
-    setNewHistoryName('My Plot Plan');
-  };
-
-  const deleteHistoryItem = (id: string) => {
-    const updated = historyList.filter(h => h.id !== id);
-    setHistoryList(updated);
-    localStorage.setItem('toolique_far_hist', JSON.stringify(updated));
-  };
 
   // --- Copy, PDF, and Print actions ---
   const getResultsText = () => {

@@ -660,25 +660,25 @@ export default function ThreeDPrintingCostCalculator() {
     setPackingTime(item.inputs.packingTime);
     setLabourRate(item.inputs.labourRate);
 
-    setPaintCost(item.inputs.paintCost);
-    setGlueCost(item.inputs.glueCost);
-    setSandpaperCost(item.inputs.sandpaperCost);
-    setScrewsMagnetsCost(item.inputs.screwsMagnetsCost);
-    setPackagingBoxCost(item.inputs.packagingBoxCost);
-    setBubbleWrapCost(item.inputs.bubbleWrapCost);
-    setLabelStickerCost(item.inputs.labelStickerCost);
-    setCourierHandlingCost(item.inputs.courierHandlingCost);
+    setPaintCost(item.inputs.paintCost ?? 0);
+    setGlueCost(item.inputs.glueCost ?? 0);
+    setSandpaperCost(item.inputs.sandpaperCost ?? 0);
+    setScrewsMagnetsCost(item.inputs.screwsMagnetsCost ?? 0);
+    setPackagingBoxCost(item.inputs.packagingBoxCost ?? settings.packagingBoxCost);
+    setBubbleWrapCost(item.inputs.bubbleWrapCost ?? 10);
+    setLabelStickerCost(item.inputs.labelStickerCost ?? 5);
+    setCourierHandlingCost(item.inputs.courierHandlingCost ?? 60);
 
     setCustomCosts(item.inputs.customCosts || []);
     setBatchQuantity(item.inputs.batchQuantity || 1);
 
-    setPlatformCommission(item.inputs.platformCommission);
-    setPaymentGateway(item.inputs.paymentGateway);
-    setGst(item.inputs.gst);
-    setMarketingCost(item.inputs.marketingCost);
-    setMiscellaneousCost(item.inputs.miscellaneousCost);
-    setDiscount(item.inputs.discount);
-    setProfitMargin(item.inputs.profitMargin);
+    setPlatformCommission(item.inputs.platformCommission ?? settings.platformCommission);
+    setPaymentGateway(item.inputs.paymentGateway ?? settings.paymentGateway);
+    setGst(item.inputs.gst ?? settings.gst);
+    setMarketingCost(item.inputs.marketingCost ?? 5);
+    setMiscellaneousCost(item.inputs.miscellaneousCost ?? 0);
+    setDiscount(item.inputs.discount ?? 0);
+    setProfitMargin(item.inputs.profitMargin ?? settings.profitMargin);
 
     setIsHistoryOpen(false);
   };

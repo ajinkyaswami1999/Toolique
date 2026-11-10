@@ -408,7 +408,7 @@ export function calculate3DPrintCosts(inputs: CostCalculatorInputs): CostCalcula
   const batchTiers: BatchTier[] = tierCounts.map((tQty) => {
     // Fixed setup cost amortized across tQty
     const tSetupPerUnit = setupLabourCost / tQty;
-    const tUnitCost = totalVariableCostPerUnit + tSetupPerUnit + (inputs.miscellaneousCost / tQty);
+    const tUnitCost = totalVariableCostPerUnit + tSetupPerUnit + ((inputs.miscellaneousCost || 0) / tQty);
     
     // Volume discount tiers
     let discountPct = 0;
@@ -417,11 +417,11 @@ export function calculate3DPrintCosts(inputs: CostCalculatorInputs): CostCalcula
     else if (tQty >= 10) discountPct = 7;
     else if (tQty >= 5) discountPct = 4;
 
-    const tProfit = tUnitCost * (inputs.profitMargin / 100);
+    const tProfit = tUnitCost * (profitMargin / 100);
     const tOverheadsBase = tUnitCost + tProfit;
-    const tOverhead = tOverheadsBase * ((inputs.platformCommission + inputs.paymentGateway + inputs.marketingCost) / 100);
+    const tOverhead = tOverheadsBase * ((platformComm + paymentGw + marketing) / 100);
     const tSub = tOverheadsBase + tOverhead;
-    const tGst = tSub * (inputs.gst / 100);
+    const tGst = tSub * (gstRate / 100);
     const rawPrice = tSub + tGst;
 
     const discountedUnitPrice = rawPrice * (1 - discountPct / 100);
