@@ -104,7 +104,7 @@ export default function ArchitectureHub() {
 
   const PILLARS = [
     { id: 'calculators', name: 'Calculators Hub', description: 'Calculators for finance, unit conversions, and math.', path: '/calculators' },
-    { id: 'civil', name: 'Civil Engineering Suite', description: 'Estimation sheets, concrete ratios, and structural elements.', path: '/civil' },
+    { id: 'civil', name: 'Civil Engineering Suite', description: 'Estimation sheets, concrete ratios, and structural elements.', path: '/tools/civil' },
     { id: 'developer', name: 'Developer Utilities', description: 'SQL formatting, JSON validation, and web tag generators.', path: '/developer' },
     { id: 'qa', name: 'QA Engineering', description: 'Test cases, mock datasets, and boundaries.', path: '/qa' }
   ];

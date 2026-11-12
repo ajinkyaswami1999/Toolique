@@ -176,7 +176,7 @@ export default function ComplianceHub() {
           'Bharatiya Sakshya Adhiniyam Section 63',
           'FinTech compliance tools India'
         ]}
-        canonicalUrl="/compliance"
+        canonicalUrl="https://www.toolique.in/compliance"
         schemaMarkup={hubSchema}
       />
 

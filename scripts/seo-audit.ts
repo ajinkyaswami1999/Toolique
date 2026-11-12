@@ -140,16 +140,16 @@ function runAudit() {
       });
     }
 
-    // Verify Canonical
+    // Verify Canonical (404 pages intentionally use noindex instead of self-canonical)
     const canonicalMatch = content.match(/<link\s+rel="canonical"\s+href="([^"]*)"/i);
-    if (!canonicalMatch || !canonicalMatch[1].trim()) {
+    if (!is404 && (!canonicalMatch || !canonicalMatch[1].trim())) {
       issuesList.push({
         file: relativePath,
         type: 'Canonical',
         severity: 'high',
         message: 'Missing canonical URL link tag.'
       });
-    } else {
+    } else if (canonicalMatch && canonicalMatch[1].trim()) {
       const canonicalUrl = canonicalMatch[1];
       if (!canonicalUrl.startsWith('https://www.toolique.in/')) {
         issuesList.push({

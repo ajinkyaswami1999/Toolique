@@ -49,7 +49,12 @@ export default function SEO({ title, description, keywords, canonicalUrl, schema
     // Standardize canonical URL to https://www.toolique.in production domain without query params or trailing slashes
     let currentUrl: string;
     if (canonicalUrl) {
-      currentUrl = canonicalUrl;
+      if (canonicalUrl.startsWith('http://') || canonicalUrl.startsWith('https://')) {
+        currentUrl = canonicalUrl;
+      } else {
+        const normalized = canonicalUrl === '/' ? '/' : `/${canonicalUrl.replace(/^\/+|\/+$/g, '')}`;
+        currentUrl = `https://www.toolique.in${normalized}`;
+      }
     } else {
       const rawPath = window.location.pathname;
       const cleanPath = rawPath === '/' ? '/' : rawPath.replace(/\/+$/, '');

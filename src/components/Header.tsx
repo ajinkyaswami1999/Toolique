@@ -197,7 +197,7 @@ export default function Header() {
     },
     { 
       name: '3D Maker Studio', 
-      path: '/3d-print-studio', 
+      path: '/3d-printing-tools', 
       icon: Printer, 
       desc: 'Filament Cost, AMS Multi-Color & HueForge Layers', 
       badge: '3D Slicing',

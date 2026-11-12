@@ -30,7 +30,7 @@ export const footerConfig = {
         { label: "AI Studio", link: "/ai" },
         { label: "Learning Academy", link: "/academy" },
         { label: "Developer Playground", link: "/playground" },
-        { label: "3D Printing Studio", link: "/3d-printing" },
+        { label: "3D Printing Studio", link: "/3d-printing-tools" },
         { label: "Symbolic Math Studio", link: "/math-studio" },
         { label: "Engineering Resources", link: "/blog" }
       ]

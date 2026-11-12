@@ -119,19 +119,21 @@ export default function CategoryLanding({ overrideCategory }: CategoryLandingPro
   });
 
   // Generate dynamic JSON-LD FAQ schemas
+  const pageCanonicalPath = overrideCategory ? `/${overrideCategory}` : `/tools/${category.id}`;
+  const pageCanonicalUrl = `https://www.toolique.in${pageCanonicalPath}`;
   const schemaMarkup = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'CollectionPage',
-        '@id': `https://www.toolique.in/${category.id}#collection`,
+        '@id': `${pageCanonicalUrl}#collection`,
         'name': `${category.name} Calculators & Tools`,
         'description': category.description,
-        'url': `https://www.toolique.in/${category.id}`
+        'url': pageCanonicalUrl
       },
       ...(faqs.length > 0 ? [{
         '@type': 'FAQPage',
-        '@id': `https://www.toolique.in/${category.id}#faq`,
+        '@id': `${pageCanonicalUrl}#faq`,
         'mainEntity': faqs.map((f: FAQItem) => ({
           '@type': 'Question',
           'name': f.question,
@@ -152,6 +154,7 @@ export default function CategoryLanding({ overrideCategory }: CategoryLandingPro
       <SEO 
         title={`${category.name} Tools & Free Online Calculators | Toolique`}
         description={category.description}
+        canonicalUrl={pageCanonicalUrl}
         schemaMarkup={schemaMarkup}
       />
 

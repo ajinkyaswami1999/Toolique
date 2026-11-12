@@ -199,7 +199,7 @@ export default function Home() {
       title: '3D Maker Printing Studio', 
       badge: 'Maker Suite',
       desc: 'Calculate filament consumption, multi-color AMS slot budgeting, and electricity costs.', 
-      link: '/3d-print-studio', 
+      link: '/3d-printing-tools', 
       icon: Printer, 
       color: 'text-cyan-700 dark:text-cyan-300 bg-pastel-cyan/30 border-pastel-cyan/60 dark:bg-cyan-950/40 dark:border-cyan-800/60' 
     },

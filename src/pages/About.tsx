@@ -110,7 +110,7 @@ const ECOSYSTEM_SUITES = [
     badge: 'Maker Suite',
     icon: Printer,
     desc: 'Bambu Lab AMS multi-color filament consumption, resin vat volume sizing, print farm power costs, and HueForge layer planners.',
-    link: '/3d-print-studio',
+    link: '/3d-printing-tools',
     color: 'text-cyan-700 dark:text-cyan-300 bg-pastel-cyan/30 border-pastel-cyan/60 dark:bg-cyan-950/40 dark:border-cyan-800/60'
   },
   {

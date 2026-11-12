@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Home from '../pages/Home';
 import { toolsList } from '../data/tools';
+import { categories } from '../data/categories';
 
 const ToolPage = lazy(() => import('../pages/ToolPage'));
 const About = lazy(() => import('../pages/About'));
@@ -61,9 +62,7 @@ export function getToolCanonicalPath(category: string, slug: string): string {
 }
 
 export function getCategoryCanonicalPath(category: string): string {
-  if (category === 'civil') {
-    return `/civil`;
-  } else if (category === 'architecture') {
+  if (category === 'civil' || category === 'architecture') {
     return `/architecture`;
   } else if (['developer', 'web', 'security'].includes(category)) {
     return `/developer`;
@@ -93,7 +92,7 @@ function LegacyToolRedirect() {
   return <Navigate to={getToolCanonicalPath(tool.category, tool.slug)} replace />;
 }
 
-function LegacyCategoryRedirect() {
+function LegacyCategoryOrLanding() {
   const { categoryName } = useParams<{ categoryName: string }>();
   if (!categoryName) return <Navigate to="/tools" replace />;
   // Check if param is actually a tool slug first to recover legacy GSC /tools/:slug links
@@ -101,7 +100,16 @@ function LegacyCategoryRedirect() {
   if (tool) {
     return <Navigate to={getToolCanonicalPath(tool.category, tool.slug)} replace />;
   }
-  return <Navigate to={getCategoryCanonicalPath(categoryName || '')} replace />;
+  // Render CategoryLanding directly for valid /tools/:categoryName pages in sitemap.xml
+  const isKnownCategory = categories.some((c) => c.id === categoryName);
+  if (isKnownCategory) {
+    return (
+      <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading Category...</div>}>
+        <CategoryLanding />
+      </Suspense>
+    );
+  }
+  return <Navigate to={getCategoryCanonicalPath(categoryName)} replace />;
 }
 
 export default function AppRoutes() {
@@ -208,9 +216,9 @@ export default function AppRoutes() {
           <ToolPage />
         </Suspense>
       } />
-      <Route path="/finance/:slug" element={<Navigate to="/calculators/:slug" replace />} />
+      <Route path="/finance/:slug" element={<LegacyToolRedirect />} />
       <Route path="/pdf-tools" element={<Navigate to="/pdf" replace />} />
-      <Route path="/pdf-tools/:slug" element={<Navigate to="/pdf/:slug" replace />} />
+      <Route path="/pdf-tools/:slug" element={<LegacyToolRedirect />} />
       <Route path="/3d-printing/:slug" element={<LegacyToolRedirect />} />
       <Route path="/3d-print-studio/:slug" element={<LegacyToolRedirect />} />
       <Route path="/tool/:slug" element={<LegacyToolRedirect />} />
@@ -220,7 +228,7 @@ export default function AppRoutes() {
       <Route path="/3d-printing/filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />
       <Route path="/tools/image-to-filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />
       <Route path="/3d-printing/image-to-filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />
-      <Route path="/tools/:categoryName" element={<LegacyCategoryRedirect />} />
+      <Route path="/tools/:categoryName" element={<LegacyCategoryOrLanding />} />
       <Route path="/calculators/vehicle-depreciation-calculator" element={<Navigate to="/calculators/car-depreciation-calculator" replace />} />
       <Route path="/automobile/vehicle-depreciation-calculator" element={<Navigate to="/calculators/car-depreciation-calculator" replace />} />
       <Route path="/automobile/car-depreciation-calculator" element={<Navigate to="/calculators/car-depreciation-calculator" replace />} />
@@ -287,16 +295,8 @@ export default function AppRoutes() {
           <BlogResources />
         </Suspense>
       } />
-      <Route path="/3d-printing" element={
-        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading 3D Print Studio...</div>}>
-          <ThreeDPrintStudio />
-        </Suspense>
-      } />
-      <Route path="/3d-print-studio" element={
-        <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading 3D Print Studio...</div>}>
-          <ThreeDPrintStudio />
-        </Suspense>
-      } />
+      <Route path="/3d-printing" element={<Navigate to="/3d-printing-tools" replace />} />
+      <Route path="/3d-print-studio" element={<Navigate to="/3d-printing-tools" replace />} />
       <Route path="/3d-printing-tools" element={
         <Suspense fallback={<div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">Loading 3D Print Studio...</div>}>
           <ThreeDPrintStudio />

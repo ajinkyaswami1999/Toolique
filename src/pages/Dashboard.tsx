@@ -608,7 +608,7 @@ export default function Dashboard() {
             🔑 JWT Debugger
           </Link>
           <Link
-            to="/3d-print-studio"
+            to="/3d-printing-tools"
             className="px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs font-bold text-zinc-700 dark:text-zinc-300 hover:border-indigo-500 hover:text-indigo-600 transition shrink-0"
           >
             📐 3D Print Studio

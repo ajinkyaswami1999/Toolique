@@ -9,6 +9,7 @@ import { javascriptQuestions } from '../src/features/academy/data/questions/java
 import { reactQuestions } from '../src/features/academy/data/questions/react';
 import { qaQuestions } from '../src/features/academy/data/questions/qa';
 import { workflows } from '../src/data/workflows';
+import { blogArticles } from '../src/data/blogArticles';
 
 const DIST_DIR = path.resolve('dist');
 const TEMPLATE_PATH = path.join(DIST_DIR, 'index.html');
@@ -124,14 +125,14 @@ export function getToolCanonicalPath(category: string, slug: string): string {
 }
 
 export function getCategoryCanonicalPath(category: string): string {
-  if (category === 'civil') {
-    return `civil`;
-  } else if (category === 'architecture') {
+  if (category === 'civil' || category === 'architecture') {
     return `architecture`;
-  } else if (['developer', 'web'].includes(category)) {
+  } else if (['developer', 'web', 'security'].includes(category)) {
     return `developer`;
   } else if (category === 'qa') {
     return `qa`;
+  } else if (category === 'finance') {
+    return `finance`;
   } else if (category === '3d-printing') {
     return `3d-printing-tools`;
   } else if (category === 'economics') {
@@ -145,6 +146,15 @@ export function getCategoryCanonicalPath(category: string): string {
   }
 }
 
+function escapeHtml(text: string): string {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // Helper to write static pre-rendered shell
 function generateShell(
   routePath: string,
@@ -152,34 +162,42 @@ function generateShell(
   description: string,
   keywords: string[],
   schemaMarkup?: object,
-  bodyContentOverride?: string
+  bodyContentOverride?: string,
+  options?: { noindex?: boolean }
 ) {
   const cleanPath = routePath.replace(/^\/+|\/+$/g, '');
   const fullUrl = cleanPath === '' ? 'https://www.toolique.in/' : `https://www.toolique.in/${cleanPath}`;
+  const safeTitle = escapeHtml(title);
+  const safeDesc = escapeHtml(description);
+  const safeKeywords = escapeHtml(keywords.join(', '));
   let html = template.replace(/<script\s+type="application\/ld\+json">[\s\S]*?<\/script>/gi, '');
 
-  // 1. Replace metadata
-  html = html.replace(/<title>[^<]*<\/title>/i, `<title>${title}</title>`);
-  html = html.replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, `<meta name="description" content="${description}" />`);
+  // 1. Replace metadata (use function replacers so '$&', '$`', "$'" in content never corrupt HTML)
+  html = html.replace(/<title>[^<]*<\/title>/i, () => `<title>${safeTitle}</title>`);
+  html = html.replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i, () => `<meta name="description" content="${safeDesc}" />`);
 
-  // Replace canonical link tag with page-specific URL
-  html = html.replace(/<link rel="canonical"[^>]*\/?>/i, `<link rel="canonical" href="${fullUrl}" />`);
+  // Replace canonical link tag with page-specific URL (or noindex for 404)
+  if (options?.noindex) {
+    html = html.replace(/<link rel="canonical"[^>]*\/?>/i, () => `<meta name="robots" content="noindex, nofollow" />`);
+  } else {
+    html = html.replace(/<link rel="canonical"[^>]*\/?>/i, () => `<link rel="canonical" href="${fullUrl}" />`);
+  }
 
   if (keywords.length > 0) {
-    const keywordsMeta = `<meta name="keywords" content="${keywords.join(', ')}" />`;
-    html = html.replace('</head>', `    ${keywordsMeta}\n  </head>`);
+    const keywordsMeta = `<meta name="keywords" content="${safeKeywords}" />`;
+    html = html.replace('</head>', () => `    ${keywordsMeta}\n  </head>`);
   }
 
   // 2. Replace Open Graph tags
-  html = html.replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:title" content="${title}" />`);
-  html = html.replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:description" content="${description}" />`);
-  html = html.replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, `<meta property="og:url" content="${fullUrl}" />`);
+  html = html.replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i, () => `<meta property="og:title" content="${safeTitle}" />`);
+  html = html.replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i, () => `<meta property="og:description" content="${safeDesc}" />`);
+  html = html.replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i, () => `<meta property="og:url" content="${fullUrl}" />`);
 
   // 3. Replace Twitter tags (upgrade card type to summary_large_image)
-  html = html.replace(/<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:card" content="summary_large_image" />`);
-  html = html.replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:title" content="${title}" />`);
-  html = html.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${description}" />`);
-  html = html.replace(/<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>/i, `<meta name="twitter:url" content="${fullUrl}" />`);
+  html = html.replace(/<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i, () => `<meta name="twitter:card" content="summary_large_image" />`);
+  html = html.replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i, () => `<meta name="twitter:title" content="${safeTitle}" />`);
+  html = html.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i, () => `<meta name="twitter:description" content="${safeDesc}" />`);
+  html = html.replace(/<meta\s+name="twitter:url"\s+content="[^"]*"\s*\/?>/i, () => `<meta name="twitter:url" content="${fullUrl}" />`);
 
   // 4. Inject JSON-LD Schema
   const targetSchema: any = schemaMarkup 
@@ -197,27 +215,29 @@ function generateShell(
     }
   });
 
+  const safeJsonLd = JSON.stringify(targetSchema, null, 2).replace(/<\/script/gi, '<\\/script');
   const schemaScript = `
     <!-- JSON-LD Structured Data for this specific page -->
     <script type="application/ld+json">
-    ${JSON.stringify(targetSchema, null, 2)}
+    ${safeJsonLd}
     </script>
   </head>`;
-  html = html.replace('</head>', schemaScript);
+  html = html.replace('</head>', () => schemaScript);
 
   // 5. Populate body loading state with indexable HTML content
   const rootContent = bodyContentOverride || `
     <div id="root">
-      <div style="padding: 40px; max-width: 800px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #333;">
-        <h1 style="font-size: 2.5rem; margin-bottom: 10px; color: #111;">${title.split(' | ')[0]}</h1>
-        <p style="font-size: 1.2rem; color: #666; margin-bottom: 20px;">${description}</p>
-        <div style="background: #f9f9f9; border: 1px solid #eee; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-          <p style="margin: 0; font-weight: bold; color: #555;">Loading interactive calculator...</p>
-          <p style="margin: 5px 0 0 0; color: #888; font-size: 0.9rem;">Please enable JavaScript if it is disabled in your browser.</p>
-        </div>
+      <div style="padding: 40px 20px; max-width: 900px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+        <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+          <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+          <span>${escapeHtml(title.split(' | ')[0])}</span>
+        </nav>
+        <h1 style="font-size: 2.25rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">${escapeHtml(title.split(' | ')[0])}</h1>
+        <p style="font-size: 1.125rem; color: #475569; margin-bottom: 24px;">${safeDesc}</p>
+        <p style="font-size: 0.95rem; color: #64748b;">Explore <a href="/tools" style="color: #4f46e5; font-weight: 600;">all 250+ free online tools</a>, <a href="/academy" style="color: #4f46e5; font-weight: 600;">Toolique Academy</a>, or <a href="/workflows" style="color: #4f46e5; font-weight: 600;">project workflows</a>.</p>
       </div>
     </div>`;
-  html = html.replace(/<div id="root">[\s\S]*?<\/div>/i, rootContent);
+  html = html.replace(/<div id="root">[\s\S]*?<\/div>/i, () => rootContent);
 
   // Write file
   const targetDir = path.join(DIST_DIR, cleanPath);
@@ -230,7 +250,7 @@ function generateRedirectShell(fromPath: string, canonicalPath: string, name?: s
   const cleanFrom = fromPath.replace(/^\/+|\/+$/g, '');
   const cleanTo = canonicalPath.replace(/^\/+|\/+$/g, '');
   const toUrl = `https://www.toolique.in/${cleanTo}`;
-  const label = name || 'Resource';
+  const label = escapeHtml(name || 'Resource');
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -241,7 +261,6 @@ function generateRedirectShell(fromPath: string, canonicalPath: string, name?: s
   <meta name="description" content="Redirecting to ${label} on Toolique. Explore 250+ free privacy-focused calculators and developer tools." />
   <link rel="canonical" href="${toUrl}" />
   <meta http-equiv="refresh" content="0; url=${toUrl}" />
-  <meta name="robots" content="noindex, follow" />
   <meta property="og:title" content="Redirecting to ${label} | Toolique" />
   <meta property="og:description" content="Redirecting to ${label} on Toolique." />
   <meta property="og:url" content="${toUrl}" />
@@ -1068,43 +1087,292 @@ const workflowsSchema = {
   ]
 };
 
+// Finance Hub Page
+const financeTargetSlugs = [
+  'in-hand-salary-calculator', 'income-tax-calculator', 'hra-calculator',
+  'tds-calculator', 'gst-calculator', 'sip-calculator', 'cagr-calculator',
+  'compound-interest-calculator', 'fd-calculator', 'rd-calculator',
+  'ppf-calculator', 'nps-calculator', 'gratuity-calculator', 'emi-calculator'
+];
+const financeToolsList = toolsList.filter(t => financeTargetSlugs.includes(t.slug));
+const financeFaqs = [
+  {
+    question: 'Which is better in India: Old Tax Regime or New Tax Regime?',
+    answer: 'The New Tax Regime offers lower tax slab rates and an increased standard deduction of ₹75,000 for salaried employees with a tax rebate up to ₹7 Lakhs taxable income (making income up to ₹7.75 Lakhs effectively tax-free). The Old Tax Regime remains beneficial if you claim substantial deductions under Section 80C, Section 80D, Section 24(b), and HRA.'
+  },
+  {
+    question: 'Are Toolique Indian finance and tax calculators private?',
+    answer: 'Yes. All salary, income tax, HRA, TDS, GST, SIP, and EMI calculations run 100% locally in your browser with zero server transmission.'
+  }
+];
+
+const financeBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Finance &amp; Tax Hub</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Personal Finance, Tax &amp; Investment Calculators</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px; line-height: 1.6;">
+        Calculate Indian income tax (Old vs. New Regime), in-hand salary from CTC, HRA exemption, TDS, GST, mutual fund SIP growth, loan EMIs, PPF, NPS, and FD returns locally in your browser.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        ${financeToolsList.map(renderToolCardHtml).join('')}
+      </div>
+      ${renderFaqsHtml(financeFaqs)}
+    </div>
+  </div>`;
+
+const financeSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.toolique.in/finance#collection',
+      'name': 'Personal Finance, Tax & Investment Calculators | Toolique',
+      'description': 'Calculate income tax, in-hand salary from CTC, mutual fund SIP growth, loan EMIs, PPF returns, NPS pensions, and FD interest with Indian tax code rules.',
+      'url': 'https://www.toolique.in/finance',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'name': 'Finance & Tax Calculators Directory',
+        'numberOfItems': financeToolsList.length,
+        'itemListElement': financeToolsList.map((t, idx) => ({
+          '@type': 'ListItem',
+          'position': idx + 1,
+          'name': t.name,
+          'url': `https://www.toolique.in/${getToolCanonicalPath(t.category, t.slug)}`
+        }))
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://www.toolique.in/finance#faq',
+      'mainEntity': financeFaqs.map(faq => ({
+        '@type': 'Question',
+        'name': faq.question,
+        'acceptedAnswer': { '@type': 'Answer', 'text': faq.answer }
+      }))
+    }
+  ]
+};
+
+function buildEditorialBodyHtml(
+  breadcrumbLabel: string,
+  heading: string,
+  intro: string,
+  sections: { title: string; body: string }[],
+  links: { label: string; href: string }[] = [
+    { label: 'Explore 250+ Tools', href: '/tools' },
+    { label: 'Finance & Tax Hub', href: '/finance' },
+    { label: 'Architecture & Civil Suite', href: '/architecture' },
+    { label: 'Developer Utilities', href: '/developer' },
+    { label: 'Toolique Academy', href: '/academy' }
+  ]
+): string {
+  return `
+    <div id="root">
+      <div style="padding: 40px 20px; max-width: 960px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.65; color: #334155;">
+        <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+          <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+          <span>${escapeHtml(breadcrumbLabel)}</span>
+        </nav>
+        <h1 style="font-size: 2.35rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">${escapeHtml(heading)}</h1>
+        <p style="font-size: 1.1rem; color: #475569; margin-bottom: 28px;">${escapeHtml(intro)}</p>
+        <div style="display: grid; gap: 18px; margin-bottom: 32px;">
+          ${sections.map(sec => `
+            <section style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px;">
+              <h2 style="font-size: 1.25rem; color: #0f172a; margin-top: 0; margin-bottom: 8px; font-weight: 700;">${escapeHtml(sec.title)}</h2>
+              <p style="margin: 0; color: #475569; font-size: 0.96rem;">${escapeHtml(sec.body)}</p>
+            </section>
+          `).join('')}
+        </div>
+        <nav aria-label="Related Hubs" style="display: flex; flex-wrap: wrap; gap: 10px;">
+          ${links.map(l => `<a href="${l.href}" style="padding: 8px 14px; border-radius: 8px; background: #eef2ff; color: #4338ca; text-decoration: none; font-size: 0.875rem; font-weight: 600;">${escapeHtml(l.label)}</a>`).join('')}
+        </nav>
+      </div>
+    </div>`;
+}
+
+const blogBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Knowledge Base &amp; Resources</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Knowledge Base &amp; Statutory Engineering Guides</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px;">
+        Explore technical guides on NBC 2016 FSI/FAR bye-laws, IS 456 concrete design, Indian tax regimes, SQL query optimization, QA automation, and 3D printing cost economics.
+      </p>
+      <div style="display: grid; gap: 20px;">
+        ${blogArticles.map(article => `
+          <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px;">
+            <div style="font-size: 0.78rem; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-bottom: 6px;">${escapeHtml(article.category)} • ${escapeHtml(article.readTime)}</div>
+            <h2 style="font-size: 1.3rem; color: #0f172a; margin: 0 0 8px 0; font-weight: 800;">${escapeHtml(article.title)}</h2>
+            <p style="color: #475569; font-size: 0.95rem; margin: 0 0 12px 0;">${escapeHtml(article.excerpt)}</p>
+            <a href="${escapeHtml(article.toolLink)}" style="color: #4f46e5; font-weight: 700; text-decoration: none; font-size: 0.9rem;">Open ${escapeHtml(article.toolName)} &rarr;</a>
+          </article>
+        `).join('')}
+      </div>
+    </div>
+  </div>`;
+
+const academyBodyHtml = `
+  <div id="root">
+    <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+      <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+        <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+        <span>Toolique Academy</span>
+      </nav>
+      <h1 style="font-size: 2.5rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">Toolique Academy — Programming &amp; QA Interview Prep</h1>
+      <p style="font-size: 1.15rem; color: #475569; margin-bottom: 32px;">
+        Practice SQL, Python, JavaScript, React, and QA Automation interview challenges with browser-based SQLite &amp; code playgrounds, visualizers, and spaced repetition.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px;">
+        ${academyCategories.map(cat => `
+          <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px;">
+            <h2 style="font-size: 1.2rem; margin: 0 0 8px 0; font-weight: 700;"><a href="/academy/${cat.id}" style="color: #0f172a; text-decoration: none;">${escapeHtml(cat.name)}</a></h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin: 0 0 12px 0;">${escapeHtml(cat.description)}</p>
+            <a href="/academy/${cat.id}" style="color: #4f46e5; font-size: 0.875rem; font-weight: 600; text-decoration: none;">Start Track (${escapeHtml(cat.learningTime)}) &rarr;</a>
+          </article>
+        `).join('')}
+      </div>
+    </div>
+  </div>`;
+
 // Static Pages Map
 const staticPages = [
   {
     path: '404',
     title: '404 - Page Not Found | Toolique',
     description: 'The requested page could not be found on Toolique. Search our 250+ free online calculators and developer tools.',
-    keywords: ['404', 'page not found', 'toolique']
+    keywords: ['404', 'page not found', 'toolique'],
+    noindex: true,
+    bodyHtml: buildEditorialBodyHtml(
+      '404 Not Found',
+      '404 — Page Not Found',
+      'The requested page could not be found or has moved. Browse our hubs below to find the right tool.',
+      [
+        { title: 'Browse Toolique Utilities', body: 'Access 250+ free browser-based calculators, developer formatters, QA test generators, and engineering suites.' }
+      ]
+    )
   },
   {
     path: 'about',
     title: 'About Us | Toolique',
     description: 'Learn more about Toolique - our mission to provide high-quality, privacy-focused calculators and developer tools.',
-    keywords: ['about toolique', 'online tools info', 'calculators mission']
+    keywords: ['about toolique', 'online tools info', 'calculators mission'],
+    bodyHtml: buildEditorialBodyHtml(
+      'About Us',
+      'About Toolique — Privacy-First Client-Side Utility Platform',
+      'Toolique is a free, zero-knowledge productivity suite of 250+ calculators, developer utilities, QA studios, and statutory engineering engines running 100% inside your browser.',
+      [
+        { title: '100% Client-Side Execution', body: 'All calculations, cryptographic hashes, PDF operations, and code formatters execute in local browser RAM with zero server uploads.' },
+        { title: 'Built for India & Global Teams', body: 'Includes Indian statutory calculators for Income Tax, GST, HRA, DPDP Act 2023, RBI Digital Lending, UIDAI Aadhaar Vault, and NBC 2016 building regulations.' },
+        { title: 'Zero Sign-Up & Ad-Free', body: 'Every tool is immediately accessible without accounts, subscriptions, rate limits, or tracking cookies.' }
+      ]
+    )
+  },
+  {
+    path: 'why-toolique',
+    title: 'Why Choose Toolique | Privacy-First Client-Side Developer, QA & Creator Suite',
+    description: 'Discover why software developers, QA test leads, architects, and finance professionals choose Toolique. 100% client-side sandbox, zero server logging, sub-millisecond execution, and 250+ free tools.',
+    keywords: ['why toolique', 'client side developer tools', 'dpdp compliant tools', 'offline pwa calculators'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Why Toolique',
+      'Why Professionals Choose Toolique',
+      'Built for speed, privacy, and statutory accuracy: compare client-side browser sandboxing against cloud-hosted utility sites.',
+      [
+        { title: 'Zero Server Payload Transmission', body: 'Sensitive JWTs, SQL schemas, Aadhaar masks, tax figures, and confidential PDFs never leave your device.' },
+        { title: 'DPDP Act 2023 & GDPR Compliant by Design', body: 'No personal inputs are logged, stored remotely, or shared with third-party analytics.' },
+        { title: 'Sub-Millisecond Performance & Offline PWA', body: 'Computations run directly in your browser engine with zero network round-trips and full offline support.' },
+        { title: 'Connected Multi-Tool Workflows', body: 'Chain related calculators and developer formatters into guided end-to-end engineering pipelines.' }
+      ]
+    )
   },
   {
     path: 'contact',
     title: 'Contact Us | Toolique',
     description: 'Get in touch with Toolique. Suggest a new tool, report a bug, or send us feedback.',
-    keywords: ['contact toolique', 'suggest calculator', 'report bug']
+    keywords: ['contact toolique', 'suggest calculator', 'report bug'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Contact Us',
+      'Contact Toolique Engineering & Support',
+      'Have a suggestion for a new calculator, found a statutory formula discrepancy, or need enterprise DLP verification? Reach out directly.',
+      [
+        { title: 'Email Support', body: 'Contact us anytime at support@toolique.in for feature requests, bug reports, or compliance documentation inquiries.' },
+        { title: 'Open Source Issue Tracking', body: 'Report bugs or track feature milestones through our GitHub repository linked in the platform footer.' }
+      ]
+    )
   },
   {
     path: 'privacy-policy',
     title: 'Privacy Policy | Toolique',
     description: 'Your privacy is our priority. Read our privacy policy to understand how we keep all your calculations local and secure.',
-    keywords: ['privacy policy', 'data safety', 'local storage tools']
+    keywords: ['privacy policy', 'data safety', 'local storage tools'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Privacy Policy',
+      'Privacy Policy — Zero-Data Client-Side Guarantee',
+      'Toolique processes your inputs strictly in browser memory. We do not upload, store, or inspect calculator, developer, PDF, or compliance payloads on remote servers.',
+      [
+        { title: 'Local-Only Processing', body: 'Tools execute via JavaScript, WebAssembly, and Web Crypto APIs locally on your device.' },
+        { title: 'Browser LocalStorage & IndexedDB', body: 'Optional preferences such as dark mode, recent tools, scratchpad notes, and academy progress are stored only in your own browser storage and can be cleared anytime.' },
+        { title: 'DPDP Act 2023 & GDPR Alignment', body: 'Because zero personal calculation data is collected on our servers, your enterprise and personal data remains under your exclusive control.' }
+      ]
+    )
   },
   {
     path: 'terms-conditions',
     title: 'Terms & Conditions | Toolique',
     description: 'Read the terms and conditions for using the Toolique platform.',
-    keywords: ['terms and conditions', 'calculator usage terms']
+    keywords: ['terms and conditions', 'calculator usage terms'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Terms & Conditions',
+      'Terms & Conditions of Use',
+      'Open-access terms governing the use of Toolique free online calculators, developer formatters, compliance evaluators, and learning tools.',
+      [
+        { title: 'Permitted Personal & Commercial Use', body: 'All utilities on Toolique are free to use for individual, educational, engineering, and commercial workflows without registration.' },
+        { title: 'Local Data Ownership', body: 'You retain 100% ownership of all inputs, code snippets, documents, and exported reports generated in your browser.' }
+      ]
+    )
   },
   {
     path: 'disclaimer',
     title: 'Disclaimer | Toolique',
     description: 'Read our disclaimer regarding the accuracy and usage of calculations on Toolique.',
-    keywords: ['disclaimer', 'calculator accuracy notice']
+    keywords: ['disclaimer', 'calculator accuracy notice'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Disclaimer',
+      'Statutory & Calculation Accuracy Disclaimer',
+      'Important scope and verification notes for financial taxation, civil structural estimation, architectural bye-laws, and compliance checklists.',
+      [
+        { title: 'Informational & Estimation Scope', body: 'Outputs from tax, civil engineering, FSI/FAR, and compliance calculators are provided for planning and educational estimation. Verify critical filings and structural designs with qualified professionals and local authorities.' },
+        { title: 'No Legal or Financial Advisory Relationship', body: 'Use of statutory evaluators such as DPDP, RBI DLG, UIDAI, or CERT-In tools does not constitute formal legal or regulatory certification.' }
+      ]
+    )
+  },
+  {
+    path: 'status',
+    title: 'System Status | Toolique',
+    description: 'Monitor system operations, client-side metrics, storage usage, and local execution status for the Toolique utilities suite.',
+    keywords: ['toolique status', 'system uptime', 'client side diagnostics'],
+    bodyHtml: buildEditorialBodyHtml(
+      'System Status',
+      'Toolique Platform Status & Client Diagnostics',
+      'Inspect live operational status for the Toolique core router, 250+ client-side utilities, AI sandboxes, SQL/JS playgrounds, and CDN delivery.',
+      [
+        { title: 'Core Client-Side Services', body: 'All 250+ browser utilities, local storage state, WebAssembly modules, and static CDN assets operate serverless with high availability.' }
+      ]
+    )
+  },
+  {
+    path: 'finance',
+    title: 'Personal Finance, Tax & Investment Calculators | Toolique',
+    description: 'Calculate income tax, in-hand salary from CTC, mutual fund SIP growth, loan EMIs, PPF returns, NPS pensions, and FD interest with Indian tax code rules.',
+    keywords: ['income tax calculator india', 'in hand salary calculator', 'hra calculator', 'sip calculator', 'gst calculator', 'emi calculator', 'ppf calculator'],
+    schemaMarkup: financeSchema,
+    bodyHtml: financeBodyHtml
   },
   {
     path: 'math-studio',
@@ -1182,6 +1450,15 @@ const staticPages = [
     title: 'About Ajinkya Swami | Founder of Toolique & Voxelique',
     description: 'Meet Ajinkya Swami, founder of Toolique and Voxelique. Learn about his experience in QA Automation, software development, engineering tools, 3D printing, and his mission to build high-quality free online tools.',
     keywords: ['Ajinkya Swami', 'Toolique Founder', 'Voxelique Founder', 'QA Automation Engineer', '3D Printing cost calculator', 'About Ajinkya'],
+    bodyHtml: buildEditorialBodyHtml(
+      'About Founder',
+      'About Ajinkya Swami — Founder of Toolique & Voxelique',
+      'Meet Ajinkya Swami, QA Automation Engineer, full-stack builder, and founder of Toolique and Voxelique, building fast, privacy-first browser tools for engineers, makers, and Indian professionals.',
+      [
+        { title: 'Engineering & QA Automation Background', body: 'Specializes in Selenium, Playwright, Python, React, TypeScript, and building practical automation frameworks and developer productivity utilities.' },
+        { title: '3D Printing & Maker Ecosystem (Voxelique)', body: 'Designed Toolique 3D Print Studio calculators for filament costing, Bambu Lab AMS purge optimization, HueForge layer planning, and print farm economics.' }
+      ]
+    ),
     schemaMarkup: {
       '@context': 'https://schema.org',
       '@graph': [
@@ -1234,49 +1511,118 @@ const staticPages = [
     path: 'academy',
     title: 'Toolique Academy | Learn Programming & QA Interview Prep',
     description: 'Practice programming, software engineering, QA automation, and technical interview questions with dynamic daily challenges and progress tracking.',
-    keywords: ['programming academy', 'interview prep', 'qa automation', 'coding challenges']
+    keywords: ['programming academy', 'interview prep', 'qa automation', 'coding challenges'],
+    bodyHtml: academyBodyHtml
   },
   {
     path: 'academy/bookmarks',
     title: 'Saved Challenges & Notes | Toolique Academy',
     description: 'Review your bookmarked technical interview questions, coding challenges, and export your personal scratch notes.',
-    keywords: ['saved coding questions', 'bookmark interview prep', 'code notes']
+    keywords: ['saved coding questions', 'bookmark interview prep', 'code notes'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Academy Bookmarks',
+      'Saved Challenges & Study Notes',
+      'Access your bookmarked SQL, Python, JavaScript, React, and QA Automation questions along with personal study notes stored locally in your browser.',
+      [
+        { title: 'Local-First Progress & Notes', body: 'All bookmarks, solved question history, and scratch notes persist in browser storage with one-click JSON backup export.' }
+      ],
+      [
+        { label: 'Academy Home', href: '/academy' },
+        { label: 'SQL Track', href: '/academy/sql' },
+        { label: 'Python Track', href: '/academy/python' },
+        { label: 'QA Automation Track', href: '/academy/qa' }
+      ]
+    )
   },
   {
     path: 'academy/learn',
     title: 'Visual Explainers & Learn Path | Toolique Academy',
     description: 'Master programming concepts visually. Explore interactive visualizers for SQL JOINs, Stacks, Queues, and Linked Lists.',
-    keywords: ['sql join visualizer', 'data structures visualization', 'visual coding explainers']
+    keywords: ['sql join visualizer', 'data structures visualization', 'visual coding explainers'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Visual Explainers',
+      'Interactive Visual Explainers & Learning Paths',
+      'Understand SQL JOINs (INNER, LEFT, RIGHT, FULL OUTER), Stacks, Queues, Trees, and Linked Lists through interactive step-by-step browser visualizations.',
+      [
+        { title: 'SQL JOIN Visualizer', body: 'Inspect how relational database engines match rows across tables with visual Venn diagrams and live sample outputs.' },
+        { title: 'Data Structures Visualizers', body: 'Trace push, pop, enqueue, dequeue, and pointer operations interactively in browser memory.' }
+      ],
+      [
+        { label: 'Academy Home', href: '/academy' },
+        { label: 'Interactive Playgrounds', href: '/academy/playgrounds' },
+        { label: 'SQL Track', href: '/academy/sql' }
+      ]
+    )
   },
   {
     path: 'academy/playgrounds',
     title: 'Interactive Playgrounds Sandbox | Toolique Academy',
     description: 'Write and execute SQL queries, JavaScript scripts, and Python code in the browser with full console output logs.',
-    keywords: ['sql playground', 'javascript playground', 'python sandbox', 'online code editor']
+    keywords: ['sql playground', 'javascript playground', 'python sandbox', 'online code editor'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Academy Playgrounds',
+      'Interactive SQL, JavaScript & HTML Playgrounds',
+      'Run SQLite queries via WebAssembly, test JavaScript snippets, and experiment with HTML/CSS layouts directly inside your browser sandbox.',
+      [
+        { title: 'In-Browser SQLite (WASM)', body: 'Execute SELECT, JOIN, GROUP BY, CTEs, and window functions against pre-loaded relational datasets with zero server setup.' },
+        { title: 'JavaScript & HTML Sandboxes', body: 'Prototype functions, DOM interactions, and algorithms immediately with live console output.' }
+      ],
+      [
+        { label: 'Academy Home', href: '/academy' },
+        { label: 'Visual Explainers', href: '/academy/learn' },
+        { label: 'Developer Playground', href: '/playground' }
+      ]
+    )
   },
   {
     path: 'ai',
     title: 'AI Studio | Toolique',
     description: 'Evolve your developer and QA workflows. Use browser-sandboxed AI models to generate SQL queries, test validation cases, and regex patterns instantly.',
-    keywords: ['ai studio', 'ai sql generator', 'ai test case generator', 'ai regex generator']
+    keywords: ['ai studio', 'ai sql generator', 'ai test case generator', 'ai regex generator'],
+    bodyHtml: buildEditorialBodyHtml(
+      'AI Studio',
+      'Toolique AI Studio — Client-Sandboxed Developer & QA Assistants',
+      'Generate SQL queries, test case matrices, regular expressions, and structured code templates locally in your browser without sharing proprietary schemas.',
+      [
+        { title: 'SQL & Regex Synthesis', body: 'Describe desired query joins or validation patterns and generate clean, testable snippets ready for Toolique playgrounds.' },
+        { title: 'QA Test Case & Scenario Generation', body: 'Convert feature requirements into structured positive, negative, and boundary test suites.' }
+      ]
+    )
   },
   {
     path: 'playground',
     title: 'Interactive Developer Playground | Toolique',
     description: 'Write, format, lint, and run JavaScript, JSON parsing lists, Python scripts, or send REST API calls directly from a premium sandboxed web client.',
-    keywords: ['developer playground', 'online ide', 'javascript runner', 'rest client']
+    keywords: ['developer playground', 'online ide', 'javascript runner', 'rest client'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Developer Playground',
+      'Interactive Developer Playground & Code Sandbox',
+      'Run JavaScript, execute local SQLite queries, inspect JSON payloads, and prototype frontend snippets in a fast, zero-setup browser workspace.',
+      [
+        { title: 'Multi-Environment Browser Workspace', body: 'Switch seamlessly between JavaScript execution, SQLite query testing, and live HTML preview without leaving the browser.' }
+      ]
+    )
   },
   {
     path: 'blog',
     title: 'Knowledge Base & Resources | Toolique',
     description: 'Explore technical articles, developer roadmap explainers, and comprehensive calculation guides linked back to browser-based playgrounds and tools.',
-    keywords: ['developer blog', 'sql joins guide', '3d printing pricing guide', 'gst calculator explanation']
+    keywords: ['developer blog', 'sql joins guide', '3d printing pricing guide', 'gst calculator explanation'],
+    bodyHtml: blogBodyHtml
   },
   {
     path: 'dashboard',
     title: 'Local User Profile & Dashboard | Toolique',
     description: 'Monitor your developer academy progress, bookmarks list, coding challenge history logs, and manage local notes and backup exports without registration.',
-    keywords: ['user dashboard', 'local profile', 'developer progress tracking']
+    keywords: ['user dashboard', 'local profile', 'developer progress tracking'],
+    bodyHtml: buildEditorialBodyHtml(
+      'Workspace Dashboard',
+      'Personal Local Workspace & Productivity Dashboard',
+      'Manage your favorite tools, recently used calculators, active project workflows, academy XP progress, scratchpad notes, and local JSON backups without creating an account.',
+      [
+        { title: 'Zero-Account Local Persistence', body: 'All dashboard state stays in your browser IndexedDB and LocalStorage, supporting instant export and restore across devices.' }
+      ]
+    )
   },
   {
     path: 'tools',
@@ -1319,7 +1665,15 @@ const staticPages = [
 
 // Generate static pages
 staticPages.forEach((page) => {
-  generateShell(page.path, page.title, page.description, page.keywords, (page as any).schemaMarkup, (page as any).bodyHtml);
+  generateShell(
+    page.path,
+    page.title,
+    page.description,
+    page.keywords,
+    (page as any).schemaMarkup,
+    (page as any).bodyHtml,
+    { noindex: Boolean((page as any).noindex) }
+  );
 });
 
 // ------------------------------------------------------------------------------------------------
@@ -1534,12 +1888,60 @@ categories.forEach((cat) => {
 // ------------------------------------------------------------------------------------------------
 // 4. Generate Academy Pages
 // ------------------------------------------------------------------------------------------------
+const academyQuestions = [
+  ...sqlQuestions,
+  ...pythonQuestions,
+  ...javascriptQuestions,
+  ...reactQuestions,
+  ...qaQuestions
+];
+
 academyCategories.forEach((cat) => {
   const routePath = `academy/${cat.id}`;
   const title = `${cat.name} | Toolique Academy`;
   const description = cat.description;
   const keywords = cat.topics || [];
-  
+  const trackQuestions = academyQuestions.filter(q => {
+    const qCat = q.id.startsWith('sql') ? 'sql' : q.id.startsWith('py') ? 'python' : q.id.startsWith('js') ? 'javascript' : q.id.startsWith('react') ? 'react' : 'qa';
+    return qCat === cat.id;
+  });
+
+  const trackBodyHtml = `
+    <div id="root">
+      <div style="padding: 40px 20px; max-width: 1000px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; color: #334155;">
+        <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+          <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+          <a href="/academy" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Academy</a> &gt; 
+          <span>${escapeHtml(cat.name)}</span>
+        </nav>
+        <h1 style="font-size: 2.4rem; margin-bottom: 12px; color: #0f172a; font-weight: 800;">${escapeHtml(cat.name)} Interview Track</h1>
+        <p style="font-size: 1.125rem; color: #475569; margin-bottom: 24px;">${escapeHtml(cat.description)} (${escapeHtml(cat.learningTime)})</p>
+        <section style="margin-bottom: 32px;">
+          <h2 style="font-size: 1.4rem; color: #0f172a; margin-bottom: 12px; font-weight: 700;">Curriculum Roadmap</h2>
+          <div style="display: grid; gap: 14px;">
+            ${cat.roadmap.map(step => `
+              <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                <h3 style="font-size: 1.05rem; margin: 0 0 6px 0; color: #0f172a; font-weight: 700;">${escapeHtml(step.title)}</h3>
+                <p style="margin: 0; color: #475569; font-size: 0.92rem;">${escapeHtml(step.description)}</p>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+        <section>
+          <h2 style="font-size: 1.4rem; color: #0f172a; margin-bottom: 12px; font-weight: 700;">Practice Questions (${trackQuestions.length})</h2>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+            ${trackQuestions.map(q => `
+              <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px;">
+                <div style="font-size: 0.75rem; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-bottom: 4px;">${escapeHtml(q.difficulty)} • ${escapeHtml(q.topic)}</div>
+                <h3 style="font-size: 1.02rem; margin: 0 0 8px 0; font-weight: 700;"><a href="/academy/${cat.id}/question/${q.slug}" style="color: #0f172a; text-decoration: none;">${escapeHtml(q.title)}</a></h3>
+                <a href="/academy/${cat.id}/question/${q.slug}" style="color: #4f46e5; font-size: 0.85rem; font-weight: 600; text-decoration: none;">Solve Challenge &rarr;</a>
+              </article>
+            `).join('')}
+          </div>
+        </section>
+      </div>
+    </div>`;
+
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -1555,16 +1957,8 @@ academyCategories.forEach((cat) => {
     ]
   };
 
-  generateShell(routePath, title, description, keywords, schema);
+  generateShell(routePath, title, description, keywords, schema, trackBodyHtml);
 });
-
-const academyQuestions = [
-  ...sqlQuestions,
-  ...pythonQuestions,
-  ...javascriptQuestions,
-  ...reactQuestions,
-  ...qaQuestions
-];
 
 academyQuestions.forEach((q) => {
   const categoryId = q.id.startsWith('sql') ? 'sql' : q.id.startsWith('py') ? 'python' : q.id.startsWith('js') ? 'javascript' : q.id.startsWith('react') ? 'react' : 'qa';
@@ -1573,6 +1967,30 @@ academyQuestions.forEach((q) => {
   const title = `${q.title} | ${category ? category.name : 'Academy'} Question`;
   const description = `Solve the challenge: ${q.title}. Category: ${q.topic}. Practice technical questions with step-by-step solutions.`;
   const keywords = q.tags || [];
+
+  const questionBodyHtml = `
+    <div id="root">
+      <div style="padding: 40px 20px; max-width: 900px; margin: 0 auto; font-family: system-ui, -apple-system, sans-serif; line-height: 1.65; color: #334155;">
+        <nav aria-label="Breadcrumb" style="margin-bottom: 16px; font-size: 0.875rem; color: #64748b;">
+          <a href="/" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Home</a> &gt; 
+          <a href="/academy" style="color: #4f46e5; text-decoration: none; font-weight: 600;">Academy</a> &gt; 
+          <a href="/academy/${categoryId}" style="color: #4f46e5; text-decoration: none; font-weight: 600;">${escapeHtml(category ? category.name : categoryId)}</a> &gt; 
+          <span>${escapeHtml(q.title)}</span>
+        </nav>
+        <div style="font-size: 0.8rem; font-weight: 700; color: #4f46e5; text-transform: uppercase; margin-bottom: 8px;">${escapeHtml(q.difficulty)} • ${escapeHtml(q.topic)}</div>
+        <h1 style="font-size: 2.25rem; margin-bottom: 16px; color: #0f172a; font-weight: 800;">${escapeHtml(q.title)}</h1>
+        <section style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px; margin-bottom: 24px;">
+          <h2 style="font-size: 1.25rem; margin: 0 0 10px 0; color: #0f172a; font-weight: 700;">Problem Statement</h2>
+          <div style="color: #334155; white-space: pre-line; font-size: 0.98rem;">${escapeHtml(q.question)}</div>
+        </section>
+        ${q.explanation ? `
+        <section style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px; margin-bottom: 24px;">
+          <h2 style="font-size: 1.25rem; margin: 0 0 10px 0; color: #0f172a; font-weight: 700;">Step-by-Step Solution Guide</h2>
+          <div style="color: #475569; white-space: pre-line; font-size: 0.95rem;">${escapeHtml(q.explanation)}</div>
+        </section>` : ''}
+        <p style="font-size: 0.9rem; color: #64748b;">Back to <a href="/academy/${categoryId}" style="color: #4f46e5; font-weight: 600;">${escapeHtml(category ? category.name : 'Academy Track')}</a> or open the <a href="/academy/playgrounds" style="color: #4f46e5; font-weight: 600;">Interactive Playground</a>.</p>
+      </div>
+    </div>`;
 
   const schema = {
     '@context': 'https://schema.org',
@@ -1612,7 +2030,7 @@ academyQuestions.forEach((q) => {
     ]
   };
 
-  generateShell(routePath, title, description, keywords, schema);
+  generateShell(routePath, title, description, keywords, schema, questionBodyHtml);
 });
 
 // ------------------------------------------------------------------------------------------------
@@ -1655,7 +2073,7 @@ toolsList.forEach((tool) => {
 generateRedirectShell('civil', 'architecture', 'Architecture & Civil Suite');
 generateRedirectShell('architecture-tools', 'architecture', 'Architecture Suite');
 generateRedirectShell('qa-tools', 'qa', 'QA Workspace');
-generateRedirectShell('finance-tools', 'calculators', 'Finance Calculators');
+generateRedirectShell('finance-tools', 'finance', 'Personal Finance & Tax Hub');
 generateRedirectShell('developer-tools', 'developer', 'Developer Suite');
 generateRedirectShell('pdf-tools', 'pdf', 'PDF Tools Hub');
 generateRedirectShell('3d-print-studio', '3d-printing-tools', '3D Printing Tools & Calculators');
@@ -1686,10 +2104,10 @@ function generateXmlSitemap() {
   staticPages.filter(p => !['404', '3d-print-studio', '3d-printing'].includes(p.path)).forEach(p => {
     let priority = '0.5';
     let freq = 'monthly';
-    if (['qa', 'architecture', 'developer', 'calculators', 'tools', 'academy', '3d-printing-tools', 'economics', 'workflows', 'pdf'].includes(p.path)) {
+    if (['qa', 'architecture', 'developer', 'calculators', 'finance', 'compliance', 'tools', 'academy', '3d-printing-tools', 'economics', 'workflows', 'pdf'].includes(p.path)) {
       priority = '0.95';
       freq = 'daily';
-    } else if (p.path === 'about-founder' || p.path === 'math-studio') {
+    } else if (['about-founder', 'math-studio', 'why-toolique'].includes(p.path)) {
       priority = '0.9';
       freq = 'weekly';
     } else if (p.path.startsWith('academy/')) {

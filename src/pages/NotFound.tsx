@@ -50,7 +50,7 @@ export default function NotFound() {
       title: '3D Print Studio',
       description: 'Filament, resin, cost, & print pricing calculators',
       icon: Box,
-      href: '/3d-print-studio',
+      href: '/3d-printing-tools',
       badge: 'Popular',
       color: 'from-amber-500/10 via-orange-500/10 to-amber-500/5 text-amber-600 dark:text-amber-400 border-amber-500/20'
     },

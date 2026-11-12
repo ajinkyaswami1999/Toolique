@@ -644,6 +644,161 @@
       "permanent": true
     },
     {
+      "source": "/3d-printing/image-to-filament-art-maker",
+      "destination": "/3d-printing-tools/filament-art-maker",
+      "permanent": true
+    },
+    {
+      "source": "/3d-printing/:slug",
+      "destination": "/3d-printing-tools/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/3d-print-studio/:slug",
+      "destination": "/3d-printing-tools/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/pdf-tools/:slug",
+      "destination": "/pdf/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/math-studio/:slug",
+      "destination": "/calculators/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/finance/:slug",
+      "destination": "/calculators/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/3d-printing",
+      "destination": "/3d-printing-tools",
+      "permanent": true
+    },
+    {
+      "source": "/3d-print-studio",
+      "destination": "/3d-printing-tools",
+      "permanent": true
+    },
+    {
+      "source": "/pdf-tools",
+      "destination": "/pdf",
+      "permanent": true
+    },
+    {
+      "source": "/civil",
+      "destination": "/architecture",
+      "permanent": true
+    },
+    {
+      "source": "/architecture-tools",
+      "destination": "/architecture",
+      "permanent": true
+    },
+    {
+      "source": "/qa-tools",
+      "destination": "/qa",
+      "permanent": true
+    },
+    {
+      "source": "/finance-tools",
+      "destination": "/finance",
+      "permanent": true
+    },
+    {
+      "source": "/developer-tools",
+      "destination": "/developer",
+      "permanent": true
+    },
+    {
+      "source": "/economics-tools",
+      "destination": "/economics",
+      "permanent": true
+    },
+    {
+      "source": "/project-workflows",
+      "destination": "/workflows",
+      "permanent": true
+    },
+    {
+      "source": "/developer/biometric-device-tester",
+      "destination": "/compliance/biometric-device-tester",
+      "permanent": true
+    },
+    {
+      "source": "/calculators/vehicle-depreciation-calculator",
+      "destination": "/calculators/car-depreciation-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/calculators/image-compressor",
+      "destination": "/calculators/image-studio",
+      "permanent": true
+    },
+    {
+      "source": "/calculators/image-cropper",
+      "destination": "/calculators/image-studio",
+      "permanent": true
+    },
+    {
+      "source": "/calculators/image-resizer",
+      "destination": "/calculators/image-studio",
+      "permanent": true
+    },
+    {
+      "source": "/developer/javascript-minifier",
+      "destination": "/developer/js-minifier",
+      "permanent": true
+    },
+    {
+      "source": "/developer/stylesheet-minifier",
+      "destination": "/developer/css-minifier",
+      "permanent": true
+    },
+    {
+      "source": "/developer/robots-generator",
+      "destination": "/developer/robots-txt-generator",
+      "permanent": true
+    },
+    {
+      "source": "/tools/filament-art-maker",
+      "destination": "/3d-printing-tools/filament-art-maker",
+      "permanent": true
+    },
+    {
+      "source": "/tools/image-to-filament-art-maker",
+      "destination": "/3d-printing-tools/filament-art-maker",
+      "permanent": true
+    },
+    {
+      "source": "/tools/image-studio",
+      "destination": "/calculators/image-studio",
+      "permanent": true
+    },
+    {
+      "source": "/tools/image-compressor",
+      "destination": "/calculators/image-studio",
+      "permanent": true
+    },
+    {
+      "source": "/tools/image-cropper",
+      "destination": "/calculators/image-studio",
+      "permanent": true
+    },
+    {
+      "source": "/tools/image-resizer",
+      "destination": "/calculators/image-studio",
+      "permanent": true
+    },
+    {
+      "source": "/tools/advanced-boq-calculator-india",
+      "destination": "/civil/advanced-boq-calculator-india",
+      "permanent": true
+    },
+    {
       "source": "/tool/:slug",
       "destination": "/calculators/:slug",
       "permanent": true

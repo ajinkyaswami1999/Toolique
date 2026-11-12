@@ -439,7 +439,7 @@ export default function Footer() {
           <Link to="/finance" className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold hover:underline">
             Finance & Tax Hub
           </Link>, or slice 3D models with the{' '}
-          <Link to="/3d-printing" className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold hover:underline">
+          <Link to="/3d-printing-tools" className="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold hover:underline">
             3D Printing Studio
           </Link>.
         </p>
