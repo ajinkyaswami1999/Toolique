@@ -189,6 +189,12 @@ export default function AppRoutes() {
       <Route path="/3d-print-studio/:slug" element={<LegacyToolRedirect />} />
       <Route path="/tool/:slug" element={<LegacyToolRedirect />} />
 
+      {/* Standalone Short URLs & Redirects */}
+      <Route path="/internet-speed-test" element={<Navigate to="/developer/internet-speed-test" replace />} />
+      <Route path="/speedtest" element={<Navigate to="/developer/internet-speed-test" replace />} />
+      <Route path="/speed-test" element={<Navigate to="/developer/internet-speed-test" replace />} />
+      <Route path="/tools/internet-speed-test" element={<Navigate to="/developer/internet-speed-test" replace />} />
+
       {/* Legacy Category & Tool Redirects */}
       <Route path="/tools/filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />
       <Route path="/3d-printing/filament-art-maker" element={<Navigate to="/3d-printing-tools/filament-art-maker" replace />} />

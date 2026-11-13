@@ -13,6 +13,7 @@
     "seo:audit": "tsx scripts/seo-audit.ts"
   },
   "dependencies": {
+    "@cloudflare/speedtest": "^1.17.0",
     "@monaco-editor/react": "^4.7.0",
     "@types/jsbarcode": "^3.11.4",
     "@types/sql.js": "^1.4.11",

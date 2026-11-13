@@ -3034,6 +3034,29 @@ export const searchTools: SearchToolItem[] = [
     ]
   },
   {
+    "id": "InternetSpeedTest",
+    "name": "Internet Speed Test",
+    "category": "developer",
+    "slug": "internet-speed-test",
+    "icon": "Wifi",
+    "shortDescription": "Test your internet speed for free with Toolique. Check download speed, upload speed, ping, jitter and connection quality instantly. No registration required.",
+    "keywords": [
+      "Internet Speed Test",
+      "WiFi Speed Test",
+      "Download Speed Test",
+      "Upload Speed Test",
+      "Ping Test Online",
+      "Jitter Test",
+      "Broadband Speed Test",
+      "Cloudflare Speed Test",
+      "Network Latency Checker",
+      "Bufferbloat Test",
+      "Gaming Ping Test",
+      "Check Connection Quality",
+      "Free Speed Test"
+    ]
+  },
+  {
     "id": "QRCodeGenerator",
     "name": "QR Code Generator & Studio",
     "category": "social",

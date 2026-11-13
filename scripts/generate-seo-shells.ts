@@ -2085,6 +2085,9 @@ generateRedirectShell('3d-printing/image-to-filament-art-maker', '3d-printing-to
 generateRedirectShell('tools/advanced-boq-calculator-india', 'civil/advanced-boq-calculator-india', 'Advanced BOQ Calculator India');
 generateRedirectShell('economics-tools', 'economics', 'Economics Suite');
 generateRedirectShell('project-workflows', 'workflows', 'Multi-Step Project Workflows');
+generateRedirectShell('internet-speed-test', 'developer/internet-speed-test', 'Internet Speed Test');
+generateRedirectShell('speedtest', 'developer/internet-speed-test', 'Internet Speed Test');
+generateRedirectShell('speed-test', 'developer/internet-speed-test', 'Internet Speed Test');
 
 console.log('SEO pre-rendering shells generation complete!');
 
@@ -2123,12 +2126,14 @@ function generateXmlSitemap() {
     let priority = '0.8';
     let freq = 'weekly';
 
-    // Flagship Hero Tools: Building Feasibility Checker & Biometric Device Tester get maximum 1.0 priority and daily crawling
+    // Flagship Hero Tools: Building Feasibility Checker, Biometric Device Tester & Internet Speed Test get maximum 1.0 priority and daily crawling
     if (
       t.id === 'BuildingFeasibilityChecker' ||
       t.slug === 'building-feasibility-checker' ||
       t.id === 'BiometricDeviceTester' ||
-      t.slug === 'biometric-device-tester'
+      t.slug === 'biometric-device-tester' ||
+      t.id === 'InternetSpeedTest' ||
+      t.slug === 'internet-speed-test'
     ) {
       priority = '1.0';
       freq = 'daily';

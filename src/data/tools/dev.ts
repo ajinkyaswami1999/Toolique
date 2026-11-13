@@ -2111,5 +2111,90 @@ export const devTools: Tool[] = [
         "content": "Automating API integration tests requires matching actual payloads against specifications. Mismatches can break downstream consumer applications."
       }
     ]
+  },
+  {
+    "id": "InternetSpeedTest",
+    "slug": "internet-speed-test",
+    "name": "Internet Speed Test",
+    "category": "developer",
+    "shortDescription": "Test your internet speed for free with Toolique. Check download speed, upload speed, ping, jitter and connection quality instantly. No registration required.",
+    "metaTitle": "Internet Speed Test – Check Download, Upload & Ping Speed | Toolique",
+    "metaDescription": "Test your internet speed for free with Toolique. Check download speed, upload speed, ping, jitter and connection quality instantly. No registration required.",
+    "keywords": [
+      "Internet Speed Test",
+      "WiFi Speed Test",
+      "Download Speed Test",
+      "Upload Speed Test",
+      "Ping Test Online",
+      "Jitter Test",
+      "Broadband Speed Test",
+      "Cloudflare Speed Test",
+      "Network Latency Checker",
+      "Bufferbloat Test",
+      "Gaming Ping Test",
+      "Check Connection Quality",
+      "Free Speed Test"
+    ],
+    "icon": "Wifi",
+    "howToUse": [
+      "Click 'Start Speed Test' to initiate real-time measurement against Cloudflare Anycast edge servers.",
+      "Observe unloaded ping latency and packet jitter calculated over consecutive UDP/TCP packets.",
+      "Track dynamic download bandwidth as progressive payload chunks (100KB to 100MB) are transferred.",
+      "Evaluate upload throughput and loaded-latency bufferbloat measurements under active network load.",
+      "View connection quality assessments for gaming, 4K streaming, video calling, and cloud backups.",
+      "Copy formatted test summary, share via Web Share API, or inspect your local test history table."
+    ],
+    "faqs": [
+      {
+        "question": "How does this Internet Speed Test work?",
+        "answer": "This tool integrates Cloudflare's official @cloudflare/speedtest JavaScript engine to exchange real encrypted data payloads with globally distributed Cloudflare edge data centers. It measures actual ping latency, download bandwidth, upload throughput, and jitter directly in your browser without artificial simulation or server proxies."
+      },
+      {
+        "question": "Does Toolique store my speed test results or public IP address?",
+        "answer": "No. Toolique operates under a strict client-side privacy philosophy. Zero measurement data, bandwidth metrics, or IP addresses are ever transmitted to or stored on Toolique backend servers. Your test history is retained strictly on your device inside browser localStorage and can be cleared at any time."
+      },
+      {
+        "question": "Why does my measured speed differ from what my broadband ISP advertises?",
+        "answer": "Internet Service Providers advertise maximum theoretical link speeds under pristine wired conditions. Real-world measured speeds depend on Wi-Fi interference, 2.4 GHz vs 5 GHz radio congestion, distance from your wireless router, background downloads from other household devices, and local ISP neighborhood traffic."
+      },
+      {
+        "question": "What is considered a good ping (latency) for online gaming?",
+        "answer": "For fast-twitch competitive online gaming (Valorant, CS2, Fortnite, Apex Legends), a ping under 25 ms is exceptional, 25 to 50 ms is great, and 50 to 80 ms is acceptable. Pings above 100 ms introduce noticeable rubber-banding, delayed hit registration, and gameplay lag."
+      },
+      {
+        "question": "What is jitter and why does it affect Zoom and Teams video calls?",
+        "answer": "Jitter measures the variance in packet arrival times. When jitter is high (above 10 ms), packets arrive out of sequence or in uneven bursts, forcing conferencing software to drop audio packets or freeze video frames. Stable jitter under 4 ms ensures stutter-free audio and smooth video meetings."
+      },
+      {
+        "question": "What is the difference between Mbps and MB/s?",
+        "answer": "Mbps (Megabits per second) measures telecommunications bandwidth speed, whereas MB/s (Megabytes per second) measures file storage size. Because 8 bits equal 1 Byte, an 80 Mbps internet connection downloads files at approximately 10 MB/s under ideal conditions."
+      },
+      {
+        "question": "What is loaded latency and bufferbloat?",
+        "answer": "Loaded latency measures round-trip ping time while your connection is actively downloading or uploading heavy data. When routers have oversized buffers that queue too many packets, ping spikes dramatically—a condition known as bufferbloat. Low loaded latency ensures your connection stays responsive even during simultaneous large downloads."
+      },
+      {
+        "question": "Should I run this speed test over Wi-Fi or an Ethernet cable?",
+        "answer": "For diagnosing your ISP's true incoming connection speed, connect your computer directly to the router using a Cat6 or Cat7 Ethernet cable. Testing over Wi-Fi is great for measuring real-world wireless coverage in specific rooms, but physical obstacles and radio interference typically reduce apparent speeds compared to a wired link."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Understanding Internet Speed Metrics: Download, Upload, Ping & Jitter",
+        "content": "A high-performance internet connection depends on four critical pillars:\n\n- **Download Speed (Mbps)**: How quickly your device pulls content from the web, crucial for streaming movies, opening websites, and downloading games.\n- **Upload Speed (Mbps)**: How quickly your device pushes data to the internet, vital for Zoom/Teams video conferencing, cloud backups, and Twitch/YouTube streaming.\n- **Ping / Latency (ms)**: The round-trip travel time for a single packet of data. Lower ping creates instant responsiveness in gaming and remote desktop software.\n- **Jitter (ms)**: The statistical variance in ping over time. Stable jitter prevents audio distortion and stutter during real-time voice and video calls."
+      },
+      {
+        "title": "Broadband Bandwidth Requirements for Everyday Activities",
+        "content": "| Household Activity | Minimum Download | Recommended Download | Recommended Upload |\n| :--- | :--- | :--- | :--- |\n| **4K Ultra HD Streaming** | 25 Mbps | 50 Mbps | 5 Mbps |\n| **1080p HD Streaming** | 10 Mbps | 20 Mbps | 2 Mbps |\n| **Competitive Online Gaming** | 15 Mbps | 30 Mbps | 5 Mbps (Ping < 30ms) |\n| **Remote Work & Video Calls** | 20 Mbps | 50 Mbps | 10 Mbps |\n| **Multi-User Smart Household** | 100 Mbps | 200+ Mbps | 30+ Mbps |"
+      },
+      {
+        "title": "Diagnosing Bufferbloat and Network Congestion",
+        "content": "Bufferbloat occurs when home network hardware excessively buffers packets during bandwidth saturation, creating catastrophic latency spikes. If your unloaded ping is 15 ms but spikes to 250 ms during downloads, your connection suffers from bufferbloat. Enabling Smart Queue Management (SQM) or Cake QoS in your router firmware resolves this issue by prioritizing latency-sensitive gaming and voice packets ahead of bulk downloads."
+      },
+      {
+        "title": "How Cloudflare Global Anycast Edge Infrastructure Ensures Accurate Testing",
+        "content": "Unlike conventional speed tests that route traffic to single congested local test servers, this speed test utilizes Cloudflare's global Anycast edge network spanning over 330 cities across 120+ countries. Your browser connects automatically to the geographically closest data center, measuring genuine network capability without transit choke points or ISP test-traffic throttling."
+      }
+    ]
   }
 ];

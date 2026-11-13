@@ -168,6 +168,7 @@ export const TOOL_SLUG_TO_CATEGORY: Record<string, string> = {
   "xpath-tester": "qa",
   "test-scenario-generator": "qa",
   "api-response-comparator": "qa",
+  "internet-speed-test": "developer",
   "qr-code-generator": "social",
   "image-studio": "image",
   "image-converter": "image",

@@ -56,6 +56,7 @@ const AdvancedDataCleaner = lazy(() => import('../tools/AdvancedDataCleaner'));
 const WebsiteCrawler = lazy(() => import('../tools/WebsiteCrawler'));
 const WhatsMyIP = lazy(() => import('../tools/WhatsMyIP'));
 const BiometricDeviceTester = lazy(() => import('../tools/BiometricDeviceTester'));
+const InternetSpeedTest = lazy(() => import('../tools/InternetSpeedTest'));
 
 // Phase 3 - Civil Engineering (9 tools)
 const ConstructionCostCalculator = lazy(() => import('../tools/ConstructionCostCalculator'));
@@ -512,6 +513,7 @@ const toolComponents: Record<string, React.ComponentType> = {
   AdvancedDataCleaner,
   WebsiteCrawler,
   WhatsMyIP,
+  InternetSpeedTest,
 
   // Phase 3 - Civil Engineering
   ConstructionCostCalculator,
@@ -970,6 +972,12 @@ const crossSuiteSuggestions: Record<string, { text: string; linkText: string; li
     text: 'Evaluating potential breach liability under Section 33 of the DPDP Act? Assess exposure with the',
     linkText: 'DPDP Act 2023 Readiness Evaluator',
     linkUrl: '/compliance/dpdp-readiness-evaluator'
+  },
+  'internet-speed-test': {
+    label: 'Public IP & Network Telemetry',
+    text: 'Need to inspect your public IPv4/IPv6 address, ISP hostname, and DNS leak info? Check',
+    linkText: "What's My IP & Network Diagnostic",
+    linkUrl: '/developer/whats-my-ip'
   }
 };
 
