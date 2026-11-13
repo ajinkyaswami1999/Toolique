@@ -16,10 +16,16 @@ export interface RecentToolItem {
   lastVisited: number;
 }
 
-// Open IndexedDB safely
+// Cached Singleton DB Promise for connection pooling
+let dbPromise: Promise<IDBDatabase> | null = null;
+
+// Open IndexedDB safely with connection caching
 function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
+  if (dbPromise) return dbPromise;
+
+  dbPromise = new Promise((resolve, reject) => {
     if (typeof window === 'undefined' || !window.indexedDB) {
+      dbPromise = null;
       reject(new Error('IndexedDB not supported in this environment'));
       return;
     }
@@ -40,13 +46,24 @@ function openDB(): Promise<IDBDatabase> {
     };
 
     request.onsuccess = () => {
-      resolve(request.result);
+      const db = request.result;
+      db.onclose = () => {
+        dbPromise = null;
+      };
+      db.onversionchange = () => {
+        db.close();
+        dbPromise = null;
+      };
+      resolve(db);
     };
 
     request.onerror = () => {
+      dbPromise = null;
       reject(request.error || new Error('Failed to open IndexedDB'));
     };
   });
+
+  return dbPromise;
 }
 
 // ----------------------------------------------------

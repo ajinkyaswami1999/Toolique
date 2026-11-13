@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { toolsList } from '../data/tools';
 import { workflows } from '../data/workflows';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 import ToolCard from '../components/ToolCard';
 import SEO from '../components/SEO';
 

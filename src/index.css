@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -49,7 +48,6 @@
       radial-gradient(at 0% 80%, rgba(209, 250, 229, 0.6) 0px, transparent 55%),
       radial-gradient(at 100% 80%, rgba(254, 215, 170, 0.5) 0px, transparent 55%),
       radial-gradient(at 50% 100%, rgba(221, 214, 254, 0.6) 0px, transparent 55%);
-    background-attachment: fixed;
   }
 
   :root.dark body,
@@ -63,7 +61,6 @@
       radial-gradient(at 0% 88%, rgba(56, 189, 248, 0.18) 0px, transparent 55%),
       radial-gradient(at 100% 88%, rgba(244, 114, 182, 0.18) 0px, transparent 55%),
       radial-gradient(at 50% 50%, rgba(129, 140, 248, 0.05) 0px, transparent 65%);
-    background-attachment: fixed;
   }
 
   @media (max-width: 768px) {
@@ -94,7 +91,6 @@
     radial-gradient(at 0% 80%, rgba(209, 250, 229, 0.6) 0px, transparent 55%),
     radial-gradient(at 100% 80%, rgba(254, 215, 170, 0.5) 0px, transparent 55%),
     radial-gradient(at 50% 100%, rgba(221, 214, 254, 0.6) 0px, transparent 55%);
-  background-attachment: fixed;
 }
 
 :root.dark .pastel-canvas-bg,
@@ -108,7 +104,6 @@
     radial-gradient(at 0% 88%, rgba(56, 189, 248, 0.18) 0px, transparent 55%),
     radial-gradient(at 100% 88%, rgba(244, 114, 182, 0.18) 0px, transparent 55%),
     radial-gradient(at 50% 50%, rgba(129, 140, 248, 0.05) 0px, transparent 65%);
-  background-attachment: fixed;
 }
 
 /* Custom Scrollbar */

@@ -14,7 +14,7 @@ import {
 import { toolsList } from '../data/tools';
 import ToolCard from '../components/ToolCard';
 import SEO from '../components/SEO';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 
 interface FAQItem {
   question: string;

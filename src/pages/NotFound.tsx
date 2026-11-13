@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO';
 import { toolsList } from '../data/tools';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 import { 
   FileQuestion, 
   Search, 

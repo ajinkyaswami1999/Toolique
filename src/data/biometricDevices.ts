@@ -842,5 +842,66 @@ export const troubleshootingGuides: TroubleshootingGuideItem[] = [
     ],
     affectedDevices: ['Legacy L0 Devices (Phased Out) -> Active L1 Certified Hardware'],
     windowsVersions: ['Windows 10', 'Windows 11']
+  },
+  {
+    id: 'err-1001-expired',
+    category: 'registration',
+    categoryLabel: 'Whitelisting & Subscription',
+    title: 'Error 1001 / 1003: Device Not Whitelisted / RD Service Subscription Expired',
+    errorCode: 'Error 1001 / 1003',
+    symptoms: [
+      'Morpho RD Service popup: "Device not whitelisted / Validity Expired".',
+      'Startek or Mantra shows "Device validity expired or not found on management server".',
+      'AePS transactions immediately abort with code 1001 or 1003.'
+    ],
+    rootCause: 'Morpho, Startek, and third-party vendors require an annual cloud RD Service subscription. If the 1-year or 3-year token validity ends, the device serial number is temporarily de-whitelisted from the UIDAI KMS.',
+    resolutionSteps: [
+      'Visit the official vendor portal (e.g. rdserviceonline.com for Morpho / IDEMIA or mantratec.com for Mantra).',
+      'Enter your device serial number (located on the bottom sticker) to check current validity and subscription end-date.',
+      'Renew the annual RD Service AMC token online if expired.',
+      'Once payment is processed, unplug the scanner, reconnect to USB, and wait for "Telemetry & Registration Successful".'
+    ],
+    affectedDevices: ['Morpho MSO 1300 E3', 'Startek FM220U', 'Mantra MFS100 / MFS110'],
+    windowsVersions: ['Windows 10', 'Windows 11', 'Android']
+  },
+  {
+    id: 'err-port-conflict',
+    category: 'service',
+    categoryLabel: 'Port Conflict (11100–11105)',
+    title: 'Port 11100 Occupied or Bound by Conflicting Application',
+    errorCode: 'PORT_IN_USE / EADDRINUSE',
+    symptoms: [
+      'RD Service fails to start or continuously cycles between "Running" and "Stopped" in services.msc.',
+      'Loopback scan shows port 11100 responding with non-UIDAI HTML (e.g., IIS web server or dev server).'
+    ],
+    rootCause: 'Another background service, developer process, or second biometric driver is occupying TCP port 11100. UIDAI allows daemons to dynamically try ports 11101 through 11105.',
+    resolutionSteps: [
+      'Open Command Prompt or PowerShell as Administrator.',
+      'Run `netstat -ano | findstr :11100` to find the Process ID (PID) using port 11100.',
+      'Identify the conflicting program with `tasklist | findstr <PID>` and terminate or reconfigure it.',
+      'Restart your biometric RD Service so it can bind to port 11100 or increment to 11101–11105.'
+    ],
+    affectedDevices: ['All Biometric Scanners (Mantra, Morpho, Startek, SecuGen, Precision)'],
+    windowsVersions: ['Windows 10', 'Windows 11']
+  },
+  {
+    id: 'err-system-time-sync',
+    category: 'hardware',
+    categoryLabel: 'System Clock Sync',
+    title: 'UIDAI Error 219 / 811: Timestamp Mismatch & System Clock Desync',
+    errorCode: 'Error 219 / Error 811',
+    symptoms: [
+      'Biometric capture succeeds with green light, but banking portal reports "Error 219: Invalid Biometric Auth - Timestamp out of sync".',
+      'Transaction fails at server level.'
+    ],
+    rootCause: 'UIDAI authentication servers enforce strict replay protection. If the Windows clock differs by more than ±5 minutes from Indian Standard Time (IST), the encrypted timestamp in the PID block is rejected.',
+    resolutionSteps: [
+      'Right-click the clock in your Windows taskbar (bottom-right) and select "Adjust date and time".',
+      'Ensure "Set time automatically" and "Set time zone automatically" are turned ON.',
+      'Verify the Time Zone is set to `(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi`.',
+      'Click "Sync now" under Additional settings to synchronize with time.windows.com or pool.ntp.org.'
+    ],
+    affectedDevices: ['All UIDAI L0 & L1 Scanners'],
+    windowsVersions: ['Windows 10', 'Windows 11']
   }
 ];

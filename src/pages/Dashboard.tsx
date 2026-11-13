@@ -28,7 +28,7 @@ import SEO from '../components/SEO';
 import { toolsList } from '../data/tools';
 import { workflows } from '../data/workflows';
 import { academyCategories } from '../features/academy/data/categories';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 import LucideIcon from '../components/LucideIcon';
 import { 
   getFavoritesFromDB, 

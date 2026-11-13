@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { toolsList, type Tool } from '../data/tools';
+import { HERO_MARQUEE_TOOLS, type HeroMarqueeTool } from '../data/tools/heroTools';
 
 const categoryGlowStyles: Record<string, { dot: string; cardDark: string }> = {
   finance: {
@@ -99,10 +99,9 @@ interface HeroToolsBackgroundProps {
 export default function HeroToolsBackground({ rowCount = 6 }: HeroToolsBackgroundProps) {
   // Partition a curated, lightweight sample of tools across rows (12 items per row max)
   const rows = useMemo(() => {
-    const splitRows: Tool[][] = Array.from({ length: rowCount }, () => []);
+    const splitRows: HeroMarqueeTool[][] = Array.from({ length: rowCount }, () => []);
     // Pick first 72 tools for background display to keep DOM lightweight and 60fps on mobile
-    const sampleTools = toolsList.slice(0, 72);
-    sampleTools.forEach((tool, index) => {
+    HERO_MARQUEE_TOOLS.forEach((tool, index) => {
       splitRows[index % rowCount].push(tool);
     });
     return splitRows;

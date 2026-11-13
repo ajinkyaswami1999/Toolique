@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import type { Workflow } from '../data/workflows';
 import { toolsList } from '../data/tools';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 
 interface WorkflowModalProps {
   workflow: Workflow;

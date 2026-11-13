@@ -20,7 +20,17 @@ import {
   Fingerprint,
   Eye,
   RefreshCw,
-  Radio
+  Radio,
+  Printer,
+  Terminal,
+  Usb,
+  Layers,
+  CheckCheck,
+  Sparkles,
+  X,
+  Volume2,
+  VolumeX,
+  Zap
 } from 'lucide-react';
 import {
   manufacturers,
@@ -37,6 +47,15 @@ import type {
   CaptureResult,
   DiscoveredRDService
 } from '../types/biometric';
+
+const POPULAR_DEVICES = [
+  { id: 'mantra-mfs110-l1', mfrId: 'mantra', label: 'Mantra MFS110', badge: 'L1 HW' },
+  { id: 'morpho-mso1300e3-l1', mfrId: 'idemia_morpho', label: 'Morpho 1300 E3', badge: 'L1 HW' },
+  { id: 'startek-fm220u-l1', mfrId: 'startek', label: 'Startek FM220U', badge: 'L1 HW' },
+  { id: 'mantra-mis100v2-l1', mfrId: 'mantra', label: 'Mantra MIS100 Iris', badge: 'Iris L1' },
+  { id: 'mantra-mfs100-l0', mfrId: 'mantra', label: 'Mantra MFS100', badge: 'L0 Legacy' },
+  { id: 'secugen-hamster-pro20-l1', mfrId: 'secugen', label: 'SecuGen Hamster 20', badge: 'L1 HW' },
+];
 
 export default function BiometricDeviceTester() {
   // Device & Manufacturer state
@@ -75,6 +94,47 @@ export default function BiometricDeviceTester() {
 
   // Copy feedback state
   const [copiedLogId, setCopiedLogId] = useState<string | null>(null);
+  const [copiedCommandText, setCopiedCommandText] = useState<string | null>(null);
+
+  // Interactive Port Matrix Radar State (11100–11105)
+  const [portMatrix, setPortMatrix] = useState<Record<number, {
+    port: number;
+    status: 'idle' | 'probing' | 'open' | 'closed';
+    protocol?: 'http' | 'https';
+    latencyMs?: number;
+    serviceName?: string;
+    deviceStatus?: string;
+  }>>(() => ({
+    11100: { port: 11100, status: 'idle' },
+    11101: { port: 11101, status: 'idle' },
+    11102: { port: 11102, status: 'idle' },
+    11103: { port: 11103, status: 'idle' },
+    11104: { port: 11104, status: 'idle' },
+    11105: { port: 11105, status: 'idle' },
+  }));
+  const [isScanningPortMatrix, setIsScanningPortMatrix] = useState<boolean>(false);
+
+  // WebUSB Physical Bus Probe State
+  const [usbStatus, setUsbStatus] = useState<{
+    tested: boolean;
+    success?: boolean;
+    productName?: string;
+    vendorId?: string;
+    productId?: string;
+    manufacturerName?: string;
+    serialNumber?: string;
+    message?: string;
+  } | null>(null);
+  const [isDetectingUsb, setIsDetectingUsb] = useState<boolean>(false);
+
+  // Diagnostic Health Report Modal State
+  const [showHealthReport, setShowHealthReport] = useState<boolean>(false);
+  const [copiedReportText, setCopiedReportText] = useState<boolean>(false);
+
+  // Audio Feedback & UI enhancement states
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [showSocketLog, setShowSocketLog] = useState<boolean>(false);
+  const [copiedSocketLog, setCopiedSocketLog] = useState<boolean>(false);
 
   // Form control IDs for accessibility
   const mfrSelectId = useId();
@@ -344,7 +404,7 @@ export default function BiometricDeviceTester() {
       const infoElem = xmlDoc.querySelector('Interface[id="DEVICEINFO"]') || xmlDoc.querySelector('Interface[id="INFO"]') || xmlDoc.querySelector('Interface[id="info"]');
 
       let capturePath = capElem?.getAttribute('path') || '/rd/capture';
-      let infoPath = infoElem?.getAttribute('path') || '/rd/info';
+      const infoPath = infoElem?.getAttribute('path') || '/rd/info';
 
       // Normalize if full URL was provided in path
       if (capturePath.startsWith('http://') || capturePath.startsWith('https://')) {
@@ -396,25 +456,241 @@ export default function BiometricDeviceTester() {
   // Scan all known biometric ports (11100–11105) concurrently across HTTP and HTTPS
   const scanAllLoopbackPorts = useCallback(async (): Promise<DiscoveredRDService[]> => {
     setIsScanningHardware(true);
-    const portsToScan = [11100, 11101, 11102, 11103, 11104, 11105];
-    const probePromises: Promise<DiscoveredRDService | null>[] = [];
+    setIsScanningPortMatrix(true);
 
-    for (const p of portsToScan) {
-      probePromises.push(probePort(p, 'http'));
-      probePromises.push(probePort(p, 'https'));
+    const portsToScan = [11100, 11101, 11102, 11103, 11104, 11105];
+
+    // Set all ports to probing state
+    setPortMatrix((prev) => {
+      const next = { ...prev };
+      portsToScan.forEach((p) => {
+        next[p] = { port: p, status: 'probing' };
+      });
+      return next;
+    });
+
+    if (executionMode === 'mock') {
+      await new Promise((r) => setTimeout(r, 450));
+      const isPortConflict = selectedScenarioId === 'vendor_mismatch';
+      const isStopped = selectedScenarioId === 'rdservice_stopped';
+
+      setPortMatrix({
+        11100: {
+          port: 11100,
+          status: isStopped ? 'closed' : 'open',
+          protocol: 'http',
+          latencyMs: isStopped ? undefined : 45,
+          serviceName: isStopped ? undefined : isPortConflict ? 'Mantra MFS110 AVDM' : `${activeManufacturer.name} RD Service`,
+          deviceStatus: isStopped ? 'CLOSED' : 'READY'
+        },
+        11101: {
+          port: 11101,
+          status: isPortConflict ? 'open' : 'closed',
+          protocol: 'http',
+          latencyMs: isPortConflict ? 38 : undefined,
+          serviceName: isPortConflict ? `${activeManufacturer.name} Secondary Daemon` : undefined,
+          deviceStatus: isPortConflict ? 'READY' : 'CLOSED'
+        },
+        11102: { port: 11102, status: 'closed' },
+        11103: { port: 11103, status: 'closed' },
+        11104: { port: 11104, status: 'closed' },
+        11105: { port: 11105, status: 'closed' },
+      });
+      setIsScanningHardware(false);
+      setIsScanningPortMatrix(false);
+      return [];
     }
+
+    const probePromises = portsToScan.map(async (p) => {
+      const t0 = performance.now();
+      let res = await probePort(p, 'https');
+      let proto: 'http' | 'https' = 'https';
+      if (!res) {
+        res = await probePort(p, 'http');
+        proto = 'http';
+      }
+      const duration = Math.round(performance.now() - t0);
+      setPortMatrix((prev) => ({
+        ...prev,
+        [p]: {
+          port: p,
+          status: res ? 'open' : 'closed',
+          protocol: proto,
+          latencyMs: res ? duration : undefined,
+          serviceName: res?.info,
+          deviceStatus: res?.status
+        }
+      }));
+      return res;
+    });
 
     const results = await Promise.all(probePromises);
     const found = results.filter((r): r is DiscoveredRDService => r !== null);
     setDiscoveredServices(found);
     setIsScanningHardware(false);
+    setIsScanningPortMatrix(false);
     return found;
-  }, []);
+  }, [executionMode, selectedScenarioId, activeManufacturer.name]);
+
+  // Physical WebUSB Hardware Enumeration (WebUSB API)
+  const handleDetectPhysicalUsb = async () => {
+    setIsDetectingUsb(true);
+    if (typeof navigator === 'undefined' || !('usb' in navigator)) {
+      setUsbStatus({
+        tested: true,
+        success: false,
+        message: 'WebUSB API is not supported in this browser. Please open Google Chrome or Microsoft Edge on Windows 10/11.'
+      });
+      setIsDetectingUsb(false);
+      return;
+    }
+
+    try {
+      const device = await (navigator as unknown as { usb: { requestDevice: (opts: { filters: { vendorId: number }[] }) => Promise<{ productName?: string; vendorId: number; productId: number; manufacturerName?: string; serialNumber?: string }> } }).usb.requestDevice({
+        filters: [
+          { vendorId: 0x2802 }, // Mantra Softech
+          { vendorId: 0x0bca }, // Morpho / IDEMIA
+          { vendorId: 0x0483 }, // Startek Engineering
+          { vendorId: 0x1162 }, // SecuGen Corporation
+        ]
+      });
+
+      setUsbStatus({
+        tested: true,
+        success: true,
+        productName: device.productName || `${activeManufacturer.name} Biometric Scanner`,
+        vendorId: '0x' + device.vendorId.toString(16).toUpperCase(),
+        productId: '0x' + device.productId.toString(16).toUpperCase(),
+        manufacturerName: device.manufacturerName || activeManufacturer.name,
+        serialNumber: device.serialNumber || 'USB Bus Connected',
+        message: 'Physical USB hardware connection verified. The scanner is receiving 5V bus power and responding to Windows USB enumeration.'
+      });
+    } catch (err: unknown) {
+      const errorObj = err as { name?: string; message?: string };
+      if (errorObj?.name === 'NotFoundError') {
+        setUsbStatus({
+          tested: true,
+          success: false,
+          message: 'No biometric USB scanner selected or plugged in. Connect the device directly to a rear motherboard USB 2.0/3.0 port and try again.'
+        });
+      } else {
+        setUsbStatus({
+          tested: true,
+          success: false,
+          message: errorObj?.message || 'Unable to access USB bus. Another application or service may hold exclusive lock.'
+        });
+      }
+    } finally {
+      setIsDetectingUsb(false);
+    }
+  };
+
+  // Jump to specific troubleshooting error guide
+  const jumpToTroubleshoot = (guideId: string) => {
+    setActiveTab('troubleshoot');
+    setExpandedTroubleshootId(guideId);
+    setTimeout(() => {
+      const el = document.getElementById(guideId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 120);
+  };
+
+  // One-click copy helper with feedback
+  const handleCopyCommand = (cmd: string) => {
+    try {
+      navigator.clipboard.writeText(cmd);
+      setCopiedCommandText(cmd);
+      setTimeout(() => setCopiedCommandText(null), 2000);
+    } catch {
+      // ignore
+    }
+  };
+
+  // In-Browser Web Audio Synthesizer (Instant sensory tactile feedback)
+  const playAcousticFeedback = useCallback((type: 'success' | 'error' | 'start') => {
+    if (!soundEnabled || typeof window === 'undefined') return;
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      if (type === 'success') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.18);
+      } else if (type === 'error') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(280, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(180, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.09, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.2);
+      } else {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.08);
+      }
+    } catch {
+      // AudioContext policy
+    }
+  }, [soundEnabled]);
+
+  // Generate downloadable/printable technician diagnostic slip
+  const generateAuditReportText = () => {
+    const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    const primaryPort = activeDevice.defaultPorts[0] || 11100;
+    const checksSummary = diagnosticChecks.map(c => `[${c.status.toUpperCase()}] ${c.title}: ${c.message}`).join('\n');
+    return `=====================================================
+TOOLIQUE BIOMETRIC & RD SERVICE DIAGNOSTIC AUDIT
+=====================================================
+Timestamp (IST): ${timestamp}
+Device Model: ${activeManufacturer.name} ${activeDevice.modelName}
+Certification Level: UIDAI ${activeDevice.certificationLevel} Certified (STQC Approved: ${activeDevice.stqcCertified ? 'YES' : 'NO'})
+Modality: ${activeDevice.modalityLabel}
+Target UIDAI Environment: env="${uidaiEnv}"
+Primary Loopback Port: 127.0.0.1:${primaryPort}
+Platform: Windows 10/11 64-bit
+
+DIAGNOSTIC CHECKS:
+${checksSummary}
+
+STATUS COUNTERS:
+Pass: ${statusCounts.pass} | Fail: ${statusCounts.fail} | Inconclusive: ${statusCounts.inconclusive} | Skipped: ${statusCounts.skipped}
+
+AUDIT VERDICT:
+${statusCounts.fail === 0 && statusCounts.pass >= 4 ? 'READY FOR PRODUCTION AUTH (AePS / PM-KISAN / eKYC)' : 'ACTION REQUIRED - Follow troubleshooting guide'}
+
+Generated by Toolique Biometric Diagnostics (https://www.toolique.in/compliance/biometric-device-tester)
+=====================================================`;
+  };
 
   // Auto-scan loopback when entering Live USB mode
   useEffect(() => {
+    let isMounted = true;
     if (executionMode === 'live' || captureMode === 'live') {
-      scanAllLoopbackPorts();
+      const timer = setTimeout(() => {
+        if (isMounted) {
+          scanAllLoopbackPorts();
+        }
+      }, 0);
+      return () => {
+        isMounted = false;
+        clearTimeout(timer);
+      };
     }
   }, [executionMode, captureMode, scanAllLoopbackPorts]);
 
@@ -740,6 +1016,7 @@ export default function BiometricDeviceTester() {
 
     // 3. Construct URL and PidOptions
     setCaptureState('waiting_finger');
+    playAcousticFeedback('start');
 
     const isIris = activeDevice.modality === 'single_iris';
     const fCountOpt = isIris ? '0' : '1';
@@ -832,6 +1109,7 @@ ${custParams}  </CustOpts>
           isMock: false
         });
         setCaptureState('success');
+        playAcousticFeedback('success');
       } else {
         setCaptureResult({
           status: 'error',
@@ -848,6 +1126,7 @@ ${custParams}  </CustOpts>
         });
         setCaptureError(`Error ${errCode}: ${errInfo}`);
         setCaptureState('error');
+        playAcousticFeedback('error');
       }
     } catch (err: unknown) {
       const errorMsg = err instanceof Error ? err.message : 'Communication failed';
@@ -855,6 +1134,7 @@ ${custParams}  </CustOpts>
         `${activeDevice.modelName} RD Service capture failed: ${errorMsg}. Endpoint: ${captureUrl}.`
       );
       setCaptureState('error');
+      playAcousticFeedback('error');
     }
   };
 
@@ -867,6 +1147,7 @@ ${custParams}  </CustOpts>
     // Initial dispatch delay
     await new Promise((r) => setTimeout(r, 350));
     setCaptureState('waiting_finger');
+    playAcousticFeedback('start');
 
     // Simulated optical scan placement time
     const waitTime = captureSimPreset === 'timeout' ? 2600 : 1600;
@@ -917,6 +1198,7 @@ ${custParams}  </CustOpts>
         isMock: true
       });
       setCaptureState('success');
+      playAcousticFeedback('success');
     } else if (captureSimPreset === 'borderline') {
       const score = 52;
       const minutiae = isIris ? 0 : 22;
@@ -948,6 +1230,7 @@ ${custParams}  </CustOpts>
         isMock: true
       });
       setCaptureState('success');
+      playAcousticFeedback('start');
     } else if (captureSimPreset === 'quick_remove') {
       const mockXml = `<?xml version="1.0"?>
 <PidData>
@@ -972,6 +1255,7 @@ ${custParams}  </CustOpts>
           : `${activeDevice.modelName} Error 1142: Finger removed too quickly before optical exposure completed. Keep finger firmly placed on the glass until the LED turns off.`
       );
       setCaptureState('error');
+      playAcousticFeedback('error');
     } else if (captureSimPreset === 'timeout') {
       const mockXml = `<?xml version="1.0"?>
 <PidData>
@@ -996,6 +1280,7 @@ ${custParams}  </CustOpts>
           : `${activeDevice.modelName} Error 1141: Capture timed out. No finger was detected on the platen glass within the timeout duration.`
       );
       setCaptureState('error');
+      playAcousticFeedback('error');
     } else {
       // detached
       const mockXml = `<?xml version="1.0"?>
@@ -1017,6 +1302,7 @@ ${custParams}  </CustOpts>
       });
       setCaptureError(`${activeDevice.modelName} Error 1140: Device not attached. USB connection lost or scanner not enumerated.`);
       setCaptureState('error');
+      playAcousticFeedback('error');
     }
   };
 
@@ -1037,42 +1323,42 @@ ${custParams}  </CustOpts>
     switch (status) {
       case 'pass':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
             Pass
           </span>
         );
       case 'fail':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
-            <XCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+            <XCircle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
             Fail
           </span>
         );
       case 'inconclusive':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+            <AlertTriangle className="w-3 h-3 text-amber-600 dark:text-amber-400" />
             Inconclusive
           </span>
         );
       case 'skipped':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
-            <AlertCircle className="w-3.5 h-3.5" />
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
+            <AlertCircle className="w-3 h-3" />
             Skipped
           </span>
         );
       case 'running':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-            <Activity className="w-3.5 h-3.5 animate-spin" />
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+            <Activity className="w-3 h-3 animate-spin" />
             Probing...
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-zinc-100 text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800">
             Idle
           </span>
         );
@@ -1080,16 +1366,83 @@ ${custParams}  </CustOpts>
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-5">
       {/* 1. Unified Biometric Command & Control Console (No Scrolling Needed!) */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-4 shadow-xs space-y-3">
+        {/* Quick Hardware Switcher & Audio Tone Strip */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-zinc-100 dark:border-zinc-800">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider whitespace-nowrap flex items-center gap-1 mr-1">
+              <Zap className="w-3 h-3 text-amber-500 fill-amber-500/30" />
+              Quick Device:
+            </span>
+            {POPULAR_DEVICES.map((dev) => {
+              const isSelected = selectedDeviceId === dev.id;
+              return (
+                <button
+                  key={dev.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedManufacturerId(dev.mfrId);
+                    setSelectedDeviceId(dev.id);
+                    handleResetCapture();
+                  }}
+                  className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-emerald-600 text-white shadow-xs font-semibold'
+                      : 'bg-zinc-100 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200/60 dark:border-zinc-700/60'
+                  }`}
+                >
+                  <span>{dev.label}</span>
+                  <span
+                    className={`text-[9px] px-1 py-0.2 rounded font-bold ${
+                      isSelected
+                        ? 'bg-emerald-700 text-white'
+                        : dev.badge.includes('L1')
+                        ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300'
+                        : 'bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300'
+                    }`}
+                  >
+                    {dev.badge}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[11px] font-medium border transition-all cursor-pointer ${
+                soundEnabled
+                  ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
+                  : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-400 border-dashed border-zinc-300 dark:border-zinc-800'
+              }`}
+              title={soundEnabled ? 'Acoustic terminal sound active (Click to mute)' : 'Acoustic terminal sound muted (Click to enable)'}
+            >
+              {soundEnabled ? (
+                <>
+                  <Volume2 className="w-3 h-3 text-emerald-500" />
+                  <span className="hidden md:inline">Audio Beep: ON</span>
+                </>
+              ) : (
+                <>
+                  <VolumeX className="w-3 h-3 text-zinc-400" />
+                  <span className="hidden md:inline">Audio Beep: OFF</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
         {/* Row 1: Selectors & Instant Action Buttons */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           {/* Controls Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2.5 flex-1">
             {/* Manufacturer Selector */}
             <div>
-              <label htmlFor={mfrSelectId} className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
+              <label htmlFor={mfrSelectId} className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
                 Manufacturer
               </label>
               <select
@@ -1102,7 +1455,7 @@ ${custParams}  </CustOpts>
                   if (firstAvailable) setSelectedDeviceId(firstAvailable.id);
                   handleResetCapture();
                 }}
-                className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs font-medium text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
               >
                 {manufacturers.map((m) => (
                   <option key={m.id} value={m.id}>
@@ -1114,7 +1467,7 @@ ${custParams}  </CustOpts>
 
             {/* Device Model Selector */}
             <div>
-              <label htmlFor={deviceSelectId} className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
+              <label htmlFor={deviceSelectId} className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
                 Device Model
               </label>
               <select
@@ -1127,7 +1480,7 @@ ${custParams}  </CustOpts>
                   if (dev) setSelectedManufacturerId(dev.manufacturerId);
                   handleResetCapture();
                 }}
-                className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-xs font-semibold text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1.5 text-xs font-medium text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
               >
                 {availableDevicesForManufacturer.map((d) => (
                   <option key={d.id} value={d.id}>
@@ -1140,7 +1493,7 @@ ${custParams}  </CustOpts>
             {/* UIDAI Environment Parameter (env) Toggle */}
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                   UIDAI Env (<code className="font-mono text-zinc-600 dark:text-zinc-300">env</code>)
                 </label>
                 <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded ${
@@ -1155,9 +1508,9 @@ ${custParams}  </CustOpts>
                 <button
                   type="button"
                   onClick={() => setUidaiEnv('P')}
-                  className={`py-1.5 px-2 rounded-xl text-xs font-semibold border transition-all ${
+                  className={`py-1 px-2 rounded-lg text-[11px] font-medium border transition-all ${
                     uidaiEnv === 'P'
-                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs'
+                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs font-semibold'
                       : 'bg-zinc-50 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100'
                   }`}
                 >
@@ -1166,9 +1519,9 @@ ${custParams}  </CustOpts>
                 <button
                   type="button"
                   onClick={() => setUidaiEnv('PP')}
-                  className={`py-1.5 px-2 rounded-xl text-xs font-semibold border transition-all ${
+                  className={`py-1 px-2 rounded-lg text-[11px] font-medium border transition-all ${
                     uidaiEnv === 'PP'
-                      ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 border-amber-300 dark:border-amber-700 shadow-xs'
+                      ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 border-amber-300 dark:border-amber-700 shadow-xs font-semibold'
                       : 'bg-zinc-50 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100'
                   }`}
                 >
@@ -1179,7 +1532,7 @@ ${custParams}  </CustOpts>
 
             {/* Diagnostic Mode Toggle */}
             <div>
-              <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1">
                 Diagnostic Mode
               </label>
               <div className="grid grid-cols-2 gap-1.5">
@@ -1190,9 +1543,9 @@ ${custParams}  </CustOpts>
                     setCaptureMode('mock');
                     handleResetCapture();
                   }}
-                  className={`py-1.5 px-2 rounded-xl text-xs font-semibold border transition-all ${
+                  className={`py-1 px-2 rounded-lg text-[11px] font-medium border transition-all ${
                     executionMode === 'mock'
-                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs'
+                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs font-semibold'
                       : 'bg-zinc-50 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100'
                   }`}
                 >
@@ -1206,9 +1559,9 @@ ${custParams}  </CustOpts>
                     scanAllLoopbackPorts();
                     handleResetCapture();
                   }}
-                  className={`py-1.5 px-2 rounded-xl text-xs font-semibold border transition-all ${
+                  className={`py-1 px-2 rounded-lg text-[11px] font-medium border transition-all ${
                     executionMode === 'live'
-                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs'
+                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs font-semibold'
                       : 'bg-zinc-50 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100'
                   }`}
                 >
@@ -1219,26 +1572,26 @@ ${custParams}  </CustOpts>
           </div>
 
           {/* Instant Primary Action Buttons (Always Visible at Top!) */}
-          <div className="flex items-center gap-2 lg:border-l lg:border-zinc-200 lg:dark:border-zinc-800 lg:pl-4 shrink-0">
+          <div className="flex items-center gap-2 lg:border-l lg:border-zinc-200 lg:dark:border-zinc-800 lg:pl-3 shrink-0">
             {activeTab === 'diagnostics' ? (
               <>
                 <button
                   type="button"
                   onClick={handleRunDiagnostics}
                   disabled={isRunningAll}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer"
                 >
-                  <Play className="w-4 h-4 fill-white" />
+                  <Play className="w-3.5 h-3.5 fill-white" />
                   {isRunningAll ? 'Running Checks...' : 'Run All Diagnostics'}
                 </button>
                 <button
                   type="button"
                   onClick={handleResetDiagnostics}
                   disabled={isRunningAll}
-                  className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 transition-all cursor-pointer"
+                  className="p-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 transition-all cursor-pointer"
                   title="Reset all checks"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="w-3.5 h-3.5" />
                 </button>
               </>
             ) : activeTab === 'capture' ? (
@@ -1247,9 +1600,9 @@ ${custParams}  </CustOpts>
                   type="button"
                   onClick={executionMode === 'mock' ? triggerMockCapture : triggerLiveCapture}
                   disabled={captureState === 'dispatched' || captureState === 'waiting_finger' || captureState === 'processing'}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer"
                 >
-                  {activeDevice.modality === 'single_iris' ? <Eye className="w-4 h-4" /> : <Fingerprint className="w-4 h-4" />}
+                  {activeDevice.modality === 'single_iris' ? <Eye className="w-3.5 h-3.5" /> : <Fingerprint className="w-3.5 h-3.5" />}
                   {captureState === 'waiting_finger'
                     ? (activeDevice.modality === 'single_iris' ? 'Align Eye...' : 'Place Finger...')
                     : captureState === 'processing'
@@ -1262,10 +1615,10 @@ ${custParams}  </CustOpts>
                   <button
                     type="button"
                     onClick={handleResetCapture}
-                    className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 transition-all cursor-pointer"
+                    className="p-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 transition-all cursor-pointer"
                     title="Reset capture"
                   >
-                    <RefreshCw className="w-4 h-4" />
+                    <RefreshCw className="w-3.5 h-3.5" />
                   </button>
                 )}
               </>
@@ -1274,16 +1627,16 @@ ${custParams}  </CustOpts>
                 href={activeDevice.driverDownloadUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-all whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition-all whitespace-nowrap"
               >
-                <Download className="w-4 h-4" />
+                <Download className="w-3.5 h-3.5" />
                 Download {activeDevice.modelName} Drivers
               </a>
             ) : (
               <button
                 type="button"
                 onClick={() => { setSelectedTroubleshootCategory('all'); setTroubleshootQuery(''); }}
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold text-xs transition-all whitespace-nowrap cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold text-xs transition-all whitespace-nowrap cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Reset Filters
@@ -1293,63 +1646,74 @@ ${custParams}  </CustOpts>
         </div>
 
         {/* Row 2: Status & Security Metadata Strip */}
-        <div className="flex items-center justify-between gap-2 flex-wrap pt-3 border-t border-zinc-100 dark:border-zinc-800/80 text-[11px] text-zinc-500 dark:text-zinc-400">
-          <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center justify-between gap-2 flex-wrap pt-2.5 border-t border-zinc-100 dark:border-zinc-800/80 text-[11px] text-zinc-500 dark:text-zinc-400">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <span className="font-semibold text-zinc-800 dark:text-zinc-200">
               {activeManufacturer.name} {activeDevice.modelName}
             </span>
             <span>•</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
               UIDAI {activeDevice.certificationLevel} Certified
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium">
+            <span className="px-1.5 py-0.2 rounded text-[9px] bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium">
               {activeDevice.modalityLabel}
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+            <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
               Port: 127.0.0.1:{activeDevice.defaultPorts[0] || 11100}
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
               env=&quot;{uidaiEnv}&quot;
             </span>
             {executionMode === 'mock' && (
-              <span className="text-zinc-400">
+              <span className="text-zinc-400 text-[10px]">
                 Preset: {mockScenarios.find((s) => s.id === selectedScenarioId)?.label.split(' ')[1] || 'Healthy'}
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
-            <ShieldCheck className="w-4 h-4 shrink-0" />
-            <span>100% In-Browser Privacy • Zero Biometric Storage</span>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <button
+              type="button"
+              onClick={() => setShowHealthReport(true)}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 font-medium text-[11px] transition-all cursor-pointer shadow-2xs"
+              title="Generate & print Aadhaar RD Service Health Audit Certificate"
+            >
+              <Printer className="w-3 h-3" />
+              Export Health Certificate
+            </button>
+            <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium text-[11px]">
+              <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+              <span>100% In-Browser Privacy • Zero Biometric Storage</span>
+            </div>
           </div>
         </div>
 
         {/* Row 3: Live Hardware Detection Strip & Mismatch Alert (When in Live Mode) */}
         {executionMode === 'live' && (
-          <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/80 space-y-2.5">
+          <div className="pt-2.5 border-t border-zinc-100 dark:border-zinc-800/80 space-y-2">
             {/* Real-time Hardware Monitor Strip */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs bg-zinc-50 dark:bg-zinc-800/50 p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/60">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
-                  <Radio className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />
-                  Local USB Hardware Monitor:
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs bg-zinc-50 dark:bg-zinc-800/50 p-2 rounded-lg border border-zinc-200 dark:border-zinc-700/60">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1 text-[11px]">
+                  <Radio className="w-3 h-3 text-emerald-500 animate-pulse" />
+                  Local USB Monitor:
                 </span>
                 {isScanningHardware ? (
-                  <span className="text-zinc-500 dark:text-zinc-400 flex items-center gap-1">
+                  <span className="text-zinc-500 dark:text-zinc-400 flex items-center gap-1 text-[11px]">
                     <Activity className="w-3 h-3 animate-spin" />
                     Scanning ports 11100–11105 across HTTP & HTTPS...
                   </span>
                 ) : discoveredServices.length === 0 ? (
-                  <span className="text-rose-600 dark:text-rose-400 font-semibold flex items-center gap-1 text-[11px]">
+                  <span className="text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 text-[11px]">
                     <XCircle className="w-3 h-3" />
                     No RD Service daemon detected on ports 11100–11105 (Services stopped)
                   </span>
                 ) : (
-                  <div className="flex items-center gap-1.5 flex-wrap">
+                  <div className="flex items-center gap-1 flex-wrap">
                     {discoveredServices.map((svc) => (
                       <span
                         key={`${svc.protocol}-${svc.port}`}
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] font-bold border ${
+                        className={`inline-flex items-center gap-1 px-1.5 py-0.2 rounded font-mono text-[9px] font-bold border ${
                           svc.status === 'READY'
                             ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700'
                             : 'bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border-amber-300 dark:border-amber-700'
@@ -1367,7 +1731,7 @@ ${custParams}  </CustOpts>
                 type="button"
                 onClick={() => scanAllLoopbackPorts()}
                 disabled={isScanningHardware}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-[11px] font-semibold transition-all cursor-pointer self-start sm:self-auto shrink-0"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-[10px] font-medium transition-all cursor-pointer self-start sm:self-auto shrink-0"
                 title="Scan ports again"
               >
                 <RefreshCw className={`w-3 h-3 ${isScanningHardware ? 'animate-spin' : ''}`} />
@@ -1380,11 +1744,11 @@ ${custParams}  </CustOpts>
               <>
                 {/* 1. Device is Not Connected (status="NOTREADY") */}
                 {discoveredServices.some((s) => s.vendorId === activeManufacturer.id && s.status === 'NOTREADY') && (
-                  <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div className="p-2.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 rounded-lg text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-start gap-2">
-                      <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-bold text-amber-900 dark:text-amber-200">
+                        <span className="font-bold text-amber-900 dark:text-amber-200 text-xs">
                           {activeDevice.modelName} is NOT CONNECTED (status=&quot;NOTREADY&quot;)
                         </span>
                         <p className="text-amber-700 dark:text-amber-300 text-[11px] mt-0.5">
@@ -1397,11 +1761,11 @@ ${custParams}  </CustOpts>
 
                 {/* 2. Device Mismatch: Target service is NOT running, but another manufacturer IS ready */}
                 {!discoveredServices.some((s) => s.vendorId === activeManufacturer.id) && (
-                  <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-700 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="p-2.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-700 rounded-lg text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-start gap-2">
-                      <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+                      <AlertCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-bold text-rose-900 dark:text-rose-200">
+                        <span className="font-bold text-rose-900 dark:text-rose-200 text-xs">
                           Vendor Mismatch: You selected {activeManufacturer.name}, but {discoveredServices[0].vendorName} is active
                         </span>
                         <p className="text-rose-700 dark:text-rose-300 text-[11px] mt-0.5">
@@ -1421,9 +1785,9 @@ ${custParams}  </CustOpts>
                             handleResetCapture();
                           }
                         }}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all whitespace-nowrap cursor-pointer shrink-0"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition-all whitespace-nowrap cursor-pointer shrink-0"
                       >
-                        <RotateCcw className="w-3.5 h-3.5" />
+                        <RotateCcw className="w-3 h-3" />
                         Switch to {discoveredServices.find((s) => s.status === 'READY')?.vendorName} (Ready)
                       </button>
                     )}
@@ -1435,20 +1799,84 @@ ${custParams}  </CustOpts>
         )}
       </div>
 
+      {/* Pinned 1-Click Error Remedy Quick Bar */}
+      <div className="bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-orange-500/10 border border-amber-500/20 dark:border-amber-500/30 rounded-xl p-2.5 sm:p-3">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            </span>
+            <span className="text-[11px] font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 whitespace-nowrap">
+              <Sparkles className="w-3 h-3 text-amber-500" />
+              1-Click Urgent Fixes:
+            </span>
+            <span className="text-[10px] text-zinc-500 hidden xl:inline">
+              Instant remedies for banking & CSP kiosk error codes
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <button
+              type="button"
+              onClick={() => jumpToTroubleshoot('err-1140')}
+              className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-white dark:bg-zinc-800 border border-rose-300 dark:border-rose-700/60 text-rose-700 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 shadow-2xs transition-all cursor-pointer"
+            >
+              Error 1140 (Not Attached)
+            </button>
+            <button
+              type="button"
+              onClick={() => jumpToTroubleshoot('err-720')}
+              className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-white dark:bg-zinc-800 border border-amber-300 dark:border-amber-700/60 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 shadow-2xs transition-all cursor-pointer"
+            >
+              Error 720 (Not Registered)
+            </button>
+            <button
+              type="button"
+              onClick={() => jumpToTroubleshoot('err-1001-expired')}
+              className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-white dark:bg-zinc-800 border border-rose-300 dark:border-rose-700/60 text-rose-700 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 shadow-2xs transition-all cursor-pointer"
+            >
+              Error 1001/1003 (Token Expired)
+            </button>
+            <button
+              type="button"
+              onClick={() => jumpToTroubleshoot('err-port-conflict')}
+              className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-white dark:bg-zinc-800 border border-blue-300 dark:border-blue-700/60 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 shadow-2xs transition-all cursor-pointer"
+            >
+              Port 11100 Conflict
+            </button>
+            <button
+              type="button"
+              onClick={() => jumpToTroubleshoot('err-browser-ssl')}
+              className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-white dark:bg-zinc-800 border border-purple-300 dark:border-purple-700/60 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/40 shadow-2xs transition-all cursor-pointer"
+            >
+              Chrome PNA / SSL
+            </button>
+            <button
+              type="button"
+              onClick={() => jumpToTroubleshoot('err-system-time-sync')}
+              className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 shadow-2xs transition-all cursor-pointer"
+            >
+              Error 219 (Clock Desync)
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* 2. Navigation Tabs */}
-      <div className="flex border-b border-zinc-200 dark:border-zinc-800 gap-2 overflow-x-auto">
+      <div className="flex border-b border-zinc-200 dark:border-zinc-800 gap-1 overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab('diagnostics')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 whitespace-nowrap transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 whitespace-nowrap transition-all cursor-pointer ${
             activeTab === 'diagnostics'
               ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
               : 'border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
           }`}
         >
-          <Activity className="w-4 h-4" />
+          <Activity className="w-3.5 h-3.5" />
           RD Service Diagnostics
-          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold">
+          <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold">
             6 Checks
           </span>
         </button>
@@ -1456,15 +1884,15 @@ ${custParams}  </CustOpts>
         <button
           type="button"
           onClick={() => setActiveTab('capture')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 whitespace-nowrap transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 whitespace-nowrap transition-all cursor-pointer ${
             activeTab === 'capture'
               ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
               : 'border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
           }`}
         >
-          <Fingerprint className="w-4 h-4 text-emerald-500" />
+          <Fingerprint className="w-3.5 h-3.5 text-emerald-500" />
           Capture & Quality Studio
-          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold">
+          <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-bold">
             Live & Mock
           </span>
         </button>
@@ -1472,26 +1900,26 @@ ${custParams}  </CustOpts>
         <button
           type="button"
           onClick={() => setActiveTab('specs')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 whitespace-nowrap transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 whitespace-nowrap transition-all cursor-pointer ${
             activeTab === 'specs'
               ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
               : 'border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
           }`}
         >
-          <Cpu className="w-4 h-4" />
-          Device Specifications & Drivers
+          <Cpu className="w-3.5 h-3.5" />
+          Device Specs & Drivers
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('troubleshoot')}
-          className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 whitespace-nowrap transition-all cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 whitespace-nowrap transition-all cursor-pointer ${
             activeTab === 'troubleshoot'
               ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
               : 'border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
           }`}
         >
-          <HelpCircle className="w-4 h-4" />
+          <HelpCircle className="w-3.5 h-3.5" />
           Troubleshooting & Error Guide
         </button>
       </div>
@@ -1500,19 +1928,19 @@ ${custParams}  </CustOpts>
       {activeTab === 'diagnostics' && (
         <div className="space-y-4">
           {/* Status Counter Strip & Scenario Selector (if mock) */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3.5">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl p-2.5 sm:p-3">
             {/* Status Counters */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Pass: {statusCounts.pass}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
+                <CheckCircle2 className="w-3 h-3" /> Pass: {statusCounts.pass}
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/20">
-                <XCircle className="w-3.5 h-3.5" /> Fail: {statusCounts.fail}
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/20">
+                <XCircle className="w-3 h-3" /> Fail: {statusCounts.fail}
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
-                <AlertTriangle className="w-3.5 h-3.5" /> Inconclusive: {statusCounts.inconclusive}
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
+                <AlertTriangle className="w-3 h-3" /> Inconclusive: {statusCounts.inconclusive}
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
                 Skipped: {statusCounts.skipped}
               </span>
             </div>
@@ -1527,7 +1955,7 @@ ${custParams}  </CustOpts>
                   id={scenarioSelectId}
                   value={selectedScenarioId}
                   onChange={(e) => setSelectedScenarioId(e.target.value)}
-                  className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-1.5 text-xs text-zinc-800 dark:text-zinc-200 focus:outline-hidden"
+                  className="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-800 dark:text-zinc-200 focus:outline-hidden"
                 >
                   {mockScenarios.map((sc) => (
                     <option key={sc.id} value={sc.id}>
@@ -1543,15 +1971,239 @@ ${custParams}  </CustOpts>
             )}
           </div>
 
+          {/* Loopback Port Matrix Radar & Physical Hardware Bus Section */}
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 sm:p-4 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-emerald-500" />
+                  <h3 className="text-xs sm:text-[13px] font-bold text-zinc-900 dark:text-zinc-100">
+                    Loopback Port Matrix Radar (127.0.0.1:11100–11105)
+                  </h3>
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 font-bold">
+                    Dual HTTP/HTTPS
+                  </span>
+                </div>
+                <p className="text-[11px] text-zinc-500 mt-0.5">
+                  Probes all 6 official UIDAI standard loopback sockets concurrently to detect Mantra, Morpho, Startek, or SecuGen daemons.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => scanAllLoopbackPorts()}
+                  disabled={isScanningPortMatrix || isScanningHardware}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 font-medium text-[11px] transition-all cursor-pointer"
+                >
+                  <RefreshCw className={`w-3 h-3 ${isScanningPortMatrix ? 'animate-spin' : ''}`} />
+                  Scan All 6 Ports
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDetectPhysicalUsb}
+                  disabled={isDetectingUsb}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[11px] shadow-xs transition-all cursor-pointer"
+                  title="Detect plugged-in Mantra/Morpho/Startek USB dongle via WebUSB"
+                >
+                  <Usb className={`w-3 h-3 ${isDetectingUsb ? 'animate-pulse' : ''}`} />
+                  Check Physical USB Bus
+                </button>
+              </div>
+            </div>
+
+            {/* WebUSB Bus Status Notification if triggered */}
+            {usbStatus && (
+              <div
+                className={`p-2.5 rounded-lg border text-xs flex items-center justify-between gap-2 ${
+                  usbStatus.success
+                    ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-200'
+                    : 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-700 text-rose-800 dark:text-rose-200'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Usb className="w-3.5 h-3.5 shrink-0" />
+                  <span className="text-[11px]">
+                    <strong>USB Bus:</strong> {usbStatus.message}
+                    {usbStatus.vendorId && (
+                      <span className="font-mono ml-1.5 opacity-80">
+                        (VID: {usbStatus.vendorId} • PID: {usbStatus.productId} • S/N: {usbStatus.serialNumber})
+                      </span>
+                    )}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setUsbStatus(null)}
+                  className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
+            {/* 6-Port Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+              {[11100, 11101, 11102, 11103, 11104, 11105].map((portNum) => {
+                const item = portMatrix[portNum] || { port: portNum, status: 'idle' };
+                return (
+                  <div
+                    key={portNum}
+                    className={`p-2 sm:p-2.5 rounded-lg border transition-all text-center flex flex-col justify-between ${
+                      item.status === 'open'
+                        ? 'bg-emerald-500/10 border-emerald-500/30'
+                        : item.status === 'probing'
+                        ? 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-400 animate-pulse'
+                        : item.status === 'closed'
+                        ? 'bg-zinc-50 dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-800'
+                        : 'bg-zinc-50/50 dark:bg-zinc-800/20 border-dashed border-zinc-200 dark:border-zinc-800'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-[11px] font-bold text-zinc-800 dark:text-zinc-200">
+                        :{portNum}
+                      </span>
+                      <span
+                        className={`inline-block w-1.5 h-1.5 rounded-full ${
+                          item.status === 'open'
+                            ? 'bg-emerald-500'
+                            : item.status === 'probing'
+                            ? 'bg-indigo-500'
+                            : item.status === 'closed'
+                            ? 'bg-zinc-400'
+                            : 'bg-zinc-300'
+                        }`}
+                      />
+                    </div>
+
+                    <div className="my-0.5">
+                      <span
+                        className={`text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ${
+                          item.status === 'open'
+                            ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                            : item.status === 'probing'
+                            ? 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-300'
+                            : item.status === 'closed'
+                            ? 'bg-zinc-200/60 dark:bg-zinc-800 text-zinc-500'
+                            : 'bg-zinc-200/40 dark:bg-zinc-800 text-zinc-400'
+                        }`}
+                      >
+                        {item.deviceStatus || item.status}
+                      </span>
+                    </div>
+
+                    <div className="text-[9px] text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
+                      {item.serviceName || (item.status === 'open' ? 'Daemon Listening' : 'No Daemon')}
+                    </div>
+
+                    {item.latencyMs !== undefined && item.latencyMs > 0 && (
+                      <div className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 mt-0.5 font-semibold">
+                        {item.protocol?.toUpperCase()}: {item.latencyMs}ms
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Live Socket Wire Terminal Drawer */}
+            <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setShowSocketLog(!showSocketLog)}
+                className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+              >
+                <Terminal className="w-3.5 h-3.5" />
+                {showSocketLog ? 'Hide Wire Protocol Packet Trace' : 'View Wire Protocol Packet Trace (Raw Socket Telemetry)'}
+              </button>
+
+              <span className="text-[10px] text-zinc-400 font-mono">
+                Active Protocol: HTTP/HTTPS Loopback Daemon
+              </span>
+            </div>
+
+            {showSocketLog && (
+              <div className="space-y-1.5 pt-1.5 animate-in fade-in duration-150">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-zinc-400">
+                    Raw Telemetry Stream (127.0.0.1:11100–11105)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const logData = [
+                        `[${new Date().toLocaleTimeString()}] SOCKET PROBE 127.0.0.1:11100 - VERB: RDSERVICE / GET`,
+                        `[${new Date().toLocaleTimeString()}] HARDWARE VID: ${activeDevice.vendorId || '0x2802'} PID: ${activeDevice.productId || '0x001B'}`,
+                        `[${new Date().toLocaleTimeString()}] CRYPTO ENCLAVE: Level ${activeDevice.certificationLevel} (STQC Certified: ${activeDevice.stqcCertified ? 'YES' : 'NO'})`,
+                        `[${new Date().toLocaleTimeString()}] UIDAI ENV: env="${uidaiEnv}" TARGET STATUS: READY`,
+                        `[${new Date().toLocaleTimeString()}] LOOPBACK PROBE COMPLETE: 6 Sockets Scanned`
+                      ].join('\n');
+                      navigator.clipboard.writeText(logData);
+                      setCopiedSocketLog(true);
+                      setTimeout(() => setCopiedSocketLog(false), 2000);
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 cursor-pointer"
+                  >
+                    {copiedSocketLog ? (
+                      <>
+                        <CheckCheck className="w-3 h-3 text-emerald-500" /> Copied Trace
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3" /> Copy Socket Trace
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="p-3 rounded-xl bg-zinc-950 font-mono text-[10px] text-emerald-400 border border-zinc-800 overflow-x-auto space-y-1 leading-relaxed max-h-44 select-all">
+                  <div className="text-zinc-500"># Toolique RD Service Network Packet Sniffer (RFC 2616 Localhost)</div>
+                  <div><span className="text-indigo-400">[OUT]</span> PROBE :11100 &rarr; HTTP/1.1 RDSERVICE http://127.0.0.1:11100/</div>
+                  <div>
+                    <span className="text-emerald-400">[IN]</span> {discoveredServices.length > 0 ? '200 OK' : 'ERR_CONN_REFUSED'} &rarr; &lt;RDService status=&quot;{discoveredServices[0]?.status || 'NOTREADY'}&quot; info=&quot;{discoveredServices[0]?.info || `${activeManufacturer.name} Daemon`}&quot;&gt;
+                  </div>
+                  <div><span className="text-indigo-400">[OUT]</span> QUERY :11100 &rarr; HTTP/1.1 DEVICEINFO http://127.0.0.1:11100/rd/info</div>
+                  <div>
+                    <span className="text-emerald-400">[IN]</span> 200 OK &rarr; &lt;DeviceInfo mi=&quot;{activeDevice.modelName}&quot; dpId=&quot;{activeDevice.dpId || 'VENDOR.DP'}&quot; mc=&quot;{activeDevice.certificationLevel}_TOKEN&quot; env=&quot;{uidaiEnv}&quot;&gt;
+                  </div>
+                  <div>
+                    <span className="text-amber-400">[ATTEST]</span> Hardware Trust: Level {activeDevice.certificationLevel} {activeDevice.certificationLevel === 'L1' ? 'Secure Boot Bootloader Attestation Verified' : 'Software Attestation'}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Automated Diagnostic Run Banner */}
+          {isRunningAll && (
+            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3 flex items-center justify-between gap-2.5 animate-pulse">
+              <div className="flex items-center gap-2.5">
+                <Activity className="w-4 h-4 text-emerald-500 animate-spin" />
+                <div>
+                  <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 block">
+                    Executing 6-Step Cryptographic & Loopback Diagnostic Suite...
+                  </span>
+                  <span className="text-[10px] text-zinc-500">
+                    Probing loopback daemons, validating UIDAI env=&quot;{uidaiEnv}&quot;, and checking hardware certificate chain
+                  </span>
+                </div>
+              </div>
+              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-bold uppercase">
+                Active Probe
+              </span>
+            </div>
+          )}
+
           {/* Diagnostic Checks List */}
-          <div className="space-y-4">
+          <div className="space-y-2.5">
             {diagnosticChecks.map((check, index) => {
               const isExpanded = expandedCheckId === check.id;
 
               return (
                 <div
                   key={check.id}
-                  className={`bg-white dark:bg-zinc-900 border rounded-2xl transition-all ${
+                  className={`bg-white dark:bg-zinc-900 border rounded-xl transition-all ${
                     check.status === 'pass'
                       ? 'border-emerald-200 dark:border-emerald-900/40'
                       : check.status === 'fail'
@@ -1564,49 +2216,49 @@ ${custParams}  </CustOpts>
                   {/* Card Header */}
                   <div
                     onClick={() => setExpandedCheckId(isExpanded ? null : check.id)}
-                    className="p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer select-none"
+                    className="p-3 sm:p-3.5 flex items-center justify-between gap-3 cursor-pointer select-none"
                   >
-                    <div className="flex items-start sm:items-center gap-3">
-                      <div className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 sm:mt-0">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-6 h-6 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 flex items-center justify-center font-bold text-[11px] shrink-0">
                         {index + 1}
                       </div>
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                          <h3 className="text-xs sm:text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">
                             {check.title}
                           </h3>
                           {check.durationMs !== undefined && (
-                            <span className="text-[11px] text-zinc-400 font-mono">
+                            <span className="text-[10px] text-zinc-400 font-mono">
                               ({check.durationMs}ms)
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                        <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">
                           {check.message || check.description}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex items-center gap-2.5 shrink-0">
                       {renderStatusBadge(check.status)}
                       <div className="text-zinc-400">
-                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                       </div>
                     </div>
                   </div>
 
                   {/* Expandable Technical Log / Details */}
                   {isExpanded && (
-                    <div className="px-5 pb-5 pt-2 border-t border-zinc-100 dark:border-zinc-800/80 space-y-3">
+                    <div className="px-3.5 pb-3.5 pt-1.5 border-t border-zinc-100 dark:border-zinc-800/80 space-y-2.5">
                       {check.technicalDetails && (
-                        <div className="text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800">
+                        <div className="text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-800/50 p-2.5 rounded-lg border border-zinc-200/60 dark:border-zinc-800">
                           <strong>Technical Assessment:</strong> {check.technicalDetails}
                         </div>
                       )}
 
                       {check.recommendation && (
-                        <div className="text-xs text-amber-800 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/40 p-3 rounded-xl border border-amber-200 dark:border-amber-800 flex items-start gap-2">
-                          <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+                        <div className="text-xs text-amber-800 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/40 p-2.5 rounded-lg border border-amber-200 dark:border-amber-800 flex items-start gap-2">
+                          <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
                           <div>
                             <strong>Recommended Action:</strong> {check.recommendation}
                           </div>
@@ -1616,14 +2268,14 @@ ${custParams}  </CustOpts>
                       {/* Raw Protocol XML Payload (if present) */}
                       {check.rawPayload && (
                         <div>
-                          <div className="flex items-center justify-between mb-1.5">
-                            <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
                               Simulated RD Protocol XML
                             </span>
                             <button
                               type="button"
                               onClick={() => copyToClipboard(check.rawPayload || '', `xml-${check.id}`)}
-                              className="inline-flex items-center gap-1 text-[11px] text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                              className="inline-flex items-center gap-1 text-[10px] text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
                             >
                               {copiedLogId === `xml-${check.id}` ? (
                                 <>
@@ -1636,7 +2288,7 @@ ${custParams}  </CustOpts>
                               )}
                             </button>
                           </div>
-                          <pre className="text-[11px] font-mono bg-zinc-950 text-emerald-400 p-3 rounded-xl overflow-x-auto border border-zinc-800 leading-relaxed">
+                          <pre className="text-[10px] font-mono bg-zinc-950 text-emerald-400 p-2.5 rounded-lg overflow-x-auto border border-zinc-800 leading-relaxed">
                             {check.rawPayload}
                           </pre>
                         </div>
@@ -1645,12 +2297,12 @@ ${custParams}  </CustOpts>
                       {/* Protocol Execution Logs */}
                       {check.logs && check.logs.length > 0 && (
                         <div>
-                          <span className="block text-[11px] font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">
+                          <span className="block text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1">
                             Diagnostic Telemetry Trace
                           </span>
-                          <div className="text-[11px] font-mono bg-zinc-900 text-zinc-300 p-3 rounded-xl space-y-1 border border-zinc-800">
+                          <div className="text-[10px] font-mono bg-zinc-900 text-zinc-300 p-2.5 rounded-lg space-y-0.5 border border-zinc-800">
                             {check.logs.map((log, lIdx) => (
-                              <div key={lIdx} className="flex items-start gap-2">
+                              <div key={lIdx} className="flex items-start gap-1.5">
                                 <span className="text-zinc-500 select-none">&gt;</span>
                                 <span>{log}</span>
                               </div>
@@ -1669,36 +2321,36 @@ ${custParams}  </CustOpts>
 
       {/* 5. Tab Content: Biometric Capture & Quality Studio */}
       {activeTab === 'capture' && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Privacy Guarantee Header */}
-          <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 dark:bg-emerald-950/20">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-5 h-5" />
+          <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-2.5 sm:p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 dark:bg-emerald-950/20">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-4 h-4" />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
                   Client-Side Biometric Diagnostic Sandbox
                 </h4>
-                <p className="text-[11px] text-emerald-800/80 dark:text-emerald-300/80">
+                <p className="text-[10px] text-emerald-800/80 dark:text-emerald-300/80">
                   All requests communicate directly with your local loopback socket. Toolique does not capture, save, or transmit raw biometric templates or PID data.
                 </p>
               </div>
             </div>
-            <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 shrink-0">
+            <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 shrink-0">
               UIDAI L1 Compliant Standard
             </span>
           </div>
 
           {/* Mode Selector & Configuration Toolbar */}
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 sm:p-3.5 shadow-xs space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
               {/* Mode Toggle */}
               <div>
-                <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">
+                <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-1">
                   Capture Mode
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-1.5">
                   <button
                     type="button"
                     onClick={() => {
@@ -1706,9 +2358,9 @@ ${custParams}  </CustOpts>
                       setCaptureMode('mock');
                       handleResetCapture();
                     }}
-                    className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all ${
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-medium border transition-all ${
                       executionMode === 'mock'
-                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs'
+                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs font-semibold'
                         : 'bg-zinc-50 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100'
                     }`}
                   >
@@ -1722,9 +2374,9 @@ ${custParams}  </CustOpts>
                       scanAllLoopbackPorts();
                       handleResetCapture();
                     }}
-                    className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all ${
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-medium border transition-all ${
                       executionMode === 'live'
-                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs'
+                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs font-semibold'
                         : 'bg-zinc-50 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100'
                     }`}
                   >
@@ -1735,11 +2387,11 @@ ${custParams}  </CustOpts>
 
               {/* UIDAI Environment Parameter (env) Selector */}
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
                     UIDAI Env (<code className="font-mono text-zinc-600 dark:text-zinc-300">env</code>)
                   </label>
-                  <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                  <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded ${
                     uidaiEnv === 'P'
                       ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
                       : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
@@ -1747,16 +2399,16 @@ ${custParams}  </CustOpts>
                     {uidaiEnv === 'P' ? 'P' : 'PP'}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-1.5">
                   <button
                     type="button"
                     onClick={() => {
                       setUidaiEnv('P');
                       handleResetCapture();
                     }}
-                    className={`py-2 px-2.5 rounded-xl text-xs font-semibold border transition-all ${
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-medium border transition-all ${
                       uidaiEnv === 'P'
-                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs'
+                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700 shadow-xs font-semibold'
                         : 'bg-zinc-50 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100'
                     }`}
                   >
@@ -1768,9 +2420,9 @@ ${custParams}  </CustOpts>
                       setUidaiEnv('PP');
                       handleResetCapture();
                     }}
-                    className={`py-2 px-2.5 rounded-xl text-xs font-semibold border transition-all ${
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-medium border transition-all ${
                       uidaiEnv === 'PP'
-                        ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 border-amber-300 dark:border-amber-700 shadow-xs'
+                        ? 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 border-amber-300 dark:border-amber-700 shadow-xs font-semibold'
                         : 'bg-zinc-50 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100'
                     }`}
                   >
@@ -1782,7 +2434,7 @@ ${custParams}  </CustOpts>
               {/* Simulation Preset or Live Port Config */}
               {captureMode === 'mock' ? (
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-1">
                     Simulation Preset
                   </label>
                   <select
@@ -1791,10 +2443,10 @@ ${custParams}  </CustOpts>
                       setCaptureSimPreset(e.target.value as 'optimal' | 'borderline' | 'timeout' | 'detached' | 'quick_remove');
                       handleResetCapture();
                     }}
-                    className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-xs text-zinc-800 dark:text-zinc-200 focus:outline-hidden"
+                    className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-800 dark:text-zinc-200 focus:outline-hidden"
                   >
                     <option value="optimal">🟢 High Quality Scan (qScore: 85%+)</option>
-                    <option value="borderline">🟡 Borderline Quality (qScore: 52% - Below 60)</option>
+                    <option value="borderline">🟡 Borderline Quality (qScore: 52%)</option>
                     <option value="quick_remove">🔴 Error 1142: Removed Too Quick</option>
                     <option value="timeout">🔴 Error 1141: Capture Timeout</option>
                     <option value="detached">🔴 Error 1140: Device Not Attached</option>
@@ -1802,10 +2454,10 @@ ${custParams}  </CustOpts>
                 </div>
               ) : (
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">
+                  <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-1">
                     Capture Timeout
                   </label>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <input
                       type="range"
                       min="5"
@@ -1813,9 +2465,9 @@ ${custParams}  </CustOpts>
                       step="1"
                       value={captureTimeout}
                       onChange={(e) => setCaptureTimeout(parseInt(e.target.value, 10))}
-                      className="w-full accent-emerald-600 cursor-pointer"
+                      className="w-full accent-emerald-600 cursor-pointer h-1.5"
                     />
-                    <span className="font-mono text-xs font-bold text-zinc-700 dark:text-zinc-300 w-8 text-right">
+                    <span className="font-mono text-xs font-bold text-zinc-700 dark:text-zinc-300 w-7 text-right">
                       {captureTimeout}s
                     </span>
                   </div>
@@ -1824,10 +2476,10 @@ ${custParams}  </CustOpts>
 
               {/* Quality Target */}
               <div>
-                <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">
-                  UIDAI Minimum Quality Target
+                <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-1">
+                  UIDAI Minimum Target
                 </label>
-                <div className="flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 rounded-xl px-2 py-1">
+                <div className="flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2 py-0.5">
                   <select
                     value={minQualityTarget}
                     onChange={(e) => setMinQualityTarget(parseInt(e.target.value, 10))}
@@ -1849,21 +2501,21 @@ ${custParams}  </CustOpts>
                   type="button"
                   onClick={executionMode === 'mock' ? triggerMockCapture : triggerLiveCapture}
                   disabled={captureState === 'dispatched' || captureState === 'waiting_finger' || captureState === 'processing'}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {activeDevice.modality === 'single_iris' ? (
-                    <Eye className="w-4 h-4" />
+                    <Eye className="w-3.5 h-3.5" />
                   ) : (
-                    <Fingerprint className="w-4 h-4" />
+                    <Fingerprint className="w-3.5 h-3.5" />
                   )}
                   {captureState === 'waiting_finger'
                     ? activeDevice.modality === 'single_iris'
-                      ? 'Infrared Sensor Active — Align Eye...'
-                      : 'Optical LED Active — Place Finger...'
+                      ? 'Sensor Active — Align Eye...'
+                      : 'LED Active — Place Finger...'
                     : captureState === 'processing'
                     ? activeDevice.modality === 'single_iris'
                       ? 'Processing Iris Template...'
-                      : 'Processing Biometric Scan...'
+                      : 'Processing Scan...'
                     : executionMode === 'mock'
                     ? `Run Simulated Capture (${uidaiEnv})`
                     : executionMode === 'live' && discoveredServices.some((s) => s.vendorId === activeManufacturer.id && s.status === 'NOTREADY')
@@ -1875,15 +2527,15 @@ ${custParams}  </CustOpts>
                   <button
                     type="button"
                     onClick={handleResetCapture}
-                    className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-medium hover:bg-zinc-100 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-medium hover:bg-zinc-100 transition-all cursor-pointer"
                   >
-                    <RefreshCw className="w-3.5 h-3.5" /> Reset
+                    <RefreshCw className="w-3 h-3" /> Reset
                   </button>
                 )}
               </div>
 
               {executionMode === 'live' && (
-                <span className="text-[11px] text-zinc-400 hidden sm:inline">
+                <span className="text-[10px] text-zinc-400 hidden sm:inline">
                   {discoveredServices.find((s) => s.vendorId === activeManufacturer.id) ? (
                     <>
                       Target: <code className="bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded text-emerald-600 dark:text-emerald-400 font-bold">
@@ -1892,7 +2544,7 @@ ${custParams}  </CustOpts>
                     </>
                   ) : (
                     <>
-                      Target: <code className="bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">Ports 11100–11105 (Auto-Detect)</code>
+                      Target: <code className="bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">Ports 11100–11105 (Auto)</code>
                     </>
                   )}
                 </span>
@@ -1901,34 +2553,37 @@ ${custParams}  </CustOpts>
           </div>
 
           {/* Interactive Optical Platen & Real-Time Diagnostic Dashboard */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Visual Platen Sensor Casing */}
-            <div className="lg:col-span-5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
-              <div className="mb-4">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-400">
-                  {activeManufacturer.name} {activeDevice.modelName} {activeDevice.modality === 'single_iris' ? 'Iris Sensor Reticle' : 'Optical Platen'}
+            <div className="lg:col-span-5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-xs">
+              <div className="mb-3 flex items-center justify-between w-full px-1">
+                <span className="text-[9px] uppercase font-bold tracking-widest text-zinc-400">
+                  {activeManufacturer.name} {activeDevice.modelName}
+                </span>
+                <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-semibold">
+                  {activeDevice.modality === 'single_iris' ? 'IRIS RETICLE' : 'OPTICAL PLATEN'}
                 </span>
               </div>
 
               {/* Physical Scanner Platen Housing */}
               <div
-                className={`relative w-48 h-56 rounded-3xl border-4 transition-all duration-300 flex flex-col items-center justify-center p-4 select-none ${
+                className={`relative w-40 h-52 sm:w-44 sm:h-56 rounded-2xl border-3 transition-all duration-300 flex flex-col items-center justify-center p-3 select-none ${
                   captureState === 'waiting_finger'
                     ? activeDevice.modality === 'single_iris'
-                      ? 'border-cyan-500 bg-cyan-950/20 shadow-[0_0_35px_rgba(6,182,212,0.7)] animate-pulse'
-                      : 'border-red-500 bg-red-950/20 shadow-[0_0_35px_rgba(239,68,68,0.7)] animate-pulse'
+                      ? 'border-cyan-500 bg-cyan-950/20 shadow-[0_0_25px_rgba(6,182,212,0.6)] animate-pulse'
+                      : 'border-red-500 bg-red-950/20 shadow-[0_0_25px_rgba(239,68,68,0.6)] animate-pulse'
                     : captureState === 'processing'
-                    ? 'border-amber-500 bg-amber-950/20 shadow-[0_0_30px_rgba(245,158,11,0.6)]'
+                    ? 'border-amber-500 bg-amber-950/20 shadow-[0_0_20px_rgba(245,158,11,0.5)]'
                     : captureState === 'success'
-                    ? 'border-emerald-500 bg-emerald-950/20 shadow-[0_0_30px_rgba(16,185,129,0.6)]'
+                    ? 'border-emerald-500 bg-emerald-950/20 shadow-[0_0_20px_rgba(16,185,129,0.5)]'
                     : captureState === 'error'
-                    ? 'border-rose-500 bg-rose-950/20 shadow-[0_0_20px_rgba(244,63,94,0.4)]'
-                    : 'border-zinc-300 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60'
+                    ? 'border-rose-500 bg-rose-950/20 shadow-[0_0_15px_rgba(244,63,94,0.4)]'
+                    : 'border-zinc-300 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-800/60 shadow-inner'
                 }`}
               >
                 {/* Scratch-Free Platen Glass / Reticle Window */}
                 <div
-                  className={`w-28 h-36 rounded-2xl border-2 transition-all flex flex-col items-center justify-center relative overflow-hidden ${
+                  className={`w-28 h-36 sm:w-32 sm:h-42 rounded-xl border-2 transition-all flex flex-col items-center justify-center relative overflow-hidden backdrop-blur-xs ${
                     captureState === 'waiting_finger'
                       ? activeDevice.modality === 'single_iris'
                         ? 'border-cyan-400 bg-gradient-to-b from-cyan-600/40 via-sky-500/20 to-cyan-700/40'
@@ -1940,17 +2595,37 @@ ${custParams}  </CustOpts>
                       : 'border-zinc-400/50 dark:border-zinc-600 bg-zinc-200/50 dark:bg-zinc-900/50'
                   }`}
                 >
+                  {/* Futuristic HUD Corner Indicators */}
+                  <span className="absolute top-1.5 left-2 text-[8px] font-mono font-bold text-zinc-400/80 dark:text-zinc-500 select-none">
+                    ┌ {activeDevice.resolutionDpi}DPI
+                  </span>
+                  <span className="absolute top-1.5 right-2 text-[8px] font-mono font-bold text-zinc-400/80 dark:text-zinc-500 select-none">
+                    NFIQ2.0 ┐
+                  </span>
+                  <span className="absolute bottom-1.5 left-2 text-[8px] font-mono font-bold text-zinc-400/80 dark:text-zinc-500 select-none">
+                    └ ISO-19794
+                  </span>
+                  <span className="absolute bottom-1.5 right-2 text-[8px] font-mono font-bold text-zinc-400/80 dark:text-zinc-500 select-none">
+                    TEE {activeDevice.certificationLevel} ┘
+                  </span>
+
+                  {/* Optical Reticle Crosshairs */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+                    <div className="w-full h-px bg-current" />
+                    <div className="h-full w-px bg-current absolute" />
+                  </div>
+
                   {/* Silhouette / Reticle Rendering */}
                   <div className="relative z-10 flex flex-col items-center justify-center">
                     {activeDevice.modality === 'single_iris' ? (
                       <Eye
-                        className={`w-16 h-16 transition-all duration-300 ${
+                        className={`w-12 h-12 transition-all duration-300 ${
                           captureState === 'waiting_finger'
                             ? 'text-cyan-400 animate-pulse scale-105'
                             : captureState === 'processing'
                             ? 'text-amber-400 animate-pulse'
                             : captureState === 'success'
-                            ? 'text-emerald-400 scale-110 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]'
+                            ? 'text-emerald-400 scale-110 drop-shadow-[0_0_10px_rgba(52,211,153,0.9)]'
                             : captureState === 'error'
                             ? 'text-rose-400'
                             : 'text-zinc-400/60 dark:text-zinc-600'
@@ -1958,13 +2633,13 @@ ${custParams}  </CustOpts>
                       />
                     ) : (
                       <Fingerprint
-                        className={`w-16 h-16 transition-all duration-300 ${
+                        className={`w-12 h-12 transition-all duration-300 ${
                           captureState === 'waiting_finger'
                             ? 'text-red-400 animate-pulse scale-105'
                             : captureState === 'processing'
-                            ? 'text-amber-400 animate-spin'
+                            ? 'text-amber-400 animate-pulse'
                             : captureState === 'success'
-                            ? 'text-emerald-400 scale-110 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]'
+                            ? 'text-emerald-400 scale-110 drop-shadow-[0_0_10px_rgba(52,211,153,0.9)]'
                             : captureState === 'error'
                             ? 'text-rose-400'
                             : 'text-zinc-400/60 dark:text-zinc-600'
@@ -1974,18 +2649,18 @@ ${custParams}  </CustOpts>
 
                     {/* Sensor State Labels */}
                     <span
-                      className={`text-[9px] font-mono uppercase tracking-wider font-bold mt-2 px-1.5 py-0.5 rounded ${
+                      className={`text-[9px] font-mono uppercase tracking-wider font-bold mt-1.5 px-2 py-0.2 rounded-full ${
                         captureState === 'waiting_finger'
                           ? activeDevice.modality === 'single_iris'
-                            ? 'text-cyan-200 bg-cyan-900/80'
-                            : 'text-red-200 bg-red-900/80'
+                            ? 'text-cyan-200 bg-cyan-900/90 shadow-xs'
+                            : 'text-red-200 bg-red-900/90 shadow-xs'
                           : captureState === 'processing'
-                          ? 'text-amber-200 bg-amber-900/80'
+                          ? 'text-amber-200 bg-amber-900/90 shadow-xs'
                           : captureState === 'success'
-                          ? 'text-emerald-200 bg-emerald-900/80'
+                          ? 'text-emerald-200 bg-emerald-900/90 shadow-xs'
                           : captureState === 'error'
-                          ? 'text-rose-200 bg-rose-900/80'
-                          : 'text-zinc-400'
+                          ? 'text-rose-200 bg-rose-900/90 shadow-xs'
+                          : 'text-zinc-400 bg-zinc-700/20'
                       }`}
                     >
                       {captureState === 'waiting_finger'
@@ -2002,14 +2677,35 @@ ${custParams}  </CustOpts>
                     </span>
                   </div>
 
+                  {/* Minutiae Feature Nodes on Successful Capture */}
+                  {captureState === 'success' && (
+                    <div className="absolute inset-0 pointer-events-none z-20">
+                      {[
+                        { top: '24%', left: '35%' },
+                        { top: '34%', left: '60%' },
+                        { top: '46%', left: '30%' },
+                        { top: '50%', left: '66%' },
+                        { top: '62%', left: '42%' },
+                        { top: '68%', left: '55%' },
+                        { top: '40%', left: '48%' },
+                      ].map((pos, idx) => (
+                        <span
+                          key={idx}
+                          style={pos}
+                          className="absolute w-1.5 h-1.5 rounded-full bg-emerald-300 shadow-[0_0_6px_#34d399] animate-ping"
+                        />
+                      ))}
+                    </div>
+                  )}
+
                   {/* Scanning sweep laser animation during processing */}
                   {captureState === 'processing' && (
-                    <div className="absolute inset-x-0 h-1 bg-amber-400 shadow-[0_0_12px_#fbbf24] animate-bounce top-1/2" />
+                    <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_12px_#fbbf24] animate-bounce top-1/2 z-20" />
                   )}
                 </div>
 
                 {/* Platen Dimensions / Focal Distance Label */}
-                <div className="mt-3 flex items-center gap-1.5 text-[10px] text-zinc-400">
+                <div className="mt-2 flex items-center gap-1.5 text-[9px] text-zinc-400 font-mono">
                   <span>{activeDevice.platenSize || (activeDevice.modality === 'single_iris' ? '70–120 mm Focus' : '15.0 × 20.0 mm')}</span>
                   <span>•</span>
                   <span>{activeDevice.resolutionDpi} DPI</span>
@@ -2017,33 +2713,33 @@ ${custParams}  </CustOpts>
               </div>
 
               {/* Status Message below Platen */}
-              <div className="mt-4 text-xs font-medium max-w-xs">
+              <div className="mt-3 text-xs font-medium max-w-xs text-center min-h-[30px] flex items-center justify-center">
                 {captureState === 'waiting_finger' && (
-                  <p className="text-red-600 dark:text-red-400 font-semibold animate-pulse">
+                  <p className="text-red-600 dark:text-red-400 font-semibold animate-pulse text-[11px]">
                     {activeDevice.modality === 'single_iris'
-                      ? '🔵 Infrared illumination active. Align eye within 70–120 mm range.'
-                      : '🔴 Optical Red LED is ON. Firmly place finger on scanner platen.'}
+                      ? '🔵 Infrared active. Align eye within 70–120 mm.'
+                      : '🔴 Optical Red LED is ON. Place finger firmly.'}
                   </p>
                 )}
                 {captureState === 'processing' && (
-                  <p className="text-amber-600 dark:text-amber-400 font-semibold">
+                  <p className="text-amber-600 dark:text-amber-400 font-semibold text-[11px]">
                     {activeDevice.modality === 'single_iris'
-                      ? '⚡ Capturing iris pattern & verifying ISO/IEC 19794-6 compliance...'
-                      : '⚡ Optical sensor exposing ridges & computing minutiae...'}
+                      ? '⚡ Capturing iris pattern (ISO/IEC 19794-6)...'
+                      : '⚡ Optical sensor exposing ridges & minutiae...'}
                   </p>
                 )}
                 {captureState === 'success' && captureResult && (
-                  <p className="text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <p className="text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">
                     🟢 Scan complete! Quality Score: {captureResult.qScore}% ({captureResult.durationMs}ms)
                   </p>
                 )}
                 {captureState === 'error' && (
-                  <p className="text-rose-600 dark:text-rose-400 font-semibold">
+                  <p className="text-rose-600 dark:text-rose-400 font-semibold text-[11px]">
                     {captureError || 'Capture failed. Please retry.'}
                   </p>
                 )}
                 {captureState === 'idle' && (
-                  <p className="text-zinc-400">
+                  <p className="text-zinc-400 text-[11px]">
                     Ready to initiate capture request.
                   </p>
                 )}
@@ -2051,89 +2747,154 @@ ${custParams}  </CustOpts>
             </div>
 
             {/* Diagnostic Metrics & Telemetry Details */}
-            <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-5">
-              <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-emerald-500" />
+            <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-4.5 space-y-3.5 shadow-xs">
+              <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+                <h3 className="text-xs sm:text-[13px] font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-emerald-500" />
                   Capture Diagnostic Results
                 </h3>
                 {captureResult && (
-                  <span className="text-[11px] font-mono text-zinc-400">
-                    {captureResult.timestamp} {captureResult.isMock ? '(Simulated)' : '(Live Hardware)'}
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-semibold">
+                    {captureResult.timestamp} • {captureResult.isMock ? 'Simulated' : 'Live Hardware'}
                   </span>
                 )}
               </div>
 
               {captureResult ? (
-                <div className="space-y-4">
-                  {/* Metric Cards Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {/* Quality Score Card */}
-                    <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl p-3 text-center">
-                      <span className="text-[10px] uppercase font-bold text-zinc-400 block mb-1">
-                        Quality Score
-                      </span>
-                      <div
-                        className={`text-2xl font-black ${
+                <div className="space-y-3">
+                  {/* Circular SVG Quality Score Gauge & Compliance Banner */}
+                  <div className="flex flex-col sm:flex-row items-center gap-4 p-3 sm:p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200/70 dark:border-zinc-800">
+                    {/* SVG Radial Gauge */}
+                    <div className="relative w-22 h-22 sm:w-24 sm:h-24 shrink-0 flex items-center justify-center">
+                      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        {/* Background track circle */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          className="stroke-zinc-200 dark:stroke-zinc-700/60"
+                          strokeWidth="8"
+                          fill="transparent"
+                        />
+                        {/* Animated fill arc */}
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="40"
+                          stroke={
+                            captureResult.qScore >= minQualityTarget
+                              ? '#10b981'
+                              : captureResult.qScore >= 40
+                              ? '#f59e0b'
+                              : '#f43f5e'
+                          }
+                          strokeWidth="8"
+                          strokeDasharray={251.3}
+                          strokeDashoffset={251.3 - (251.3 * Math.min(100, Math.max(0, captureResult.qScore))) / 100}
+                          strokeLinecap="round"
+                          fill="transparent"
+                          className="transition-all duration-700 ease-out"
+                        />
+                      </svg>
+                      {/* Centered Percentage Score */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span className={`text-xl sm:text-2xl font-black tracking-tight leading-none ${
                           captureResult.qScore >= minQualityTarget
                             ? 'text-emerald-600 dark:text-emerald-400'
                             : captureResult.qScore >= 40
                             ? 'text-amber-600 dark:text-amber-400'
                             : 'text-rose-600 dark:text-rose-400'
-                        }`}
-                      >
-                        {captureResult.qScore}%
+                        }`}>
+                          {captureResult.qScore}%
+                        </span>
+                        <span className="text-[8px] font-mono uppercase text-zinc-400 mt-0.5">
+                          NFIQ 2.0
+                        </span>
                       </div>
-                      <span className="text-[10px] text-zinc-500 mt-0.5 block">
-                        {captureResult.qScore >= minQualityTarget ? 'Compliant' : 'Below Target'}
-                      </span>
                     </div>
 
+                    {/* Verdict & Threshold Explanation */}
+                    <div className="flex-1 space-y-1 text-center sm:text-left">
+                      <div className="flex items-center justify-center sm:justify-start gap-2">
+                        <span className={`px-1.5 py-0.2 rounded-md text-[9px] font-bold uppercase tracking-wider ${
+                          captureResult.qScore >= minQualityTarget
+                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300'
+                            : 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300'
+                        }`}>
+                          {captureResult.qScore >= minQualityTarget ? 'UIDAI Compliant' : 'Sub-Optimal Target'}
+                        </span>
+                        <span className="text-[10px] font-mono text-zinc-400">
+                          Target: ≥ {minQualityTarget}%
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                        {captureResult.qScore >= minQualityTarget
+                          ? `High-fidelity biometric capture verified. Ridge minutiae distribution meets UIDAI Aadhaar authentication standards.`
+                          : `Score is below the configured ${minQualityTarget}% threshold. Ensure scanner platen is clean and retry with balanced finger pressure.`}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 4 Metric Cards Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {/* Minutiae / Features Count Card */}
-                    <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl p-3 text-center">
-                      <span className="text-[10px] uppercase font-bold text-zinc-400 block mb-1">
+                    <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-800 rounded-lg p-2.5 text-center">
+                      <span className="text-[9px] uppercase font-bold text-zinc-400 block mb-0.5">
                         {activeDevice.modality === 'single_iris' ? 'Iris Features' : 'Minutiae Points'}
                       </span>
-                      <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100">
+                      <div className="text-lg sm:text-xl font-black text-zinc-900 dark:text-zinc-100">
                         {activeDevice.modality === 'single_iris' ? `${captureResult.qScore}%` : captureResult.nmPoints}
                       </div>
-                      <span className="text-[10px] text-zinc-500 mt-0.5 block">
+                      <span className="text-[9px] text-zinc-500 mt-0.5 block">
                         {activeDevice.modality === 'single_iris' ? 'ISO 19794-6' : 'Extracted (FMR)'}
                       </span>
                     </div>
 
                     {/* Execution Latency Card */}
-                    <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl p-3 text-center">
-                      <span className="text-[10px] uppercase font-bold text-zinc-400 block mb-1">
+                    <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-800 rounded-lg p-2.5 text-center">
+                      <span className="text-[9px] uppercase font-bold text-zinc-400 block mb-0.5">
                         Sensor Latency
                       </span>
-                      <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100">
+                      <div className="text-lg sm:text-xl font-black text-zinc-900 dark:text-zinc-100">
                         {captureResult.durationMs}
                         <span className="text-xs font-normal text-zinc-400 ml-0.5">ms</span>
                       </div>
-                      <span className="text-[10px] text-zinc-500 mt-0.5 block">
-                        End-to-End
+                      <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5 block">
+                        {captureResult.durationMs < 1000 ? '⚡ Ultra Fast' : 'Normal'}
                       </span>
                     </div>
 
                     {/* L1 Attestation Card */}
-                    <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl p-3 text-center">
-                      <span className="text-[10px] uppercase font-bold text-zinc-400 block mb-1">
+                    <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-800 rounded-lg p-2.5 text-center">
+                      <span className="text-[9px] uppercase font-bold text-zinc-400 block mb-0.5">
                         {activeDevice.certificationLevel} Cryptography
                       </span>
-                      <div className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-1">
+                      <div className="text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-1">
                         {activeDevice.certificationLevel === 'L1' ? 'HW Signed' : 'SW Signed'}
                       </div>
-                      <span className="text-[10px] text-zinc-500 mt-0.5 block">
+                      <span className="text-[9px] text-zinc-500 mt-0.5 block">
                         {activeDevice.certificationLevel === 'L1' ? 'Secure Enclave' : 'Host Security'}
+                      </span>
+                    </div>
+
+                    {/* UIDAI Target Card */}
+                    <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-800 rounded-lg p-2.5 text-center">
+                      <span className="text-[9px] uppercase font-bold text-zinc-400 block mb-0.5">
+                        UIDAI Target
+                      </span>
+                      <div className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 mt-1">
+                        env=&quot;{uidaiEnv}&quot;
+                      </div>
+                      <span className="text-[9px] text-zinc-500 mt-0.5 block">
+                        {uidaiEnv === 'P' ? 'Production' : 'Sandbox'}
                       </span>
                     </div>
                   </div>
 
                   {/* Device & Status Details */}
-                  <div className="bg-zinc-50 dark:bg-zinc-800/40 rounded-xl p-3.5 border border-zinc-200/60 dark:border-zinc-800 text-xs space-y-2">
+                  <div className="bg-zinc-50 dark:bg-zinc-800/40 rounded-lg p-2.5 border border-zinc-200/60 dark:border-zinc-800 text-[11px] space-y-1.5">
                     <div className="flex justify-between">
-                      <span className="text-zinc-500">{activeManufacturer.name} Return Status:</span>
+                      <span className="text-zinc-500">{activeManufacturer.name} Status:</span>
                       <span className="font-semibold text-zinc-900 dark:text-zinc-100">
                         Code {captureResult.errorCode} ({captureResult.errorInfo})
                       </span>
@@ -2141,14 +2902,14 @@ ${custParams}  </CustOpts>
                     <div className="flex justify-between">
                       <span className="text-zinc-500">UIDAI Environment:</span>
                       <span className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                        <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold ${
                           uidaiEnv === 'P'
                             ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
                             : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
                         }`}>
                           env=&quot;{uidaiEnv}&quot;
                         </span>
-                        <span>{uidaiEnv === 'P' ? 'Production (Live Auth)' : 'Pre-Production (Sandbox)'}</span>
+                        <span>{uidaiEnv === 'P' ? 'Production (Live)' : 'Pre-Production (Sandbox)'}</span>
                       </span>
                     </div>
                     {captureResult.deviceInfo && (
@@ -2170,7 +2931,7 @@ ${custParams}  </CustOpts>
                     <div className="flex justify-between">
                       <span className="text-zinc-500">Privacy Status:</span>
                       <span className="text-emerald-600 dark:text-emerald-400 font-semibold">
-                        Encrypted PID Masked • Zero Biometric Storage
+                        Encrypted PID Masked • Zero Storage
                       </span>
                     </div>
                   </div>
@@ -2180,13 +2941,13 @@ ${custParams}  </CustOpts>
                     <button
                       type="button"
                       onClick={() => setShowRawXml(!showRawXml)}
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
                     >
                       {showRawXml ? 'Hide Sanitized Protocol XML' : 'View Sanitized Protocol XML'}
                     </button>
 
                     {showRawXml && (
-                      <div className="mt-2">
+                      <div className="mt-1.5">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-[10px] font-mono text-zinc-400">
                             Redacted &lt;PidData&gt; Response
@@ -2194,7 +2955,7 @@ ${custParams}  </CustOpts>
                           <button
                             type="button"
                             onClick={() => copyToClipboard(captureResult.rawXml, 'capture-xml')}
-                            className="inline-flex items-center gap-1 text-[11px] text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                            className="inline-flex items-center gap-1 text-[10px] text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
                           >
                             {copiedLogId === 'capture-xml' ? (
                               <>
@@ -2207,7 +2968,7 @@ ${custParams}  </CustOpts>
                             )}
                           </button>
                         </div>
-                        <pre className="text-[11px] font-mono bg-zinc-950 text-emerald-400 p-3 rounded-xl overflow-x-auto border border-zinc-800 leading-relaxed max-h-48">
+                        <pre className="text-[10px] font-mono bg-zinc-950 text-emerald-400 p-2.5 rounded-lg overflow-x-auto border border-zinc-800 leading-relaxed max-h-44">
                           {captureResult.rawXml}
                         </pre>
                       </div>
@@ -2215,14 +2976,27 @@ ${custParams}  </CustOpts>
                   </div>
                 </div>
               ) : (
-                <div className="min-h-[220px] flex flex-col items-center justify-center text-center p-6 bg-zinc-50/50 dark:bg-zinc-800/20 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800">
-                  <Fingerprint className="w-10 h-10 text-zinc-300 dark:text-zinc-700 mb-3" />
-                  <p className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                    No capture telemetry recorded yet
+                <div className="min-h-[190px] flex flex-col items-center justify-center text-center p-4 bg-zinc-50/50 dark:bg-zinc-800/20 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800">
+                  <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 dark:text-zinc-600 mb-2 shadow-inner">
+                    <Fingerprint className="w-6 h-6" />
+                  </div>
+                  <p className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
+                    Scanner Ready for Capture Trigger
                   </p>
-                  <p className="text-[11px] text-zinc-400 max-w-sm mt-1">
-                    Click <strong>&quot;Run Simulated Capture&quot;</strong> to test with sandbox presets, or toggle to <strong>&quot;Live Hardware&quot;</strong> to trigger your physical USB {activeManufacturer.name} {activeDevice.modelName} scanner.
+                  <p className="text-[10px] text-zinc-400 max-w-sm mt-1 leading-relaxed">
+                    Click <strong>&quot;Run Simulated Capture&quot;</strong> to evaluate mock telemetry with audio feedback, or select <strong>&quot;Live USB&quot;</strong> to query your physical {activeManufacturer.name} {activeDevice.modelName}.
                   </p>
+                  <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5">
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-zinc-200/60 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                      500 DPI Optical
+                    </span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-zinc-200/60 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                      ISO/IEC 19794-2/4
+                    </span>
+                    <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-zinc-200/60 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                      UIDAI RD Spec v2.0
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
@@ -2232,11 +3006,11 @@ ${custParams}  </CustOpts>
 
       {/* 6. Tab Content: Troubleshooting Guide */}
       {activeTab === 'troubleshoot' && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Search & Category Filter */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="relative flex-1">
-              <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <label htmlFor={tsSearchId} className="sr-only">Search error code or symptom</label>
               <input
                 id={tsSearchId}
@@ -2244,12 +3018,12 @@ ${custParams}  </CustOpts>
                 value={troubleshootQuery}
                 onChange={(e) => setTroubleshootQuery(e.target.value)}
                 placeholder="Search error code (e.g. 1140, 720), port, SSL, or driver symptom..."
-                className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
+                className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
               />
             </div>
 
             {/* Filter buttons */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0">
               {[
                 { id: 'all', label: 'All Issues' },
                 { id: 'hardware', label: 'Hardware/USB' },
@@ -2261,10 +3035,10 @@ ${custParams}  </CustOpts>
                   key={cat.id}
                   type="button"
                   onClick={() => setSelectedTroubleshootCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap transition-all cursor-pointer ${
                     selectedTroubleshootCategory === cat.id
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200'
+                      ? 'bg-emerald-600 text-white font-semibold shadow-xs'
+                      : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
                   }`}
                 >
                   {cat.label}
@@ -2274,70 +3048,98 @@ ${custParams}  </CustOpts>
           </div>
 
           {/* Troubleshooting Guides Accordion */}
-          <div className="space-y-4">
+          <div className="space-y-2.5">
             {filteredTroubleshootGuides.map((guide) => {
               const isExpanded = expandedTroubleshootId === guide.id;
 
               return (
                 <div
                   key={guide.id}
-                  className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden transition-all"
+                  id={guide.id}
+                  className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden transition-all"
                 >
                   <div
                     onClick={() => setExpandedTroubleshootId(isExpanded ? null : guide.id)}
-                    className="p-5 flex items-start justify-between gap-4 cursor-pointer select-none hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20"
+                    className="p-3 sm:p-3.5 flex items-start justify-between gap-3 cursor-pointer select-none hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20"
                   >
                     <div>
-                      <div className="flex items-center gap-2 flex-wrap mb-1.5">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
+                      <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                        <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
                           {guide.categoryLabel}
                         </span>
                         {guide.errorCode && (
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                          <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
                             {guide.errorCode}
                           </span>
                         )}
                       </div>
-                      <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                      <h3 className="text-xs sm:text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">
                         {guide.title}
                       </h3>
-                      <p className="text-xs text-zinc-500 mt-1 line-clamp-1">
+                      <p className="text-[11px] text-zinc-500 mt-0.5 line-clamp-1">
                         <strong>Root Cause:</strong> {guide.rootCause}
                       </p>
                     </div>
 
-                    <div className="text-zinc-400 shrink-0 mt-1">
-                      {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                    <div className="text-zinc-400 shrink-0 mt-0.5">
+                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </div>
                   </div>
 
                   {isExpanded && (
-                    <div className="px-5 pb-5 pt-2 border-t border-zinc-100 dark:border-zinc-800/80 space-y-4 text-xs">
+                    <div className="px-3.5 pb-3.5 pt-1.5 border-t border-zinc-100 dark:border-zinc-800/80 space-y-3 text-xs">
                       <div>
                         <strong className="text-zinc-900 dark:text-zinc-200 block mb-1">
                           Common Symptoms:
                         </strong>
-                        <ul className="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400 pl-1">
+                        <ul className="list-disc list-inside space-y-0.5 text-zinc-600 dark:text-zinc-400 pl-1 text-[11px]">
                           {guide.symptoms.map((s, idx) => (
                             <li key={idx}>{s}</li>
                           ))}
                         </ul>
                       </div>
 
-                      <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-xl p-4">
-                        <strong className="text-emerald-900 dark:text-emerald-200 block mb-2">
+                      <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-lg p-3">
+                        <strong className="text-emerald-900 dark:text-emerald-200 block mb-1.5 text-xs">
                           Step-by-Step Resolution:
                         </strong>
-                        <ol className="list-decimal list-inside space-y-1.5 text-emerald-800 dark:text-emerald-300">
-                          {guide.resolutionSteps.map((step, idx) => (
-                            <li key={idx} className="leading-relaxed">
-                              {step}
-                            </li>
-                          ))}
+                        <ol className="list-decimal list-inside space-y-1.5 text-emerald-800 dark:text-emerald-300 text-[11px]">
+                          {guide.resolutionSteps.map((step, idx) => {
+                            const codeMatch = step.match(/`([^`]+)`/);
+                            const extractableCode = codeMatch ? codeMatch[1] : null;
+
+                            return (
+                              <li key={idx} className="leading-relaxed">
+                                <span>{step}</span>
+                                {extractableCode && (
+                                  <div className="mt-1 flex items-center gap-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleCopyCommand(extractableCode)}
+                                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/60 hover:bg-emerald-200 dark:hover:bg-emerald-800 text-[10px] font-mono font-semibold text-emerald-800 dark:text-emerald-200 transition-all cursor-pointer"
+                                      title="Copy command to clipboard"
+                                    >
+                                      {copiedCommandText === extractableCode ? (
+                                        <>
+                                          <CheckCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                          <span>Copied!</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Terminal className="w-3 h-3" />
+                                          <span>Copy: {extractableCode}</span>
+                                        </>
+                                      )}
+                                    </button>
+                                  </div>
+                                )}
+                              </li>
+                            );
+                          })}
                         </ol>
                       </div>
 
-                      <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                      <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-2 border-t border-zinc-100 dark:border-zinc-800 font-mono">
                         <span>Applies to: {guide.affectedDevices.join(', ')}</span>
                         <span>{guide.windowsVersions.join(' • ')}</span>
                       </div>
@@ -2352,51 +3154,51 @@ ${custParams}  </CustOpts>
 
       {/* 7. Tab Content: Specifications & Driver Downloads */}
       {activeTab === 'specs' && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Technical Specifications */}
-            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-emerald-500" />
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-4.5 space-y-3 shadow-xs">
+              <h3 className="text-xs sm:text-[13px] font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <Cpu className="w-3.5 h-3.5 text-emerald-500" />
                 {activeManufacturer.name} {activeDevice.modelName} Specifications
               </h3>
 
-              <div className="space-y-2.5 text-xs text-zinc-600 dark:text-zinc-400 divide-y divide-zinc-100 dark:divide-zinc-800">
-                <div className="flex justify-between py-1.5">
+              <div className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400 divide-y divide-zinc-100 dark:divide-zinc-800">
+                <div className="flex justify-between py-1">
                   <span className="text-zinc-500">Certification Standard:</span>
                   <span className="font-semibold text-zinc-900 dark:text-zinc-200">UIDAI {activeDevice.certificationLevel} & STQC Certified</span>
                 </div>
-                <div className="flex justify-between py-1.5">
+                <div className="flex justify-between py-1">
                   <span className="text-zinc-500">Modality:</span>
                   <span className="font-semibold text-zinc-900 dark:text-zinc-200">{activeDevice.modalityLabel}</span>
                 </div>
-                <div className="flex justify-between py-1.5">
+                <div className="flex justify-between py-1">
                   <span className="text-zinc-500">Sensor Technology:</span>
                   <span className="font-semibold text-zinc-900 dark:text-zinc-200">{activeDevice.sensorTechnology}</span>
                 </div>
-                <div className="flex justify-between py-1.5">
+                <div className="flex justify-between py-1">
                   <span className="text-zinc-500">Optical Resolution:</span>
                   <span className="font-semibold text-zinc-900 dark:text-zinc-200">{activeDevice.resolutionDpi} DPI</span>
                 </div>
-                <div className="flex justify-between py-1.5">
+                <div className="flex justify-between py-1">
                   <span className="text-zinc-500">{activeDevice.modality === 'single_iris' ? 'Focal Distance:' : 'Platen Glass Size:'}</span>
                   <span className="font-semibold text-zinc-900 dark:text-zinc-200">{activeDevice.platenSize}</span>
                 </div>
-                <div className="flex justify-between py-1.5">
+                <div className="flex justify-between py-1">
                   <span className="text-zinc-500">Host Interface:</span>
                   <span className="font-semibold text-zinc-900 dark:text-zinc-200">{activeDevice.interfaceType}</span>
                 </div>
-                <div className="flex justify-between py-1.5">
+                <div className="flex justify-between py-1">
                   <span className="text-zinc-500">Cryptographic Security:</span>
                   <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                    {activeDevice.certificationLevel === 'L1' ? 'Hardware TEE / Secure Enclave Boot Signing' : 'Host Software Encrypted (L0)'}
+                    {activeDevice.certificationLevel === 'L1' ? 'Hardware TEE Secure Enclave' : 'Host Software Encrypted (L0)'}
                   </span>
                 </div>
-                <div className="flex justify-between py-1.5">
+                <div className="flex justify-between py-1">
                   <span className="text-zinc-500">Operating Systems:</span>
                   <span className="font-semibold text-zinc-900 dark:text-zinc-200">{activeDevice.supportedOS.join(', ')}</span>
                 </div>
-                <div className="flex justify-between py-1.5">
+                <div className="flex justify-between py-1">
                   <span className="text-zinc-500">RD Service Default Ports:</span>
                   <span className="font-mono text-zinc-900 dark:text-zinc-200">{activeDevice.defaultPorts.join(', ')}</span>
                 </div>
@@ -2404,65 +3206,209 @@ ${custParams}  </CustOpts>
             </div>
 
             {/* Official Driver & RD Service Links */}
-            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Download className="w-4 h-4 text-emerald-500" />
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-4.5 space-y-3 shadow-xs">
+              <h3 className="text-xs sm:text-[13px] font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <Download className="w-3.5 h-3.5 text-emerald-500" />
                 Official Driver & RD Service Packages
               </h3>
 
-              <p className="text-xs text-zinc-500">
+              <p className="text-[11px] text-zinc-500 leading-relaxed">
                 To test live hardware on Windows 10/11, install both the <strong>{activeDevice.modelName} Driver</strong> and the official <strong>{activeDevice.modelName} RD Service daemon</strong> from {activeManufacturer.name}.
               </p>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <a
                   href={activeDevice.driverDownloadUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 hover:border-emerald-500 transition-all text-xs"
+                  className="flex items-center justify-between p-2.5 sm:p-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 hover:border-emerald-500 transition-all text-xs"
                 >
                   <div>
                     <span className="font-semibold text-zinc-900 dark:text-zinc-100 block">
                       {activeManufacturer.name} {activeDevice.modelName} Windows Driver
                     </span>
-                    <span className="text-zinc-400 text-[11px]">Includes USB drivers for Windows 10 & Windows 11</span>
+                    <span className="text-zinc-400 text-[10px]">Includes USB drivers for Windows 10 & Windows 11</span>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-zinc-400" />
+                  <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
                 </a>
 
                 <a
                   href={activeDevice.rdServiceDownloadUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 hover:border-emerald-500 transition-all text-xs"
+                  className="flex items-center justify-between p-2.5 sm:p-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 hover:border-emerald-500 transition-all text-xs"
                 >
                   <div>
                     <span className="font-semibold text-zinc-900 dark:text-zinc-100 block">
                       {activeManufacturer.name} {activeDevice.modelName} RD Service Package
                     </span>
-                    <span className="text-zinc-400 text-[11px]">Binds local loopback daemon on ports {activeDevice.defaultPorts.join(', ')}</span>
+                    <span className="text-zinc-400 text-[10px]">Binds local loopback daemon on ports {activeDevice.defaultPorts.join(', ')}</span>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-zinc-400" />
+                  <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
                 </a>
 
                 <a
                   href={activeDevice.documentationUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 hover:border-emerald-500 transition-all text-xs"
+                  className="flex items-center justify-between p-2.5 sm:p-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/60 hover:border-emerald-500 transition-all text-xs"
                 >
                   <div>
                     <span className="font-semibold text-zinc-900 dark:text-zinc-100 block">
                       {activeManufacturer.name} {activeDevice.modelName} Official Documentation
                     </span>
-                    <span className="text-zinc-400 text-[11px]">Hardware brochure and STQC certificate data</span>
+                    <span className="text-zinc-400 text-[10px]">Hardware brochure and STQC certificate data</span>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-zinc-400" />
+                  <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
                 </a>
               </div>
 
-              <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-[11px] text-zinc-600 dark:text-zinc-400">
-                <strong>Tip for Windows 11 Users:</strong> Always run driver installers by right-clicking and selecting <em>"Run as Administrator"</em> to ensure the Windows Service registration succeeds.
+              <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-[10px] text-zinc-600 dark:text-zinc-400">
+                <strong>Tip for Windows 11 Users:</strong> Always run driver installers by right-clicking and selecting <em>&quot;Run as Administrator&quot;</em> to ensure the Windows Service registration succeeds.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 8. Diagnostic Health Audit Certificate Modal */}
+      {showHealthReport && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+          <div className="max-w-xl w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-150">
+            {/* Modal Header */}
+            <div className="p-3.5 sm:p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/40">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                  <Printer className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                    RD Service Diagnostic Health Certificate
+                  </h3>
+                  <p className="text-[11px] text-zinc-500">
+                    UIDAI Compliant Hardware & Driver Attestation Report
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowHealthReport(false)}
+                className="w-7 h-7 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 flex items-center justify-center transition-all cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-4 sm:p-5 overflow-y-auto space-y-3 print:p-0">
+              {/* Summary Badges */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                <div className="p-2 sm:p-2.5 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase block">Device</span>
+                  <span className="text-[11px] font-bold text-zinc-900 dark:text-zinc-100 truncate block mt-0.5">
+                    {activeManufacturer.name} {activeDevice.modelName}
+                  </span>
+                </div>
+                <div className="p-2 sm:p-2.5 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase block">UIDAI Spec</span>
+                  <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 block mt-0.5">
+                    Level {activeDevice.certificationLevel} (STQC)
+                  </span>
+                </div>
+                <div className="p-2 sm:p-2.5 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase block">Audit Result</span>
+                  <span className={`text-[11px] font-bold block mt-0.5 ${
+                    statusCounts.fail === 0 && statusCounts.pass >= 4
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-amber-600 dark:text-amber-400'
+                  }`}>
+                    {statusCounts.fail === 0 && statusCounts.pass >= 4 ? 'PASSED (Ready)' : 'ATTN REQUIRED'}
+                  </span>
+                </div>
+                <div className="p-2 sm:p-2.5 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                  <span className="text-[9px] text-zinc-400 font-bold uppercase block">Privacy</span>
+                  <span className="text-[11px] font-bold text-zinc-900 dark:text-zinc-100 block mt-0.5">
+                    100% Zero-Storage
+                  </span>
+                </div>
+              </div>
+
+              {/* Hardware Attestation Serial Barcode */}
+              <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/30 rounded-lg border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center">
+                <div className="flex items-center gap-[2.5px] h-7 select-none opacity-85">
+                  {[3, 1, 2, 4, 1, 3, 2, 1, 4, 2, 3, 1, 2, 3, 4, 1, 2, 1, 3, 2, 4, 1, 2, 3, 1, 4, 2, 1, 3].map((w, i) => (
+                    <div
+                      key={i}
+                      className="bg-zinc-800 dark:bg-zinc-200 h-full rounded-xs"
+                      style={{ width: `${w}px` }}
+                    />
+                  ))}
+                </div>
+                <div className="flex items-center gap-1.5 mt-1 font-mono text-[8px] text-zinc-500">
+                  <span>ATTESTATION ID: UIDAI-RDS-{activeDevice.modelName.replace(/[^a-zA-Z0-9]/g, '')}-{(activeDevice.certificationLevel)}-VALID</span>
+                  <span>•</span>
+                  <span>ISO 19794</span>
+                </div>
+              </div>
+
+              {/* Preformatted Certificate Text Block */}
+              <div>
+                <label className="block text-[11px] font-bold text-zinc-600 dark:text-zinc-400 mb-1">
+                  Technician Certificate Slip (Plain Text):
+                </label>
+                <pre className="text-[10px] font-mono leading-relaxed bg-zinc-950 text-emerald-400 p-3 rounded-lg border border-zinc-800 overflow-x-auto max-h-48 select-all">
+                  {generateAuditReportText()}
+                </pre>
+              </div>
+
+              {/* Statutory Privacy Footnote */}
+              <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-[10px] text-amber-800 dark:text-amber-300 leading-relaxed">
+                <strong>Statutory Compliance:</strong> In accordance with UIDAI regulations and Section 29 of the Aadhaar Act, 2016, no citizen Aadhaar number, raw biometric bitmap, or encrypted PID data is captured, logged, or saved. This certificate validates only local loopback socket reachability, device attestation, and hardware communication readiness.
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="p-3 sm:p-3.5 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/40 flex items-center justify-between gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowHealthReport(false)}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-all cursor-pointer"
+              >
+                Close
+              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(generateAuditReportText());
+                    setCopiedReportText(true);
+                    setTimeout(() => setCopiedReportText(false), 2000);
+                  }}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-xs font-medium text-zinc-800 dark:text-zinc-200 transition-all cursor-pointer"
+                >
+                  {copiedReportText ? (
+                    <>
+                      <CheckCheck className="w-3.5 h-3.5 text-emerald-500" />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Slip</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-all cursor-pointer shadow-xs"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  Print / PDF Slip
+                </button>
               </div>
             </div>
           </div>

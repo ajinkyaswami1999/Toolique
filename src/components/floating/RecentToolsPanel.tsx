@@ -9,7 +9,7 @@ import {
   Star, 
   Compass
 } from 'lucide-react';
-import { getToolCanonicalPath } from '../../routes/AppRoutes';
+import { getToolCanonicalPath } from '../../utils/canonicalRouting';
 import { 
   getRecentlyUsedToolsFromDB, 
   clearRecentlyUsedToolsFromDB, 

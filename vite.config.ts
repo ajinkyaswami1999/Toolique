@@ -13,6 +13,26 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            // Isolate core React runtime & routing for persistent browser caching
+            if (
+              id.includes('react/') ||
+              id.includes('react-dom') ||
+              id.includes('scheduler') ||
+              id.includes('react-router')
+            ) {
+              return 'vendor-react';
+            }
+
+            // Isolate motion & animation engine
+            if (id.includes('framer-motion') || id.includes('motion-dom')) {
+              return 'vendor-motion';
+            }
+
+            // Isolate Lucide icons
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+
             // Isolate heavy math & calculus computing engines
             if (id.includes('mathjs')) {
               return 'vendor-mathjs';
@@ -42,6 +62,6 @@ export default defineConfig({
         },
       },
     },
-    chunkSizeWarningLimit: 1600,
+    chunkSizeWarningLimit: 800,
   },
 });

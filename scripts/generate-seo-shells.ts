@@ -2123,8 +2123,13 @@ function generateXmlSitemap() {
     let priority = '0.8';
     let freq = 'weekly';
 
-    // Flagship Hero Tool: Building Feasibility Checker gets maximum 1.0 priority and daily crawling
-    if (t.id === 'BuildingFeasibilityChecker' || t.slug === 'building-feasibility-checker') {
+    // Flagship Hero Tools: Building Feasibility Checker & Biometric Device Tester get maximum 1.0 priority and daily crawling
+    if (
+      t.id === 'BuildingFeasibilityChecker' ||
+      t.slug === 'building-feasibility-checker' ||
+      t.id === 'BiometricDeviceTester' ||
+      t.slug === 'biometric-device-tester'
+    ) {
       priority = '1.0';
       freq = 'daily';
     }
@@ -2163,6 +2168,49 @@ ${urls.map(u => `  <url>
   console.log(`Programmatic sitemap.xml generated successfully in dist/ and public/! (${urls.length} URLs compiled)`);
 }
 
+function syncToolIndices() {
+  const slugMap: Record<string, string> = {};
+  const searchTools = toolsList.map(t => {
+    slugMap[t.slug] = t.category;
+    return {
+      id: t.id,
+      name: t.name,
+      category: t.category,
+      slug: t.slug,
+      icon: t.icon,
+      shortDescription: t.shortDescription,
+      keywords: t.keywords || []
+    };
+  });
+
+  const heroTools = toolsList.slice(0, 72).map(t => ({
+    id: t.id,
+    name: t.name,
+    category: t.category
+  }));
+
+  fs.writeFileSync(
+    path.resolve('src/data/tools/slugMap.ts'),
+    `// Auto-generated lightweight tool slug to category map for O(1) routing\nexport const TOOL_SLUG_TO_CATEGORY: Record<string, string> = ${JSON.stringify(slugMap, null, 2)};\n`,
+    'utf8'
+  );
+
+  fs.writeFileSync(
+    path.resolve('src/data/tools/searchIndex.ts'),
+    `// Auto-generated lightweight search index (~30 KB vs 1.16 MB full tools list)\nexport interface SearchToolItem {\n  id: string;\n  name: string;\n  category: string;\n  slug: string;\n  icon: string;\n  shortDescription: string;\n  keywords: string[];\n}\n\nexport const searchTools: SearchToolItem[] = ${JSON.stringify(searchTools, null, 2)};\n`,
+    'utf8'
+  );
+
+  fs.writeFileSync(
+    path.resolve('src/data/tools/heroTools.ts'),
+    `// Auto-generated lightweight marquee tools list for decorative backgrounds (~2 KB)\nexport interface HeroMarqueeTool {\n  id: string;\n  name: string;\n  category: string;\n}\n\nexport const HERO_MARQUEE_TOOLS: HeroMarqueeTool[] = ${JSON.stringify(heroTools, null, 2)};\n`,
+    'utf8'
+  );
+
+  console.log('Synchronized lightweight tool indices (slugMap, searchIndex, heroTools).');
+}
+
+syncToolIndices();
 generateXmlSitemap();
 
 // Sync public static files to dist/

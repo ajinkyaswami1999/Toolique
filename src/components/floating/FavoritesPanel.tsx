@@ -9,9 +9,9 @@ import {
   Compass, 
   Plus
 } from 'lucide-react';
-import { toolsList } from '../../data/tools';
+import { searchTools } from '../../data/tools/searchIndex';
 import { categories } from '../../data/categories';
-import { getToolCanonicalPath } from '../../routes/AppRoutes';
+import { getToolCanonicalPath } from '../../utils/canonicalRouting';
 import { getFavoritesFromDB, toggleFavoriteInDB } from '../../utils/indexedDB';
 import LucideIcon from '../LucideIcon';
 
@@ -74,7 +74,7 @@ export default function FavoritesPanel({ onClose }: FavoritesPanelProps) {
   };
 
   // Matched favorite tools
-  const favoriteTools = toolsList.filter(t => favoriteIds.includes(t.id));
+  const favoriteTools = searchTools.filter(t => favoriteIds.includes(t.id));
   const filteredFavorites = favoriteTools.filter(t => 
     t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     t.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -82,7 +82,7 @@ export default function FavoritesPanel({ onClose }: FavoritesPanelProps) {
   );
 
   // Available tools to add
-  const availableToAdd = toolsList.filter(t => 
+  const availableToAdd = searchTools.filter(t => 
     !favoriteIds.includes(t.id) &&
     (t.name.toLowerCase().includes(addSearchQuery.toLowerCase()) ||
      t.category.toLowerCase().includes(addSearchQuery.toLowerCase()))

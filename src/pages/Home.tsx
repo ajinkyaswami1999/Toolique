@@ -5,14 +5,14 @@ import {
   Globe, FileText, Share2, Calendar, Scale, Lock, GraduationCap, Car, Briefcase, Heart, Type,
   Flame, Award, Printer, ShieldCheck, Layers, TrendingUp, Shield, Landmark, Fingerprint, FileCheck
 } from 'lucide-react';
-import { toolsList } from '../data/tools';
+import { searchTools } from '../data/tools/searchIndex';
 import { categories } from '../data/categories';
 import { workflows } from '../data/workflows';
 import ToolCard from '../components/ToolCard';
 import HeroToolsBackground from '../components/HeroToolsBackground';
 import SEO from '../components/SEO';
 import { Link, useNavigate } from 'react-router-dom';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 
 const categoryIcons: Record<string, React.ComponentType<any>> = {
   finance: IndianRupee,
@@ -85,7 +85,7 @@ export default function Home() {
 
   // Filtered tools for Featured Section (Ordered by priority)
   const getOrderedTools = (ids: string[]) => {
-    return ids.map(id => toolsList.find(t => t.id === id)).filter((t): t is typeof toolsList[0] => Boolean(t));
+    return ids.map(id => searchTools.find(t => t.id === id)).filter((t): t is typeof searchTools[0] => Boolean(t));
   };
 
   const trendingTools = useMemo(() => {
@@ -497,7 +497,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {spotlightWorkflows.map((wf) => {
-            const firstStepTool = toolsList.find((t) => t.id === wf.steps[0]?.id);
+            const firstStepTool = searchTools.find((t) => t.id === wf.steps[0]?.id);
             const launchPath = firstStepTool ? getToolCanonicalPath(firstStepTool.category, firstStepTool.slug) : '#';
 
             return (

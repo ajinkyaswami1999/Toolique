@@ -33,7 +33,7 @@ import {
 import SEO from '../components/SEO';
 import { workflows, workflowCategories, type Workflow } from '../data/workflows';
 import { toolsList } from '../data/tools';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 
 const categoryIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Compass,

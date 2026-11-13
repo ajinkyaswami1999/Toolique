@@ -12,7 +12,7 @@ import { categories } from '../data/categories';
 import SEO from '../components/SEO';
 import LucideIcon from '../components/LucideIcon';
 import ToolCard from '../components/ToolCard';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 
 const categoryIcons: Record<string, React.ComponentType<any>> = {
   finance: IndianRupee,

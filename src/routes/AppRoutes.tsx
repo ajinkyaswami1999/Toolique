@@ -1,9 +1,10 @@
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-import Home from '../pages/Home';
-import { toolsList } from '../data/tools';
+import { TOOL_SLUG_TO_CATEGORY } from '../data/tools/slugMap';
 import { categories } from '../data/categories';
+import { getToolCanonicalPath, getCategoryCanonicalPath } from '../utils/canonicalRouting';
 
+const Home = lazy(() => import('../pages/Home'));
 const ToolPage = lazy(() => import('../pages/ToolPage'));
 const About = lazy(() => import('../pages/About'));
 const WhyToolique = lazy(() => import('../pages/WhyToolique'));
@@ -39,66 +40,23 @@ const ToolsDirectory = lazy(() => import('../pages/ToolsDirectory'));
 const WorkflowsHub = lazy(() => import('../pages/WorkflowsHub'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
-export function getToolCanonicalPath(category: string, slug: string): string {
-  if (category === 'civil') {
-    return `/civil/${slug}`;
-  } else if (category === 'architecture') {
-    return `/architecture/${slug}`;
-  } else if (['developer', 'web'].includes(category)) {
-    return `/developer/${slug}`;
-  } else if (category === 'qa') {
-    return `/qa/${slug}`;
-  } else if (category === '3d-printing') {
-    return `/3d-printing-tools/${slug}`;
-  } else if (category === 'economics') {
-    return `/economics/${slug}`;
-  } else if (category === 'pdf') {
-    return `/pdf/${slug}`;
-  } else if (['compliance', 'dpdp-privacy', 'rbi-financial', 'uidai-aadhaar', 'audit-evidence'].includes(category)) {
-    return `/compliance/${slug}`;
-  } else {
-    return `/calculators/${slug}`;
-  }
-}
-
-export function getCategoryCanonicalPath(category: string): string {
-  if (category === 'civil' || category === 'architecture') {
-    return `/architecture`;
-  } else if (['developer', 'web', 'security'].includes(category)) {
-    return `/developer`;
-  } else if (category === 'qa') {
-    return `/qa`;
-  } else if (category === 'finance') {
-    return `/finance`;
-  } else if (category === 'economics') {
-    return `/economics`;
-  } else if (category === '3d-printing') {
-    return `/3d-printing-tools`;
-  } else if (category === 'pdf') {
-    return `/pdf`;
-  } else if (['compliance', 'dpdp-privacy', 'rbi-financial', 'uidai-aadhaar', 'audit-evidence'].includes(category)) {
-    return `/compliance`;
-  } else {
-    return `/calculators`;
-  }
-}
-
 function LegacyToolRedirect() {
   const { slug } = useParams<{ slug: string }>();
-  const tool = toolsList.find((t) => t.slug === slug);
-  if (!tool) {
+  if (!slug) return <Navigate to="/tools" replace />;
+  const category = TOOL_SLUG_TO_CATEGORY[slug];
+  if (!category) {
     return <Navigate to="/tools" replace />;
   }
-  return <Navigate to={getToolCanonicalPath(tool.category, tool.slug)} replace />;
+  return <Navigate to={getToolCanonicalPath(category, slug)} replace />;
 }
 
 function LegacyCategoryOrLanding() {
   const { categoryName } = useParams<{ categoryName: string }>();
   if (!categoryName) return <Navigate to="/tools" replace />;
   // Check if param is actually a tool slug first to recover legacy GSC /tools/:slug links
-  const tool = toolsList.find((t) => t.slug === categoryName);
-  if (tool) {
-    return <Navigate to={getToolCanonicalPath(tool.category, tool.slug)} replace />;
+  const category = TOOL_SLUG_TO_CATEGORY[categoryName];
+  if (category) {
+    return <Navigate to={getToolCanonicalPath(category, categoryName)} replace />;
   }
   // Render CategoryLanding directly for valid /tools/:categoryName pages in sitemap.xml
   const isKnownCategory = categories.some((c) => c.id === categoryName);
@@ -115,7 +73,15 @@ function LegacyCategoryOrLanding() {
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={
+        <Suspense fallback={
+          <div className="flex items-center justify-center min-h-[60vh] text-zinc-500 text-xs font-semibold">
+            Loading Toolique...
+          </div>
+        }>
+          <Home />
+        </Suspense>
+      } />
       <Route path="/tools" element={
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-[50vh] text-zinc-500 text-xs font-semibold">

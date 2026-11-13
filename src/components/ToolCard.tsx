@@ -4,7 +4,7 @@ import { ArrowUpRight, Heart, Copy, Check } from 'lucide-react';
 import type { Tool } from '../data/tools';
 import { categories, type Category } from '../data/categories';
 import LucideIcon from './LucideIcon';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 
 // Precomputed category map for O(1) instant lookups
 const CATEGORY_MAP: Record<string, Category> = Object.fromEntries(
@@ -44,8 +44,18 @@ const getToolBadge = (toolId: string) => {
   return null;
 };
 
+export interface ToolCardData {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  shortDescription: string;
+  icon: string;
+  keywords?: string[];
+}
+
 interface ToolCardProps {
-  tool: Tool;
+  tool: Tool | ToolCardData;
   onTagClick?: (tag: string) => void;
 }
 
@@ -78,7 +88,9 @@ function ToolCardComponent({ tool, onTagClick }: ToolCardProps) {
       }
       localStorage.setItem('toolique_favorites', JSON.stringify(Array.from(favSet)));
       window.dispatchEvent(new CustomEvent('toolique_favorite_toggle'));
-    } catch {}
+    } catch {
+      // LocalStorage access may fail in incognito mode
+    }
   };
 
   const handleCopyLink = (e: React.MouseEvent) => {
@@ -88,7 +100,9 @@ function ToolCardComponent({ tool, onTagClick }: ToolCardProps) {
       navigator.clipboard.writeText(`https://www.toolique.in${canonicalPath}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {}
+    } catch {
+      // Clipboard access unavailable or denied
+    }
   };
 
   return (

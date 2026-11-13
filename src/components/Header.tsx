@@ -32,10 +32,10 @@ import {
   Phone,
   FileText
 } from 'lucide-react';
-import { toolsList } from '../data/tools';
+import { searchTools } from '../data/tools/searchIndex';
 import { TooliqueLogo } from './Logo';
 import LucideIcon from './LucideIcon';
-import { getToolCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath } from '../utils/canonicalRouting';
 
 interface DomainSuite {
   name: string;
@@ -50,7 +50,14 @@ interface DomainSuite {
 }
 
 export default function Header() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) return savedTheme === 'dark';
+      return document.documentElement.classList.contains('dark');
+    }
+    return false;
+  });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchCategory, setSearchCategory] = useState<string>('all');
@@ -266,12 +273,12 @@ export default function Header() {
     { id: 'economics', label: 'Economics' }
   ];
 
-  const popularDefaultTools = useMemo(() => toolsList.filter(t =>
+  const popularDefaultTools = useMemo(() => searchTools.filter(t =>
     ['BuildingFeasibilityChecker', 'GSTCalculator', 'SIPCalculator', 'IncomeTaxCalculator', 'SQLFormatter', 'JSONFormatter', 'ApiTester', 'TestCaseGenerator'].includes(t.id)
   ), []);
 
   const filteredSuggestions = useMemo(() => {
-    let list = toolsList;
+    let list = searchTools;
     if (searchCategory !== 'all') {
       if (searchCategory === 'developer') {
         list = list.filter(t => ['developer', 'web', 'security'].includes(t.category));
@@ -334,20 +341,16 @@ export default function Header() {
     }
   }, [selectedIndex]);
 
-  // Initialize theme
+  // Sync theme with DOM and localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    if (isDarkMode) {
       document.documentElement.classList.add('dark');
-      setIsDarkMode(true);
+      localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
-      setIsDarkMode(false);
-      if (!savedTheme) {
-        localStorage.setItem('theme', 'light');
-      }
+      localStorage.setItem('theme', 'light');
     }
-  }, []);
+  }, [isDarkMode]);
 
   const toggleTheme = () => {
     if (isDarkMode) {

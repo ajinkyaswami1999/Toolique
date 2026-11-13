@@ -7,9 +7,11 @@ export const complianceTools: Tool[] = [
     name: 'Biometric Device Tester & UIDAI RD Service Diagnostics (L0 & L1)',
     category: 'uidai-aadhaar',
     shortDescription: 'Test Aadhaar biometric fingerprint and iris scanners (Mantra, Morpho, Startek, SecuGen, Precision), verify RD Service loopback connectivity on Windows 10/11, test capture in Production & Pre-Production (P/PP), and troubleshoot UIDAI errors.',
-    metaTitle: 'Biometric Device Tester & UIDAI RD Service Diagnostics | Toolique',
-    metaDescription: 'Test Aadhaar biometric devices (Mantra, Morpho, Startek, SecuGen, Precision) and RD Service on Windows 10/11. Run diagnostics for loopback ports 11100–11105, USB detection, P/PP environment capture, and fix Error 1140 & 720.',
+    metaTitle: 'Mantra & Morpho RD Service Test Online | UIDAI L1/L0 Biometric Device Tester',
+    metaDescription: 'Free online Mantra (MFS110 L1 / MFS100), Morpho (MSO 1300 E3), Startek & SecuGen RD Service tester for Windows 10/11 & Android. Check loopback ports 11100–11105, test capture in P/PP environment, resolve Error 1140, 720, 1001, and verify STQC L1 certification for AePS, PM-KISAN & eKYC.',
     keywords: [
+      'Mantra RD service test online',
+      'Morpho RD service test page online',
       'Biometric device tester',
       'RD Service test online',
       'Mantra MFS110 L1 tester',
@@ -21,47 +23,71 @@ export const complianceTools: Tool[] = [
       'Aadhaar biometric tester',
       'RD service port 11100 test',
       'UIDAI env P vs PP capture test',
-      'Error 1140 device not attached',
-      'Error 720 not registered in management server',
-      'AePS biometric scanner test',
-      'Iris scanner RD service test'
+      'Error 1140 device not attached solution',
+      'Error 720 not registered in management server fix',
+      'Error 1001 device not whitelisted fix',
+      'AePS biometric scanner test online',
+      'Iris scanner RD service test online',
+      'CSC VLE biometric device check'
     ],
     icon: 'Fingerprint',
     howToUse: [
       'Select your biometric hardware manufacturer (Mantra, Morpho, Startek, SecuGen, Precision) and specific device model.',
       'Select your UIDAI Environment: Production ("P") for live auth or Pre-Production ("PP") for sandbox staging.',
-      'Choose between "Mock Simulator" for sandbox testing or "Live Loopback Probe" to test your local Windows machine.',
-      'Click "Run Full Diagnostics" or "Trigger Biometric Capture" to test RD Service connectivity, USB detection, and sensor response.',
-      'Review real-time Pass, Fail, Inconclusive, and Skipped badges, and inspect protocol XML telemetry or troubleshooting steps.'
+      'Choose between "Mock Simulator" for sandbox testing or "Live USB" to test your local Windows 10/11 machine.',
+      'Click "Run All Diagnostics" or "Trigger Biometric Capture" to test RD Service connectivity, USB detection, and sensor response.',
+      'Use the Interactive Port Matrix Radar (11100–11105) to detect active daemons and verify socket latency.',
+      'Review real-time Pass, Fail, Inconclusive, and Skipped badges, and inspect protocol XML telemetry or troubleshooting steps.',
+      'Click "Export Health Report" to copy or print a verified hardware diagnostic certificate for banking support.'
     ],
     faqs: [
       {
-        question: 'What is the difference between UIDAI L0 and L1 biometric devices?',
-        answer: 'Level 0 (L0) devices sign biometric data at the software/driver layer, making them vulnerable to software tampering or replay attacks. Level 1 (L1) devices like the Mantra MFS110 L1 sign the biometric sample using hardware cryptographic keys inside a trusted execution environment (TEE/Secure Boot) embedded directly on the physical scanner before transmitting data to the PC.'
+        question: 'How do I test my Mantra MFS110 L1 or MFS100 scanner online?',
+        answer: 'Plug your Mantra scanner into a rear USB port on your Windows 10/11 PC. Select "Mantra" and your model in Toolique, switch mode to "Live USB", and click "Run All Diagnostics". The tester will probe loopback ports 11100–11105, verify that the Mantra AVDM service is listening, inspect registration status with Mantra KMS, and test biometric capture with live quality score feedback.'
       },
       {
-        question: 'Which loopback ports does Mantra RD Service use on Windows 10 and 11?',
-        answer: 'Mantra RD Service binds to local loopback ports between 11100 and 11105 on IP 127.0.0.1. By default, it prioritizes port 11100. If port 11100 is occupied by another service, it incrementally tries 11101, 11102, up to 11105.'
+        question: 'How do I test Morpho (IDEMIA) MSO 1300 E3 RD Service online?',
+        answer: 'Ensure the Morpho RD Service driver is installed from rdserviceonline.com. Select "IDEMIA (Morpho)" in the tester. The tool sends an HTTP RDSERVICE handshake to local ports (default 11100) to verify device info and capture readiness. If you receive Error 1001 or 1003, check your annual RD Service whitelisting validity.'
+      },
+      {
+        question: 'What is the difference between UIDAI L0 and L1 biometric devices?',
+        answer: 'Level 0 (L0) devices sign biometric data at the software/driver layer, making them vulnerable to software tampering or replay attacks. Level 1 (L1) devices like the Mantra MFS110 L1 and Morpho MSO 1300 E3 L1 sign the biometric sample using hardware cryptographic keys inside a trusted execution environment (TEE/Secure Boot) embedded directly on the physical scanner before transmitting data to the PC.'
+      },
+      {
+        question: 'Which loopback ports does biometric RD Service use on Windows 10 and 11?',
+        answer: 'UIDAI Registered Device specifications mandate vendor daemons to listen on local loopback IP 127.0.0.1 across port range 11100 to 11105. By default, Mantra, Morpho, Startek, and SecuGen prioritize port 11100. If 11100 is occupied by another process, the daemon incrementally binds to 11101, 11102, up to 11105.'
       },
       {
         question: 'How do I resolve Mantra Error 1140 ("Device not attached")?',
-        answer: 'Error 1140 occurs when the RD Service daemon is running but cannot detect the physical MFS110 USB device. To resolve it: (1) Connect the scanner to a direct rear motherboard USB 2.0 or 3.0 port rather than an unpowered USB hub, (2) Disable Windows USB Selective Suspend in Power Options, (3) Check Device Manager to ensure the device shows up under USB devices without an exclamation mark, and (4) Restart the Mantra RD Service in services.msc.'
+        answer: 'Error 1140 occurs when the RD Service daemon is running but cannot detect the physical MFS110/MFS100 USB device. To resolve it: (1) Connect the scanner directly to a rear motherboard USB 2.0 or 3.0 port rather than an unpowered USB hub, (2) Disable Windows USB Selective Suspend in Power Options, (3) Check Device Manager to ensure the device shows up under USB devices without an exclamation mark, and (4) Restart the Mantra RD Service in services.msc.'
       },
       {
         question: 'What causes Mantra Error 720 ("Device not registered in management server")?',
-        answer: 'Error 720 indicates that the MFS110 L1 hardware serial number has not completed online key exchange with Mantra\'s cloud Management Server. Every UIDAI L1 device must synchronize its cryptographic certificate with the manufacturer. Ensure your PC has active internet access, unplug the USB cable, wait 5 seconds, and plug it back in so the daemon can automatically complete online registration.'
+        answer: 'Error 720 indicates that the hardware serial number has not completed online key exchange with Mantra\'s cloud Management Server. Every UIDAI L1 device must synchronize its cryptographic certificate with the manufacturer. Ensure your PC has active internet access, unplug the USB cable, wait 5 seconds, and plug it back in so the daemon can automatically complete online registration.'
+      },
+      {
+        question: 'What causes Morpho Error 1001 or 1003 ("Device not whitelisted / validity expired")?',
+        answer: 'Error 1001 or 1003 indicates that the annual RD Service AMC subscription for your Morpho scanner has expired or the serial number is not registered on rdserviceonline.com. Visit rdserviceonline.com, check device validity using the serial number on the bottom label, renew the token if expired, and reconnect the device.'
       },
       {
         question: 'Why does Google Chrome or Microsoft Edge block localhost RD Service requests?',
-        answer: 'Modern web browsers enforce Private Network Access (PNA) and Mixed-Content policies, which restrict unencrypted HTTP requests from HTTPS websites to 127.0.0.1. To allow testing, open chrome://flags/#allow-insecure-localhost (or edge://flags/#allow-insecure-localhost), enable the flag, and restart the browser, or ensure you are running the latest SSL-enabled Mantra RD Service package.'
+        answer: 'Modern web browsers enforce Private Network Access (PNA) and Mixed-Content policies, which restrict unencrypted HTTP requests from HTTPS websites to 127.0.0.1. To allow testing, open chrome://flags/#allow-insecure-localhost (or edge://flags/#allow-insecure-localhost), enable the flag, and restart the browser, or ensure you are running the latest SSL-enabled RD Service package.'
+      },
+      {
+        question: 'How do I fix UIDAI Error 219 / 811 ("Timestamp out of sync")?',
+        answer: 'UIDAI authentication servers enforce strict replay protection. If the Windows clock differs by more than ±5 minutes from Indian Standard Time (IST), the encrypted timestamp in the PID block is rejected. Right-click the Windows clock, select "Adjust date and time", turn on "Set time automatically", set Time Zone to (UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi, and click "Sync now".'
+      },
+      {
+        question: 'Which biometric scanners are required for AePS cash withdrawal and PM-KISAN in 2026?',
+        answer: 'UIDAI circulars have phased out Level 0 (L0) devices across all commercial banking and citizen service networks. AePS (NPCI), DigiPay (CSC), Spice Money, Fino Payments Bank, Payworld, and PM-KISAN require certified Level 1 (L1) devices such as the Mantra MFS110 L1, Morpho MSO 1300 E3 L1, Startek FM220U L1, or SecuGen Hamster Pro 20 L1.'
       },
       {
         question: 'Does Toolique collect or upload my fingerprint data?',
-        answer: 'Never. Toolique is architected on a zero-retention, client-side first foundation. We do not capture, record, save, or transmit fingerprint templates, ISO minutiae (FMR/FIR), PID blocks, or personal identity numbers. The capture section is locked, and all diagnostics run purely inside your local browser memory.'
+        answer: 'Never. Toolique is architected on a zero-retention, client-side first foundation. We do not capture, record, save, or transmit fingerprint templates, ISO minutiae (FMR/FIR), PID blocks, or personal identity numbers. The tool is strictly designed for hardware health checks, driver verification, port reachability audits, and technician troubleshooting.'
       },
       {
-        question: 'How do I restart the Mantra RD Service daemon in Windows?',
-        answer: 'Press Win + R on your Windows keyboard, type services.msc, and press Enter. Locate "Mantra AVDM" or "Mantra MFS110 RD Service" in the services list, right-click it, and select "Restart". Alternatively, open PowerShell as Administrator and run: Get-Service *Mantra* | Restart-Service.'
+        question: 'How do I restart the RD Service daemon in Windows 10/11?',
+        answer: 'Press Win + R on your Windows keyboard, type services.msc, and press Enter. Locate your vendor service ("Mantra AVDM", "Morpho RD Service", "Startek RD Service", or "SecuGen RD Service") in the services list, right-click it, and select "Restart". Alternatively, open PowerShell as Administrator and run: Get-Service *RD* | Restart-Service.'
       }
     ],
     sections: [
@@ -71,11 +97,15 @@ export const complianceTools: Tool[] = [
       },
       {
         title: 'UIDAI L1 Security Architecture: Hardware Key Signing vs L0 Legacy Software',
-        content: 'UIDAI circulars mandated the phase-out of Level 0 (L0) devices in favor of Level 1 (L1) devices such as the Mantra MFS110 L1. While L0 devices performed encryption and digital signing within software drivers running on the host Windows machine, L1 devices feature dedicated secure microcontrollers with hardware-enforced Secure Boot and tamper-proof cryptographic enclaves. The biometric capture, quality evaluation, and asymmetric key signing take place entirely on the MFS110 sensor hardware before the encrypted payload ever touches the host operating system, preventing man-in-the-middle and replay exploits.'
+        content: 'UIDAI circulars mandated the phase-out of Level 0 (L0) devices in favor of Level 1 (L1) devices such as the Mantra MFS110 L1 and Morpho MSO 1300 E3 L1. While L0 devices performed encryption and digital signing within software drivers running on the host Windows machine, L1 devices feature dedicated secure microcontrollers with hardware-enforced Secure Boot and tamper-proof cryptographic enclaves. The biometric capture, quality evaluation, and asymmetric key signing take place entirely on the sensor hardware before the encrypted payload ever touches the host operating system, preventing man-in-the-middle and replay exploits.'
       },
       {
         title: 'Localhost Loopback Network Flow & Port Allocation (11100–11105)',
         content: 'The RD Service specification establishes that vendor daemons must listen on local loopback sockets (127.0.0.1) across port range 11100 to 11105. When an authentication web application loads, it performs discovery by scanning each port sequentially with an HTTP RDSERVICE verb. Once an active daemon responds, the client queries /rd/info to inspect device registration (dpId, rdsId, mi, mc) before triggering an encrypted /rd/capture request. Firewalls, corporate VPNs, and conflicting port bindings must allow local loopback traffic on these dedicated ports.'
+      },
+      {
+        title: 'Quick Reference: Common RD Service Error Codes & 1-Minute Solutions',
+        content: '• Error 1140 (Mantra): Device not attached. Plug directly into rear motherboard USB 2.0/3.0 port and disable USB selective suspend.\n• Error 720 (Mantra): Device not registered in management server. Verify PC internet connection and reconnect USB cable.\n• Error 1001 / 1003 (Morpho / Startek): Validity expired. Check serial number on rdserviceonline.com and renew annual token.\n• Error 219 (UIDAI): Timestamp out of sync. Synchronize Windows clock with IST (UTC+05:30).\n• Port 11100 Blocked: Run "netstat -ano | findstr :11100" in CMD as Administrator to terminate conflicting process.\n• PNA Mixed Content Block: Navigate to chrome://flags/#allow-insecure-localhost and set to "Enabled".'
       },
       {
         title: 'Browser Security Constraints: Private Network Access (PNA) & Mixed Content',
@@ -83,7 +113,7 @@ export const complianceTools: Tool[] = [
       },
       {
         title: 'Windows 10/11 Driver & USB Host Controller Troubleshooting',
-        content: 'Biometric optical sensors require consistent 5V/500mA USB bus power. On Windows 10 and Windows 11, aggressive power-saving policies such as USB Selective Suspend often power down the MFS110 platen LED, leading to intermittent disconnects and Error 1140. Technicians should ensure the device is plugged directly into a high-speed motherboard USB port, verify driver installation in Device Manager under Universal Serial Bus devices, and confirm that the background service Mantra AVDM is set to Automatic startup in services.msc.'
+        content: 'Biometric optical sensors require consistent 5V/500mA USB bus power. On Windows 10 and Windows 11, aggressive power-saving policies such as USB Selective Suspend often power down the platen LED, leading to intermittent disconnects and Error 1140. Technicians should ensure the device is plugged directly into a high-speed motherboard USB port, verify driver installation in Device Manager under Universal Serial Bus devices, and confirm that the background service is set to Automatic startup in services.msc.'
       },
       {
         title: 'Privacy and Zero-Retention Architecture: Protecting Citizen Biometric Data',

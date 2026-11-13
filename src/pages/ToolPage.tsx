@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState, useEffect } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { toolsList } from '../data/tools';
-import { getToolCanonicalPath, getCategoryCanonicalPath } from '../routes/AppRoutes';
+import { getToolCanonicalPath, getCategoryCanonicalPath } from '../utils/canonicalRouting';
 import { additionalFaqs } from '../data/toolFaqs';
 import { categories } from '../data/categories';
 import { getToolWorkflows } from '../data/workflows';
